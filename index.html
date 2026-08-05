@@ -143,7 +143,32 @@
                 </div>
 
                 <div id="ui">
-                    <div id="cta-slot"></div>
+                    <div class="event-primary">
+                        <div id="cta-slot"></div>
+                        <!-- <div class="event-countdown" id="event-countdown" role="timer"
+                            aria-label="เวลานับถอยหลังสู่ Better Trade 2026">
+                            <div class="event-countdown__label">เริ่มงานใน</div>
+                            <div class="event-countdown__values">
+                                <span class="event-countdown__unit">
+                                    <strong data-countdown="days">00</strong>
+                                    <small>วัน</small>
+                                </span>
+                                <span class="event-countdown__unit">
+                                    <strong data-countdown="hours">00</strong>
+                                    <small>ชม.</small>
+                                </span>
+                                <span class="event-countdown__unit">
+                                    <strong data-countdown="minutes">00</strong>
+                                    <small>นาที</small>
+                                </span>
+                                <span class="event-countdown__unit">
+                                    <strong data-countdown="seconds">00</strong>
+                                    <small>วินาที</small>
+                                </span>
+                            </div>
+                            <div class="event-countdown__status" aria-hidden="true"></div>
+                        </div> -->
+                    </div>
                     <div class="event-details">
                         <div class="date">31 ต.ค. - 1 พ.ย. 2569</div>
                         <div class="time">09:00 – 18:30 น.</div>
@@ -195,7 +220,7 @@
     <section id="concept">
         <div class="concept__inner">
             <h2 class="concept__title">โลกกำลังเปลี่ยนเร็วกว่าที่เคย <br>แต่โอกาสก็เช่นกัน</h2>
-            <p class="concept__description">BETTER TRADE รวบรวมความรู้ เครื่องมือ และ Playbook ที่จะช่วยให้คุณมองเห็นโอกาส ตัดสินใจอย่างมั่นใจ และเติบโตไปพร้อมกับโลกยุคใหม่</p>
+            <p class="concept__description">BETTER TRADE รวบรวมความรู้ เครื่องมือ และ Playbook ที่จะช่วยให้คุณมองเห็นโอกาส <br>ตัดสินใจอย่างมั่นใจ และเติบโตไปพร้อมกับโลกยุคใหม่</p>
         </div>
         <div class="concept__video-scroll">
             <div class="concept__video-perspective">
@@ -221,6 +246,7 @@
     <!-- Liquid metal CTAs (WebGL). Module scripts are deferred, so this runs after
      the markup exists but before window 'load' fires the hero intro. -->
     <script type="module" src="js/hero-v2-cta.js"></script>
+    <script src="js/event-countdown.js"></script>
 
     <script src="vendor/gsap/gsap.min.js"></script>
     <script src="vendor/gsap/ScrollTrigger.min.js"></script>

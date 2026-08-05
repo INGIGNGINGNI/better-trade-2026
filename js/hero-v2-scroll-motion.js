@@ -34,6 +34,10 @@
         // Ceiling on the poster title's height, as a share of the viewport. Only bites on
         // short viewports, where a width-driven title would overlap the CTA block below.
         const TITLE_MAX_VH = 0.34;
+        // The settled video sits 48px below the description. Its entrance translation
+        // subtracts this same distance so adding layout space does not push the moving
+        // frame farther away before it reaches the final position.
+        const CONCEPT_VIDEO_GAP = 48;
 
         /* The eight runners, split out of the PSD's คน+เงา group. Listed far -> near so
            the reveal stagger reads as a crowd arriving from the distance. revealAngle
@@ -595,7 +599,7 @@
 
             // Background keeps the KV proportion but must cover the viewport in BOTH
             // axes — on a tall/narrow screen, matching width alone leaves a gap below.
-            const mobileBackgroundHeight = SH + 48;
+            const mobileBackgroundHeight = SH + 144;
             const bgW = isMobileStatic()
                 ? Math.max(vw, SW, mobileBackgroundHeight * KV_RATIO)
                 : Math.max(vw, SW, vh * KV_RATIO);
@@ -1216,7 +1220,7 @@
             }).fromTo(el.conceptVideoFrame, {
                 rotateX: () => window.innerWidth <= 768 ? 12 : 20,
                 scale: () => window.innerWidth <= 768 ? 0.94 : 0.90,
-                y: () => window.innerWidth <= 768 ? 32 : 24,
+                y: () => (window.innerWidth <= 768 ? 32 : 24) - CONCEPT_VIDEO_GAP,
                 force3D: true,
             }, {
                 rotateX: 0,

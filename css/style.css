@@ -543,10 +543,14 @@ body.menu-open .site-header__backdrop {
 }
 
 #wall-left {
+    width: 101.35%;
     transform-origin: 0 50%;
 }
 
 #wall-right {
+    left: auto;
+    right: 0;
+    width: 98.7%;
     transform-origin: 100% 50%;
 }
 
@@ -658,11 +662,85 @@ the timeline drops them under the ship once the walls have retreated. */
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-10);
+    gap: var(--space-6);
     opacity: 0;
     text-align: center;
     color: var(--ink);
     font-family: var(--headline);
+}
+
+#ui .event-primary {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-3);
+}
+
+#ui .event-countdown {
+    min-width: 288px;
+    display: grid;
+    justify-items: center;
+    gap: var(--space-1);
+    font-variant-numeric: tabular-nums;
+}
+
+#ui .event-countdown__label {
+    color: currentColor;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+}
+
+#ui .event-countdown__values {
+    display: grid;
+    grid-template-columns: repeat(4, 64px);
+    gap: var(--space-2);
+}
+
+#ui .event-countdown__unit {
+    position: relative;
+    min-width: 0;
+    display: grid;
+    justify-items: center;
+    gap: 2px;
+}
+
+#ui .event-countdown__unit:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    right: calc(var(--space-1) * -1);
+    width: 1px;
+    height: 32px;
+    background: var(--spectrum-vertical);
+}
+
+#ui .event-countdown__unit strong {
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1;
+}
+
+#ui .event-countdown__unit small {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1;
+}
+
+#ui .event-countdown__status {
+    display: none;
+    min-height: 40px;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+#ui .event-countdown.is-status .event-countdown__values {
+    display: none;
+}
+
+#ui .event-countdown.is-status .event-countdown__status {
+    display: flex;
 }
 
 /* The CTA is built by js/liquid-metal-button.js and mounted in #cta-slot. */
@@ -674,38 +752,39 @@ the timeline drops them under the ship once the walls have retreated. */
 #ui .event-details {
     display: grid;
     justify-items: center;
-    gap: var(--space-4);
+    gap: var(--space-6);
 }
 
 #ui .time {
-    font-size: clamp(24px, 2.5vw, 24px);
+    font-size: 20px;
     line-height: 1;
 }
 
 #ui .date {
-    font-size: clamp(28px, 3vw, 40px);
-    font-weight: 600;
+    font-size: 32px;
+    font-weight: 500;
     line-height: 1.05;
     letter-spacing: 0;
     white-space: nowrap;
 }
 
 #ui .venue {
-    font-size: clamp(20px, 2vw, 24px);
+    font-size: 20px;
     font-weight: 400;
-    line-height: 1.15;
-    padding-top: 24px;
+    line-height: 150%;
+    padding-top: 12px;
 }
 
 #ui .venue-link {
-    gap: var(--space-1);
+    align-items: center;
+    gap: var(--space-3);
     color: inherit;
     font-size: inherit;
     font-weight: inherit;
 }
 
 #ui .venue-link .material-symbols-rounded {
-    font-size: 1em;
+    font-size: 18px;
     font-variation-settings: 'wght' 400;
 }
 
@@ -748,9 +827,9 @@ the timeline drops them under the ship once the walls have retreated. */
 .concept__title {
     max-width: 1040px;
     margin: 0;
-    font-size: clamp(40px, 5.2vw, 72px);
-    font-weight: 600;
-    line-height: 1.05;
+    font-size: 48px;
+    font-weight: 400;
+    line-height: 120%;
     letter-spacing: 0;
     text-wrap: balance;
 }
@@ -758,9 +837,9 @@ the timeline drops them under the ship once the walls have retreated. */
 .concept__description {
     max-width: 920px;
     margin: 0;
-    font-size: clamp(22px, 2.2vw, 32px);
-    font-weight: 400;
-    line-height: 1.45;
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 150%;
     letter-spacing: 0;
     text-wrap: balance;
 }
@@ -768,7 +847,7 @@ the timeline drops them under the ship once the walls have retreated. */
 .concept__video-scroll {
     width: min(100%, 1460px);
     min-height: 125vh;
-    margin: 0 auto;
+    margin: var(--space-12) auto 0;
     position: relative;
     opacity: 1;
     transform: translateY(0);
@@ -899,6 +978,10 @@ the timeline drops them under the ship once the walls have retreated. */
         text-shadow: 0 2px 12px rgba(0, 0, 0, 0.72);
     }
 
+    body.is-mobile-static #ui .event-countdown {
+        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.72);
+    }
+
     body.is-mobile-static #ui .venue {
         padding-top: var(--space-2);
     }
@@ -955,6 +1038,20 @@ the timeline drops them under the ship once the walls have retreated. */
     #ui {
         top: min(62%, 100% - 216px);
         gap: var(--space-2);
+    }
+
+    #ui .event-primary {
+        gap: var(--space-2);
+    }
+
+    #ui .event-countdown {
+        min-width: min(280px, calc(100vw - var(--space-8)));
+    }
+
+    #ui .event-countdown__values {
+        grid-template-columns: repeat(4, minmax(52px, 1fr));
+        width: 100%;
+        gap: var(--space-1);
     }
 
     #ui .time {

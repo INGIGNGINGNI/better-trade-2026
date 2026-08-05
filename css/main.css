@@ -67,6 +67,7 @@
     /* Typography */
     --bt-font-size-14: 14px;
     --bt-font-size-16: 16px;
+    --bt-font-weight-regular: 400;
     --bt-font-weight-medium: 500;
     --bt-font-weight-bold: 700;
 
@@ -135,7 +136,7 @@
     box-shadow: var(--bt-shadow-action);
     font-family: inherit;
     font-size: var(--bt-font-size-16);
-    font-weight: var(--bt-font-weight-medium);
+    font-weight: var(--bt-font-weight-regular);
     line-height: 1;
     letter-spacing: 0;
     text-align: center;
@@ -203,7 +204,6 @@
     color: var(--bt-color-cloud);
     background: var(--bt-color-ink);
     box-shadow: var(--bt-shadow-action-primary);
-    font-weight: var(--bt-font-weight-bold);
 
     &:hover {
         color: var(--bt-color-white);
