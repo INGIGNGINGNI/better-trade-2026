@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Better Trade 2026 component library and visual system">
+<title>Better Trade 2026 - Component Library</title>
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="fonts/fonts.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/design-system.css">
+</head>
+<body data-view="clean">
+<a class="skip-link" href="#main">ข้ามไปยังเนื้อหา</a>
+<div class="blueprint-grid" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="topbar__inner">
+    <a class="brand" href="#top" aria-label="Better Trade 2026 Component Library">
+      <strong>BETTER TRADE 2026</strong>
+      <span>Component Library 01</span>
+    </a>
+
+    <nav class="topnav" aria-label="Component sections">
+      <a href="#foundation">Foundation</a>
+      <a href="#buttons">Buttons</a>
+      <a href="#navigation">Navigation</a>
+      <a href="#content">Content</a>
+      <a href="#forms">Forms</a>
+    </nav>
+
+    <div class="view-switch" aria-label="Display mode">
+      <button type="button" data-view-value="clean" aria-pressed="true">Clean</button>
+      <button type="button" data-view-value="blueprint" aria-pressed="false">Blueprint</button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="scene intro" id="top">
+    <div class="scene__inner">
+      <div class="intro__copy">
+        <p class="eyebrow">New World New Playbook</p>
+        <h1>Better Trade<br>Component Library</h1>
+        <p class="scene-head__note">Museum × Library × Future Observatory<br>Timeless. Intelligent. Curious. Monumental. Purposeful.</p>
+        <div class="intro__meta">
+          <span>System 01</span>
+          <span>Web Experience</span>
+          <span>2026</span>
+        </div>
+      </div>
+      <div class="intro__visual" aria-hidden="true">
+        <span class="intro__axis"></span>
+        <img src="images/triangle.webp" alt="">
+      </div>
+    </div>
+  </section>
+
+  <section class="scene" id="foundation">
+    <div class="scene__inner">
+      <header class="scene-head">
+        <div>
+          <p class="eyebrow">01 / Foundation</p>
+          <h2>Structure before decoration.</h2>
+        </div>
+        <p class="scene-head__note">Massive white space, architectural typography and a restrained spectrum form the visual hierarchy.</p>
+      </header>
+
+      <div class="foundation-grid">
+        <div class="type-specimen">
+          <div class="type-specimen__display">Future<br>Timeless</div>
+          <div class="type-specimen__thai">ความรู้คือประตูสู่โลกใบใหม่</div>
+          <p class="type-specimen__body">เรากำลังสร้างพื้นที่ที่รวบรวม Knowledge, Asset และ Playbook เพื่อเตรียมผู้ลงทุนให้พร้อมสำหรับการเปลี่ยนแปลง</p>
+        </div>
+
+        <div class="swatches" aria-label="Color tokens">
+          <button class="swatch swatch--ink" type="button" data-copy="#111318"><strong>Ink</strong><code>#111318</code></button>
+          <button class="swatch swatch--paper" type="button" data-copy="#F7F8F7"><strong>Paper</strong><code>#F7F8F7</code></button>
+          <button class="swatch swatch--graphite" type="button" data-copy="#30343A"><strong>Graphite</strong><code>#30343A</code></button>
+          <button class="swatch swatch--spectrum" type="button" data-copy="Holographic Spectrum"><strong>Spectrum</strong><code>Accent only</code></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene" id="buttons">
+    <div class="scene__inner">
+      <header class="scene-head">
+        <div>
+          <p class="eyebrow">02 / Action</p>
+          <h2>Buttons with intent.</h2>
+        </div>
+        <p class="scene-head__note">The holographic treatment is reserved for the highest-value action. Supporting actions stay quiet and precise.</p>
+      </header>
+
+      <div class="specimen-list">
+        <div class="specimen-row">
+          <div class="specimen-label"><strong>Primary</strong><span>Liquid spectrum rim</span></div>
+          <div class="specimen-stage"><div id="primary-button-slot"></div></div>
+        </div>
+        <div class="specimen-row">
+          <div class="specimen-label"><strong>Secondary</strong><span>Monochrome support</span></div>
+          <div class="specimen-stage">
+            <button class="bt-button bt-button--dark" type="button" data-toast="บันทึก Playbook แล้ว">บันทึก Playbook</button>
+            <button class="bt-button" type="button" data-toast="เปิดรายละเอียดแล้ว">ดูรายละเอียด</button>
+          </div>
+        </div>
+        <div class="specimen-row">
+          <div class="specimen-label"><strong>Text action</strong><span>Discovery cue</span></div>
+          <div class="specimen-stage">
+            <button class="bt-button bt-button--text" type="button" data-toast="กำลังเปิด Chapter 01">สำรวจ Chapter 01 →</button>
+            <button class="bt-button" type="button" disabled>ยังไม่เปิดใช้งาน</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene scene--ink" id="navigation">
+    <div class="scene__inner">
+      <header class="scene-head">
+        <div>
+          <p class="eyebrow">03 / Navigation</p>
+          <h2>Editorial index.</h2>
+        </div>
+        <p class="scene-head__note">Tabs behave like chapters in a playbook. Selection reveals a scene rather than swapping a small block of content.</p>
+      </header>
+
+      <div class="tabs">
+        <div class="tablist" role="tablist" aria-label="Investment worlds">
+          <button class="tab" id="tab-market" type="button" role="tab" aria-selected="true" aria-controls="panel-market">
+            <span>โลกตลาดทุน</span><span class="tab__number">01</span>
+          </button>
+          <button class="tab" id="tab-life" type="button" role="tab" aria-selected="false" aria-controls="panel-life" tabindex="-1">
+            <span>Investment Life</span><span class="tab__number">02</span>
+          </button>
+          <button class="tab" id="tab-playbook" type="button" role="tab" aria-selected="false" aria-controls="panel-playbook" tabindex="-1">
+            <span>My Playbook</span><span class="tab__number">03</span>
+          </button>
+        </div>
+
+        <div class="tabpanel" id="panel-market" role="tabpanel" aria-labelledby="tab-market">
+          <div class="tabpanel__index">01</div>
+          <div><h3>Understand the new market.</h3><p>สำรวจโครงสร้างเศรษฐกิจ สินทรัพย์ และความเปลี่ยนแปลงที่กำลังกำหนดโลกการลงทุนในอนาคต</p></div>
+        </div>
+        <div class="tabpanel" id="panel-life" role="tabpanel" aria-labelledby="tab-life" hidden>
+          <div class="tabpanel__index">02</div>
+          <div><h3>Invest in a meaningful life.</h3><p>มองการลงทุนผ่าน Longevity, Wellness, Passion และ Lifestyle เพื่อให้ความมั่งคั่งเชื่อมโยงกับชีวิตจริง</p></div>
+        </div>
+        <div class="tabpanel" id="panel-playbook" role="tabpanel" aria-labelledby="tab-playbook" hidden>
+          <div class="tabpanel__index">03</div>
+          <div><h3>Build your own playbook.</h3><p>เปลี่ยนความรู้ให้กลายเป็นแนวทางตัดสินใจส่วนตัว พร้อมเครื่องมือที่นำกลับไปใช้งานได้หลังจบงาน</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene" id="content">
+    <div class="scene__inner">
+      <header class="scene-head">
+        <div>
+          <p class="eyebrow">04 / Content</p>
+          <h2>Pages, not a card wall.</h2>
+        </div>
+        <p class="scene-head__note">Content objects can behave like documents, chapters or exhibits without turning the page into a repetitive dashboard grid.</p>
+      </header>
+
+      <div class="chapter-stack">
+        <article class="chapter">
+          <div class="chapter__number">01</div>
+          <div><h3>Macro Environment</h3><p>อ่านแรงขับเคลื่อนของโลกและความผันผวนที่นักลงทุนต้องเผชิญ</p></div>
+          <div class="chapter__action"><button class="arrow-button" type="button" aria-label="เปิด Macro Environment" data-toast="เปิด Macro Environment">→</button></div>
+        </article>
+        <article class="chapter">
+          <div class="chapter__number">02</div>
+          <div><h3>Discovery & Understanding</h3><p>ค้นพบข้อมูลใหม่และเชื่อมโยงให้กลายเป็นความเข้าใจที่ตัดสินใจได้</p></div>
+          <div class="chapter__action"><button class="arrow-button" type="button" aria-label="เปิด Discovery and Understanding" data-toast="เปิด Discovery & Understanding">→</button></div>
+        </article>
+        <article class="chapter">
+          <div class="chapter__number">03</div>
+          <div><h3>Preparation & Commitment</h3><p>จัดลำดับทางเลือก สร้างแผน และเปลี่ยนความตั้งใจให้เป็นการลงมือทำ</p></div>
+          <div class="chapter__action"><button class="arrow-button" type="button" aria-label="เปิด Preparation and Commitment" data-toast="เปิด Preparation & Commitment">→</button></div>
+        </article>
+      </div>
+
+      <div class="data-toolbar">
+        <div><strong>Market Observatory</strong><br><span>Sample market data</span></div>
+        <button class="bt-button" type="button" id="refresh-data">อัปเดตข้อมูล</button>
+      </div>
+
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th scope="col">Asset</th>
+              <th scope="col"><button class="sort-button" type="button" data-sort="price">Price ↕</button></th>
+              <th scope="col"><button class="sort-button" type="button" data-sort="change">Change ↕</button></th>
+              <th scope="col">Signal</th>
+            </tr>
+          </thead>
+          <tbody id="market-rows">
+            <tr data-price="1298.42" data-change="1.24"><td><span class="asset-name"><i class="asset-mark"></i>SET Index</span></td><td>1,298.42</td><td class="positive">+1.24%</td><td>Momentum</td></tr>
+            <tr data-price="68.12" data-change="-0.38"><td><span class="asset-name"><i class="asset-mark"></i>Gold</span></td><td>68.12</td><td class="negative">-0.38%</td><td>Neutral</td></tr>
+            <tr data-price="112450" data-change="2.06"><td><span class="asset-name"><i class="asset-mark"></i>Bitcoin</span></td><td>112,450</td><td class="positive">+2.06%</td><td>Watch</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene" id="forms">
+    <div class="scene__inner">
+      <header class="scene-head">
+        <div>
+          <p class="eyebrow">05 / Forms & Overlay</p>
+          <h2>Quiet controls, clear decisions.</h2>
+        </div>
+        <p class="scene-head__note">Interface controls remain calm and legible. The spectrum appears only at focus, confirmation and meaningful transition points.</p>
+      </header>
+
+      <div class="form-layout">
+        <form class="form-grid" id="profile-form">
+          <div class="field">
+            <label for="name">ชื่อผู้เข้าร่วม</label>
+            <input id="name" name="name" type="text" value="นักลงทุนยุคใหม่">
+          </div>
+          <div class="field">
+            <label for="profile">Investment Profile</label>
+            <select id="profile" name="profile">
+              <option>Balanced Explorer</option>
+              <option>Growth Seeker</option>
+              <option>Long-term Builder</option>
+            </select>
+          </div>
+          <div class="field field--wide">
+            <label for="goal">เป้าหมายของ Playbook</label>
+            <textarea id="goal" name="goal">สร้างแนวทางตัดสินใจที่พร้อมรับความเปลี่ยนแปลงของโลกการลงทุน</textarea>
+            <small>Chapter note 01</small>
+          </div>
+          <div class="field field--wide"><button class="bt-button bt-button--dark" type="submit">บันทึกข้อมูล</button></div>
+        </form>
+
+        <div class="control-panel">
+          <div class="control-row">
+            <div><strong>Market signals</strong><span>แจ้งเตือนเมื่อมุมมองเปลี่ยน</span></div>
+            <label class="switch"><input type="checkbox" checked aria-label="Market signals"><span class="switch__track"></span></label>
+          </div>
+          <div class="control-row">
+            <div><strong>Weekly brief</strong><span>บทสรุปสำหรับ Playbook</span></div>
+            <label class="switch"><input type="checkbox" aria-label="Weekly brief"><span class="switch__track"></span></label>
+          </div>
+          <div class="control-row">
+            <div><strong>Document layer</strong><span>Modal specimen</span></div>
+            <button class="bt-button" type="button" id="open-dialog">เปิดตัวอย่าง</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div><strong>The Gateway to the New World</strong><span>Better Trade 2026 Component Library</span></div>
+</footer>
+
+<dialog class="dialog" id="chapter-dialog" aria-labelledby="dialog-title">
+  <div class="dialog__edge"></div>
+  <div class="dialog__body">
+    <button class="dialog__close" type="button" aria-label="ปิด" id="close-dialog">×</button>
+    <p class="eyebrow">Chapter 01</p>
+    <h3 id="dialog-title">Your New World Playbook</h3>
+    <p>พื้นที่สำหรับรวบรวมความรู้ มุมมอง และเครื่องมือที่เปลี่ยนการค้นพบให้กลายเป็นแนวทางตัดสินใจของคุณเอง</p>
+    <div class="dialog__actions">
+      <button class="bt-button bt-button--dark" type="button" data-dialog-confirm>เริ่มสร้าง Playbook</button>
+      <button class="bt-button" type="button" data-dialog-cancel>ไว้ภายหลัง</button>
+    </div>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="js/design-system.js"></script>
+</body>
+</html>

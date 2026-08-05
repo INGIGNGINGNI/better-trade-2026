@@ -1,0 +1,298 @@
+/* ==========================================================================
+   ตัวแปรกลางของโปรเจกต์
+   - เก็บ token ที่ใช้ซ้ำได้ทั้งหมดไว้ใน main.css ไฟล์เดียว
+   - ตัวเลขเชิงขนาดและระยะใช้ px ตาม workflow guideline
+   - ส่วน hero motion ใน style.css/hero.css เป็นข้อยกเว้นชั่วคราว ห้ามย้ายหรือแปลงหน่วย
+   ========================================================================== */
+:root {
+    /* สีหลักและพื้นผิว */
+    --bt-color-ink: #111318;
+    --bt-color-ink-soft: #20242a;
+    --bt-color-white: #ffffff;
+    --bt-color-paper: #f7f8f7;
+    --bt-color-cloud: #eef1f6;
+    --bt-color-muted: #687078;
+    --bt-color-accent: rgba(17, 19, 24, 0.06);
+    --bt-color-line: rgba(17, 19, 24, 0.18);
+    --bt-color-line-soft: rgba(17, 19, 24, 0.16);
+    --bt-color-focus: #2b6cff;
+    --bt-surface-popover: rgba(255, 255, 255, 0.96);
+    --bt-spectrum-line: linear-gradient(90deg, #61e8ed, #9c91ff, #f178d8, #f2ea83, #61e8ed);
+
+    /* Alias สำหรับหน้า design system เดิม */
+    --bt-paper: var(--bt-color-paper);
+    --bt-white: var(--bt-color-white);
+    --bt-ink: var(--bt-color-ink);
+    --bt-graphite: #30343a;
+    --bt-muted: var(--bt-color-muted);
+    --bt-line: var(--bt-color-line-soft);
+    --bt-line-strong: rgba(17, 19, 24, 0.34);
+    --bt-cyan: #61e8ed;
+    --bt-pink: #f178d8;
+    --bt-violet: #9c91ff;
+    --bt-yellow: #f2ea83;
+    --bt-spectrum: linear-gradient(90deg, var(--bt-cyan), var(--bt-violet), var(--bt-pink), var(--bt-yellow), var(--bt-cyan));
+
+    /* ฟอนต์ */
+    --bt-font: "FC Minimal";
+    --bt-headline: "FC Minimal";
+
+    /* Container */
+    --container-hero-max: 1440px;
+    --bt-max: 1280px;
+
+    /* Spacing และ sizing system 8 */
+    --bt-space-0: 0;
+    --bt-space-1: 4px;
+    --bt-space-2: 8px;
+    --bt-space-3: 12px;
+    --bt-space-4: 16px;
+    --bt-space-5: 20px;
+    --bt-space-6: 24px;
+    --bt-space-8: 32px;
+    --bt-space-10: 40px;
+    --bt-space-12: 48px;
+    --bt-space-16: 64px;
+    --bt-space-20: 80px;
+    --bt-space-24: 96px;
+    --bt-space-28: 112px;
+    --bt-space-32: 128px;
+
+    /* เส้นขอบและมุมโค้ง */
+    --bt-radius-1: 4px;
+    --bt-radius-2: 8px;
+    --bt-border-width-1: 1px;
+    --bt-border-width-2: 2px;
+
+    /* Typography */
+    --bt-font-size-14: 14px;
+    --bt-font-size-16: 16px;
+    --bt-font-weight-medium: 500;
+    --bt-font-weight-bold: 700;
+
+    /* Motion */
+    --bt-duration-fast: 180ms;
+    --bt-duration-base: 240ms;
+    --bt-duration-reduced: 0.01ms;
+    --bt-ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+    --bt-ease: var(--bt-ease-standard);
+
+    /* Shadow */
+    --bt-shadow-action: 0 var(--bt-border-width-1) var(--bt-space-1) rgba(17, 19, 24, 0.10);
+    --bt-shadow-action-primary: 0 var(--bt-border-width-1) var(--bt-space-1) rgba(17, 19, 24, 0.24);
+    --bt-shadow: 0 18px 48px rgba(17, 19, 24, 0.09);
+
+    /* Token เฉพาะ hero-v2 เดิม
+       คงชื่อเดิมไว้เพื่อไม่ให้ motion และ layout ที่เพิ่งกู้กลับมาพัง */
+    --ink: #1a1e2b;
+    --font: "FC Minimal";
+    --headline: "FC Minimal";
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --space-12: 48px;
+    --space-16: 64px;
+    --space-20: 80px;
+    --space-24: 96px;
+    --space-32: 128px;
+    --header-height: var(--space-20);
+    --header-line: rgba(17, 19, 24, 0.12);
+    --spectrum: linear-gradient(90deg, #61e8ed, #9c91ff, #f178d8, #f2ea83, #61e8ed);
+    --spectrum-vertical: linear-gradient(180deg, #61e8ed, #9c91ff, #f178d8, #f2ea83, #61e8ed);
+
+    /* ค่าเริ่มต้นของ custom scrollbar ก่อน JavaScript คำนวณค่าจริง */
+    --thumb-height: 80px;
+    --thumb-y: 0px;
+}
+
+/* ปรับความสูง header สำหรับ breakpoint มือถือของ hero-v2 จากไฟล์กลาง */
+@media (max-width:991px) {
+    :root {
+        --header-height: 72px;
+    }
+}
+
+/* ==========================================================================
+   Component: ปุ่มกลางของโปรเจกต์
+   ใช้ซ้ำได้ข้ามหน้าและข้าม section เช่น header CTA, secondary CTA, text CTA
+   ========================================================================== */
+.bt-action-button {
+    position: relative;
+    min-height: var(--bt-space-10);
+    padding: 0 var(--bt-space-3);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--bt-space-2);
+    border: var(--bt-border-width-1) solid var(--bt-color-line);
+    border-radius: var(--bt-radius-2);
+    color: var(--bt-color-ink);
+    background: var(--bt-surface-popover);
+    box-shadow: var(--bt-shadow-action);
+    font-family: inherit;
+    font-size: var(--bt-font-size-16);
+    font-weight: var(--bt-font-weight-medium);
+    line-height: 1;
+    letter-spacing: 0;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    outline: none;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+        transform var(--bt-duration-fast) var(--bt-ease-standard),
+        background-color var(--bt-duration-fast) var(--bt-ease-standard),
+        border-color var(--bt-duration-fast) var(--bt-ease-standard),
+        box-shadow var(--bt-duration-fast) var(--bt-ease-standard),
+        color var(--bt-duration-fast) var(--bt-ease-standard);
+
+    &::before {
+        content: "";
+        position: absolute;
+        inset: var(--bt-border-width-1);
+        border-radius: calc(var(--bt-radius-2) - var(--bt-border-width-1));
+        pointer-events: none;
+        box-shadow: inset 0 var(--bt-border-width-1) 0 rgba(255, 255, 255, 0.16);
+    }
+
+    &:hover {
+        background: var(--bt-color-accent);
+    }
+
+    &:active,
+    &[data-pressed] {
+        transform: scale(0.98);
+        box-shadow: none;
+    }
+
+    &:focus-visible {
+        outline: var(--bt-border-width-2) solid var(--bt-color-focus);
+        outline-offset: var(--bt-space-1);
+    }
+
+    &[aria-disabled="true"],
+    &:disabled {
+        pointer-events: none;
+        opacity: 0.64;
+    }
+
+    &[data-loading] {
+        color: transparent;
+        user-select: none;
+    }
+
+    .bt-action-button__spinner {
+        position: absolute;
+        width: var(--bt-space-4);
+        height: var(--bt-space-4);
+        border: var(--bt-border-width-2) solid currentColor;
+        border-right-color: transparent;
+        border-radius: 50%;
+        animation: bt-action-button-spin 720ms linear infinite;
+    }
+}
+
+.bt-action-button--primary {
+    border-color: var(--bt-color-ink);
+    color: var(--bt-color-cloud);
+    background: var(--bt-color-ink);
+    box-shadow: var(--bt-shadow-action-primary);
+    font-weight: var(--bt-font-weight-bold);
+
+    &:hover {
+        color: var(--bt-color-white);
+        background: var(--bt-color-ink-soft);
+        border-color: var(--bt-color-ink-soft);
+    }
+}
+
+.bt-action-button--secondary {
+    border-color: var(--bt-color-line);
+    color: var(--bt-color-ink);
+    background: var(--bt-surface-popover);
+
+    &:hover {
+        background: var(--bt-color-accent);
+    }
+}
+
+.bt-action-button--text {
+    min-height: var(--bt-space-10);
+    padding: 0 var(--bt-space-1);
+    border: 0;
+    border-radius: 0;
+    color: var(--bt-color-ink);
+    background: transparent;
+    box-shadow: none;
+
+    &::before {
+        display: none;
+    }
+
+    &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: var(--bt-space-0);
+        height: var(--bt-border-width-2);
+        background: var(--bt-spectrum-line);
+        transform: scaleX(0.22);
+        transform-origin: left;
+        transition: transform var(--bt-duration-base) var(--bt-ease-standard);
+    }
+
+    &:hover {
+        background: transparent;
+    }
+
+    &:hover::after,
+    &:focus-visible::after {
+        transform: scaleX(1);
+    }
+
+    &:active,
+    &[data-pressed] {
+        transform: none;
+    }
+}
+
+.bt-action-button--xl {
+    min-height: var(--bt-space-12);
+    padding-inline: var(--bt-space-6);
+    font-size: var(--bt-font-size-16);
+}
+
+.bt-action-button--sm {
+    min-height: var(--bt-space-10);
+    padding-inline: var(--bt-space-4);
+    font-size: var(--bt-font-size-14);
+}
+
+@keyframes bt-action-button-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width:1199px) {
+    .bt-action-button--header {
+        padding-inline: var(--bt-space-3);
+    }
+}
+
+@media (prefers-reduced-motion:reduce) {
+    .bt-action-button {
+        transition-duration: var(--bt-duration-reduced);
+
+        .bt-action-button__spinner {
+            animation-duration: var(--bt-duration-reduced);
+        }
+    }
+}
