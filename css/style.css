@@ -872,7 +872,7 @@ the timeline drops them under the ship once the walls have retreated. */
 /* ---------- next section ---------- */
 #concept {
     position: relative;
-    min-height: 180vh;
+    /* min-height: 180vh; */
     background: #fff;
     color: var(--ink);
     display: block;
@@ -1038,6 +1038,7 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     @media (max-width:991px) {
+
         .concept__topics-row,
         .concept__topics-row.concept__topics-row--five,
         .concept__topics-row.concept__topics-row--four {
@@ -1071,6 +1072,7 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     @media (max-width:575px) {
+
         .concept__topics-row,
         .concept__topics-row.concept__topics-row--five,
         .concept__topics-row.concept__topics-row--four {
@@ -1094,6 +1096,930 @@ the timeline drops them under the ship once the walls have retreated. */
 
         .concept__topics-row:first-child p:first-child::after {
             display: none;
+        }
+    }
+}
+
+/* ---------- Ticket ----------
+   Comparison layout แบบ editorial ใช้พื้นที่ว่างและเส้นบางแทนกรอบ card */
+.ticket {
+    position: relative;
+    padding: var(--bt-story-section-padding-y) var(--bt-space-6);
+    border-top: var(--bt-story-rule-width) solid var(--bt-story-line);
+    color: var(--bt-story-ink);
+    background: var(--bt-story-bg);
+    font-family: var(--bt-font);
+
+    .ticket__inner {
+        width: min(100%, var(--bt-story-max));
+        margin: 0 auto;
+    }
+
+    .ticket__header {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: end;
+        gap: var(--bt-story-grid-gap);
+        margin-bottom: var(--bt-story-section-padding-y-sm);
+    }
+
+    .ticket__eyebrow,
+    .ticket__plan-index {
+        margin: 0 0 var(--bt-space-4);
+        color: var(--bt-story-muted);
+        font-size: var(--bt-story-body-size);
+        font-weight: var(--bt-font-weight-regular);
+        line-height: var(--bt-story-body-line-height);
+        letter-spacing: 0;
+        text-transform: uppercase;
+    }
+
+    .ticket__heading h2 {
+        max-width: var(--bt-story-copy);
+        margin: 0;
+        font-size: var(--bt-story-title-size);
+        font-weight: var(--bt-font-weight-regular);
+        line-height: var(--bt-story-title-line-height);
+        letter-spacing: var(--bt-story-title-tracking);
+        text-wrap: balance;
+    }
+
+    .ticket__intro {
+        max-width: var(--bt-story-copy);
+        margin: 0;
+        color: var(--bt-story-muted);
+        font-size: var(--bt-story-body-size);
+        font-weight: var(--bt-font-weight-regular);
+        line-height: var(--bt-story-body-line-height);
+        letter-spacing: 0;
+    }
+
+    .ticket__plans {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        /* border-top: var(--bt-story-rule-width) solid var(--bt-story-line); */
+        /* border-bottom: var(--bt-story-rule-width) solid var(--bt-story-line); */
+    }
+
+    .ticket__plan {
+        min-width: 0;
+        padding: var(--bt-space-8);
+        display: flex;
+        flex-direction: column;
+        transition: background-color var(--bt-story-duration) var(--bt-story-ease);
+
+        &:not(:first-child) {
+            border-left: var(--bt-story-rule-width) solid var(--bt-story-line);
+        }
+
+        &:hover {
+            background: var(--bt-story-paper);
+        }
+    }
+
+    .ticket__plan-header {
+        margin-bottom: var(--bt-space-8);
+    }
+
+    .ticket__plan-header h3 {
+        margin: 0;
+        font-size: var(--bt-story-heading-size);
+        font-weight: var(--bt-font-weight-regular);
+        line-height: var(--bt-story-heading-line-height);
+        letter-spacing: var(--bt-story-heading-tracking);
+    }
+
+    .ticket__plan-note {
+        max-width: var(--bt-story-copy);
+        margin: var(--bt-space-4) 0 0;
+        color: var(--bt-story-muted);
+        font-size: var(--bt-story-small-size);
+        font-weight: var(--bt-font-weight-regular);
+        line-height: var(--bt-story-body-line-height);
+        letter-spacing: 0;
+    }
+
+    .ticket__prices {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        border-top: var(--bt-story-rule-width) solid var(--bt-story-line);
+        border-bottom: var(--bt-story-rule-width) solid var(--bt-story-line);
+    }
+
+    .ticket__price {
+        min-width: 0;
+        padding: var(--bt-space-5) var(--bt-space-3) var(--bt-space-6) 0;
+        display: grid;
+        align-content: start;
+
+        &:not(:first-child) {
+            padding-left: var(--bt-space-5);
+            border-left: var(--bt-story-rule-width) solid var(--bt-story-line);
+        }
+
+        span,
+        small {
+            color: var(--bt-story-muted);
+            font-size: var(--bt-story-small-size);
+            font-weight: var(--bt-font-weight-regular);
+            line-height: var(--bt-story-body-line-height);
+        }
+
+        strong {
+            margin-top: var(--bt-space-2);
+            font-size: var(--bt-story-heading-size);
+            font-weight: var(--bt-font-weight-medium);
+            line-height: var(--bt-story-heading-line-height);
+            letter-spacing: 0;
+        }
+    }
+
+    .ticket__access {
+        margin: var(--bt-space-6) 0 var(--bt-space-8);
+
+        >div {
+            min-height: var(--bt-space-12);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--bt-space-4);
+            border-top: var(--bt-story-rule-width) solid var(--bt-story-line);
+
+            &:first-child {
+                border-top: 0;
+            }
+        }
+
+        dt,
+        dd {
+            margin: 0;
+            font-size: var(--bt-story-small-size);
+            font-weight: var(--bt-font-weight-regular);
+            line-height: var(--bt-story-body-line-height);
+        }
+    }
+
+    /* ไอคอนขนาดเล็กช่วยเชื่อมชื่อในตารางกับรายละเอียดแต่ละรูปแบบด้านล่าง */
+    .ticket__access-label {
+        min-width: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: var(--bt-space-2);
+
+        >.material-symbols-rounded {
+            flex: 0 0 auto;
+            width: var(--bt-space-6);
+            height: var(--bt-space-6);
+            display: grid;
+            place-items: center;
+            border-radius: var(--bt-radius-1);
+            background: color-mix(in srgb, currentColor 16%, var(--bt-story-bg));
+            font-size: var(--bt-font-size-16);
+            font-variation-settings: 'wght' 300;
+        }
+
+        >span:last-child {
+            color: var(--bt-story-ink);
+        }
+
+        &.ticket__access-label--conference>.material-symbols-rounded {
+            color: var(--bt-ticket-conference);
+        }
+
+        &.ticket__access-label--experience>.material-symbols-rounded {
+            color: var(--bt-ticket-experience);
+        }
+
+        &.ticket__access-label--pavilions>.material-symbols-rounded {
+            color: var(--bt-ticket-pavilions);
+        }
+
+        &.ticket__access-label--workshop>.material-symbols-rounded {
+            color: var(--bt-ticket-workshop);
+        }
+
+        &.ticket__access-label--private-class>.material-symbols-rounded {
+            color: var(--bt-ticket-private-class);
+        }
+
+        &.ticket__access-label--playbook>.material-symbols-rounded {
+            color: var(--bt-ticket-playbook);
+        }
+    }
+
+    .ticket__status {
+        min-width: var(--bt-space-8);
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: var(--bt-space-1);
+        color: var(--bt-story-muted);
+
+        .material-symbols-rounded {
+            font-size: var(--bt-space-5);
+            font-variation-settings: 'wght' 400;
+        }
+
+        &.ticket__status--included,
+        &.ticket__status--playbook {
+            color: var(--bt-story-accent);
+        }
+
+        &.ticket__status--soon {
+            color: var(--bt-story-ink);
+            text-transform: uppercase;
+        }
+    }
+
+    .ticket__action {
+        width: 100%;
+        margin-top: auto;
+
+        /* ปุ่ม Ultimate ใช้สีดำล้วน ไม่มีขอบ spectrum */
+        &.bt-action-button--primary {
+            border-color: var(--bt-action-fill);
+            background: var(--bt-action-fill);
+        }
+    }
+
+    .ticket__benefits {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+        gap: var(--bt-story-grid-gap);
+        padding-top: var(--bt-story-section-padding-y-sm);
+
+        h3 {
+            margin: 0;
+            font-size: var(--bt-story-subheading-size);
+            font-weight: var(--bt-font-weight-regular);
+            line-height: var(--bt-story-topic-line-height);
+            letter-spacing: 0;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            list-style: none;
+        }
+
+        li {
+            min-width: 0;
+            padding: 0 var(--bt-space-5);
+            display: grid;
+            align-content: start;
+            gap: var(--bt-space-4);
+            border-left: var(--bt-story-rule-width) solid var(--bt-story-line);
+            color: var(--bt-story-muted);
+            font-size: var(--bt-story-small-size);
+            font-weight: var(--bt-font-weight-regular);
+            line-height: var(--bt-story-body-line-height);
+
+            .material-symbols-rounded {
+                color: var(--bt-story-accent);
+                font-size: var(--bt-space-6);
+                font-variation-settings: 'wght' 300;
+            }
+        }
+    }
+
+    .ticket__formats {
+        padding-top: var(--bt-space-20);
+    }
+
+    .ticket__formats-grid {
+        display: flex;
+        flex-direction: column;
+        gap: var(--bt-space-3);
+    }
+
+    .ticket__format {
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: var(--bt-space-4);
+
+        >.material-symbols-rounded {
+            display: grid;
+            place-items: center;
+            flex: 0 0 auto;
+            width: var(--bt-space-6);
+            height: var(--bt-space-6);
+            border-radius: var(--bt-radius-1);
+            background: color-mix(in srgb, currentColor 16%, var(--bt-story-bg));
+            font-size: var(--bt-font-size-16);
+            font-variation-settings: 'wght' 300;
+        }
+
+        .ticket__format-copy {
+            min-width: 0;
+            padding-top: var(--bt-space-1);
+            font-size: var(--bt-font-size-16);
+            line-height: var(--bt-story-body-line-height);
+
+            h4,
+            p {
+                display: inline;
+                margin: 0;
+                letter-spacing: 0;
+            }
+
+            h4 {
+                color: var(--bt-story-ink);
+                font-size: inherit;
+                font-weight: var(--bt-font-weight-medium);
+                line-height: inherit;
+
+                &::after {
+                    content: ' ';
+                }
+            }
+
+            p {
+                color: var(--bt-story-muted);
+                font-size: inherit;
+                font-weight: var(--bt-font-weight-regular);
+                line-height: inherit;
+            }
+        }
+
+        &.ticket__format--conference>.material-symbols-rounded {
+            color: var(--bt-ticket-conference);
+        }
+
+        &.ticket__format--experience>.material-symbols-rounded {
+            color: var(--bt-ticket-experience);
+        }
+
+        &.ticket__format--pavilions>.material-symbols-rounded {
+            color: var(--bt-ticket-pavilions);
+        }
+
+        &.ticket__format--workshop>.material-symbols-rounded {
+            color: var(--bt-ticket-workshop);
+        }
+
+        &.ticket__format--private-class>.material-symbols-rounded {
+            color: var(--bt-ticket-private-class);
+        }
+
+        &.ticket__format--playbook>.material-symbols-rounded {
+            color: var(--bt-ticket-playbook);
+        }
+    }
+
+    @media (max-width:991px) {
+        padding: var(--bt-story-section-padding-y-sm) var(--bt-space-4);
+
+        .ticket__header {
+            grid-template-columns: 1fr;
+            gap: var(--bt-space-6);
+            margin-bottom: var(--bt-space-16);
+        }
+
+        .ticket__plans {
+            grid-template-columns: 1fr;
+        }
+
+        .ticket__plan {
+            padding: var(--bt-space-8) 0;
+
+            &:not(:first-child) {
+                border-top: var(--bt-story-rule-width) solid var(--bt-story-line);
+                border-left: 0;
+            }
+        }
+
+        .ticket__plan-header {
+            margin-bottom: var(--bt-space-8);
+        }
+
+        .ticket__benefits {
+            grid-template-columns: 1fr;
+            gap: var(--bt-space-8);
+
+            ul {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                row-gap: var(--bt-space-8);
+            }
+        }
+
+    }
+
+    @media (max-width:575px) {
+
+        .ticket__heading h2,
+        .ticket__plan-header h3 {
+            font-size: var(--bt-story-topic-size);
+            line-height: var(--bt-story-topic-line-height);
+        }
+
+        .ticket__prices {
+            grid-template-columns: 1fr;
+        }
+
+        .ticket__price {
+            padding: var(--bt-space-4) 0 var(--bt-space-5);
+
+            &:not(:first-child) {
+                padding-left: 0;
+                border-top: var(--bt-story-rule-width) solid var(--bt-story-line);
+                border-left: 0;
+            }
+        }
+
+        .ticket__benefits ul {
+            grid-template-columns: 1fr;
+            row-gap: 0;
+
+            li {
+                padding: var(--bt-space-5) 0;
+                grid-template-columns: var(--bt-space-8) minmax(0, 1fr);
+                gap: var(--bt-space-3);
+                border-top: var(--bt-story-rule-width) solid var(--bt-story-line);
+                border-left: 0;
+
+                &:last-child {
+                    border-bottom: var(--bt-story-rule-width) solid var(--bt-story-line);
+                }
+            }
+        }
+
+    }
+}
+
+/* ---------- Agenda ----------
+   ตารางกำหนดการแบบ editorial เน้นลำดับเวลา พื้นที่ว่าง และเส้นบาง */
+.agenda {
+    position: relative;
+    padding: var(--bt-story-section-padding-y) var(--bt-space-6);
+    border-top: var(--bt-story-rule-width) solid var(--bt-story-line);
+    color: var(--bt-story-ink);
+    background: var(--bt-story-bg);
+    font-family: var(--bt-font);
+
+    .agenda__inner {
+        width: min(100%, var(--bt-story-max));
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: minmax(0, var(--bt-agenda-aside-width)) minmax(0, 1fr);
+        align-items: start;
+        gap: var(--bt-story-column-gap);
+    }
+
+    /* Day 2 ต่อเนื่องใน section เดียวกัน โดยใช้เส้นบางแบ่งจังหวะระหว่างวัน */
+    .agenda__inner--day-two {
+        margin-top: var(--bt-space-16);
+        padding-top: var(--bt-space-16);
+        border-top: var(--bt-story-rule-width) solid var(--bt-story-line);
+    }
+
+    .agenda__header {
+        position: sticky;
+        top: calc(var(--header-height) + var(--bt-space-6));
+        min-width: 0;
+    }
+
+    .agenda__eyebrow {
+        margin: 0 0 var(--bt-space-4);
+        color: var(--bt-story-muted);
+        font-size: var(--bt-story-body-size);
+        font-weight: var(--bt-font-weight-regular);
+        line-height: var(--bt-story-body-line-height);
+        letter-spacing: 0;
+        text-transform: uppercase;
+    }
+
+    .agenda__header h2 {
+        margin: 0 0 var(--bt-space-8);
+        font-size: var(--bt-story-display-size);
+        font-weight: var(--bt-font-weight-regular);
+        line-height: var(--bt-story-display-line-height);
+        letter-spacing: 0;
+        text-transform: uppercase;
+    }
+
+    .agenda__date,
+    .agenda__time {
+        margin: 0;
+        color: var(--bt-story-muted);
+        font-size: var(--bt-story-body-size);
+        font-weight: var(--bt-font-weight-regular);
+        line-height: var(--bt-story-body-line-height);
+        letter-spacing: 0;
+    }
+
+    .agenda__content {
+        min-width: 0;
+    }
+
+    .agenda__tabs {
+        --agenda-tab-indicator-x: 0px;
+        --agenda-tab-indicator-y: 0px;
+        --agenda-tab-indicator-width: 0px;
+
+        position: sticky;
+        top: calc(var(--header-height) + var(--bt-space-6));
+        z-index: 2;
+        min-height: var(--bt-story-touch-target);
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+        border-bottom: var(--bt-story-rule-width) solid var(--bt-story-line);
+        background: var(--bt-story-bg);
+        overflow: visible;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* ฉากใต้ Header ปิดเนื้อหาตารางที่เลื่อนผ่านด้านบนของแถบ sticky */
+        &::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            bottom: 100%;
+            left: calc(50% - 50vw);
+            z-index: 0;
+            width: 100vw;
+            height: calc(var(--header-height) + var(--bt-space-6));
+            background: var(--bt-story-bg);
+            pointer-events: none;
+        }
+    }
+
+    .agenda__tab {
+        position: relative;
+        z-index: 1;
+        flex: 0 0 auto;
+        width: auto;
+        min-height: var(--bt-story-touch-target);
+        padding: 0 var(--bt-space-6);
+        border: 0;
+        color: var(--bt-story-muted);
+        background: transparent;
+        font: inherit;
+        font-size: var(--bt-story-body-size);
+        font-weight: var(--bt-font-weight-regular);
+        line-height: var(--bt-story-body-line-height);
+        letter-spacing: 0;
+        white-space: nowrap;
+        cursor: pointer;
+        transition:
+            color var(--bt-duration-fast) var(--bt-ease-standard),
+            background-color var(--bt-duration-fast) var(--bt-ease-standard);
+
+        &:hover {
+            color: var(--bt-story-ink);
+            background: var(--bt-story-paper);
+        }
+
+        &:focus-visible {
+            outline: var(--bt-border-width-2) solid var(--bt-color-focus);
+            outline-offset: calc(var(--bt-border-width-2) * -1);
+        }
+
+        &[aria-selected="true"] {
+            color: var(--bt-story-ink);
+            font-weight: var(--bt-font-weight-medium);
+        }
+    }
+
+    .agenda__tab-indicator {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 2;
+        width: var(--agenda-tab-indicator-width);
+        height: var(--bt-story-rule-height);
+        background: var(--bt-spectrum-line);
+        pointer-events: none;
+        transform: translate(var(--agenda-tab-indicator-x), var(--agenda-tab-indicator-y));
+        will-change: width, transform;
+    }
+
+    .agenda__tabs[data-indicator-ready="true"] .agenda__tab-indicator {
+        transition:
+            width var(--bt-duration-base) linear,
+            transform var(--bt-duration-base) linear;
+    }
+
+    .agenda__panel {
+        min-width: 0;
+
+        &[hidden] {
+            display: none;
+        }
+
+        &.agenda__panel--empty {
+            min-height: var(--bt-story-section-padding-y-sm);
+        }
+    }
+
+    .agenda__table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    .agenda__time-column {
+        width: var(--bt-agenda-time-width);
+    }
+
+    .agenda__speaker-column {
+        width: var(--bt-agenda-speaker-column-width);
+    }
+
+    .agenda__table tr {
+        border-bottom: var(--bt-story-rule-width) solid var(--bt-story-line);
+    }
+
+    .agenda__table th,
+    .agenda__table td {
+        padding: var(--bt-space-6) 0;
+        vertical-align: top;
+    }
+
+    .agenda__table th {
+        padding-right: var(--bt-space-6);
+        color: var(--bt-story-muted);
+        font-size: var(--bt-story-small-size);
+        font-weight: var(--bt-font-weight-regular);
+        line-height: var(--bt-story-body-line-height);
+        letter-spacing: 0;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    .agenda__table td {
+        border-left: var(--bt-story-rule-width) solid var(--bt-story-line);
+        padding-left: var(--bt-space-6);
+    }
+
+    /* กรอบรูปวิทยากรอยู่ขวาสุดของแต่ละ Session และรองรับหลายคนในแถวเดียว */
+    .agenda__table td.agenda__speakers {
+        padding-right: 0;
+        padding-left: 0;
+        border-left: 0;
+        vertical-align: middle;
+    }
+
+    .agenda__speakers {
+        font-size: 0;
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    .agenda__speaker-frame {
+        position: relative;
+        width: var(--bt-agenda-speaker-size);
+        height: var(--bt-agenda-speaker-size);
+        display: inline-grid;
+        place-items: center;
+        overflow: hidden;
+        border: var(--bt-story-rule-width) solid var(--bt-story-line);
+        border-radius: 50%;
+        color: var(--bt-story-muted);
+        background: var(--bt-story-paper);
+
+        &+.agenda__speaker-frame {
+            margin-left: var(--bt-space-2);
+        }
+
+        >img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
+    }
+
+    .agenda__speaker-frame>span.material-symbols-rounded {
+        font-size: var(--bt-space-8);
+        font-variation-settings: 'wght' 300;
+    }
+
+    .agenda__tags {
+        margin-bottom: var(--bt-space-3);
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--bt-space-2);
+    }
+
+    .agenda__tag {
+        min-height: var(--bt-space-6);
+        padding: 0 var(--bt-space-3);
+        display: inline-flex;
+        align-items: center;
+        border-radius: var(--bt-story-pill-radius);
+        font-size: var(--bt-story-small-size);
+        font-weight: var(--bt-font-weight-medium);
+        line-height: var(--bt-story-body-line-height);
+        letter-spacing: 0;
+        text-transform: uppercase;
+
+        &.agenda__tag--capital {
+            color: var(--bt-agenda-capital);
+            background: color-mix(in srgb, var(--bt-agenda-capital) 14%, var(--bt-story-bg));
+        }
+
+        &.agenda__tag--commodity {
+            color: var(--bt-agenda-commodity);
+            background: color-mix(in srgb, var(--bt-agenda-commodity) 14%, var(--bt-story-bg));
+        }
+
+        &.agenda__tag--crypto {
+            color: var(--bt-agenda-crypto);
+            background: color-mix(in srgb, var(--bt-agenda-crypto) 16%, var(--bt-story-bg));
+        }
+
+        &.agenda__tag--alternative {
+            color: var(--bt-agenda-alternative);
+            background: color-mix(in srgb, var(--bt-agenda-alternative) 14%, var(--bt-story-bg));
+        }
+    }
+
+    .agenda__session-title,
+    .agenda__session-summary {
+        margin: 0;
+        letter-spacing: 0;
+    }
+
+    .agenda__session-title {
+        color: var(--bt-story-ink);
+        font-size: var(--bt-story-body-size);
+        font-weight: var(--bt-font-weight-medium);
+        line-height: var(--bt-story-body-line-height);
+
+        &.agenda__session-title--simple {
+            font-weight: var(--bt-font-weight-regular);
+        }
+    }
+
+    .agenda__session-summary {
+        margin-top: var(--bt-space-1);
+        color: var(--bt-story-muted);
+        font-size: var(--bt-font-size-16);
+        font-weight: var(--bt-font-weight-regular);
+        line-height: var(--bt-story-body-line-height);
+    }
+
+    .agenda__note {
+        margin: var(--bt-space-6) 0 0;
+        color: var(--bt-story-muted);
+        font-size: var(--bt-story-small-size);
+        font-weight: var(--bt-font-weight-regular);
+        line-height: var(--bt-story-body-line-height);
+        letter-spacing: 0;
+    }
+
+    @media (max-width:991px) {
+        padding: var(--bt-story-section-padding-y-sm) var(--bt-space-4);
+
+        .agenda__inner {
+            grid-template-columns: 1fr;
+            gap: var(--bt-space-8);
+        }
+
+        .agenda__inner--day-two {
+            margin-top: var(--bt-space-12);
+            padding-top: var(--bt-space-12);
+        }
+
+        .agenda__header {
+            position: static;
+        }
+
+        .agenda__header h2 {
+            margin-bottom: var(--bt-space-6);
+            font-size: var(--bt-story-title-size);
+            line-height: var(--bt-story-title-line-height);
+        }
+
+    }
+
+    /* Mobile agenda: ย้ายข้อมูลวิทยากรลงใต้ชื่อ Session เพื่อให้อ่านเป็นลำดับเดียว */
+    @media (max-width:767px) {
+        .agenda__tabs {
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        .agenda__table,
+        .agenda__table tbody {
+            display: block;
+        }
+
+        .agenda__table colgroup {
+            display: none;
+        }
+
+        .agenda__table tr {
+            display: grid;
+            grid-template-columns: var(--bt-agenda-time-width) minmax(0, 1fr);
+        }
+
+        .agenda__table th,
+        .agenda__table td {
+            display: block;
+        }
+
+        .agenda__table th {
+            grid-column: 1;
+            grid-row: 1 / span 2;
+            padding-right: var(--bt-space-4);
+        }
+
+        .agenda__table td:not(.agenda__speakers) {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        .agenda__table td.agenda__speakers {
+            grid-column: 2;
+            grid-row: 2;
+            padding: 0 0 var(--bt-space-6) var(--bt-space-6);
+            display: block;
+            border-left: var(--bt-story-rule-width) solid var(--bt-story-line);
+            font-size: var(--bt-story-small-size);
+            text-align: left;
+            white-space: normal;
+
+            &:empty {
+                display: none;
+            }
+
+        }
+
+        .agenda__speaker-frame {
+            vertical-align: top;
+        }
+    }
+
+    @media (max-width:575px) {
+        .agenda__time-column {
+            width: var(--bt-space-20);
+        }
+
+        .agenda__tab {
+            padding: 0 var(--bt-space-4);
+        }
+
+        .agenda__table th,
+        .agenda__table td {
+            padding-top: var(--bt-space-5);
+            padding-bottom: var(--bt-space-5);
+        }
+
+        .agenda__table th {
+            padding-right: var(--bt-space-3);
+            white-space: normal;
+        }
+
+        .agenda__table td {
+            padding-left: var(--bt-space-4);
+        }
+
+        .agenda__speaker-column {
+            width: var(--bt-agenda-speaker-column-width-mobile);
+        }
+
+        .agenda__table td.agenda__speakers {
+            padding-left: 0;
+        }
+
+        .agenda__speaker-frame {
+            width: var(--bt-agenda-speaker-size-mobile);
+            height: var(--bt-agenda-speaker-size-mobile);
+
+            &+.agenda__speaker-frame {
+                margin-left: var(--bt-space-1);
+            }
+
+        }
+
+        .agenda__speaker-frame>span.material-symbols-rounded {
+            font-size: var(--bt-space-5);
+        }
+
+        .agenda__tags {
+            margin-bottom: var(--bt-space-2);
+        }
+
+        .agenda__tag {
+            min-height: var(--bt-space-5);
+            padding: 0 var(--bt-space-2);
+        }
+
+        .agenda__session-title {
+            font-size: var(--bt-font-size-16);
+        }
+
+        .agenda__session-summary {
+            font-size: var(--bt-story-small-size);
         }
     }
 }
@@ -1303,5 +2229,9 @@ the timeline drops them under the ship once the walls have retreated. */
 
     .site-header {
         transition-duration: 0.01ms;
+    }
+
+    .agenda__tab-indicator {
+        transition-duration: var(--bt-duration-reduced) !important;
     }
 }

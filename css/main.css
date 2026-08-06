@@ -98,6 +98,26 @@
     --bt-story-line: #dbded5;
     --bt-story-accent: #1863dc;
 
+    /* สีแยกหมวด Ticket ถอดจากช่วงสีของ Better Trade spectrum */
+    --bt-ticket-conference: #61e8ed;
+    --bt-ticket-experience: #9c91ff;
+    --bt-ticket-pavilions: #f178d8;
+    --bt-ticket-workshop: #e0c83f;
+    --bt-ticket-private-class: #79d7bf;
+    --bt-ticket-playbook: #65b8ef;
+
+    /* สีและสัดส่วนเฉพาะ Agenda */
+    --bt-agenda-capital: #2eaa74;
+    --bt-agenda-commodity: #ef5d75;
+    --bt-agenda-crypto: #d6b72d;
+    --bt-agenda-alternative: #9c67d9;
+    --bt-agenda-aside-width: 320px;
+    --bt-agenda-time-width: 112px;
+    --bt-agenda-speaker-column-width: 208px;
+    --bt-agenda-speaker-column-width-mobile: 152px;
+    --bt-agenda-speaker-size: 64px;
+    --bt-agenda-speaker-size-mobile: 48px;
+
     /* ตัวอักษรสำหรับการเล่าเรื่อง */
     --bt-story-display-size: 80px;
     --bt-story-title-size: 50px;
