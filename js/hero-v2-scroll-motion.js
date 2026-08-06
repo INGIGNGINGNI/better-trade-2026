@@ -418,6 +418,9 @@
             shipRunHeroRestored = false;
             if (shipRunWhiteoutRAF) cancelAnimationFrame(shipRunWhiteoutRAF);
             shipRunWhiteoutRAF = null;
+            // shipRunHasCompleted already releases the gate; drop its idle watchdog too.
+            if (shipRunGateWatchdog) clearTimeout(shipRunGateWatchdog);
+            shipRunGateWatchdog = null;
             gsap.set(el.shipRunWhiteout, { opacity: 1 });
 
             requestAnimationFrame(() => {
@@ -478,6 +481,8 @@
             ]).then(() => {
                 shipRunWhiteoutRAF = requestAnimationFrame(monitorShipRunAutoplay);
             }).catch(() => {
+                // Playback is not happening, so the gate must stop holding the scroll.
+                openShipRunGate();
                 resetShipRunAutoplay();
             });
         }
@@ -488,6 +493,51 @@
                 && !shipRunHeroRestored
                 && window.scrollY < el.concept.offsetTop - 2) {
                 restoreCompletedHeroScene();
+            }
+        }, { passive: true });
+
+        /* Scroll position of the gate tween, i.e. where the run is meant to take over.
+           The timeline maps linearly onto the trigger's scroll range, so a time converts
+           straight into a scrollY. */
+        function shipRunGateScrollY() {
+            const trigger = scrollTL?.scrollTrigger;
+            const duration = scrollTL?.duration();
+            if (!trigger || !duration) return null;
+            return trigger.start
+                + (trigger.end - trigger.start) * (SHIP_RUN.startAt / duration);
+        }
+
+        /* The timeline is scrubbed with a 0.8s lag, so the gate's onStart — which starts
+           the video — fires well after the scroll position crossed it. An uninterrupted
+           scroll spends that window running past the pin end, releasing the pin straight
+           into #concept and skipping the run entirely. blockShipRunScroll can't cover it:
+           it only arms once playback is 'playing', by which point the scroll has already
+           moved, and preventDefault cannot undo scrolling that happened.
+           Clamping at the gate closes the window — the timeline catches up to startAt,
+           onStart plays the video, and the page holds here until it completes.
+           shipRunGateOpen is the escape hatch: if playback never gets going, the gate has
+           to let go, or the page would sit at this scroll position for good. */
+        let shipRunGateOpen = false;
+        let shipRunGateWatchdog = null;
+
+        function openShipRunGate() {
+            shipRunGateOpen = true;
+            if (shipRunGateWatchdog) clearTimeout(shipRunGateWatchdog);
+            shipRunGateWatchdog = null;
+        }
+
+        window.addEventListener('scroll', () => {
+            if (shipRunHasCompleted || shipRunGateOpen) return;
+            const gateY = shipRunGateScrollY();
+            if (gateY === null || window.scrollY <= gateY + 1) return;
+            window.scrollTo(0, gateY);
+            // Never hold the scroll hostage: if the run has not finished well after the
+            // clip's own runtime, something stopped it and the page has to move on.
+            if (!shipRunGateWatchdog) {
+                shipRunGateWatchdog = setTimeout(
+                    openShipRunGate,
+                    (SHIP_RUN.duration / SHIP_RUN.playbackRate) * 1000 + 4000
+                );
             }
         }, { passive: true });
 
