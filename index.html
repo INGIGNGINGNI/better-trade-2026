@@ -21,12 +21,12 @@
             </a>
 
             <nav class="site-header__nav" aria-label="เมนูหลัก">
-                <a href="#home" aria-current="page">Home</a>
-                <a href="#ticket">Ticket</a>
-                <a href="#game">Game</a>
-                <a href="#agenda">Agenda</a>
-                <a href="#speaker">Speaker</a>
-                <a href="#contact">Contact</a>
+                <a href="#home" aria-current="page"><span class="site-header__nav-label">Home</span></a>
+                <a href="#ticket"><span class="site-header__nav-label">Ticket</span></a>
+                <a href="#game"><span class="site-header__nav-label">Game</span></a>
+                <a href="#agenda"><span class="site-header__nav-label">Agenda</span></a>
+                <a href="#speaker"><span class="site-header__nav-label">Speaker</span></a>
+                <a href="#contact"><span class="site-header__nav-label">Contact</span></a>
             </nav>
 
             <div class="site-header__actions">
@@ -56,6 +56,7 @@
             </div>
         </div>
     </header>
+    <div class="site-header__contrast-labels" id="site-header-contrast-labels" aria-hidden="true"></div>
     <button class="site-header__backdrop" type="button" aria-label="ปิดเมนู"></button>
     <div class="site-scrollbar" id="site-scrollbar" role="scrollbar" aria-label="ตำแหน่งการเลื่อนหน้าเว็บ"
         aria-controls="scroller" aria-orientation="vertical" aria-valuemin="0" aria-valuemax="100"
@@ -145,9 +146,15 @@
                 <div id="ui">
                     <div class="event-primary">
                         <div id="cta-slot"></div>
-                        <!-- <div class="event-countdown" id="event-countdown" role="timer"
+                    </div>
+                    <div class="event-details">
+                        <div class="event-datetime">
+                            <span class="date">31 ต.ค. - 1 พ.ย. 2569</span>
+                            <span class="time">เวลา 09:00 – 18:30 น.</span>
+                        </div>
+                        <div class="event-countdown" id="event-countdown" role="timer"
                             aria-label="เวลานับถอยหลังสู่ Better Trade 2026">
-                            <div class="event-countdown__label">เริ่มงานใน</div>
+                            <!-- <div class="event-countdown__label">เริ่มงานใน</div> -->
                             <div class="event-countdown__values">
                                 <span class="event-countdown__unit">
                                     <strong data-countdown="days">00</strong>
@@ -167,11 +174,7 @@
                                 </span>
                             </div>
                             <div class="event-countdown__status" aria-hidden="true"></div>
-                        </div> -->
-                    </div>
-                    <div class="event-details">
-                        <div class="date">31 ต.ค. - 1 พ.ย. 2569</div>
-                        <div class="time">09:00 – 18:30 น.</div>
+                        </div>
                         <div class="venue">
                             <a class="venue-link bt-action-button bt-action-button--text" href="https://maps.app.goo.gl/uRrLjyD6aofCEb8K7"
                                 target="_blank" rel="noopener noreferrer">Samyan Mitrtown Hall<span
@@ -241,7 +244,7 @@
 
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="js/action-button.js"></script>
-    <script src="js/hero-v2-header.js"></script>
+    <script src="js/hero-v2-header.js?v=3"></script>
 
     <!-- Liquid metal CTAs (WebGL). Module scripts are deferred, so this runs after
      the markup exists but before window 'load' fires the hero intro. -->
@@ -250,7 +253,7 @@
 
     <script src="vendor/gsap/gsap.min.js"></script>
     <script src="vendor/gsap/ScrollTrigger.min.js"></script>
-    <script src="js/hero-v2-scroll-motion.js"></script>
+    <script src="js/hero-v2-scroll-motion.js?v=4"></script>
 </body>
 
 </html>

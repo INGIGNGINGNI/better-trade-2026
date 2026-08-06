@@ -83,6 +83,60 @@
     --bt-shadow-action-primary: 0 var(--bt-border-width-1) var(--bt-space-1) rgba(17, 19, 24, 0.24);
     --bt-shadow: 0 18px 48px rgba(17, 19, 24, 0.09);
 
+    /* ==========================================================================
+       Editorial / Kinfolk-inspired tokens
+       ใช้เป็นแนวทางสำหรับ section หลัง hero เช่น concept, playbook chapter,
+       agenda intro หรือ speaker story โดยยังไม่ผูกใช้กับหน้าใดทันที
+       ========================================================================== */
+
+    /* Editorial color */
+    --bt-editorial-bg: #ffffff;
+    --bt-editorial-paper: #f7f8f7;
+    --bt-editorial-ink: #111318;
+    --bt-editorial-muted: #687078;
+    --bt-editorial-line: #dbded5;
+    --bt-editorial-accent: #1863dc;
+    --bt-editorial-accent-secondary: #008000;
+
+    /* Editorial typography */
+    --bt-editorial-display-size: 80px;
+    --bt-editorial-title-size: 50px;
+    --bt-editorial-heading-size: 40px;
+    --bt-editorial-subheading-size: 25px;
+    --bt-editorial-body-size: 18px;
+    --bt-editorial-small-size: 14px;
+    --bt-editorial-display-line-height: 84px;
+    --bt-editorial-title-line-height: 52px;
+    --bt-editorial-heading-line-height: 46px;
+    --bt-editorial-body-line-height: 24px;
+    --bt-editorial-title-tracking: -0.5px;
+    --bt-editorial-heading-tracking: -0.2px;
+
+    /* Editorial layout */
+    --bt-editorial-max: 1280px;
+    --bt-editorial-narrow: 920px;
+    --bt-editorial-copy: 680px;
+    --bt-editorial-section-padding-y: 128px;
+    --bt-editorial-section-padding-y-sm: 80px;
+    --bt-editorial-grid-gap: 64px;
+    --bt-editorial-column-gap: 96px;
+    --bt-editorial-row-gap: 40px;
+
+    /* Editorial component */
+    --bt-editorial-rule-width: 1px;
+    --bt-editorial-rule-height: 2px;
+    --bt-editorial-card-radius: 8px;
+    --bt-editorial-pill-radius: 48px;
+    --bt-editorial-button-height: 48px;
+    --bt-editorial-touch-target: 44px;
+
+    /* Editorial depth และ motion */
+    --bt-editorial-shadow-low: 0 -1px 10px rgba(172, 171, 171, 0.30);
+    --bt-editorial-shadow-deep: 0 32px 68px rgba(0, 0, 0, 0.30);
+    --bt-editorial-duration: 300ms;
+    --bt-editorial-duration-slow: 560ms;
+    --bt-editorial-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
     /* Token เฉพาะ hero-v2 เดิม
        คงชื่อเดิมไว้เพื่อไม่ให้ motion และ layout ที่เพิ่งกู้กลับมาพัง */
     --ink: #1a1e2b;

@@ -131,6 +131,8 @@
             loaderProgress: document.querySelector('.loader-progress'),
             loaderProgressFill: document.querySelector('.loader-progress__fill'),
             loaderProgressValue: document.querySelector('.loader-progress__value'),
+            siteHeader: document.getElementById('site-header'),
+            siteHeaderContrastLabels: document.querySelectorAll('.site-header__contrast-label'),
             siteScrollbar: document.getElementById('site-scrollbar'),
             siteScrollbarThumb: document.querySelector('.site-scrollbar__thumb'),
         };
@@ -619,7 +621,7 @@
             document.getElementById('scroller').style.height = STATIC_FRAME ? vh + 'px' : scrollerHeight + 'px';
             el.stagewrap.style.height = isMobileStatic() ? `${scrollerHeight}px` : `${vh}px`;
             if (!isMobileStatic()) {
-                const uiTop = Math.min(vh * 0.62, vh - 264);
+                const uiTop = Math.min(vh * 0.59, vh - 324);
                 document.getElementById('ui').style.top = `${uiTop}px`;
             }
             if (STATIC_FRAME) {
@@ -1033,7 +1035,8 @@
                 el.loader?.remove();
                 gsap.set('.asset .inner', { opacity: 1, clearProps: 'transform' });
                 gsap.set('#ui', { opacity: 1, y: 0 });
-                gsap.set(siteHeader, { clearProps: 'opacity,transform' });
+                gsap.set(el.siteHeader, { clearProps: 'opacity,transform' });
+                gsap.set(el.siteHeaderContrastLabels, { clearProps: 'opacity,transform' });
                 startIdle();
                 requestSiteScrollbarUpdate();
             };
@@ -1062,7 +1065,8 @@
             const wallIntroStartOffset = 0.42;
             const wallIntroDuration = assetScatterEndOffset - wallIntroStartOffset;
 
-            gsap.set(siteHeader, { opacity: 0, y: -16 });
+            gsap.set(el.siteHeader, { opacity: 0, y: -16 });
+            gsap.set(el.siteHeaderContrastLabels, { opacity: 0, y: -16 });
             gsap.set('.asset .inner', { opacity: 0 });
             gsap.set('#ui', { opacity: 0, y: 16 });
             gsap.set(loaderIcons, {
@@ -1099,7 +1103,8 @@
                     gsap.set('.asset .inner', { opacity: 1, clearProps: 'transform' });
                     document.body.classList.remove('is-loading');
                     el.loader.remove();
-                    gsap.set(siteHeader, { clearProps: 'opacity,transform' });
+                    gsap.set(el.siteHeader, { clearProps: 'opacity,transform' });
+                    gsap.set(el.siteHeaderContrastLabels, { clearProps: 'opacity,transform' });
                     ScrollTrigger.refresh();
                     startIdle();
                     requestSiteScrollbarUpdate();
@@ -1163,7 +1168,8 @@
                     { opacity: 1, y: 0, scale: 1, duration: 0.72, ease: 'power3.out' },
                     exitAt + 0.34
                 )
-                .to(siteHeader, { opacity: 1, y: 0, duration: 0.56 }, exitAt + 0.48)
+                .to(el.siteHeader, { opacity: 1, y: 0, duration: 0.56 }, exitAt + 0.48)
+                .to(el.siteHeaderContrastLabels, { opacity: 0.95, y: 0, duration: 0.56 }, exitAt + 0.48)
                 .to('#ui', { opacity: 1, y: 0, duration: 0.62 }, exitAt + 0.64);
 
             ASSET_ICON_KEYS.forEach((k, i) => {

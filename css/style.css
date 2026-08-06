@@ -12,9 +12,12 @@ html::-webkit-scrollbar {
     height: 0;
 }
 
+/* Nothing in the design is dark, so this only ever shows through a gap — during a
+   resize, or as overscroll. Matching #stagewrap keeps such a gap invisible instead
+   of flashing near-black. */
 body {
     margin: 0;
-    background: #0d0f14;
+    background: #dfe6ee;
     font-family: var(--font);
     overflow-x: hidden;
 }
@@ -192,6 +195,44 @@ body.menu-open .site-header {
     text-transform: uppercase;
     white-space: nowrap;
     transition: color 180ms ease;
+}
+
+.site-header__nav-label {
+    color: inherit;
+    transition: opacity 180ms ease;
+}
+
+.site-header__contrast-labels {
+    --bg-color: #9ccbf6;
+    display: contents;
+}
+
+.site-header__contrast-label {
+    position: fixed;
+    z-index: 201;
+    display: grid;
+    place-items: center;
+    color: var(--bg-color);
+    font-family: var(--headline);
+    font-size: 16px;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    filter: invert(1) grayscale(1) brightness(1.3) contrast(9000);
+    mix-blend-mode: luminosity;
+    opacity: 0.95;
+    pointer-events: none;
+    transition: opacity 520ms cubic-bezier(0.16, 1, 0.3, 1), transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body.has-dynamic-nav-contrast .site-header__nav-label {
+    color: transparent;
+}
+
+body.is-loading .site-header__contrast-label,
+.site-header__contrast-labels.is-hidden .site-header__contrast-label {
+    opacity: 0;
+    transform: translateY(calc(-1 * var(--header-height)));
 }
 
 .site-header--on-dark .site-header__nav a {
@@ -446,9 +487,13 @@ body.menu-open .site-header__backdrop {
     position: relative;
 }
 
-/* replaced by layout() in px */
+/* replaced by layout() in px.
+   min-height stays in vh so the stage keeps covering the viewport during a resize:
+   layout() rewrites the px height a frame later, and without this the stale px box
+   is shorter than the new viewport and exposes the page background underneath. */
 #stagewrap {
     height: 100vh;
+    min-height: 100vh;
     width: 100%;
     position: relative;
     overflow: hidden;
@@ -654,7 +699,13 @@ the timeline drops them under the ship once the walls have retreated. */
 #ui {
     position: absolute;
     left: 50%;
-    top: min(62%, 100% - 264px);
+    /* 59vh sets the gap below the title and governs on tall viewports; the px reserve
+       governs on short ones, where it keeps the block off the bottom edge. Mirrored in
+       layout() — see hero-v2-scroll-motion.js, which overwrites this with the same
+       formula in px. Deliberately vh, not %: the containing block is #stage, whose
+       height is the KV canvas (~1.4x the viewport), so % here would not mean what the
+       JS means and the pre-layout() fallback would land far too low. */
+    top: min(59vh, 100vh - 324px);
     transform: translateX(-50%);
     z-index: 25;
     pointer-events: auto;
@@ -662,7 +713,7 @@ the timeline drops them under the ship once the walls have retreated. */
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-6);
+    gap: var(--space-10);
     opacity: 0;
     text-align: center;
     color: var(--ink);
@@ -672,28 +723,28 @@ the timeline drops them under the ship once the walls have retreated. */
 #ui .event-primary {
     display: grid;
     justify-items: center;
-    gap: var(--space-3);
 }
 
 #ui .event-countdown {
     min-width: 288px;
     display: grid;
     justify-items: center;
-    gap: var(--space-1);
+    gap: var(--space-3);
     font-variant-numeric: tabular-nums;
+    opacity: 0.92;
 }
 
 #ui .event-countdown__label {
     color: currentColor;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 400;
     line-height: 1;
 }
 
 #ui .event-countdown__values {
     display: grid;
-    grid-template-columns: repeat(4, 64px);
-    gap: var(--space-2);
+    grid-template-columns: repeat(4, 56px);
+    gap: var(--space-6);
 }
 
 #ui .event-countdown__unit {
@@ -701,16 +752,16 @@ the timeline drops them under the ship once the walls have retreated. */
     min-width: 0;
     display: grid;
     justify-items: center;
-    gap: 2px;
+    gap: var(--space-3);
 }
 
 #ui .event-countdown__unit:not(:last-child)::after {
     content: '';
     position: absolute;
-    top: 4px;
-    right: calc(var(--space-1) * -1);
+    top: 3px;
+    right: calc(var(--space-3) * -1);
     width: 1px;
-    height: 32px;
+    height: 100%;
     background: var(--spectrum-vertical);
 }
 
@@ -721,7 +772,7 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 #ui .event-countdown__unit small {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 400;
     line-height: 1;
 }
@@ -752,27 +803,36 @@ the timeline drops them under the ship once the walls have retreated. */
 #ui .event-details {
     display: grid;
     justify-items: center;
-    gap: var(--space-6);
+    gap: var(--space-8);
+}
+
+#ui .event-datetime {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: center;
+    column-gap: var(--space-3);
+    row-gap: var(--space-2);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: 0;
 }
 
 #ui .time {
-    font-size: 20px;
-    line-height: 1;
+    font-size: 24px;
+    line-height: inherit;
 }
 
 #ui .date {
-    font-size: 32px;
-    font-weight: 500;
-    line-height: 1.05;
-    letter-spacing: 0;
+    font-size: 24px;
     white-space: nowrap;
 }
 
 #ui .venue {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 400;
-    line-height: 150%;
-    padding-top: 12px;
+    line-height: 1.25;
+    padding-top: 0;
 }
 
 #ui .venue-link {
@@ -952,6 +1012,10 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 @media (max-width:991px) {
+    .site-header__contrast-labels {
+        display: none;
+    }
+
     body.is-mobile-static #stagewrap {
         min-height: 0;
         background: #fff;
@@ -1049,21 +1113,21 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     #ui .event-countdown__values {
-        grid-template-columns: repeat(4, minmax(52px, 1fr));
+        grid-template-columns: repeat(4, minmax(48px, 1fr));
         width: 100%;
         gap: var(--space-1);
     }
 
     #ui .time {
-        font-size: clamp(18px, 6vw, 24px);
+        font-size: clamp(18px, 5.5vw, 22px);
     }
 
     #ui .date {
-        font-size: clamp(22px, 7vw, 28px);
+        font-size: clamp(24px, 7vw, 28px);
     }
 
     #ui .venue {
-        font-size: clamp(18px, 5.5vw, 22px);
+        font-size: clamp(16px, 5vw, 20px);
     }
 
 
