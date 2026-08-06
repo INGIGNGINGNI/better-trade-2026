@@ -873,22 +873,20 @@ the timeline drops them under the ship once the walls have retreated. */
 #concept {
     position: relative;
     /* min-height: 180vh; */
-    background: #fff;
-    color: var(--ink);
+    background: var(--bt-story-bg);
+    color: var(--bt-story-ink);
     display: block;
-    padding: 0 var(--space-6) var(--space-32);
-    font-family: var(--headline);
+    padding: 0 0 var(--bt-story-section-padding-y);
+    font-family: var(--bt-font);
     text-align: center;
 }
 
 .concept__inner {
-    width: min(100%, 1120px);
-    margin: 0 auto;
     display: grid;
     align-content: center;
     justify-items: center;
-    gap: var(--space-6);
-    padding: clamp(192px, 22vh, 240px) 0 0;
+    gap: var(--bt-space-6);
+    padding-top: clamp(192px, 22vh, 240px);
     opacity: 1;
     transform: translateY(0);
     will-change: transform, opacity;
@@ -896,7 +894,7 @@ the timeline drops them under the ship once the walls have retreated. */
 
 #concept.is-awaiting-entry .concept__inner {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(var(--bt-space-4));
 }
 
 #concept.is-awaiting-entry.is-revealed .concept__inner {
@@ -906,29 +904,26 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 .concept__title {
-    max-width: 1040px;
     margin: 0;
-    font-size: 48px;
-    font-weight: 400;
-    line-height: 120%;
-    letter-spacing: 0;
+    font-size: var(--bt-story-title-size);
+    font-weight: var(--bt-font-weight-regular);
+    line-height: var(--bt-story-title-line-height);
+    letter-spacing: var(--bt-story-title-tracking);
     text-wrap: balance;
 }
 
 .concept__description {
-    max-width: 920px;
     margin: 0;
-    font-size: 20px;
-    font-weight: 300;
-    line-height: 150%;
-    letter-spacing: 0;
+    font-size: var(--bt-story-body-size);
+    font-weight: var(--bt-font-weight-light);
+    line-height: var(--bt-story-body-line-height);
+    letter-spacing: var(--bt-story-heading-tracking);
     text-wrap: balance;
 }
 
 .concept__video-scroll {
-    width: min(100%, 1460px);
     min-height: 125vh;
-    margin: var(--space-12) auto 0;
+    margin-top: var(--bt-space-12);
     position: relative;
     opacity: 1;
     transform: translateY(0);
@@ -937,7 +932,7 @@ the timeline drops them under the ship once the walls have retreated. */
 
 #concept.is-awaiting-entry .concept__video-scroll {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(var(--bt-space-6));
 }
 
 #concept.is-awaiting-entry.is-revealed .concept__video-scroll {
@@ -959,15 +954,13 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 .concept__video-frame {
-    width: min(100%, calc((100vh - var(--header-height) - var(--space-24)) * 16 / 9));
+    width: min(100%, calc((100vh - var(--header-height) - var(--bt-space-24)) * 16 / 9));
     aspect-ratio: 16 / 9;
     padding: 0;
     border: 0;
-    border-radius: var(--space-2);
+    border-radius: var(--bt-story-card-radius);
     background: transparent;
-    box-shadow:
-        0 var(--space-3) var(--space-6) rgba(17, 19, 24, 0.18),
-        0 var(--space-10) var(--space-20) rgba(17, 19, 24, 0.20);
+    box-shadow: var(--bt-story-shadow-low), var(--bt-story-shadow-deep);
     transform-origin: 50% 100%;
     will-change: transform;
 }
@@ -977,8 +970,8 @@ the timeline drops them under the ship once the walls have retreated. */
     width: 100%;
     height: 100%;
     overflow: hidden;
-    border-radius: var(--space-1);
-    background: #0d0f14;
+    border-radius: var(--bt-space-1);
+    background: var(--bt-story-media-bg);
 }
 
 .concept__video-media iframe {
@@ -990,112 +983,101 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 /* ---------- หัวข้อการลงทุนภายใน Concept ----------
-   จัดวางตาม wireframe ด้วยข้อความและเส้นคั่นบางในจังหวะแบบนิตยสาร */
+   ใช้ flex container เดียว แสดงสองแถวบน desktop พร้อมเส้นคั่นแบบ spectrum */
 .concept__topics {
-    width: min(100%, var(--bt-story-max));
-    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
 
-    .concept__topics-row {
-        display: grid;
-        align-items: stretch;
+    p {
+        position: relative;
+        flex: 1 0 20%;
+        min-width: 0;
+        margin: 0;
+        padding: var(--bt-space-3) var(--bt-space-4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--bt-story-ink);
+        font-size: var(--bt-story-body-size);
+        font-weight: var(--bt-font-weight-regular);
+        line-height: var(--bt-story-body-line-height);
+        letter-spacing: var(--bt-story-heading-tracking);
+        text-align: center;
+        overflow-wrap: anywhere;
+        transition:
+            color var(--bt-story-duration) var(--bt-story-ease),
+            background-color var(--bt-story-duration) var(--bt-story-ease);
 
-        &.concept__topics-row--five {
-            grid-template-columns: repeat(5, minmax(0, 1fr));
+        &:not(:first-child)::before {
+            content: "";
+            position: absolute;
+            top: var(--bt-space-4);
+            bottom: var(--bt-space-4);
+            left: calc(var(--bt-story-rule-width) * -1);
+            width: var(--bt-story-rule-height);
+            background: var(--spectrum-vertical);
         }
 
-        &.concept__topics-row--four {
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-        }
-
-        p {
-            position: relative;
-            min-width: 0;
-            margin: 0;
-            padding: var(--bt-space-3) var(--bt-space-4);
-            display: grid;
-            place-items: center;
-            color: var(--bt-story-ink);
-            font-size: var(--bt-story-body-size);
-            font-weight: var(--bt-font-weight-regular);
-            line-height: var(--bt-story-body-line-height);
-            letter-spacing: var(--bt-story-heading-tracking);
-            text-align: center;
-            overflow-wrap: anywhere;
-            transition:
-                color var(--bt-story-duration) var(--bt-story-ease),
-                background-color var(--bt-story-duration) var(--bt-story-ease);
-
-            &:not(:first-child)::before {
-                content: "";
-                position: absolute;
-                top: var(--bt-space-4);
-                bottom: var(--bt-space-4);
-                left: -1px;
-                width: var(--bt-story-rule-height);
-                background: var(--spectrum-vertical);
-            }
+        &:nth-child(6)::before {
+            display: none;
         }
     }
 
     @media (max-width:991px) {
+        flex-wrap: wrap;
 
-        .concept__topics-row,
-        .concept__topics-row.concept__topics-row--five,
-        .concept__topics-row.concept__topics-row--four {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            margin-top: 0;
+        p {
+            flex: 1 0 50%;
 
-            p {
-                &::after {
-                    content: "";
-                    position: absolute;
-                    top: 0;
-                    left: var(--bt-space-4);
-                    right: var(--bt-space-4);
-                    height: var(--bt-story-rule-height);
-                    background: var(--spectrum);
-                }
-
-                &::before {
-                    display: none;
-                }
-
-                &:nth-child(even)::before {
-                    display: block;
-                }
+            &::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: var(--bt-space-4);
+                right: var(--bt-space-4);
+                height: var(--bt-story-rule-height);
+                background: var(--spectrum);
             }
-        }
 
-        .concept__topics-row:first-child p:nth-child(-n + 2)::after {
-            display: none;
+            &::before {
+                display: none;
+            }
+
+            &:nth-child(even)::before {
+                display: block;
+            }
+
+            &:nth-child(-n + 2)::after {
+                display: none;
+            }
         }
     }
 
     @media (max-width:575px) {
 
-        .concept__topics-row,
-        .concept__topics-row.concept__topics-row--five,
-        .concept__topics-row.concept__topics-row--four {
-            display: block;
+        p {
+            flex-basis: 100%;
+            min-height: 0;
+            padding: var(--bt-space-6) 0;
+            font-size: var(--bt-story-body-size);
+            line-height: var(--bt-story-body-line-height);
 
-            p {
-                min-height: 0;
-                padding: var(--bt-space-5) 0;
-                font-size: var(--bt-story-body-size);
-                line-height: var(--bt-story-body-line-height);
-
-                &::before {
-                    display: none;
-                }
-
-                &::after {
-                    display: block;
-                }
+            &::before {
+                display: none;
             }
-        }
 
-        .concept__topics-row:first-child p:first-child::after {
-            display: none;
+            &::after {
+                display: block;
+            }
+
+            &:nth-child(-n + 2)::after {
+                display: block;
+            }
+
+            &:first-child::after {
+                display: none;
+            }
         }
     }
 }
@@ -1104,22 +1086,16 @@ the timeline drops them under the ship once the walls have retreated. */
    Comparison layout แบบ editorial ใช้พื้นที่ว่างและเส้นบางแทนกรอบ card */
 .ticket {
     position: relative;
-    padding: var(--bt-story-section-padding-y) var(--bt-space-6);
+    padding: var(--bt-story-section-padding-y) 0;
     border-top: var(--bt-story-rule-width) solid var(--bt-story-line);
     color: var(--bt-story-ink);
     background: var(--bt-story-bg);
     font-family: var(--bt-font);
 
-    .ticket__inner {
-        width: min(100%, var(--bt-story-max));
-        margin: 0 auto;
-    }
-
     .ticket__header {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        --bs-gutter-y: var(--bt-space-6);
+
         align-items: end;
-        gap: var(--bt-story-grid-gap);
         margin-bottom: var(--bt-story-section-padding-y-sm);
     }
 
@@ -1135,7 +1111,6 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .ticket__heading h2 {
-        max-width: var(--bt-story-copy);
         margin: 0;
         font-size: var(--bt-story-title-size);
         font-weight: var(--bt-font-weight-regular);
@@ -1145,7 +1120,6 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .ticket__intro {
-        max-width: var(--bt-story-copy);
         margin: 0;
         color: var(--bt-story-muted);
         font-size: var(--bt-story-body-size);
@@ -1155,8 +1129,6 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .ticket__plans {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
         /* border-top: var(--bt-story-rule-width) solid var(--bt-story-line); */
         /* border-bottom: var(--bt-story-rule-width) solid var(--bt-story-line); */
     }
@@ -1190,7 +1162,6 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .ticket__plan-note {
-        max-width: var(--bt-story-copy);
         margin: var(--bt-space-4) 0 0;
         color: var(--bt-story-muted);
         font-size: var(--bt-story-small-size);
@@ -1231,6 +1202,7 @@ the timeline drops them under the ship once the walls have retreated. */
             font-weight: var(--bt-font-weight-medium);
             line-height: var(--bt-story-heading-line-height);
             letter-spacing: 0;
+            white-space: nowrap;
         }
     }
 
@@ -1343,9 +1315,8 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .ticket__benefits {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
-        gap: var(--bt-story-grid-gap);
+        --bs-gutter-y: var(--bt-space-8);
+
         padding-top: var(--bt-story-section-padding-y-sm);
 
         h3 {
@@ -1359,8 +1330,6 @@ the timeline drops them under the ship once the walls have retreated. */
         ul {
             margin: 0;
             padding: 0;
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
             list-style: none;
         }
 
@@ -1470,16 +1439,10 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     @media (max-width:991px) {
-        padding: var(--bt-story-section-padding-y-sm) var(--bt-space-4);
+        padding: var(--bt-story-section-padding-y-sm) 0;
 
         .ticket__header {
-            grid-template-columns: 1fr;
-            gap: var(--bt-space-6);
             margin-bottom: var(--bt-space-16);
-        }
-
-        .ticket__plans {
-            grid-template-columns: 1fr;
         }
 
         .ticket__plan {
@@ -1496,11 +1459,7 @@ the timeline drops them under the ship once the walls have retreated. */
         }
 
         .ticket__benefits {
-            grid-template-columns: 1fr;
-            gap: var(--bt-space-8);
-
             ul {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
                 row-gap: var(--bt-space-8);
             }
         }
@@ -1530,7 +1489,6 @@ the timeline drops them under the ship once the walls have retreated. */
         }
 
         .ticket__benefits ul {
-            grid-template-columns: 1fr;
             row-gap: 0;
 
             li {
@@ -1553,19 +1511,16 @@ the timeline drops them under the ship once the walls have retreated. */
    ตารางกำหนดการแบบ editorial เน้นลำดับเวลา พื้นที่ว่าง และเส้นบาง */
 .agenda {
     position: relative;
-    padding: var(--bt-story-section-padding-y) var(--bt-space-6);
+    padding: var(--bt-story-section-padding-y) 0;
     border-top: var(--bt-story-rule-width) solid var(--bt-story-line);
     color: var(--bt-story-ink);
     background: var(--bt-story-bg);
     font-family: var(--bt-font);
 
-    .agenda__inner {
-        width: min(100%, var(--bt-story-max));
-        margin: 0 auto;
-        display: grid;
-        grid-template-columns: minmax(0, var(--bt-agenda-aside-width)) minmax(0, 1fr);
+    .agenda__layout {
+        --bs-gutter-y: var(--bt-space-8);
+
         align-items: start;
-        gap: var(--bt-story-column-gap);
     }
 
     /* Day 2 ต่อเนื่องใน section เดียวกัน โดยใช้เส้นบางแบ่งจังหวะระหว่างวัน */
@@ -1582,7 +1537,7 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .agenda__eyebrow {
-        margin: 0 0 var(--bt-space-4);
+        margin: 0 0 var(--bt-space-2);
         color: var(--bt-story-muted);
         font-size: var(--bt-story-body-size);
         font-weight: var(--bt-font-weight-regular);
@@ -1592,10 +1547,10 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .agenda__header h2 {
-        margin: 0 0 var(--bt-space-8);
-        font-size: var(--bt-story-display-size);
+        margin: 0 0 var(--bt-space-6);
+        font-size: var(--bt-story-title-size);
         font-weight: var(--bt-font-weight-regular);
-        line-height: var(--bt-story-display-line-height);
+        line-height: var(--bt-story-title-line-height);
         letter-spacing: 0;
         text-transform: uppercase;
     }
@@ -1608,6 +1563,10 @@ the timeline drops them under the ship once the walls have retreated. */
         font-weight: var(--bt-font-weight-regular);
         line-height: var(--bt-story-body-line-height);
         letter-spacing: 0;
+    }
+
+    .agenda__date {
+        margin-bottom: var(--bt-space-2);
     }
 
     .agenda__content {
@@ -1641,9 +1600,8 @@ the timeline drops them under the ship once the walls have retreated. */
             position: absolute;
             right: 0;
             bottom: 100%;
-            left: calc(50% - 50vw);
+            left: 0;
             z-index: 0;
-            width: 100vw;
             height: calc(var(--header-height) + var(--bt-space-6));
             background: var(--bt-story-bg);
             pointer-events: none;
@@ -1877,12 +1835,7 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     @media (max-width:991px) {
-        padding: var(--bt-story-section-padding-y-sm) var(--bt-space-4);
-
-        .agenda__inner {
-            grid-template-columns: 1fr;
-            gap: var(--bt-space-8);
-        }
+        padding: var(--bt-story-section-padding-y-sm) 0;
 
         .agenda__inner--day-two {
             margin-top: var(--bt-space-12);
@@ -1891,12 +1844,6 @@ the timeline drops them under the ship once the walls have retreated. */
 
         .agenda__header {
             position: static;
-        }
-
-        .agenda__header h2 {
-            margin-bottom: var(--bt-space-6);
-            font-size: var(--bt-story-title-size);
-            line-height: var(--bt-story-title-line-height);
         }
 
     }
@@ -2020,6 +1967,43 @@ the timeline drops them under the ship once the walls have retreated. */
 
         .agenda__session-summary {
             font-size: var(--bt-story-small-size);
+        }
+    }
+}
+
+/* ---------- Floor Plan ----------
+   แสดงหัวข้อและภาพแผนผังบูทเต็มความกว้างของ Bootstrap container */
+.floor-plan {
+    padding: var(--bt-story-section-padding-y) 0;
+    border-top: var(--bt-story-rule-width) solid var(--bt-story-line);
+    color: var(--bt-story-ink);
+    background: var(--bt-story-bg);
+    font-family: var(--bt-font);
+
+    .floor-plan__title {
+        margin: 0;
+        font-size: var(--bt-story-display-size);
+        font-weight: var(--bt-font-weight-regular);
+        line-height: var(--bt-story-display-line-height);
+        letter-spacing: 0;
+    }
+
+    .floor-plan__figure {
+        margin: var(--bt-space-12) 0 0;
+    }
+
+    .floor-plan__image {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    @media (max-width:991px) {
+        padding: var(--bt-story-section-padding-y-sm) 0;
+
+        .floor-plan__title {
+            font-size: var(--bt-story-title-size);
+            line-height: var(--bt-story-title-line-height);
         }
     }
 }
@@ -2187,21 +2171,19 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
 
-    #concept {
-        padding-inline: var(--space-4);
-    }
-
     .concept__inner {
-        padding: var(--space-32) 0 var(--space-4);
+        padding-top: var(--bt-story-section-padding-y);
+        padding-bottom: var(--bt-space-4);
     }
 
     .concept__title {
-        font-size: clamp(32px, 10vw, 48px);
+        font-size: var(--bt-story-heading-size);
+        line-height: var(--bt-story-heading-line-height);
     }
 
     .concept__description {
-        font-size: clamp(20px, 6vw, 26px);
-        line-height: 1.4;
+        font-size: var(--bt-story-body-size);
+        line-height: var(--bt-story-body-line-height);
     }
 
     .concept__video-scroll {

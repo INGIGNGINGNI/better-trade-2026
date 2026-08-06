@@ -97,6 +97,7 @@
     --bt-story-muted: #687078;
     --bt-story-line: #dbded5;
     --bt-story-accent: #1863dc;
+    --bt-story-media-bg: #0d0f14;
 
     /* สีแยกหมวด Ticket ถอดจากช่วงสีของ Better Trade spectrum */
     --bt-ticket-conference: #61e8ed;
@@ -120,15 +121,15 @@
 
     /* ตัวอักษรสำหรับการเล่าเรื่อง */
     --bt-story-display-size: 80px;
-    --bt-story-title-size: 50px;
+    --bt-story-title-size: 48px;
     --bt-story-heading-size: 40px;
-    --bt-story-subheading-size: 25px;
+    --bt-story-subheading-size: 24px;
     --bt-story-topic-size: 24px;
-    --bt-story-body-size: 18px;
-    --bt-story-small-size: 14px;
-    --bt-story-display-line-height: 84px;
-    --bt-story-title-line-height: 52px;
-    --bt-story-heading-line-height: 46px;
+    --bt-story-body-size: 16px;
+    --bt-story-small-size: 16px;
+    --bt-story-display-line-height: 88px;
+    --bt-story-title-line-height: 120%;
+    --bt-story-heading-line-height: 48px;
     --bt-story-topic-line-height: 32px;
     --bt-story-body-line-height: 24px;
     --bt-story-title-tracking: 0px;
@@ -140,24 +141,23 @@
     --bt-story-copy: 680px;
     --bt-story-section-padding-y: 128px;
     --bt-story-section-padding-y-sm: 80px;
-    --bt-story-grid-gap: 64px;
-    --bt-story-column-gap: 96px;
     --bt-story-row-gap: 40px;
 
     /* องค์ประกอบร่วมสำหรับการเล่าเรื่อง */
+    /* เส้นบาง 1px และ 2px เป็นข้อยกเว้นเชิงภาพจากระบบ 8 */
     --bt-story-rule-width: 1px;
     --bt-story-rule-height: 2px;
     --bt-story-card-radius: 8px;
     --bt-story-pill-radius: 48px;
     --bt-story-button-height: 48px;
-    --bt-story-touch-target: 44px;
+    --bt-story-touch-target: 48px;
     --bt-header-action-width: 120px;
     --bt-header-action-height: 40px;
     --bt-header-action-rim: 2px;
 
     /* มิติและการเคลื่อนไหวสำหรับการเล่าเรื่อง */
-    --bt-story-shadow-low: 0 -1px 10px rgba(172, 171, 171, 0.30);
-    --bt-story-shadow-deep: 0 32px 68px rgba(0, 0, 0, 0.30);
+    --bt-story-shadow-low: 0 0 8px rgba(172, 171, 171, 0.30);
+    --bt-story-shadow-deep: 0 32px 64px rgba(0, 0, 0, 0.30);
     --bt-story-duration: 300ms;
     --bt-story-duration-slow: 560ms;
     --bt-story-ease: cubic-bezier(0.22, 1, 0.36, 1);

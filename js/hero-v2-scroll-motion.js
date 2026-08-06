@@ -944,12 +944,13 @@
 
             const shipRunGate = { progress: 0 };
 
-            // Fill the viewport width without distorting the source. Any excess height
-            // leaves through the top so the stairs, runners, and doorway stay in frame.
+            // Cover the viewport without distorting the source. Keep the composition
+            // bottom-aligned so the stairs and runners retain their original position;
+            // narrow viewports crop the excess equally from the left and right.
             const videoEnter = {};
-            videoEnter.width = M.vw;
-            videoEnter.height = videoEnter.width / SHIP_RUN.canvasRatio;
-            videoEnter.left = 0;
+            videoEnter.height = Math.max(M.vh, M.vw / SHIP_RUN.canvasRatio);
+            videoEnter.width = videoEnter.height * SHIP_RUN.canvasRatio;
+            videoEnter.left = (M.vw - videoEnter.width) / 2;
 
             // A single scroll across the gate starts native playback. The dummy tween
             // preserves the existing trigger position without tying frames to scroll.
