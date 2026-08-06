@@ -275,6 +275,12 @@ body.is-loading .site-header__contrast-label,
     gap: var(--space-2);
 }
 
+.site-header__primary-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .site-header__toggle {
     width: var(--space-12);
     height: var(--space-12);
@@ -380,13 +386,18 @@ body.is-loading .site-header__contrast-label,
 .site-header__mobile-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    justify-items: center;
     gap: var(--space-2);
     padding-top: var(--space-6);
 }
 
 .site-header__mobile-actions .bt-action-button {
-    width: 100%;
+    width: var(--bt-header-action-width);
     padding: 0 var(--space-4);
+}
+
+.site-header__mobile-actions .site-header__primary-cta {
+    width: var(--bt-header-action-width);
 }
 
 .site-header__backdrop {
@@ -841,11 +852,11 @@ the timeline drops them under the ship once the walls have retreated. */
     color: inherit;
     font-size: inherit;
     font-weight: inherit;
-}
 
-#ui .venue-link .material-symbols-rounded {
-    font-size: 18px;
-    font-variation-settings: 'wght' 400;
+    .material-symbols-rounded {
+        font-size: 18px;
+        font-variation-settings: 'wght' 400;
+    }
 }
 
 /* ---------- next section ---------- */
@@ -966,6 +977,115 @@ the timeline drops them under the ship once the walls have retreated. */
     width: 100%;
     height: 100%;
     border: 0;
+}
+
+/* ---------- หัวข้อการลงทุนภายใน Concept ----------
+   จัดวางตาม wireframe ด้วยข้อความและเส้นคั่นบางในจังหวะแบบนิตยสาร */
+.concept__topics {
+    width: min(100%, var(--bt-story-max));
+    margin: 0 auto;
+
+    .concept__topics-row {
+        display: grid;
+        align-items: stretch;
+
+        &.concept__topics-row--five {
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+        }
+
+        &.concept__topics-row--four {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        p {
+            position: relative;
+            min-width: 0;
+            margin: 0;
+            padding: var(--bt-space-3) var(--bt-space-4);
+            display: grid;
+            place-items: center;
+            color: var(--bt-story-ink);
+            font-size: var(--bt-story-body-size);
+            font-weight: var(--bt-font-weight-regular);
+            line-height: var(--bt-story-body-line-height);
+            letter-spacing: var(--bt-story-heading-tracking);
+            text-align: center;
+            overflow-wrap: anywhere;
+            transition:
+                color var(--bt-story-duration) var(--bt-story-ease),
+                background-color var(--bt-story-duration) var(--bt-story-ease);
+
+            &:not(:first-child)::before {
+                content: "";
+                position: absolute;
+                top: var(--bt-space-4);
+                bottom: var(--bt-space-4);
+                left: -1px;
+                width: var(--bt-story-rule-height);
+                background: var(--spectrum-vertical);
+            }
+        }
+    }
+
+    @media (max-width:991px) {
+        .concept__topics-row,
+        .concept__topics-row.concept__topics-row--five,
+        .concept__topics-row.concept__topics-row--four {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            margin-top: 0;
+
+            p {
+                &::after {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: var(--bt-space-4);
+                    right: var(--bt-space-4);
+                    height: var(--bt-story-rule-height);
+                    background: var(--spectrum);
+                }
+
+                &::before {
+                    display: none;
+                }
+
+                &:nth-child(even)::before {
+                    display: block;
+                }
+            }
+        }
+
+        .concept__topics-row:first-child p:nth-child(-n + 2)::after {
+            display: none;
+        }
+    }
+
+    @media (max-width:575px) {
+        .concept__topics-row,
+        .concept__topics-row.concept__topics-row--five,
+        .concept__topics-row.concept__topics-row--four {
+            display: block;
+
+            p {
+                min-height: 0;
+                padding: var(--bt-space-5) 0;
+                font-size: var(--bt-story-body-size);
+                line-height: var(--bt-story-body-line-height);
+
+                &::before {
+                    display: none;
+                }
+
+                &::after {
+                    display: block;
+                }
+            }
+        }
+
+        .concept__topics-row:first-child p:first-child::after {
+            display: none;
+        }
+    }
 }
 
 /* ---------- alignment debug overlay (press K) ---------- */
