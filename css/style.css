@@ -854,8 +854,18 @@ the timeline drops them under the ship once the walls have retreated. */
     font-weight: inherit;
 
     .material-symbols-rounded {
+        display: inline-block;
+        flex: 0 0 auto;
         font-size: 18px;
         font-variation-settings: 'wght' 400;
+    }
+
+    &:hover .material-symbols-rounded,
+    &:focus-visible .material-symbols-rounded {
+        color: transparent;
+        background: var(--spectrum);
+        background-clip: text;
+        -webkit-background-clip: text;
     }
 }
 
