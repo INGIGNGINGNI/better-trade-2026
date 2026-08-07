@@ -6,13 +6,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Better Trade 2026 — Scroll Hero</title>
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="vendor/material-symbols/rounded.css">
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body class="is-loading">
+    <svg class="bt-icon-sprite" aria-hidden="true" focusable="false">
+        <symbol id="icon-book-open" viewBox="0 0 24 24">
+            <path d="M12 7v14" />
+            <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3z" />
+            <path d="M21 18a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-5a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3z" />
+        </symbol>
+        <symbol id="icon-box" viewBox="0 0 24 24">
+            <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+            <path d="m3.3 7 8.7 5 8.7-5" />
+            <path d="M12 22V12" />
+        </symbol>
+        <symbol id="icon-chart-line" viewBox="0 0 24 24">
+            <path d="M3 3v18h18" />
+            <path d="m19 9-5 5-4-4-3 3" />
+        </symbol>
+        <symbol id="icon-check" viewBox="0 0 24 24">
+            <path d="M20 6 9 17l-5-5" />
+        </symbol>
+        <symbol id="icon-clock" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 6v6l4 2" />
+        </symbol>
+        <symbol id="icon-external-link" viewBox="0 0 24 24">
+            <path d="M15 3h6v6" />
+            <path d="M10 14 21 3" />
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+        </symbol>
+        <symbol id="icon-arrow-up-right" viewBox="0 0 24 24">
+            <path d="M7 7h10v10" />
+            <path d="M7 17 17 7" />
+        </symbol>
+        <symbol id="icon-gift" viewBox="0 0 24 24">
+            <rect x="3" y="8" width="18" height="4" rx="1" />
+            <path d="M12 8v13" />
+            <path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7" />
+            <path d="M7.5 8a2.5 2.5 0 1 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5" />
+        </symbol>
+        <symbol id="icon-minus" viewBox="0 0 24 24">
+            <path d="M5 12h14" />
+        </symbol>
+        <symbol id="icon-network" viewBox="0 0 24 24">
+            <rect x="16" y="16" width="6" height="6" rx="1" />
+            <rect x="2" y="16" width="6" height="6" rx="1" />
+            <rect x="9" y="2" width="6" height="6" rx="1" />
+            <path d="M5 16v-3a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3" />
+            <path d="M12 8v8" />
+        </symbol>
+        <symbol id="icon-presentation" viewBox="0 0 24 24">
+            <path d="M2 3h20" />
+            <path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3" />
+            <path d="m7 21 5-5 5 5" />
+        </symbol>
+        <symbol id="icon-store" viewBox="0 0 24 24">
+            <path d="m2 7 2-4h16l2 4" />
+            <path d="M4 7v14h16V7" />
+            <path d="M8 21v-7h8v7" />
+            <path d="M2 7h20" />
+        </symbol>
+        <symbol id="icon-user" viewBox="0 0 24 24">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+        </symbol>
+        <symbol id="icon-users" viewBox="0 0 24 24">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </symbol>
+        <linearGradient id="icon-spectrum" x1="0%" y1="50%" x2="100%" y2="50%">
+            <stop offset="0%" stop-color="#08C7E8" />
+            <stop offset="35%" stop-color="#7B61FF" />
+            <stop offset="68%" stop-color="#FF4FD8" />
+            <stop offset="100%" stop-color="#B6F052" />
+        </linearGradient>
+    </svg>
 
     <header class="site-header" id="site-header">
         <div class="site-header__inner">
@@ -60,7 +134,6 @@
             </div>
         </div>
     </header>
-    <div class="site-header__contrast-labels" id="site-header-contrast-labels" aria-hidden="true"></div>
     <button class="site-header__backdrop" type="button" aria-label="ปิดเมนู"></button>
     <div class="site-scrollbar" id="site-scrollbar" role="scrollbar" aria-label="ตำแหน่งการเลื่อนหน้าเว็บ"
         aria-controls="scroller" aria-orientation="vertical" aria-valuemin="0" aria-valuemax="100"
@@ -181,8 +254,8 @@
                         </div>
                         <div class="venue">
                             <a class="venue-link bt-action-button bt-action-button--text" href="https://maps.app.goo.gl/uRrLjyD6aofCEb8K7"
-                                target="_blank" rel="noopener noreferrer">Samyan Mitrtown Hall<span
-                                    class="material-symbols-rounded" aria-hidden="true">arrow_outward</span></a>
+                                target="_blank" rel="noopener noreferrer">Samyan Mitrtown Hall<svg class="bt-icon"
+                                    aria-hidden="true"><use href="#icon-arrow-up-right"></use></svg></a>
                         </div>
                     </div>
                 </div>
@@ -287,12 +360,12 @@
                     </div>
 
                     <dl class="ticket__access">
-                        <div><dt class="ticket__access-label ticket__access-label--conference"><span class="material-symbols-rounded" aria-hidden="true">podium</span><span>Conference</span></dt><dd class="ticket__status ticket__status--included"><span class="material-symbols-rounded" aria-hidden="true">check</span><span class="visually-hidden">รวมในบัตร</span></dd></div>
-                        <div><dt class="ticket__access-label ticket__access-label--experience"><span class="material-symbols-rounded" aria-hidden="true">view_in_ar</span><span>Experience</span></dt><dd class="ticket__status ticket__status--included"><span class="material-symbols-rounded" aria-hidden="true">check</span><span class="visually-hidden">รวมในบัตร</span></dd></div>
-                        <div><dt class="ticket__access-label ticket__access-label--pavilions"><span class="material-symbols-rounded" aria-hidden="true">storefront</span><span>Pavilions</span></dt><dd class="ticket__status ticket__status--included"><span class="material-symbols-rounded" aria-hidden="true">check</span><span class="visually-hidden">รวมในบัตร</span></dd></div>
-                        <div><dt class="ticket__access-label ticket__access-label--workshop"><span class="material-symbols-rounded" aria-hidden="true">co_present</span><span>Workshop</span></dt><dd class="ticket__status ticket__status--soon"><span class="material-symbols-rounded" aria-hidden="true">schedule</span><span>Soon</span></dd></div>
-                        <div><dt class="ticket__access-label ticket__access-label--private-class"><span class="material-symbols-rounded" aria-hidden="true">groups</span><span>Private Class</span></dt><dd class="ticket__status ticket__status--excluded"><span class="material-symbols-rounded" aria-hidden="true">remove</span><span class="visually-hidden">ไม่รวมในบัตร</span></dd></div>
-                        <div><dt class="ticket__access-label ticket__access-label--playbook"><span class="material-symbols-rounded" aria-hidden="true">menu_book</span><span>Playbook</span></dt><dd class="ticket__status ticket__status--playbook">Full</dd></div>
+                        <div><dt class="ticket__access-label ticket__access-label--conference"><svg class="bt-icon" aria-hidden="true"><use href="#icon-presentation"></use></svg><span>Conference</span></dt><dd class="ticket__status ticket__status--included"><svg class="bt-icon" aria-hidden="true"><use href="#icon-check"></use></svg><span class="visually-hidden">รวมในบัตร</span></dd></div>
+                        <div><dt class="ticket__access-label ticket__access-label--experience"><svg class="bt-icon" aria-hidden="true"><use href="#icon-box"></use></svg><span>Experience</span></dt><dd class="ticket__status ticket__status--included"><svg class="bt-icon" aria-hidden="true"><use href="#icon-check"></use></svg><span class="visually-hidden">รวมในบัตร</span></dd></div>
+                        <div><dt class="ticket__access-label ticket__access-label--pavilions"><svg class="bt-icon" aria-hidden="true"><use href="#icon-store"></use></svg><span>Pavilions</span></dt><dd class="ticket__status ticket__status--included"><svg class="bt-icon" aria-hidden="true"><use href="#icon-check"></use></svg><span class="visually-hidden">รวมในบัตร</span></dd></div>
+                        <div><dt class="ticket__access-label ticket__access-label--workshop"><svg class="bt-icon" aria-hidden="true"><use href="#icon-presentation"></use></svg><span>Workshop</span></dt><dd class="ticket__status ticket__status--soon"><svg class="bt-icon" aria-hidden="true"><use href="#icon-clock"></use></svg><span>Soon</span></dd></div>
+                        <div><dt class="ticket__access-label ticket__access-label--private-class"><svg class="bt-icon" aria-hidden="true"><use href="#icon-users"></use></svg><span>Private Class</span></dt><dd class="ticket__status ticket__status--excluded"><svg class="bt-icon" aria-hidden="true"><use href="#icon-minus"></use></svg><span class="visually-hidden">ไม่รวมในบัตร</span></dd></div>
+                        <div><dt class="ticket__access-label ticket__access-label--playbook"><svg class="bt-icon" aria-hidden="true"><use href="#icon-book-open"></use></svg><span>Playbook</span></dt><dd class="ticket__status ticket__status--playbook">Full</dd></div>
                     </dl>
 
                     <a class="bt-action-button bt-action-button--primary bt-action-button--xl ticket__action" href="#contact">เลือก Ultimate</a>
@@ -317,12 +390,12 @@
                     </div>
 
                     <dl class="ticket__access">
-                        <div><dt class="ticket__access-label ticket__access-label--conference"><span class="material-symbols-rounded" aria-hidden="true">podium</span><span>Conference</span></dt><dd class="ticket__status ticket__status--excluded"><span class="material-symbols-rounded" aria-hidden="true">remove</span><span class="visually-hidden">ไม่รวมในบัตร</span></dd></div>
-                        <div><dt class="ticket__access-label ticket__access-label--experience"><span class="material-symbols-rounded" aria-hidden="true">view_in_ar</span><span>Experience</span></dt><dd class="ticket__status ticket__status--included"><span class="material-symbols-rounded" aria-hidden="true">check</span><span class="visually-hidden">รวมในบัตร</span></dd></div>
-                        <div><dt class="ticket__access-label ticket__access-label--pavilions"><span class="material-symbols-rounded" aria-hidden="true">storefront</span><span>Pavilions</span></dt><dd class="ticket__status ticket__status--included"><span class="material-symbols-rounded" aria-hidden="true">check</span><span class="visually-hidden">รวมในบัตร</span></dd></div>
-                        <div><dt class="ticket__access-label ticket__access-label--workshop"><span class="material-symbols-rounded" aria-hidden="true">co_present</span><span>Workshop</span></dt><dd class="ticket__status ticket__status--excluded"><span class="material-symbols-rounded" aria-hidden="true">remove</span><span class="visually-hidden">ไม่รวมในบัตร</span></dd></div>
-                        <div><dt class="ticket__access-label ticket__access-label--private-class"><span class="material-symbols-rounded" aria-hidden="true">groups</span><span>Private Class</span></dt><dd class="ticket__status ticket__status--included"><span class="material-symbols-rounded" aria-hidden="true">check</span><span class="visually-hidden">รวมในบัตร</span></dd></div>
-                        <div><dt class="ticket__access-label ticket__access-label--playbook"><span class="material-symbols-rounded" aria-hidden="true">menu_book</span><span>Playbook</span></dt><dd class="ticket__status ticket__status--playbook">Lite</dd></div>
+                        <div><dt class="ticket__access-label ticket__access-label--conference"><svg class="bt-icon" aria-hidden="true"><use href="#icon-presentation"></use></svg><span>Conference</span></dt><dd class="ticket__status ticket__status--excluded"><svg class="bt-icon" aria-hidden="true"><use href="#icon-minus"></use></svg><span class="visually-hidden">ไม่รวมในบัตร</span></dd></div>
+                        <div><dt class="ticket__access-label ticket__access-label--experience"><svg class="bt-icon" aria-hidden="true"><use href="#icon-box"></use></svg><span>Experience</span></dt><dd class="ticket__status ticket__status--included"><svg class="bt-icon" aria-hidden="true"><use href="#icon-check"></use></svg><span class="visually-hidden">รวมในบัตร</span></dd></div>
+                        <div><dt class="ticket__access-label ticket__access-label--pavilions"><svg class="bt-icon" aria-hidden="true"><use href="#icon-store"></use></svg><span>Pavilions</span></dt><dd class="ticket__status ticket__status--included"><svg class="bt-icon" aria-hidden="true"><use href="#icon-check"></use></svg><span class="visually-hidden">รวมในบัตร</span></dd></div>
+                        <div><dt class="ticket__access-label ticket__access-label--workshop"><svg class="bt-icon" aria-hidden="true"><use href="#icon-presentation"></use></svg><span>Workshop</span></dt><dd class="ticket__status ticket__status--excluded"><svg class="bt-icon" aria-hidden="true"><use href="#icon-minus"></use></svg><span class="visually-hidden">ไม่รวมในบัตร</span></dd></div>
+                        <div><dt class="ticket__access-label ticket__access-label--private-class"><svg class="bt-icon" aria-hidden="true"><use href="#icon-users"></use></svg><span>Private Class</span></dt><dd class="ticket__status ticket__status--included"><svg class="bt-icon" aria-hidden="true"><use href="#icon-check"></use></svg><span class="visually-hidden">รวมในบัตร</span></dd></div>
+                        <div><dt class="ticket__access-label ticket__access-label--playbook"><svg class="bt-icon" aria-hidden="true"><use href="#icon-book-open"></use></svg><span>Playbook</span></dt><dd class="ticket__status ticket__status--playbook">Lite</dd></div>
                     </dl>
 
                     <a class="bt-action-button bt-action-button--secondary bt-action-button--xl ticket__action" href="#contact">เลือก Master Class</a>
@@ -347,12 +420,12 @@
                     </div>
 
                     <dl class="ticket__access">
-                        <div><dt class="ticket__access-label ticket__access-label--conference"><span class="material-symbols-rounded" aria-hidden="true">podium</span><span>Conference</span></dt><dd class="ticket__status ticket__status--excluded"><span class="material-symbols-rounded" aria-hidden="true">remove</span><span class="visually-hidden">ไม่รวมในบัตร</span></dd></div>
-                        <div><dt class="ticket__access-label ticket__access-label--experience"><span class="material-symbols-rounded" aria-hidden="true">view_in_ar</span><span>Experience</span></dt><dd class="ticket__status ticket__status--included"><span class="material-symbols-rounded" aria-hidden="true">check</span><span class="visually-hidden">รวมในบัตร</span></dd></div>
-                        <div><dt class="ticket__access-label ticket__access-label--pavilions"><span class="material-symbols-rounded" aria-hidden="true">storefront</span><span>Pavilions</span></dt><dd class="ticket__status ticket__status--included"><span class="material-symbols-rounded" aria-hidden="true">check</span><span class="visually-hidden">รวมในบัตร</span></dd></div>
-                        <div><dt class="ticket__access-label ticket__access-label--workshop"><span class="material-symbols-rounded" aria-hidden="true">co_present</span><span>Workshop</span></dt><dd class="ticket__status ticket__status--excluded"><span class="material-symbols-rounded" aria-hidden="true">remove</span><span class="visually-hidden">ไม่รวมในบัตร</span></dd></div>
-                        <div><dt class="ticket__access-label ticket__access-label--private-class"><span class="material-symbols-rounded" aria-hidden="true">groups</span><span>Private Class</span></dt><dd class="ticket__status ticket__status--excluded"><span class="material-symbols-rounded" aria-hidden="true">remove</span><span class="visually-hidden">ไม่รวมในบัตร</span></dd></div>
-                        <div><dt class="ticket__access-label ticket__access-label--playbook"><span class="material-symbols-rounded" aria-hidden="true">menu_book</span><span>Playbook</span></dt><dd class="ticket__status ticket__status--playbook">Lite</dd></div>
+                        <div><dt class="ticket__access-label ticket__access-label--conference"><svg class="bt-icon" aria-hidden="true"><use href="#icon-presentation"></use></svg><span>Conference</span></dt><dd class="ticket__status ticket__status--excluded"><svg class="bt-icon" aria-hidden="true"><use href="#icon-minus"></use></svg><span class="visually-hidden">ไม่รวมในบัตร</span></dd></div>
+                        <div><dt class="ticket__access-label ticket__access-label--experience"><svg class="bt-icon" aria-hidden="true"><use href="#icon-box"></use></svg><span>Experience</span></dt><dd class="ticket__status ticket__status--included"><svg class="bt-icon" aria-hidden="true"><use href="#icon-check"></use></svg><span class="visually-hidden">รวมในบัตร</span></dd></div>
+                        <div><dt class="ticket__access-label ticket__access-label--pavilions"><svg class="bt-icon" aria-hidden="true"><use href="#icon-store"></use></svg><span>Pavilions</span></dt><dd class="ticket__status ticket__status--included"><svg class="bt-icon" aria-hidden="true"><use href="#icon-check"></use></svg><span class="visually-hidden">รวมในบัตร</span></dd></div>
+                        <div><dt class="ticket__access-label ticket__access-label--workshop"><svg class="bt-icon" aria-hidden="true"><use href="#icon-presentation"></use></svg><span>Workshop</span></dt><dd class="ticket__status ticket__status--excluded"><svg class="bt-icon" aria-hidden="true"><use href="#icon-minus"></use></svg><span class="visually-hidden">ไม่รวมในบัตร</span></dd></div>
+                        <div><dt class="ticket__access-label ticket__access-label--private-class"><svg class="bt-icon" aria-hidden="true"><use href="#icon-users"></use></svg><span>Private Class</span></dt><dd class="ticket__status ticket__status--excluded"><svg class="bt-icon" aria-hidden="true"><use href="#icon-minus"></use></svg><span class="visually-hidden">ไม่รวมในบัตร</span></dd></div>
+                        <div><dt class="ticket__access-label ticket__access-label--playbook"><svg class="bt-icon" aria-hidden="true"><use href="#icon-book-open"></use></svg><span>Playbook</span></dt><dd class="ticket__status ticket__status--playbook">Lite</dd></div>
                     </dl>
 
                     <a class="bt-action-button bt-action-button--secondary bt-action-button--xl ticket__action" href="#contact">เลือก Explorer</a>
@@ -363,10 +436,10 @@
                 <h3 id="ticket-benefits-title" class="col-12 col-lg-3">ทุก Pass ได้รับ</h3>
                 <div class="col-12 col-lg-9">
                     <ul class="ticket__benefits-list row g-0">
-                        <li class="col-12 col-sm-6 col-lg-3"><span class="material-symbols-rounded" aria-hidden="true">auto_stories</span><span>เข้าถึงองค์ความรู้<br>จากผู้เชี่ยวชาญ</span></li>
-                        <li class="col-12 col-sm-6 col-lg-3"><span class="material-symbols-rounded" aria-hidden="true">monitoring</span><span>อัปเดตเทรนด์ลงทุน<br>ครบทุกสินทรัพย์</span></li>
-                        <li class="col-12 col-sm-6 col-lg-3"><span class="material-symbols-rounded" aria-hidden="true">hub</span><span>เชื่อมต่อเครือข่าย<br>นักลงทุนคุณภาพ</span></li>
-                        <li class="col-12 col-sm-6 col-lg-3"><span class="material-symbols-rounded" aria-hidden="true">redeem</span><span>สิทธิพิเศษเฉพาะ<br>ผู้เข้าร่วมงาน</span></li>
+                        <li class="col-12 col-sm-6 col-lg-3"><svg class="bt-icon" aria-hidden="true"><use href="#icon-book-open"></use></svg><span>เข้าถึงองค์ความรู้<br>จากผู้เชี่ยวชาญ</span></li>
+                        <li class="col-12 col-sm-6 col-lg-3"><svg class="bt-icon" aria-hidden="true"><use href="#icon-chart-line"></use></svg><span>อัปเดตเทรนด์ลงทุน<br>ครบทุกสินทรัพย์</span></li>
+                        <li class="col-12 col-sm-6 col-lg-3"><svg class="bt-icon" aria-hidden="true"><use href="#icon-network"></use></svg><span>เชื่อมต่อเครือข่าย<br>นักลงทุนคุณภาพ</span></li>
+                        <li class="col-12 col-sm-6 col-lg-3"><svg class="bt-icon" aria-hidden="true"><use href="#icon-gift"></use></svg><span>สิทธิพิเศษเฉพาะ<br>ผู้เข้าร่วมงาน</span></li>
                     </ul>
                 </div>
             </aside>
@@ -374,32 +447,32 @@
             <div class="ticket__formats" aria-label="รูปแบบประสบการณ์ภายในงาน Better Trade">
                 <div class="ticket__formats-grid">
                     <article class="ticket__format ticket__format--conference">
-                        <span class="material-symbols-rounded" aria-hidden="true">podium</span>
+                        <svg class="bt-icon" aria-hidden="true"><use href="#icon-presentation"></use></svg>
                         <div class="ticket__format-copy"><h4>Conference</h4><p>ร่วมฟังแนวคิดจากวิทยากรระดับแนวหน้าของไทย เจาะภาพใหญ่ เทรนด์ และมุมมองการลงทุนที่ไม่ยึดติดกับตลาดแบบเดิม</p></div>
                     </article>
 
                     <article class="ticket__format ticket__format--experience">
-                        <span class="material-symbols-rounded" aria-hidden="true">view_in_ar</span>
+                        <svg class="bt-icon" aria-hidden="true"><use href="#icon-box"></use></svg>
                         <div class="ticket__format-copy"><h4>Experience</h4><p>ค้นหาประสบการณ์ใหม่กับแบรนด์ชั้นนำ ผ่านกิจกรรมที่เปิดโอกาสให้ทดลอง สัมผัสความสนุก และค้นพบความสนใจใหม่ของตัวเอง</p></div>
                     </article>
 
                     <article class="ticket__format ticket__format--pavilions">
-                        <span class="material-symbols-rounded" aria-hidden="true">storefront</span>
+                        <svg class="bt-icon" aria-hidden="true"><use href="#icon-store"></use></svg>
                         <div class="ticket__format-copy"><h4>Pavilions</h4><p>พื้นที่รวมเรื่องราวของนักสะสม เดินชม แลกเปลี่ยน และค้นหา Rare Item จากโลกของการ์ด ของสะสม และแบรนด์เนม</p></div>
                     </article>
 
                     <article class="ticket__format ticket__format--workshop">
-                        <span class="material-symbols-rounded" aria-hidden="true">co_present</span>
+                        <svg class="bt-icon" aria-hidden="true"><use href="#icon-presentation"></use></svg>
                         <div class="ticket__format-copy"><h4>Workshop</h4><p>ยกระดับการเรียนรู้ด้วยการลงมือทำจริง อัปสกิลแบบ Step by Step ไปพร้อมกับมืออาชีพตัวจริงในแต่ละวงการ</p></div>
                     </article>
 
                     <article class="ticket__format ticket__format--private-class">
-                        <span class="material-symbols-rounded" aria-hidden="true">groups</span>
+                        <svg class="bt-icon" aria-hidden="true"><use href="#icon-users"></use></svg>
                         <div class="ticket__format-copy"><h4>Private Class</h4><p>คลาสกลุ่มเล็กสำหรับการเรียนรู้เชิงลึก ถามตอบอย่างใกล้ชิด และแลกเปลี่ยนประสบการณ์กับผู้เชี่ยวชาญโดยตรง</p></div>
                     </article>
 
                     <article class="ticket__format ticket__format--playbook">
-                        <span class="material-symbols-rounded" aria-hidden="true">menu_book</span>
+                        <svg class="bt-icon" aria-hidden="true"><use href="#icon-book-open"></use></svg>
                         <div class="ticket__format-copy"><h4>Playbook</h4><p>คู่มือรวบรวมกรอบคิด เครื่องมือ และประเด็นสำคัญจากงาน เพื่อให้คุณนำความรู้กลับไปทบทวนและต่อยอดได้จริง</p></div>
                     </article>
                 </div>
@@ -446,7 +519,7 @@
                             <tr>
                                 <th scope="row"><time>10:00 – 10:05</time></th>
                                 <td><p class="agenda__session-title agenda__session-title--simple">Welcome Speech</p></td>
-                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="material-symbols-rounded" aria-hidden="true">person</span></span></td>
+                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><svg class="bt-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span></td>
                             </tr>
                             <tr>
                                 <th scope="row"><time>10:05 – 10:20</time></th>
@@ -455,7 +528,7 @@
                                     <p class="agenda__session-title">New World, New Playbook</p>
                                     <p class="agenda__session-summary">The Rules of Money Have Changed</p>
                                 </td>
-                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="material-symbols-rounded" aria-hidden="true">person</span></span></td>
+                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><svg class="bt-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span></td>
                             </tr>
                             <tr>
                                 <th scope="row"><time>10:20 – 11:20</time></th>
@@ -464,7 +537,7 @@
                                     <p class="agenda__session-title">The Great Reallocation</p>
                                     <p class="agenda__session-summary">When Capital Moves, the World Changes</p>
                                 </td>
-                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="material-symbols-rounded" aria-hidden="true">person</span></span></td>
+                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><svg class="bt-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span></td>
                             </tr>
                             <tr>
                                 <th scope="row"><time>11:20 – 12:00</time></th>
@@ -473,7 +546,7 @@
                                     <p class="agenda__session-title">The Death of Average Returns</p>
                                     <p class="agenda__session-summary">Why Old Portfolios May No Longer Work</p>
                                 </td>
-                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="material-symbols-rounded" aria-hidden="true">person</span></span></td>
+                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><svg class="bt-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span></td>
                             </tr>
                             <tr>
                                 <th scope="row"><time>12:00 – 13:00</time></th>
@@ -487,7 +560,7 @@
                                     <p class="agenda__session-title">Success in Personal</p>
                                     <p class="agenda__session-summary">How to Turn Income into Long-Term Wealth</p>
                                 </td>
-                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="material-symbols-rounded" aria-hidden="true">person</span></span></td>
+                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><svg class="bt-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span></td>
                             </tr>
                             <tr>
                                 <th scope="row"><time>13:40 – 14:10</time></th>
@@ -496,7 +569,7 @@
                                     <p class="agenda__session-title">From ETF to Tokenization</p>
                                     <p class="agenda__session-summary">The Financial System Is Becoming Digital</p>
                                 </td>
-                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="material-symbols-rounded" aria-hidden="true">person</span></span></td>
+                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><svg class="bt-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span></td>
                             </tr>
                             <tr>
                                 <th scope="row"><time>14:10 – 14:40</time></th>
@@ -505,7 +578,7 @@
                                     <p class="agenda__session-title">The Future of Money: Stablecoin</p>
                                     <p class="agenda__session-summary">Tokenized Gold &amp; the New Financial Rail</p>
                                 </td>
-                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="material-symbols-rounded" aria-hidden="true">person</span></span></td>
+                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><svg class="bt-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span></td>
                             </tr>
                             <tr>
                                 <th scope="row"><time>14:40 – 15:10</time></th>
@@ -514,7 +587,7 @@
                                     <p class="agenda__session-title">AI Vs. Investor</p>
                                     <p class="agenda__session-summary">When Machines Think Faster Than Humans</p>
                                 </td>
-                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="material-symbols-rounded" aria-hidden="true">person</span></span></td>
+                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><svg class="bt-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span></td>
                             </tr>
                             <tr>
                                 <th scope="row"><time>15:10 – 15:25</time></th>
@@ -528,7 +601,7 @@
                                     <p class="agenda__session-title">The All Weather Portfolio</p>
                                     <p class="agenda__session-summary">Stock Vs. Bitcoin Vs. Gold Vs. Global Assets</p>
                                 </td>
-                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="material-symbols-rounded" aria-hidden="true">person</span></span></td>
+                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><svg class="bt-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span></td>
                             </tr>
                             <tr>
                                 <th scope="row"><time>16:25 – 17:25</time></th>
@@ -537,7 +610,7 @@
                                     <p class="agenda__session-title">Beyond Stocks</p>
                                     <p class="agenda__session-summary">Alternative Assets for an Uncertain World</p>
                                 </td>
-                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="material-symbols-rounded" aria-hidden="true">person</span></span></td>
+                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><svg class="bt-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span></td>
                             </tr>
                             <tr>
                                 <th scope="row"><time>17:25 – 18:25</time></th>
@@ -547,9 +620,9 @@
                                     <p class="agenda__session-summary">The Ultimate Asset Is You</p>
                                 </td>
                                 <td class="agenda__speakers">
-                                    <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 1"><span class="material-symbols-rounded" aria-hidden="true">person</span></span>
-                                    <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 2"><span class="material-symbols-rounded" aria-hidden="true">person</span></span>
-                                    <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 3"><span class="material-symbols-rounded" aria-hidden="true">person</span></span>
+                                    <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 1"><svg class="bt-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span>
+                                    <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 2"><svg class="bt-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span>
+                                    <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 3"><svg class="bt-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span>
                                 </td>
                             </tr>
                             <tr>
@@ -608,7 +681,7 @@
                             <tr>
                                 <th scope="row"><time>10:00 – 10:05</time></th>
                                 <td><p class="agenda__session-title agenda__session-title--simple">Welcome Speech</p></td>
-                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="material-symbols-rounded" aria-hidden="true">person</span></span></td>
+                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><svg class="bt-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span></td>
                             </tr>
                             <tr>
                                 <th scope="row"><time>10:05 – 10:20</time></th>
@@ -617,7 +690,7 @@
                                     <p class="agenda__session-title">New World, New Playbook</p>
                                     <p class="agenda__session-summary">The Rules of Money Have Changed</p>
                                 </td>
-                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="material-symbols-rounded" aria-hidden="true">person</span></span></td>
+                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><svg class="bt-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span></td>
                             </tr>
                             <tr>
                                 <th scope="row"><time>10:20 – 11:20</time></th>
@@ -626,7 +699,7 @@
                                     <p class="agenda__session-title">The Great Reallocation</p>
                                     <p class="agenda__session-summary">When Capital Moves, the World Changes</p>
                                 </td>
-                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="material-symbols-rounded" aria-hidden="true">person</span></span></td>
+                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><svg class="bt-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span></td>
                             </tr>
                             <tr>
                                 <th scope="row"><time>11:20 – 12:00</time></th>
@@ -635,7 +708,7 @@
                                     <p class="agenda__session-title">The Death of Average Returns</p>
                                     <p class="agenda__session-summary">Why Old Portfolios May No Longer Work</p>
                                 </td>
-                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="material-symbols-rounded" aria-hidden="true">person</span></span></td>
+                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><svg class="bt-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span></td>
                             </tr>
                             <tr>
                                 <th scope="row"><time>12:00 – 13:00</time></th>
@@ -649,7 +722,7 @@
                                     <p class="agenda__session-title">Success in Personal</p>
                                     <p class="agenda__session-summary">How to Turn Income into Long-Term Wealth</p>
                                 </td>
-                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="material-symbols-rounded" aria-hidden="true">person</span></span></td>
+                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><svg class="bt-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span></td>
                             </tr>
                             <tr>
                                 <th scope="row"><time>13:40 – 14:10</time></th>
@@ -658,7 +731,7 @@
                                     <p class="agenda__session-title">From ETF to Tokenization</p>
                                     <p class="agenda__session-summary">The Financial System Is Becoming Digital</p>
                                 </td>
-                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="material-symbols-rounded" aria-hidden="true">person</span></span></td>
+                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><svg class="bt-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span></td>
                             </tr>
                             <tr>
                                 <th scope="row"><time>14:10 – 14:40</time></th>
@@ -667,7 +740,7 @@
                                     <p class="agenda__session-title">The Future of Money: Stablecoin</p>
                                     <p class="agenda__session-summary">Tokenized Gold &amp; the New Financial Rail</p>
                                 </td>
-                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="material-symbols-rounded" aria-hidden="true">person</span></span></td>
+                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><svg class="bt-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span></td>
                             </tr>
                             <tr>
                                 <th scope="row"><time>14:40 – 15:10</time></th>
@@ -676,7 +749,7 @@
                                     <p class="agenda__session-title">AI Vs. Investor</p>
                                     <p class="agenda__session-summary">When Machines Think Faster Than Humans</p>
                                 </td>
-                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="material-symbols-rounded" aria-hidden="true">person</span></span></td>
+                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><svg class="bt-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span></td>
                             </tr>
                             <tr>
                                 <th scope="row"><time>15:10 – 15:25</time></th>
@@ -690,7 +763,7 @@
                                     <p class="agenda__session-title">The All Weather Portfolio</p>
                                     <p class="agenda__session-summary">Stock Vs. Bitcoin Vs. Gold Vs. Global Assets</p>
                                 </td>
-                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="material-symbols-rounded" aria-hidden="true">person</span></span></td>
+                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><svg class="bt-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span></td>
                             </tr>
                             <tr>
                                 <th scope="row"><time>16:25 – 17:25</time></th>
@@ -699,7 +772,7 @@
                                     <p class="agenda__session-title">Beyond Stocks</p>
                                     <p class="agenda__session-summary">Alternative Assets for an Uncertain World</p>
                                 </td>
-                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="material-symbols-rounded" aria-hidden="true">person</span></span></td>
+                                <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><svg class="bt-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span></td>
                             </tr>
                             <tr>
                                 <th scope="row"><time>17:25 – 18:25</time></th>
@@ -709,9 +782,9 @@
                                     <p class="agenda__session-summary">The Ultimate Asset Is You</p>
                                 </td>
                                 <td class="agenda__speakers">
-                                    <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 1"><span class="material-symbols-rounded" aria-hidden="true">person</span></span>
-                                    <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 2"><span class="material-symbols-rounded" aria-hidden="true">person</span></span>
-                                    <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 3"><span class="material-symbols-rounded" aria-hidden="true">person</span></span>
+                                    <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 1"><svg class="bt-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span>
+                                    <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 2"><svg class="bt-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span>
+                                    <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 3"><svg class="bt-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span>
                                 </td>
                             </tr>
                             <tr>

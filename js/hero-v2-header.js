@@ -2,34 +2,6 @@
         const siteHeader = document.querySelector('.site-header');
         const siteHeaderBackdrop = document.querySelector('.site-header__backdrop');
         const siteHeaderMobileLinks = document.querySelectorAll('.site-header__mobile a');
-        const siteHeaderNavLinks = [...document.querySelectorAll('.site-header__nav a')];
-        const siteHeaderContrastLabels = document.getElementById('site-header-contrast-labels');
-        const supportsDynamicContrast = CSS.supports('mix-blend-mode', 'luminosity')
-            && CSS.supports('filter', 'invert(1) grayscale(1) brightness(1.3) contrast(9000)');
-        const contrastLabels = supportsDynamicContrast
-            ? siteHeaderNavLinks.map(link => {
-                const label = document.createElement('span');
-                label.className = 'site-header__contrast-label';
-                label.textContent = link.textContent.trim();
-                siteHeaderContrastLabels.appendChild(label);
-                return label;
-            })
-            : [];
-
-        function syncHeaderContrastLabels() {
-            const enabled = supportsDynamicContrast && window.innerWidth > 991;
-            document.body.classList.toggle('has-dynamic-nav-contrast', enabled);
-            if (!enabled) return;
-
-            siteHeaderNavLinks.forEach((link, index) => {
-                const rect = link.getBoundingClientRect();
-                const label = contrastLabels[index];
-                label.style.left = `${rect.left}px`;
-                label.style.top = `${rect.top}px`;
-                label.style.width = `${rect.width}px`;
-                label.style.height = `${rect.height}px`;
-            });
-        }
 
         // Kept for buildScroll()'s wallCloseAt (the ship-channel seal timing) in the hero
         // script further down — unrelated to the header, just reusing the same formula.
@@ -57,7 +29,6 @@
 
             const hidden = y >= hideAt && y < stickyAt;
             siteHeader.classList.toggle('is-hidden', hidden);
-            siteHeaderContrastLabels.classList.toggle('is-hidden', hidden);
         }
 
         function setSiteMenu(open) {
@@ -78,7 +49,6 @@
             const applyTheme = () => {
                 const onDark = activeDark.size > 0;
                 siteHeader.classList.toggle('site-header--on-dark', onDark);
-                siteHeaderContrastLabels.style.setProperty('--bg-color', onDark ? '#0d0f14' : '#9ccbf6');
             };
 
             const headerHeight = siteHeader.offsetHeight || 80;
@@ -109,11 +79,8 @@
         window.addEventListener('resize', () => {
             if (window.innerWidth > 991) setSiteMenu(false);
             updateSiteHeader();
-            syncHeaderContrastLabels();
             disconnectHeaderThemeObserver();
             disconnectHeaderThemeObserver = setupHeaderThemeObserver();
         });
-        if (document.fonts) document.fonts.ready.then(syncHeaderContrastLabels);
-        syncHeaderContrastLabels();
         updateSiteHeader();
     

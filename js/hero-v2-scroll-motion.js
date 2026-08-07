@@ -132,7 +132,6 @@
             loaderProgressFill: document.querySelector('.loader-progress__fill'),
             loaderProgressValue: document.querySelector('.loader-progress__value'),
             siteHeader: document.getElementById('site-header'),
-            siteHeaderContrastLabels: document.querySelectorAll('.site-header__contrast-label'),
             siteScrollbar: document.getElementById('site-scrollbar'),
             siteScrollbarThumb: document.querySelector('.site-scrollbar__thumb'),
         };
@@ -1087,7 +1086,6 @@
                 gsap.set('.asset .inner', { opacity: 1, clearProps: 'transform' });
                 gsap.set('#ui', { opacity: 1, y: 0 });
                 gsap.set(el.siteHeader, { clearProps: 'opacity,transform' });
-                gsap.set(el.siteHeaderContrastLabels, { clearProps: 'opacity,transform' });
                 startIdle();
                 requestSiteScrollbarUpdate();
             };
@@ -1117,7 +1115,6 @@
             const wallIntroDuration = assetScatterEndOffset - wallIntroStartOffset;
 
             gsap.set(el.siteHeader, { opacity: 0, y: -16 });
-            gsap.set(el.siteHeaderContrastLabels, { opacity: 0, y: -16 });
             gsap.set('.asset .inner', { opacity: 0 });
             gsap.set('#ui', { opacity: 0, y: 16 });
             gsap.set(loaderIcons, {
@@ -1155,7 +1152,6 @@
                     document.body.classList.remove('is-loading');
                     el.loader.remove();
                     gsap.set(el.siteHeader, { clearProps: 'opacity,transform' });
-                    gsap.set(el.siteHeaderContrastLabels, { clearProps: 'opacity,transform' });
                     ScrollTrigger.refresh();
                     startIdle();
                     requestSiteScrollbarUpdate();
@@ -1220,7 +1216,6 @@
                     exitAt + 0.34
                 )
                 .to(el.siteHeader, { opacity: 1, y: 0, duration: 0.56 }, exitAt + 0.48)
-                .to(el.siteHeaderContrastLabels, { opacity: 0.95, y: 0, duration: 0.56 }, exitAt + 0.48)
                 .to('#ui', { opacity: 1, y: 0, duration: 0.62 }, exitAt + 0.64);
 
             ASSET_ICON_KEYS.forEach((k, i) => {

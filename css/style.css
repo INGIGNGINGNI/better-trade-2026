@@ -2,6 +2,26 @@
     box-sizing: border-box;
 }
 
+/* Lucide-style inline SVG icons. Symbols live in index.html so the page stays static. */
+.bt-icon-sprite {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+.bt-icon {
+    display: inline-block;
+    flex: 0 0 auto;
+    width: 1em;
+    height: 1em;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+}
+
 html {
     scroll-behavior: auto;
     scrollbar-width: none;
@@ -199,40 +219,6 @@ body.menu-open .site-header {
 
 .site-header__nav-label {
     color: inherit;
-    transition: opacity 180ms ease;
-}
-
-.site-header__contrast-labels {
-    --bg-color: #9ccbf6;
-    display: contents;
-}
-
-.site-header__contrast-label {
-    position: fixed;
-    z-index: 201;
-    display: grid;
-    place-items: center;
-    color: var(--bg-color);
-    font-family: var(--headline);
-    font-size: 16px;
-    line-height: 1;
-    text-transform: uppercase;
-    white-space: nowrap;
-    filter: invert(1) grayscale(1) brightness(1.3) contrast(9000);
-    mix-blend-mode: luminosity;
-    opacity: 0.95;
-    pointer-events: none;
-    transition: opacity 520ms cubic-bezier(0.16, 1, 0.3, 1), transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-body.has-dynamic-nav-contrast .site-header__nav-label {
-    color: transparent;
-}
-
-body.is-loading .site-header__contrast-label,
-.site-header__contrast-labels.is-hidden .site-header__contrast-label {
-    opacity: 0;
-    transform: translateY(calc(-1 * var(--header-height)));
 }
 
 .site-header--on-dark .site-header__nav a {
@@ -853,19 +839,15 @@ the timeline drops them under the ship once the walls have retreated. */
     font-size: inherit;
     font-weight: inherit;
 
-    .material-symbols-rounded {
-        display: inline-block;
-        flex: 0 0 auto;
-        font-size: 18px;
-        font-variation-settings: 'wght' 400;
+    .bt-icon {
+        width: 18px;
+        height: 18px;
+        stroke-width: 2;
     }
 
-    &:hover .material-symbols-rounded,
-    &:focus-visible .material-symbols-rounded {
-        color: transparent;
-        background: var(--spectrum);
-        background-clip: text;
-        -webkit-background-clip: text;
+    &:hover .bt-icon,
+    &:focus-visible .bt-icon {
+        stroke: url("#icon-spectrum");
     }
 }
 
@@ -1087,7 +1069,6 @@ the timeline drops them under the ship once the walls have retreated. */
 .ticket {
     position: relative;
     padding: var(--bt-story-section-padding-y) 0;
-    border-top: var(--bt-story-rule-width) solid var(--bt-story-line);
     color: var(--bt-story-ink);
     background: var(--bt-story-bg);
     font-family: var(--bt-font);
@@ -1238,43 +1219,43 @@ the timeline drops them under the ship once the walls have retreated. */
         align-items: center;
         gap: var(--bt-space-2);
 
-        >.material-symbols-rounded {
+        >.bt-icon {
             flex: 0 0 auto;
             width: var(--bt-space-6);
             height: var(--bt-space-6);
             display: grid;
             place-items: center;
+            padding: var(--bt-space-1);
             border-radius: var(--bt-radius-1);
             background: color-mix(in srgb, currentColor 16%, var(--bt-story-bg));
-            font-size: var(--bt-font-size-16);
-            font-variation-settings: 'wght' 300;
+            stroke-width: 1.75;
         }
 
         >span:last-child {
             color: var(--bt-story-ink);
         }
 
-        &.ticket__access-label--conference>.material-symbols-rounded {
+        &.ticket__access-label--conference>.bt-icon {
             color: var(--bt-ticket-conference);
         }
 
-        &.ticket__access-label--experience>.material-symbols-rounded {
+        &.ticket__access-label--experience>.bt-icon {
             color: var(--bt-ticket-experience);
         }
 
-        &.ticket__access-label--pavilions>.material-symbols-rounded {
+        &.ticket__access-label--pavilions>.bt-icon {
             color: var(--bt-ticket-pavilions);
         }
 
-        &.ticket__access-label--workshop>.material-symbols-rounded {
+        &.ticket__access-label--workshop>.bt-icon {
             color: var(--bt-ticket-workshop);
         }
 
-        &.ticket__access-label--private-class>.material-symbols-rounded {
+        &.ticket__access-label--private-class>.bt-icon {
             color: var(--bt-ticket-private-class);
         }
 
-        &.ticket__access-label--playbook>.material-symbols-rounded {
+        &.ticket__access-label--playbook>.bt-icon {
             color: var(--bt-ticket-playbook);
         }
     }
@@ -1287,9 +1268,9 @@ the timeline drops them under the ship once the walls have retreated. */
         gap: var(--bt-space-1);
         color: var(--bt-story-muted);
 
-        .material-symbols-rounded {
+        .bt-icon {
             font-size: var(--bt-space-5);
-            font-variation-settings: 'wght' 400;
+            stroke-width: 2.25;
         }
 
         &.ticket__status--included,
@@ -1345,10 +1326,10 @@ the timeline drops them under the ship once the walls have retreated. */
             font-weight: var(--bt-font-weight-regular);
             line-height: var(--bt-story-body-line-height);
 
-            .material-symbols-rounded {
+            .bt-icon {
                 color: var(--bt-story-accent);
                 font-size: var(--bt-space-6);
-                font-variation-settings: 'wght' 300;
+                stroke-width: 1.75;
             }
         }
     }
@@ -1369,16 +1350,16 @@ the timeline drops them under the ship once the walls have retreated. */
         align-items: center;
         gap: var(--bt-space-4);
 
-        >.material-symbols-rounded {
+        >.bt-icon {
             display: grid;
             place-items: center;
             flex: 0 0 auto;
             width: var(--bt-space-6);
             height: var(--bt-space-6);
+            padding: var(--bt-space-1);
             border-radius: var(--bt-radius-1);
             background: color-mix(in srgb, currentColor 16%, var(--bt-story-bg));
-            font-size: var(--bt-font-size-16);
-            font-variation-settings: 'wght' 300;
+            stroke-width: 1.75;
         }
 
         .ticket__format-copy {
@@ -1413,27 +1394,27 @@ the timeline drops them under the ship once the walls have retreated. */
             }
         }
 
-        &.ticket__format--conference>.material-symbols-rounded {
+        &.ticket__format--conference>.bt-icon {
             color: var(--bt-ticket-conference);
         }
 
-        &.ticket__format--experience>.material-symbols-rounded {
+        &.ticket__format--experience>.bt-icon {
             color: var(--bt-ticket-experience);
         }
 
-        &.ticket__format--pavilions>.material-symbols-rounded {
+        &.ticket__format--pavilions>.bt-icon {
             color: var(--bt-ticket-pavilions);
         }
 
-        &.ticket__format--workshop>.material-symbols-rounded {
+        &.ticket__format--workshop>.bt-icon {
             color: var(--bt-ticket-workshop);
         }
 
-        &.ticket__format--private-class>.material-symbols-rounded {
+        &.ticket__format--private-class>.bt-icon {
             color: var(--bt-ticket-private-class);
         }
 
-        &.ticket__format--playbook>.material-symbols-rounded {
+        &.ticket__format--playbook>.bt-icon {
             color: var(--bt-ticket-playbook);
         }
     }
@@ -1512,14 +1493,11 @@ the timeline drops them under the ship once the walls have retreated. */
 .agenda {
     position: relative;
     padding: var(--bt-story-section-padding-y) 0;
-    border-top: var(--bt-story-rule-width) solid var(--bt-story-line);
     color: var(--bt-story-ink);
     background: var(--bt-story-bg);
     font-family: var(--bt-font);
 
     .agenda__layout {
-        --bs-gutter-y: var(--bt-space-8);
-
         align-items: start;
     }
 
@@ -1527,7 +1505,6 @@ the timeline drops them under the ship once the walls have retreated. */
     .agenda__inner--day-two {
         margin-top: var(--bt-space-16);
         padding-top: var(--bt-space-16);
-        border-top: var(--bt-story-rule-width) solid var(--bt-story-line);
     }
 
     .agenda__header {
@@ -1755,9 +1732,9 @@ the timeline drops them under the ship once the walls have retreated. */
 
     }
 
-    .agenda__speaker-frame>span.material-symbols-rounded {
+    .agenda__speaker-frame>.bt-icon {
         font-size: var(--bt-space-8);
-        font-variation-settings: 'wght' 300;
+        stroke-width: 1.75;
     }
 
     .agenda__tags {
@@ -1948,7 +1925,7 @@ the timeline drops them under the ship once the walls have retreated. */
 
         }
 
-        .agenda__speaker-frame>span.material-symbols-rounded {
+        .agenda__speaker-frame>.bt-icon {
             font-size: var(--bt-space-5);
         }
 
@@ -1975,14 +1952,13 @@ the timeline drops them under the ship once the walls have retreated. */
    แสดงหัวข้อและภาพแผนผังบูทเต็มความกว้างของ Bootstrap container */
 .floor-plan {
     padding: var(--bt-story-section-padding-y) 0;
-    border-top: var(--bt-story-rule-width) solid var(--bt-story-line);
     color: var(--bt-story-ink);
     background: var(--bt-story-bg);
     font-family: var(--bt-font);
 
     .floor-plan__title {
         margin: 0;
-        font-size: var(--bt-story-display-size);
+        font-size: var(--bt-story-title-size);
         font-weight: var(--bt-font-weight-regular);
         line-height: var(--bt-story-display-line-height);
         letter-spacing: 0;
@@ -2052,10 +2028,6 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 @media (max-width:991px) {
-    .site-header__contrast-labels {
-        display: none;
-    }
-
     body.is-mobile-static #stagewrap {
         min-height: 0;
         background: #fff;
