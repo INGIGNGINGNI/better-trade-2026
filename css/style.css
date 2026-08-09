@@ -1116,18 +1116,26 @@ the timeline drops them under the ship once the walls have retreated. */
     text-wrap: balance;
 }
 
+.topics-showcase__content {
+    margin-top: clamp(56px, 7vw, 96px);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(420px, 0.94fr);
+    gap: clamp(44px, 6vw, 104px);
+    align-items: center;
+}
+
 .topics-showcase .concept__topics {
-    width: min(76%, 920px);
-    margin-top: clamp(112px, 15vw, 208px);
+    width: 100%;
     display: grid;
 }
 
 .topics-showcase .concept__topics p {
     --topic-delay: 0ms;
     --topic-line-delay: 80ms;
+    --topic-star-size: clamp(18px, 1.7vw, 28px);
 
     position: relative;
-    min-height: calc(var(--bt-story-topic-line-height) + var(--bt-space-8));
+    min-height: calc(var(--bt-story-topic-line-height) + var(--bt-space-5));
     margin: 0;
     padding: var(--bt-space-4) 0;
     display: flex;
@@ -1139,6 +1147,15 @@ the timeline drops them under the ship once the walls have retreated. */
     letter-spacing: 0;
 }
 
+.topics-showcase .concept__topics p::before {
+    content: "";
+    flex: 0 0 var(--topic-star-size);
+    width: var(--topic-star-size);
+    height: var(--topic-star-size);
+    margin-right: var(--bt-space-4);
+    background: url("../images/star.png") center / contain no-repeat;
+}
+
 .topics-showcase .concept__topics p::after {
     content: "";
     position: absolute;
@@ -1146,7 +1163,7 @@ the timeline drops them under the ship once the walls have retreated. */
     bottom: 0;
     width: min(100%, 50vw);
     height: 1px;
-    background: rgba(247, 248, 247, 0.52);
+    background: rgba(247, 248, 247, 0.16);
     transform-origin: left center;
 }
 
@@ -1159,15 +1176,125 @@ the timeline drops them under the ship once the walls have retreated. */
 .topics-showcase .concept__topics p:nth-child(8) { --topic-delay: 490ms; --topic-line-delay: 570ms; }
 .topics-showcase .concept__topics p:nth-child(9) { --topic-delay: 560ms; --topic-line-delay: 640ms; }
 
+.topics-showcase__assets {
+    position: relative;
+    width: 100%;
+    min-height: clamp(540px, 48vw, 680px);
+    align-self: stretch;
+    isolation: isolate;
+}
+
+.topics-showcase__assets::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 51%;
+    width: min(78%, 460px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(107, 124, 198, 0.12), rgba(16, 17, 20, 0) 68%);
+    filter: blur(20px);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.topics-showcase__asset {
+    position: absolute;
+    left: var(--asset-x);
+    top: var(--asset-y);
+    z-index: var(--asset-z, 1);
+    width: var(--asset-size);
+    max-width: var(--asset-max, 240px);
+    margin: 0;
+    translate: -50% -50%;
+}
+
+.topics-showcase__asset-motion {
+    width: 100%;
+    will-change: transform, opacity;
+}
+
+.topics-showcase__asset-float {
+    width: 100%;
+    will-change: transform;
+}
+
+.topics-showcase__asset img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transform: rotate(var(--asset-rotation, 0deg));
+    filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.34));
+}
+
+.topics-showcase__asset--triangle {
+    --asset-x: 50%;
+    --asset-y: 66%;
+    --asset-size: 33%;
+    --asset-max: 230px;
+    --asset-rotation: 10deg;
+    --asset-z: 3;
+}
+
+.topics-showcase__asset--bitcoin {
+    --asset-x: 23%;
+    --asset-y: 42%;
+    --asset-size: 29%;
+    --asset-max: 205px;
+    --asset-rotation: -10deg;
+    --asset-z: 2;
+}
+
+.topics-showcase__asset--gold {
+    --asset-x: 77%;
+    --asset-y: 41%;
+    --asset-size: 15%;
+    --asset-max: 108px;
+    --asset-rotation: 12deg;
+    --asset-z: 2;
+}
+
+.topics-showcase__asset--stock {
+    --asset-x: 23%;
+    --asset-y: 82%;
+    --asset-size: 9%;
+    --asset-max: 64px;
+    --asset-rotation: -12deg;
+    --asset-z: 1;
+}
+
+.topics-showcase__asset--card {
+    --asset-x: 77%;
+    --asset-y: 80%;
+    --asset-size: 26%;
+    --asset-max: 184px;
+    --asset-rotation: 16deg;
+    --asset-z: 1;
+}
+
+.topics-showcase__asset--heart {
+    --asset-x: 50%;
+    --asset-y: 15%;
+    --asset-size: 37%;
+    --asset-max: 258px;
+    --asset-rotation: -4deg;
+    --asset-z: 3;
+}
+
 .topics-showcase.is-reveal-ready .topics-showcase__header h2,
-.topics-showcase.is-reveal-ready .topics-showcase__header p,
-.topics-showcase.is-reveal-ready .concept__topics p {
+.topics-showcase.is-reveal-ready .topics-showcase__header p {
     opacity: 0;
     transform: translateY(var(--bt-space-4));
 }
 
+.topics-showcase.is-reveal-ready .concept__topics p {
+    opacity: 0;
+    transform: translateX(calc(var(--bt-space-8) * -1));
+}
+
 .topics-showcase.is-reveal-ready .concept__topics p::after {
-    transform: scaleX(0);
+    opacity: 0;
+    transform: translateX(calc(var(--bt-space-8) * -1)) scaleX(0);
 }
 
 .topics-showcase.is-reveal-ready.is-header-visible .topics-showcase__header h2 {
@@ -1184,15 +1311,18 @@ the timeline drops them under the ship once the walls have retreated. */
 
 .topics-showcase.is-reveal-ready.are-topics-visible .concept__topics p {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0);
     transition:
         opacity 560ms ease var(--topic-delay),
         transform 700ms var(--bt-story-ease) var(--topic-delay);
 }
 
 .topics-showcase.is-reveal-ready.are-topics-visible .concept__topics p::after {
-    transform: scaleX(1);
-    transition: transform 900ms var(--bt-story-ease) var(--topic-line-delay);
+    opacity: 1;
+    transform: translateX(0) scaleX(1);
+    transition:
+        opacity 520ms ease var(--topic-line-delay),
+        transform 900ms var(--bt-story-ease) var(--topic-line-delay);
 }
 
 @media (max-width: 767px) {
@@ -1210,13 +1340,33 @@ the timeline drops them under the ship once the walls have retreated. */
         display: none;
     }
 
-    .topics-showcase .concept__topics {
-        width: 100%;
-        margin-top: var(--bt-space-20);
+    .topics-showcase__content {
+        margin-top: var(--bt-space-14);
+        grid-template-columns: 1fr;
+        gap: var(--bt-space-16);
     }
 
     .topics-showcase .concept__topics p {
-        min-height: calc(var(--bt-story-topic-line-height) + var(--bt-space-8));
+        min-height: calc(var(--bt-story-topic-line-height) + var(--bt-space-5));
+    }
+
+    .topics-showcase__assets {
+        min-height: min(128vw, 560px);
+    }
+
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+    .topics-showcase__content {
+        grid-template-columns: minmax(0, 1.05fr) minmax(340px, 0.95fr);
+        gap: var(--bt-space-10);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .topics-showcase__asset-motion,
+    .topics-showcase__asset-float {
+        will-change: auto;
     }
 }
 
@@ -1959,7 +2109,7 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .agenda__table tr {
-        border-bottom: var(--bt-story-rule-width) solid var(--bt-story-line);
+        border-bottom: var(--bt-story-rule-width) solid var(--bt-agenda-line);
     }
 
     .agenda__table th,
@@ -1980,7 +2130,7 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .agenda__table td {
-        border-left: var(--bt-story-rule-width) solid var(--bt-story-line);
+        border-left: var(--bt-story-rule-width) solid var(--bt-agenda-line);
         padding-left: var(--bt-space-6);
     }
 
@@ -2173,7 +2323,7 @@ the timeline drops them under the ship once the walls have retreated. */
             grid-row: 2;
             padding: 0 0 var(--bt-space-6) var(--bt-space-6);
             display: block;
-            border-left: var(--bt-story-rule-width) solid var(--bt-story-line);
+            border-left: var(--bt-story-rule-width) solid var(--bt-agenda-line);
             font-size: var(--bt-story-small-size);
             text-align: left;
             white-space: normal;

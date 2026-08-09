@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/style.css?v=13">
+    <link rel="stylesheet" href="css/style.css?v=17">
 </head>
 
 <body class="is-loading">
@@ -355,16 +355,39 @@
                 <p>สำรวจเทรนด์ เศรษฐกิจ เทคโนโลยี และโอกาสลงทุน<br>ที่จะกำหนดโลกใบต่อไป</p>
             </header>
 
-            <div class="concept__topics" aria-label="หัวข้อการลงทุนที่น่าสนใจภายในงาน">
-                <p>Geopolitics Macroeconomics</p>
-                <p>Capital Market</p>
-                <p>Digital Asset</p>
-                <p>Alternative Asset</p>
-                <p>AI Investments</p>
-                <p>Personal Investments</p>
-                <p>Passion Investments</p>
-                <p>Longevity &amp; Wellness Investments</p>
-                <p>Lifestyle Investments</p>
+            <div class="topics-showcase__content">
+                <div class="concept__topics" aria-label="หัวข้อการลงทุนที่น่าสนใจภายในงาน">
+                    <p>Geopolitics Macroeconomics</p>
+                    <p>Capital Market</p>
+                    <p>Digital Asset</p>
+                    <p>Alternative Asset</p>
+                    <p>AI Investments</p>
+                    <p>Personal Investments</p>
+                    <p>Passion Investments</p>
+                    <p>Longevity &amp; Wellness Investments</p>
+                    <p>Lifestyle Investments</p>
+                </div>
+
+                <div class="topics-showcase__assets" aria-hidden="true">
+                    <figure class="topics-showcase__asset topics-showcase__asset--triangle" data-topic-asset>
+                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/triangle.webp" alt=""></div></div>
+                    </figure>
+                    <figure class="topics-showcase__asset topics-showcase__asset--bitcoin" data-topic-asset>
+                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/bitcoin.webp" alt=""></div></div>
+                    </figure>
+                    <figure class="topics-showcase__asset topics-showcase__asset--gold" data-topic-asset>
+                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/gold.webp" alt=""></div></div>
+                    </figure>
+                    <figure class="topics-showcase__asset topics-showcase__asset--stock" data-topic-asset>
+                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/stock.webp" alt=""></div></div>
+                    </figure>
+                    <figure class="topics-showcase__asset topics-showcase__asset--card" data-topic-asset>
+                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/card.webp" alt=""></div></div>
+                    </figure>
+                    <figure class="topics-showcase__asset topics-showcase__asset--heart" data-topic-asset>
+                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/heart.webp" alt=""></div></div>
+                    </figure>
+                </div>
             </div>
         </div>
     </section>
@@ -1123,7 +1146,8 @@
     <script src="vendor/gsap/gsap.min.js"></script>
     <script src="vendor/gsap/ScrollTrigger.min.js"></script>
     <script src="js/hero-v2-scroll-motion.js?v=6"></script>
-    <script src="js/topics-reveal.js?v=2"></script>
+    <script src="js/topics-reveal.js?v=3"></script>
+    <script src="js/topics-assets-motion.js?v=7"></script>
     <!-- หลัง hero เพราะ ScrollTrigger refresh ตามลำดับที่สร้าง และ speaker อยู่ใต้ hero ในหน้า -->
     <script src="js/speaker-motion.js"></script>
 </body>
