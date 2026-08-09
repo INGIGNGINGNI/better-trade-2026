@@ -74,7 +74,6 @@
             fps: 30000 / 1001,
             startAt: 1.00,
             scrollDuration: 0.86,
-            playbackRate: 1.6,
             whiteoutDuration: 0.42,
             conceptRevealDelay: 720,
             /* ship-new-3 is a 16:9 composition centred and bottom-aligned. */
@@ -329,21 +328,54 @@
             }
         }, { once: true });
 
-        let shipRunAutoplayState = 'idle';
-        let shipRunWhiteoutRAF = null;
-        const blockedScrollKeys = new Set([
-            'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' ',
-        ]);
+        let shipRunScrubState = 'idle';
 
-        const blockShipRunScroll = event => {
-            if (shipRunAutoplayState !== 'playing') return;
-            if (event.type !== 'keydown' || blockedScrollKeys.has(event.key)) {
-                event.preventDefault();
+        function getShipRunDuration() {
+            if (Number.isFinite(el.shipRunVideo.duration)) {
+                return Math.min(
+                    el.shipRunVideo.duration,
+                    Number.isFinite(el.shipRunAlpha.duration)
+                        ? el.shipRunAlpha.duration
+                        : el.shipRunVideo.duration
+                );
             }
-        };
-        window.addEventListener('wheel', blockShipRunScroll, { passive: false });
-        window.addEventListener('touchmove', blockShipRunScroll, { passive: false });
-        window.addEventListener('keydown', blockShipRunScroll, { passive: false });
+            return SHIP_RUN.duration;
+        }
+
+        function syncShipRunToScroll() {
+            shipRunTargetTime = clamp(
+                shipRunState.time,
+                0,
+                Math.max(0, getShipRunDuration() - 0.001)
+            );
+            if (shipRunSyncRAF) return;
+
+            shipRunSyncRAF = requestAnimationFrame(() => {
+                shipRunSyncRAF = null;
+                const threshold = 0.5 / SHIP_RUN.fps;
+                [el.shipRunVideo, el.shipRunAlpha].forEach(video => {
+                    if (video.readyState < 1) return;
+                    const target = clamp(
+                        shipRunTargetTime,
+                        0,
+                        Math.max(0, video.duration - 0.001)
+                    );
+                    if (Math.abs(video.currentTime - target) > threshold) {
+                        video.currentTime = target;
+                    }
+                });
+                requestShipRunRender();
+            });
+
+            const whiteoutStart = getShipRunDuration() - SHIP_RUN.whiteoutDuration;
+            gsap.set(el.shipRunWhiteout, {
+                opacity: clamp(
+                    (shipRunState.time - whiteoutStart) / SHIP_RUN.whiteoutDuration,
+                    0,
+                    1
+                ),
+            });
+        }
 
         function maintainCompletedHeroScene() {
             if (!shipRunHeroRestored) return;
@@ -376,9 +408,7 @@
             if (!shipRunHasCompleted) return;
             if (shipRunConceptRevealTimer) clearTimeout(shipRunConceptRevealTimer);
             shipRunConceptRevealTimer = null;
-            if (shipRunWhiteoutRAF) cancelAnimationFrame(shipRunWhiteoutRAF);
-            shipRunWhiteoutRAF = null;
-            shipRunAutoplayState = 'complete';
+            shipRunScrubState = 'complete';
             shipRunHeroRestored = true;
             el.shipRunVideo.pause();
             el.shipRunAlpha.pause();
@@ -390,16 +420,16 @@
             requestShipRunRender();
         }
 
-        function resetShipRunAutoplay() {
+        function resetShipRunScrub() {
             if (shipRunHasCompleted) {
                 restoreCompletedHeroScene();
                 return;
             }
-            if (shipRunWhiteoutRAF) cancelAnimationFrame(shipRunWhiteoutRAF);
-            shipRunWhiteoutRAF = null;
             if (shipRunConceptRevealTimer) clearTimeout(shipRunConceptRevealTimer);
             shipRunConceptRevealTimer = null;
-            shipRunAutoplayState = 'idle';
+            shipRunScrubState = 'idle';
+            shipRunState.time = 0;
+            shipRunTargetTime = 0;
             el.shipRunVideo.pause();
             el.shipRunAlpha.pause();
             if (el.shipRunVideo.readyState >= 1) el.shipRunVideo.currentTime = 0;
@@ -411,16 +441,11 @@
             requestShipRunRender();
         }
 
-        function completeShipRunAutoplay() {
-            if (shipRunAutoplayState !== 'playing') return;
-            shipRunAutoplayState = 'complete';
+        function completeShipRunScrub() {
+            if (shipRunScrubState !== 'scrubbing') return;
+            shipRunScrubState = 'complete';
             shipRunHasCompleted = true;
             shipRunHeroRestored = false;
-            if (shipRunWhiteoutRAF) cancelAnimationFrame(shipRunWhiteoutRAF);
-            shipRunWhiteoutRAF = null;
-            // shipRunHasCompleted already releases the gate; drop its idle watchdog too.
-            if (shipRunGateWatchdog) clearTimeout(shipRunGateWatchdog);
-            shipRunGateWatchdog = null;
             gsap.set(el.shipRunWhiteout, { opacity: 1 });
 
             requestAnimationFrame(() => {
@@ -432,34 +457,14 @@
             });
         }
 
-        function monitorShipRunAutoplay() {
-            if (shipRunAutoplayState !== 'playing') return;
-            const duration = Number.isFinite(el.shipRunVideo.duration)
-                ? el.shipRunVideo.duration
-                : SHIP_RUN.duration;
-            const whiteoutStart = duration - SHIP_RUN.whiteoutDuration;
-            const whiteoutProgress = clamp(
-                (el.shipRunVideo.currentTime - whiteoutStart) / SHIP_RUN.whiteoutDuration,
-                0,
-                1
-            );
-            gsap.set(el.shipRunWhiteout, { opacity: whiteoutProgress });
-
-            if (el.shipRunVideo.ended || el.shipRunVideo.currentTime >= duration - 0.025) {
-                completeShipRunAutoplay();
-                return;
-            }
-            shipRunWhiteoutRAF = requestAnimationFrame(monitorShipRunAutoplay);
-        }
-
-        function startShipRunAutoplay() {
+        function startShipRunScrub() {
             if (STATIC_FRAME) return;
             if (shipRunHasCompleted) {
                 restoreCompletedHeroScene();
                 return;
             }
-            if (shipRunAutoplayState !== 'idle') return;
-            shipRunAutoplayState = 'playing';
+            if (shipRunScrubState === 'scrubbing') return;
+            shipRunScrubState = 'scrubbing';
             shipRunHeroRestored = false;
             el.concept.classList.add('is-awaiting-entry');
             el.concept.classList.remove('is-revealed');
@@ -469,75 +474,15 @@
 
             el.shipRunVideo.pause();
             el.shipRunAlpha.pause();
-            el.shipRunVideo.currentTime = 0;
-            el.shipRunAlpha.currentTime = 0;
-            el.shipRunVideo.playbackRate = SHIP_RUN.playbackRate;
-            el.shipRunAlpha.playbackRate = SHIP_RUN.playbackRate;
+            syncShipRunToScroll();
             requestShipRunRender();
-
-            Promise.all([
-                el.shipRunAlpha.play(),
-                el.shipRunVideo.play(),
-            ]).then(() => {
-                shipRunWhiteoutRAF = requestAnimationFrame(monitorShipRunAutoplay);
-            }).catch(() => {
-                // Playback is not happening, so the gate must stop holding the scroll.
-                openShipRunGate();
-                resetShipRunAutoplay();
-            });
         }
 
-        el.shipRunVideo.addEventListener('ended', completeShipRunAutoplay);
         window.addEventListener('scroll', () => {
             if (shipRunHasCompleted
                 && !shipRunHeroRestored
                 && window.scrollY < el.concept.offsetTop - 2) {
                 restoreCompletedHeroScene();
-            }
-        }, { passive: true });
-
-        /* Scroll position of the gate tween, i.e. where the run is meant to take over.
-           The timeline maps linearly onto the trigger's scroll range, so a time converts
-           straight into a scrollY. */
-        function shipRunGateScrollY() {
-            const trigger = scrollTL?.scrollTrigger;
-            const duration = scrollTL?.duration();
-            if (!trigger || !duration) return null;
-            return trigger.start
-                + (trigger.end - trigger.start) * (SHIP_RUN.startAt / duration);
-        }
-
-        /* The timeline is scrubbed with a 0.8s lag, so the gate's onStart — which starts
-           the video — fires well after the scroll position crossed it. An uninterrupted
-           scroll spends that window running past the pin end, releasing the pin straight
-           into #concept and skipping the run entirely. blockShipRunScroll can't cover it:
-           it only arms once playback is 'playing', by which point the scroll has already
-           moved, and preventDefault cannot undo scrolling that happened.
-           Clamping at the gate closes the window — the timeline catches up to startAt,
-           onStart plays the video, and the page holds here until it completes.
-           shipRunGateOpen is the escape hatch: if playback never gets going, the gate has
-           to let go, or the page would sit at this scroll position for good. */
-        let shipRunGateOpen = false;
-        let shipRunGateWatchdog = null;
-
-        function openShipRunGate() {
-            shipRunGateOpen = true;
-            if (shipRunGateWatchdog) clearTimeout(shipRunGateWatchdog);
-            shipRunGateWatchdog = null;
-        }
-
-        window.addEventListener('scroll', () => {
-            if (shipRunHasCompleted || shipRunGateOpen) return;
-            const gateY = shipRunGateScrollY();
-            if (gateY === null || window.scrollY <= gateY + 1) return;
-            window.scrollTo(0, gateY);
-            // Never hold the scroll hostage: if the run has not finished well after the
-            // clip's own runtime, something stopped it and the page has to move on.
-            if (!shipRunGateWatchdog) {
-                shipRunGateWatchdog = setTimeout(
-                    openShipRunGate,
-                    (SHIP_RUN.duration / SHIP_RUN.playbackRate) * 1000 + 4000
-                );
             }
         }, { passive: true });
 
@@ -785,7 +730,7 @@
             shipRunTargetTime = 0;
             if (shipRunSyncRAF) cancelAnimationFrame(shipRunSyncRAF);
             shipRunSyncRAF = null;
-            resetShipRunAutoplay();
+            resetShipRunScrub();
 
             // Walls begin registered with the sky, then acquire a restrained depth offset
             // during the lower camera move. This keeps the opening beat precise while
@@ -963,8 +908,6 @@
                 );
             });
 
-            const shipRunGate = { progress: 0 };
-
             // Cover the viewport without distorting the source. Keep the composition
             // bottom-aligned so the stairs and runners retain their original position;
             // narrow viewports crop the excess equally from the left and right.
@@ -973,8 +916,8 @@
             videoEnter.width = videoEnter.height * SHIP_RUN.canvasRatio;
             videoEnter.left = (M.vw - videoEnter.width) / 2;
 
-            // A single scroll across the gate starts native playback. The dummy tween
-            // preserves the existing trigger position without tying frames to scroll.
+            // Map the existing continuation range directly onto the video duration. Both
+            // sources stay paused; scroll position selects their matching color/alpha frame.
             if (!completedHeroTimelineBuilt) {
                 scrollTL
                     .set(el.shipRunLayer, {
@@ -986,12 +929,16 @@
                         opacity: 1,
                     }, SHIP_RUN.startAt)
                     .set(shipRunStaticScene, { opacity: 0 }, SHIP_RUN.startAt)
-                    .to(shipRunGate, {
-                        progress: 1,
+                    .fromTo(shipRunState, {
+                        time: 0,
+                    }, {
+                        time: SHIP_RUN.duration,
                         duration: SHIP_RUN.scrollDuration,
                         ease: 'none',
-                        onStart: startShipRunAutoplay,
-                        onReverseComplete: resetShipRunAutoplay,
+                        onStart: startShipRunScrub,
+                        onUpdate: syncShipRunToScroll,
+                        onComplete: completeShipRunScrub,
+                        onReverseComplete: resetShipRunScrub,
                     }, SHIP_RUN.startAt);
             }
 
@@ -1003,7 +950,7 @@
                     const trigger = scrollTL.scrollTrigger;
                     if (window.scrollY >= el.concept.offsetTop - M.vh * 0.5) {
                         shipRunHasCompleted = true;
-                        shipRunAutoplayState = 'complete';
+                        shipRunScrubState = 'complete';
                         shipRunHeroRestored = false;
                         gsap.set([el.shipRunLayer, el.shipRunWhiteout], { opacity: 0 });
                         el.concept.classList.add('is-awaiting-entry', 'is-revealed');
@@ -1019,23 +966,15 @@
                     );
                     let restoredTime = restoredProgress * scrollTL.duration();
 
-                    // A reload cannot resume native media playback reliably. Land on the
-                    // complete static Hero frame and let the next downward gesture trigger
-                    // the video from its real first frame instead.
-                    if (!shipRunHasCompleted
-                        && window.scrollY > 10
-                        && restoredTime >= SHIP_RUN.startAt) {
-                        restoredTime = SHIP_RUN.startAt - 0.002;
-                        restoredProgress = restoredTime / scrollTL.duration();
-                        window.scrollTo(0, trigger.start + scrollRange * restoredProgress);
-                    }
-
                     ScrollTrigger.update();
                     trigger.getTween()?.progress(1);
                     scrollTL.progress(restoredProgress, false);
                     syncShipLookToTimeline();
-                    if (!shipRunHasCompleted) {
+                    if (!shipRunHasCompleted && restoredTime < SHIP_RUN.startAt) {
                         gsap.set([el.shipRunLayer, el.shipRunWhiteout], { opacity: 0 });
+                    } else if (!shipRunHasCompleted) {
+                        startShipRunScrub();
+                        syncShipRunToScroll();
                     }
                     requestSiteScrollbarUpdate();
                 };
@@ -1056,9 +995,7 @@
             }
 
             if (shipRunSyncRAF) cancelAnimationFrame(shipRunSyncRAF);
-            if (shipRunWhiteoutRAF) cancelAnimationFrame(shipRunWhiteoutRAF);
             shipRunSyncRAF = null;
-            shipRunWhiteoutRAF = null;
             el.shipRunVideo.pause();
             el.shipRunAlpha.pause();
             gsap.set([el.shipRunLayer, el.shipRunWhiteout], { opacity: 0 });

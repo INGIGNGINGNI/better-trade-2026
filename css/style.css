@@ -726,7 +726,7 @@ body.menu-open .site-header__backdrop {
     transform-origin: 50% 100%;
 }
 
-/* Autoplay continuation: one scroll starts the run through the ship door. */
+/* Scroll-scrubbed continuation through the ship door. */
 #ship-run-layer {
     position: fixed;
     inset: 0;
@@ -754,7 +754,7 @@ body.menu-open .site-header__backdrop {
     pointer-events: none;
 }
 
-/* Scroll-scrubbed continuation: its first frame matches the completed stair
+/* Its first frame matches the completed stair
     composition, then the camera follows the runners through the ship door. */
 #ship-run-video {
     position: absolute;
