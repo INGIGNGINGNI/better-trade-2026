@@ -99,6 +99,12 @@
     --bt-story-accent: #1863dc;
     --bt-story-media-bg: #0d0f14;
 
+    /* สีและขนาดเฉพาะ Footer */
+    --bt-footer-ink: #f7f8f7;
+    --bt-footer-muted: #aeb4bb;
+    --bt-footer-line: rgba(255, 255, 255, 0.18);
+    --bt-footer-logo-width: 256px;
+
     /* สีแยกหมวด Ticket ถอดจากช่วงสีของ Better Trade spectrum */
     --bt-ticket-conference: #61e8ed;
     --bt-ticket-experience: #9c91ff;
@@ -159,6 +165,77 @@
     --bt-header-action-height: 40px;
     --bt-header-action-rim: 2px;
 
+    /* Token เฉพาะ hamburger / mobile menu */
+    --bt-menu-bg: var(--bt-color-white);
+    --bt-menu-backdrop-bg: #f4f3ef;
+    --bt-menu-ink: var(--bt-color-ink);
+    --bt-menu-ink-hover: #5b677a;
+    --bt-menu-muted: #72777f;
+    --bt-menu-index: #8b9097;
+    --bt-menu-line: rgba(17, 19, 24, 0.20);
+    --bt-menu-line-soft: rgba(17, 19, 24, 0.12);
+    --bt-menu-link-underline: rgba(17, 19, 24, 0.24);
+    --bt-menu-panel-max-width: 720px;
+    --bt-menu-toggle-size: 48px;
+    --bt-menu-toggle-lines-width: 20px;
+    --bt-menu-toggle-lines-height: 16px;
+    --bt-menu-toggle-line-height: 1.5px;
+    --bt-menu-toggle-line-middle: 7px;
+    --bt-menu-toggle-line-bottom: 14px;
+    --bt-menu-scroll-padding-y: 18px;
+    --bt-menu-scroll-padding-x: 24px;
+    --bt-menu-scroll-padding-x-sm: 20px;
+    --bt-menu-scroll-padding-bottom: 28px;
+    --bt-menu-nav-link-height: 54px;
+    --bt-menu-nav-font-size: 48px;
+    --bt-menu-nav-font-size-sm: 34px;
+    --bt-menu-nav-line-height: 0.92;
+    --bt-menu-nav-tracking: -0.035em;
+    --bt-menu-nav-hover-indent: 8px;
+    --bt-menu-index-offset-y: 11px;
+    --bt-menu-label-size: 11px;
+    --bt-menu-label-weight: 500;
+    --bt-menu-label-tracking: 0.12em;
+    --bt-menu-index-size: 10px;
+    --bt-menu-index-tracking: 0.08em;
+    --bt-menu-actions-gap: var(--bt-space-2);
+    --bt-menu-actions-padding-y: 20px;
+    --bt-menu-footer-gap: 24px;
+    --bt-menu-footer-padding-top: 18px;
+    --bt-menu-contact-gap: 5px;
+    --bt-menu-contact-font-size: 14px;
+    --bt-menu-contact-line-height: 1.25;
+    --bt-menu-contact-underline-offset: 3px;
+    --bt-menu-sponsor-padding-top: 16px;
+    --bt-menu-transition-duration: 620ms;
+    --bt-menu-transition-ease: cubic-bezier(0.76, 0, 0.24, 1);
+    --bt-menu-visibility-delay: 800ms;
+    --bt-menu-closing-delay: 180ms;
+    --bt-menu-content-fade-duration: 180ms;
+    --bt-menu-content-open-delay: 400ms;
+    --bt-menu-link-transition-duration: 180ms;
+    --bt-menu-link-indent-duration: 260ms;
+
+    /* Token เฉพาะ featured topics */
+    --bt-topics-section-padding-top: 192px;
+    --bt-topics-section-padding-bottom: 208px;
+    --bt-topics-content-margin-top: 96px;
+    --bt-topics-content-gap: 104px;
+    --bt-topics-star-size: 28px;
+    --bt-topics-assets-min-height: 680px;
+    --bt-topics-section-padding-top-md: 144px;
+    --bt-topics-section-padding-bottom-md: 160px;
+    --bt-topics-content-margin-top-md: 72px;
+    --bt-topics-content-gap-md: 40px;
+    --bt-topics-star-size-md: 22px;
+    --bt-topics-assets-min-height-md: 600px;
+    --bt-topics-section-padding-top-sm: 96px;
+    --bt-topics-section-padding-bottom-sm: 112px;
+    --bt-topics-content-margin-top-sm: 56px;
+    --bt-topics-content-gap-sm: 64px;
+    --bt-topics-star-size-sm: 18px;
+    --bt-topics-assets-min-height-sm: 560px;
+
     /* มิติและการเคลื่อนไหวสำหรับการเล่าเรื่อง */
     --bt-story-shadow-low: 0 0 8px rgba(172, 171, 171, 0.30);
     --bt-story-shadow-deep: 0 32px 64px rgba(0, 0, 0, 0.30);
@@ -197,6 +274,12 @@
 @media (max-width:991px) {
     :root {
         --header-height: 72px;
+    }
+}
+
+@media (max-width:575px) {
+    .container {
+        --bs-gutter-x: 48px;
     }
 }
 
@@ -402,6 +485,13 @@
    Subtext ของแต่ละ Section
    ใช้ซ้ำได้ข้ามหน้าและข้าม section ได้
    ========================================================================== */
+.bt-section-title {
+    font-size: var(--bt-story-title-size);
+    font-weight: var(--bt-font-weight-regular);
+    line-height: var(--bt-story-title-line-height);
+    letter-spacing: var(--bt-story-title-tracking);
+}
+
 .bt-section-subtext {
     /* ความยาวเส้นต่อท้าย (ดู ::after ด้านล่าง) ปรับต่อ section ได้ถ้าต้องการ */
     --bt-subtext-rule-length: 64px;
