@@ -192,6 +192,16 @@ container หลักให้อ้างอิงขนาดจาก Bootst
 
 ใช้ `.container`, `.container-sm`, `.container-md`, `.container-lg`, `.container-xl`, `.container-xxl` ตาม breakpoint ของ Bootstrap 5
 
+การสร้าง section ใหม่ต้องใช้ layout system ของ Bootstrap เป็นโครงหลักเสมอ เช่น `.container`, `.row`, `.col-*` และ gutter ของ Bootstrap เพื่อให้ layout สม่ำเสมอทั้งโปรเจกต์
+
+ข้อกำหนดสำหรับ section ใหม่:
+
+- ต้องมี Bootstrap container ครอบ content หลัก ยกเว้นกรณีเป็น full-width visual ที่ได้รับอนุมัติเป็นข้อยกเว้น
+- ต้องใช้ `.row` และ `.col-*` เมื่อต้องจัด column หรือ responsive layout
+- ต้องใช้ gutter ของ Bootstrap เป็นค่าเริ่มต้น และห้ามกำหนด gutter เองโดยไม่มีเหตุผลด้าน layout ชัดเจน
+- ห้ามกำหนด `max-width` เองแทน Bootstrap container นอกจากมี requirement เฉพาะและระบุเป็นข้อยกเว้น
+- ทุกการเพิ่มหรือแก้ไข layout ต้องออกแบบ responsive ตั้งแต่แรก และต้องกำหนด behavior สำหรับ breakpoint สำคัญ เช่น desktop, tablet และ mobile
+
 สามารถ custom container ได้เฉพาะกรณีที่ layout มีปัญหาจาก container หลัก เช่น:
 
 - art direction ของ hero ต้องกว้างกว่าขนาด Bootstrap
@@ -380,6 +390,7 @@ Checklist:
 ก่อนส่งมอบงานทุกครั้งต้องตรวจสอบ:
 
 - โครงสร้างไฟล์ตรงตามมาตรฐาน
+- section ใหม่ใช้ Bootstrap layout system เช่น `.container`, `.row`, `.col-*` และ gutter ตาม Bootstrap
 - ไม่มี CDN
 - ไม่มี `<style>` ใน HTML
 - ไม่มี `<script>` inline ใน HTML
@@ -393,7 +404,7 @@ Checklist:
 - class แยกเฉพาะ section ไม่ใช้ข้าม section
 - JS แยกตามหน้าที่
 - asset ที่ไม่ได้ใช้งานถูกลบออกแล้ว
-- layout responsive ทุก breakpoint สำคัญ
+- layout responsive ทุก breakpoint สำคัญ และมีการกำหนด behavior ชัดเจนเมื่อมีการเพิ่มหรือแก้ไข UI
 - text ไม่ล้น container
 - motion ไม่ทำให้ layout shift
 - รองรับ `prefers-reduced-motion`
@@ -409,4 +420,5 @@ Checklist:
 - ไม่มี asset ที่ไม่ได้ใช้งานจาก scope งานล่าสุด
 - ไม่มี inline style หรือ inline script
 - CSS และ JS แยกหน้าที่ชัดเจน
+- ใช้ Bootstrap layout system ถูกต้องสำหรับ section ใหม่ และไม่สร้าง container/gutter เองโดยไม่มีข้อยกเว้น
 - ผ่านการตรวจ responsive และ interaction แล้ว

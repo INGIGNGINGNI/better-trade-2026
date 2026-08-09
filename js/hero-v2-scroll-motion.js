@@ -165,6 +165,7 @@
         let scrollTL = null;
         let introDone = false;
         let scrollbarRAF = null;
+        let scrollbarRevealTimer = null;
         let scrollbarDrag = null;
         const shipRunState = { time: 0 };
         let shipRunTargetTime = 0;
@@ -564,6 +565,24 @@
             });
         }
 
+        function revealSiteScrollbar() {
+            const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+            if (document.body.classList.contains('is-loading') || maxScroll <= 0) return;
+
+            el.siteScrollbar.classList.add('is-visible');
+            clearTimeout(scrollbarRevealTimer);
+            scrollbarRevealTimer = setTimeout(() => {
+                if (!scrollbarDrag) {
+                    el.siteScrollbar.classList.remove('is-visible');
+                }
+            }, 1100);
+        }
+
+        function handleSiteScrollbarScroll() {
+            revealSiteScrollbar();
+            requestSiteScrollbarUpdate();
+        }
+
         function scrollFromScrollbarPointer(clientY, startScroll, startPointerY) {
             const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
             const thumbHeight = parseFloat(getComputedStyle(el.siteScrollbar).getPropertyValue('--thumb-height')) || 32;
@@ -574,6 +593,7 @@
         el.siteScrollbarThumb.addEventListener('pointerdown', event => {
             event.preventDefault();
             scrollbarDrag = { pointerY: event.clientY, scrollY: window.scrollY };
+            revealSiteScrollbar();
             el.siteScrollbar.classList.add('is-dragging');
             el.siteScrollbarThumb.setPointerCapture(event.pointerId);
         });
@@ -587,6 +607,7 @@
             if (!scrollbarDrag) return;
             scrollbarDrag = null;
             el.siteScrollbar.classList.remove('is-dragging');
+            revealSiteScrollbar();
             if (el.siteScrollbarThumb.hasPointerCapture(event.pointerId)) {
                 el.siteScrollbarThumb.releasePointerCapture(event.pointerId);
             }
@@ -596,6 +617,7 @@
 
         el.siteScrollbar.addEventListener('pointerdown', event => {
             if (event.target === el.siteScrollbarThumb) return;
+            revealSiteScrollbar();
             const track = el.siteScrollbar.getBoundingClientRect();
             const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
             const thumbHeight = parseFloat(getComputedStyle(el.siteScrollbar).getPropertyValue('--thumb-height')) || 32;
@@ -619,7 +641,7 @@
             window.scrollTo(0, clamp(keyTargets[event.key], 0, maxScroll));
         });
 
-        window.addEventListener('scroll', requestSiteScrollbarUpdate, { passive: true });
+        window.addEventListener('scroll', handleSiteScrollbarScroll, { passive: true });
 
         /* ?frame=0.55 renders one still frame of the scroll timeline instead of wiring
            it to the scrollbar: no ScrollTrigger, no pin, document exactly one viewport.

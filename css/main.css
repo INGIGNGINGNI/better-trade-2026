@@ -126,12 +126,15 @@
     --bt-story-subheading-size: 24px;
     --bt-story-topic-size: 24px;
     --bt-story-body-size: 16px;
-    --bt-story-small-size: 16px;
+    --bt-story-small-size: 14px;
+    --bt-story-subtext-size: 18px;
+    --bt-story-tag-size: 14px;
     --bt-story-display-line-height: 88px;
-    --bt-story-title-line-height: 120%;
+    --bt-story-title-line-height: 140%;
     --bt-story-heading-line-height: 48px;
     --bt-story-topic-line-height: 32px;
     --bt-story-body-line-height: 24px;
+    --bt-story-small-line-height: normal;
     --bt-story-title-tracking: 0px;
     --bt-story-heading-tracking: 0px;
 
@@ -390,5 +393,50 @@
         .bt-action-button__spinner {
             animation-duration: var(--bt-duration-reduced);
         }
+    }
+}
+
+
+/* ==========================================================================
+   Subtext ของแต่ละ Section
+   ใช้ซ้ำได้ข้ามหน้าและข้าม section ได้
+   ========================================================================== */
+.bt-section-subtext {
+    /* ความยาวเส้นต่อท้าย (ดู ::after ด้านล่าง) ปรับต่อ section ได้ถ้าต้องการ */
+    --bt-subtext-rule-length: 64px;
+
+    margin: var(--bt-space-6) 0 0;
+    color: var(--bt-story-muted);
+    font-size: var(--bt-story-subtext-size);
+    font-weight: var(--bt-font-weight-regular);
+    line-height: var(--bt-story-body-line-height);
+    letter-spacing: 0;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+}
+
+/* เส้น-ดาวต่อท้ายข้อความ ตัวภาพวาดมาเป็นแนวนอนอยู่แล้วจึงไม่ต้องหมุน และดาวอยู่ปลายซ้าย
+   พอวางไว้ด้านหลังดาวจึงมาชิดตัวอักษรพอดี แล้วเส้นทอดออกไปทางขวา
+   วางท้ายแทนหน้าเพราะ 3 ใน 4 ที่ใช้เป็น section ชิดซ้าย (Agenda / Speaker / Ticket)
+   ถ้าเอาไว้ข้างหน้าจะดันตัวอักษรเข้าไป 76px จนไม่ตรงแนวกับหัวข้อ h2 ด้านบน
+   ใช้ inline-block เพื่อให้ไหลไปตาม text-align ของแต่ละ section เอง (Expectation จัดกลาง)
+   ไม่ต้องเขียนกฎแยกทีละที่ */
+.bt-section-subtext::after {
+    content: '';
+    display: inline-block;
+    width: var(--bt-subtext-rule-length);
+    height: calc(var(--bt-subtext-rule-length) / 5.13);
+    /* อัตราส่วนภาพ 200:39 */
+    margin-left: var(--bt-space-3);
+    vertical-align: middle;
+    background: url('../images/line-star-trail.webp') center / contain no-repeat;
+}
+
+.bt-section-subtext.expectation-none {
+    display: block;
+
+    &::after {
+        display: none;
     }
 }

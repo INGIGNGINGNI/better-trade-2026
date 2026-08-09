@@ -42,7 +42,8 @@ body {
     overflow-x: hidden;
 }
 
-body.menu-open {
+body.menu-open,
+body.menu-closing {
     overflow: hidden;
 }
 
@@ -54,30 +55,20 @@ body.is-loading {
 .site-scrollbar {
     position: fixed;
     top: var(--space-2);
-    right: var(--space-1);
+    right: 0;
     bottom: var(--space-2);
     z-index: 260;
     width: var(--space-2);
-    opacity: 1;
+    opacity: 0;
+    pointer-events: none;
     transition: opacity 240ms ease;
     touch-action: none;
-}
-
-.site-scrollbar::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 50%;
-    width: 2px;
-    background: rgba(17, 19, 24, 0.10);
-    transform: translateX(-50%);
 }
 
 .site-scrollbar__thumb {
     position: absolute;
     top: 0;
-    right: 1px;
+    right: 0;
     width: 6px;
     height: var(--thumb-height);
     min-height: var(--space-8);
@@ -87,6 +78,12 @@ body.is-loading {
     box-shadow: 0 2px 8px rgba(17, 19, 24, 0.20);
     transform: translateY(var(--thumb-y));
     will-change: transform;
+}
+
+.site-scrollbar.is-visible,
+.site-scrollbar.is-dragging {
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .site-scrollbar:hover .site-scrollbar__thumb,
@@ -157,10 +154,15 @@ button {
     pointer-events: none;
 }
 
-body.menu-open .site-header {
+body.menu-open .site-header,
+body.menu-closing .site-header {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
     pointer-events: auto;
+    /* The header may currently be translated off-screen by the hero scroll state.
+       Snap it back before Safari lays out the fixed menu; animating that transform
+       temporarily makes the menu use the 80px header as its containing block. */
+    transition: none;
 }
 
 .site-header__inner {
@@ -273,11 +275,13 @@ body.menu-open .site-header {
     padding: 0;
     display: none;
     place-items: center;
-    border: 1px solid var(--header-line);
-    border-radius: 50%;
+    border: 0;
+    border-radius: 0;
     color: #111318;
-    background: rgba(255, 255, 255, 0.78);
+    background: transparent;
     cursor: pointer;
+    appearance: none;
+    box-shadow: none;
 }
 
 .site-header__toggle-lines {
@@ -322,68 +326,134 @@ body.menu-open .site-header {
 }
 
 .site-header__mobile {
-    position: absolute;
-    top: var(--header-height);
-    left: 0;
-    right: 0;
-    padding: var(--space-4) var(--space-6) var(--space-6);
-    border-top: 1px solid var(--header-line);
-    border-bottom: 1px solid var(--header-line);
-    background: rgba(247, 248, 247, 0.98);
-    box-shadow: 0 var(--space-6) var(--space-12) rgba(17, 19, 24, 0.14);
-    opacity: 0;
+    position: fixed;
+    inset: 0;
+    z-index: 196;
+    padding-top: var(--header-height);
+    background: var(--bt-color-white);
+    font-family: var(--headline);
     visibility: hidden;
-    transform: translateY(calc(-1 * var(--space-3)));
     pointer-events: none;
-    transition: opacity 180ms ease, transform 260ms cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 260ms;
+    clip-path: inset(0 0 100% 0);
+    transition:
+        clip-path 620ms cubic-bezier(0.76, 0, 0.24, 1),
+        visibility 0s linear 800ms;
+    will-change: clip-path;
 }
 
-.site-header__mobile-nav {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-2) var(--space-6);
+.site-header__mobile a {
+    font-family: var(--headline);
 }
+
+.site-header__mobile-scroll {
+    width: min(100%, 720px);
+    height: calc(100vh - var(--header-height));
+    height: calc(100dvh - var(--header-height));
+    margin: 0 auto;
+    padding: 18px 24px max(28px, env(safe-area-inset-bottom));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+    opacity: 0;
+    transition: opacity 180ms ease;
+}
+
+.site-header__mobile-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.site-header__mobile-eyebrow,
+.site-header__mobile-label {
+    margin: 0;
+    color: #72777f;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.site-header__mobile-eyebrow {
+    padding-bottom: 16px;
+}
+
+/* .site-header__mobile-nav {
+    border-top: 1px solid rgba(17, 19, 24, 0.2);
+    border-bottom: 1px solid rgba(17, 19, 24, 0.2);
+} */
 
 .site-header__mobile-nav a {
-    min-height: 56px;
-    padding: 0 var(--space-2);
+    min-height: 54px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     color: #111318;
     text-decoration: none;
-    font-size: 16px;
+    font-size: clamp(34px, 10vw, 48px);
+    font-weight: 300;
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    transition: color 180ms ease, padding-left 260ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.site-header__mobile-nav a:nth-child(odd) {
-    padding-right: var(--space-4);
+.site-header__mobile-nav a:hover,
+.site-header__mobile-nav a:focus-visible {
+    color: #5b677a;
+    padding-left: 8px;
 }
 
-.site-header__mobile-nav a:nth-child(even) {
-    padding-left: var(--space-4);
-}
-
-.site-header__mobile-nav a::after {
-    content: '↗';
-    color: #7a818b;
-    font-size: 12px;
+.site-header__mobile-nav-index {
+    align-self: flex-start;
+    margin-top: 11px;
+    color: #8b9097;
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: 0.08em;
 }
 
 .site-header__mobile-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    justify-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
     gap: var(--space-2);
-    padding-top: var(--space-6);
+    padding: 20px 0;
 }
 
-.site-header__mobile-actions .bt-action-button {
-    width: var(--bt-header-action-width);
-    padding: 0 var(--space-4);
+.site-header__mobile-footer {
+    padding-top: 18px;
+    display: grid;
+    grid-template-columns: 0.75fr 1.25fr;
+    gap: 22px 18px;
+    border-top: 1px solid rgba(17, 19, 24, 0.2);
 }
 
-.site-header__mobile-actions .site-header__primary-cta {
-    width: var(--bt-header-action-width);
+.site-header__mobile-contact {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.site-header__mobile-contact .site-header__mobile-label {
+    margin-bottom: 5px;
+}
+
+.site-header__mobile-contact a {
+    max-width: 100%;
+    color: #111318;
+    font-size: 14px;
+    line-height: 1.25;
+    text-decoration-color: rgba(17, 19, 24, 0.24);
+    text-underline-offset: 3px;
+    overflow-wrap: anywhere;
+}
+
+.site-header__mobile-contact--sponsor {
+    grid-column: 1 / -1;
+    padding-top: 16px;
+    border-top: 1px solid rgba(17, 19, 24, 0.12);
 }
 
 .site-header__backdrop {
@@ -399,11 +469,53 @@ body.menu-open .site-header {
 }
 
 body.menu-open .site-header__mobile {
-    opacity: 1;
     visibility: visible;
-    transform: translateY(0);
     pointer-events: auto;
+    clip-path: inset(0);
+    transition:
+        clip-path 620ms cubic-bezier(0.76, 0, 0.24, 1),
+        visibility 0s;
+}
+
+body.menu-closing .site-header__mobile {
+    visibility: visible;
+    transition-delay: 180ms, 0s;
+}
+
+body.menu-open .site-header__mobile-scroll {
+    opacity: 1;
+    transition-delay: 400ms;
+}
+
+body.menu-closing .site-header__mobile-scroll {
+    opacity: 0;
     transition-delay: 0s;
+}
+
+body.menu-open .site-header__inner,
+body.menu-closing .site-header__inner {
+    border-bottom-color: rgba(17, 19, 24, 0.2);
+}
+
+body.menu-open .site-scrollbar,
+body.menu-closing .site-scrollbar {
+    opacity: 0;
+    pointer-events: none;
+}
+
+body.menu-open .site-header__logo img,
+body.menu-closing .site-header__logo img,
+body.menu-closing .site-header--on-dark .site-header__logo img,
+body.menu-open .site-header--on-dark .site-header__logo img {
+    filter: none;
+}
+
+body.menu-open .site-header__toggle,
+body.menu-closing .site-header__toggle {
+    color: #111318;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
 }
 
 body.menu-open .site-header__backdrop {
@@ -763,7 +875,7 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 #ui .event-countdown__unit strong {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 500;
     line-height: 1;
 }
@@ -816,12 +928,12 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 #ui .time {
-    font-size: 24px;
+    font-size: 20px;
     line-height: inherit;
 }
 
 #ui .date {
-    font-size: 24px;
+    font-size: 20px;
     white-space: nowrap;
 }
 
@@ -964,108 +1076,151 @@ the timeline drops them under the ship once the walls have retreated. */
     border: 0;
 }
 
-/* ---------- หัวข้อการลงทุนภายใน Concept ----------
-   ใช้ flex container เดียว แสดงสองแถวบน desktop พร้อมเส้นคั่นแบบ spectrum */
-.concept__topics {
+/* ---------- Featured topics ---------- */
+.topics-showcase {
+    position: relative;
+    min-height: 100vh;
+    padding: clamp(112px, 13vw, 192px) 0 clamp(120px, 14vw, 208px);
+    overflow: hidden;
+    color: #f7f8f7;
+    background: #101114;
+    font-family: var(--bt-font);
+}
+
+.topics-showcase__inner {
+    display: grid;
+}
+
+.topics-showcase__header {
+    width: min(100%, 1040px);
+    margin: 0 auto;
+    text-align: center;
+}
+
+.topics-showcase__header h2 {
+    margin: 0;
+    font-size: var(--bt-story-title-size);
+    font-weight: var(--bt-font-weight-regular);
+    line-height: var(--bt-story-title-line-height);
+    letter-spacing: var(--bt-story-title-tracking);
+    text-wrap: balance;
+}
+
+.topics-showcase__header p {
+    margin: var(--bt-space-8) 0 0;
+    color: rgba(247, 248, 247, 0.68);
+    font-size: var(--bt-story-body-size);
+    font-weight: var(--bt-font-weight-light);
+    line-height: var(--bt-story-body-line-height);
+    letter-spacing: var(--bt-story-heading-tracking);
+    text-wrap: balance;
+}
+
+.topics-showcase .concept__topics {
+    width: min(76%, 920px);
+    margin-top: clamp(112px, 15vw, 208px);
+    display: grid;
+}
+
+.topics-showcase .concept__topics p {
+    --topic-delay: 0ms;
+    --topic-line-delay: 80ms;
+
+    position: relative;
+    min-height: calc(var(--bt-story-topic-line-height) + var(--bt-space-8));
+    margin: 0;
+    padding: var(--bt-space-4) 0;
     display: flex;
-    flex-wrap: wrap;
-    align-items: stretch;
+    align-items: center;
+    color: #f7f8f7;
+    font-size: var(--bt-story-topic-size);
+    font-weight: var(--bt-font-weight-regular);
+    line-height: var(--bt-story-topic-line-height);
+    letter-spacing: 0;
+}
 
-    p {
-        position: relative;
-        flex: 1 0 20%;
-        min-width: 0;
-        margin: 0;
-        padding: var(--bt-space-3) var(--bt-space-4);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--bt-story-ink);
-        font-size: var(--bt-story-body-size);
-        font-weight: var(--bt-font-weight-regular);
-        line-height: var(--bt-story-body-line-height);
-        letter-spacing: var(--bt-story-heading-tracking);
-        text-align: center;
-        overflow-wrap: anywhere;
-        transition:
-            color var(--bt-story-duration) var(--bt-story-ease),
-            background-color var(--bt-story-duration) var(--bt-story-ease);
+.topics-showcase .concept__topics p::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: min(100%, 50vw);
+    height: 1px;
+    background: rgba(247, 248, 247, 0.52);
+    transform-origin: left center;
+}
 
-        &:not(:first-child)::before {
-            content: "";
-            position: absolute;
-            top: var(--bt-space-4);
-            bottom: var(--bt-space-4);
-            left: calc(var(--bt-story-rule-width) * -1);
-            width: var(--bt-story-rule-height);
-            background: var(--spectrum-vertical);
-        }
+.topics-showcase .concept__topics p:nth-child(2) { --topic-delay: 70ms; --topic-line-delay: 150ms; }
+.topics-showcase .concept__topics p:nth-child(3) { --topic-delay: 140ms; --topic-line-delay: 220ms; }
+.topics-showcase .concept__topics p:nth-child(4) { --topic-delay: 210ms; --topic-line-delay: 290ms; }
+.topics-showcase .concept__topics p:nth-child(5) { --topic-delay: 280ms; --topic-line-delay: 360ms; }
+.topics-showcase .concept__topics p:nth-child(6) { --topic-delay: 350ms; --topic-line-delay: 430ms; }
+.topics-showcase .concept__topics p:nth-child(7) { --topic-delay: 420ms; --topic-line-delay: 500ms; }
+.topics-showcase .concept__topics p:nth-child(8) { --topic-delay: 490ms; --topic-line-delay: 570ms; }
+.topics-showcase .concept__topics p:nth-child(9) { --topic-delay: 560ms; --topic-line-delay: 640ms; }
 
-        &:nth-child(6)::before {
-            display: none;
-        }
+.topics-showcase.is-reveal-ready .topics-showcase__header h2,
+.topics-showcase.is-reveal-ready .topics-showcase__header p,
+.topics-showcase.is-reveal-ready .concept__topics p {
+    opacity: 0;
+    transform: translateY(var(--bt-space-4));
+}
+
+.topics-showcase.is-reveal-ready .concept__topics p::after {
+    transform: scaleX(0);
+}
+
+.topics-showcase.is-reveal-ready.is-header-visible .topics-showcase__header h2 {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 700ms ease, transform 820ms var(--bt-story-ease);
+}
+
+.topics-showcase.is-reveal-ready.is-header-visible .topics-showcase__header p {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 620ms ease 140ms, transform 760ms var(--bt-story-ease) 140ms;
+}
+
+.topics-showcase.is-reveal-ready.are-topics-visible .concept__topics p {
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+        opacity 560ms ease var(--topic-delay),
+        transform 700ms var(--bt-story-ease) var(--topic-delay);
+}
+
+.topics-showcase.is-reveal-ready.are-topics-visible .concept__topics p::after {
+    transform: scaleX(1);
+    transition: transform 900ms var(--bt-story-ease) var(--topic-line-delay);
+}
+
+@media (max-width: 767px) {
+    .topics-showcase {
+        min-height: auto;
+        padding: var(--bt-space-24) 0 var(--bt-space-28);
     }
 
-    @media (max-width:991px) {
-        flex-wrap: wrap;
-
-        p {
-            flex: 1 0 50%;
-
-            &::after {
-                content: "";
-                position: absolute;
-                top: 0;
-                left: var(--bt-space-4);
-                right: var(--bt-space-4);
-                height: var(--bt-story-rule-height);
-                background: var(--spectrum);
-            }
-
-            &::before {
-                display: none;
-            }
-
-            &:nth-child(even)::before {
-                display: block;
-            }
-
-            &:nth-child(-n + 2)::after {
-                display: none;
-            }
-        }
+    .topics-showcase__header h2 {
+        font-size: var(--bt-story-heading-size);
+        line-height: var(--bt-story-heading-line-height);
     }
 
-    @media (max-width:575px) {
+    .topics-showcase__header p br {
+        display: none;
+    }
 
-        p {
-            flex-basis: 100%;
-            min-height: 0;
-            padding: var(--bt-space-6) 0;
-            font-size: var(--bt-story-body-size);
-            line-height: var(--bt-story-body-line-height);
+    .topics-showcase .concept__topics {
+        width: 100%;
+        margin-top: var(--bt-space-20);
+    }
 
-            &::before {
-                display: none;
-            }
-
-            &::after {
-                display: block;
-            }
-
-            &:nth-child(-n + 2)::after {
-                display: block;
-            }
-
-            &:first-child::after {
-                display: none;
-            }
-        }
+    .topics-showcase .concept__topics p {
+        min-height: calc(var(--bt-story-topic-line-height) + var(--bt-space-8));
     }
 }
 
-/* ---------- Ticket ----------
-   Comparison layout แบบ editorial ใช้พื้นที่ว่างและเส้นบางแทนกรอบ card */
+/* ---------- Ticket ---------- Comparison layout แบบ editorial ใช้พื้นที่ว่างและเส้นบางแทนกรอบ card */
 .ticket {
     position: relative;
     padding: var(--bt-story-section-padding-y) 0;
@@ -1080,10 +1235,8 @@ the timeline drops them under the ship once the walls have retreated. */
         margin-bottom: var(--bt-story-section-padding-y-sm);
     }
 
-    .ticket__eyebrow,
     .ticket__plan-index {
-        margin: 0 0 var(--bt-space-4);
-        color: var(--bt-story-muted);
+        margin: 0 0 var(--bt-space-2);
         font-size: var(--bt-story-body-size);
         font-weight: var(--bt-font-weight-regular);
         line-height: var(--bt-story-body-line-height);
@@ -1492,24 +1645,40 @@ the timeline drops them under the ship once the walls have retreated. */
    ตารางกำหนดการแบบ editorial เน้นลำดับเวลา พื้นที่ว่าง และเส้นบาง */
 .agenda {
     position: relative;
+    scroll-margin-top: calc(var(--header-height) + var(--bt-space-4));
     padding: var(--bt-story-section-padding-y) 0;
     color: var(--bt-story-ink);
     background: var(--bt-story-bg);
     font-family: var(--bt-font);
 
+    /* margin-bottom ต้องไม่แคบกว่าฉากขาว ::before ของ .agenda__tabs (บรรทัดล่าง)
+       ที่ยื่นขึ้นมาปิดพื้นที่เหนือแถบ sticky สูง calc(header-height + space-6)
+       เท่ากันเป๊ะ — ถ้าช่องว่างตรงนี้แคบกว่านั้น ฉากขาวจะยื่นทับหัวข้อด้านบน */
+    .agenda__section-header {
+        margin-bottom: calc(var(--header-height) + var(--bt-space-6));
+    }
+
+    .agenda__section-header h2 {
+        max-width: 920px;
+        margin: 0;
+        font-size: var(--bt-story-title-size);
+        font-weight: var(--bt-font-weight-regular);
+        line-height: var(--bt-story-title-line-height);
+        letter-spacing: 0;
+    }
+
+    /* align-items: start สำคัญ — ถ้าคอลัมน์ sidebar ถูกยืดเต็มความสูงแถว
+       กล่องของมันจะสูงเท่าตาราง ทำให้ sticky ไม่มีระยะให้เลื่อน */
     .agenda__layout {
         align-items: start;
     }
 
-    /* Day 2 ต่อเนื่องใน section เดียวกัน โดยใช้เส้นบางแบ่งจังหวะระหว่างวัน */
-    .agenda__inner--day-two {
-        margin-top: var(--bt-space-16);
-        padding-top: var(--bt-space-16);
+    .agenda__inner,
+    .agenda__day-panel {
+        scroll-margin-top: calc(var(--header-height) + var(--bt-space-6));
     }
 
-    .agenda__header {
-        position: sticky;
-        top: calc(var(--header-height) + var(--bt-space-6));
+    .agenda__days {
         min-width: 0;
     }
 
@@ -1523,27 +1692,145 @@ the timeline drops them under the ship once the walls have retreated. */
         text-transform: uppercase;
     }
 
-    .agenda__header h2 {
-        margin: 0 0 var(--bt-space-6);
-        font-size: var(--bt-story-title-size);
-        font-weight: var(--bt-font-weight-regular);
-        line-height: var(--bt-story-title-line-height);
-        letter-spacing: 0;
-        text-transform: uppercase;
+    /* sidebar เป็นคอลัมน์จริงในแถว จึงมีความสูงจริงให้ browser ใช้คำนวณจุดปล่อย
+       (เดิมเป็น overlay height:0 ทำให้ค้างเลยขอบ section ไปทับ section ถัดไป) */
+    .agenda__day-switcher {
+        position: sticky;
+        top: calc(var(--header-height) + var(--bt-space-6));
+        z-index: 2;
+        align-self: start;
+        min-width: 0;
+        background: var(--bt-story-bg);
     }
 
-    .agenda__date,
-    .agenda__time {
-        margin: 0;
+    /* แถวสูงตามเนื้อหาจริง ไม่ล็อกค่าคงที่ ไม่งั้นวันที่ไม่ได้เลือก (เหลือแค่บรรทัดเดียว)
+       จะทิ้งช่องว่างค้างไว้ ความสูงรวมยังเท่าเดิมทั้งสองสถานะ เพราะส่วนที่ขยาย
+       ย้ายจากวันหนึ่งไปอีกวันหนึ่งพอดี จึงไม่เกิดการกระตุก */
+    .agenda__day-switcher-inner {
+        display: grid;
+        justify-items: start;
+        gap: var(--bt-space-6);
+    }
+
+    .agenda__day-switch {
+        position: relative;
+        z-index: 1;
+        display: block;
+        align-self: start;
+        width: fit-content;
+        min-width: 0;
+        padding: 0;
+        color: var(--bt-story-muted);
+        font-size: var(--bt-story-subheading-size);
+        font-weight: var(--bt-font-weight-regular);
+        line-height: var(--bt-story-topic-line-height);
+        letter-spacing: 0;
+        text-decoration: none;
+        text-transform: uppercase;
+        transition:
+            color var(--bt-duration-base) var(--bt-story-ease),
+            opacity var(--bt-duration-base) var(--bt-story-ease);
+
+        &:hover,
+        &:focus-visible {
+            color: var(--bt-story-ink);
+        }
+
+        &[aria-current='true'] {
+            color: var(--bt-story-ink);
+        }
+
+        &:focus-visible {
+            outline: var(--bt-border-width-2) solid var(--bt-color-focus);
+            outline-offset: var(--bt-space-2);
+        }
+    }
+
+    .agenda__day-switch-label {
+        display: block;
+        transition:
+            font-size var(--bt-duration-base) var(--bt-story-ease),
+            line-height var(--bt-duration-base) var(--bt-story-ease),
+            color var(--bt-duration-base) var(--bt-story-ease);
+    }
+
+    /* ใช้ 0fr → 1fr แทน max-height เพราะ max-height ต้องกำหนดค่าปลายทางเผื่อไว้
+       (เดิม 72px ขณะที่เนื้อหาจริง 56px) ค่าที่เกินมาทำให้กล่องกางเสร็จตั้งแต่ 26%
+       ของเวลา แล้วเหลืออีก 178ms ที่ค่าวิ่งต่อโดยตาไม่เห็นอะไรเปลี่ยน
+       ส่วน 1fr วิ่งตามความสูงจริงเสมอ จังหวะจึงตรงกับ opacity ที่วิ่งคู่กัน */
+    .agenda__day-switch-details {
+        display: grid;
+        grid-template-rows: 0fr;
+        margin-top: 0;
         color: var(--bt-story-muted);
         font-size: var(--bt-story-body-size);
-        font-weight: var(--bt-font-weight-regular);
         line-height: var(--bt-story-body-line-height);
-        letter-spacing: 0;
+        text-transform: none;
+        opacity: 0;
+        transform: translateY(calc(var(--bt-space-2) * -1));
+        transition:
+            grid-template-rows var(--bt-duration-base) var(--bt-story-ease),
+            margin-top var(--bt-duration-base) var(--bt-story-ease),
+            opacity var(--bt-duration-base) var(--bt-story-ease),
+            transform var(--bt-duration-base) var(--bt-story-ease);
     }
 
-    .agenda__date {
-        margin-bottom: var(--bt-space-2);
+    /* ต้องมีชั้นนี้เพื่อให้ 0fr บีบได้จริง — min-height: 0 ปลดขนาดขั้นต่ำของ grid item
+       และ overflow: hidden เป็นตัวตัดเนื้อหาส่วนเกินระหว่างย่อ */
+    .agenda__day-switch-details-inner {
+        display: grid;
+        gap: var(--bt-space-2);
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    .agenda__day-switch[aria-current='true'] .agenda__day-switch-label {
+        font-size: var(--bt-story-title-size);
+        line-height: 56px;
+    }
+
+    .agenda__day-switch[aria-current='true'] .agenda__day-switch-details {
+        grid-template-rows: 1fr;
+        margin-top: var(--bt-space-6);
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* เส้นนำสายตาเป็น grid item แถวกลาง (อยู่ระหว่างสอง <a> ใน DOM อยู่แล้ว)
+       จึงขยับตามความสูงจริงของแต่ละวันเอง ไม่ต้องผูกกับตำแหน่ง absolute คงที่ */
+    .agenda__day-switch-rail {
+        position: relative;
+        overflow: hidden;
+        width: var(--bt-story-rule-width);
+        height: var(--bt-space-28);
+        background: var(--bt-story-line);
+        pointer-events: none;
+    }
+
+    /* ช่วงสเปกตรัมครึ่งเส้น เลื่อนไปเกาะฝั่งของวันที่เลือก — ล้อกับตัวชี้ใต้ Stage tabs
+       ที่เลื่อนแนวนอน ใช้ translateY ล้วนจึงไม่แตะ layout เลย */
+    .agenda__day-switch-rail::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        height: 50%;
+        background: var(--spectrum-vertical);
+        transform: translateY(0);
+        transition: transform var(--bt-duration-base) var(--bt-story-ease);
+    }
+
+    .agenda__day-switcher-inner[data-active-day='day-two'] .agenda__day-switch-rail::after {
+        transform: translateY(100%);
+    }
+
+    .agenda__day-panel[hidden] {
+        display: none;
+    }
+
+    .agenda__day-panel.is-entering .agenda__content {
+        animation: agenda-day-enter var(--bt-duration-base) var(--bt-story-ease) both;
     }
 
     .agenda__content {
@@ -1643,6 +1930,10 @@ the timeline drops them under the ship once the walls have retreated. */
 
     .agenda__panel {
         min-width: 0;
+        /* สลับแท็บ Stage แล้วเลื่อนมาจอดใต้แถบแท็บที่ sticky อยู่พอดี ไม่ใช่ใต้ header
+           เฉย ๆ (นั่นจะทำให้แถบแท็บมาบังหัวตาราง) เผื่อความสูงแถบแท็บ+เส้นคาดเพิ่ม
+           จากออฟเซตที่ .agenda__day-panel ใช้ */
+        scroll-margin-top: calc(var(--header-height) + var(--bt-space-6) + var(--bt-story-touch-target) + var(--bt-story-rule-width));
 
         &[hidden] {
             display: none;
@@ -1738,7 +2029,7 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .agenda__tags {
-        margin-bottom: var(--bt-space-3);
+        margin-bottom: var(--bt-space-4);
         display: flex;
         flex-wrap: wrap;
         gap: var(--bt-space-2);
@@ -1750,8 +2041,8 @@ the timeline drops them under the ship once the walls have retreated. */
         display: inline-flex;
         align-items: center;
         border-radius: var(--bt-story-pill-radius);
-        font-size: var(--bt-story-small-size);
-        font-weight: var(--bt-font-weight-medium);
+        font-size: var(--bt-story-tag-size);
+        font-weight: var(--bt-font-weight-regular);
         line-height: var(--bt-story-body-line-height);
         letter-spacing: 0;
         text-transform: uppercase;
@@ -1797,7 +2088,15 @@ the timeline drops them under the ship once the walls have retreated. */
     .agenda__session-summary {
         margin-top: var(--bt-space-1);
         color: var(--bt-story-muted);
-        font-size: var(--bt-font-size-16);
+        font-size: var(--bt-story-small-size);
+        font-weight: var(--bt-font-weight-regular);
+        line-height: var(--bt-story-body-line-height);
+    }
+
+    .agenda__session-speaker {
+        margin-top: var(--bt-space-3);
+        color: var(--bt-story-ink);
+        font-size: var(--bt-story-body-size);
         font-weight: var(--bt-font-weight-regular);
         line-height: var(--bt-story-body-line-height);
     }
@@ -1814,15 +2113,22 @@ the timeline drops them under the ship once the walls have retreated. */
     @media (max-width:991px) {
         padding: var(--bt-story-section-padding-y-sm) 0;
 
-        .agenda__inner--day-two {
-            margin-top: var(--bt-space-12);
-            padding-top: var(--bt-space-12);
+        .agenda__section-header {
+            margin-bottom: var(--bt-space-12);
         }
 
-        .agenda__header {
+        .agenda__day-switcher {
             position: static;
+            margin-bottom: var(--bt-space-12);
         }
 
+        .agenda__day-switch-rail {
+            height: var(--bt-space-12);
+        }
+
+        .agenda__tabs {
+            top: var(--header-height);
+        }
     }
 
     /* Mobile agenda: ย้ายข้อมูลวิทยากรลงใต้ชื่อ Session เพื่อให้อ่านเป็นลำดับเดียว */
@@ -1945,8 +2251,681 @@ the timeline drops them under the ship once the walls have retreated. */
         .agenda__session-summary {
             font-size: var(--bt-story-small-size);
         }
+
+        .agenda__session-speaker {
+            font-size: var(--bt-story-small-size);
+        }
     }
 }
+
+@keyframes agenda-day-enter {
+    from {
+        opacity: 0;
+        transform: translateY(var(--bt-space-2));
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .agenda .agenda__day-panel.is-entering .agenda__content {
+        animation-duration: var(--bt-duration-reduced);
+    }
+
+    /* เดิมครอบแค่ตารางฝั่งขวา ตัวสลับวันยังมอร์ฟป้าย 24→48px เต็ม 240ms อยู่ */
+    .agenda .agenda__day-switch,
+    .agenda .agenda__day-switch-label,
+    .agenda .agenda__day-switch-details,
+    .agenda .agenda__day-switch-rail::after {
+        transition-duration: var(--bt-duration-reduced);
+    }
+
+    /* ยังเห็นออร่าตอน hover ได้ แต่ไม่ต้องลอยหมุน */
+    .speaker-card__portrait::before,
+    .speaker-card__portrait::after {
+        transition-duration: var(--bt-duration-reduced);
+    }
+
+    .speaker-card:hover .speaker-card__portrait::before,
+    .speaker-card:hover .speaker-card__portrait::after {
+        animation: none;
+    }
+}
+
+/* ---------- Speakers ---------- */
+.speaker {
+    position: relative;
+    scroll-margin-top: var(--header-height);
+    padding: var(--bt-story-section-padding-y) 0;
+    color: var(--bt-story-ink);
+    background: var(--bt-story-bg);
+    font-family: var(--bt-font);
+
+    .speaker__section-header {
+        margin-bottom: var(--bt-space-20);
+    }
+
+    .speaker__section-header h2 {
+        max-width: 920px;
+        margin: 0;
+        font-size: var(--bt-story-title-size);
+        font-weight: var(--bt-font-weight-regular);
+        line-height: var(--bt-story-title-line-height);
+        letter-spacing: 0;
+    }
+
+    .speaker__layout {
+        align-items: start;
+    }
+
+
+    /* ---- ตัวสลับวัน: ก๊อปแพตเทิร์นจาก .agenda__day-switcher ทั้งชุด ---- */
+    .speaker__day-switcher {
+        position: sticky;
+        top: calc(var(--header-height) + var(--bt-space-6));
+        z-index: 2;
+        align-self: start;
+        min-width: 0;
+        /* background: var(--bt-story-bg); */
+    }
+
+    .speaker__days {
+        min-width: 0;
+    }
+
+    .speaker__day-panel {
+        scroll-margin-top: calc(var(--header-height) + var(--bt-space-6));
+    }
+
+    .speaker__day-panel[hidden] {
+        display: none;
+    }
+
+    .speaker__day-switcher-inner {
+        display: grid;
+        justify-items: start;
+        gap: var(--bt-space-6);
+    }
+
+    .speaker__day-switch {
+        position: relative;
+        z-index: 1;
+        display: block;
+        align-self: start;
+        width: fit-content;
+        min-width: 0;
+        padding: 0;
+        color: var(--bt-story-muted);
+        font-size: var(--bt-story-subheading-size);
+        font-weight: var(--bt-font-weight-regular);
+        line-height: var(--bt-story-topic-line-height);
+        letter-spacing: 0;
+        text-decoration: none;
+        text-transform: uppercase;
+        transition:
+            color var(--bt-duration-base) var(--bt-story-ease),
+            opacity var(--bt-duration-base) var(--bt-story-ease);
+
+        &:hover,
+        &:focus-visible {
+            color: var(--bt-story-ink);
+        }
+
+        &[aria-current='true'] {
+            color: var(--bt-story-ink);
+        }
+
+        &:focus-visible {
+            outline: var(--bt-border-width-2) solid var(--bt-color-focus);
+            outline-offset: var(--bt-space-2);
+        }
+    }
+
+    .speaker__day-switch-label {
+        display: block;
+        transition:
+            font-size var(--bt-duration-base) var(--bt-story-ease),
+            line-height var(--bt-duration-base) var(--bt-story-ease),
+            color var(--bt-duration-base) var(--bt-story-ease);
+    }
+
+    /* 0fr → 1fr วิ่งตามความสูงจริง ไม่ต้องเดาเพดานแบบ max-height */
+    .speaker__day-switch-details {
+        display: grid;
+        grid-template-rows: 0fr;
+        margin-top: 0;
+        color: var(--bt-story-muted);
+        font-size: var(--bt-story-body-size);
+        line-height: var(--bt-story-body-line-height);
+        text-transform: none;
+        opacity: 0;
+        transform: translateY(calc(var(--bt-space-2) * -1));
+        transition:
+            grid-template-rows var(--bt-duration-base) var(--bt-story-ease),
+            margin-top var(--bt-duration-base) var(--bt-story-ease),
+            opacity var(--bt-duration-base) var(--bt-story-ease),
+            transform var(--bt-duration-base) var(--bt-story-ease);
+    }
+
+    .speaker__day-switch-details-inner {
+        display: grid;
+        gap: var(--bt-space-2);
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    .speaker__day-switch[aria-current='true'] .speaker__day-switch-label {
+        font-size: var(--bt-story-title-size);
+        line-height: 56px;
+    }
+
+    .speaker__day-switch[aria-current='true'] .speaker__day-switch-details {
+        grid-template-rows: 1fr;
+        margin-top: var(--bt-space-6);
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .speaker__day-switch-rail {
+        position: relative;
+        overflow: hidden;
+        width: var(--bt-story-rule-width);
+        height: var(--bt-space-28);
+        background: var(--bt-story-line);
+        pointer-events: none;
+    }
+
+    .speaker__day-switch-rail::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        height: 50%;
+        background: var(--spectrum-vertical);
+        transform: translateY(0);
+        transition: transform var(--bt-duration-base) var(--bt-story-ease);
+    }
+
+    .speaker__day-switcher-inner[data-active-day='day-two'] .speaker__day-switch-rail::after {
+        transform: translateY(100%);
+    }
+
+    /* หัวข้อกับแถบวันค้างอยู่ระหว่างเลื่อนดูการ์ด ใช้แพตเทิร์นเดียวกับ .agenda__tabs
+       สติกกี้ถูกจำกัดด้วยกล่องของ .speaker__inner จึงหลุดเองเมื่อจบ section */
+    .speaker__eyebrow {
+        margin: 0 0 var(--bt-space-2);
+        color: var(--bt-story-muted);
+        font-size: var(--bt-story-body-size);
+        font-weight: var(--bt-font-weight-regular);
+        line-height: var(--bt-story-body-line-height);
+        letter-spacing: 0;
+        text-transform: uppercase;
+    }
+
+    /* แถบวันใช้ดีไซน์เดียวกับแถบเวทีของ Agenda: ปุ่มข้อความเรียงแถว
+       เส้นคาดล่างของกล่อง และตัวชี้สเปกตรัมที่เลื่อนตามปุ่มที่เลือก */
+    /* กติกาของกริด (คอลัมน์/ระยะห่าง) ย้ายไปเขียนรวมกับ .moderator__grid ที่ระดับบนสุด
+       เพื่อให้สอง section เปลี่ยนพร้อมกันเสมอ ที่เหลือไว้ตรงนี้คือเรื่องเฉพาะแท็บวัน */
+    .speaker__panel[hidden] {
+        display: none;
+    }
+
+    /* วันที่ยังไม่ประกาศรายชื่อ กันไม่ให้ section ยุบจนดูเหมือนหน้าพัง
+       (แนวเดียวกับ .agenda__panel--empty) */
+    .speaker__panel--empty {
+        min-height: var(--bt-story-section-padding-y-sm);
+    }
+
+    /* เหลือไว้เฉพาะการวางลงผังเชิงบรรณาธิการ ซึ่งเป็นเรื่องของ section นี้เท่านั้น
+       หน้าตาของการ์ดย้ายไปเป็นคอมโพเนนต์ .speaker-card ระดับบนสุด (ใต้บล็อกนี้)
+       เพราะ Moderators & MC ใช้การ์ดหน้าตาเดียวกันแต่คนละผัง */
+    .speaker-card {
+        grid-column: var(--speaker-column);
+        grid-row: var(--speaker-row);
+    }
+
+    @media (max-width: 1199px) {
+        /* ปิดผังตายตัวให้การ์ดไหลต่อกันเอง ช่องว่างเชิงบรรณาธิการจึงหายไปพร้อมกัน
+           (ระยะห่างของกริดที่เปลี่ยนคู่กันอยู่ในบล็อกกริดร่วมท้ายไฟล์ section นี้) */
+        .speaker-card {
+            grid-column: auto;
+            grid-row: auto;
+        }
+
+    }
+
+    @media (max-width: 991px) {
+        padding: var(--bt-story-section-padding-y-sm) 0;
+
+        .speaker__section-header {
+            margin-bottom: var(--bt-space-12);
+        }
+
+        /* จอนี้เรียงซ้อนคอลัมน์เดียว ถ้าตัวสลับวันยังค้างจะกินพื้นที่จอเยอะเกิน */
+        .speaker__day-switcher {
+            position: static;
+            margin-bottom: var(--bt-space-12);
+        }
+
+        .speaker__day-switch-rail {
+            height: var(--bt-space-12);
+        }
+    }
+}
+
+
+/* ---------- กริดของการ์ดคน (ใช้ร่วมกัน) ----------
+   Speaker กับ Moderators & MC ต้องได้แทร็กกว้างเท่ากันเป๊ะ การ์ดถึงจะขนาดเดียวกัน
+   เขียนรวมเป็นกฎเดียวแบบนี้เพื่อไม่ให้ค่าใดค่าหนึ่งถูกแก้ทีหลังแล้วสองฝั่งหลุดจากกัน */
+.speaker__panel,
+.moderator__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+    grid-auto-rows: auto;
+    gap: var(--bt-space-8) var(--bt-space-8);
+    margin-top: 0;
+}
+
+@media (max-width: 1199px) {
+    .speaker__panel,
+    .moderator__grid {
+        gap: var(--bt-space-16) var(--bt-space-8);
+    }
+}
+
+@media (max-width: 991px) {
+    .speaker__panel,
+    .moderator__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--bt-space-12) var(--bt-space-6);
+    }
+}
+
+@media (max-width: 767px) {
+    .speaker__panel,
+    .moderator__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--bt-space-12) var(--bt-space-4);
+    }
+}
+
+
+/* ---------- การ์ดคนหนึ่งใบ (คอมโพเนนต์ร่วม) ----------
+   ใช้ทั้งใน Speaker และ Moderators & MC จึงอยู่นอกบล็อกของ section ไหนทั้งสิ้น
+   ความกว้างมาจากแทร็กของกริดที่ครอบอยู่ ความสูงมาจาก aspect-ratio ของกรอบรูป
+   บวกความสูงคงที่ของ meta — สอง section จึงได้การ์ดขนาดเท่ากันเองโดยไม่ต้องล็อก px */
+.speaker-card {
+    justify-self: center;
+    width: 100%;
+    min-width: 0;
+    margin-top: 0;
+    /* padding: var(--bt-space-4); */
+    /* border: var(--bt-story-rule-width) solid var(--bt-story-line); */
+}
+
+/* ออร่าสเปกตรัมหลังรูปวิทยากร (รูปเป็น PNG พื้นโปร่ง แสงจึงลอดออกมารอบตัวคน)
+   อยู่ในกรอบรูปที่ overflow: hidden + isolation: isolate อยู่แล้ว แสงจึงถูกตัด
+   ที่ขอบกรอบรูปพอดี ไม่ล้นลงไปโดนชื่อ/ตำแหน่งในส่วน .speaker-card__meta */
+.speaker-card__portrait::before,
+.speaker-card__portrait::after {
+    content: '';
+    position: absolute;
+    /* กินพื้นที่เกินกรอบพอสมควร เพื่อให้ตอนหมุนแล้วมุมกรอบไม่โหว่ขาว
+       แต่ไม่ใหญ่จนในกรอบเหลือแต่เนื้อสีเรียบ ๆ จนไม่เห็นความโค้งของก้อนแสง */
+    inset: 0;
+    z-index: -1;
+    border-radius: 50%;
+    filter: blur(16px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--bt-story-duration-slow) var(--bt-story-ease);
+}
+
+/* แยกสองชั้น คนละคู่สี คนละจังหวะ/ทิศหมุน เวลาเหลื่อมกันจึงผสมกันเป็นทิศทาง
+   อิสระแบบสุ่ม ไม่ใช่วิ่งตามแกน x หรือ y อย่างเดียว */
+.speaker-card__portrait::before {
+    background:
+        radial-gradient(circle at 30% 32%, var(--bt-cyan) 0%, transparent 52%),
+        radial-gradient(circle at 70% 64%, var(--bt-violet) 0%, transparent 52%);
+}
+
+.speaker-card__portrait::after {
+    background:
+        radial-gradient(circle at 68% 28%, var(--bt-pink) 0%, transparent 50%),
+        radial-gradient(circle at 32% 72%, var(--bt-yellow) 0%, transparent 54%);
+}
+
+.speaker-card:hover .speaker-card__portrait::before {
+    opacity: 0.95;
+    animation: speaker-aurora-a 16s linear infinite;
+}
+
+.speaker-card:hover .speaker-card__portrait::after {
+    opacity: 0.75;
+    animation: speaker-aurora-b 22s linear infinite;
+}
+
+.speaker-card__portrait {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    isolation: isolate;
+    background-color: #FAFBFD;
+    overflow: hidden;
+}
+
+.speaker-card__portrait img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* --speaker-portrait-y คือค่าจัดหัวให้เสมอกันของแต่ละรูป (speaker-directory.js ตั้ง
+       ให้ฝั่ง Speaker ส่วน Moderators & MC เขียนไว้ที่ style ของการ์ดใน HTML)
+       ส่วน --speaker-portrait-drift เป็นตัวที่ ScrollTrigger ขยับเท่านั้น แยกกันไว้
+       เพื่อให้ revert ของ gsap ล้าง drift ได้โดยค่าจัดหัวยังอยู่ครบ */
+    object-position: center calc(var(--speaker-portrait-y, 0%) + var(--speaker-portrait-drift, 0%));
+    filter: saturate(0.88) contrast(1.02);
+    transform: scale(1);
+    transform-origin: center top;
+    transition:
+        filter var(--bt-story-duration-slow) var(--bt-story-ease),
+        transform var(--bt-story-duration-slow) var(--bt-story-ease);
+}
+
+.speaker-card:hover .speaker-card__portrait img {
+    filter: saturate(1) contrast(1);
+    /* transform: scale(1.03); */
+}
+
+.speaker-card__meta {
+    /* position + z-index จำเป็นคู่กับ background-color ด้านล่าง ไม่ใช่แค่ของประดับ:
+       .speaker-card__portrait เป็น positioned element จึงถูกวาดในขั้นหลังกว่า
+       พื้นหลังของ block ธรรมดาอย่าง meta ออร่าที่ฟุ้งเลยขอบรูปลงมาจึงทับพื้นขาว
+       ตรงนี้ได้ ต้องดัน meta ขึ้นมาเป็น positioned ด้วย ถึงจะวาดทีหลัง (อยู่หลัง
+       ใน DOM) แล้วปิดออร่าส่วนที่ล้ำลงมาได้จริง */
+    position: relative;
+    z-index: 1;
+    min-width: 0;
+    padding: var(--bt-space-6) var(--bt-space-3) var(--bt-space-0);
+    /* border-top: var(--bt-story-rule-width) solid var(--bt-story-line); */
+}
+
+.speaker-card h3 {
+    margin: 0;
+    font-size: var(--bt-story-body-size);
+    font-weight: var(--bt-font-weight-regular);
+    line-height: var(--bt-space-6);
+    letter-spacing: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.speaker-card p {
+    margin: var(--bt-space-1) 0 0;
+    color: var(--bt-story-muted);
+    font-size: var(--bt-story-small-size);
+    font-weight: var(--bt-font-weight-light);
+    line-height: var(--bt-story-small-line-height);
+    min-height: calc(var(--bt-story-body-line-height) * 2);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ต่ำกว่า 1200px การ์ดไหลตามกริดปกติ เพดาน 260px กันไม่ให้ใบเดียวยืดจนเสียสัดส่วน */
+@media (max-width: 1199px) {
+    .speaker-card {
+        width: min(100%, 260px);
+    }
+}
+
+@media (max-width: 767px) {
+    /* การ์ด 2 คอลัมน์บนจอเล็กแคบเกินกว่าชื่อไทยจะพอดีบรรทัดเดียว
+       เผื่อไว้ 2 บรรทัดเท่ากันทุกใบ ชื่อจึงไม่โดนตัดและการ์ดยังสูงเท่ากัน
+       ระยะบรรทัด 28px เผื่อที่ให้วรรณยุกต์/สระบนของไทยไม่ชนกัน */
+    .speaker-card h3 {
+        -webkit-line-clamp: 2;
+        line-height: 28px;
+        min-height: 56px;
+    }
+}
+
+/* จอสัมผัสไม่มี hover ให้เห็น โชว์ออร่าจาง ๆ ค้างไว้แทน (ไม่ต้องขยับ) */
+@media (hover: none) {
+    .speaker-card__portrait::before {
+        opacity: 0.35;
+    }
+
+    .speaker-card__portrait::after {
+        opacity: 0.28;
+    }
+}
+
+
+/* ---------- Moderators & MC ----------
+   โครงเดียวกับ Speaker ทุกอย่าง ต่างแค่ไม่มีตัวสลับวันและมีการ์ดชุดเดียว 5 ใบ
+   กริดจึงต้องอยู่ในคอลัมน์ 9 ช่องที่เยื้อง 3 ช่องเท่ากับ .speaker__days
+   เพื่อให้แทร็กกว้างเท่ากัน การ์ดสองฝั่งจึงมีขนาดตรงกันเป๊ะโดยไม่ต้องล็อกค่าใด */
+.moderator {
+    position: relative;
+    scroll-margin-top: var(--header-height);
+    /* เว้นบน-ล่างเต็มเท่า section อื่นทุกอัน ระยะระหว่าง Speaker กับ section นี้
+       จึงเป็น 128+128 เท่ากับคู่ section อื่นในหน้า ไม่ใช่ 128 อย่างที่ตัดบนออก */
+    padding: var(--bt-story-section-padding-y) 0;
+    color: var(--bt-story-ink);
+    background: var(--bt-story-bg);
+    font-family: var(--bt-font);
+
+    .moderator__section-header {
+        margin-bottom: var(--bt-space-20);
+    }
+
+    .moderator__section-header h2 {
+        max-width: 920px;
+        margin: 0;
+        font-size: var(--bt-story-title-size);
+        font-weight: var(--bt-font-weight-regular);
+        line-height: var(--bt-story-title-line-height);
+        letter-spacing: 0;
+    }
+
+    /* 5 ใบลงกริด 3 คอลัมน์ชุดเดียวกับฝั่ง Speaker (นิยามอยู่ในบล็อกกริดร่วมด้านบน):
+       เต็มแถวแรก 3 ใบ เหลือ 2 ใบชิดซ้ายแถวล่าง ช่องว่างท้ายแถวจึงเข้าจังหวะเดียวกับ
+       ผังเว้นช่องของ Speaker พอดี ไม่ต้องกำหนดอะไรเพิ่มตรงนี้ */
+
+    @media (max-width: 991px) {
+        padding: var(--bt-story-section-padding-y-sm) 0;
+
+        .moderator__section-header {
+            margin-bottom: var(--bt-space-12);
+        }
+    }
+}
+
+/* หมุนรอบจุดกึ่งกลางพร้อมเลื่อน/ย่อขยายเล็กน้อยไปด้วย ทำให้ blob ลอยเป็นวงอิสระ
+   ไม่ตรงตามแกนใดแกนหนึ่ง — สองชุดหมุนคนละทิศและคนละความเร็ว เพื่อไม่ให้จับจังหวะซ้ำได้ */
+@keyframes speaker-aurora-a {
+    0% {
+        transform: rotate(0deg) translate(0, 0) scale(1);
+    }
+
+    25% {
+        transform: rotate(90deg) translate(6%, -5%) scale(1.08);
+    }
+
+    50% {
+        transform: rotate(180deg) translate(-5%, 6%) scale(0.95);
+    }
+
+    75% {
+        transform: rotate(270deg) translate(-6%, -4%) scale(1.06);
+    }
+
+    100% {
+        transform: rotate(360deg) translate(0, 0) scale(1);
+    }
+}
+
+@keyframes speaker-aurora-b {
+    0% {
+        transform: rotate(0deg) translate(0, 0) scale(1.04);
+    }
+
+    25% {
+        transform: rotate(-90deg) translate(-7%, 4%) scale(0.96);
+    }
+
+    50% {
+        transform: rotate(-180deg) translate(5%, -6%) scale(1.1);
+    }
+
+    75% {
+        transform: rotate(-270deg) translate(4%, 6%) scale(0.98);
+    }
+
+    100% {
+        transform: rotate(-360deg) translate(0, 0) scale(1.04);
+    }
+}
+
+
+/* ---------- Expectation ----------
+   สรุปขนาดของงานแบบนิตยสาร: พื้นที่ขาว ตัวเลขเด่น และใช้เส้นบางแบ่งจังหวะแทนกรอบการ์ด */
+.expectation {
+    /* ความยาวของเส้นคั่นระหว่างช่อง (ดู .expectation__stat::before)
+       เพดานอยู่ที่ ~150px เพราะเนื้อหาสูง 103px และช่องไฟระหว่างสองแถวมี 48px
+       ถ้าเส้นยาวกว่านั้นส่วนที่ยื่นเกินของแถวบน-ล่างจะไล่มาชนกันจนดูรก */
+    --expectation-rule-length: 80px;
+
+    padding: var(--bt-story-section-padding-y) 0;
+    color: var(--bt-story-ink);
+    background: var(--bt-story-bg);
+    font-family: var(--bt-font);
+
+    .expectation__header {
+        text-align: center;
+
+        h2 {
+            margin: 0;
+            font-size: var(--bt-story-title-size);
+            font-weight: var(--bt-font-weight-regular);
+            line-height: var(--bt-story-title-line-height);
+            letter-spacing: var(--bt-story-title-tracking);
+        }
+    }
+
+    /* ใช้ Bootstrap row/column เป็นโครงหลัก เส้นตั้งวางที่ขอบ column จึงคงแนวตรงกันทุกขนาด */
+    .expectation__stats {
+        margin-top: var(--bt-space-16);
+    }
+
+    .expectation__stats--secondary {
+        margin-top: var(--bt-space-12);
+    }
+
+    .expectation__stat {
+        position: relative;
+        display: flex;
+        min-width: 0;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+
+        /* เส้นคั่นเป็นภาพเส้น-ดาวที่วาดมาเป็นแนวนอน จึงต้องหมุน 90° เอา
+           กล่องเลยกว้าง = ความยาวเส้น และสูง = ความยาวหารอัตราส่วนภาพ (1023:112 ≈ 9.13)
+           ต่างจากเส้น 1px เดิมตรงที่ยืดตามความสูงเนื้อหาเองไม่ได้แล้ว ต้องกำหนดความยาว
+           ตายตัวผ่าน --expectation-rule-length แล้วปรับเป็นช่วง ๆ ตามขนาดจอ */
+        &::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: var(--expectation-rule-length);
+            height: calc(var(--expectation-rule-length) / 9.13);
+            background: url('../images/line-star.webp') center / contain no-repeat;
+            transform: translate(-50%, -50%) rotate(90deg);
+        }
+
+        &:first-child::before {
+            display: none;
+        }
+
+        strong {
+            color: var(--bt-story-accent);
+            font-size: var(--bt-story-title-size);
+            font-weight: var(--bt-font-weight-medium);
+            line-height: var(--bt-story-title-line-height);
+            letter-spacing: 0;
+        }
+
+        span {
+            margin-top: var(--bt-space-1);
+            font-size: var(--bt-story-body-size);
+            font-weight: var(--bt-font-weight-regular);
+            line-height: var(--bt-story-topic-line-height);
+            letter-spacing: 0;
+        }
+    }
+
+    @media (max-width: 991px) {
+        /* ตัวเลขเล็กลงตามกฎด้านล่าง เนื้อหาจึงเตี้ยลงเหลือ ~92px
+           ถ้าคงเส้นไว้ที่ 135px ส่วนที่ยื่นเกินจะเหลือช่องไฟระหว่างแถวแค่ 5px */
+        --expectation-rule-length: 122px;
+
+        padding: var(--bt-story-section-padding-y-sm) 0;
+
+        .expectation__stats {
+            margin-top: var(--bt-space-12);
+        }
+
+        /* ลดตัวเลขตั้งแต่ tablet เพื่อให้ 4,000+ อยู่ใน Bootstrap column โดยไม่ชนข้อมูลข้างเคียง */
+        .expectation__stat strong {
+            font-size: var(--bt-story-heading-size);
+            line-height: var(--bt-story-title-line-height);
+        }
+
+        .expectation__stats--secondary {
+            row-gap: var(--bt-space-12);
+        }
+
+        /* แถวล่างเปลี่ยนเป็น 2 คอลัมน์ เส้นของรายการที่ 3 เริ่มรอบใหม่จึงไม่ต้องแสดง */
+        .expectation__stats--secondary .expectation__stat:nth-child(3)::before {
+            display: none;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .expectation__header h2 {
+            font-size: var(--bt-story-heading-size);
+            line-height: var(--bt-story-heading-line-height);
+        }
+
+        .expectation__stats {
+            row-gap: var(--bt-space-10);
+        }
+
+        .expectation__stat {
+            span {
+                font-size: var(--bt-story-body-size);
+                line-height: var(--bt-story-body-line-height);
+            }
+        }
+
+        /* แถวบนรายการที่ 3 กว้างเต็มและขึ้นบรรทัดใหม่ จึงตัดเส้นด้านซ้ายออก */
+        .expectation__stats--primary .expectation__stat:nth-child(3)::before {
+            display: none;
+        }
+    }
+}
+
 
 /* ---------- Floor Plan ----------
    แสดงหัวข้อและภาพแผนผังบูทเต็มความกว้างของ Bootstrap container */
@@ -1956,11 +2935,13 @@ the timeline drops them under the ship once the walls have retreated. */
     background: var(--bt-story-bg);
     font-family: var(--bt-font);
 
+    /* หัวข้อเป็นสองบรรทัดเหมือน section อื่น จึงใช้ title-line-height (140%)
+       ไม่ใช่ display-line-height (88px) ที่ตั้งไว้ตอนยังเป็นบรรทัดเดียว ไม่งั้นสองบรรทัดจะห่างเกิน */
     .floor-plan__title {
         margin: 0;
         font-size: var(--bt-story-title-size);
         font-weight: var(--bt-font-weight-regular);
-        line-height: var(--bt-story-display-line-height);
+        line-height: var(--bt-story-title-line-height);
         letter-spacing: 0;
     }
 
@@ -1970,16 +2951,26 @@ the timeline drops them under the ship once the walls have retreated. */
 
     .floor-plan__image {
         display: block;
-        width: 100%;
+        width: 80%;
         height: auto;
+        margin-inline: auto;
     }
 
     @media (max-width:991px) {
         padding: var(--bt-story-section-padding-y-sm) 0;
 
+        /* จอเล็กคืนความกว้างเต็ม ย่ออีก 20% แล้วชื่อโซนในแผนผังจะอ่านไม่ออก */
+        .floor-plan__image {
+            width: 100%;
+        }
+    }
+
+    /* ลดหัวข้อลงเท่า Expectation/Concept ที่ทำไว้แล้ว ถ้าคง 48px ไว้บนจอ 375px
+       จะเหลือที่ราว 16 ตัวอักษรต่อบรรทัด หัวข้อจึงตัดคำจนมีคำห้อยท้ายบรรทัดเดียวโดด ๆ */
+    @media (max-width: 767px) {
         .floor-plan__title {
-            font-size: var(--bt-story-title-size);
-            line-height: var(--bt-story-title-line-height);
+            font-size: var(--bt-story-heading-size);
+            line-height: var(--bt-story-heading-line-height);
         }
     }
 }
@@ -2067,6 +3058,10 @@ the timeline drops them under the ship once the walls have retreated. */
         min-height: var(--header-height);
         display: flex;
         justify-content: space-between;
+        position: relative;
+        z-index: 1;
+        border-bottom: 1px solid transparent;
+        transition: border-color 220ms ease;
     }
 
     .site-header__logo {
@@ -2085,6 +3080,29 @@ the timeline drops them under the ship once the walls have retreated. */
 
     .site-header__backdrop {
         display: block;
+        z-index: 195;
+        background: #f4f3ef;
+        visibility: hidden;
+        opacity: 1;
+        clip-path: inset(0 0 100% 0);
+        transition:
+            clip-path 620ms cubic-bezier(0.76, 0, 0.24, 1),
+            visibility 0s linear 800ms;
+        will-change: clip-path;
+    }
+
+    body.menu-open .site-header__backdrop {
+        visibility: visible;
+        opacity: 1;
+        clip-path: inset(0);
+        transition:
+            clip-path 620ms cubic-bezier(0.76, 0, 0.24, 1),
+            visibility 0s;
+    }
+
+    body.menu-closing .site-header__backdrop {
+        visibility: visible;
+        transition-delay: 180ms, 0s;
     }
 }
 
@@ -2098,17 +3116,9 @@ the timeline drops them under the ship once the walls have retreated. */
         bottom: var(--space-8);
     }
 
-    .site-header__mobile {
-        padding-left: var(--space-4);
-        padding-right: var(--space-4);
-    }
-
-    .site-header__mobile-actions {
-        grid-template-columns: 1fr;
-    }
-
-    .site-header__mobile-nav a {
-        font-size: 15px;
+    .site-header__mobile-scroll {
+        padding-left: 20px;
+        padding-right: 20px;
     }
 
     #ui {
@@ -2129,19 +3139,6 @@ the timeline drops them under the ship once the walls have retreated. */
         width: 100%;
         gap: var(--space-1);
     }
-
-    #ui .time {
-        font-size: clamp(18px, 5.5vw, 22px);
-    }
-
-    #ui .date {
-        font-size: clamp(24px, 7vw, 28px);
-    }
-
-    #ui .venue {
-        font-size: clamp(16px, 5vw, 20px);
-    }
-
 
     .concept__inner {
         padding-top: var(--bt-story-section-padding-y);
@@ -2174,6 +3171,7 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .site-header__mobile,
+    .site-header__mobile-scroll,
     .site-header__backdrop,
     .site-header__toggle-lines span,
     .bt-action-button,
