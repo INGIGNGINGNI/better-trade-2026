@@ -9,7 +9,7 @@
             ship: { l: 15.25, t: 26.00, w: 70.65 },
             stairs: { l: 1.98, t: 78.22, w: 95.83 },
             pshadow: { l: 5.09, t: 77.70, w: 60.77 },
-            title: { cx: 52.36, cy: 16.16, w: 52.00, rot: 0 },
+            title: { cx: 52.36, cy: 16.16, w: 44.20, rot: 0 },
             triangle: { cx: 47.19, cy: 32.41, w: 6.27, rot: 20 },
             bitcoin: { cx: 26.57, cy: 28.47, w: 7.75, rot: -7 },
             gold: { cx: 71.48, cy: 32.42, w: 6.12, rot: 45 },
@@ -22,7 +22,7 @@
 
         /* Frame 1 — the poster arrangement, in percentages of the viewport. */
         const POSTER = {
-            title: { cx: 50.0, cy: 35.0, w: 50.0, rot: 0, min: 300, max: 1000 },
+            title: { cx: 50.0, cy: 35.0, w: 42.5, rot: 0, min: 255, max: 850 },
             triangle: { cx: 8.5, cy: 14.5, w: 13.0, rot: -10, min: 58, max: 230 },
             gold: { cx: 84.5, cy: 16.8, w: 5.5, rot: 8, min: 48, max: 130 },
             card: { cx: 91.5, cy: 42.0, w: 9.5, rot: 12, min: 52, max: 180 },
@@ -33,7 +33,7 @@
         const posterIconShiftY = viewportWidth => viewportWidth <= 991 ? 5 : 9;
         // Ceiling on the poster title's height, as a share of the viewport. Only bites on
         // short viewports, where a width-driven title would overlap the CTA block below.
-        const TITLE_MAX_VH = 0.34;
+        const TITLE_MAX_VH = 0.289;
         // The settled video sits 48px below the description. Its entrance translation
         // subtracts this same distance so adding layout space does not push the moving
         // frame farther away before it reaches the final position.

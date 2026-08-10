@@ -2,14 +2,6 @@
     box-sizing: border-box;
 }
 
-/* Lucide-style inline SVG icons. Symbols live in index.html so the page stays static. */
-.bt-icon-sprite {
-    position: absolute;
-    width: 0;
-    height: 0;
-    overflow: hidden;
-}
-
 .bt-icon {
     display: inline-block;
     flex: 0 0 auto;
@@ -20,6 +12,11 @@
     stroke-linecap: round;
     stroke-linejoin: round;
     fill: none;
+}
+
+.bt-icon--brand {
+    stroke: none;
+    fill: currentColor;
 }
 
 html {
@@ -1013,9 +1010,9 @@ the timeline drops them under the ship once the walls have retreated. */
 
 .concept__description {
     margin: 0;
-    font-size: var(--bt-story-body-size);
+    font-size: var(--bt-story-topic-size);
     font-weight: var(--bt-font-weight-light);
-    line-height: var(--bt-story-body-line-height);
+    line-height: var(--bt-story-topic-line-height);
     letter-spacing: var(--bt-story-heading-tracking);
     text-wrap: balance;
 }
@@ -1114,9 +1111,9 @@ the timeline drops them under the ship once the walls have retreated. */
 .topics-showcase__header p {
     margin: var(--bt-space-8) 0 0;
     color: rgba(247, 248, 247, 0.68);
-    font-size: var(--bt-story-body-size);
+    font-size: var(--bt-story-topic-size);
     font-weight: var(--bt-font-weight-light);
-    line-height: var(--bt-story-body-line-height);
+    line-height: var(--bt-story-topic-line-height);
     letter-spacing: var(--bt-story-heading-tracking);
     text-wrap: balance;
 }
@@ -1168,7 +1165,7 @@ the timeline drops them under the ship once the walls have retreated. */
     bottom: 0;
     width: min(100%, 50vw);
     height: 1px;
-    background: rgba(247, 248, 247, 0.16);
+    background: rgba(255, 255, 255, 0.12);
     transform-origin: left center;
 }
 
@@ -1445,7 +1442,7 @@ the timeline drops them under the ship once the walls have retreated. */
         transition: background-color var(--bt-story-duration) var(--bt-story-ease);
 
         &:not(:first-child) {
-            border-left: var(--bt-story-rule-width) solid var(--bt-story-line);
+            border-left: var(--bt-story-rule-width) solid var(--bt-story-line-2);
         }
 
         &:hover {
@@ -1688,7 +1685,7 @@ the timeline drops them under the ship once the walls have retreated. */
         .ticket__format-copy {
             min-width: 0;
             padding-top: var(--bt-space-1);
-            font-size: var(--bt-font-size-16);
+            font-size: var(--bt-font-size-14);
             line-height: var(--bt-story-body-line-height);
 
             h4,
@@ -2129,7 +2126,7 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .agenda__table tr {
-        border-bottom: var(--bt-story-rule-width) solid var(--bt-agenda-line);
+        border-bottom: var(--bt-story-rule-width) solid var(--bt-story-line-2);
     }
 
     .agenda__table th,
@@ -2150,7 +2147,7 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .agenda__table td {
-        border-left: var(--bt-story-rule-width) solid var(--bt-agenda-line);
+        border-left: var(--bt-story-rule-width) solid var(--bt-story-line-2);
         padding-left: var(--bt-space-6);
     }
 
@@ -2258,15 +2255,15 @@ the timeline drops them under the ship once the walls have retreated. */
     .agenda__session-summary {
         margin-top: var(--bt-space-1);
         color: var(--bt-story-muted);
-        font-size: var(--bt-story-small-size);
+        font-size: var(--bt-story-body-size);
         font-weight: var(--bt-font-weight-regular);
         line-height: var(--bt-story-body-line-height);
     }
 
     .agenda__session-speaker {
-        margin-top: var(--bt-space-3);
+        margin-top: var(--bt-space-4);
         color: var(--bt-story-ink);
-        font-size: var(--bt-story-body-size);
+        font-size: var(--bt-story-small-size);
         font-weight: var(--bt-font-weight-regular);
         line-height: var(--bt-story-body-line-height);
     }
@@ -2343,7 +2340,7 @@ the timeline drops them under the ship once the walls have retreated. */
             grid-row: 2;
             padding: 0 0 var(--bt-space-6) var(--bt-space-6);
             display: block;
-            border-left: var(--bt-story-rule-width) solid var(--bt-agenda-line);
+            border-left: var(--bt-story-rule-width) solid var(--bt-story-line-2);
             font-size: var(--bt-story-small-size);
             text-align: left;
             white-space: normal;
@@ -3137,6 +3134,7 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .floor-plan__figure {
+        position: relative;
         margin: var(--bt-space-12) 0 0;
     }
 
@@ -3163,17 +3161,30 @@ the timeline drops them under the ship once the walls have retreated. */
             font-size: var(--bt-story-heading-size);
             line-height: var(--bt-story-heading-line-height);
         }
+
     }
 }
 
 
 /* ---------- Footer ----------
-   ส่วนปิดท้ายแบบ editorial ใช้พื้นที่ดำ เส้นบาง และลำดับตัวอักษรแทนการครอบข้อมูลด้วย Card */
+   ส่วนปิดท้ายแบบ contact module สำหรับงาน event แสดงเฉพาะช่องทางติดต่อและผู้สนับสนุน */
 .site-footer {
-    padding: var(--bt-story-section-padding-y-sm) 0 var(--bt-space-8);
+    padding: var(--bt-story-section-padding-y-sm) 0 var(--bt-space-12);
     color: var(--bt-footer-ink);
-    background: var(--bt-story-media-bg);
+    background: var(--bt-color-white);
     font-family: var(--bt-font);
+
+    .site-footer__container {
+        max-width: none;
+        padding-right: var(--bt-space-12);
+        padding-left: var(--bt-space-12);
+    }
+
+    .site-footer__panel {
+        padding: var(--bt-space-20);
+        border-radius: var(--bt-radius-2);
+        background: var(--bt-story-media-bg);
+    }
 
     .site-footer__content {
         align-items: stretch;
@@ -3190,39 +3201,15 @@ the timeline drops them under the ship once the walls have retreated. */
         height: auto;
     }
 
-    .site-footer__social {
-        display: grid;
-        gap: var(--bt-space-3);
-        margin-top: var(--bt-space-12);
-
-        p {
-            display: grid;
-            grid-template-columns: var(--bt-space-20) minmax(0, 1fr);
-            gap: var(--bt-space-4);
-            margin: 0;
-            font-size: var(--bt-story-body-size);
-            line-height: var(--bt-story-body-line-height);
-        }
-
-        span {
-            color: var(--bt-footer-muted);
-            font-weight: var(--bt-font-weight-light);
-        }
-
-        strong {
-            color: var(--bt-footer-ink);
-            font-weight: var(--bt-font-weight-regular);
-        }
-    }
-
     .site-footer__column {
+        padding-top: var(--bt-space-2);
+        padding-bottom: var(--bt-space-2);
         border-left: var(--bt-story-rule-width) solid var(--bt-footer-line);
     }
 
     .site-footer__eyebrow {
-        margin: 0 0 var(--bt-space-2);
-        color: var(--bt-footer-muted);
-        font-size: var(--bt-story-small-size);
+        margin: 0 0 var(--bt-space-1);
+        font-size: var(--bt-story-body-size);
         font-weight: var(--bt-font-weight-light);
         line-height: var(--bt-story-body-line-height);
         letter-spacing: 0;
@@ -3245,15 +3232,18 @@ the timeline drops them under the ship once the walls have retreated. */
 
     .site-footer__contact-list {
         display: grid;
-        margin: var(--bt-space-8) 0 0;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: var(--bt-space-8);
+        margin: var(--bt-space-10) 0 0;
+        padding-top: var(--bt-space-4);
+        border-top: var(--bt-story-rule-width) solid var(--bt-footer-line);
 
         a {
             display: grid;
-            grid-template-columns: var(--bt-space-12) minmax(0, 1fr) var(--bt-space-4);
+            grid-template-columns: var(--bt-space-8) minmax(0, 1fr);
             gap: var(--bt-space-3);
             align-items: center;
             padding: var(--bt-space-4) 0;
-            border-top: var(--bt-story-rule-width) solid var(--bt-footer-line);
             color: var(--bt-footer-ink);
             text-decoration: none;
             transition: color var(--bt-duration-base) var(--bt-story-ease);
@@ -3269,11 +3259,16 @@ the timeline drops them under the ship once the walls have retreated. */
             }
         }
 
-        span {
+        .site-footer__contact-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             color: var(--bt-footer-muted);
-            font-size: var(--bt-story-small-size);
-            font-weight: var(--bt-font-weight-light);
-            line-height: var(--bt-story-body-line-height);
+
+            .bt-icon {
+                width: var(--bt-space-5);
+                height: var(--bt-space-5);
+            }
         }
 
         strong {
@@ -3284,22 +3279,15 @@ the timeline drops them under the ship once the walls have retreated. */
             line-height: var(--bt-story-body-line-height);
         }
 
-        .bt-icon {
-            width: var(--bt-space-4);
-            height: var(--bt-space-4);
-            transition: transform var(--bt-duration-base) var(--bt-story-ease);
-        }
-
-        a:hover .bt-icon,
-        a:focus-visible .bt-icon {
-            transform: translate(var(--bt-space-1), calc(var(--bt-space-1) * -1));
-        }
     }
 
     .site-footer__people {
         display: grid;
-        gap: var(--bt-space-6);
-        margin-top: var(--bt-space-8);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--bt-space-8);
+        margin-top: var(--bt-space-10);
+        padding-top: var(--bt-space-4);
+        border-top: var(--bt-story-rule-width) solid var(--bt-footer-line);
     }
 
     .site-footer__person {
@@ -3307,7 +3295,6 @@ the timeline drops them under the ship once the walls have retreated. */
         gap: var(--bt-space-1);
         margin: 0;
         padding-top: var(--bt-space-4);
-        border-top: var(--bt-story-rule-width) solid var(--bt-footer-line);
 
         p,
         a {
@@ -3347,53 +3334,11 @@ the timeline drops them under the ship once the walls have retreated. */
         }
     }
 
-    .site-footer__bottom {
-        align-items: center;
-        margin-top: var(--bt-space-4);
-        padding-top: var(--bt-space-6);
-        border-top: var(--bt-story-rule-width) solid var(--bt-footer-line);
-
-        p {
-            margin: 0;
-            color: var(--bt-footer-muted);
-            font-size: var(--bt-story-small-size);
-            font-weight: var(--bt-font-weight-light);
-            line-height: var(--bt-story-body-line-height);
-        }
-    }
-
-    .site-footer__back-to-top {
-        display: flex;
-        justify-content: flex-end;
-
-        a {
-            display: inline-flex;
-            gap: var(--bt-space-2);
-            align-items: center;
-            color: var(--bt-footer-ink);
-            font-size: var(--bt-story-small-size);
-            line-height: var(--bt-story-body-line-height);
-            text-decoration: none;
-            transition: color var(--bt-duration-base) var(--bt-story-ease);
-
-            &:hover,
-            &:focus-visible {
-                color: var(--bt-cyan);
-            }
-
-            &:focus-visible {
-                outline: var(--bt-border-width-2) solid var(--bt-cyan);
-                outline-offset: var(--bt-space-1);
-            }
-        }
-
-        .bt-icon {
-            width: var(--bt-space-4);
-            height: var(--bt-space-4);
-        }
-    }
-
     @media (max-width: 991px) {
+        .site-footer__panel {
+            padding: var(--bt-space-16);
+        }
+
         .site-footer__brand {
             padding-bottom: var(--bt-space-12);
         }
@@ -3405,6 +3350,15 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     @media (max-width: 767px) {
+        .site-footer__container {
+            padding-right: var(--bt-space-6);
+            padding-left: var(--bt-space-6);
+        }
+
+        .site-footer__panel {
+            padding: var(--bt-space-8);
+        }
+
         .site-footer__column {
             padding-top: var(--bt-space-8);
             padding-bottom: var(--bt-space-8);
@@ -3412,13 +3366,15 @@ the timeline drops them under the ship once the walls have retreated. */
             border-left: 0;
         }
 
-        .site-footer__bottom {
-            margin-top: var(--bt-space-8);
+        .site-footer__people {
+            grid-template-columns: 1fr;
+            gap: var(--bt-space-6);
         }
+    }
 
-        .site-footer__back-to-top {
-            justify-content: flex-start;
-            margin-top: var(--bt-space-4);
+    @media (max-width: 575px) {
+        .site-footer__contact-list {
+            grid-template-columns: 1fr;
         }
     }
 }

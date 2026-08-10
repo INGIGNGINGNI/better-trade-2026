@@ -96,14 +96,15 @@
     --bt-story-ink: #111318;
     --bt-story-muted: #687078;
     --bt-story-line: #dbded5;
+    --bt-story-line-2: #f2f2f2;
     --bt-story-accent: #1863dc;
     --bt-story-media-bg: #0d0f14;
 
     /* สีและขนาดเฉพาะ Footer */
     --bt-footer-ink: #f7f8f7;
     --bt-footer-muted: #aeb4bb;
-    --bt-footer-line: rgba(255, 255, 255, 0.18);
-    --bt-footer-logo-width: 256px;
+    --bt-footer-line: rgba(255, 255, 255, 0.12);
+    --bt-footer-logo-width: 192px;
 
     /* สีแยกหมวด Ticket ถอดจากช่วงสีของ Better Trade spectrum */
     --bt-ticket-conference: #61e8ed;
@@ -118,7 +119,6 @@
     --bt-agenda-commodity: #ef5d75;
     --bt-agenda-crypto: #d6b72d;
     --bt-agenda-alternative: #9c67d9;
-    --bt-agenda-line: #eee;
     --bt-agenda-aside-width: 320px;
     --bt-agenda-time-width: 112px;
     --bt-agenda-speaker-column-width: 208px;
@@ -139,7 +139,7 @@
     --bt-story-display-line-height: 88px;
     --bt-story-title-line-height: 140%;
     --bt-story-heading-line-height: 48px;
-    --bt-story-topic-line-height: 32px;
+    --bt-story-topic-line-height: 40px;
     --bt-story-body-line-height: 24px;
     --bt-story-small-line-height: normal;
     --bt-story-title-tracking: 0px;
@@ -221,19 +221,19 @@
     --bt-topics-section-padding-bottom: 208px;
     --bt-topics-content-margin-top: 96px;
     --bt-topics-content-gap: 104px;
-    --bt-topics-star-size: 28px;
+    --bt-topics-star-size: 24px;
     --bt-topics-assets-min-height: 680px;
     --bt-topics-section-padding-top-md: 144px;
     --bt-topics-section-padding-bottom-md: 160px;
     --bt-topics-content-margin-top-md: 72px;
     --bt-topics-content-gap-md: 40px;
-    --bt-topics-star-size-md: 22px;
+    --bt-topics-star-size-md: 18px;
     --bt-topics-assets-min-height-md: 600px;
     --bt-topics-section-padding-top-sm: 96px;
     --bt-topics-section-padding-bottom-sm: 112px;
     --bt-topics-content-margin-top-sm: 56px;
     --bt-topics-content-gap-sm: 64px;
-    --bt-topics-star-size-sm: 18px;
+    --bt-topics-star-size-sm: 16px;
     --bt-topics-assets-min-height-sm: 560px;
 
     /* มิติและการเคลื่อนไหวสำหรับการเล่าเรื่อง */
