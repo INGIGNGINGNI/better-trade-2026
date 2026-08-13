@@ -146,11 +146,30 @@
         const LOADING_SPEED = 2; // >1 = faster progress bar + icon cycling; the wall/title/header reveal keeps its original pace
         const mobileStaticQuery = window.matchMedia('(max-width: 1199px)');
         const isMobileStatic = () => mobileStaticQuery.matches && !STATIC_FRAME;
+        const readLargeViewportHeight = () => {
+            if (!window.CSS?.supports?.('height', '100lvh')) return window.innerHeight;
+
+            const probe = document.createElement('div');
+            probe.setAttribute('aria-hidden', 'true');
+            probe.style.cssText = [
+                'position:fixed',
+                'left:-9999px',
+                'top:0',
+                'width:1px',
+                'height:100lvh',
+                'visibility:hidden',
+                'pointer-events:none',
+            ].join(';');
+            document.body.appendChild(probe);
+            const height = probe.getBoundingClientRect().height;
+            probe.remove();
+            return Number.isFinite(height) && height > 0 ? height : window.innerHeight;
+        };
         // iOS Safari changes window.innerHeight whenever its bottom toolbar collapses.
-        // Keep the mobile hero tied to the viewport captured for the current width so a
-        // vertical-only browser chrome resize reveals more of the scene instead of
-        // recalculating and scaling every layer.
-        let mobileLayoutViewportHeight = window.innerHeight;
+        // Size the mobile hero from the large viewport up front, then keep that reference
+        // for vertical-only browser chrome resizes. The scene therefore starts at the
+        // scale it would have after the toolbar collapses, without growing mid-scroll.
+        let mobileLayoutViewportHeight = readLargeViewportHeight();
 
         const readRootPixelValue = (property, fallback) => {
             const value = Number.parseFloat(
@@ -1451,12 +1470,12 @@
                 return;
             }
 
-            // A real width change (orientation or responsive breakpoint) gets a fresh,
-            // stable height baseline for the new layout.
-            if (widthChanged) mobileLayoutViewportHeight = nextHeight;
-
             if (rAF) cancelAnimationFrame(rAF);
             rAF = requestAnimationFrame(() => {
+                // A real width change (orientation or responsive breakpoint) gets a fresh
+                // large-viewport baseline after Safari has applied the new orientation.
+                if (widthChanged) mobileLayoutViewportHeight = readLargeViewportHeight();
+
                 // Killing the pin can restore the height captured when ScrollTrigger was
                 // created, so do it before layout writes the new static hero dimensions.
                 if (isMobileStatic() && scrollTL) {

@@ -3715,13 +3715,13 @@ the timeline drops them under the ship once the walls have retreated. */
 
         .speaker__day-switch-prompt {
             position: absolute;
-            top: calc((var(--touch-target-md) / 2) - var(--space-6));
+            top: calc((var(--touch-target-md) / 2) - var(--space-8));
             left: 50%;
             display: block;
             color: var(--color-text-muted);
-            font-size: var(--section-small-size);
-            font-weight: var(--font-weight-regular);
-            line-height: var(--section-small-line-height);
+            font-size: var(--section-body-size);
+            font-weight: var(--font-weight-medium);
+            line-height: var(--section-body-line-height);
             transform: translateX(-50%);
             white-space: nowrap;
         }
@@ -4911,7 +4911,7 @@ the timeline drops them under the ship once the walls have retreated. */
 @media (max-width:575px) {
     :root {
         --hero-static-top-inset: 32px;
-        --hero-static-bottom-gap: 80px;
+        --hero-static-bottom-gap: 104px;
         --hero-static-stage-max-vw: 1.68;
     }
 
