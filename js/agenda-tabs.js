@@ -189,7 +189,7 @@
         });
 
         if (updateHistory) {
-            history.replaceState(null, '', activeLink.getAttribute('href'));
+            history.replaceState(null, '', window.location.pathname + window.location.search);
         }
     };
 

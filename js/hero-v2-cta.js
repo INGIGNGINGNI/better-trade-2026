@@ -21,7 +21,8 @@ const compactRegisterOptions = {
 };
 
 function goToRegistration() {
-    window.location.hash = 'ticket';
+    document.getElementById('ticket')?.scrollIntoView({ block: 'start' });
+    history.replaceState(null, '', window.location.pathname + window.location.search);
 
     if (document.body.classList.contains('menu-open')) {
         document.querySelector('.site-header__backdrop')?.click();

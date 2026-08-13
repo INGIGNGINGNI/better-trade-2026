@@ -84,6 +84,50 @@
             legacyCanvasRatio: 1248 / 1664,
             legacyContentHeightShare: 0.7344,
         };
+        const HERO_RUN_PROGRESS_EVENT = 'bettertrade:hero-run-progress';
+        let heroRunProgressMode = '';
+        let heroRunProgressValue = -1;
+
+        function publishHeroRunProgress(mode, progress = 0) {
+            const value = clamp(progress, 0, 1);
+            if (mode === heroRunProgressMode
+                && Math.abs(value - heroRunProgressValue) < 0.001) return;
+
+            heroRunProgressMode = mode;
+            heroRunProgressValue = value;
+            window.dispatchEvent(new CustomEvent(HERO_RUN_PROGRESS_EVENT, {
+                detail: { mode, progress: value },
+            }));
+        }
+
+        function updateHeroRunProgress() {
+            if (STATIC_FRAME) {
+                publishHeroRunProgress('hidden');
+                return;
+            }
+
+            if (isMobileStatic() || reduced) {
+                const revealAt = Math.max(0, el.concept.offsetTop - window.innerHeight * 0.5);
+                publishHeroRunProgress(window.scrollY >= revealAt ? 'ready' : 'hidden');
+                return;
+            }
+
+            if (shipRunHasCompleted) {
+                publishHeroRunProgress(window.scrollY > 10 ? 'ready' : 'hidden', 1);
+                return;
+            }
+
+            const timelineTime = scrollTL?.time() || 0;
+            if (timelineTime < SHIP_RUN.startAt) {
+                publishHeroRunProgress('hidden');
+                return;
+            }
+
+            publishHeroRunProgress(
+                'progress',
+                (timelineTime - SHIP_RUN.startAt) / SHIP_RUN.scrollDuration
+            );
+        }
 
         /* How tall the virtual KV canvas is, in viewport heights. Bigger = the KV fills
            more of a wide screen and the beat-2 camera move gets longer. Portrait screens
@@ -102,6 +146,11 @@
         const LOADING_SPEED = 2; // >1 = faster progress bar + icon cycling; the wall/title/header reveal keeps its original pace
         const mobileStaticQuery = window.matchMedia('(max-width: 1199px)');
         const isMobileStatic = () => mobileStaticQuery.matches && !STATIC_FRAME;
+        // iOS Safari changes window.innerHeight whenever its bottom toolbar collapses.
+        // Keep the mobile hero tied to the viewport captured for the current width so a
+        // vertical-only browser chrome resize reveals more of the scene instead of
+        // recalculating and scaling every layer.
+        let mobileLayoutViewportHeight = window.innerHeight;
 
         const readRootPixelValue = (property, fallback) => {
             const value = Number.parseFloat(
@@ -425,6 +474,7 @@
             el.concept.classList.add('is-revealed');
             maintainCompletedHeroScene();
             requestShipRunRender();
+            updateHeroRunProgress();
         }
 
         function resetShipRunScrub() {
@@ -446,6 +496,7 @@
             gsap.set(shipRunStaticScene, { opacity: 1 });
             el.concept.classList.remove('is-awaiting-entry', 'is-revealed');
             requestShipRunRender();
+            updateHeroRunProgress();
         }
 
         function completeShipRunScrub() {
@@ -454,6 +505,7 @@
             shipRunHasCompleted = true;
             shipRunHeroRestored = false;
             gsap.set(el.shipRunWhiteout, { opacity: 1 });
+            updateHeroRunProgress();
 
             requestAnimationFrame(() => {
                 activateCompletedHeroTimeline();
@@ -483,6 +535,7 @@
             el.shipRunAlpha.pause();
             syncShipRunToScroll();
             requestShipRunRender();
+            updateHeroRunProgress();
         }
 
         window.addEventListener('scroll', () => {
@@ -533,6 +586,7 @@
         function handleSiteScrollbarScroll() {
             revealSiteScrollbar();
             requestSiteScrollbarUpdate();
+            updateHeroRunProgress();
         }
 
         function scrollFromScrollbarPointer(clientY, startScroll, startPointerY) {
@@ -605,20 +659,24 @@
            layout(): position everything for BOTH frames, in pixels.
            --------------------------------------------------------- */
         function layout() {
-            const vw = window.innerWidth, vh = window.innerHeight;
             const mobileStatic = isMobileStatic();
+            const vw = window.innerWidth;
+            const vh = mobileStatic ? mobileLayoutViewportHeight : window.innerHeight;
             const staticTopInset = mobileStatic
                 ? readRootPixelValue('--hero-static-top-inset', 48)
                 : 0;
             const staticBottomGap = mobileStatic
                 ? readRootPixelValue('--hero-static-bottom-gap', 32)
                 : 0;
+            const staticStageMaxVW = mobileStatic
+                ? readRootPixelValue('--hero-static-stage-max-vw', 1.8)
+                : 0.98;
 
             // Mobile uses a wider, cropped KV canvas so the complete ship/stair composition
             // has enough vertical room to read as a long-form scene instead of a desktop
             // poster squeezed into one viewport.
             const SW = mobileStatic
-                ? Math.min(vh * stageHeightVH(vw / vh) * KV_RATIO, vw * 1.8)
+                ? Math.min(vh * stageHeightVH(vw / vh) * KV_RATIO, vw * staticStageMaxVW)
                 : Math.min(vh * stageHeightVH(vw / vh) * KV_RATIO, vw * 0.98);
             const SH = SW / KV_RATIO;
             const stageLeft = (vw - SW) / 2;
@@ -775,6 +833,7 @@
                     syncWalls();
                     syncShipLookToTimeline();
                     maintainCompletedHeroScene();
+                    updateHeroRunProgress();
                 },
                 scrollTrigger: STATIC_FRAME ? undefined : {
                     trigger: '#scroller',
@@ -971,6 +1030,7 @@
                         gsap.set([el.shipRunLayer, el.shipRunWhiteout], { opacity: 0 });
                         el.concept.classList.add('is-awaiting-entry', 'is-revealed');
                         requestAnimationFrame(activateCompletedHeroTimeline);
+                        updateHeroRunProgress();
                         return;
                     }
 
@@ -993,6 +1053,7 @@
                         syncShipRunToScroll();
                     }
                     requestSiteScrollbarUpdate();
+                    updateHeroRunProgress();
                 };
 
                 requestAnimationFrame(() => {
@@ -1050,6 +1111,7 @@
             const minTop = Math.min(maxTop, M.SH * 0.48);
             ui.style.top = `${clamp(M.SH * 0.70, minTop, maxTop)}px`;
             el.concept.classList.remove('is-awaiting-entry', 'is-revealed');
+            updateHeroRunProgress();
         }
 
         /* ---------------------------------------------------------
@@ -1084,7 +1146,7 @@
             const exitAt = loadingDuration;
             const loaderIcons = ASSET_ICON_KEYS.map(k => el.loaderIcons[k]);
             const progress = { value: 0 };
-            const iconTargets = {};
+            const assetScatterOrigins = {};
             const assetScatterStartOffset = 0.10;
             const assetScatterStagger = 0.045;
             const assetScatterDuration = 1.06;
@@ -1098,6 +1160,8 @@
             gsap.set('.asset .inner', { opacity: 0 });
             gsap.set('#ui', { opacity: 0, y: 16 });
             gsap.set(loaderIcons, {
+                left: M.vw / 2,
+                top: M.vh / 2,
                 xPercent: -50,
                 yPercent: -50,
                 x: 0,
@@ -1110,14 +1174,22 @@
             ASSET_ICON_KEYS.forEach(k => {
                 const icon = el.loaderIcons[k];
                 const target = el[k].getBoundingClientRect();
-                const initialWidth = Math.max(1, icon.offsetWidth);
-                const posterWidth = parseFloat(el[k].style.width)
-                    * (isMobileStatic() ? 1 : M.assets[k].scale);
-                iconTargets[k] = {
-                    x: target.left + target.width / 2 - M.vw / 2,
-                    y: target.top + target.height / 2 - M.vh / 2,
-                    scale: posterWidth / initialWidth,
-                    rotation: isMobileStatic() ? KV[k].rot : M.assets[k].rotA,
+                const renderedWidth = Math.max(1, target.width);
+                const baseWidth = Math.max(1, Number.parseFloat(el[k].style.width));
+                const parentScale = renderedWidth / baseWidth;
+                const parentRotation = isMobileStatic() ? KV[k].rot : M.assets[k].rotA;
+                const angle = parentRotation * Math.PI / 180;
+                const dx = M.vw / 2 - (target.left + target.width / 2);
+                const dy = M.vh / 2 - (target.top + target.height / 2);
+
+                // Convert the viewport-space offset back into the asset's local axes.
+                // The real asset can then take over from the loader at the exact same
+                // centre point while retaining its own z-index relative to the ship.
+                assetScatterOrigins[k] = {
+                    x: (Math.cos(angle) * dx + Math.sin(angle) * dy) / parentScale,
+                    y: (-Math.sin(angle) * dx + Math.cos(angle) * dy) / parentScale,
+                    scale: Math.max(1, icon.offsetWidth) / renderedWidth,
+                    rotation: -parentRotation,
                 };
             });
 
@@ -1173,17 +1245,23 @@
 
             tl.to(el.loaderProgress, { opacity: 0, y: 8, duration: 0.22 / LOADING_SPEED }, exitAt - 0.12 / LOADING_SPEED);
 
-            // Only the triangle — the icon the spinner already settled on — stays visible at
-            // center. The other five stay hidden there, ready to appear the instant each one
-            // peels off toward its own poster slot, so it reads as one icon splitting into six.
+            // Hand the centre icon over to the real hero assets before scattering. Using
+            // the actual nodes here keeps every icon in its intended layer relative to the
+            // ship; loader copies would all sit in the loader's topmost stacking context.
             ASSET_ICON_KEYS.forEach(k => {
                 const isSeed = k === 'triangle';
                 tl.set(el.loaderIcons[k], {
-                    opacity: isSeed ? 1 : 0,
+                    opacity: 0,
                     x: 0,
                     y: 0,
                     scale: isSeed ? 1 : 0.5,
                     rotation: 0,
+                }, exitAt);
+                tl.set(el[k + 'Inner'], {
+                    ...assetScatterOrigins[k],
+                    scale: assetScatterOrigins[k].scale * (isSeed ? 1 : 0.5),
+                    opacity: isSeed ? 1 : 0,
+                    transformOrigin: '50% 50%',
                 }, exitAt);
             });
 
@@ -1199,20 +1277,17 @@
                 .to('#ui', { opacity: 1, y: 0, duration: 0.62 }, exitAt + 0.64);
 
             ASSET_ICON_KEYS.forEach((k, i) => {
-                const icon = el.loaderIcons[k];
-                const target = iconTargets[k];
                 const at = exitAt + assetScatterStartOffset + i * assetScatterStagger;
 
-                tl.set(icon, { zIndex: 20 + i }, at)
-                    .to(icon, {
-                        opacity: 1,
-                        x: target.x,
-                        y: target.y,
-                        scale: target.scale,
-                        rotation: target.rotation,
-                        duration: assetScatterDuration,
-                        ease: 'power3.inOut',
-                    }, at);
+                tl.to(el[k + 'Inner'], {
+                    opacity: 1,
+                    x: 0,
+                    y: 0,
+                    scale: 1,
+                    rotation: 0,
+                    duration: assetScatterDuration,
+                    ease: 'power3.inOut',
+                }, at);
             });
 
             tl.set('.asset .inner', { opacity: 1 }, exitAt + 1.54)
@@ -1332,6 +1407,7 @@
                 playIntro();
                 setupConceptVideoMotion();
                 requestSiteScrollbarUpdate();
+                updateHeroRunProgress();
                 return;
             }
 
@@ -1349,6 +1425,7 @@
             }
             setupConceptVideoMotion();
             requestSiteScrollbarUpdate();
+            updateHeroRunProgress();
 
         }
 
@@ -1362,8 +1439,21 @@
             const nextWidth = window.innerWidth;
             const nextHeight = window.innerHeight;
             if (nextWidth === viewportWidth && nextHeight === viewportHeight) return;
+            const widthChanged = nextWidth !== viewportWidth;
             viewportWidth = nextWidth;
             viewportHeight = nextHeight;
+
+            // Collapsing/expanding Safari chrome is a height-only resize. Rebuilding the
+            // mobile scene here caused the ship, people and asset icons to grow mid-scroll.
+            if (isMobileStatic() && !widthChanged) {
+                requestSiteScrollbarUpdate();
+                updateHeroRunProgress();
+                return;
+            }
+
+            // A real width change (orientation or responsive breakpoint) gets a fresh,
+            // stable height baseline for the new layout.
+            if (widthChanged) mobileLayoutViewportHeight = nextHeight;
 
             if (rAF) cancelAnimationFrame(rAF);
             rAF = requestAnimationFrame(() => {
@@ -1384,6 +1474,7 @@
                 setupConceptVideoMotion();
                 ScrollTrigger.refresh();
                 requestSiteScrollbarUpdate();
+                updateHeroRunProgress();
             });
         });
 

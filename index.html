@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="css/main.css?v=11">
-    <link rel="stylesheet" href="css/style.css?v=73">
+    <link rel="stylesheet" href="css/style.css?v=84">
 </head>
 
 <body class="is-loading">
@@ -111,6 +111,9 @@
         aria-valuenow="0" tabindex="-1">
         <span class="site-scrollbar__thumb"></span>
     </div>
+    <button class="back-to-top" type="button" aria-label="กลับไปด้านบน" aria-hidden="true">
+        <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-arrow-up-right"></use></svg>
+    </button>
     <div id="home" aria-hidden="true"></div>
 
 
@@ -387,6 +390,8 @@
                         </div>
                     </div>
 
+                    <a class="bt-action-button bt-action-button--primary bt-action-button--xl ticket__action" href="#contact">เลือก Ultimate</a>
+
                     <dl class="ticket__access">
                         <div><dt class="ticket__access-label ticket__access-label--conference"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-presentation"></use></svg><span>Conference</span></dt><dd class="ticket__status ticket__status--included"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-check"></use></svg><span class="visually-hidden">รวมในบัตร</span></dd></div>
                         <div><dt class="ticket__access-label ticket__access-label--experience"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-box"></use></svg><span>Experience</span></dt><dd class="ticket__status ticket__status--included"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-check"></use></svg><span class="visually-hidden">รวมในบัตร</span></dd></div>
@@ -395,8 +400,6 @@
                         <div><dt class="ticket__access-label ticket__access-label--private-class"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-users"></use></svg><span>Private Class</span></dt><dd class="ticket__status ticket__status--excluded"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-minus"></use></svg><span class="visually-hidden">ไม่รวมในบัตร</span></dd></div>
                         <div><dt class="ticket__access-label ticket__access-label--playbook"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-book-open"></use></svg><span>Playbook</span></dt><dd class="ticket__status ticket__status--playbook">Full</dd></div>
                     </dl>
-
-                    <a class="bt-action-button bt-action-button--primary bt-action-button--xl ticket__action" href="#contact">เลือก Ultimate</a>
                 </article>
 
                 <article class="ticket__plan ticket__plan--master col-12 col-lg-4" aria-labelledby="ticket-master-title">
@@ -417,6 +420,8 @@
                         </div>
                     </div>
 
+                    <a class="bt-action-button bt-action-button--secondary bt-action-button--xl ticket__action" href="#contact">เลือก Master Class</a>
+
                     <dl class="ticket__access">
                         <div><dt class="ticket__access-label ticket__access-label--conference"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-presentation"></use></svg><span>Conference</span></dt><dd class="ticket__status ticket__status--excluded"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-minus"></use></svg><span class="visually-hidden">ไม่รวมในบัตร</span></dd></div>
                         <div><dt class="ticket__access-label ticket__access-label--experience"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-box"></use></svg><span>Experience</span></dt><dd class="ticket__status ticket__status--included"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-check"></use></svg><span class="visually-hidden">รวมในบัตร</span></dd></div>
@@ -425,8 +430,6 @@
                         <div><dt class="ticket__access-label ticket__access-label--private-class"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-users"></use></svg><span>Private Class</span></dt><dd class="ticket__status ticket__status--included"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-check"></use></svg><span class="visually-hidden">รวมในบัตร</span></dd></div>
                         <div><dt class="ticket__access-label ticket__access-label--playbook"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-book-open"></use></svg><span>Playbook</span></dt><dd class="ticket__status ticket__status--playbook">Lite</dd></div>
                     </dl>
-
-                    <a class="bt-action-button bt-action-button--secondary bt-action-button--xl ticket__action" href="#contact">เลือก Master Class</a>
                 </article>
 
                 <article class="ticket__plan col-12 col-lg-4" aria-labelledby="ticket-explorer-title">
@@ -447,6 +450,8 @@
                         </div>
                     </div>
 
+                    <a class="bt-action-button bt-action-button--secondary bt-action-button--xl ticket__action" href="#contact">เลือก Explorer</a>
+
                     <dl class="ticket__access">
                         <div><dt class="ticket__access-label ticket__access-label--conference"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-presentation"></use></svg><span>Conference</span></dt><dd class="ticket__status ticket__status--excluded"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-minus"></use></svg><span class="visually-hidden">ไม่รวมในบัตร</span></dd></div>
                         <div><dt class="ticket__access-label ticket__access-label--experience"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-box"></use></svg><span>Experience</span></dt><dd class="ticket__status ticket__status--included"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-check"></use></svg><span class="visually-hidden">รวมในบัตร</span></dd></div>
@@ -455,8 +460,6 @@
                         <div><dt class="ticket__access-label ticket__access-label--private-class"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-users"></use></svg><span>Private Class</span></dt><dd class="ticket__status ticket__status--excluded"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-minus"></use></svg><span class="visually-hidden">ไม่รวมในบัตร</span></dd></div>
                         <div><dt class="ticket__access-label ticket__access-label--playbook"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-book-open"></use></svg><span>Playbook</span></dt><dd class="ticket__status ticket__status--playbook">Lite</dd></div>
                     </dl>
-
-                    <a class="bt-action-button bt-action-button--secondary bt-action-button--xl ticket__action" href="#contact">เลือก Explorer</a>
                 </article>
             </div>
 
@@ -476,33 +479,33 @@
                 <div class="ticket__formats-grid">
                     <article class="ticket__format ticket__format--conference">
                         <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-presentation"></use></svg>
-                        <div class="ticket__format-copy"><h4>Conference</h4><p>ร่วมฟังแนวคิดจากวิทยากรระดับแนวหน้าของไทย เจาะภาพใหญ่ เทรนด์ และมุมมองการลงทุนที่ไม่ยึดติดกับตลาดแบบเดิม</p></div>
+                        <div class="ticket__format-copy"><h4>Conference</h4><p>ร่วมเดินทางไปกับวิทยากรระดับแนวหน้าของไทยในแต่ละวงการการลงทุนในรูปแบบต่าง ๆ ตามยุคสมัยที่ไม่ยึดติดกับตลาดการลงทุนแบบเดิม</p></div>
                     </article>
 
                     <article class="ticket__format ticket__format--experience">
                         <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-box"></use></svg>
-                        <div class="ticket__format-copy"><h4>Experience</h4><p>ค้นหาประสบการณ์ใหม่กับแบรนด์ชั้นนำ ผ่านกิจกรรมที่เปิดโอกาสให้ทดลอง สัมผัสความสนุก และค้นพบความสนใจใหม่ของตัวเอง</p></div>
+                        <div class="ticket__format-copy"><h4>Experience</h4><p>ค้นหาประสบการณ์ใหม่กับบูธแบรนด์ชั้นนำ ที่ทุกกิจกรรมเปิดโอกาสให้สัมผัสความสนุก รางวัลและการค้นหาตัวตนในทุก ๆ ก้าวความสนใจ</p></div>
                     </article>
 
                     <article class="ticket__format ticket__format--pavilions">
                         <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-store"></use></svg>
-                        <div class="ticket__format-copy"><h4>Pavilions</h4><p>พื้นที่รวมเรื่องราวของนักสะสม เดินชม แลกเปลี่ยน และค้นหา Rare Item จากโลกของการ์ด ของสะสม และแบรนด์เนม</p></div>
+                        <div class="ticket__format-copy"><h4>Pavilions</h4><p>ตลาดของนักสะสมที่ทุกบูธมีเรื่องราวให้ค้นหา ร่วมเดินช้อป แลกเปลี่ยน และค้นหา Rare Item ในวงการการ์ดและแบรนด์เนม</p></div>
                     </article>
 
                     <article class="ticket__format ticket__format--workshop">
                         <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-presentation"></use></svg>
-                        <div class="ticket__format-copy"><h4>Workshop</h4><p>ยกระดับการเรียนรู้ด้วยการลงมือทำจริง อัปสกิลแบบ Step by Step ไปพร้อมกับมืออาชีพตัวจริงในแต่ละวงการ</p></div>
+                        <div class="ticket__format-copy"><h4>Workshop</h4><p>อีกระดับของการเรียนรู้ ลงมือทำจริง อัปสกิลกัน Step by Step กับมืออาชีพ ตัวจริง ในแต่ละวงการ</p></div>
                     </article>
 
                     <article class="ticket__format ticket__format--private-class">
                         <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-users"></use></svg>
-                        <div class="ticket__format-copy"><h4>Private Class</h4><p>คลาสกลุ่มเล็กสำหรับการเรียนรู้เชิงลึก ถามตอบอย่างใกล้ชิด และแลกเปลี่ยนประสบการณ์กับผู้เชี่ยวชาญโดยตรง</p></div>
+                        <div class="ticket__format-copy"><h4>Private Class</h4><p>Coming SOON</p></div>
                     </article>
 
-                    <article class="ticket__format ticket__format--playbook">
+                    <!-- <article class="ticket__format ticket__format--playbook">
                         <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-book-open"></use></svg>
                         <div class="ticket__format-copy"><h4>Playbook</h4><p>คู่มือรวบรวมกรอบคิด เครื่องมือ และประเด็นสำคัญจากงาน เพื่อให้คุณนำความรู้กลับไปทบทวนและต่อยอดได้จริง</p></div>
-                    </article>
+                    </article> -->
                 </div>
             </div>
         </div>
@@ -531,6 +534,7 @@
                                 </span>
                             </span>
                         </a>
+                        <span class="agenda__day-switch-prompt" aria-hidden="true">เลือกวัน</span>
                         <span class="agenda__day-switch-rail" aria-hidden="true"></span>
                         <a id="agenda-day-two-switch" class="agenda__day-switch" href="#agenda-day-two" role="tab" aria-selected="false" aria-controls="agenda-day-two" tabindex="-1">
                             <span class="agenda__day-switch-label">Day 2</span>
@@ -987,7 +991,7 @@
 
         <div class="speaker__inner container">
             <div class="speaker__layout row">
-                <nav class="speaker__day-switcher col-12 col-lg-3" aria-label="เลือกวันของ Speaker">
+                <nav class="speaker__day-switcher col-12 col-md-3" aria-label="เลือกวันของ Speaker">
                     <!-- <p class="speaker__eyebrow">Speaker</p> -->
                     <div class="speaker__day-switcher-inner" role="tablist" aria-orientation="vertical">
                         <a id="speaker-day-one-switch" class="speaker__day-switch" href="#speaker-day-one" role="tab" aria-selected="true" aria-controls="speaker-day-one" aria-current="true">
@@ -999,6 +1003,7 @@
                                 </span>
                             </span>
                         </a>
+                        <span class="speaker__day-switch-prompt" aria-hidden="true">เลือกวัน</span>
                         <span class="speaker__day-switch-rail" aria-hidden="true"></span>
                         <a id="speaker-day-two-switch" class="speaker__day-switch" href="#speaker-day-two" role="tab" aria-selected="false" aria-controls="speaker-day-two" tabindex="-1">
                             <span class="speaker__day-switch-label">Day 2</span>
@@ -1012,7 +1017,7 @@
                     </div>
                 </nav>
 
-                <div class="speaker__days col-12 col-lg-9">
+                <div class="speaker__days col-12 col-md-9">
                     <div id="speaker-day-one" class="speaker__day-panel" data-speaker-day-panel="day-one" role="tabpanel" aria-labelledby="speaker-day-one-switch">
                         <div class="speaker__panel" data-speaker-day="dayOne"></div>
                     </div>
@@ -1315,19 +1320,21 @@
 
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="js/action-button.js"></script>
-    <script src="js/agenda-tabs.js?v=4"></script>
-    <script src="js/speaker-directory.js?v=4"></script>
+    <script src="js/agenda-tabs.js?v=5"></script>
+    <script src="js/speaker-directory.js?v=5"></script>
     <script src="js/expectation-counter.js?v=1"></script>
+    <script src="js/back-to-top.js?v=2"></script>
     <script src="js/hero-v2-header.js?v=6"></script>
+    <script src="js/in-page-navigation.js?v=1"></script>
 
     <!-- Liquid metal CTAs (WebGL). Module scripts are deferred, so this runs after
      the markup exists but before window 'load' fires the hero intro. -->
-    <script type="module" src="js/hero-v2-cta.js?v=2"></script>
+    <script type="module" src="js/hero-v2-cta.js?v=3"></script>
     <script src="js/event-countdown.js"></script>
 
     <script src="vendor/gsap/gsap.min.js"></script>
     <script src="vendor/gsap/ScrollTrigger.min.js"></script>
-    <script src="js/hero-v2-scroll-motion.js?v=12"></script>
+    <script src="js/hero-v2-scroll-motion.js?v=14"></script>
     <script src="js/topics-reveal.js?v=4"></script>
     <script src="js/topics-assets-motion.js?v=7"></script>
     <!-- หลัง hero เพราะ ScrollTrigger refresh ตามลำดับที่สร้าง และ speaker อยู่ใต้ hero ในหน้า -->

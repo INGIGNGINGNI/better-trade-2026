@@ -145,6 +145,8 @@
     --radius-round: 999px;
     --border-width-1: 1px;
     --border-width-2: 2px;
+    --border-width-4: 4px;
+    --border-width-6: 6px;
 
     /* Primitive: typography */
     --font-family-base: "FC Minimal";
@@ -275,7 +277,6 @@
     --section-topic-size-sm: var(--font-size-20);
     --section-topic-size-xs: var(--font-size-16);
     --section-body-size: var(--font-size-16);
-    ;
     --section-small-size: var(--font-size-14);
     --section-subtext-size: var(--font-size-18);
     --section-tag-size: var(--font-size-14);

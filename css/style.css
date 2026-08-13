@@ -95,6 +95,156 @@ body.is-loading .site-scrollbar,
     pointer-events: none;
 }
 
+.back-to-top {
+    --back-to-top-progress: 0deg;
+
+    position: fixed;
+    right: max(var(--space-5), env(safe-area-inset-right));
+    bottom: max(var(--space-5), env(safe-area-inset-bottom));
+    z-index: 240;
+    width: var(--touch-target-md);
+    height: var(--touch-target-md);
+    display: inline-grid;
+    place-items: center;
+    padding: 0;
+    isolation: isolate;
+    overflow: hidden;
+    border: var(--border-width-1) solid var(--alpha-ink-12);
+    border-radius: 50%;
+    color: var(--color-text-primary);
+    background: color-mix(in srgb, var(--color-surface-page) 88%, #ffffff);
+    box-shadow: 0 var(--space-2) var(--space-6) var(--alpha-ink-16);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(var(--space-3)) scale(0.94);
+    transition:
+        opacity var(--duration-standard) var(--ease-standard),
+        transform var(--duration-standard) var(--ease-standard),
+        color var(--duration-fast) var(--ease-standard),
+        background-color var(--duration-fast) var(--ease-standard),
+        border-color var(--duration-fast) var(--ease-standard);
+
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        border-radius: inherit;
+        pointer-events: none;
+    }
+
+    &::before {
+        inset: -1px;
+        z-index: 0;
+        background: var(--spectrum);
+        -webkit-mask:
+            radial-gradient(farthest-side, transparent calc(100% - var(--border-width-6)), #000 0),
+            conic-gradient(from -90deg, #000 var(--back-to-top-progress), transparent 0);
+        -webkit-mask-composite: source-in;
+        mask:
+            radial-gradient(farthest-side, transparent calc(100% - var(--border-width-6)), #000 0),
+            conic-gradient(from -90deg, #000 var(--back-to-top-progress), transparent 0);
+        mask-composite: intersect;
+        opacity: 0;
+    }
+
+    &::after {
+        inset: var(--space-1);
+        z-index: 1;
+        background: color-mix(in srgb, var(--color-surface-page) 88%, #ffffff);
+    }
+
+    .bt-icon {
+        position: relative;
+        z-index: 2;
+        width: var(--space-5);
+        height: var(--space-5);
+        transform: rotate(-45deg);
+        stroke-width: 2.25;
+        opacity: 0;
+        transition: opacity var(--duration-fast) var(--ease-standard);
+    }
+
+    &:hover {
+        color: var(--color-surface-page);
+        border-color: var(--color-text-primary);
+        background: var(--color-text-primary);
+
+        &::after {
+            background: var(--color-text-primary);
+        }
+    }
+
+    &:focus-visible {
+        opacity: 1;
+        pointer-events: auto;
+        outline: var(--border-width-2) solid var(--color-accent-primary);
+        outline-offset: var(--space-1);
+    }
+}
+
+.back-to-top.is-progress {
+    pointer-events: none;
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+
+    &::before {
+        opacity: 1;
+    }
+
+    &::after {
+        background: transparent;
+    }
+}
+
+.back-to-top.is-ready {
+    --back-to-top-progress: 360deg;
+
+    animation: back-to-top-ready-pop var(--duration-slow) var(--ease-standard) both;
+
+    .bt-icon {
+        opacity: 1;
+    }
+}
+
+@keyframes back-to-top-ready-pop {
+    0% {
+        transform: translateY(var(--space-4)) scale(0.82);
+    }
+
+    62% {
+        transform: translateY(calc(var(--space-1) * -1)) scale(1.06);
+    }
+
+    100% {
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .back-to-top.is-ready {
+        animation: none;
+    }
+}
+
+.back-to-top.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+}
+
+.back-to-top.is-visible.is-progress {
+    pointer-events: none;
+}
+
+body.is-loading .back-to-top,
+body.menu-open .back-to-top,
+body.menu-closing .back-to-top {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(var(--space-3)) scale(0.94);
+}
+
 p {
     font-family: var(--font);
 }
@@ -1086,7 +1236,7 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 #ui .event-countdown__unit strong {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 500;
     line-height: 1;
 }
@@ -1139,12 +1289,12 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 #ui .time {
-    font-size: 20px;
+    font-size: 24px;
     line-height: inherit;
 }
 
 #ui .date {
-    font-size: 20px;
+    font-size: 24px;
     white-space: nowrap;
 }
 
@@ -1821,10 +1971,6 @@ the timeline drops them under the ship once the walls have retreated. */
         &:not(:first-child) {
             border-left: var(--rule-width-subtle) solid var(--color-border-faint);
         }
-
-        &:hover {
-            background: var(--color-surface-paper);
-        }
     }
 
     .ticket__plan--ultimate {
@@ -1832,7 +1978,7 @@ the timeline drops them under the ship once the walls have retreated. */
         background:
             linear-gradient(color-mix(in srgb, var(--color-surface-page) 68%, var(--color-surface-paper)), color-mix(in srgb, var(--color-surface-page) 68%, var(--color-surface-paper))) padding-box,
             var(--spectrum) border-box;
-        border-top-width: var(--border-width-2);
+        border-top-width: var(--border-width-6);
         /* box-shadow:
             0 18px 48px rgba(17, 19, 24, 0.10),
             0 0 0 1px var(--alpha-ink-06); */
@@ -1924,7 +2070,7 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .ticket__access {
-        margin: var(--space-6) 0 var(--space-8);
+        margin: var(--space-6) 0 0;
 
         >div {
             min-height: var(--space-12);
@@ -2022,7 +2168,7 @@ the timeline drops them under the ship once the walls have retreated. */
 
     .ticket__action {
         width: 100%;
-        margin-top: auto;
+        margin: var(--space-6) 0 0;
 
         /* ปุ่ม Ultimate ใช้สีดำล้วน ไม่มีขอบ spectrum */
         &.bt-action-button--primary {
@@ -2156,9 +2302,15 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     @media (max-width:1199px) {
+        --bt-ticket-price-size: var(--font-size-32);
+
         .ticket__plan-header h3 {
             display: flex;
             flex-direction: column;
+        }
+
+        .ticket__price strong {
+            font-size: var(--bt-ticket-price-size);
         }
     }
 
@@ -2254,7 +2406,7 @@ the timeline drops them under the ship once the walls have retreated. */
         }
 
         .ticket__access {
-            margin: var(--space-4) var(--space-0) var(--space-6);
+            margin: var(--space-4) var(--space-0) var(--space-0);
         }
 
         .ticket__benefits {
@@ -2478,6 +2630,10 @@ the timeline drops them under the ship once the walls have retreated. */
         height: var(--space-28);
         background: var(--color-border-editorial);
         pointer-events: none;
+    }
+
+    .agenda__day-switch-prompt {
+        display: none;
     }
 
     /* ช่วงสเปกตรัมครึ่งเส้น เลื่อนไปเกาะฝั่งของวันที่เลือก — ล้อกับตัวชี้ใต้ Stage tabs
@@ -2787,8 +2943,8 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     @media (max-width:991px) {
-        --agenda-day-label-size: var(--font-size-40);
-        --agenda-day-label-active-size: var(--font-size-24);
+        --agenda-day-label-size: var(--font-size-24);
+        --agenda-day-label-active-size: var(--font-size-40);
 
         padding: var(--section-padding-y-sm) 0;
 
@@ -2852,7 +3008,7 @@ the timeline drops them under the ship once the walls have retreated. */
 
         .agenda__day-switcher-inner {
             position: relative;
-            width: min(100%, 280px);
+            width: min(100%, 360px);
             grid-template-columns: repeat(2, minmax(0, 1fr));
             justify-items: stretch;
             align-items: end;
@@ -2931,13 +3087,26 @@ the timeline drops them under the ship once the walls have retreated. */
         .agenda__day-switch-rail {
             position: absolute;
             top: calc(var(--touch-target-md) / 2);
-            right: var(--space-20);
-            left: var(--space-20);
+            right: 34%;
+            left: 34%;
             display: block;
             width: auto;
             height: var(--rule-width-subtle);
             background: var(--color-border-editorial);
             transform: translateY(-50%);
+        }
+
+        .agenda__day-switch-prompt {
+            position: absolute;
+            top: calc((var(--touch-target-md) / 2) - var(--space-8));
+            left: 50%;
+            display: block;
+            color: var(--color-text-muted);
+            font-size: var(--section-body-size);
+            font-weight: var(--font-weight-medium);
+            line-height: var(--section-body-line-height);
+            transform: translateX(-50%);
+            white-space: nowrap;
         }
 
         .agenda__day-switch-rail::after {
@@ -3041,6 +3210,15 @@ the timeline drops them under the ship once the walls have retreated. */
     @media (max-width:575px) {
         --agenda-day-label-size: var(--font-size-28);
         --agenda-day-label-active-size: var(--font-size-28);
+
+        .agenda__day-switcher-inner {
+            width: min(100%, 320px);
+        }
+
+        .agenda__day-switch-rail {
+            right: 34%;
+            left: 34%;
+        }
 
         .agenda__day-switch,
         .agenda__day-switch-label {
@@ -3188,6 +3366,14 @@ the timeline drops them under the ship once the walls have retreated. */
     color: var(--color-text-primary);
     background: var(--color-surface-page);
     font-family: var(--font-family-base);
+    --speaker-day-label-size: var(--font-size-24);
+    --speaker-day-label-line-height: 56px;
+    --speaker-day-label-weight: var(--font-weight-regular);
+    --speaker-day-label-color: var(--color-text-inverse-muted);
+    --speaker-day-label-active-size: var(--font-size-48);
+    --speaker-day-label-active-line-height: var(--section-topic-line-height);
+    --speaker-day-label-active-weight: var(--font-weight-regular);
+    --speaker-day-label-active-color: var(--color-text-primary);
 
     .speaker__section-header {
         margin-bottom: var(--space-20);
@@ -3243,10 +3429,10 @@ the timeline drops them under the ship once the walls have retreated. */
         width: fit-content;
         min-width: 0;
         padding: 0;
-        color: var(--color-text-muted);
-        font-size: var(--section-subheading-size);
-        font-weight: var(--font-weight-regular);
-        line-height: var(--section-topic-line-height);
+        color: var(--speaker-day-label-color);
+        font-size: var(--speaker-day-label-size);
+        font-weight: var(--speaker-day-label-weight);
+        line-height: var(--speaker-day-label-line-height);
         letter-spacing: 0;
         text-decoration: none;
         text-transform: uppercase;
@@ -3256,11 +3442,11 @@ the timeline drops them under the ship once the walls have retreated. */
 
         &:hover,
         &:focus-visible {
-            color: var(--color-text-primary);
+            color: var(--speaker-day-label-active-color);
         }
 
         &[aria-current='true'] {
-            color: var(--color-text-primary);
+            color: var(--speaker-day-label-active-color);
         }
 
         &:focus-visible {
@@ -3271,6 +3457,7 @@ the timeline drops them under the ship once the walls have retreated. */
 
     .speaker__day-switch-label {
         display: block;
+        font-size: var(--speaker-day-label-size);
         transition:
             font-size var(--duration-base) var(--ease-standard),
             line-height var(--duration-base) var(--ease-standard),
@@ -3303,8 +3490,9 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .speaker__day-switch[aria-current='true'] .speaker__day-switch-label {
-        font-size: var(--section-title-size);
-        line-height: 56px;
+        font-size: var(--speaker-day-label-active-size);
+        font-weight: var(--speaker-day-label-active-weight);
+        line-height: var(--speaker-day-label-active-line-height);
     }
 
     .speaker__day-switch[aria-current='true'] .speaker__day-switch-details {
@@ -3321,6 +3509,10 @@ the timeline drops them under the ship once the walls have retreated. */
         height: var(--space-28);
         background: var(--color-border-editorial);
         pointer-events: none;
+    }
+
+    .speaker__day-switch-prompt {
+        display: none;
     }
 
     .speaker__day-switch-rail::after {
@@ -3385,6 +3577,9 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     @media (max-width: 991px) {
+        --speaker-day-label-size: var(--font-size-24);
+        --speaker-day-label-active-size: var(--font-size-40);
+
         padding: var(--section-padding-y-sm) 0;
 
         .speaker__section-header {
@@ -3403,6 +3598,13 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     @media (max-width: 767px) {
+        --speaker-day-label-size: var(--font-size-32);
+        --speaker-day-label-line-height: var(--section-topic-line-height);
+        --speaker-day-label-weight: var(--font-weight-regular);
+        --speaker-day-label-active-size: var(--font-size-32);
+        --speaker-day-label-active-line-height: var(--speaker-day-label-line-height);
+        --speaker-day-label-active-weight: var(--speaker-day-label-weight);
+
         .speaker__layout {
             margin-right: 0;
             margin-left: 0;
@@ -3426,7 +3628,7 @@ the timeline drops them under the ship once the walls have retreated. */
 
         .speaker__day-switcher-inner {
             position: relative;
-            width: min(100%, 280px);
+            width: min(100%, 360px);
             grid-template-columns: repeat(2, minmax(0, 1fr));
             justify-items: stretch;
             align-items: end;
@@ -3440,8 +3642,8 @@ the timeline drops them under the ship once the walls have retreated. */
             padding: 0 0 var(--space-3);
             display: flex;
             align-items: flex-end;
-            font-size: var(--font-size-24);
-            line-height: var(--section-topic-line-height);
+            font-size: var(--speaker-day-label-size);
+            line-height: var(--speaker-day-label-line-height);
             background: transparent;
             text-align: left;
 
@@ -3452,13 +3654,14 @@ the timeline drops them under the ship once the walls have retreated. */
         }
 
         .speaker__day-switch-label {
-            font-size: var(--font-size-24);
-            line-height: var(--section-topic-line-height);
+            font-size: var(--speaker-day-label-size);
+            line-height: var(--speaker-day-label-line-height);
         }
 
         .speaker__day-switch[aria-current='true'] .speaker__day-switch-label {
-            font-size: var(--font-size-24);
-            line-height: var(--section-topic-line-height);
+            font-size: var(--speaker-day-label-active-size);
+            font-weight: var(--speaker-day-label-active-weight);
+            line-height: var(--speaker-day-label-active-line-height);
         }
 
         .speaker__day-switch-details,
@@ -3501,13 +3704,26 @@ the timeline drops them under the ship once the walls have retreated. */
         .speaker__day-switch-rail {
             position: absolute;
             top: calc(var(--touch-target-md) / 2);
-            right: var(--space-20);
-            left: var(--space-20);
+            right: 34%;
+            left: 34%;
             display: block;
             width: auto;
             height: var(--rule-width-subtle);
             background: var(--color-border-editorial);
             transform: translateY(-50%);
+        }
+
+        .speaker__day-switch-prompt {
+            position: absolute;
+            top: calc((var(--touch-target-md) / 2) - var(--space-6));
+            left: 50%;
+            display: block;
+            color: var(--color-text-muted);
+            font-size: var(--section-small-size);
+            font-weight: var(--font-weight-regular);
+            line-height: var(--section-small-line-height);
+            transform: translateX(-50%);
+            white-space: nowrap;
         }
 
         .speaker__day-switch-rail::after {
@@ -3523,6 +3739,20 @@ the timeline drops them under the ship once the walls have retreated. */
 
         .speaker__day-switcher-inner[data-active-day='day-two'] .speaker__day-switch-rail::after {
             transform: translateX(100%);
+        }
+    }
+
+    @media (max-width: 575px) {
+        --speaker-day-label-size: var(--font-size-28);
+        --speaker-day-label-active-size: var(--font-size-28);
+
+        .speaker__day-switcher-inner {
+            width: min(100%, 320px);
+        }
+
+        .speaker__day-switch-rail {
+            right: 34%;
+            left: 34%;
         }
     }
 }
@@ -4192,6 +4422,7 @@ the timeline drops them under the ship once the walls have retreated. */
         .expectation__stats {
             margin-top: var(--space-12);
             row-gap: var(--space-12);
+            justify-content: center;
         }
 
         /* ที่ต่ำกว่า desktop รายการที่ 7 เริ่มแถวสุดท้าย */
@@ -4599,6 +4830,7 @@ the timeline drops them under the ship once the walls have retreated. */
     :root {
         --hero-static-top-inset: 48px;
         --hero-static-bottom-gap: 32px;
+        --hero-static-stage-max-vw: 1.8;
     }
 
     body.is-mobile-static #stagewrap {
@@ -4680,6 +4912,7 @@ the timeline drops them under the ship once the walls have retreated. */
     :root {
         --hero-static-top-inset: 32px;
         --hero-static-bottom-gap: 80px;
+        --hero-static-stage-max-vw: 1.68;
     }
 
     .loader-icon {
