@@ -78,8 +78,10 @@
         card.style.setProperty('--speaker-portrait-y', portraitFocusY[imageIndex - 1]);
         card.innerHTML = `
             <div class="speaker-card__portrait">
-                <img src="images/speakers/speaker-${imageIndex}.png" width="397" height="793"
-                    loading="lazy" decoding="async" alt="${name}">
+                <div class="speaker-card__frame">
+                    <img src="images/speakers/speaker-${imageIndex}.png" width="397" height="793"
+                        loading="lazy" decoding="async" alt="${name}">
+                </div>
             </div>
             <div class="speaker-card__meta">
                 <h3>${name}</h3>
@@ -107,8 +109,18 @@
         ? Array.from(daySwitcher.querySelectorAll('.speaker__day-switch[role="tab"]'))
         : [];
     const dayPanels = Array.from(document.querySelectorAll('[data-speaker-day-panel]'));
+    const mobileDaySwitcher = window.matchMedia('(max-width: 767px)');
 
     if (!dayLinks.length || !dayPanels.length) return;
+
+    if (daySwitcher) {
+        const syncDaySwitcherOrientation = () => {
+            daySwitcher.setAttribute('aria-orientation', mobileDaySwitcher.matches ? 'horizontal' : 'vertical');
+        };
+
+        syncDaySwitcherOrientation();
+        mobileDaySwitcher.addEventListener('change', syncDaySwitcherOrientation);
+    }
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let motionRefreshTimer = 0;
@@ -185,7 +197,15 @@
         daySwitcher.dataset.activeDay = activePanel.dataset.speakerDayPanel || '';
 
         if (revealTop) {
-            revealPanelTop(activePanel);
+            if (mobileDaySwitcher.matches) {
+                daySwitcher.closest('.speaker__day-switcher').scrollIntoView({
+                    block: 'start',
+                    behavior: reducedMotion.matches ? 'auto' : 'smooth',
+                });
+                refreshSpeakerMotion(activePanel);
+            } else {
+                revealPanelTop(activePanel);
+            }
         } else {
             refreshSpeakerMotion(activePanel);
         }

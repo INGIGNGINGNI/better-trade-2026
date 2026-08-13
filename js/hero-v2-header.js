@@ -1,5 +1,6 @@
         const siteHeaderToggle = document.querySelector('.site-header__toggle');
         const siteHeader = document.querySelector('.site-header');
+        const siteHeaderInner = siteHeader?.querySelector('.site-header__inner');
         const siteHeaderBackdrop = document.querySelector('.site-header__backdrop');
         const siteHeaderMobile = document.getElementById('site-mobile-menu');
         const siteHeaderMobileLinks = document.querySelectorAll('.site-header__mobile a');
@@ -24,18 +25,26 @@
         const HEADER_HIDE_AT_RATIO = 0.12;
         const HEADER_STICKY_BUFFER = 4;
 
-        function updateSiteHeader() {
-            if (document.body.classList.contains('menu-open') || document.body.classList.contains('menu-closing')) {
-                siteHeader.classList.remove('is-hidden');
-                return;
-            }
+        function setHeaderSticky(sticky) {
+            siteHeader.classList.toggle('is-sticky', sticky);
+            siteHeaderInner?.classList.toggle('container', sticky);
+        }
 
+        function updateSiteHeader() {
             const heroScrollDistance = getHeroScrollDistance();
             const hideAt = heroScrollDistance * HEADER_HIDE_AT_RATIO;
             const stickyAt = Math.max(0, heroScrollDistance - HEADER_STICKY_BUFFER);
             const y = window.scrollY;
 
+            const sticky = y >= stickyAt;
             const hidden = y >= hideAt && y < stickyAt;
+            setHeaderSticky(sticky);
+
+            if (document.body.classList.contains('menu-open') || document.body.classList.contains('menu-closing')) {
+                siteHeader.classList.remove('is-hidden');
+                return;
+            }
+
             siteHeader.classList.toggle('is-hidden', hidden);
         }
 

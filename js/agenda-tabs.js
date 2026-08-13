@@ -120,6 +120,16 @@
         ? Array.from(daySwitcher.querySelectorAll('.agenda__day-switch[role="tab"]'))
         : [];
     const dayPanels = Array.from(document.querySelectorAll('[data-agenda-day-panel]'));
+    const mobileDaySwitcher = window.matchMedia('(max-width: 767px)');
+
+    if (daySwitcher) {
+        const syncDaySwitcherOrientation = () => {
+            daySwitcher.setAttribute('aria-orientation', mobileDaySwitcher.matches ? 'horizontal' : 'vertical');
+        };
+
+        syncDaySwitcherOrientation();
+        mobileDaySwitcher.addEventListener('change', syncDaySwitcherOrientation);
+    }
 
     const updateDaySwitch = (activeLink) => {
         if (!activeLink) return;
@@ -161,7 +171,11 @@
            พอสลับจะไปโผล่กลางตารางของอีกวันทันที scroll-margin-top ของแผงทำให้
            หยุดใต้ header พอดี (ตั้งไว้แล้วใน .agenda__day-panel) */
         if (revealTop) {
-            activePanel.scrollIntoView({
+            const revealTarget = mobileDaySwitcher.matches
+                ? daySwitcher.closest('.agenda__day-switcher')
+                : activePanel;
+
+            revealTarget.scrollIntoView({
                 block: 'start',
                 behavior: reducedMotion.matches ? 'auto' : 'smooth',
             });

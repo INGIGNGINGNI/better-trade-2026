@@ -120,37 +120,62 @@ css/
 - reusable component/class ต้องเขียนไว้ใน `main.css` เท่านั้น
 - section-specific class ต้องเขียนไว้ใน `style.css` เท่านั้น และห้ามนำไป reuse ข้าม section
 
+### Design Token Architecture
+
+จัด token ใน `:root` เป็นชั้นเสมอ เพื่อให้สามารถนำระบบกลางไปใช้กับโปรเจกต์อื่นได้ง่าย และลดการผูกค่ากับหน้าใดหน้าหนึ่ง
+
+ลำดับชั้น token:
+
+1. `Primitive Tokens` คือค่าดิบกลาง เช่น สี, spacing, radius, font size, shadow, motion ห้ามตั้งชื่อผูกกับ section หรือ campaign
+2. `Semantic Tokens` คือค่าที่บอกหน้าที่การใช้งาน เช่น text, surface, border, accent โดยอ้างกลับไปยัง primitive
+3. `System Tokens` คือ token สำหรับระบบ UI ที่ reuse ได้ เช่น section typography, layout, component size, rule, card, button
+4. `Project Alias Tokens` คือ token เฉพาะโปรเจกต์ เช่น `--bt-*` เพื่อให้ CSS เดิมหรือ brand-specific UI ใช้งานได้ โดยต้องอ้างกลับไปยัง token ชั้นก่อนหน้าให้มากที่สุด
+
+หลัก naming:
+
+- Primitive ใช้ชื่อกลาง เช่น `--color-neutral-900`, `--space-12`, `--radius-2`, `--font-size-16`
+- Semantic ใช้ชื่อจากหน้าที่ เช่น `--color-text-primary`, `--color-surface-page`, `--color-border-subtle`
+- สีที่ใช้แทนสถานะหรือหมวดเนื้อหา ต้องอยู่ใน Semantic เช่น `--color-state-success`, `--color-access-conference`, `--color-topic-capital`
+- System ใช้ชื่อระดับระบบ เช่น `--section-title-size`, `--button-height-md`, `--card-radius`
+- Project alias ใช้ prefix โปรเจกต์หรือ section เช่น `--bt-ticket-conference`, `--bt-agenda-time-width`, `--bt-footer-panel-bg`
+- ห้ามตั้งชื่อ token ตามตำแหน่งเฉพาะหน้า เช่น `--ticket-card-left-gap` ใน `:root` ยกเว้นเป็น project alias ที่จำเป็นจริง
+
 ตัวอย่าง `main.css`:
 
 ```css
 :root {
-  --font-size-12: 12px;
+  /* Primitive Tokens */
+  --color-neutral-0: #ffffff;
+  --color-neutral-900: #111318;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-12: 48px;
+  --radius-2: 8px;
   --font-size-16: 16px;
   --font-size-24: 24px;
-
-  --space-4: 4px;
-  --space-8: 8px;
-  --space-10: 40px;
-  --space-16: 16px;
-  --space-24: 24px;
-  --space-32: 32px;
-
-  --radius-8: 8px;
-  --radius-16: 16px;
-
-  --duration-fast: 160ms;
   --duration-base: 240ms;
-  --duration-reduced: 1ms;
-  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
-  --animation-iteration-reduced: 1;
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
 
-  --container-hero-max: 1440px;
+  /* Semantic Tokens */
+  --color-text-primary: var(--color-neutral-900);
+  --color-surface-page: var(--color-neutral-0);
+  --color-state-success: var(--color-green-600);
+  --color-topic-capital: var(--color-state-success);
+
+  /* System Tokens */
+  --section-title-size: var(--font-size-24);
+  --button-height-md: var(--space-12);
+  --card-radius: var(--radius-2);
+
+  /* Project Alias Tokens */
+  --bt-color-ink: var(--color-text-primary);
+  --bt-ticket-title-size: var(--section-title-size);
 }
 
 .button {
-  min-height: var(--space-10);
-  padding-inline: var(--space-16);
-  border-radius: var(--radius-8);
+  min-height: var(--button-height-md);
+  padding-inline: var(--space-4);
+  border-radius: var(--card-radius);
   font-size: var(--font-size-16);
 }
 ```

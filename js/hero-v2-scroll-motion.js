@@ -100,8 +100,15 @@
         const LOADER_ORDER = ['bitcoin', 'gold', 'stock', 'triangle'];
         const ASSET_IDLE_ENABLED = true;
         const LOADING_SPEED = 2; // >1 = faster progress bar + icon cycling; the wall/title/header reveal keeps its original pace
-        const mobileStaticQuery = window.matchMedia('(max-width: 991px)');
+        const mobileStaticQuery = window.matchMedia('(max-width: 1199px)');
         const isMobileStatic = () => mobileStaticQuery.matches && !STATIC_FRAME;
+
+        const readRootPixelValue = (property, fallback) => {
+            const value = Number.parseFloat(
+                getComputedStyle(document.documentElement).getPropertyValue(property)
+            );
+            return Number.isFinite(value) ? value : fallback;
+        };
 
         const el = {
             stagewrap: document.getElementById('stagewrap'),
@@ -599,29 +606,36 @@
            --------------------------------------------------------- */
         function layout() {
             const vw = window.innerWidth, vh = window.innerHeight;
+            const mobileStatic = isMobileStatic();
+            const staticTopInset = mobileStatic
+                ? readRootPixelValue('--hero-static-top-inset', 48)
+                : 0;
+            const staticBottomGap = mobileStatic
+                ? readRootPixelValue('--hero-static-bottom-gap', 32)
+                : 0;
 
             // Mobile uses a wider, cropped KV canvas so the complete ship/stair composition
             // has enough vertical room to read as a long-form scene instead of a desktop
             // poster squeezed into one viewport.
-            const SW = isMobileStatic()
+            const SW = mobileStatic
                 ? Math.min(vh * stageHeightVH(vw / vh) * KV_RATIO, vw * 1.8)
                 : Math.min(vh * stageHeightVH(vw / vh) * KV_RATIO, vw * 0.98);
             const SH = SW / KV_RATIO;
             const stageLeft = (vw - SW) / 2;
 
             el.stage.style.cssText =
-                `position:absolute;width:${SW}px;height:${SH}px;left:${stageLeft}px;top:0;will-change:transform;`;
+                `position:absolute;width:${SW}px;height:${SH}px;left:${stageLeft}px;top:${staticTopInset}px;will-change:transform;`;
 
             // How far the camera travels in beat 2.
             const PAN = Math.max(0, SH - vh) * 0.98;
 
             // Background keeps the KV proportion but must cover the viewport in BOTH
             // axes — on a tall/narrow screen, matching width alone leaves a gap below.
-            const mobileBackgroundHeight = SH + 144;
-            const bgW = isMobileStatic()
+            const mobileBackgroundHeight = SH + staticTopInset;
+            const bgW = mobileStatic
                 ? Math.max(vw, SW, mobileBackgroundHeight * KV_RATIO)
                 : Math.max(vw, SW, vh * KV_RATIO);
-            const bgH = isMobileStatic() ? mobileBackgroundHeight : bgW / KV_RATIO;
+            const bgH = mobileStatic ? mobileBackgroundHeight : bgW / KV_RATIO;
             el.bg.style.width = bgW + 'px';
             el.bg.style.height = bgH + 'px';
             el.bg.style.left = ((vw - bgW) / 2) + 'px';
@@ -630,15 +644,17 @@
 
             // Scroll length = the pinned view + beat 1 + however far beat 2 actually moves,
             // so a short camera move never leaves dead scroll behind it.
-            const scrollerHeight = isMobileStatic()
+            const scrollerHeight = mobileStatic
                 ? bgH
                 : vh + vh * 4.1 + PAN * 1.4;
             const heroScrollDistance = Math.max(1, scrollerHeight - vh);
             document.getElementById('scroller').style.height = STATIC_FRAME ? vh + 'px' : scrollerHeight + 'px';
-            el.stagewrap.style.height = isMobileStatic() ? `${scrollerHeight}px` : `${vh}px`;
-            if (!isMobileStatic()) {
+            el.stagewrap.style.height = mobileStatic ? `${scrollerHeight}px` : `${vh}px`;
+            if (!mobileStatic) {
                 const uiTop = Math.min(vh * 0.59, vh - 324);
-                document.getElementById('ui').style.top = `${uiTop}px`;
+                const ui = document.getElementById('ui');
+                ui.style.top = `${uiTop}px`;
+                ui.style.zIndex = '25';
             }
             if (STATIC_FRAME) {
                 document.getElementById('concept').style.display = 'none';
@@ -651,7 +667,7 @@
             el.walls.style.width = bgW + 'px';
             el.walls.style.height = bgH + 'px';
             el.walls.style.left = ((vw - bgW) / 2 - stageLeft) + 'px';
-            el.walls.style.top = '0px';
+            el.walls.style.top = `${-staticTopInset}px`;
 
             // Ship, stairs, shadows and every runner sit at their true KV coordinates.
             const place = (node, g) => {
@@ -712,7 +728,7 @@
             );
             M = {
                 vw, vh, SW, SH, PAN, PANBG, bgW, bgH, stageLeft, assets, shipStartX, shipStartY,
-                wallTravel, wallSealScale, wallCloseAt,
+                wallTravel, wallSealScale, wallCloseAt, staticTopInset, staticBottomGap,
             };
         }
 
@@ -1008,7 +1024,7 @@
                 y: 0,
                 scale: 1,
                 opacity: 1,
-                zIndex: 75,
+                zIndex: 31,
                 filter: `blur(0px) brightness(${SHIP_LIGHT.brightnessTo}) saturate(${SHIP_LIGHT.saturationTo}) drop-shadow(0 14px 20px rgba(42, 62, 102, ${SHIP_LIGHT.shadowAlphaTo}))`,
             });
             gsap.set([el.stairs, el.pshadow, ...el.runners], {
@@ -1027,7 +1043,12 @@
                 });
             });
             gsap.set(el.title.querySelector('img'), { paddingLeft: 0 });
-            document.getElementById('ui').style.top = `${M.SH * 0.83}px`;
+            const ui = document.getElementById('ui');
+            ui.style.zIndex = '120';
+            const uiHeight = ui.offsetHeight || 220;
+            const maxTop = Math.max(0, M.SH - uiHeight - M.staticBottomGap);
+            const minTop = Math.min(maxTop, M.SH * 0.48);
+            ui.style.top = `${clamp(M.SH * 0.70, minTop, maxTop)}px`;
             el.concept.classList.remove('is-awaiting-entry', 'is-revealed');
         }
 
@@ -1215,7 +1236,7 @@
                 conceptVideoMotion = null;
             }
 
-            if (STATIC_FRAME || reduced || isMobileStatic()) {
+            if (STATIC_FRAME || reduced) {
                 gsap.set(el.conceptVideoFrame, { rotateX: 0, scale: 1, y: 0 });
                 return;
             }
@@ -1284,7 +1305,7 @@
         }
 
         function startIdle() {
-            if (!ASSET_IDLE_ENABLED || idleStarted || reduced || STATIC_FRAME || isMobileStatic()) return;
+            if (!ASSET_IDLE_ENABLED || idleStarted || reduced || STATIC_FRAME) return;
             idleStarted = true;
 
             KEYS.filter(k => k !== 'title').forEach(k => {
@@ -1346,6 +1367,13 @@
 
             if (rAF) cancelAnimationFrame(rAF);
             rAF = requestAnimationFrame(() => {
+                // Killing the pin can restore the height captured when ScrollTrigger was
+                // created, so do it before layout writes the new static hero dimensions.
+                if (isMobileStatic() && scrollTL) {
+                    scrollTL.scrollTrigger?.kill();
+                    scrollTL.kill();
+                    scrollTL = null;
+                }
                 layout();
                 if (isMobileStatic()) {
                     setupMobileStaticHero();

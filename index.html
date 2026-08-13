@@ -5,13 +5,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Better Trade 2026 — Scroll Hero</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baskervville:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="fonts/fonts.css">
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/style.css?v=17">
+    <link rel="stylesheet" href="css/main.css?v=11">
+    <link rel="stylesheet" href="css/style.css?v=73">
 </head>
 
 <body class="is-loading">
+    <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+        <defs>
+            <linearGradient id="icon-spectrum" x1="0%" y1="50%" x2="100%" y2="50%">
+                <stop offset="0%" stop-color="#00d4fe" />
+                <stop offset="20%" stop-color="#1f87e6" />
+                <stop offset="40%" stop-color="#113cf3" />
+                <stop offset="60%" stop-color="#722df4" />
+                <stop offset="80%" stop-color="#e63bd8" />
+                <stop offset="100%" stop-color="#f79319" />
+            </linearGradient>
+        </defs>
+    </svg>
     <header class="site-header" id="site-header">
         <div class="site-header__inner">
             <a class="site-header__logo" href="#home" aria-label="Better Trade 2026 Home">
@@ -28,7 +43,7 @@
             </nav>
 
             <div class="site-header__actions">
-                <a class="bt-action-button bt-action-button--secondary bt-action-button--xl bt-action-button--header" href="#playbook">Playbook</a>
+                <a class="bt-action-button bt-action-button--secondary bt-action-button--xl bt-action-button--header" href="#playbook">Investor DNA</a>
                 <span class="site-header__primary-cta" data-header-register-cta>
                     <a class="bt-action-button bt-action-button--primary bt-action-button--xl bt-action-button--header" href="#ticket">ลงทะเบียน</a>
                 </span>
@@ -56,27 +71,36 @@
             </nav>
 
             <div class="site-header__mobile-actions">
-                <a class="bt-action-button bt-action-button--secondary bt-action-button--xl bt-action-button--header" href="#playbook">Playbook</a>
+                <a class="bt-action-button bt-action-button--secondary bt-action-button--xl bt-action-button--header" href="#playbook">Investor DNA</a>
                 <span class="site-header__primary-cta" data-header-register-cta>
                     <a class="bt-action-button bt-action-button--primary bt-action-button--xl bt-action-button--header" href="#ticket">ลงทะเบียน</a>
                 </span>
             </div>
 
             <footer class="site-header__mobile-footer">
-                <div class="site-header__mobile-contact">
-                    <p class="site-header__mobile-label">Connect</p>
-                    <a href="https://www.facebook.com/bettertradeofficial" target="_blank" rel="noopener noreferrer">Facebook <span aria-hidden="true"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-arrow-up-right"></use></svg></span></a>
-                    <a href="https://page.line.me/qqh1534o?openQrModal=true" target="_blank" rel="noopener noreferrer">LINE <span aria-hidden="true"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-arrow-up-right"></use></svg></span></a>
-                </div>
-                <div class="site-header__mobile-contact site-header__mobile-contact--service">
-                    <p class="site-header__mobile-label">Customer service</p>
-                    <a href="tel:+6620238800">02-023-8800</a>
-                    <a href="mailto:customerservice@efin.finance">customerservice@efin.finance</a>
+                <div class="site-header__mobile-contact site-header__mobile-contact--primary">
+                    <p class="site-header__mobile-label">contact</p>
+                    <div class="site-header__mobile-contact-grid">
+                        <a href="https://www.facebook.com/bettertradeofficial" target="_blank" rel="noopener noreferrer"><svg class="bt-icon bt-icon--brand" aria-hidden="true"><use href="images/icons.svg#icon-facebook"></use></svg><span>Better Trade</span></a>
+                        <a href="https://page.line.me/qqh1534o?openQrModal=true" target="_blank" rel="noopener noreferrer"><svg class="bt-icon bt-icon--brand" aria-hidden="true"><use href="images/icons.svg#icon-message-circle"></use></svg><span>@efin.finance</span></a>
+                        <a href="mailto:customerservice@efin.finance"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-mail"></use></svg><span>customerservice@efin.finance</span></a>
+                        <a href="tel:+6620238800"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-headset"></use></svg><span>02-023-8800</span></a>
+                    </div>
                 </div>
                 <div class="site-header__mobile-contact site-header__mobile-contact--sponsor">
-                    <p class="site-header__mobile-label">Booths &amp; Sponsors</p>
-                    <a href="tel:+66994464366" aria-label="โทรหาคุณหนึ่ง สุภารัตน์ งามศรี">สุภารัตน์ งามศรี · 099-446-4366</a>
-                    <a href="tel:+66610726233" aria-label="โทรหาคุณลัคกี้ เบญญาภา บุญรัตน์">เบญญาภา บุญรัตน์ · 061-072-6233</a>
+                    <p class="site-header__mobile-label">สนับสนุน Booths &amp; Sponsors</p>
+                    <div class="site-header__mobile-sponsor-list">
+                        <div class="site-header__mobile-sponsor">
+                            <p class="site-header__mobile-sponsor-name">สุภารัตน์ งามศรี <span>[หนึ่ง]</span></p>
+                            <a href="mailto:suparat@efinancethai.com"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-mail"></use></svg><span>suparat@efinancethai.com</span></a>
+                            <a href="tel:+66994464366" aria-label="โทรหาคุณหนึ่ง สุภารัตน์ งามศรี"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-phone"></use></svg><span>099-446-4366</span></a>
+                        </div>
+                        <div class="site-header__mobile-sponsor">
+                            <p class="site-header__mobile-sponsor-name">เบญญาภา บุญรัตน์ <span>[ลัคกี้]</span></p>
+                            <a href="mailto:benyapha@efinancethai.com"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-mail"></use></svg><span>benyapha@efinancethai.com</span></a>
+                            <a href="tel:+66610726233" aria-label="โทรหาคุณลัคกี้ เบญญาภา บุญรัตน์"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-phone"></use></svg><span>061-072-6233</span></a>
+                        </div>
+                    </div>
                 </div>
             </footer>
         </div>
@@ -89,6 +113,8 @@
     </div>
     <div id="home" aria-hidden="true"></div>
 
+
+    <!-- Start : Hero -->
     <div id="scroller">
         <div id="stagewrap">
             <div id="bg" aria-hidden="true">
@@ -201,8 +227,21 @@
                         </div>
                         <div class="venue">
                             <a class="venue-link bt-action-button bt-action-button--text" href="https://maps.app.goo.gl/uRrLjyD6aofCEb8K7"
-                                target="_blank" rel="noopener noreferrer">Samyan Mitrtown Hall<svg class="bt-icon"
-                                    aria-hidden="true"><use href="images/icons.svg#icon-arrow-up-right"></use></svg></a>
+                                target="_blank" rel="noopener noreferrer">Samyan Mitrtown Hall<svg class="bt-icon venue-link__icon"
+                                    viewBox="0 0 24 24" aria-hidden="true">
+                                    <defs>
+                                        <linearGradient id="venue-arrow-spectrum" x1="0%" y1="50%" x2="100%" y2="50%">
+                                            <stop offset="0%" stop-color="#00d4fe" />
+                                            <stop offset="20%" stop-color="#1f87e6" />
+                                            <stop offset="40%" stop-color="#113cf3" />
+                                            <stop offset="60%" stop-color="#722df4" />
+                                            <stop offset="80%" stop-color="#e63bd8" />
+                                            <stop offset="100%" stop-color="#f79319" />
+                                        </linearGradient>
+                                    </defs>
+                                    <path d="M7 7h10v10" />
+                                    <path d="M7 17 17 7" />
+                                </svg></a>
                         </div>
                     </div>
                 </div>
@@ -243,13 +282,14 @@
             <div id="kvref"></div>
         </div>
     </div>
+    <!-- End : Hero -->
 
 
     <!-- Start Section : Concept -->
-    <section id="concept">
+    <section id="concept" aria-labelledby="concept-title">
         <div class="concept__inner container">
-            <h2 class="concept__title">โลกกำลังเปลี่ยนเร็วกว่าที่เคย <br>แต่โอกาสก็เช่นกัน</h2>
-            <p class="concept__description">BETTER TRADE รวบรวมความรู้ เครื่องมือ และ Playbook ที่จะช่วยให้คุณมองเห็นโอกาส <br>ตัดสินใจอย่างมั่นใจ และเติบโตไปพร้อมกับโลกยุคใหม่</p>
+            <h2 id="concept-title" class="bt-section-title">โลกกำลังเปลี่ยนเร็วกว่าที่เคย <br>แต่<span class="bt-title-highlight">โอกาสก็เช่นกัน</span></h2>
+            <p class="concept__description">BETTER TRADE รวบรวมความรู้ เครื่องมือ และ Playbook ที่จะช่วยให้คุณมองเห็นโอกาส <br class="d-lg-block d-none">ตัดสินใจอย่างมั่นใจ และเติบโตไปพร้อมกับโลกยุคใหม่</p>
         </div>
         <div class="concept__video-scroll container">
             <div class="concept__video-perspective">
@@ -270,12 +310,13 @@
     </section>
     <!-- End Section : Concept -->
 
+
     <!-- Start Section : Featured Topics -->
     <section id="featured-topics" class="topics-showcase" data-header-theme="dark"
         aria-labelledby="featured-topics-title">
         <div class="topics-showcase__inner container">
             <header class="topics-showcase__header">
-                <h2 id="featured-topics-title" class="bt-section-title">หัวข้อที่คุณไม่ควรพลาด<br>ใน Better Trade 2026</h2>
+                <h2 id="featured-topics-title" class="bt-section-title">หัวข้อที่คุณ<span class="bt-title-highlight">ไม่ควรพลาด</span><br>ใน Better Trade 2026</h2>
                 <p>สำรวจเทรนด์ เศรษฐกิจ เทคโนโลยี และโอกาสลงทุนที่จะกำหนดโลกใบต่อไป</p>
             </header>
 
@@ -322,19 +363,17 @@
     <section id="ticket" class="ticket" aria-labelledby="ticket-title">
         <div class="ticket__inner container">
             <header class="ticket__header row">
-                <div class="ticket__heading col-12 col-lg-6">
-                    <h2 id="ticket-title" class="bt-section-title">เลือกเส้นทาง<br>สู่โลกใหม่ของคุณ</h2>
+                <div class="ticket__heading col-12 col-xl-6">
+                    <h2 id="ticket-title" class="bt-section-title">เลือก<span class="bt-title-highlight">ประสบการณ์</span>ที่ใช่<br class="d-xl-block d-none">ในแบบของคุณ</h2>
                     <p class="bt-section-subtext">Ticket Price</p>
                 </div>
-                <!-- <p class="ticket__intro col-12 col-lg-6">ตั้งแต่การสำรวจโลกการลงทุน ไปจนถึงการเจาะลึกกับผู้เชี่ยวชาญ เลือกประสบการณ์ที่ตรงกับจังหวะและเป้าหมายของคุณ</p> -->
             </header>
 
             <div class="ticket__plans row g-0">
                 <article class="ticket__plan ticket__plan--ultimate col-12 col-lg-4" aria-labelledby="ticket-ultimate-title">
                     <header class="ticket__plan-header">
                         <p class="ticket__plan-index">New World</p>
-                        <h3 id="ticket-ultimate-title">Ultimate Ticket</h3>
-                        <!-- <p class="ticket__plan-note">สัมผัสทุกมิติของ Better Trade ตลอดหนึ่งหรือสองวันเต็ม</p> -->
+                        <h3 id="ticket-ultimate-title">Ultimate <span class="ticket__plan-title-suffix">Ticket</span></h3>
                     </header>
 
                     <div class="ticket__prices" aria-label="ราคาบัตร Ultimate">
@@ -360,10 +399,10 @@
                     <a class="bt-action-button bt-action-button--primary bt-action-button--xl ticket__action" href="#contact">เลือก Ultimate</a>
                 </article>
 
-                <article class="ticket__plan col-12 col-lg-4" aria-labelledby="ticket-master-title">
+                <article class="ticket__plan ticket__plan--master col-12 col-lg-4" aria-labelledby="ticket-master-title">
                     <header class="ticket__plan-header">
                         <p class="ticket__plan-index">New World</p>
-                        <h3 id="ticket-master-title">Master Class Ticket</h3>
+                        <h3 id="ticket-master-title">Master Class <span class="ticket__plan-title-suffix">Ticket</span></h3>
                         <!-- <p class="ticket__plan-note">เลือกเจาะลึกหัวข้อสำคัญกับผู้เชี่ยวชาญในคลาสขนาดเข้มข้น</p> -->
                     </header>
 
@@ -393,7 +432,7 @@
                 <article class="ticket__plan col-12 col-lg-4" aria-labelledby="ticket-explorer-title">
                     <header class="ticket__plan-header">
                         <p class="ticket__plan-index">New World</p>
-                        <h3 id="ticket-explorer-title">Explorer Ticket</h3>
+                        <h3 id="ticket-explorer-title">Explorer <span class="ticket__plan-title-suffix">Ticket</span></h3>
                         <!-- <p class="ticket__plan-note">เริ่มสำรวจเทรนด์และโอกาสใหม่ด้วยประสบการณ์ที่เข้าถึงง่าย</p> -->
                     </header>
 
@@ -474,13 +513,13 @@
     <!-- Start Section : Agenda -->
     <section id="agenda" class="agenda" aria-labelledby="agenda-title">
         <header class="agenda__section-header container">
-            <h2 id="agenda-title" class="bt-section-title">2 วันเต็ม<br>อัดแน่นทุกกลยุทธ์ที่พอร์ตคุณรออยู่</h2>
+            <h2 id="agenda-title" class="bt-section-title"><span class="bt-title-highlight">2 วันเต็ม </span><br class="d-sm-block d-none">อัดแน่นด้วยกลยุทธ์เพื่อพอร์ตของคุณ</h2>
             <p class="bt-section-subtext">Agenda</p>
         </header>
 
         <div class="agenda__inner container">
             <div class="agenda__layout row">
-                <nav class="agenda__day-switcher col-12 col-lg-3" aria-label="เลือกวันของ Agenda">
+                <nav class="agenda__day-switcher col-12 col-md-3" aria-label="เลือกวันของ Agenda">
                     <!-- <p class="agenda__eyebrow">Agenda</p> -->
                     <div class="agenda__day-switcher-inner" role="tablist" aria-orientation="vertical">
                         <a id="agenda-day-one-switch" class="agenda__day-switch" href="#agenda-day-one" role="tab" aria-selected="true" aria-controls="agenda-day-one" aria-current="true">
@@ -505,15 +544,17 @@
                     </div>
                 </nav>
 
-                <div class="agenda__days col-12 col-lg-9">
+                <div class="agenda__days col-12 col-md-9">
                     <div id="agenda-day-one" class="agenda__day-panel" data-agenda-day-panel="day-one" role="tabpanel" aria-labelledby="agenda-day-one-switch">
                         <div class="agenda__content">
-                            <div class="agenda__tabs" role="tablist" aria-label="เวทีภายในงาน">
-                                <button id="agenda-main-stage-tab" class="agenda__tab" type="button" role="tab" aria-selected="true" aria-controls="agenda-main-stage">Main Stage</button>
-                                <button id="agenda-mini-stage-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-mini-stage" tabindex="-1">Mini Stage</button>
-                                <button id="agenda-workshop-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-workshop" tabindex="-1">Workshop</button>
-                                <button id="agenda-private-class-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-private-class" tabindex="-1">Private Class</button>
-                                <span class="agenda__tab-indicator" aria-hidden="true"></span>
+                            <div class="agenda__tabs-viewport">
+                                <div class="agenda__tabs" role="tablist" aria-label="เวทีภายในงาน">
+                                    <button id="agenda-main-stage-tab" class="agenda__tab" type="button" role="tab" aria-selected="true" aria-controls="agenda-main-stage">Main Stage</button>
+                                    <button id="agenda-mini-stage-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-mini-stage" tabindex="-1">Mini Stage</button>
+                                    <button id="agenda-workshop-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-workshop" tabindex="-1">Workshop</button>
+                                    <button id="agenda-private-class-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-private-class" tabindex="-1">Private Class</button>
+                                    <span class="agenda__tab-indicator" aria-hidden="true"></span>
+                                </div>
                             </div>
 
                             <div id="agenda-main-stage" class="agenda__panel" role="tabpanel" aria-labelledby="agenda-main-stage-tab">
@@ -697,12 +738,14 @@
 
                     <div id="agenda-day-two" class="agenda__day-panel" data-agenda-day-panel="day-two" role="tabpanel" aria-labelledby="agenda-day-two-switch" hidden>
                         <div class="agenda__content">
-                            <div class="agenda__tabs" role="tablist" aria-label="เวทีภายในงาน วันที่ 2">
-                                <button id="agenda-day-two-main-stage-tab" class="agenda__tab" type="button" role="tab" aria-selected="true" aria-controls="agenda-day-two-main-stage">Main Stage</button>
-                                <button id="agenda-day-two-mini-stage-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-day-two-mini-stage" tabindex="-1">Mini Stage</button>
-                                <button id="agenda-day-two-workshop-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-day-two-workshop" tabindex="-1">Workshop</button>
-                                <button id="agenda-day-two-private-class-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-day-two-private-class" tabindex="-1">Private Class</button>
-                                <span class="agenda__tab-indicator" aria-hidden="true"></span>
+                            <div class="agenda__tabs-viewport">
+                                <div class="agenda__tabs" role="tablist" aria-label="เวทีภายในงาน วันที่ 2">
+                                    <button id="agenda-day-two-main-stage-tab" class="agenda__tab" type="button" role="tab" aria-selected="true" aria-controls="agenda-day-two-main-stage">Main Stage</button>
+                                    <button id="agenda-day-two-mini-stage-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-day-two-mini-stage" tabindex="-1">Mini Stage</button>
+                                    <button id="agenda-day-two-workshop-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-day-two-workshop" tabindex="-1">Workshop</button>
+                                    <button id="agenda-day-two-private-class-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-day-two-private-class" tabindex="-1">Private Class</button>
+                                    <span class="agenda__tab-indicator" aria-hidden="true"></span>
+                                </div>
                             </div>
 
                             <div id="agenda-day-two-main-stage" class="agenda__panel" role="tabpanel" aria-labelledby="agenda-day-two-main-stage-tab">
@@ -745,7 +788,10 @@
                                                 <p class="agenda__session-summary">ถ้าต้องเลือกวันนี้ อะไรคือการลงทุนที่คุณเชื่อที่สุด ?</p>
                                                 <p class="agenda__session-speaker">TBD</p>
                                             </td>
-                                            <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-user"></use></svg></span></td>
+                                            <td class="agenda__speakers">
+                                                <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 1"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-user"></use></svg></span>
+                                                <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 2"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-user"></use></svg></span>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <th scope="row"><time>11:45 – 12:45</time></th>
@@ -760,7 +806,10 @@
                                                 <p class="agenda__session-summary">เมื่อเงินมากขึ้น วิธีบริหารต้องเปลี่ยน</p>
                                                 <p class="agenda__session-speaker">TBD</p>
                                             </td>
-                                            <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-user"></use></svg></span></td>
+                                            <td class="agenda__speakers">
+                                                <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 1"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-user"></use></svg></span>
+                                                <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 2"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-user"></use></svg></span>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <th scope="row"><time>13:25 – 14:05</time></th>
@@ -788,7 +837,7 @@
                                                 <div class="agenda__tags"><span class="agenda__tag agenda__tag--capital">Capital</span></div>
                                                 <p class="agenda__session-title">AI in Action</p>
                                                 <p class="agenda__session-summary">ให้ AI ช่วยคิด ก่อนเงินคุณทำงาน</p>
-                                                <p class="agenda__session-speaker">TBD</p>
+                                                <p class="agenda__session-speaker">อ.วชิรเมษฐ์ ธเนศสถิตพงษ์</p>
                                             </td>
                                             <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-user"></use></svg></span></td>
                                         </tr>
@@ -870,41 +919,38 @@
             <div class="row">
                 <div class="col-12">
                     <header class="expectation__header">
-                        <h2 id="expectation-title" class="bt-section-title">รวมทุกโอกาสของโลกการลงทุน<br>ไว้ในงานเดียว</h2>
+                        <h2 id="expectation-title" class="bt-section-title">รวม<span class="bt-title-highlight">ทุกโอกาส</span>ของโลกการลงทุน<br class="d-sm-block d-none">ไว้ในงานเดียว</h2>
                         <p class="bt-section-subtext expectation-none">Expectation</p>
                     </header>
                 </div>
             </div>
 
-            <div class="expectation__stats expectation__stats--primary row" aria-label="สถิติภาพรวมของงาน">
-                <div class="expectation__stat col-6 col-md-4">
+            <div class="expectation__stats row" aria-label="สถิติของงาน">
+                <div class="expectation__stat col-4 col-lg-4">
                     <strong>40+</strong>
                     <span>Speakers</span>
                 </div>
-                <div class="expectation__stat col-6 col-md-4">
+                <div class="expectation__stat col-4 col-lg-4">
                     <strong>4,000+</strong>
                     <span>Attendees</span>
                 </div>
-                <div class="expectation__stat col-12 col-md-4">
+                <div class="expectation__stat col-4 col-lg-4">
                     <strong>20</strong>
                     <span>Sessions</span>
                 </div>
-            </div>
-
-            <div class="expectation__stats expectation__stats--secondary row" aria-label="สถิติพื้นที่และกิจกรรมภายในงาน">
-                <div class="expectation__stat col-6 col-lg-3">
+                <div class="expectation__stat col-4 col-lg-3">
                     <strong>24+</strong>
                     <span>Exhibitions</span>
                 </div>
-                <div class="expectation__stat col-6 col-lg-3">
+                <div class="expectation__stat col-4 col-lg-3">
                     <strong>8</strong>
                     <span>Workshops</span>
                 </div>
-                <div class="expectation__stat col-6 col-lg-3">
+                <div class="expectation__stat col-4 col-lg-3">
                     <strong>4</strong>
                     <span>Private Classes</span>
                 </div>
-                <div class="expectation__stat col-6 col-lg-3">
+                <div class="expectation__stat col-4 col-lg-3">
                     <strong>93</strong>
                     <span>Pavilion Booths</span>
                 </div>
@@ -919,7 +965,7 @@
         <div class="floor-plan__inner container">
             <div class="row">
                 <div class="col-12">
-                    <h2 id="floor-plan-title" class="bt-section-title floor-plan__title">สำรวจพื้นที่<br>และโซนต่าง ๆ ในงาน</h2>
+                    <h2 id="floor-plan-title" class="bt-section-title floor-plan__title"><span class="bt-title-highlight">สำรวจ</span>พื้นที่<br>และโซนต่าง ๆ ในงาน</h2>
                     <p class="bt-section-subtext">Floor Plan</p>
                     <figure class="floor-plan__figure">
                         <img class="floor-plan__image" src="images/floor-plan.png" width="3813" height="2125"
@@ -935,7 +981,7 @@
     <!-- Start Section : Speaker -->
     <section id="speaker" class="speaker" aria-labelledby="speaker-title">
         <header class="speaker__section-header container">
-            <h2 id="speaker-title" class="bt-section-title">พบกับผู้เชี่ยวชาญ<br>ที่กำลังนิยามโลกการลงทุนใหม่</h2>
+            <h2 id="speaker-title" class="bt-section-title">พบกับผู้เชี่ยวชาญ<br>ที่กำลัง<span class="bt-title-highlight">นิยามโลกการลงทุนใหม่</span></h2>
             <p class="bt-section-subtext">Speaker</p>
         </header>
 
@@ -984,7 +1030,7 @@
     <!-- Start Section : Moderators & MC -->
     <section id="moderator" class="moderator" aria-labelledby="moderator-title">
         <header class="moderator__section-header container">
-            <h2 id="moderator-title" class="bt-section-title">ผู้ดำเนินรายการ<br>ที่จะพาคุณเจาะลึกทุกประเด็น</h2>
+            <h2 id="moderator-title" class="bt-section-title">ผู้ดำเนินรายการ<br>ที่จะพาคุณ<span class="bt-title-highlight">เจาะลึกทุกประเด็น</span></h2>
             <p class="bt-section-subtext">Moderators &amp; MC</p>
         </header>
 
@@ -996,8 +1042,10 @@
                     <div class="moderator__grid">
                         <article class="speaker-card" style="--speaker-portrait-y: 10.2%">
                             <div class="speaker-card__portrait">
-                                <img src="images/speakers/speaker-1.png" width="397" height="793"
-                                    loading="lazy" decoding="async" alt="ชนกันต์ ธีรวุฒิ">
+                                <div class="speaker-card__frame">
+                                    <img src="images/speakers/speaker-1.png" width="397" height="793"
+                                        loading="lazy" decoding="async" alt="ชนกันต์ ธีรวุฒิ">
+                                </div>
                             </div>
                             <div class="speaker-card__meta">
                                 <h3>ชนกันต์ ธีรวุฒิ</h3>
@@ -1007,8 +1055,10 @@
 
                         <article class="speaker-card" style="--speaker-portrait-y: 20.9%">
                             <div class="speaker-card__portrait">
-                                <img src="images/speakers/speaker-2.png" width="397" height="793"
-                                    loading="lazy" decoding="async" alt="พรนภา สิริวัฒน์">
+                                <div class="speaker-card__frame">
+                                    <img src="images/speakers/speaker-2.png" width="397" height="793"
+                                        loading="lazy" decoding="async" alt="พรนภา สิริวัฒน์">
+                                </div>
                             </div>
                             <div class="speaker-card__meta">
                                 <h3>พรนภา สิริวัฒน์</h3>
@@ -1018,8 +1068,10 @@
 
                         <article class="speaker-card" style="--speaker-portrait-y: 8.1%">
                             <div class="speaker-card__portrait">
-                                <img src="images/speakers/speaker-3.png" width="397" height="793"
-                                    loading="lazy" decoding="async" alt="ตรัยคุณ อภิวงศ์">
+                                <div class="speaker-card__frame">
+                                    <img src="images/speakers/speaker-3.png" width="397" height="793"
+                                        loading="lazy" decoding="async" alt="ตรัยคุณ อภิวงศ์">
+                                </div>
                             </div>
                             <div class="speaker-card__meta">
                                 <h3>ตรัยคุณ อภิวงศ์</h3>
@@ -1029,8 +1081,10 @@
 
                         <article class="speaker-card" style="--speaker-portrait-y: 20.5%">
                             <div class="speaker-card__portrait">
-                                <img src="images/speakers/speaker-4.png" width="397" height="793"
-                                    loading="lazy" decoding="async" alt="วรินทร ชัยเจริญ">
+                                <div class="speaker-card__frame">
+                                    <img src="images/speakers/speaker-4.png" width="397" height="793"
+                                        loading="lazy" decoding="async" alt="วรินทร ชัยเจริญ">
+                                </div>
                             </div>
                             <div class="speaker-card__meta">
                                 <h3>วรินทร ชัยเจริญ</h3>
@@ -1040,12 +1094,30 @@
 
                         <article class="speaker-card" style="--speaker-portrait-y: 13.4%">
                             <div class="speaker-card__portrait">
-                                <img src="images/speakers/speaker-5.png" width="397" height="793"
-                                    loading="lazy" decoding="async" alt="ณิชกานต์ พงศ์ธาดา">
+                                <div class="speaker-card__frame">
+                                    <img src="images/speakers/speaker-5.png" width="397" height="793"
+                                        loading="lazy" decoding="async" alt="ณิชกานต์ พงศ์ธาดา">
+                                </div>
                             </div>
                             <div class="speaker-card__meta">
                                 <h3>ณิชกานต์ พงศ์ธาดา</h3>
                                 <p>Master of Ceremonies, Opening &amp; Closing</p>
+                            </div>
+                        </article>
+
+                        <!-- ใช้ speaker-1.png ซ้ำ: มีภาพต้นฉบับแค่ 5 รูป (แนวเดียวกับที่
+                             section Speaker ใช้ 5 รูปหมุนเวียนกับ 20 คน) --speaker-portrait-y
+                             ใช้ค่าเดียวกับการ์ดแรกเพราะเป็นภาพเดียวกัน กรอบเดียวกัน -->
+                        <article class="speaker-card" style="--speaker-portrait-y: 10.2%">
+                            <div class="speaker-card__portrait">
+                                <div class="speaker-card__frame">
+                                    <img src="images/speakers/speaker-1.png" width="397" height="793"
+                                        loading="lazy" decoding="async" alt="ปิยะดา วัชรพล">
+                                </div>
+                            </div>
+                            <div class="speaker-card__meta">
+                                <h3>ปิยะดา วัชรพล</h3>
+                                <p>Moderator, Mini Stage</p>
                             </div>
                         </article>
                     </div>
@@ -1056,21 +1128,126 @@
     <!-- End Section : Moderators & MC -->
 
 
+    <!-- Start Section : Past Event -->
+    <section id="past-event" class="past-event" aria-labelledby="past-event-title">
+        <div class="past-event__inner container">
+            <header class="past-event__header">
+                <div class="past-event__heading">
+                    <h2 id="past-event-title" class="bt-section-title">ทุกเวทีที่ผ่านมา<br>เปลี่ยนความรู้ให้เป็น<span class="bt-title-highlight">โอกาสจริง</span></h2>
+                    <p class="bt-section-subtext">Past Event</p>
+                </div>
+            </header>
+
+            <div class="past-event__films" aria-label="วิดีโอไฮไลต์จาก Better Trade ที่ผ่านมา">
+                <article class="past-event__film past-event__film--featured">
+                    <div class="past-event__video-frame">
+                        <iframe src="https://www.youtube-nocookie.com/embed/LmFJbFmtASY?rel=0"
+                            title="Highlight Better Trade 2025 The Intelligent Investor"
+                            loading="lazy"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            allowfullscreen></iframe>
+                    </div>
+                </article>
+
+                <article class="past-event__film past-event__film--second">
+                    <div class="past-event__video-frame">
+                        <iframe src="https://www.youtube-nocookie.com/embed/XgPSHdP922g?rel=0"
+                            title="Highlight Better Trade 2024"
+                            loading="lazy"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            allowfullscreen></iframe>
+                    </div>
+                </article>
+
+                <article class="past-event__film past-event__film--third">
+                    <div class="past-event__video-frame">
+                        <iframe src="https://www.youtube-nocookie.com/embed/4Ed9C1U_eTQ?rel=0"
+                            title="Highlight Better Trade 2023"
+                            loading="lazy"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            allowfullscreen></iframe>
+                    </div>
+                </article>
+            </div>
+
+            <div class="past-event__marquee" aria-label="พื้นที่เตรียมใส่ภาพบรรยากาศงาน Better Trade ที่ผ่านมา" tabindex="0">
+                <div class="past-event__marquee-track">
+                    <div class="past-event__marquee-group">
+                        <figure class="past-event__slide">
+                            <div class="past-event__slide-frame">
+                                <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-camera"></use></svg>
+                            </div>
+                        </figure>
+                        <figure class="past-event__slide">
+                            <div class="past-event__slide-frame">
+                                <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-camera"></use></svg>
+                            </div>
+                        </figure>
+                        <figure class="past-event__slide">
+                            <div class="past-event__slide-frame">
+                                <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-camera"></use></svg>
+                            </div>
+                        </figure>
+                        <figure class="past-event__slide">
+                            <div class="past-event__slide-frame">
+                                <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-camera"></use></svg>
+                            </div>
+                        </figure>
+                        <figure class="past-event__slide">
+                            <div class="past-event__slide-frame">
+                                <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-camera"></use></svg>
+                            </div>
+                        </figure>
+                    </div>
+
+                    <div class="past-event__marquee-group" aria-hidden="true">
+                        <figure class="past-event__slide">
+                            <div class="past-event__slide-frame">
+                                <svg class="bt-icon"><use href="images/icons.svg#icon-camera"></use></svg>
+                            </div>
+                        </figure>
+                        <figure class="past-event__slide">
+                            <div class="past-event__slide-frame">
+                                <svg class="bt-icon"><use href="images/icons.svg#icon-camera"></use></svg>
+                            </div>
+                        </figure>
+                        <figure class="past-event__slide">
+                            <div class="past-event__slide-frame">
+                                <svg class="bt-icon"><use href="images/icons.svg#icon-camera"></use></svg>
+                            </div>
+                        </figure>
+                        <figure class="past-event__slide">
+                            <div class="past-event__slide-frame">
+                                <svg class="bt-icon"><use href="images/icons.svg#icon-camera"></use></svg>
+                            </div>
+                        </figure>
+                        <figure class="past-event__slide">
+                            <div class="past-event__slide-frame">
+                                <svg class="bt-icon"><use href="images/icons.svg#icon-camera"></use></svg>
+                            </div>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Section : Past Event -->
+
+
     <!-- Start Component : Footer -->
     <footer id="contact" class="site-footer" aria-labelledby="footer-title">
-        <div class="site-footer__inner container site-footer__container">
+        <div class="site-footer__inner container">
             <h2 id="footer-title" class="visually-hidden">ติดต่อ Better Trade และ efin</h2>
 
             <div class="site-footer__panel">
-                <div class="site-footer__content row gy-5 gx-lg-5">
-                    <div class="site-footer__brand col-12 col-lg-2">
+                <div class="site-footer__content row">
+                    <section class="site-footer__column col-12 col-md-6 col-lg-6" aria-labelledby="footer-service-title">
                         <img class="site-footer__logo" src="images/efin-logo-white.png" width="1311" height="442"
                             decoding="async" alt="efin — investment, fit YOU.">
-                    </div>
-
-                    <section class="site-footer__column col-12 col-md-6 col-lg-5" aria-labelledby="footer-service-title">
-                        <p class="site-footer__eyebrow">ติดต่อ</p>
-                        <h3 id="footer-service-title">Event Information</h3>
+                        <h3 id="footer-service-title" class="visually-hidden">Event Information</h3>
 
                         <address class="site-footer__contact-list">
                             <a href="https://www.facebook.com/bettertradeofficial" target="_blank" rel="noopener noreferrer">
@@ -1089,27 +1266,43 @@
                                 <strong>customerservice@efin.finance</strong>
                             </a>
                             <a href="tel:020238800">
-                                <span class="site-footer__contact-icon" aria-hidden="true"><svg class="bt-icon"><use href="images/icons.svg#icon-phone"></use></svg></span>
+                                <span class="site-footer__contact-icon" aria-hidden="true"><svg class="bt-icon"><use href="images/icons.svg#icon-headset"></use></svg></span>
                                 <span class="visually-hidden">Call</span>
                                 <strong>02-023-8800</strong>
                             </a>
                         </address>
                     </section>
 
-                    <section class="site-footer__column col-12 col-md-6 col-lg-5" aria-labelledby="footer-sponsor-title">
+                    <section class="site-footer__column col-12 col-md-6 col-lg-6" aria-labelledby="footer-sponsor-title">
                         <p class="site-footer__eyebrow">สนับสนุน</p>
                         <h3 id="footer-sponsor-title">Booths &amp; Sponsors</h3>
 
                         <div class="site-footer__people">
                             <address class="site-footer__person">
                                 <p>สุภารัตน์ งามศรี <span>[หนึ่ง]</span></p>
-                                <a href="mailto:suparat@efinancethai.com">suparat@efinancethai.com</a>
-                                <a href="tel:0994464366">099-446-4366</a>
+                                <a href="mailto:suparat@efinancethai.com">
+                                    <span class="site-footer__contact-icon" aria-hidden="true"><svg class="bt-icon"><use href="images/icons.svg#icon-mail"></use></svg></span>
+                                    <span class="visually-hidden">Email</span>
+                                    suparat@efinancethai.com
+                                </a>
+                                <a href="tel:0994464366">
+                                    <span class="site-footer__contact-icon" aria-hidden="true"><svg class="bt-icon"><use href="images/icons.svg#icon-phone"></use></svg></span>
+                                    <span class="visually-hidden">Call</span>
+                                    099-446-4366
+                                </a>
                             </address>
                             <address class="site-footer__person">
                                 <p>เบญญาภา บุญรัตน์ <span>[ลัคกี้]</span></p>
-                                <a href="mailto:benyapha@efinancethai.com">benyapha@efinancethai.com</a>
-                                <a href="tel:0610726233">061-072-6233</a>
+                                <a href="mailto:benyapha@efinancethai.com">
+                                    <span class="site-footer__contact-icon" aria-hidden="true"><svg class="bt-icon"><use href="images/icons.svg#icon-mail"></use></svg></span>
+                                    <span class="visually-hidden">Email</span>
+                                    benyapha@efinancethai.com
+                                </a>
+                                <a href="tel:0610726233">
+                                    <span class="site-footer__contact-icon" aria-hidden="true"><svg class="bt-icon"><use href="images/icons.svg#icon-phone"></use></svg></span>
+                                    <span class="visually-hidden">Call</span>
+                                    061-072-6233
+                                </a>
                             </address>
                         </div>
                     </section>
@@ -1122,19 +1315,20 @@
 
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="js/action-button.js"></script>
-    <script src="js/agenda-tabs.js?v=2"></script>
-    <script src="js/speaker-directory.js?v=3"></script>
+    <script src="js/agenda-tabs.js?v=4"></script>
+    <script src="js/speaker-directory.js?v=4"></script>
+    <script src="js/expectation-counter.js?v=1"></script>
     <script src="js/hero-v2-header.js?v=6"></script>
 
     <!-- Liquid metal CTAs (WebGL). Module scripts are deferred, so this runs after
      the markup exists but before window 'load' fires the hero intro. -->
-    <script type="module" src="js/hero-v2-cta.js"></script>
+    <script type="module" src="js/hero-v2-cta.js?v=2"></script>
     <script src="js/event-countdown.js"></script>
 
     <script src="vendor/gsap/gsap.min.js"></script>
     <script src="vendor/gsap/ScrollTrigger.min.js"></script>
-    <script src="js/hero-v2-scroll-motion.js?v=8"></script>
-    <script src="js/topics-reveal.js?v=3"></script>
+    <script src="js/hero-v2-scroll-motion.js?v=12"></script>
+    <script src="js/topics-reveal.js?v=4"></script>
     <script src="js/topics-assets-motion.js?v=7"></script>
     <!-- หลัง hero เพราะ ScrollTrigger refresh ตามลำดับที่สร้าง และ speaker อยู่ใต้ hero ในหน้า -->
     <script src="js/speaker-motion.js"></script>

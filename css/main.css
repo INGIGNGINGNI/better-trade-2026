@@ -1,247 +1,489 @@
 /* ==========================================================================
-   ตัวแปรกลางของโปรเจกต์
-   - เก็บ token ที่ใช้ซ้ำได้ทั้งหมดไว้ใน main.css ไฟล์เดียว
+   Design Token Architecture
+   - Primitive Tokens: ค่าดิบกลาง ใช้ร่วมได้ข้ามโปรเจกต์
+   - Semantic Tokens: ความหมายการใช้งาน เช่น text, surface, border, accent
+   - Typography/Layout/Component Tokens: token ระดับระบบสำหรับ UI ที่ reuse ได้
+   - Project Alias Tokens: ชื่อเดิมของ Better Trade ชี้กลับมายัง token กลางเพื่อไม่ให้หน้าเดิมพัง
    - ตัวเลขเชิงขนาดและระยะใช้ px ตาม workflow guideline
    - ส่วน hero motion ใน style.css/hero.css เป็นข้อยกเว้นชั่วคราว ห้ามย้ายหรือแปลงหน่วย
    ========================================================================== */
 :root {
+    /* ==========================================================================
+       1) Primitive Tokens
+       ค่าดิบที่ควรใช้ซ้ำได้ข้ามโปรเจกต์ ห้ามผูกชื่อกับ section หรือ campaign
+       ========================================================================== */
+
+    /* Primitive: color */
+    --color-neutral-0: #ffffff;
+    --color-neutral-50: #f7f8f7;
+    --color-neutral-100: #eef1f6;
+    --color-neutral-200: #e4e8ee;
+    --color-neutral-300: #c9d0d8;
+    --color-neutral-400: #99a2ad;
+    --color-neutral-500: #687078;
+    --color-neutral-600: #4f5863;
+    --color-neutral-700: #30343a;
+    --color-neutral-800: #20242a;
+    --color-neutral-900: #111318;
+    --color-neutral-950: #0d0f14;
+
+    /* Primitive: brand และ focus scale */
+    --color-blue-100: #eaf2ff;
+    --color-blue-200: #cfe1ff;
+    --color-blue-300: #9fc2ff;
+    --color-blue-400: #6598ff;
+    --color-blue-500: #2b6cff;
+    --color-blue-600: #1863dc;
+
+    /* Primitive: spectrum scale */
+    --color-cyan-100: #e9fcfd;
+    --color-cyan-200: #bff6f8;
+    --color-cyan-300: #61e8ed;
+    --color-cyan-400: #34d4dc;
+    --color-cyan-500: #18afbd;
+    --color-cyan-600: #0f8695;
+    --color-violet-100: #f1efff;
+    --color-violet-200: #d8d3ff;
+    --color-violet-300: #9c91ff;
+    --color-violet-400: #7c6df2;
+    --color-violet-500: #6252d6;
+    --color-violet-600: #493cad;
+    --color-pink-100: #fff0fb;
+    --color-pink-200: #ffc8f1;
+    --color-pink-300: #f178d8;
+    --color-pink-400: #dd4fc2;
+    --color-pink-500: #ba319f;
+    --color-pink-600: #8f237c;
+    --color-yellow-100: #fffbe0;
+    --color-yellow-200: #f8f1ad;
+    --color-yellow-300: #f2ea83;
+    --color-yellow-400: #e2d84e;
+    --color-yellow-500: #c2b52d;
+    --color-yellow-600: #8c811f;
+
+    /* Primitive: category scale */
+    --color-green-100: #eaf9f4;
+    --color-green-200: #c5f0e4;
+    --color-green-300: #9ce2cf;
+    --color-green-400: #79d7bf;
+    --color-green-500: #42b995;
+    --color-green-600: #2f8f73;
+    --color-sky-100: #edf8ff;
+    --color-sky-200: #ccecff;
+    --color-sky-300: #9bd7fb;
+    --color-sky-400: #65b8ef;
+    --color-sky-500: #3a93d3;
+    --color-sky-600: #276fa8;
+    --color-success-100: #eaf8f1;
+    --color-success-200: #c9eedc;
+    --color-success-300: #8fd8b6;
+    --color-success-400: #56bf8e;
+    --color-success-500: #3ab17b;
+    --color-success-600: #2eaa74;
+    --color-danger-100: #fff0f3;
+    --color-danger-200: #ffd4dd;
+    --color-danger-300: #faa9b8;
+    --color-danger-400: #f47f94;
+    --color-danger-500: #ef5d75;
+    --color-danger-600: #c83f56;
+    --color-warning-100: #fff9db;
+    --color-warning-200: #f4eaa4;
+    --color-warning-300: #e8d76c;
+    --color-warning-400: #dfc845;
+    --color-warning-500: #d6b72d;
+    --color-warning-600: #a68d1f;
+    --color-purple-100: #f5effd;
+    --color-purple-200: #e2d1fa;
+    --color-purple-300: #c6a6f0;
+    --color-purple-400: #b184e8;
+    --color-purple-500: #9c67d9;
+    --color-purple-600: #7947b5;
+    --color-gold-100: #fff7df;
+    --color-gold-200: #f7e8ad;
+    --color-gold-300: #ead66f;
+    --color-gold-400: #e0c83f;
+    --color-gold-500: #c3a823;
+    --color-gold-600: #917b18;
+
+    /* Primitive: alpha color */
+    --alpha-ink-04: rgba(17, 19, 24, 0.04);
+    --alpha-ink-06: rgba(17, 19, 24, 0.06);
+    --alpha-ink-08: rgba(17, 19, 24, 0.08);
+    --alpha-ink-10: rgba(17, 19, 24, 0.10);
+    --alpha-ink-12: rgba(17, 19, 24, 0.12);
+    --alpha-ink-14: rgba(17, 19, 24, 0.14);
+    --alpha-ink-16: rgba(17, 19, 24, 0.16);
+    --alpha-ink-18: rgba(17, 19, 24, 0.18);
+    --alpha-ink-20: rgba(17, 19, 24, 0.20);
+    --alpha-ink-24: rgba(17, 19, 24, 0.24);
+    --alpha-ink-34: rgba(17, 19, 24, 0.34);
+    --alpha-white-12: rgba(255, 255, 255, 0.12);
+    --alpha-white-28: rgba(255, 255, 255, 0.28);
+    --alpha-white-96: rgba(255, 255, 255, 0.96);
+
+    /* Primitive: spacing และ sizing system 8 */
+    --space-0: 0px;
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --space-12: 48px;
+    --space-16: 64px;
+    --space-20: 80px;
+    --space-24: 96px;
+    --space-28: 112px;
+    --space-32: 128px;
+
+    /* Primitive: border และ radius */
+    --radius-1: 4px;
+    --radius-2: 8px;
+    --radius-pill: 48px;
+    --radius-round: 999px;
+    --border-width-1: 1px;
+    --border-width-2: 2px;
+
+    /* Primitive: typography */
+    --font-family-base: "FC Minimal";
+    --font-family-heading: "FC Minimal";
+    --font-size-12: 12px;
+    --font-size-14: 14px;
+    --font-size-16: 16px;
+    --font-size-18: 18px;
+    --font-size-20: 20px;
+    --font-size-24: 24px;
+    --font-size-28: 28px;
+    --font-size-32: 32px;
+    --font-size-40: 40px;
+    --font-size-48: 48px;
+    --font-size-56: 56px;
+    --font-size-80: 80px;
+    --font-weight-light: 300;
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-bold: 700;
+    --line-height-1: 1;
+    --line-height-tight: 24px;
+    --line-height-body: 24px;
+    --line-height-heading: 48px;
+    --line-height-topic: 40px;
+    --line-height-display: 88px;
+    --line-height-normal: normal;
+    --line-height-relaxed: 1.6;
+    --letter-spacing-0: 0px;
+    --letter-spacing-label: 0.12em;
+    --letter-spacing-index: 0.08em;
+
+    /* Primitive: motion */
+    --duration-fast: 180ms;
+    --duration-base: 240ms;
+    --duration-standard: 300ms;
+    --duration-slow: 560ms;
+    --duration-reduced: 0.01ms;
+    --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-reveal: cubic-bezier(0.76, 0, 0.24, 1);
+
+    /* Primitive: shadow */
+    --shadow-low: 0 0 8px rgba(172, 171, 171, 0.30);
+    --shadow-action: 0 var(--border-width-1) var(--space-1) var(--alpha-ink-10);
+    --shadow-action-primary: 0 var(--border-width-1) var(--space-1) var(--alpha-ink-24);
+    --shadow-elevated: 0 18px 48px rgba(17, 19, 24, 0.09);
+    --shadow-deep: 0 32px 64px rgba(0, 0, 0, 0.30);
+
+    /* Primitive: gradient */
+    --gradient-spectrum: linear-gradient(90deg, var(--color-cyan-300), var(--color-violet-300), var(--color-pink-300), var(--color-yellow-300), var(--color-cyan-300));
+    --gradient-spectrum-vertical: linear-gradient(180deg, var(--color-cyan-300), var(--color-violet-300), var(--color-pink-300), var(--color-yellow-300), var(--color-cyan-300));
+
+    /* ==========================================================================
+       2) Semantic Tokens
+       ชื่อบอกความหมายของการใช้งาน ไม่บอกหน้าหรือ section
+       ========================================================================== */
+    /* Semantic: text */
+    --color-text-primary: var(--color-neutral-900);
+    --color-text-secondary: var(--color-neutral-800);
+    --color-text-muted: var(--color-neutral-500);
+    --color-text-inverse: var(--color-neutral-50);
+    --color-text-inverse-muted: #aeb4bb;
+
+    /* Semantic: surface */
+    --color-surface-page: var(--color-neutral-0);
+    --color-surface-paper: var(--color-neutral-50);
+    --color-surface-soft: var(--color-neutral-100);
+    --color-surface-popover: var(--alpha-white-96);
+    --color-surface-inverse: var(--color-neutral-950);
+
+    /* Semantic: border และ interactive */
+    --color-border-subtle: var(--alpha-ink-16);
+    --color-border-default: var(--alpha-ink-18);
+    --color-border-strong: var(--alpha-ink-34);
+    --color-border-inverse-subtle: var(--alpha-white-12);
+    --color-border-editorial: #dbded5;
+    --color-border-faint: #f2f2f2;
+    --color-accent-primary: var(--color-blue-600);
+    --color-focus-ring: var(--color-blue-500);
+
+    /* Semantic: state */
+    --color-state-success: var(--color-success-600);
+    --color-state-danger: var(--color-danger-500);
+    --color-state-warning: var(--color-warning-500);
+    --color-state-info: var(--color-sky-500);
+
+    /* Semantic: spectrum และหมวดสีทั่วไป */
+    --color-category-cyan: var(--color-cyan-300);
+    --color-category-violet: var(--color-violet-300);
+    --color-category-pink: var(--color-pink-300);
+    --color-category-yellow: var(--color-yellow-300);
+    --color-category-green: var(--color-green-400);
+    --color-category-sky: var(--color-sky-400);
+    --color-category-gold: var(--color-gold-400);
+    --color-category-purple: var(--color-purple-500);
+
+    /* Semantic: access format ใช้กับ ticket และ pass entitlement */
+    --color-access-conference: var(--color-category-cyan);
+    --color-access-experience: var(--color-category-violet);
+    --color-access-pavilions: var(--color-category-pink);
+    --color-access-workshop: var(--color-category-gold);
+    --color-access-private-class: var(--color-category-green);
+    --color-access-playbook: var(--color-category-sky);
+
+    /* Semantic: investment topic ใช้กับ agenda tag และ topic badge */
+    --color-topic-capital: var(--color-state-success);
+    --color-topic-commodity: var(--color-state-danger);
+    --color-topic-crypto: var(--color-state-warning);
+    --color-topic-alternative: var(--color-category-purple);
+    --gradient-accent-spectrum: var(--gradient-spectrum);
+
+    /* ==========================================================================
+       3) System Tokens
+       โครงระบบ UI ที่ใช้ซ้ำได้ เช่น typography, layout, section, component
+       ========================================================================== */
+    --layout-container-max: 1280px;
+    --layout-container-hero-max: 1440px;
+    --layout-narrow-max: 920px;
+    --layout-copy-max: 680px;
+    --section-padding-y: var(--space-32);
+    --section-padding-y-sm: var(--space-20);
+    --section-row-gap: var(--space-10);
+    --section-display-size: var(--font-size-80);
+    --section-title-size: var(--font-size-48);
+    --section-heading-size: var(--font-size-40);
+    --section-subheading-size: var(--font-size-24);
+    --section-topic-size: var(--font-size-24);
+    --section-topic-size-sm: var(--font-size-20);
+    --section-topic-size-xs: var(--font-size-16);
+    --section-body-size: var(--font-size-16);
+    ;
+    --section-small-size: var(--font-size-14);
+    --section-subtext-size: var(--font-size-18);
+    --section-tag-size: var(--font-size-14);
+    --section-display-line-height: var(--line-height-display);
+    --section-title-line-height: 140%;
+    --section-heading-line-height: var(--line-height-heading);
+    --section-topic-line-height: var(--line-height-topic);
+    --section-topic-line-height-sm: var(--line-height-relaxed);
+    --section-topic-line-height-xs: var(--section-body-line-height);
+    --section-body-line-height: var(--line-height-body);
+    --section-small-line-height: var(--line-height-normal);
+    --section-title-tracking: var(--letter-spacing-0);
+    --section-heading-tracking: var(--letter-spacing-0);
+    --rule-width-subtle: var(--border-width-1);
+    --rule-width-emphasis: var(--border-width-2);
+    --card-radius: var(--radius-2);
+    --pill-radius: var(--radius-pill);
+    --touch-target-md: var(--space-12);
+    --button-height-md: var(--space-12);
+    --button-height-sm: var(--space-10);
+    --button-radius-pill: var(--radius-pill);
+
+    /* ==========================================================================
+       4) Project Alias Tokens: Better Trade
+       ชื่อเดิมยังอยู่เพื่อไม่ให้ CSS เดิมพัง แต่ค่าอ้างกลับไปยัง token กลาง
+       ========================================================================== */
+
     /* สีหลักและพื้นผิว */
-    --bt-color-ink: #111318;
-    --bt-color-ink-soft: #20242a;
-    --bt-color-white: #ffffff;
-    --bt-color-paper: #f7f8f7;
-    --bt-color-cloud: #eef1f6;
-    --bt-color-muted: #687078;
-    --bt-color-accent: rgba(17, 19, 24, 0.06);
-    --bt-color-line: rgba(17, 19, 24, 0.18);
-    --bt-color-line-soft: rgba(17, 19, 24, 0.16);
-    --bt-color-focus: #2b6cff;
-    --bt-surface-popover: rgba(255, 255, 255, 0.96);
-    --bt-spectrum-line: linear-gradient(90deg, #61e8ed, #9c91ff, #f178d8, #f2ea83, #61e8ed);
+    --bt-color-ink: var(--color-text-primary);
+    --bt-color-ink-soft: var(--color-text-secondary);
+    --bt-color-white: var(--color-neutral-0);
+    --bt-color-paper: var(--color-surface-paper);
+    --bt-color-cloud: var(--color-surface-soft);
+    --bt-color-muted: var(--color-text-muted);
+    --bt-color-accent: var(--alpha-ink-06);
+    --bt-color-line: var(--color-border-default);
+    --bt-color-line-soft: var(--color-border-subtle);
+    --bt-color-focus: var(--color-focus-ring);
+    --bt-surface-popover: var(--color-surface-popover);
+    --bt-spectrum-line: var(--gradient-accent-spectrum);
 
     /* Alias สำหรับหน้า design system เดิม */
     --bt-paper: var(--bt-color-paper);
     --bt-white: var(--bt-color-white);
     --bt-ink: var(--bt-color-ink);
-    --bt-graphite: #30343a;
+    --bt-graphite: var(--color-neutral-700);
     --bt-muted: var(--bt-color-muted);
     --bt-line: var(--bt-color-line-soft);
-    --bt-line-strong: rgba(17, 19, 24, 0.34);
-    --bt-cyan: #61e8ed;
-    --bt-pink: #f178d8;
-    --bt-violet: #9c91ff;
-    --bt-yellow: #f2ea83;
-    --bt-spectrum: linear-gradient(90deg, var(--bt-cyan), var(--bt-violet), var(--bt-pink), var(--bt-yellow), var(--bt-cyan));
+    --bt-line-strong: var(--color-border-strong);
+    --bt-cyan: var(--color-category-cyan);
+    --bt-pink: var(--color-category-pink);
+    --bt-violet: var(--color-category-violet);
+    --bt-yellow: var(--color-category-yellow);
+    --bt-spectrum: var(--gradient-accent-spectrum);
 
     /* ฟอนต์ */
-    --bt-font: "FC Minimal";
-    --bt-headline: "FC Minimal";
+    --bt-font: var(--font-family-base);
+    --bt-headline: var(--font-family-heading);
 
     /* Container */
-    --container-hero-max: 1440px;
-    --bt-max: 1280px;
+    --container-hero-max: var(--layout-container-hero-max);
+    --bt-max: var(--layout-container-max);
 
     /* Spacing และ sizing system 8 */
-    --bt-space-0: 0;
-    --bt-space-1: 4px;
-    --bt-space-2: 8px;
-    --bt-space-3: 12px;
-    --bt-space-4: 16px;
-    --bt-space-5: 20px;
-    --bt-space-6: 24px;
-    --bt-space-8: 32px;
-    --bt-space-10: 40px;
-    --bt-space-12: 48px;
-    --bt-space-16: 64px;
-    --bt-space-20: 80px;
-    --bt-space-24: 96px;
-    --bt-space-28: 112px;
-    --bt-space-32: 128px;
+    --bt-space-0: var(--space-0);
+    --bt-space-1: var(--space-1);
+    --bt-space-2: var(--space-2);
+    --bt-space-3: var(--space-3);
+    --bt-space-4: var(--space-4);
+    --bt-space-5: var(--space-5);
+    --bt-space-6: var(--space-6);
+    --bt-space-8: var(--space-8);
+    --bt-space-10: var(--space-10);
+    --bt-space-12: var(--space-12);
+    --bt-space-16: var(--space-16);
+    --bt-space-20: var(--space-20);
+    --bt-space-24: var(--space-24);
+    --bt-space-28: var(--space-28);
+    --bt-space-32: var(--space-32);
 
     /* เส้นขอบและมุมโค้ง */
-    --bt-radius-1: 4px;
-    --bt-radius-2: 8px;
-    --bt-border-width-1: 1px;
-    --bt-border-width-2: 2px;
+    --bt-radius-1: var(--radius-1);
+    --bt-radius-2: var(--radius-2);
+    --bt-border-width-1: var(--border-width-1);
+    --bt-border-width-2: var(--border-width-2);
 
     /* Typography */
-    --bt-font-size-14: 14px;
-    --bt-font-size-16: 16px;
-    --bt-font-weight-light: 300;
-    --bt-font-weight-regular: 400;
-    --bt-font-weight-medium: 500;
-    --bt-font-weight-bold: 700;
+    --bt-font-size-14: var(--font-size-14);
+    --bt-font-size-16: var(--font-size-16);
+    --bt-font-weight-light: var(--font-weight-light);
+    --bt-font-weight-regular: var(--font-weight-regular);
+    --bt-font-weight-medium: var(--font-weight-medium);
+    --bt-font-weight-bold: var(--font-weight-bold);
 
     /* Motion */
-    --bt-duration-fast: 180ms;
-    --bt-duration-base: 240ms;
-    --bt-duration-reduced: 0.01ms;
-    --bt-ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+    --bt-duration-fast: var(--duration-fast);
+    --bt-duration-base: var(--duration-base);
+    --bt-duration-reduced: var(--duration-reduced);
+    --bt-ease-standard: var(--ease-standard);
     --bt-ease: var(--bt-ease-standard);
 
     /* Shadow */
-    --bt-shadow-action: 0 var(--bt-border-width-1) var(--bt-space-1) rgba(17, 19, 24, 0.10);
-    --bt-shadow-action-primary: 0 var(--bt-border-width-1) var(--bt-space-1) rgba(17, 19, 24, 0.24);
-    --bt-shadow: 0 18px 48px rgba(17, 19, 24, 0.09);
-
-    /* ==========================================================================
-       Better Trade Story System
-       ระบบภาพและจังหวะการเล่าเรื่องสำหรับ section เนื้อหาหลัง hero
-       โดยยังไม่ผูกใช้กับ section หรือหน้าใดทันที
-       ========================================================================== */
-
-    /* สีสำหรับการเล่าเรื่อง ใช้ accent หลักเพียงสีเดียว */
-    --bt-story-bg: #ffffff;
-    --bt-story-paper: #f7f8f7;
-    --bt-story-ink: #111318;
-    --bt-story-muted: #687078;
-    --bt-story-line: #dbded5;
-    --bt-story-line-2: #f2f2f2;
-    --bt-story-accent: #1863dc;
-    --bt-story-media-bg: #0d0f14;
+    --bt-shadow-action: var(--shadow-action);
+    --bt-shadow-action-primary: var(--shadow-action-primary);
+    --bt-shadow: var(--shadow-elevated);
 
     /* สีและขนาดเฉพาะ Footer */
-    --bt-footer-ink: #f7f8f7;
-    --bt-footer-muted: #aeb4bb;
-    --bt-footer-line: rgba(255, 255, 255, 0.12);
-    --bt-footer-logo-width: 192px;
+    --bt-footer-ink: var(--color-text-inverse);
+    --bt-footer-muted: var(--color-text-inverse-muted);
+    --bt-footer-line: var(--color-border-inverse-subtle);
+    --bt-footer-logo-width: calc(var(--space-32) + var(--space-16));
 
     /* สีแยกหมวด Ticket ถอดจากช่วงสีของ Better Trade spectrum */
-    --bt-ticket-conference: #61e8ed;
-    --bt-ticket-experience: #9c91ff;
-    --bt-ticket-pavilions: #f178d8;
-    --bt-ticket-workshop: #e0c83f;
-    --bt-ticket-private-class: #79d7bf;
-    --bt-ticket-playbook: #65b8ef;
+    --bt-ticket-conference: var(--color-access-conference);
+    --bt-ticket-experience: var(--color-access-experience);
+    --bt-ticket-pavilions: var(--color-access-pavilions);
+    --bt-ticket-workshop: var(--color-access-workshop);
+    --bt-ticket-private-class: var(--color-access-private-class);
+    --bt-ticket-playbook: var(--color-access-playbook);
 
     /* สีและสัดส่วนเฉพาะ Agenda */
-    --bt-agenda-capital: #2eaa74;
-    --bt-agenda-commodity: #ef5d75;
-    --bt-agenda-crypto: #d6b72d;
-    --bt-agenda-alternative: #9c67d9;
-    --bt-agenda-aside-width: 320px;
-    --bt-agenda-time-width: 112px;
-    --bt-agenda-speaker-column-width: 208px;
-    --bt-agenda-speaker-column-width-mobile: 152px;
-    --bt-agenda-speaker-size: 64px;
-    --bt-agenda-speaker-size-mobile: 48px;
+    --bt-agenda-capital: var(--color-topic-capital);
+    --bt-agenda-commodity: var(--color-topic-commodity);
+    --bt-agenda-crypto: var(--color-topic-crypto);
+    --bt-agenda-alternative: var(--color-topic-alternative);
+    --bt-agenda-aside-width: calc(var(--space-32) + var(--space-32) + var(--space-16));
+    --bt-agenda-time-width: var(--space-28);
+    --bt-agenda-speaker-column-width: calc(var(--space-32) + var(--space-20));
+    --bt-agenda-speaker-column-width-mobile: calc(var(--space-28) + var(--space-10));
+    --bt-agenda-speaker-size: var(--space-16);
+    --bt-agenda-speaker-size-mobile: var(--space-12);
 
-    /* ตัวอักษรสำหรับการเล่าเรื่อง */
-    --bt-story-display-size: 80px;
-    --bt-story-title-size: 48px;
-    --bt-story-heading-size: 40px;
-    --bt-story-subheading-size: 24px;
-    --bt-story-topic-size: 24px;
-    --bt-story-body-size: 16px;
-    --bt-story-small-size: 14px;
-    --bt-story-subtext-size: 18px;
-    --bt-story-tag-size: 14px;
-    --bt-story-display-line-height: 88px;
-    --bt-story-title-line-height: 140%;
-    --bt-story-heading-line-height: 48px;
-    --bt-story-topic-line-height: 40px;
-    --bt-story-body-line-height: 24px;
-    --bt-story-small-line-height: normal;
-    --bt-story-title-tracking: 0px;
-    --bt-story-heading-tracking: 0px;
-
-    /* โครงสร้างพื้นที่สำหรับการเล่าเรื่อง */
-    --bt-story-max: 1280px;
-    --bt-story-narrow: 920px;
-    --bt-story-copy: 680px;
-    --bt-story-section-padding-y: 128px;
-    --bt-story-section-padding-y-sm: 80px;
-    --bt-story-row-gap: 40px;
-
-    /* องค์ประกอบร่วมสำหรับการเล่าเรื่อง */
-    /* เส้นบาง 1px และ 2px เป็นข้อยกเว้นเชิงภาพจากระบบ 8 */
-    --bt-story-rule-width: 1px;
-    --bt-story-rule-height: 2px;
-    --bt-story-card-radius: 8px;
-    --bt-story-pill-radius: 48px;
-    --bt-story-button-height: 48px;
-    --bt-story-touch-target: 48px;
-    --bt-header-action-width: 120px;
-    --bt-header-action-height: 40px;
-    --bt-header-action-rim: 2px;
+    --bt-header-action-width: calc(var(--space-20) + var(--space-10));
+    --bt-header-action-height: var(--space-10);
+    --bt-header-action-rim: var(--border-width-2);
+    --bt-header-nav-ink: var(--color-neutral-600);
+    --bt-header-nav-ink-hover: var(--color-text-primary);
+    --bt-header-nav-ink-on-dark-hover: var(--color-text-inverse);
 
     /* Token เฉพาะ hamburger / mobile menu */
-    --bt-menu-bg: var(--bt-color-white);
-    --bt-menu-backdrop-bg: #f4f3ef;
-    --bt-menu-ink: var(--bt-color-ink);
-    --bt-menu-ink-hover: #5b677a;
-    --bt-menu-muted: #72777f;
-    --bt-menu-index: #8b9097;
-    --bt-menu-line: rgba(17, 19, 24, 0.20);
-    --bt-menu-line-soft: rgba(17, 19, 24, 0.12);
-    --bt-menu-link-underline: rgba(17, 19, 24, 0.24);
-    --bt-menu-panel-max-width: 720px;
-    --bt-menu-toggle-size: 48px;
-    --bt-menu-toggle-lines-width: 20px;
-    --bt-menu-toggle-lines-height: 16px;
-    --bt-menu-toggle-line-height: 1.5px;
-    --bt-menu-toggle-line-middle: 7px;
-    --bt-menu-toggle-line-bottom: 14px;
-    --bt-menu-scroll-padding-y: 18px;
-    --bt-menu-scroll-padding-x: 24px;
-    --bt-menu-scroll-padding-x-sm: 20px;
-    --bt-menu-scroll-padding-bottom: 28px;
-    --bt-menu-nav-link-height: 54px;
-    --bt-menu-nav-font-size: 48px;
-    --bt-menu-nav-font-size-sm: 34px;
-    --bt-menu-nav-line-height: 0.92;
-    --bt-menu-nav-tracking: -0.035em;
-    --bt-menu-nav-hover-indent: 8px;
-    --bt-menu-index-offset-y: 11px;
-    --bt-menu-label-size: 11px;
-    --bt-menu-label-weight: 500;
-    --bt-menu-label-tracking: 0.12em;
-    --bt-menu-index-size: 10px;
-    --bt-menu-index-tracking: 0.08em;
-    --bt-menu-actions-gap: var(--bt-space-2);
-    --bt-menu-actions-padding-y: 20px;
-    --bt-menu-footer-gap: 24px;
-    --bt-menu-footer-padding-top: 18px;
-    --bt-menu-contact-gap: 5px;
-    --bt-menu-contact-font-size: 14px;
-    --bt-menu-contact-line-height: 1.25;
-    --bt-menu-contact-underline-offset: 3px;
-    --bt-menu-sponsor-padding-top: 16px;
-    --bt-menu-transition-duration: 620ms;
-    --bt-menu-transition-ease: cubic-bezier(0.76, 0, 0.24, 1);
-    --bt-menu-visibility-delay: 800ms;
-    --bt-menu-closing-delay: 180ms;
-    --bt-menu-content-fade-duration: 180ms;
-    --bt-menu-content-open-delay: 400ms;
-    --bt-menu-link-transition-duration: 180ms;
-    --bt-menu-link-indent-duration: 260ms;
+    --bt-menu-bg: var(--color-surface-page);
+    --bt-menu-backdrop-bg: var(--color-surface-paper);
+    --bt-menu-ink: var(--color-text-primary);
+    --bt-menu-toggle-ink-on-dark: var(--color-text-inverse);
+    --bt-menu-ink-hover: var(--color-text-muted);
+    --bt-menu-muted: var(--color-neutral-500);
+    --bt-menu-index: var(--color-neutral-400);
+    --bt-menu-line: var(--alpha-ink-20);
+    --bt-menu-line-soft: var(--alpha-ink-12);
+    --bt-menu-link-underline: var(--alpha-ink-24);
+    --bt-menu-panel-max-width: calc(var(--space-32) * 5 + var(--space-20));
+    --bt-menu-toggle-size: var(--space-12);
+    --bt-menu-toggle-lines-width: var(--space-5);
+    --bt-menu-toggle-lines-height: var(--space-4);
+    --bt-menu-toggle-line-height: var(--border-width-2);
+    --bt-menu-toggle-line-middle: var(--space-2);
+    --bt-menu-toggle-line-bottom: var(--space-4);
+    --bt-menu-scroll-padding-y: var(--space-4);
+    --bt-menu-scroll-padding-x: var(--space-6);
+    --bt-menu-scroll-padding-x-sm: var(--space-5);
+    --bt-menu-scroll-padding-bottom: var(--space-8);
+    --bt-menu-nav-link-height: var(--font-size-56);
+    --bt-menu-nav-font-size: var(--font-size-40);
+    --bt-menu-nav-font-size-sm: var(--font-size-32);
+    --bt-menu-nav-line-height: var(--line-height-1);
+    --bt-menu-nav-tracking: var(--letter-spacing-0);
+    --bt-menu-nav-hover-indent: var(--space-2);
+    --bt-menu-index-offset-y: var(--space-3);
+    --bt-menu-label-size: var(--font-size-16);
+    --bt-menu-label-weight: var(--font-weight-regular);
+    --bt-menu-label-tracking: var(--letter-spacing-label);
+    --bt-menu-index-size: var(--font-size-12);
+    --bt-menu-index-tracking: var(--letter-spacing-index);
+    --bt-menu-actions-gap: var(--space-3);
+    --bt-menu-actions-padding-y: var(--space-8);
+    --bt-menu-footer-gap: var(--space-6);
+    --bt-menu-footer-padding-top: var(--space-8);
+    --bt-menu-contact-gap: var(--space-6);
+    --bt-menu-contact-font-size: var(--font-size-16);
+    --bt-menu-contact-line-height: var(--line-height-body);
+    --bt-menu-contact-underline-offset: var(--space-1);
+    --bt-menu-sponsor-padding-top: var(--space-8);
+    --bt-menu-transition-duration: var(--duration-slow);
+    --bt-menu-transition-ease: var(--ease-reveal);
+    --bt-menu-visibility-delay: calc(var(--duration-slow) + var(--duration-base));
+    --bt-menu-closing-delay: var(--duration-fast);
+    --bt-menu-content-fade-duration: var(--duration-fast);
+    --bt-menu-content-open-delay: calc(var(--duration-base) + var(--duration-fast));
+    --bt-menu-link-transition-duration: var(--duration-fast);
+    --bt-menu-link-indent-duration: var(--duration-base);
 
     /* Token เฉพาะ featured topics */
-    --bt-topics-section-padding-top: 192px;
-    --bt-topics-section-padding-bottom: 208px;
-    --bt-topics-content-margin-top: 96px;
-    --bt-topics-content-gap: 104px;
-    --bt-topics-star-size: 24px;
-    --bt-topics-assets-min-height: 680px;
-    --bt-topics-section-padding-top-md: 144px;
-    --bt-topics-section-padding-bottom-md: 160px;
-    --bt-topics-content-margin-top-md: 72px;
-    --bt-topics-content-gap-md: 40px;
-    --bt-topics-star-size-md: 18px;
-    --bt-topics-assets-min-height-md: 600px;
-    --bt-topics-section-padding-top-sm: 96px;
-    --bt-topics-section-padding-bottom-sm: 112px;
-    --bt-topics-content-margin-top-sm: 56px;
-    --bt-topics-content-gap-sm: 64px;
-    --bt-topics-star-size-sm: 16px;
-    --bt-topics-assets-min-height-sm: 560px;
-
-    /* มิติและการเคลื่อนไหวสำหรับการเล่าเรื่อง */
-    --bt-story-shadow-low: 0 0 8px rgba(172, 171, 171, 0.30);
-    --bt-story-shadow-deep: 0 32px 64px rgba(0, 0, 0, 0.30);
-    --bt-story-duration: 300ms;
-    --bt-story-duration-slow: 560ms;
-    --bt-story-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --bt-topics-ink: var(--color-text-inverse);
+    --bt-topics-ink-muted: color-mix(in srgb, var(--bt-topics-ink) 68%, transparent);
+    --bt-topics-bg: var(--color-neutral-900);
+    --bt-topics-rule: var(--alpha-white-12);
+    --bt-topics-content-margin-top: var(--space-24);
+    --bt-topics-content-gap: calc(var(--space-16) + var(--space-10));
+    --bt-topics-star-size: var(--space-6);
+    --bt-topics-assets-min-height: calc(var(--space-32) * 5 + var(--space-10));
+    --bt-topics-content-margin-top-md: calc(var(--space-16) + var(--space-2));
+    --bt-topics-content-gap-md: var(--space-10);
+    --bt-topics-star-size-md: var(--space-4);
+    --bt-topics-assets-min-height-md: calc(var(--space-32) * 4 + var(--space-16) + var(--space-6));
+    --bt-topics-content-margin-top-sm: calc(var(--space-12) + var(--space-2));
+    --bt-topics-content-gap-sm: var(--space-16);
+    --bt-topics-star-size-sm: var(--space-4);
+    --bt-topics-assets-min-height-sm: calc(var(--space-32) * 4 + var(--space-12));
 
     /* Token เฉพาะ hero-v2 เดิม
        คงชื่อเดิมไว้เพื่อไม่ให้ motion และ layout ที่เพิ่งกู้กลับมาพัง */
@@ -262,24 +504,75 @@
     --space-32: 128px;
     --header-height: var(--space-20);
     --header-line: rgba(17, 19, 24, 0.12);
-    --spectrum: linear-gradient(90deg, #61e8ed, #9c91ff, #f178d8, #f2ea83, #61e8ed);
-    --spectrum-vertical: linear-gradient(180deg, #61e8ed, #9c91ff, #f178d8, #f2ea83, #61e8ed);
+
+    /* เดิม — คงไว้เผื่อย้อนกลับ ไม่มีจุดไหนอ้างอิงตัวนี้โดยตรงแล้ว
+       (--spectrum ด้านล่างเปลี่ยนไปใช้ชุดใหม่ที่ถอดจาก KV แทน) */
+    --spectrum-legacy: linear-gradient(90deg, #61e8ed, #9c91ff, #f178d8, #f2ea83, #61e8ed);
+    --spectrum-vertical-legacy: linear-gradient(180deg, #61e8ed, #9c91ff, #f178d8, #f2ea83, #61e8ed);
+
+    /* ใหม่ — ถอดจาก KV-BT-2026-Final.jpg และไอคอนสินทรัพย์ ด้วย k-means ใน sRGB
+       แล้วไล่โทนต่อใน OKLCH คัดลอกมาจาก css/text-token.css (--color-kv-spectrum-*
+       และ --gradient-kv-spectrum) เอาเฉพาะส่วน spectrum มาลองใช้แทนของเดิม */
+    --color-kv-spectrum-1: #00d4fe;
+    --color-kv-spectrum-2: #1f87e6;
+    --color-kv-spectrum-3: #113cf3;
+    --color-kv-spectrum-4: #722df4;
+    --color-kv-spectrum-5: #e63bd8;
+    --color-kv-spectrum-6: #f79319;
+    --gradient-kv-spectrum: linear-gradient(90deg,
+            var(--color-kv-spectrum-1),
+            var(--color-kv-spectrum-2),
+            var(--color-kv-spectrum-3),
+            var(--color-kv-spectrum-4),
+            var(--color-kv-spectrum-5),
+            var(--color-kv-spectrum-6));
+    --gradient-kv-spectrum-vertical: linear-gradient(180deg,
+            var(--color-kv-spectrum-1),
+            var(--color-kv-spectrum-2),
+            var(--color-kv-spectrum-3),
+            var(--color-kv-spectrum-4),
+            var(--color-kv-spectrum-5),
+            var(--color-kv-spectrum-6));
+
+    /* ทดลอง: ทุกจุดที่ใช้ --spectrum / --spectrum-vertical อยู่แล้วจะได้สีชุดใหม่ทันที
+       โดยไม่ต้องแก้ที่จุดใช้งาน — ถ้าอยากย้อนกลับ สลับกลับไปเป็น var(--spectrum-legacy)
+       และ var(--spectrum-vertical-legacy) ได้เลย */
+    --spectrum: var(--gradient-kv-spectrum);
+    --spectrum-vertical: var(--gradient-kv-spectrum-vertical);
 
     /* ค่าเริ่มต้นของ custom scrollbar ก่อน JavaScript คำนวณค่าจริง */
     --thumb-height: 80px;
     --thumb-y: 0px;
 }
 
-/* ปรับความสูง header สำหรับ breakpoint มือถือของ hero-v2 จากไฟล์กลาง */
-@media (max-width:991px) {
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+}
+
+/* ปรับความสูง header ให้ตรงกับ breakpoint static ของ hero-v2 */
+@media (max-width:1199px) {
     :root {
         --header-height: 72px;
     }
 }
 
+@media (min-width: 576px) and (max-width: 767px) {
+
+    .container,
+    .container-sm {
+        --bs-gutter-x: 32px;
+        max-width: 720px;
+    }
+}
+
 @media (max-width:575px) {
+    :root {
+        --section-padding-y-sm: var(--space-16);
+        --bt-menu-label-size: var(--font-size-14);
+    }
+
     .container {
-        --bs-gutter-x: 48px;
+        --bs-gutter-x: 32px;
     }
 }
 
@@ -288,25 +581,25 @@
    ใช้ซ้ำได้ข้ามหน้าและข้าม section เช่น header CTA, secondary CTA, text CTA
    ========================================================================== */
 .bt-action-button {
-    --bt-action-fill: var(--bt-surface-popover);
+    --bt-action-fill: var(--color-surface-popover);
 
     position: relative;
-    min-height: var(--bt-space-10);
-    padding: 0 var(--bt-space-3);
+    min-height: var(--space-10);
+    padding: 0 var(--space-3);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--bt-space-2);
-    border: var(--bt-border-width-2) solid transparent;
-    border-radius: var(--bt-story-pill-radius);
-    color: var(--bt-color-ink);
+    gap: var(--space-2);
+    border: var(--border-width-2) solid transparent;
+    border-radius: var(--pill-radius);
+    color: var(--color-text-primary);
     background:
         linear-gradient(var(--bt-action-fill), var(--bt-action-fill)) padding-box,
         var(--bt-spectrum) border-box;
-    box-shadow: var(--bt-shadow-action);
+    box-shadow: var(--shadow-action);
     font-family: inherit;
-    font-size: var(--bt-font-size-16);
-    font-weight: var(--bt-font-weight-regular);
+    font-size: var(--font-size-16);
+    font-weight: var(--font-weight-regular);
     line-height: 1;
     letter-spacing: 0;
     text-align: center;
@@ -317,10 +610,10 @@
     overflow: hidden;
     -webkit-tap-highlight-color: transparent;
     transition:
-        transform var(--bt-duration-fast) var(--bt-ease-standard),
-        filter var(--bt-duration-fast) var(--bt-ease-standard),
-        box-shadow var(--bt-duration-fast) var(--bt-ease-standard),
-        color var(--bt-duration-fast) var(--bt-ease-standard);
+        transform var(--duration-fast) var(--ease-standard),
+        filter var(--duration-fast) var(--ease-standard),
+        box-shadow var(--duration-fast) var(--ease-standard),
+        color var(--duration-fast) var(--ease-standard);
 
     &::before {
         content: "";
@@ -329,15 +622,15 @@
         border-radius: inherit;
         pointer-events: none;
         box-shadow:
-            inset 0 var(--bt-border-width-1) 0 rgba(255, 255, 255, 0.28),
-            inset 0 calc(var(--bt-border-width-1) * -1) 0 rgba(17, 19, 24, 0.08);
+            inset 0 var(--border-width-1) 0 rgba(255, 255, 255, 0.28),
+            inset 0 calc(var(--border-width-1) * -1) 0 rgba(17, 19, 24, 0.08);
     }
 
     &:hover {
-        --bt-action-fill: var(--bt-color-paper);
+        --bt-action-fill: var(--color-surface-paper);
 
         filter: brightness(1.02);
-        box-shadow: 0 var(--bt-space-1) var(--bt-space-3) rgba(17, 19, 24, 0.14);
+        box-shadow: 0 var(--space-1) var(--space-3) rgba(17, 19, 24, 0.14);
     }
 
     &:active,
@@ -347,8 +640,8 @@
     }
 
     &:focus-visible {
-        outline: var(--bt-border-width-2) solid var(--bt-color-focus);
-        outline-offset: var(--bt-space-1);
+        outline: var(--border-width-2) solid var(--color-focus-ring);
+        outline-offset: var(--space-1);
     }
 
     &[aria-disabled="true"],
@@ -364,9 +657,9 @@
 
     .bt-action-button__spinner {
         position: absolute;
-        width: var(--bt-space-4);
-        height: var(--bt-space-4);
-        border: var(--bt-border-width-2) solid currentColor;
+        width: var(--space-4);
+        height: var(--space-4);
+        border: var(--border-width-2) solid currentColor;
         border-right-color: transparent;
         border-radius: 50%;
         animation: bt-action-button-spin 720ms linear infinite;
@@ -374,36 +667,42 @@
 }
 
 .bt-action-button--primary {
-    --bt-action-fill: var(--bt-color-ink);
+    --bt-action-fill: var(--color-text-primary);
 
-    color: var(--bt-color-cloud);
-    box-shadow: var(--bt-shadow-action-primary);
+    color: var(--color-surface-soft);
+    background:
+        linear-gradient(var(--bt-action-fill), var(--bt-action-fill)) padding-box,
+        var(--gradient-accent-spectrum) border-box;
+    box-shadow: var(--shadow-action-primary);
 
     &:hover {
-        --bt-action-fill: var(--bt-color-ink-soft);
+        --bt-action-fill: var(--color-text-secondary);
 
-        color: var(--bt-color-white);
+        color: var(--color-neutral-0);
+        background:
+            linear-gradient(var(--bt-action-fill), var(--bt-action-fill)) padding-box,
+            var(--gradient-accent-spectrum) border-box;
     }
 }
 
 .bt-action-button--secondary {
-    --bt-action-fill: var(--bt-surface-popover);
+    --bt-action-fill: var(--color-surface-popover);
 
     border-color: var(--bt-color-line);
-    color: var(--bt-color-ink);
+    color: var(--color-text-primary);
     background: var(--bt-action-fill);
 
     &:hover {
-        --bt-action-fill: var(--bt-color-paper);
+        --bt-action-fill: var(--color-surface-paper);
     }
 }
 
 .bt-action-button--text {
-    min-height: var(--bt-space-10);
-    padding: 0 var(--bt-space-1);
+    min-height: var(--space-10);
+    padding: 0 var(--space-1);
     border: 0;
     border-radius: 0;
-    color: var(--bt-color-ink);
+    color: var(--color-text-primary);
     background: transparent;
     box-shadow: none;
 
@@ -416,12 +715,12 @@
         position: absolute;
         left: 0;
         right: 0;
-        bottom: var(--bt-space-0);
-        height: var(--bt-border-width-2);
-        background: var(--bt-spectrum-line);
+        bottom: var(--space-0);
+        height: var(--border-width-2);
+        background: var(--gradient-accent-spectrum);
         transform: scaleX(0.22);
         transform-origin: left;
-        transition: transform var(--bt-duration-base) var(--bt-ease-standard);
+        transition: transform var(--duration-base) var(--ease-standard);
     }
 
     &:hover {
@@ -442,19 +741,19 @@
 }
 
 .bt-action-button--xl {
-    min-height: var(--bt-space-12);
-    padding-inline: var(--bt-space-6);
-    font-size: var(--bt-font-size-16);
+    min-height: var(--space-12);
+    padding-inline: var(--space-6);
+    font-size: var(--font-size-16);
 }
 
 .bt-action-button--sm {
-    min-height: var(--bt-space-10);
-    padding-inline: var(--bt-space-4);
-    font-size: var(--bt-font-size-14);
+    min-height: var(--space-10);
+    padding-inline: var(--space-4);
+    font-size: var(--font-size-14);
 }
 
 .bt-action-button--header {
-    width: var(--bt-header-action-width);
+    /* width: var(--bt-header-action-width); */
     min-height: var(--bt-header-action-height);
 }
 
@@ -464,18 +763,12 @@
     }
 }
 
-@media (max-width:1199px) {
-    .bt-action-button--header {
-        padding-inline: var(--bt-space-3);
-    }
-}
-
 @media (prefers-reduced-motion:reduce) {
     .bt-action-button {
-        transition-duration: var(--bt-duration-reduced);
+        transition-duration: var(--duration-reduced);
 
         .bt-action-button__spinner {
-            animation-duration: var(--bt-duration-reduced);
+            animation-duration: var(--duration-reduced);
         }
     }
 }
@@ -486,22 +779,52 @@
    ใช้ซ้ำได้ข้ามหน้าและข้าม section ได้
    ========================================================================== */
 .bt-section-title {
-    font-size: var(--bt-story-title-size);
-    font-weight: var(--bt-font-weight-regular);
-    line-height: var(--bt-story-title-line-height);
-    letter-spacing: var(--bt-story-title-tracking);
+    --bt-section-title-size: var(--section-title-size);
+
+    font-size: var(--bt-section-title-size);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--section-title-line-height);
+    letter-spacing: var(--section-title-tracking);
+}
+
+.bt-title-highlight {
+    color: transparent;
+    background: linear-gradient(90deg,
+            #00d4fe 0%,
+            #1f87e6 20%,
+            #113cf3 40%,
+            #722df4 58%,
+            #e63bd8 76%,
+            #f79319 100%);
+    background-size: 200% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: bt-title-spectrum-flow 3s ease-in-out infinite alternate;
+}
+
+@keyframes bt-title-spectrum-flow {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 100% 100%;
+    }
 }
 
 .bt-section-subtext {
     /* ความยาวเส้นต่อท้าย (ดู ::after ด้านล่าง) ปรับต่อ section ได้ถ้าต้องการ */
-    --bt-subtext-rule-length: 64px;
+    --bt-subtext-rule-length: var(--space-16);
+    --bt-section-subtext-size: var(--section-subtext-size);
 
-    margin: var(--bt-space-6) 0 0;
-    color: var(--bt-story-muted);
-    font-size: var(--bt-story-subtext-size);
-    font-weight: var(--bt-font-weight-regular);
-    line-height: var(--bt-story-body-line-height);
-    letter-spacing: 0;
+    margin: var(--space-6) 0 0;
+    color: var(--color-text-muted);
+    font-family: 'Baskervville', var(--font-family-base);
+    font-size: var(--bt-section-subtext-size);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--section-body-line-height);
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     display: flex;
     align-items: center;
@@ -519,7 +842,7 @@
     width: var(--bt-subtext-rule-length);
     height: calc(var(--bt-subtext-rule-length) / 5.13);
     /* อัตราส่วนภาพ 200:39 */
-    margin-left: var(--bt-space-3);
+    margin-left: var(--space-3);
     vertical-align: middle;
     background: url('../images/line-star-trail.webp') center / contain no-repeat;
 }
@@ -529,5 +852,20 @@
 
     &::after {
         display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bt-title-highlight {
+        animation: none;
+    }
+}
+
+@media (max-width:575px) {
+    .bt-section-subtext {
+        --bt-section-subtext-size: var(--font-size-14);
+
+        margin: var(--space-4) 0 0;
+        font-size: var(--bt-section-subtext-size);
     }
 }

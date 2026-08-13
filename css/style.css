@@ -119,6 +119,30 @@ button {
     font-family: var(--font);
 }
 
+/* ---------- reusable section title responsive ----------
+   ใช้เป็น media ของ component กลางที่ถูกเรียกในหลาย section
+   จึงวางไว้ช่วงต้นไฟล์แทนการกระจายไว้ท้ายไฟล์ */
+@media (max-width:991px) {
+    section[aria-labelledby] h2.bt-section-title {
+        --bt-section-title-size: var(--font-size-40);
+        font-size: var(--bt-section-title-size);
+    }
+}
+
+@media (max-width:767px) {
+    section[aria-labelledby] h2.bt-section-title {
+        --bt-section-title-size: var(--font-size-32);
+        font-size: var(--bt-section-title-size);
+    }
+}
+
+@media (max-width:575px) {
+    section[aria-labelledby] h2.bt-section-title {
+        --bt-section-title-size: var(--font-size-28);
+        font-size: var(--bt-section-title-size);
+    }
+}
+
 /* ---------- global header ----------
     Fixed for its whole life (not just once "sticky") so it can float over the
     pinned hero from frame one. Visibility has three phases, driven by scroll
@@ -172,6 +196,10 @@ body.menu-closing .site-header {
     gap: var(--space-8);
 }
 
+.site-header.is-sticky .site-header__inner {
+    width: 100%;
+}
+
 .site-header__logo {
     width: 120px;
     display: flex;
@@ -208,9 +236,9 @@ body.menu-closing .site-header {
     padding: 0 var(--space-1);
     display: grid;
     place-items: center;
-    color: #434952;
+    color: var(--bt-header-nav-ink);
     text-decoration: none;
-    font-size: 16px;
+    font-size: var(--font-size-16);
     text-transform: uppercase;
     white-space: nowrap;
     transition: color 180ms ease;
@@ -239,12 +267,12 @@ body.menu-closing .site-header {
 
 .site-header__nav a:hover,
 .site-header__nav a:focus-visible {
-    color: #111318;
+    color: var(--bt-header-nav-ink-hover);
 }
 
 .site-header--on-dark .site-header__nav a:hover,
 .site-header--on-dark .site-header__nav a:focus-visible {
-    color: #fff;
+    color: var(--bt-header-nav-ink-on-dark-hover);
 }
 
 .site-header__nav a:hover::after,
@@ -266,6 +294,26 @@ body.menu-closing .site-header {
     justify-content: center;
 }
 
+.site-header .bt-action-button--primary {
+    --bt-action-fill: var(--color-text-primary);
+
+    border-color: transparent;
+    color: var(--color-surface-soft);
+    background:
+        linear-gradient(var(--bt-action-fill), var(--bt-action-fill)) padding-box,
+        var(--gradient-accent-spectrum) border-box;
+
+    &:hover,
+    &:focus-visible {
+        --bt-action-fill: var(--color-text-secondary);
+
+        color: var(--color-neutral-0);
+        background:
+            linear-gradient(var(--bt-action-fill), var(--bt-action-fill)) padding-box,
+            var(--gradient-accent-spectrum) border-box;
+    }
+}
+
 .site-header__toggle {
     width: var(--bt-menu-toggle-size);
     height: var(--bt-menu-toggle-size);
@@ -279,6 +327,11 @@ body.menu-closing .site-header {
     cursor: pointer;
     appearance: none;
     box-shadow: none;
+    transition: color var(--bt-duration-fast) ease;
+}
+
+.site-header--on-dark .site-header__toggle {
+    color: var(--bt-menu-toggle-ink-on-dark);
 }
 
 .site-header__toggle-lines {
@@ -369,7 +422,6 @@ body.menu-closing .site-header {
     font-size: var(--bt-menu-label-size);
     font-weight: var(--bt-menu-label-weight);
     line-height: 1;
-    letter-spacing: var(--bt-menu-label-tracking);
     text-transform: uppercase;
 }
 
@@ -389,7 +441,7 @@ body.menu-closing .site-header {
     justify-content: space-between;
     color: var(--bt-menu-ink);
     text-decoration: none;
-    font-size: var(--bt-menu-nav-font-size);
+    font-size: var(--bt-menu-nav-font-size-sm);
     font-weight: var(--bt-font-weight-light);
     line-height: var(--bt-menu-nav-line-height);
     letter-spacing: var(--bt-menu-nav-tracking);
@@ -425,21 +477,29 @@ body.menu-closing .site-header {
 .site-header__mobile-footer {
     padding-top: var(--bt-menu-footer-padding-top);
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     gap: var(--bt-menu-footer-gap);
     border-top: var(--bt-border-width-1) solid var(--bt-menu-line);
 }
 
 .site-header__mobile-contact {
-    min-width: 0;
+    min-width: calc(50% - var(--bt-menu-footer-gap));
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: var(--bt-menu-contact-gap);
 }
 
-.site-header__mobile-contact .site-header__mobile-label {
-    margin-bottom: var(--bt-menu-contact-gap);
+.site-header__mobile-contact--primary {
+    width: 100%;
+}
+
+.site-header__mobile-contact-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    column-gap: var(--space-4);
+    row-gap: var(--space-3);
 }
 
 .site-header__mobile-contact a {
@@ -447,15 +507,82 @@ body.menu-closing .site-header {
     color: var(--bt-menu-ink);
     font-size: var(--bt-menu-contact-font-size);
     line-height: var(--bt-menu-contact-line-height);
+    text-decoration: underline;
     text-decoration-color: var(--bt-menu-link-underline);
     text-underline-offset: var(--bt-menu-contact-underline-offset);
     overflow-wrap: anywhere;
 }
 
+.site-header__mobile-contact-grid a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    text-decoration: none;
+}
+
+.site-header__mobile-contact-grid .bt-icon {
+    flex: 0 0 auto;
+    width: var(--space-5);
+    height: var(--space-5);
+    color: var(--bt-menu-index);
+    stroke-width: 1.8;
+}
+
+.site-header__mobile-contact-grid span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
 .site-header__mobile-contact--sponsor {
+    width: 100%;
     grid-column: 1 / -1;
     padding-top: var(--bt-menu-sponsor-padding-top);
     border-top: var(--bt-border-width-1) solid var(--bt-menu-line-soft);
+}
+
+.site-header__mobile-sponsor-list {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    column-gap: var(--space-4);
+    row-gap: var(--space-3);
+}
+
+.site-header__mobile-sponsor {
+    display: grid;
+    gap: var(--space-2);
+}
+
+.site-header__mobile-sponsor-name {
+    margin: 0 0 var(--space-1);
+    color: var(--bt-menu-ink);
+    font-size: var(--bt-menu-contact-font-size);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--bt-menu-contact-line-height);
+}
+
+.site-header__mobile-sponsor-name span {
+    color: var(--bt-menu-muted);
+}
+
+.site-header__mobile-sponsor a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    text-decoration: none;
+}
+
+.site-header__mobile-sponsor .bt-icon {
+    flex: 0 0 auto;
+    width: var(--space-5);
+    height: var(--space-5);
+    color: var(--bt-menu-index);
+    stroke-width: 1.8;
+}
+
+.site-header__mobile-sponsor a span {
+    min-width: 0;
+    overflow-wrap: anywhere;
 }
 
 .site-header__backdrop {
@@ -525,9 +652,91 @@ body.menu-open .site-header__backdrop {
     pointer-events: auto;
 }
 
+@media (max-width:1199px) {
+    .site-header__inner {
+        width: calc(100% - var(--space-8));
+        min-height: var(--header-height);
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        z-index: 1;
+        border-bottom: 1px solid transparent;
+        transition: border-color 220ms ease;
+    }
+
+    .site-header__logo {
+        width: 144px;
+        height: var(--space-12);
+    }
+
+    .site-header__nav,
+    .site-header__actions {
+        display: none;
+    }
+
+    .site-header__toggle {
+        display: grid;
+    }
+
+    .site-header__backdrop {
+        display: block;
+        z-index: 195;
+        background: var(--bt-menu-backdrop-bg);
+        visibility: hidden;
+        opacity: 1;
+        clip-path: inset(0 0 100% 0);
+        transition:
+            clip-path var(--bt-menu-transition-duration) var(--bt-menu-transition-ease),
+            visibility 0s linear var(--bt-menu-visibility-delay);
+        will-change: clip-path;
+    }
+
+    body.menu-open .site-header__backdrop {
+        visibility: visible;
+        opacity: 1;
+        clip-path: inset(0);
+        transition:
+            clip-path var(--bt-menu-transition-duration) var(--bt-menu-transition-ease),
+            visibility 0s;
+    }
+
+    body.menu-closing .site-header__backdrop {
+        visibility: visible;
+        transition-delay: var(--bt-menu-closing-delay), 0s;
+    }
+}
+
+@media (max-width:575px) {
+    .site-header__mobile-scroll {
+        padding-left: var(--bt-menu-scroll-padding-x-sm);
+        padding-right: var(--bt-menu-scroll-padding-x-sm);
+    }
+
+    .site-header__mobile-nav a {
+        font-size: var(--bt-menu-nav-font-size-sm);
+    }
+
+    .site-header__mobile-contact-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .site-header__mobile-sponsor-list {
+        grid-template-columns: 1fr;
+        gap: var(--space-6);
+    }
+
+    .site-header__mobile-sponsor {
+        gap: var(--space-1);
+    }
+
+    .site-header__mobile-sponsor-name {
+        margin: 0 0 var(--space-0);
+    }
+}
+
 /* ---------- opening loader ---------- */
 #loader {
-    position: absolute;
+    position: fixed;
     inset: 0;
     z-index: 300;
     overflow: hidden;
@@ -953,6 +1162,10 @@ the timeline drops them under the ship once the walls have retreated. */
     font-size: inherit;
     font-weight: inherit;
 
+    &::after {
+        background: var(--spectrum);
+    }
+
     .bt-icon {
         width: 18px;
         height: 18px;
@@ -961,19 +1174,23 @@ the timeline drops them under the ship once the walls have retreated. */
 
     &:hover .bt-icon,
     &:focus-visible .bt-icon {
-        stroke: url("#icon-spectrum");
+        stroke: #00d4fe;
+        stroke: url("#venue-arrow-spectrum");
     }
 }
 
 /* ---------- next section ---------- */
 #concept {
+    --bt-concept-description-size: var(--section-topic-size);
+    --bt-concept-description-line-height: var(--section-topic-line-height);
+
     position: relative;
     /* min-height: 180vh; */
-    background: var(--bt-story-bg);
-    color: var(--bt-story-ink);
+    background: var(--color-surface-page);
+    color: var(--color-text-primary);
     display: block;
-    padding: 0 0 var(--bt-story-section-padding-y);
-    font-family: var(--bt-font);
+    padding: var(--section-padding-y) 0;
+    font-family: var(--font-family-base);
     text-align: center;
 }
 
@@ -981,8 +1198,7 @@ the timeline drops them under the ship once the walls have retreated. */
     display: grid;
     align-content: center;
     justify-items: center;
-    gap: var(--bt-space-6);
-    padding-top: clamp(192px, 22vh, 240px);
+    gap: var(--space-6);
     opacity: 1;
     transform: translateY(0);
     will-change: transform, opacity;
@@ -990,7 +1206,7 @@ the timeline drops them under the ship once the walls have retreated. */
 
 #concept.is-awaiting-entry .concept__inner {
     opacity: 0;
-    transform: translateY(var(--bt-space-4));
+    transform: translateY(var(--space-4));
 }
 
 #concept.is-awaiting-entry.is-revealed .concept__inner {
@@ -999,27 +1215,18 @@ the timeline drops them under the ship once the walls have retreated. */
     transition: opacity 560ms ease, transform 720ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.concept__title {
-    margin: 0;
-    font-size: var(--bt-story-title-size);
-    font-weight: var(--bt-font-weight-regular);
-    line-height: var(--bt-story-title-line-height);
-    letter-spacing: var(--bt-story-title-tracking);
-    text-wrap: balance;
-}
-
 .concept__description {
     margin: 0;
-    font-size: var(--bt-story-topic-size);
-    font-weight: var(--bt-font-weight-light);
-    line-height: var(--bt-story-topic-line-height);
-    letter-spacing: var(--bt-story-heading-tracking);
+    font-size: var(--bt-concept-description-size);
+    font-weight: var(--font-weight-light);
+    line-height: var(--bt-concept-description-line-height);
+    letter-spacing: var(--section-heading-tracking);
     text-wrap: balance;
 }
 
 .concept__video-scroll {
     min-height: 125vh;
-    margin-top: var(--bt-space-12);
+    margin-top: var(--space-12);
     position: relative;
     opacity: 1;
     transform: translateY(0);
@@ -1028,7 +1235,7 @@ the timeline drops them under the ship once the walls have retreated. */
 
 #concept.is-awaiting-entry .concept__video-scroll {
     opacity: 0;
-    transform: translateY(var(--bt-space-6));
+    transform: translateY(var(--space-6));
 }
 
 #concept.is-awaiting-entry.is-revealed .concept__video-scroll {
@@ -1037,6 +1244,15 @@ the timeline drops them under the ship once the walls have retreated. */
     transition:
         opacity 640ms ease 120ms,
         transform 760ms cubic-bezier(0.22, 1, 0.36, 1) 120ms;
+}
+
+@media (max-width:991px) {
+    .concept__description {
+        --bt-concept-description-size: var(--section-topic-size-sm);
+        --bt-concept-description-line-height: var(--section-topic-line-height-sm);
+        font-size: var(--bt-concept-description-size);
+        line-height: var(--bt-concept-description-line-height);
+    }
 }
 
 .concept__video-perspective {
@@ -1050,13 +1266,13 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 .concept__video-frame {
-    width: min(100%, calc((100vh - var(--header-height) - var(--bt-space-24)) * 16 / 9));
+    width: min(100%, calc((100vh - var(--header-height) - var(--space-24)) * 16 / 9));
     aspect-ratio: 16 / 9;
     padding: 0;
     border: 0;
-    border-radius: var(--bt-story-card-radius);
+    border-radius: var(--card-radius);
     background: transparent;
-    box-shadow: var(--bt-story-shadow-low), var(--bt-story-shadow-deep);
+    box-shadow: var(--shadow-low), var(--shadow-deep);
     transform-origin: 50% 100%;
     will-change: transform;
 }
@@ -1066,8 +1282,8 @@ the timeline drops them under the ship once the walls have retreated. */
     width: 100%;
     height: 100%;
     overflow: hidden;
-    border-radius: var(--bt-space-1);
-    background: var(--bt-story-media-bg);
+    border-radius: var(--space-1);
+    background: var(--color-surface-inverse);
 }
 
 .concept__video-media iframe {
@@ -1078,15 +1294,59 @@ the timeline drops them under the ship once the walls have retreated. */
     border: 0;
 }
 
+@media (max-width: 767px) {
+    #concept {
+        padding: var(--section-padding-y-sm) 0;
+    }
+
+    .concept__inner {
+        padding-bottom: var(--space-4);
+    }
+
+    .concept__video-scroll {
+        min-height: 100vh;
+    }
+
+    .concept__video-frame {
+        width: 100%;
+    }
+}
+
+@media (max-width:575px) {
+    .concept__description {
+        --bt-concept-description-size: var(--section-topic-size-xs);
+        --bt-concept-description-line-height: var(--section-topic-line-height-xs);
+        font-size: var(--bt-concept-description-size);
+        line-height: var(--bt-concept-description-line-height);
+    }
+
+    .concept__video-scroll {
+        min-height: unset;
+        margin-top: var(--space-3);
+    }
+
+    .concept__video-perspective {
+        min-height: unset;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+    #concept {
+        padding: var(--section-padding-y-sm) 0;
+    }
+}
+
 /* ---------- Featured topics ---------- */
 .topics-showcase {
+    --bt-topics-title-size: var(--section-title-size);
+
     position: relative;
     min-height: 100vh;
-    padding: var(--bt-topics-section-padding-top) 0 var(--bt-topics-section-padding-bottom);
+    padding: var(--section-padding-y) 0;
     overflow: hidden;
-    color: #f7f8f7;
-    background: #101114;
-    font-family: var(--bt-font);
+    color: var(--bt-topics-ink);
+    background: var(--bt-topics-bg);
+    font-family: var(--font-family-base);
 }
 
 .topics-showcase__inner {
@@ -1101,20 +1361,20 @@ the timeline drops them under the ship once the walls have retreated. */
 
 .topics-showcase__header h2 {
     margin: 0;
-    font-size: var(--bt-story-title-size);
-    font-weight: var(--bt-font-weight-regular);
-    line-height: var(--bt-story-title-line-height);
-    letter-spacing: var(--bt-story-title-tracking);
+    font-size: var(--bt-topics-title-size);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--section-title-line-height);
+    letter-spacing: var(--section-title-tracking);
     text-wrap: balance;
 }
 
 .topics-showcase__header p {
-    margin: var(--bt-space-8) 0 0;
-    color: rgba(247, 248, 247, 0.68);
-    font-size: var(--bt-story-topic-size);
-    font-weight: var(--bt-font-weight-light);
-    line-height: var(--bt-story-topic-line-height);
-    letter-spacing: var(--bt-story-heading-tracking);
+    margin: var(--space-8) 0 0;
+    color: var(--bt-topics-ink-muted);
+    font-size: var(--section-topic-size);
+    font-weight: var(--font-weight-light);
+    line-height: var(--section-topic-line-height);
+    letter-spacing: var(--section-heading-tracking);
     text-wrap: balance;
 }
 
@@ -1132,20 +1392,24 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 .topics-showcase .concept__topics p {
+    /* Each topic reveals when it scrolls in, so timing comes from scroll position rather
+       than a fixed sequence. topics-reveal.js sets --topic-delay only on topics that cross
+       the line in the same batch (a whole screenful arriving at once), so those fan out
+       instead of popping together. The underline always trails its own text. */
     --topic-delay: 0ms;
-    --topic-line-delay: 80ms;
+    --topic-line-delay: calc(var(--topic-delay) + 80ms);
     --topic-star-size: var(--bt-topics-star-size);
 
     position: relative;
-    min-height: calc(var(--bt-story-topic-line-height) + var(--bt-space-5));
+    min-height: calc(var(--section-topic-line-height) + var(--space-5));
     margin: 0;
-    padding: var(--bt-space-4) 0;
+    padding: var(--space-4) 0;
     display: flex;
     align-items: center;
-    color: #f7f8f7;
-    font-size: var(--bt-story-topic-size);
-    font-weight: var(--bt-font-weight-regular);
-    line-height: var(--bt-story-topic-line-height);
+    color: var(--bt-topics-ink);
+    font-size: var(--section-topic-size);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--section-topic-line-height);
     letter-spacing: 0;
 }
 
@@ -1154,7 +1418,7 @@ the timeline drops them under the ship once the walls have retreated. */
     flex: 0 0 var(--topic-star-size);
     width: var(--topic-star-size);
     height: var(--topic-star-size);
-    margin-right: var(--bt-space-4);
+    margin-right: var(--space-4);
     background: url("../images/star.png") center / contain no-repeat;
 }
 
@@ -1165,18 +1429,9 @@ the timeline drops them under the ship once the walls have retreated. */
     bottom: 0;
     width: min(100%, 50vw);
     height: 1px;
-    background: rgba(255, 255, 255, 0.12);
+    background: var(--bt-topics-rule);
     transform-origin: left center;
 }
-
-.topics-showcase .concept__topics p:nth-child(2) { --topic-delay: 70ms; --topic-line-delay: 150ms; }
-.topics-showcase .concept__topics p:nth-child(3) { --topic-delay: 140ms; --topic-line-delay: 220ms; }
-.topics-showcase .concept__topics p:nth-child(4) { --topic-delay: 210ms; --topic-line-delay: 290ms; }
-.topics-showcase .concept__topics p:nth-child(5) { --topic-delay: 280ms; --topic-line-delay: 360ms; }
-.topics-showcase .concept__topics p:nth-child(6) { --topic-delay: 350ms; --topic-line-delay: 430ms; }
-.topics-showcase .concept__topics p:nth-child(7) { --topic-delay: 420ms; --topic-line-delay: 500ms; }
-.topics-showcase .concept__topics p:nth-child(8) { --topic-delay: 490ms; --topic-line-delay: 570ms; }
-.topics-showcase .concept__topics p:nth-child(9) { --topic-delay: 560ms; --topic-line-delay: 640ms; }
 
 .topics-showcase__assets {
     position: relative;
@@ -1286,56 +1541,148 @@ the timeline drops them under the ship once the walls have retreated. */
 .topics-showcase.is-reveal-ready .topics-showcase__header h2,
 .topics-showcase.is-reveal-ready .topics-showcase__header p {
     opacity: 0;
-    transform: translateY(var(--bt-space-4));
+    transform: translateY(var(--space-4));
 }
 
 .topics-showcase.is-reveal-ready .concept__topics p {
     opacity: 0;
-    transform: translateX(calc(var(--bt-space-8) * -1));
+    transform: translateX(calc(var(--space-8) * -1));
 }
 
 .topics-showcase.is-reveal-ready .concept__topics p::after {
     opacity: 0;
-    transform: translateX(calc(var(--bt-space-8) * -1)) scaleX(0);
+    transform: translateX(calc(var(--space-8) * -1)) scaleX(0);
 }
 
 .topics-showcase.is-reveal-ready.is-header-visible .topics-showcase__header h2 {
     opacity: 1;
     transform: translateY(0);
-    transition: opacity 700ms ease, transform 820ms var(--bt-story-ease);
+    transition: opacity 700ms ease, transform 820ms var(--ease-standard);
 }
 
 .topics-showcase.is-reveal-ready.is-header-visible .topics-showcase__header p {
     opacity: 1;
     transform: translateY(0);
-    transition: opacity 620ms ease 140ms, transform 760ms var(--bt-story-ease) 140ms;
+    transition: opacity 620ms ease 140ms, transform 760ms var(--ease-standard) 140ms;
 }
 
-.topics-showcase.is-reveal-ready.are-topics-visible .concept__topics p {
+.topics-showcase.is-reveal-ready .concept__topics p.is-topic-visible {
     opacity: 1;
     transform: translateX(0);
     transition:
         opacity 560ms ease var(--topic-delay),
-        transform 700ms var(--bt-story-ease) var(--topic-delay);
+        transform 700ms var(--ease-standard) var(--topic-delay);
 }
 
-.topics-showcase.is-reveal-ready.are-topics-visible .concept__topics p::after {
+.topics-showcase.is-reveal-ready .concept__topics p.is-topic-visible::after {
     opacity: 1;
     transform: translateX(0) scaleX(1);
     transition:
         opacity 520ms ease var(--topic-line-delay),
-        transform 900ms var(--bt-story-ease) var(--topic-line-delay);
+        transform 900ms var(--ease-standard) var(--topic-line-delay);
+}
+
+@media (max-width:991px) {
+    .topics-showcase {
+        min-height: auto;
+        padding: var(--section-padding-y-sm) 0;
+    }
+
+    .topics-showcase__header p {
+        font-size: var(--section-topic-size-sm);
+        line-height: var(--section-topic-line-height-sm);
+    }
+
+    .topics-showcase__content {
+        --topics-asset-left: 15%;
+        --topics-asset-right: 85%;
+
+        position: relative;
+        margin-top: var(--bt-topics-content-margin-top-md);
+        display: block;
+    }
+
+    .topics-showcase .concept__topics {
+        position: relative;
+        z-index: 2;
+        width: min(calc(100% - 180px), 560px);
+        margin-inline: auto;
+    }
+
+    .topics-showcase .concept__topics p::after {
+        width: 100%;
+    }
+
+    .topics-showcase__assets {
+        position: absolute;
+        inset-block: 0;
+        left: calc(50% - 50vw);
+        right: calc(50% - 50vw);
+        z-index: 1;
+        width: auto;
+        min-height: 0;
+        pointer-events: none;
+    }
+
+    .topics-showcase__assets::before {
+        display: none;
+    }
+
+    .topics-showcase__asset--triangle {
+        --asset-x: var(--topics-asset-left);
+        --asset-y: 6%;
+        --asset-size: clamp(72px, 15vw, 142px);
+        --asset-rotation: -10deg;
+        --asset-z: 3;
+    }
+
+    .topics-showcase__asset--bitcoin {
+        --asset-x: var(--topics-asset-left);
+        --asset-y: 64%;
+        --asset-size: clamp(58px, 10vw, 104px);
+        --asset-rotation: -8deg;
+        --asset-z: 2;
+    }
+
+    .topics-showcase__asset--gold {
+        --asset-x: var(--topics-asset-right);
+        --asset-y: 18%;
+        --asset-size: clamp(36px, 6vw, 58px);
+        --asset-rotation: 8deg;
+        --asset-z: 1;
+    }
+
+    .topics-showcase__asset--stock {
+        --asset-x: var(--topics-asset-left);
+        --asset-y: 94%;
+        --asset-size: clamp(32px, 5vw, 48px);
+        --asset-rotation: -14deg;
+        --asset-z: 1;
+    }
+
+    .topics-showcase__asset--card {
+        --asset-x: var(--topics-asset-right);
+        --asset-y: 42%;
+        --asset-size: clamp(54px, 9vw, 88px);
+        --asset-rotation: 12deg;
+        --asset-z: 2;
+    }
+
+    .topics-showcase__asset--heart {
+        --asset-x: var(--topics-asset-right);
+        --asset-y: 79%;
+        --asset-size: clamp(82px, 16vw, 156px);
+        --asset-rotation: -5deg;
+        --asset-z: 3;
+    }
 }
 
 @media (max-width: 767px) {
     .topics-showcase {
-        min-height: auto;
-        padding: var(--bt-topics-section-padding-top-sm) 0 var(--bt-topics-section-padding-bottom-sm);
-    }
+        --bt-topics-title-size: var(--section-heading-size);
 
-    .topics-showcase__header h2 {
-        font-size: var(--bt-story-heading-size);
-        line-height: var(--bt-story-heading-line-height);
+        min-height: auto;
+        padding: var(--section-padding-y-sm) 0;
     }
 
     .topics-showcase__header p br {
@@ -1344,25 +1691,46 @@ the timeline drops them under the ship once the walls have retreated. */
 
     .topics-showcase__content {
         margin-top: var(--bt-topics-content-margin-top-sm);
-        grid-template-columns: 1fr;
-        gap: var(--bt-topics-content-gap-sm);
+    }
+
+    .topics-showcase .concept__topics {
+        width: min(calc(100% - 72px), 480px);
     }
 
     .topics-showcase .concept__topics p {
         --topic-star-size: var(--bt-topics-star-size-sm);
 
-        min-height: calc(var(--bt-story-topic-line-height) + var(--bt-space-5));
+        min-height: calc(var(--section-topic-line-height) + var(--space-5));
+        padding: var(--space-3) 0;
+        font-size: var(--section-topic-size-sm);
+        line-height: var(--section-topic-line-height-sm);
     }
 
     .topics-showcase__assets {
-        min-height: min(128vw, var(--bt-topics-assets-min-height-sm));
+        min-height: 0;
     }
 
 }
 
-@media (min-width: 768px) and (max-width: 1199px) {
+@media (max-width:575px) {
+    .topics-showcase__header p {
+        font-size: var(--section-topic-size-xs);
+        line-height: var(--section-topic-line-height-xs);
+    }
+
+    .topics-showcase__content {
+        --topics-asset-left: 5%;
+        --topics-asset-right: 95%;
+    }
+
+    .topics-showcase .concept__topics {
+        width: calc(100% - 80px);
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
     .topics-showcase {
-        padding: var(--bt-topics-section-padding-top-md) 0 var(--bt-topics-section-padding-bottom-md);
+        padding: var(--section-padding-y-sm) 0;
     }
 
     .topics-showcase__content {
@@ -1381,6 +1749,7 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     .topics-showcase__asset-motion,
     .topics-showcase__asset-float {
         will-change: auto;
@@ -1389,134 +1758,181 @@ the timeline drops them under the ship once the walls have retreated. */
 
 /* ---------- Ticket ---------- Comparison layout แบบ editorial ใช้พื้นที่ว่างและเส้นบางแทนกรอบ card */
 .ticket {
+    --bt-ticket-title-size: var(--section-title-size);
+    --bt-ticket-plan-title-size: var(--section-heading-size);
+    --bt-ticket-plan-title-line-height: var(--section-heading-line-height);
+    --bt-ticket-price-size: var(--section-heading-size);
+    --bt-ticket-price-line-height: var(--section-heading-line-height);
+
     position: relative;
-    padding: var(--bt-story-section-padding-y) 0;
-    color: var(--bt-story-ink);
-    background: var(--bt-story-bg);
-    font-family: var(--bt-font);
+    padding: var(--section-padding-y) 0;
+    color: var(--color-text-primary);
+    background: var(--color-surface-page);
+    font-family: var(--font-family-base);
 
     .ticket__header {
-        --bs-gutter-y: var(--bt-space-6);
+        --bs-gutter-y: var(--space-6);
 
         align-items: end;
-        margin-bottom: var(--bt-story-section-padding-y-sm);
+        margin-bottom: var(--section-padding-y-sm);
     }
 
     .ticket__plan-index {
-        margin: 0 0 var(--bt-space-2);
-        font-size: var(--bt-story-body-size);
-        font-weight: var(--bt-font-weight-regular);
-        line-height: var(--bt-story-body-line-height);
+        margin: 0 0 var(--space-2);
+        font-size: var(--section-body-size);
+        font-weight: var(--font-weight-regular);
+        line-height: var(--section-body-line-height);
         letter-spacing: 0;
         text-transform: uppercase;
     }
 
     .ticket__heading h2 {
         margin: 0;
-        font-size: var(--bt-story-title-size);
-        font-weight: var(--bt-font-weight-regular);
-        line-height: var(--bt-story-title-line-height);
-        letter-spacing: var(--bt-story-title-tracking);
+        font-size: var(--bt-ticket-title-size);
+        font-weight: var(--font-weight-regular);
+        line-height: var(--section-title-line-height);
+        letter-spacing: var(--section-title-tracking);
         text-wrap: balance;
     }
 
     .ticket__intro {
         margin: 0;
-        color: var(--bt-story-muted);
-        font-size: var(--bt-story-body-size);
-        font-weight: var(--bt-font-weight-regular);
-        line-height: var(--bt-story-body-line-height);
+        color: var(--color-text-muted);
+        font-size: var(--section-body-size);
+        font-weight: var(--font-weight-regular);
+        line-height: var(--section-body-line-height);
         letter-spacing: 0;
     }
 
     .ticket__plans {
-        /* border-top: var(--bt-story-rule-width) solid var(--bt-story-line); */
-        /* border-bottom: var(--bt-story-rule-width) solid var(--bt-story-line); */
+        /* border-top: var(--rule-width-subtle) solid var(--color-border-editorial); */
+        /* border-bottom: var(--rule-width-subtle) solid var(--color-border-editorial); */
     }
 
     .ticket__plan {
+        position: relative;
         min-width: 0;
-        padding: var(--bt-space-8);
+        padding: var(--space-8);
         display: flex;
         flex-direction: column;
-        transition: background-color var(--bt-story-duration) var(--bt-story-ease);
+        border-top: var(--rule-width-subtle) solid transparent;
+        transition: background-color var(--duration-standard) var(--ease-standard);
 
         &:not(:first-child) {
-            border-left: var(--bt-story-rule-width) solid var(--bt-story-line-2);
+            border-left: var(--rule-width-subtle) solid var(--color-border-faint);
         }
 
         &:hover {
-            background: var(--bt-story-paper);
+            background: var(--color-surface-paper);
         }
     }
 
+    .ticket__plan--ultimate {
+        z-index: 1;
+        background:
+            linear-gradient(color-mix(in srgb, var(--color-surface-page) 68%, var(--color-surface-paper)), color-mix(in srgb, var(--color-surface-page) 68%, var(--color-surface-paper))) padding-box,
+            var(--spectrum) border-box;
+        border-top-width: var(--border-width-2);
+        /* box-shadow:
+            0 18px 48px rgba(17, 19, 24, 0.10),
+            0 0 0 1px var(--alpha-ink-06); */
+
+        &::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--color-kv-spectrum-1) 12%, transparent) 0%, transparent 34%),
+                radial-gradient(circle at 88% 10%, color-mix(in srgb, var(--color-kv-spectrum-5) 10%, transparent) 0%, transparent 30%);
+            opacity: 0.64;
+            pointer-events: none;
+        }
+
+        &:hover {
+            background:
+                linear-gradient(color-mix(in srgb, var(--color-surface-page) 68%, var(--color-surface-paper)), color-mix(in srgb, var(--color-surface-page) 68%, var(--color-surface-paper))) padding-box,
+                var(--spectrum) border-box;
+        }
+    }
+
+    .ticket__plan--master {
+        border-left: 0 !important;
+    }
+
     .ticket__plan-header {
-        margin-bottom: var(--bt-space-8);
+        margin-bottom: var(--space-8);
     }
 
     .ticket__plan-header h3 {
         margin: 0;
-        font-size: var(--bt-story-heading-size);
-        font-weight: var(--bt-font-weight-regular);
-        line-height: var(--bt-story-heading-line-height);
-        letter-spacing: var(--bt-story-heading-tracking);
+        font-size: var(--bt-ticket-plan-title-size);
+        font-weight: var(--font-weight-regular);
+        line-height: var(--bt-ticket-plan-title-line-height);
+        letter-spacing: var(--section-heading-tracking);
+    }
+
+    /* หน่วยเป็น em ตั้งใจ ผูกกับขนาดฟอนต์ของ h3 ที่ครอบอยู่ (40px ปกติ, 24px บนมือถือ)
+       คำว่า "Ticket" จึงเล็กลงตามสัดส่วนเดิมเสมอโดยไม่ต้องตั้งค่าซ้ำใน media query มือถือ */
+    .ticket__plan-title-suffix {
+        font-size: 0.5em;
     }
 
     .ticket__plan-note {
-        margin: var(--bt-space-4) 0 0;
-        color: var(--bt-story-muted);
-        font-size: var(--bt-story-small-size);
-        font-weight: var(--bt-font-weight-regular);
-        line-height: var(--bt-story-body-line-height);
+        margin: var(--space-4) 0 0;
+        color: var(--color-text-muted);
+        font-size: var(--section-small-size);
+        font-weight: var(--font-weight-regular);
+        line-height: var(--section-body-line-height);
         letter-spacing: 0;
     }
 
     .ticket__prices {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        border-top: var(--bt-story-rule-width) solid var(--bt-story-line);
-        border-bottom: var(--bt-story-rule-width) solid var(--bt-story-line);
+        border-top: var(--rule-width-subtle) solid var(--color-border-editorial);
+        border-bottom: var(--rule-width-subtle) solid var(--color-border-editorial);
     }
 
     .ticket__price {
         min-width: 0;
-        padding: var(--bt-space-5) var(--bt-space-3) var(--bt-space-6) 0;
+        padding: var(--space-5) var(--space-3) var(--space-6) 0;
         display: grid;
         align-content: start;
 
         &:not(:first-child) {
-            padding-left: var(--bt-space-5);
-            border-left: var(--bt-story-rule-width) solid var(--bt-story-line);
+            padding-left: var(--space-5);
+            border-left: var(--rule-width-subtle) solid var(--color-border-editorial);
         }
 
         span,
         small {
-            color: var(--bt-story-muted);
-            font-size: var(--bt-story-small-size);
-            font-weight: var(--bt-font-weight-regular);
-            line-height: var(--bt-story-body-line-height);
+            color: var(--color-text-muted);
+            font-size: var(--section-small-size);
+            font-weight: var(--font-weight-regular);
+            line-height: var(--section-body-line-height);
         }
 
         strong {
-            margin-top: var(--bt-space-2);
-            font-size: var(--bt-story-heading-size);
-            font-weight: var(--bt-font-weight-medium);
-            line-height: var(--bt-story-heading-line-height);
+            margin-top: var(--space-2);
+            font-size: var(--bt-ticket-price-size);
+            font-weight: var(--font-weight-medium);
+            line-height: var(--bt-ticket-price-line-height);
             letter-spacing: 0;
             white-space: nowrap;
         }
     }
 
     .ticket__access {
-        margin: var(--bt-space-6) 0 var(--bt-space-8);
+        margin: var(--space-6) 0 var(--space-8);
 
         >div {
-            min-height: var(--bt-space-12);
+            min-height: var(--space-12);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: var(--bt-space-4);
-            border-top: var(--bt-story-rule-width) solid var(--bt-story-line);
+            gap: var(--space-4);
+            border-top: var(--rule-width-subtle) solid var(--color-border-editorial);
 
             &:first-child {
                 border-top: 0;
@@ -1526,9 +1942,9 @@ the timeline drops them under the ship once the walls have retreated. */
         dt,
         dd {
             margin: 0;
-            font-size: var(--bt-story-small-size);
-            font-weight: var(--bt-font-weight-regular);
-            line-height: var(--bt-story-body-line-height);
+            font-size: var(--section-small-size);
+            font-weight: var(--font-weight-regular);
+            line-height: var(--section-body-line-height);
         }
     }
 
@@ -1537,22 +1953,22 @@ the timeline drops them under the ship once the walls have retreated. */
         min-width: 0;
         display: inline-flex;
         align-items: center;
-        gap: var(--bt-space-2);
+        gap: var(--space-2);
 
         >.bt-icon {
             flex: 0 0 auto;
-            width: var(--bt-space-6);
-            height: var(--bt-space-6);
+            width: var(--space-6);
+            height: var(--space-6);
             display: grid;
             place-items: center;
-            padding: var(--bt-space-1);
-            border-radius: var(--bt-radius-1);
-            background: color-mix(in srgb, currentColor 16%, var(--bt-story-bg));
+            padding: var(--space-1);
+            border-radius: var(--radius-1);
+            background: color-mix(in srgb, currentColor 16%, var(--color-surface-page));
             stroke-width: 1.75;
         }
 
         >span:last-child {
-            color: var(--bt-story-ink);
+            color: var(--color-text-primary);
         }
 
         &.ticket__access-label--conference>.bt-icon {
@@ -1581,25 +1997,25 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .ticket__status {
-        min-width: var(--bt-space-8);
+        min-width: var(--space-8);
         display: inline-flex;
         align-items: center;
         justify-content: flex-end;
-        gap: var(--bt-space-1);
-        color: var(--bt-story-muted);
+        gap: var(--space-1);
+        color: var(--color-text-muted);
 
         .bt-icon {
-            font-size: var(--bt-space-5);
+            font-size: var(--space-5);
             stroke-width: 2.25;
         }
 
         &.ticket__status--included,
         &.ticket__status--playbook {
-            color: var(--bt-story-accent);
+            color: var(--color-accent-primary);
         }
 
         &.ticket__status--soon {
-            color: var(--bt-story-ink);
+            color: var(--color-text-primary);
             text-transform: uppercase;
         }
     }
@@ -1616,15 +2032,15 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .ticket__benefits {
-        --bs-gutter-y: var(--bt-space-8);
+        --bs-gutter-y: var(--space-8);
 
-        padding-top: var(--bt-story-section-padding-y-sm);
+        padding-top: var(--section-padding-y-sm);
 
         h3 {
             margin: 0;
-            font-size: var(--bt-story-subheading-size);
-            font-weight: var(--bt-font-weight-regular);
-            line-height: var(--bt-story-topic-line-height);
+            font-size: var(--section-subheading-size);
+            font-weight: var(--font-weight-regular);
+            line-height: var(--section-topic-line-height);
             letter-spacing: 0;
         }
 
@@ -1636,57 +2052,57 @@ the timeline drops them under the ship once the walls have retreated. */
 
         li {
             min-width: 0;
-            padding: 0 var(--bt-space-5);
+            padding: 0 var(--space-5);
             display: grid;
             align-content: start;
-            gap: var(--bt-space-4);
-            border-left: var(--bt-story-rule-width) solid var(--bt-story-line);
-            color: var(--bt-story-muted);
-            font-size: var(--bt-story-small-size);
-            font-weight: var(--bt-font-weight-regular);
-            line-height: var(--bt-story-body-line-height);
+            gap: var(--space-4);
+            /* border-left: var(--rule-width-subtle) solid var(--color-border-editorial); */
+            color: var(--color-text-muted);
+            font-size: var(--section-small-size);
+            font-weight: var(--font-weight-regular);
+            line-height: var(--section-body-line-height);
 
             .bt-icon {
-                color: var(--bt-story-accent);
-                font-size: var(--bt-space-6);
+                color: var(--color-accent-primary);
+                font-size: var(--space-6);
                 stroke-width: 1.75;
             }
         }
     }
 
     .ticket__formats {
-        padding-top: var(--bt-space-20);
+        padding-top: var(--space-20);
     }
 
     .ticket__formats-grid {
         display: flex;
         flex-direction: column;
-        gap: var(--bt-space-3);
+        gap: var(--space-3);
     }
 
     .ticket__format {
         min-width: 0;
         display: flex;
         align-items: center;
-        gap: var(--bt-space-4);
+        gap: var(--space-4);
 
         >.bt-icon {
             display: grid;
             place-items: center;
             flex: 0 0 auto;
-            width: var(--bt-space-6);
-            height: var(--bt-space-6);
-            padding: var(--bt-space-1);
-            border-radius: var(--bt-radius-1);
-            background: color-mix(in srgb, currentColor 16%, var(--bt-story-bg));
+            width: var(--space-6);
+            height: var(--space-6);
+            padding: var(--space-1);
+            border-radius: var(--radius-1);
+            background: color-mix(in srgb, currentColor 16%, var(--color-surface-page));
             stroke-width: 1.75;
         }
 
         .ticket__format-copy {
             min-width: 0;
-            padding-top: var(--bt-space-1);
-            font-size: var(--bt-font-size-14);
-            line-height: var(--bt-story-body-line-height);
+            padding-top: var(--space-1);
+            font-size: var(--font-size-14);
+            line-height: var(--section-body-line-height);
 
             h4,
             p {
@@ -1696,9 +2112,9 @@ the timeline drops them under the ship once the walls have retreated. */
             }
 
             h4 {
-                color: var(--bt-story-ink);
+                color: var(--color-text-primary);
                 font-size: inherit;
-                font-weight: var(--bt-font-weight-medium);
+                font-weight: var(--font-weight-medium);
                 line-height: inherit;
 
                 &::after {
@@ -1707,9 +2123,9 @@ the timeline drops them under the ship once the walls have retreated. */
             }
 
             p {
-                color: var(--bt-story-muted);
+                color: var(--color-text-muted);
                 font-size: inherit;
-                font-weight: var(--bt-font-weight-regular);
+                font-weight: var(--font-weight-regular);
                 line-height: inherit;
             }
         }
@@ -1739,68 +2155,135 @@ the timeline drops them under the ship once the walls have retreated. */
         }
     }
 
+    @media (max-width:1199px) {
+        .ticket__plan-header h3 {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+
     @media (max-width:991px) {
-        padding: var(--bt-story-section-padding-y-sm) 0;
+        --bt-ticket-plan-title-size: var(--font-size-32);
+        --bt-ticket-price-size: var(--font-size-32);
+
+        padding: var(--section-padding-y-sm) 0;
 
         .ticket__header {
-            margin-bottom: var(--bt-space-16);
+            margin-bottom: var(--space-16);
+        }
+
+        .ticket__plan-header h3 {
+            display: block;
+            font-size: var(--bt-ticket-plan-title-size);
+        }
+
+        .ticket__price strong {
+            font-size: var(--bt-ticket-price-size);
         }
 
         .ticket__plan {
-            padding: var(--bt-space-8) 0;
+            padding: var(--space-12) var(--space-8);
 
             &:not(:first-child) {
-                border-top: var(--bt-story-rule-width) solid var(--bt-story-line);
+                border-top: var(--rule-width-subtle) solid var(--color-border-editorial);
                 border-left: 0;
             }
         }
 
         .ticket__plan-header {
-            margin-bottom: var(--bt-space-8);
+            margin-bottom: var(--space-8);
         }
 
         .ticket__benefits {
+            h3 {
+                margin-bottom: var(--space-8);
+            }
+
             ul {
-                row-gap: var(--bt-space-8);
+                row-gap: 0;
+            }
+
+            li {
+                flex: 0 0 25%;
+                max-width: 25%;
+                padding: 0 var(--space-2);
+                gap: var(--space-2);
+
+                .bt-icon {
+                    font-size: var(--space-5);
+                }
             }
         }
 
     }
 
     @media (max-width:575px) {
+        --bt-ticket-title-size: var(--section-topic-size);
+        --bt-ticket-plan-title-size: var(--font-size-28);
+        --bt-ticket-plan-title-line-height: var(--section-topic-line-height);
+        --bt-ticket-price-size: var(--font-size-28);
 
-        .ticket__heading h2,
+        .ticket__plan-header {
+            margin-bottom: var(--space-4);
+        }
+
         .ticket__plan-header h3 {
-            font-size: var(--bt-story-topic-size);
-            line-height: var(--bt-story-topic-line-height);
+            font-size: var(--bt-ticket-plan-title-size);
         }
 
-        .ticket__prices {
-            grid-template-columns: 1fr;
+        .ticket__plan-index {
+            margin: 0 0 var(--space-1);
+            font-size: var(--section-small-size);
         }
 
-        .ticket__price {
-            padding: var(--bt-space-4) 0 var(--bt-space-5);
+        .ticket__price strong {
+            margin-top: var(--space-0);
+            font-size: var(--bt-ticket-price-size);
+        }
 
-            &:not(:first-child) {
-                padding-left: 0;
-                border-top: var(--bt-story-rule-width) solid var(--bt-story-line);
-                border-left: 0;
+        .ticket__plan {
+            padding: var(--space-12) var(--space-8);
+
+            &:hover {
+                background: inherit;
             }
         }
 
-        .ticket__benefits ul {
-            row-gap: 0;
+        .ticket__price {
+            padding: var(--space-3) var(--space-3) var(--space-3) var(--space-0);
+        }
+
+        .ticket__access {
+            margin: var(--space-4) var(--space-0) var(--space-6);
+        }
+
+        .ticket__benefits {
+            h3 {
+                margin-bottom: var(--space-6);
+            }
+
+            ul {
+                row-gap: var(--space-8);
+                column-gap: var(--space-6);
+            }
 
             li {
-                padding: var(--bt-space-5) 0;
-                grid-template-columns: var(--bt-space-8) minmax(0, 1fr);
-                gap: var(--bt-space-3);
-                border-top: var(--bt-story-rule-width) solid var(--bt-story-line);
-                border-left: 0;
+                flex: 0 0 50%;
+                max-width: calc(50% - var(--space-6));
+                padding: 0 var(--space-2);
+                align-content: start;
+                gap: var(--space-2);
 
-                &:last-child {
-                    border-bottom: var(--bt-story-rule-width) solid var(--bt-story-line);
+                span {
+                    min-width: 0;
+                }
+
+                br {
+                    display: none;
+                }
+
+                .bt-icon {
+                    font-size: var(--space-5);
                 }
             }
         }
@@ -1812,25 +2295,41 @@ the timeline drops them under the ship once the walls have retreated. */
    ตารางกำหนดการแบบ editorial เน้นลำดับเวลา พื้นที่ว่าง และเส้นบาง */
 .agenda {
     position: relative;
-    scroll-margin-top: calc(var(--header-height) + var(--bt-space-4));
-    padding: var(--bt-story-section-padding-y) 0;
-    color: var(--bt-story-ink);
-    background: var(--bt-story-bg);
-    font-family: var(--bt-font);
+    scroll-margin-top: calc(var(--header-height) + var(--space-4));
+    padding: var(--section-padding-y) 0;
+    color: var(--color-text-primary);
+    background: var(--color-surface-page);
+    font-family: var(--font-family-base);
+    --agenda-day-label-size: var(--font-size-24);
+    --agenda-day-label-line-height: 56px;
+    --agenda-day-label-weight: var(--font-weight-regular);
+    --agenda-day-label-color: var(--color-text-inverse-muted);
+    --agenda-day-label-active-size: var(--font-size-48);
+    --agenda-day-label-active-line-height: var(--section-topic-line-height);
+    --agenda-day-label-active-weight: var(--font-weight-regular);
+    --agenda-day-label-active-color: var(--color-text-primary);
+    --agenda-day-details-size: var(--section-body-size);
+    --agenda-day-details-line-height: var(--section-body-line-height);
+    --agenda-day-details-weight: var(--font-weight-regular);
+    --agenda-day-details-color: var(--color-text-muted);
+    --agenda-day-details-active-size: var(--agenda-day-details-size);
+    --agenda-day-details-active-line-height: var(--agenda-day-details-line-height);
+    --agenda-day-details-active-weight: var(--agenda-day-details-weight);
+    --agenda-day-details-active-color: var(--agenda-day-details-color);
 
     /* margin-bottom ต้องไม่แคบกว่าฉากขาว ::before ของ .agenda__tabs (บรรทัดล่าง)
        ที่ยื่นขึ้นมาปิดพื้นที่เหนือแถบ sticky สูง calc(header-height + space-6)
        เท่ากันเป๊ะ — ถ้าช่องว่างตรงนี้แคบกว่านั้น ฉากขาวจะยื่นทับหัวข้อด้านบน */
     .agenda__section-header {
-        margin-bottom: calc(var(--header-height) + var(--bt-space-6));
+        margin-bottom: calc(var(--header-height) + var(--space-6));
     }
 
     .agenda__section-header h2 {
         max-width: 920px;
         margin: 0;
-        font-size: var(--bt-story-title-size);
-        font-weight: var(--bt-font-weight-regular);
-        line-height: var(--bt-story-title-line-height);
+        font-size: var(--section-title-size);
+        font-weight: var(--font-weight-regular);
+        line-height: var(--section-title-line-height);
         letter-spacing: 0;
     }
 
@@ -1842,7 +2341,7 @@ the timeline drops them under the ship once the walls have retreated. */
 
     .agenda__inner,
     .agenda__day-panel {
-        scroll-margin-top: calc(var(--header-height) + var(--bt-space-6));
+        scroll-margin-top: calc(var(--header-height) + var(--space-6));
     }
 
     .agenda__days {
@@ -1850,11 +2349,11 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .agenda__eyebrow {
-        margin: 0 0 var(--bt-space-2);
-        color: var(--bt-story-muted);
-        font-size: var(--bt-story-body-size);
-        font-weight: var(--bt-font-weight-regular);
-        line-height: var(--bt-story-body-line-height);
+        margin: 0 0 var(--space-2);
+        color: var(--color-text-muted);
+        font-size: var(--section-body-size);
+        font-weight: var(--font-weight-regular);
+        line-height: var(--section-body-line-height);
         letter-spacing: 0;
         text-transform: uppercase;
     }
@@ -1863,11 +2362,11 @@ the timeline drops them under the ship once the walls have retreated. */
        (เดิมเป็น overlay height:0 ทำให้ค้างเลยขอบ section ไปทับ section ถัดไป) */
     .agenda__day-switcher {
         position: sticky;
-        top: calc(var(--header-height) + var(--bt-space-6));
+        top: calc(var(--header-height) + var(--space-6));
         z-index: 2;
         align-self: start;
         min-width: 0;
-        background: var(--bt-story-bg);
+        background: var(--color-surface-page);
     }
 
     /* แถวสูงตามเนื้อหาจริง ไม่ล็อกค่าคงที่ ไม่งั้นวันที่ไม่ได้เลือก (เหลือแค่บรรทัดเดียว)
@@ -1876,7 +2375,7 @@ the timeline drops them under the ship once the walls have retreated. */
     .agenda__day-switcher-inner {
         display: grid;
         justify-items: start;
-        gap: var(--bt-space-6);
+        gap: var(--space-6);
     }
 
     .agenda__day-switch {
@@ -1887,38 +2386,39 @@ the timeline drops them under the ship once the walls have retreated. */
         width: fit-content;
         min-width: 0;
         padding: 0;
-        color: var(--bt-story-muted);
-        font-size: var(--bt-story-subheading-size);
-        font-weight: var(--bt-font-weight-regular);
-        line-height: var(--bt-story-topic-line-height);
+        color: var(--agenda-day-label-color);
+        font-size: var(--agenda-day-label-size);
+        font-weight: var(--agenda-day-label-weight);
+        line-height: var(--agenda-day-label-line-height);
         letter-spacing: 0;
         text-decoration: none;
         text-transform: uppercase;
         transition:
-            color var(--bt-duration-base) var(--bt-story-ease),
-            opacity var(--bt-duration-base) var(--bt-story-ease);
+            color var(--duration-base) var(--ease-standard),
+            opacity var(--duration-base) var(--ease-standard);
 
         &:hover,
         &:focus-visible {
-            color: var(--bt-story-ink);
+            color: var(--agenda-day-label-active-color);
         }
 
         &[aria-current='true'] {
-            color: var(--bt-story-ink);
+            color: var(--agenda-day-label-active-color);
         }
 
         &:focus-visible {
-            outline: var(--bt-border-width-2) solid var(--bt-color-focus);
-            outline-offset: var(--bt-space-2);
+            outline: var(--border-width-2) solid var(--color-focus-ring);
+            outline-offset: var(--space-2);
         }
     }
 
     .agenda__day-switch-label {
         display: block;
+        font-size: var(--agenda-day-label-size);
         transition:
-            font-size var(--bt-duration-base) var(--bt-story-ease),
-            line-height var(--bt-duration-base) var(--bt-story-ease),
-            color var(--bt-duration-base) var(--bt-story-ease);
+            font-size var(--duration-base) var(--ease-standard),
+            line-height var(--duration-base) var(--ease-standard),
+            color var(--duration-base) var(--ease-standard);
     }
 
     /* ใช้ 0fr → 1fr แทน max-height เพราะ max-height ต้องกำหนดค่าปลายทางเผื่อไว้
@@ -1929,36 +2429,42 @@ the timeline drops them under the ship once the walls have retreated. */
         display: grid;
         grid-template-rows: 0fr;
         margin-top: 0;
-        color: var(--bt-story-muted);
-        font-size: var(--bt-story-body-size);
-        line-height: var(--bt-story-body-line-height);
+        color: var(--agenda-day-details-color);
+        font-size: var(--agenda-day-details-size);
+        font-weight: var(--agenda-day-details-weight);
+        line-height: var(--agenda-day-details-line-height);
         text-transform: none;
         opacity: 0;
-        transform: translateY(calc(var(--bt-space-2) * -1));
+        transform: translateY(calc(var(--space-2) * -1));
         transition:
-            grid-template-rows var(--bt-duration-base) var(--bt-story-ease),
-            margin-top var(--bt-duration-base) var(--bt-story-ease),
-            opacity var(--bt-duration-base) var(--bt-story-ease),
-            transform var(--bt-duration-base) var(--bt-story-ease);
+            grid-template-rows var(--duration-base) var(--ease-standard),
+            margin-top var(--duration-base) var(--ease-standard),
+            opacity var(--duration-base) var(--ease-standard),
+            transform var(--duration-base) var(--ease-standard);
     }
 
     /* ต้องมีชั้นนี้เพื่อให้ 0fr บีบได้จริง — min-height: 0 ปลดขนาดขั้นต่ำของ grid item
        และ overflow: hidden เป็นตัวตัดเนื้อหาส่วนเกินระหว่างย่อ */
     .agenda__day-switch-details-inner {
         display: grid;
-        gap: var(--bt-space-2);
+        gap: var(--space-2);
         min-height: 0;
         overflow: hidden;
     }
 
     .agenda__day-switch[aria-current='true'] .agenda__day-switch-label {
-        font-size: var(--bt-story-title-size);
-        line-height: 56px;
+        font-size: var(--agenda-day-label-active-size);
+        font-weight: var(--agenda-day-label-active-weight);
+        line-height: var(--agenda-day-label-active-line-height);
     }
 
     .agenda__day-switch[aria-current='true'] .agenda__day-switch-details {
         grid-template-rows: 1fr;
-        margin-top: var(--bt-space-6);
+        margin-top: var(--space-6);
+        color: var(--agenda-day-details-active-color);
+        font-size: var(--agenda-day-details-active-size);
+        font-weight: var(--agenda-day-details-active-weight);
+        line-height: var(--agenda-day-details-active-line-height);
         opacity: 1;
         transform: translateY(0);
     }
@@ -1968,9 +2474,9 @@ the timeline drops them under the ship once the walls have retreated. */
     .agenda__day-switch-rail {
         position: relative;
         overflow: hidden;
-        width: var(--bt-story-rule-width);
-        height: var(--bt-space-28);
-        background: var(--bt-story-line);
+        width: var(--rule-width-subtle);
+        height: var(--space-28);
+        background: var(--color-border-editorial);
         pointer-events: none;
     }
 
@@ -1985,7 +2491,7 @@ the timeline drops them under the ship once the walls have retreated. */
         height: 50%;
         background: var(--spectrum-vertical);
         transform: translateY(0);
-        transition: transform var(--bt-duration-base) var(--bt-story-ease);
+        transition: transform var(--duration-base) var(--ease-standard);
     }
 
     .agenda__day-switcher-inner[data-active-day='day-two'] .agenda__day-switch-rail::after {
@@ -1997,11 +2503,15 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .agenda__day-panel.is-entering .agenda__content {
-        animation: agenda-day-enter var(--bt-duration-base) var(--bt-story-ease) both;
+        animation: agenda-day-enter var(--duration-base) var(--ease-standard) both;
     }
 
     .agenda__content {
         min-width: 0;
+    }
+
+    .agenda__tabs-viewport {
+        display: contents;
     }
 
     .agenda__tabs {
@@ -2010,14 +2520,14 @@ the timeline drops them under the ship once the walls have retreated. */
         --agenda-tab-indicator-width: 0px;
 
         position: sticky;
-        top: calc(var(--header-height) + var(--bt-space-6));
+        top: calc(var(--header-height) + var(--space-6));
         z-index: 2;
-        min-height: var(--bt-story-touch-target);
+        min-height: var(--touch-target-md);
         display: flex;
         flex-direction: row;
         align-items: flex-end;
-        border-bottom: var(--bt-story-rule-width) solid var(--bt-story-line);
-        background: var(--bt-story-bg);
+        border-bottom: var(--rule-width-subtle) solid var(--color-border-editorial);
+        background: var(--color-surface-page);
         overflow: visible;
         scrollbar-width: none;
 
@@ -2033,8 +2543,8 @@ the timeline drops them under the ship once the walls have retreated. */
             bottom: 100%;
             left: 0;
             z-index: 0;
-            height: calc(var(--header-height) + var(--bt-space-6));
-            background: var(--bt-story-bg);
+            height: calc(var(--header-height) + var(--space-6));
+            background: var(--color-surface-page);
             pointer-events: none;
         }
     }
@@ -2044,35 +2554,35 @@ the timeline drops them under the ship once the walls have retreated. */
         z-index: 1;
         flex: 0 0 auto;
         width: auto;
-        min-height: var(--bt-story-touch-target);
-        padding: 0 var(--bt-space-6);
+        min-height: var(--touch-target-md);
+        padding: 0 var(--space-6);
         border: 0;
-        color: var(--bt-story-muted);
+        color: var(--color-text-muted);
         background: transparent;
         font: inherit;
-        font-size: var(--bt-story-body-size);
-        font-weight: var(--bt-font-weight-regular);
-        line-height: var(--bt-story-body-line-height);
+        font-size: var(--section-body-size);
+        font-weight: var(--font-weight-regular);
+        line-height: var(--section-body-line-height);
         letter-spacing: 0;
         white-space: nowrap;
         cursor: pointer;
         transition:
-            color var(--bt-duration-fast) var(--bt-ease-standard),
-            background-color var(--bt-duration-fast) var(--bt-ease-standard);
+            color var(--duration-fast) var(--ease-standard),
+            background-color var(--duration-fast) var(--ease-standard);
 
         &:hover {
-            color: var(--bt-story-ink);
-            background: var(--bt-story-paper);
+            color: var(--color-text-primary);
+            background: var(--color-surface-paper);
         }
 
         &:focus-visible {
-            outline: var(--bt-border-width-2) solid var(--bt-color-focus);
-            outline-offset: calc(var(--bt-border-width-2) * -1);
+            outline: var(--border-width-2) solid var(--color-focus-ring);
+            outline-offset: calc(var(--border-width-2) * -1);
         }
 
         &[aria-selected="true"] {
-            color: var(--bt-story-ink);
-            font-weight: var(--bt-font-weight-medium);
+            color: var(--color-text-primary);
+            font-weight: var(--font-weight-medium);
         }
     }
 
@@ -2082,8 +2592,8 @@ the timeline drops them under the ship once the walls have retreated. */
         left: 0;
         z-index: 2;
         width: var(--agenda-tab-indicator-width);
-        height: var(--bt-story-rule-height);
-        background: var(--bt-spectrum-line);
+        height: var(--rule-width-emphasis);
+        background: var(--spectrum);
         pointer-events: none;
         transform: translate(var(--agenda-tab-indicator-x), var(--agenda-tab-indicator-y));
         will-change: width, transform;
@@ -2091,8 +2601,8 @@ the timeline drops them under the ship once the walls have retreated. */
 
     .agenda__tabs[data-indicator-ready="true"] .agenda__tab-indicator {
         transition:
-            width var(--bt-duration-base) linear,
-            transform var(--bt-duration-base) linear;
+            width var(--duration-base) linear,
+            transform var(--duration-base) linear;
     }
 
     .agenda__panel {
@@ -2100,14 +2610,14 @@ the timeline drops them under the ship once the walls have retreated. */
         /* สลับแท็บ Stage แล้วเลื่อนมาจอดใต้แถบแท็บที่ sticky อยู่พอดี ไม่ใช่ใต้ header
            เฉย ๆ (นั่นจะทำให้แถบแท็บมาบังหัวตาราง) เผื่อความสูงแถบแท็บ+เส้นคาดเพิ่ม
            จากออฟเซตที่ .agenda__day-panel ใช้ */
-        scroll-margin-top: calc(var(--header-height) + var(--bt-space-6) + var(--bt-story-touch-target) + var(--bt-story-rule-width));
+        scroll-margin-top: calc(var(--header-height) + var(--space-6) + var(--touch-target-md) + var(--rule-width-subtle));
 
         &[hidden] {
             display: none;
         }
 
         &.agenda__panel--empty {
-            min-height: var(--bt-story-section-padding-y-sm);
+            min-height: var(--section-padding-y-sm);
         }
     }
 
@@ -2126,29 +2636,29 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .agenda__table tr {
-        border-bottom: var(--bt-story-rule-width) solid var(--bt-story-line-2);
+        border-bottom: var(--rule-width-subtle) solid var(--color-border-faint);
     }
 
     .agenda__table th,
     .agenda__table td {
-        padding: var(--bt-space-6) 0;
+        padding: var(--space-6) 0;
         vertical-align: top;
     }
 
     .agenda__table th {
-        padding-right: var(--bt-space-6);
-        color: var(--bt-story-muted);
-        font-size: var(--bt-story-small-size);
-        font-weight: var(--bt-font-weight-regular);
-        line-height: var(--bt-story-body-line-height);
+        padding-right: var(--space-6);
+        color: var(--color-text-muted);
+        font-size: var(--section-small-size);
+        font-weight: var(--font-weight-regular);
+        line-height: var(--section-body-line-height);
         letter-spacing: 0;
         text-align: left;
         white-space: nowrap;
     }
 
     .agenda__table td {
-        border-left: var(--bt-story-rule-width) solid var(--bt-story-line-2);
-        padding-left: var(--bt-space-6);
+        border-left: var(--rule-width-subtle) solid var(--color-border-faint);
+        padding-left: var(--space-6);
     }
 
     /* กรอบรูปวิทยากรอยู่ขวาสุดของแต่ละ Session และรองรับหลายคนในแถวเดียว */
@@ -2172,13 +2682,13 @@ the timeline drops them under the ship once the walls have retreated. */
         display: inline-grid;
         place-items: center;
         overflow: hidden;
-        border: var(--bt-story-rule-width) solid var(--bt-story-line);
+        border: var(--rule-width-subtle) solid var(--color-border-editorial);
         border-radius: 50%;
-        color: var(--bt-story-muted);
-        background: var(--bt-story-paper);
+        color: var(--color-text-muted);
+        background: var(--color-surface-paper);
 
         &+.agenda__speaker-frame {
-            margin-left: var(--bt-space-2);
+            margin-left: var(--space-2);
         }
 
         >img {
@@ -2191,47 +2701,47 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .agenda__speaker-frame>.bt-icon {
-        font-size: var(--bt-space-8);
+        font-size: var(--space-8);
         stroke-width: 1.75;
     }
 
     .agenda__tags {
-        margin-bottom: var(--bt-space-4);
+        margin-bottom: var(--space-4);
         display: flex;
         flex-wrap: wrap;
-        gap: var(--bt-space-2);
+        gap: var(--space-2);
     }
 
     .agenda__tag {
-        min-height: var(--bt-space-6);
-        padding: 0 var(--bt-space-3);
+        min-height: var(--space-6);
+        padding: 0 var(--space-3);
         display: inline-flex;
         align-items: center;
-        border-radius: var(--bt-story-pill-radius);
-        font-size: var(--bt-story-tag-size);
-        font-weight: var(--bt-font-weight-regular);
-        line-height: var(--bt-story-body-line-height);
+        border-radius: var(--pill-radius);
+        font-size: var(--section-tag-size);
+        font-weight: var(--font-weight-regular);
+        line-height: var(--section-body-line-height);
         letter-spacing: 0;
         text-transform: uppercase;
 
         &.agenda__tag--capital {
             color: var(--bt-agenda-capital);
-            background: color-mix(in srgb, var(--bt-agenda-capital) 14%, var(--bt-story-bg));
+            background: color-mix(in srgb, var(--bt-agenda-capital) 14%, var(--color-surface-page));
         }
 
         &.agenda__tag--commodity {
             color: var(--bt-agenda-commodity);
-            background: color-mix(in srgb, var(--bt-agenda-commodity) 14%, var(--bt-story-bg));
+            background: color-mix(in srgb, var(--bt-agenda-commodity) 14%, var(--color-surface-page));
         }
 
         &.agenda__tag--crypto {
             color: var(--bt-agenda-crypto);
-            background: color-mix(in srgb, var(--bt-agenda-crypto) 16%, var(--bt-story-bg));
+            background: color-mix(in srgb, var(--bt-agenda-crypto) 16%, var(--color-surface-page));
         }
 
         &.agenda__tag--alternative {
             color: var(--bt-agenda-alternative);
-            background: color-mix(in srgb, var(--bt-agenda-alternative) 14%, var(--bt-story-bg));
+            background: color-mix(in srgb, var(--bt-agenda-alternative) 14%, var(--color-surface-page));
         }
     }
 
@@ -2242,67 +2752,239 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .agenda__session-title {
-        color: var(--bt-story-ink);
-        font-size: var(--bt-story-body-size);
-        font-weight: var(--bt-font-weight-medium);
-        line-height: var(--bt-story-body-line-height);
+        color: var(--color-text-primary);
+        font-size: var(--section-body-size);
+        font-weight: var(--font-weight-medium);
+        line-height: var(--section-body-line-height);
 
         &.agenda__session-title--simple {
-            font-weight: var(--bt-font-weight-regular);
+            font-weight: var(--font-weight-regular);
         }
     }
 
     .agenda__session-summary {
-        margin-top: var(--bt-space-1);
-        color: var(--bt-story-muted);
-        font-size: var(--bt-story-body-size);
-        font-weight: var(--bt-font-weight-regular);
-        line-height: var(--bt-story-body-line-height);
+        margin-top: var(--space-1);
+        font-size: var(--section-body-size);
+        font-weight: var(--font-weight-regular);
+        line-height: var(--section-body-line-height);
     }
 
     .agenda__session-speaker {
-        margin-top: var(--bt-space-4);
-        color: var(--bt-story-ink);
-        font-size: var(--bt-story-small-size);
-        font-weight: var(--bt-font-weight-regular);
-        line-height: var(--bt-story-body-line-height);
+        margin-top: var(--space-4);
+        color: var(--color-text-muted);
+        font-size: var(--section-small-size);
+        font-weight: var(--font-weight-regular);
+        line-height: var(--section-body-line-height);
     }
 
     .agenda__note {
-        margin: var(--bt-space-6) 0 0;
-        color: var(--bt-story-muted);
-        font-size: var(--bt-story-small-size);
-        font-weight: var(--bt-font-weight-regular);
-        line-height: var(--bt-story-body-line-height);
+        margin: var(--space-6) 0 0;
+        color: var(--color-text-muted);
+        font-size: var(--section-small-size);
+        font-weight: var(--font-weight-regular);
+        line-height: var(--section-body-line-height);
         letter-spacing: 0;
     }
 
     @media (max-width:991px) {
-        padding: var(--bt-story-section-padding-y-sm) 0;
+        --agenda-day-label-size: var(--font-size-40);
+        --agenda-day-label-active-size: var(--font-size-24);
+
+        padding: var(--section-padding-y-sm) 0;
 
         .agenda__section-header {
-            margin-bottom: var(--bt-space-12);
+            margin-bottom: var(--space-12);
         }
 
         .agenda__day-switcher {
             position: static;
-            margin-bottom: var(--bt-space-12);
+            margin-bottom: var(--space-12);
         }
 
         .agenda__day-switch-rail {
-            height: var(--bt-space-12);
+            height: var(--space-12);
         }
 
         .agenda__tabs {
             top: var(--header-height);
         }
+
+        .agenda__day-switch,
+        .agenda__day-switch-label {
+            font-size: var(--agenda-day-label-size);
+        }
+
+        .agenda__day-switch[aria-current='true'] .agenda__day-switch-label {
+            font-size: var(--agenda-day-label-active-size);
+        }
     }
 
     /* Mobile agenda: ย้ายข้อมูลวิทยากรลงใต้ชื่อ Session เพื่อให้อ่านเป็นลำดับเดียว */
     @media (max-width:767px) {
+        --agenda-day-label-size: var(--font-size-32);
+        --agenda-day-label-line-height: var(--section-topic-line-height);
+        --agenda-day-label-weight: var(--font-weight-regular);
+        --agenda-day-label-active-size: var(--font-size-32);
+        --agenda-day-label-active-line-height: var(--agenda-day-label-line-height);
+        --agenda-day-label-active-weight: var(--agenda-day-label-weight);
+
+        .agenda__layout {
+            margin-right: 0;
+            margin-left: 0;
+        }
+
+        .agenda__day-switcher {
+            position: static;
+            width: 100%;
+            margin-bottom: var(--space-0);
+            padding: 0;
+            background: var(--color-surface-page);
+            scroll-margin-top: calc(var(--header-height) + var(--space-4));
+            display: flex;
+            justify-content: center;
+        }
+
+        .agenda__day-switcher,
+        .agenda__days {
+            padding-right: 0;
+            padding-left: 0;
+        }
+
+        .agenda__day-switcher-inner {
+            position: relative;
+            width: min(100%, 280px);
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            justify-items: stretch;
+            align-items: end;
+            gap: 0;
+            padding-bottom: var(--space-20);
+        }
+
+        .agenda__day-switch {
+            width: 100%;
+            min-height: var(--touch-target-md);
+            padding: 0 0 var(--space-3);
+            display: flex;
+            align-items: flex-end;
+            background: transparent;
+            text-align: left;
+
+            &:last-of-type {
+                justify-content: flex-end;
+                text-align: right;
+            }
+
+            &[aria-current='true'] {
+                color: var(--agenda-day-label-active-color);
+            }
+        }
+
+        .agenda__day-switch-label {
+            font-size: var(--agenda-day-label-size);
+            font-weight: var(--agenda-day-label-weight);
+            line-height: var(--agenda-day-label-line-height);
+        }
+
+        .agenda__day-switch[aria-current='true'] .agenda__day-switch-label {
+            font-size: var(--agenda-day-label-active-size);
+            font-weight: var(--agenda-day-label-active-weight);
+            line-height: var(--agenda-day-label-active-line-height);
+        }
+
+        .agenda__day-switch-details,
+        .agenda__day-switch[aria-current='true'] .agenda__day-switch-details {
+            position: absolute;
+            top: calc(var(--touch-target-md) + var(--space-4));
+            left: 0;
+            width: 200%;
+            margin-top: 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: none;
+            transition: opacity var(--duration-fast) var(--ease-standard);
+        }
+
+        .agenda__day-switch:last-of-type .agenda__day-switch-details {
+            transform: translateX(-50%);
+        }
+
+        .agenda__day-switch[aria-current='true'] .agenda__day-switch-details {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .agenda__day-switch-details-inner {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: center;
+            align-items: center;
+            gap: var(--space-1) var(--space-4);
+            overflow: visible;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        .agenda__day-switch-details-inner span+span::before {
+            content: none;
+        }
+
+        .agenda__day-switch-rail {
+            position: absolute;
+            top: calc(var(--touch-target-md) / 2);
+            right: var(--space-20);
+            left: var(--space-20);
+            display: block;
+            width: auto;
+            height: var(--rule-width-subtle);
+            background: var(--color-border-editorial);
+            transform: translateY(-50%);
+        }
+
+        .agenda__day-switch-rail::after {
+            top: auto;
+            right: auto;
+            bottom: 0;
+            left: 0;
+            width: 50%;
+            height: var(--rule-width-emphasis);
+            background: var(--spectrum);
+            transform: translateX(0);
+        }
+
+        .agenda__day-switcher-inner[data-active-day='day-two'] .agenda__day-switch-rail::after {
+            transform: translateX(100%);
+        }
+
+        .agenda__tabs-viewport {
+            position: sticky;
+            top: var(--header-height);
+            z-index: 2;
+            display: block;
+            background: var(--color-surface-page);
+
+            /* ปิดเนื้อหาตารางที่เลื่อนผ่านใต้ Header โดยไม่ถูก overflow แนวนอน clip */
+            &::before {
+                content: '';
+                position: absolute;
+                right: 0;
+                bottom: 100%;
+                left: 0;
+                height: calc(var(--header-height) + var(--space-6));
+                background: var(--color-surface-page);
+                pointer-events: none;
+            }
+        }
+
         .agenda__tabs {
+            position: relative;
+            top: auto;
+            z-index: 1;
             overflow-x: auto;
             overflow-y: hidden;
+
+            &::before {
+                display: none;
+            }
         }
 
         .agenda__table,
@@ -2327,7 +3009,7 @@ the timeline drops them under the ship once the walls have retreated. */
         .agenda__table th {
             grid-column: 1;
             grid-row: 1 / span 2;
-            padding-right: var(--bt-space-4);
+            padding-right: var(--space-4);
         }
 
         .agenda__table td:not(.agenda__speakers) {
@@ -2338,10 +3020,10 @@ the timeline drops them under the ship once the walls have retreated. */
         .agenda__table td.agenda__speakers {
             grid-column: 2;
             grid-row: 2;
-            padding: 0 0 var(--bt-space-6) var(--bt-space-6);
+            padding: 0 0 var(--space-6) var(--space-6);
             display: block;
-            border-left: var(--bt-story-rule-width) solid var(--bt-story-line-2);
-            font-size: var(--bt-story-small-size);
+            border-left: var(--rule-width-subtle) solid var(--color-border-faint);
+            font-size: var(--section-small-size);
             text-align: left;
             white-space: normal;
 
@@ -2357,25 +3039,37 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     @media (max-width:575px) {
+        --agenda-day-label-size: var(--font-size-28);
+        --agenda-day-label-active-size: var(--font-size-28);
+
+        .agenda__day-switch,
+        .agenda__day-switch-label {
+            font-size: var(--agenda-day-label-size);
+        }
+
+        .agenda__day-switch[aria-current='true'] .agenda__day-switch-label {
+            font-size: var(--agenda-day-label-active-size);
+        }
+
         .agenda__time-column {
-            width: var(--bt-space-20);
+            width: var(--space-20);
         }
 
         .agenda__tab {
-            padding: 0 var(--bt-space-4);
+            padding: 0 var(--space-4);
         }
 
         .agenda__table th,
         .agenda__table td {
-            padding-top: var(--bt-space-5);
-            padding-bottom: var(--bt-space-5);
+            padding-top: var(--space-6);
+            padding-bottom: var(--space-5);
         }
 
         .agenda__table th {
             grid-column: 1;
             grid-row: 1;
-            padding-right: var(--bt-space-0);
-            padding-bottom: var(--bt-space-6);
+            padding-right: var(--space-0);
+            padding-bottom: var(--space-2);
             white-space: normal;
         }
 
@@ -2395,7 +3089,8 @@ the timeline drops them under the ship once the walls have retreated. */
         .agenda__table td:not(.agenda__speakers) {
             grid-column: 1;
             grid-row: 2;
-            padding-top: 0;
+            padding-top: var(--space-0);
+            padding-bottom: var(--space-6);
         }
 
         .agenda__speaker-column {
@@ -2414,34 +3109,36 @@ the timeline drops them under the ship once the walls have retreated. */
             height: var(--bt-agenda-speaker-size-mobile);
 
             &+.agenda__speaker-frame {
-                margin-left: var(--bt-space-1);
+                margin-left: var(--space-1);
             }
 
         }
 
         .agenda__speaker-frame>.bt-icon {
-            font-size: var(--bt-space-5);
+            font-size: var(--space-5);
         }
 
         .agenda__tags {
-            margin-bottom: var(--bt-space-2);
+            margin-top: var(--space-3);
+            margin-bottom: var(--space-3);
         }
 
         .agenda__tag {
-            min-height: var(--bt-space-5);
-            padding: 0 var(--bt-space-2);
+            min-height: var(--space-5);
+            padding: 0 var(--space-2);
         }
 
         .agenda__session-title {
-            font-size: var(--bt-font-size-16);
+            font-size: var(--font-size-16);
         }
 
         .agenda__session-summary {
-            font-size: var(--bt-story-small-size);
+            font-size: var(--section-small-size);
         }
 
         .agenda__session-speaker {
-            font-size: var(--bt-story-small-size);
+            margin: var(--space-3) var(--space-0) var(--space-0);
+            font-size: var(--section-small-size);
         }
     }
 }
@@ -2449,7 +3146,7 @@ the timeline drops them under the ship once the walls have retreated. */
 @keyframes agenda-day-enter {
     from {
         opacity: 0;
-        transform: translateY(var(--bt-space-2));
+        transform: translateY(var(--space-2));
     }
 
     to {
@@ -2460,7 +3157,7 @@ the timeline drops them under the ship once the walls have retreated. */
 
 @media (prefers-reduced-motion: reduce) {
     .agenda .agenda__day-panel.is-entering .agenda__content {
-        animation-duration: var(--bt-duration-reduced);
+        animation-duration: var(--duration-reduced);
     }
 
     /* เดิมครอบแค่ตารางฝั่งขวา ตัวสลับวันยังมอร์ฟป้าย 24→48px เต็ม 240ms อยู่ */
@@ -2468,13 +3165,13 @@ the timeline drops them under the ship once the walls have retreated. */
     .agenda .agenda__day-switch-label,
     .agenda .agenda__day-switch-details,
     .agenda .agenda__day-switch-rail::after {
-        transition-duration: var(--bt-duration-reduced);
+        transition-duration: var(--duration-reduced);
     }
 
     /* ยังเห็นออร่าตอน hover ได้ แต่ไม่ต้องลอยหมุน */
     .speaker-card__portrait::before,
     .speaker-card__portrait::after {
-        transition-duration: var(--bt-duration-reduced);
+        transition-duration: var(--duration-reduced);
     }
 
     .speaker-card:hover .speaker-card__portrait::before,
@@ -2487,21 +3184,21 @@ the timeline drops them under the ship once the walls have retreated. */
 .speaker {
     position: relative;
     scroll-margin-top: var(--header-height);
-    padding: var(--bt-story-section-padding-y) 0;
-    color: var(--bt-story-ink);
-    background: var(--bt-story-bg);
-    font-family: var(--bt-font);
+    padding: var(--section-padding-y) 0;
+    color: var(--color-text-primary);
+    background: var(--color-surface-page);
+    font-family: var(--font-family-base);
 
     .speaker__section-header {
-        margin-bottom: var(--bt-space-20);
+        margin-bottom: var(--space-20);
     }
 
     .speaker__section-header h2 {
         max-width: 920px;
         margin: 0;
-        font-size: var(--bt-story-title-size);
-        font-weight: var(--bt-font-weight-regular);
-        line-height: var(--bt-story-title-line-height);
+        font-size: var(--section-title-size);
+        font-weight: var(--font-weight-regular);
+        line-height: var(--section-title-line-height);
         letter-spacing: 0;
     }
 
@@ -2513,11 +3210,11 @@ the timeline drops them under the ship once the walls have retreated. */
     /* ---- ตัวสลับวัน: ก๊อปแพตเทิร์นจาก .agenda__day-switcher ทั้งชุด ---- */
     .speaker__day-switcher {
         position: sticky;
-        top: calc(var(--header-height) + var(--bt-space-6));
+        top: calc(var(--header-height) + var(--space-6));
         z-index: 2;
         align-self: start;
         min-width: 0;
-        /* background: var(--bt-story-bg); */
+        /* background: var(--color-surface-page); */
     }
 
     .speaker__days {
@@ -2525,7 +3222,7 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .speaker__day-panel {
-        scroll-margin-top: calc(var(--header-height) + var(--bt-space-6));
+        scroll-margin-top: calc(var(--header-height) + var(--space-6));
     }
 
     .speaker__day-panel[hidden] {
@@ -2535,7 +3232,7 @@ the timeline drops them under the ship once the walls have retreated. */
     .speaker__day-switcher-inner {
         display: grid;
         justify-items: start;
-        gap: var(--bt-space-6);
+        gap: var(--space-6);
     }
 
     .speaker__day-switch {
@@ -2546,38 +3243,38 @@ the timeline drops them under the ship once the walls have retreated. */
         width: fit-content;
         min-width: 0;
         padding: 0;
-        color: var(--bt-story-muted);
-        font-size: var(--bt-story-subheading-size);
-        font-weight: var(--bt-font-weight-regular);
-        line-height: var(--bt-story-topic-line-height);
+        color: var(--color-text-muted);
+        font-size: var(--section-subheading-size);
+        font-weight: var(--font-weight-regular);
+        line-height: var(--section-topic-line-height);
         letter-spacing: 0;
         text-decoration: none;
         text-transform: uppercase;
         transition:
-            color var(--bt-duration-base) var(--bt-story-ease),
-            opacity var(--bt-duration-base) var(--bt-story-ease);
+            color var(--duration-base) var(--ease-standard),
+            opacity var(--duration-base) var(--ease-standard);
 
         &:hover,
         &:focus-visible {
-            color: var(--bt-story-ink);
+            color: var(--color-text-primary);
         }
 
         &[aria-current='true'] {
-            color: var(--bt-story-ink);
+            color: var(--color-text-primary);
         }
 
         &:focus-visible {
-            outline: var(--bt-border-width-2) solid var(--bt-color-focus);
-            outline-offset: var(--bt-space-2);
+            outline: var(--border-width-2) solid var(--color-focus-ring);
+            outline-offset: var(--space-2);
         }
     }
 
     .speaker__day-switch-label {
         display: block;
         transition:
-            font-size var(--bt-duration-base) var(--bt-story-ease),
-            line-height var(--bt-duration-base) var(--bt-story-ease),
-            color var(--bt-duration-base) var(--bt-story-ease);
+            font-size var(--duration-base) var(--ease-standard),
+            line-height var(--duration-base) var(--ease-standard),
+            color var(--duration-base) var(--ease-standard);
     }
 
     /* 0fr → 1fr วิ่งตามความสูงจริง ไม่ต้องเดาเพดานแบบ max-height */
@@ -2585,34 +3282,34 @@ the timeline drops them under the ship once the walls have retreated. */
         display: grid;
         grid-template-rows: 0fr;
         margin-top: 0;
-        color: var(--bt-story-muted);
-        font-size: var(--bt-story-body-size);
-        line-height: var(--bt-story-body-line-height);
+        color: var(--color-text-muted);
+        font-size: var(--section-body-size);
+        line-height: var(--section-body-line-height);
         text-transform: none;
         opacity: 0;
-        transform: translateY(calc(var(--bt-space-2) * -1));
+        transform: translateY(calc(var(--space-2) * -1));
         transition:
-            grid-template-rows var(--bt-duration-base) var(--bt-story-ease),
-            margin-top var(--bt-duration-base) var(--bt-story-ease),
-            opacity var(--bt-duration-base) var(--bt-story-ease),
-            transform var(--bt-duration-base) var(--bt-story-ease);
+            grid-template-rows var(--duration-base) var(--ease-standard),
+            margin-top var(--duration-base) var(--ease-standard),
+            opacity var(--duration-base) var(--ease-standard),
+            transform var(--duration-base) var(--ease-standard);
     }
 
     .speaker__day-switch-details-inner {
         display: grid;
-        gap: var(--bt-space-2);
+        gap: var(--space-2);
         min-height: 0;
         overflow: hidden;
     }
 
     .speaker__day-switch[aria-current='true'] .speaker__day-switch-label {
-        font-size: var(--bt-story-title-size);
+        font-size: var(--section-title-size);
         line-height: 56px;
     }
 
     .speaker__day-switch[aria-current='true'] .speaker__day-switch-details {
         grid-template-rows: 1fr;
-        margin-top: var(--bt-space-6);
+        margin-top: var(--space-6);
         opacity: 1;
         transform: translateY(0);
     }
@@ -2620,9 +3317,9 @@ the timeline drops them under the ship once the walls have retreated. */
     .speaker__day-switch-rail {
         position: relative;
         overflow: hidden;
-        width: var(--bt-story-rule-width);
-        height: var(--bt-space-28);
-        background: var(--bt-story-line);
+        width: var(--rule-width-subtle);
+        height: var(--space-28);
+        background: var(--color-border-editorial);
         pointer-events: none;
     }
 
@@ -2635,7 +3332,7 @@ the timeline drops them under the ship once the walls have retreated. */
         height: 50%;
         background: var(--spectrum-vertical);
         transform: translateY(0);
-        transition: transform var(--bt-duration-base) var(--bt-story-ease);
+        transition: transform var(--duration-base) var(--ease-standard);
     }
 
     .speaker__day-switcher-inner[data-active-day='day-two'] .speaker__day-switch-rail::after {
@@ -2645,11 +3342,11 @@ the timeline drops them under the ship once the walls have retreated. */
     /* หัวข้อกับแถบวันค้างอยู่ระหว่างเลื่อนดูการ์ด ใช้แพตเทิร์นเดียวกับ .agenda__tabs
        สติกกี้ถูกจำกัดด้วยกล่องของ .speaker__inner จึงหลุดเองเมื่อจบ section */
     .speaker__eyebrow {
-        margin: 0 0 var(--bt-space-2);
-        color: var(--bt-story-muted);
-        font-size: var(--bt-story-body-size);
-        font-weight: var(--bt-font-weight-regular);
-        line-height: var(--bt-story-body-line-height);
+        margin: 0 0 var(--space-2);
+        color: var(--color-text-muted);
+        font-size: var(--section-body-size);
+        font-weight: var(--font-weight-regular);
+        line-height: var(--section-body-line-height);
         letter-spacing: 0;
         text-transform: uppercase;
     }
@@ -2665,7 +3362,7 @@ the timeline drops them under the ship once the walls have retreated. */
     /* วันที่ยังไม่ประกาศรายชื่อ กันไม่ให้ section ยุบจนดูเหมือนหน้าพัง
        (แนวเดียวกับ .agenda__panel--empty) */
     .speaker__panel--empty {
-        min-height: var(--bt-story-section-padding-y-sm);
+        min-height: var(--section-padding-y-sm);
     }
 
     /* เหลือไว้เฉพาะการวางลงผังเชิงบรรณาธิการ ซึ่งเป็นเรื่องของ section นี้เท่านั้น
@@ -2677,6 +3374,7 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     @media (max-width: 1199px) {
+
         /* ปิดผังตายตัวให้การ์ดไหลต่อกันเอง ช่องว่างเชิงบรรณาธิการจึงหายไปพร้อมกัน
            (ระยะห่างของกริดที่เปลี่ยนคู่กันอยู่ในบล็อกกริดร่วมท้ายไฟล์ section นี้) */
         .speaker-card {
@@ -2687,20 +3385,144 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     @media (max-width: 991px) {
-        padding: var(--bt-story-section-padding-y-sm) 0;
+        padding: var(--section-padding-y-sm) 0;
 
         .speaker__section-header {
-            margin-bottom: var(--bt-space-12);
+            margin-bottom: var(--space-12);
         }
 
         /* จอนี้เรียงซ้อนคอลัมน์เดียว ถ้าตัวสลับวันยังค้างจะกินพื้นที่จอเยอะเกิน */
         .speaker__day-switcher {
             position: static;
-            margin-bottom: var(--bt-space-12);
+            margin-bottom: var(--space-12);
         }
 
         .speaker__day-switch-rail {
-            height: var(--bt-space-12);
+            height: var(--space-12);
+        }
+    }
+
+    @media (max-width: 767px) {
+        .speaker__layout {
+            margin-right: 0;
+            margin-left: 0;
+        }
+
+        .speaker__day-switcher {
+            position: static;
+            width: 100%;
+            margin-bottom: var(--space-0);
+            padding: 0;
+            scroll-margin-top: calc(var(--header-height) + var(--space-4));
+            display: flex;
+            justify-content: center;
+        }
+
+        .speaker__day-switcher,
+        .speaker__days {
+            padding-right: 0;
+            padding-left: 0;
+        }
+
+        .speaker__day-switcher-inner {
+            position: relative;
+            width: min(100%, 280px);
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            justify-items: stretch;
+            align-items: end;
+            gap: 0;
+            padding-bottom: var(--space-20);
+        }
+
+        .speaker__day-switch {
+            width: 100%;
+            min-height: var(--touch-target-md);
+            padding: 0 0 var(--space-3);
+            display: flex;
+            align-items: flex-end;
+            font-size: var(--font-size-24);
+            line-height: var(--section-topic-line-height);
+            background: transparent;
+            text-align: left;
+
+            &:last-of-type {
+                justify-content: flex-end;
+                text-align: right;
+            }
+        }
+
+        .speaker__day-switch-label {
+            font-size: var(--font-size-24);
+            line-height: var(--section-topic-line-height);
+        }
+
+        .speaker__day-switch[aria-current='true'] .speaker__day-switch-label {
+            font-size: var(--font-size-24);
+            line-height: var(--section-topic-line-height);
+        }
+
+        .speaker__day-switch-details,
+        .speaker__day-switch[aria-current='true'] .speaker__day-switch-details {
+            position: absolute;
+            top: calc(var(--touch-target-md) + var(--space-4));
+            left: 0;
+            width: 200%;
+            margin-top: 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: none;
+            transition: opacity var(--duration-fast) var(--ease-standard);
+        }
+
+        .speaker__day-switch:last-of-type .speaker__day-switch-details {
+            transform: translateX(-50%);
+        }
+
+        .speaker__day-switch[aria-current='true'] .speaker__day-switch-details {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .speaker__day-switch-details-inner {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: center;
+            align-items: center;
+            gap: var(--space-1) var(--space-4);
+            overflow: visible;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        .speaker__day-switch-details-inner span+span::before {
+            content: none;
+        }
+
+        .speaker__day-switch-rail {
+            position: absolute;
+            top: calc(var(--touch-target-md) / 2);
+            right: var(--space-20);
+            left: var(--space-20);
+            display: block;
+            width: auto;
+            height: var(--rule-width-subtle);
+            background: var(--color-border-editorial);
+            transform: translateY(-50%);
+        }
+
+        .speaker__day-switch-rail::after {
+            top: auto;
+            right: auto;
+            bottom: 0;
+            left: 0;
+            width: 50%;
+            height: var(--rule-width-emphasis);
+            background: var(--gradient-accent-spectrum);
+            transform: translateX(0);
+        }
+
+        .speaker__day-switcher-inner[data-active-day='day-two'] .speaker__day-switch-rail::after {
+            transform: translateX(100%);
         }
     }
 }
@@ -2715,30 +3537,33 @@ the timeline drops them under the ship once the walls have retreated. */
     grid-template-columns: repeat(3, minmax(0, 1fr));
     align-items: start;
     grid-auto-rows: auto;
-    gap: var(--bt-space-8) var(--bt-space-8);
+    gap: var(--space-8) var(--space-8);
     margin-top: 0;
 }
 
 @media (max-width: 1199px) {
+
     .speaker__panel,
     .moderator__grid {
-        gap: var(--bt-space-16) var(--bt-space-8);
+        gap: var(--space-16) var(--space-8);
     }
 }
 
 @media (max-width: 991px) {
+
     .speaker__panel,
     .moderator__grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: var(--bt-space-12) var(--bt-space-6);
+        gap: var(--space-12) var(--space-6);
     }
 }
 
 @media (max-width: 767px) {
+
     .speaker__panel,
     .moderator__grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: var(--bt-space-12) var(--bt-space-4);
+        gap: var(--space-12) var(--space-4);
     }
 }
 
@@ -2752,57 +3577,77 @@ the timeline drops them under the ship once the walls have retreated. */
     width: 100%;
     min-width: 0;
     margin-top: 0;
-    /* padding: var(--bt-space-4); */
-    /* border: var(--bt-story-rule-width) solid var(--bt-story-line); */
+    /* padding: var(--space-4); */
+    /* border: var(--rule-width-subtle) solid var(--color-border-editorial); */
 }
 
 /* ออร่าสเปกตรัมหลังรูปวิทยากร (รูปเป็น PNG พื้นโปร่ง แสงจึงลอดออกมารอบตัวคน)
-   อยู่ในกรอบรูปที่ overflow: hidden + isolation: isolate อยู่แล้ว แสงจึงถูกตัด
-   ที่ขอบกรอบรูปพอดี ไม่ล้นลงไปโดนชื่อ/ตำแหน่งในส่วน .speaker-card__meta */
+   ตั้งใจไม่ครอบด้วย overflow: hidden อีกต่อไป (เอาออกที่ .speaker-card__portrait
+   ด้านล่าง) เพื่อให้แสงฟุ้งล้นออกไปนอกกรอบรูปได้จริงตามที่ต้องการ
+   เพื่อไม่ให้ไปทับการ์ดใบข้างเคียง ต้องคุมด้วย "ขนาด" แทนการ "ตัดขอบ":
+   ย่อกล่องเข้ามาจากขอบกรอบรูปด้วย inset (แทนที่จะเต็มกรอบแบบเดิม) และลด blur ลง
+   ระยะที่เหลือ (inset 24% + blur 10px ≈ เผื่อไว้ราว 20px จากขอบกรอบรูป) ยังน้อยกว่า
+   ช่องว่างระหว่างการ์ดที่แคบที่สุด (16px ตอนจอมือถือ ≤767px, ดู .speaker__panel) ไม่พอ
+   ชนกับการ์ดข้างเคียงแน่ แต่เผื่อขอบเพิ่มไว้อีกชั้นเพราะขนาดจริงยังขึ้นกับสีของรูปด้วย */
 .speaker-card__portrait::before,
 .speaker-card__portrait::after {
     content: '';
     position: absolute;
-    /* กินพื้นที่เกินกรอบพอสมควร เพื่อให้ตอนหมุนแล้วมุมกรอบไม่โหว่ขาว
-       แต่ไม่ใหญ่จนในกรอบเหลือแต่เนื้อสีเรียบ ๆ จนไม่เห็นความโค้งของก้อนแสง */
-    inset: 0;
+    inset: 16%;
     z-index: -1;
     border-radius: 50%;
-    filter: blur(16px);
+    filter: blur(10px);
     opacity: 0;
     pointer-events: none;
-    transition: opacity var(--bt-story-duration-slow) var(--bt-story-ease);
+    transition: opacity var(--duration-slow) var(--ease-standard);
 }
 
 /* แยกสองชั้น คนละคู่สี คนละจังหวะ/ทิศหมุน เวลาเหลื่อมกันจึงผสมกันเป็นทิศทาง
    อิสระแบบสุ่ม ไม่ใช่วิ่งตามแกน x หรือ y อย่างเดียว */
 .speaker-card__portrait::before {
     background:
-        radial-gradient(circle at 30% 32%, var(--bt-cyan) 0%, transparent 52%),
-        radial-gradient(circle at 70% 64%, var(--bt-violet) 0%, transparent 52%);
+        radial-gradient(circle at 30% 32%, var(--color-category-cyan) 0%, transparent 52%),
+        radial-gradient(circle at 70% 64%, var(--color-category-violet) 0%, transparent 52%);
 }
 
 .speaker-card__portrait::after {
     background:
-        radial-gradient(circle at 68% 28%, var(--bt-pink) 0%, transparent 50%),
-        radial-gradient(circle at 32% 72%, var(--bt-yellow) 0%, transparent 54%);
+        radial-gradient(circle at 68% 28%, var(--color-category-pink) 0%, transparent 50%),
+        radial-gradient(circle at 32% 72%, var(--color-category-yellow) 0%, transparent 54%);
 }
 
 .speaker-card:hover .speaker-card__portrait::before {
-    opacity: 0.95;
+    opacity: 0.8;
     animation: speaker-aurora-a 16s linear infinite;
 }
 
 .speaker-card:hover .speaker-card__portrait::after {
-    opacity: 0.75;
+    opacity: 0.65;
     animation: speaker-aurora-b 22s linear infinite;
 }
 
 .speaker-card__portrait {
     position: relative;
     aspect-ratio: 4 / 5;
+    /* isolation: isolate ยังต้องอยู่ — ไม่ใช่แค่ของเก่าที่ค้างมากับ overflow ที่เพิ่งเอาออก
+       ทำให้กรอบรูปเป็น stacking context ของตัวเอง z-index: -1 ของออร่าจึงยังถูกวาด
+       "หลังกรอบรูปนี้" เท่านั้น (แสงยังล้นออกไปได้ปกติ เพราะ isolation คุมแค่ลำดับการวาด
+       ไม่ใช่ขอบเขตการแสดงผลแบบ overflow) ถ้าลบออกด้วย z-index จะทะลุไปอยู่หลังทุกอย่าง
+       บนหน้าเว็บเหมือนบั๊กที่เจอตอนทำ section Expectation */
     isolation: isolate;
-    background-color: #FAFBFD;
+    background: linear-gradient(0deg, var(--color-surface-paper) 10%, transparent 80%);
+}
+
+/* กรอบตัดภาพแยกจาก .speaker-card__portrait โดยตั้งใจ — ต้องมี overflow: hidden
+   เพื่อกันรูปที่ scale(1.03) ตอน hover ไม่ให้ล้นลงไปทับข้อความชื่อ/ตำแหน่งด้านล่าง
+   (พิสูจน์แล้วว่าไม่ใช่แค่ทฤษฎี: สุ่มสีพิกเซลแถวล่างสุดของรูปจริงออกมาเป็นสีเข้ม
+   เกือบดำของสูท ถ้าปล่อยให้ล้นจะเห็นเป็นรอยเปื้อนสีเข้มในช่องว่างเหนือชื่อชัดเจน)
+   วางเป็นชั้นแยกจากตัว .speaker-card__portrait เอง เพราะ portrait ต้องเป็น
+   overflow: visible ไว้ให้ออร่าสเปกตรัมด้านบนฟุ้งออกนอกกรอบได้ตามที่ต้องการ
+   ถ้าใส่ overflow: hidden ไว้ที่ portrait เหมือนเดิม ออร่าจะโดนตัดไปด้วย */
+.speaker-card__frame {
+    width: 100%;
+    height: 100%;
     overflow: hidden;
 }
 
@@ -2820,13 +3665,13 @@ the timeline drops them under the ship once the walls have retreated. */
     transform: scale(1);
     transform-origin: center top;
     transition:
-        filter var(--bt-story-duration-slow) var(--bt-story-ease),
-        transform var(--bt-story-duration-slow) var(--bt-story-ease);
+        filter var(--duration-slow) var(--ease-standard),
+        transform var(--duration-slow) var(--ease-standard);
 }
 
 .speaker-card:hover .speaker-card__portrait img {
     filter: saturate(1) contrast(1);
-    /* transform: scale(1.03); */
+    transform: scale(1.03);
 }
 
 .speaker-card__meta {
@@ -2838,15 +3683,15 @@ the timeline drops them under the ship once the walls have retreated. */
     position: relative;
     z-index: 1;
     min-width: 0;
-    padding: var(--bt-space-6) var(--bt-space-3) var(--bt-space-0);
-    /* border-top: var(--bt-story-rule-width) solid var(--bt-story-line); */
+    padding: var(--space-6) var(--space-3) var(--space-0);
+    /* border-top: var(--rule-width-subtle) solid var(--color-border-editorial); */
 }
 
 .speaker-card h3 {
     margin: 0;
-    font-size: var(--bt-story-body-size);
-    font-weight: var(--bt-font-weight-regular);
-    line-height: var(--bt-space-6);
+    font-size: var(--section-body-size);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--space-6);
     letter-spacing: 0;
     display: -webkit-box;
     -webkit-line-clamp: 1;
@@ -2855,12 +3700,12 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 .speaker-card p {
-    margin: var(--bt-space-1) 0 0;
-    color: var(--bt-story-muted);
-    font-size: var(--bt-story-small-size);
-    font-weight: var(--bt-font-weight-light);
-    line-height: var(--bt-story-small-line-height);
-    min-height: calc(var(--bt-story-body-line-height) * 2);
+    margin: var(--space-1) 0 0;
+    color: var(--color-text-muted);
+    font-size: var(--section-small-size);
+    font-weight: var(--font-weight-light);
+    line-height: var(--section-small-line-height);
+    min-height: calc(var(--section-body-line-height) * 2);
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -2874,25 +3719,50 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 }
 
+@media (max-width: 991px) {
+    .speaker-card {
+        width: min(100%, 320px);
+    }
+}
+
 @media (max-width: 767px) {
+
     /* การ์ด 2 คอลัมน์บนจอเล็กแคบเกินกว่าชื่อไทยจะพอดีบรรทัดเดียว
        เผื่อไว้ 2 บรรทัดเท่ากันทุกใบ ชื่อจึงไม่โดนตัดและการ์ดยังสูงเท่ากัน
        ระยะบรรทัด 28px เผื่อที่ให้วรรณยุกต์/สระบนของไทยไม่ชนกัน */
+    .speaker-card__meta {
+        padding: var(--space-5) var(--space-2) 0;
+    }
+
     .speaker-card h3 {
         -webkit-line-clamp: 2;
         line-height: 28px;
-        min-height: 56px;
+    }
+
+    .speaker-card p {
+        display: block;
+        min-height: 0;
+        overflow: visible;
+        -webkit-line-clamp: unset;
+        -webkit-box-orient: initial;
+        line-height: var(--section-body-line-height);
+    }
+}
+
+@media (max-width: 575px) {
+    .speaker-card p {
+        line-height: var(--section-small-line-height);
     }
 }
 
 /* จอสัมผัสไม่มี hover ให้เห็น โชว์ออร่าจาง ๆ ค้างไว้แทน (ไม่ต้องขยับ) */
 @media (hover: none) {
     .speaker-card__portrait::before {
-        opacity: 0.35;
+        opacity: 0.22;
     }
 
     .speaker-card__portrait::after {
-        opacity: 0.28;
+        opacity: 0.17;
     }
 }
 
@@ -2906,21 +3776,21 @@ the timeline drops them under the ship once the walls have retreated. */
     scroll-margin-top: var(--header-height);
     /* เว้นบน-ล่างเต็มเท่า section อื่นทุกอัน ระยะระหว่าง Speaker กับ section นี้
        จึงเป็น 128+128 เท่ากับคู่ section อื่นในหน้า ไม่ใช่ 128 อย่างที่ตัดบนออก */
-    padding: var(--bt-story-section-padding-y) 0;
-    color: var(--bt-story-ink);
-    background: var(--bt-story-bg);
-    font-family: var(--bt-font);
+    padding: var(--section-padding-y) 0;
+    color: var(--color-text-primary);
+    background: var(--color-surface-page);
+    font-family: var(--font-family-base);
 
     .moderator__section-header {
-        margin-bottom: var(--bt-space-20);
+        margin-bottom: var(--space-20);
     }
 
     .moderator__section-header h2 {
         max-width: 920px;
         margin: 0;
-        font-size: var(--bt-story-title-size);
-        font-weight: var(--bt-font-weight-regular);
-        line-height: var(--bt-story-title-line-height);
+        font-size: var(--section-title-size);
+        font-weight: var(--font-weight-regular);
+        line-height: var(--section-title-line-height);
         letter-spacing: 0;
     }
 
@@ -2929,11 +3799,252 @@ the timeline drops them under the ship once the walls have retreated. */
        ผังเว้นช่องของ Speaker พอดี ไม่ต้องกำหนดอะไรเพิ่มตรงนี้ */
 
     @media (max-width: 991px) {
-        padding: var(--bt-story-section-padding-y-sm) 0;
+        padding: var(--section-padding-y-sm) 0;
 
         .moderator__section-header {
-            margin-bottom: var(--bt-space-12);
+            margin-bottom: var(--space-12);
         }
+    }
+}
+
+/* ---------- Past Event ----------
+   Editorial archive: asymmetric films above a continuously moving photo reel. */
+.past-event {
+    position: relative;
+    overflow: hidden;
+    scroll-margin-top: var(--header-height);
+    padding: var(--section-padding-y) 0;
+    color: var(--color-text-primary);
+    background: var(--color-surface-page);
+    font-family: var(--font-family-base);
+}
+
+.past-event__inner {
+    display: grid;
+    gap: var(--space-16);
+}
+
+.past-event__header {
+    display: block;
+}
+
+.past-event__heading {
+    min-width: 0;
+}
+
+.past-event__header h2 {
+    max-width: 1000px;
+    margin: 0;
+    font-size: var(--section-title-size);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--section-title-line-height);
+    letter-spacing: 0;
+}
+
+.past-event__films {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: var(--space-6);
+}
+
+.past-event__film {
+    min-width: 0;
+    min-height: 0;
+}
+
+.past-event__film--featured {
+    grid-row: 1 / span 2;
+}
+
+.past-event__film--second {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.past-event__film--third {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.past-event__video-frame {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    background: var(--color-surface-inverse);
+}
+
+.past-event__film:not(.past-event__film--featured) .past-event__video-frame {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+}
+
+.past-event__video-frame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.past-event__marquee {
+    --marquee-fade: clamp(24px, 5vw, 80px);
+
+    width: 100%;
+    margin-top: calc(var(--space-10) * -1);
+    overflow: hidden;
+    outline: none;
+    -webkit-mask-image: linear-gradient(90deg,
+            transparent 0,
+            #000 var(--marquee-fade),
+            #000 calc(100% - var(--marquee-fade)),
+            transparent 100%);
+    mask-image: linear-gradient(90deg,
+            transparent 0,
+            #000 var(--marquee-fade),
+            #000 calc(100% - var(--marquee-fade)),
+            transparent 100%);
+}
+
+.past-event__marquee-track {
+    --marquee-gap: var(--space-6);
+
+    display: flex;
+    width: max-content;
+    gap: var(--marquee-gap);
+    animation: past-event-marquee 34s linear infinite;
+    will-change: transform;
+}
+
+.past-event__marquee:hover .past-event__marquee-track,
+.past-event__marquee:focus-visible .past-event__marquee-track {
+    animation-play-state: paused;
+}
+
+.past-event__marquee:focus-visible {
+    outline: var(--rule-width-subtle) solid var(--color-text-primary);
+    outline-offset: var(--space-2);
+}
+
+.past-event__marquee-group {
+    display: flex;
+    flex-shrink: 0;
+    gap: var(--marquee-gap);
+}
+
+.past-event__slide {
+    flex: 0 0 clamp(220px, 22vw, 352px);
+    margin: 0;
+}
+
+.past-event__slide-frame {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    aspect-ratio: 4 / 3;
+    padding: var(--space-6);
+    color: var(--color-text-primary);
+    background: var(--color-surface-paper);
+}
+
+.past-event__slide-frame .bt-icon {
+    align-self: center;
+    justify-self: center;
+    width: var(--space-12);
+    height: var(--space-12);
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.25;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+@keyframes past-event-marquee {
+    to {
+        transform: translateX(calc(-50% - var(--space-2)));
+    }
+}
+
+@media (max-width: 991px) {
+    .past-event {
+        padding: var(--section-padding-y-sm) 0;
+    }
+
+    .past-event__inner {
+        gap: var(--space-12);
+    }
+
+    .past-event__header {
+        display: block;
+    }
+
+    /* วิดีโอที่ 2-3 จับคู่กันในแถวเดียวกัน วิดีโอแรกยังใหญ่สุดเต็มความกว้างแถวบน
+       (จอ ≤575px จะกลับไปเรียงคอลัมน์เดียวทั้งหมด ดู block ด้านล่าง) */
+    .past-event__films {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: auto auto;
+        gap: var(--space-4);
+    }
+
+    .past-event__film--featured {
+        grid-column: 1 / -1;
+        grid-row: 1;
+    }
+
+    .past-event__film--second {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .past-event__film--third {
+        grid-column: 2;
+        grid-row: 2;
+    }
+
+    .past-event__film:not(.past-event__film--featured) .past-event__video-frame {
+        height: auto;
+        aspect-ratio: 16 / 9;
+    }
+
+    .past-event__marquee {
+        margin-top: calc(var(--space-6) * -1);
+    }
+}
+
+@media (max-width: 575px) {
+    .past-event__films {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
+
+    .past-event__film--featured,
+    .past-event__film--second,
+    .past-event__film--third {
+        grid-column: 1;
+        grid-row: auto;
+    }
+
+    .past-event__slide {
+        flex-basis: 240px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .past-event__marquee {
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .past-event__marquee::-webkit-scrollbar {
+        display: none;
+    }
+
+    .past-event__marquee-track {
+        animation: none;
+    }
+
+    .past-event__marquee-group[aria-hidden="true"] {
+        display: none;
     }
 }
 
@@ -2987,35 +4098,36 @@ the timeline drops them under the ship once the walls have retreated. */
 /* ---------- Expectation ----------
    สรุปขนาดของงานแบบนิตยสาร: พื้นที่ขาว ตัวเลขเด่น และใช้เส้นบางแบ่งจังหวะแทนกรอบการ์ด */
 .expectation {
+    --bt-expectation-title-size: var(--section-title-size);
+    --bt-expectation-stat-size: var(--section-title-size);
+    --bt-expectation-stat-line-height: var(--section-title-line-height);
+
     /* ความยาวของเส้นคั่นระหว่างช่อง (ดู .expectation__stat::before)
        เพดานอยู่ที่ ~150px เพราะเนื้อหาสูง 103px และช่องไฟระหว่างสองแถวมี 48px
        ถ้าเส้นยาวกว่านั้นส่วนที่ยื่นเกินของแถวบน-ล่างจะไล่มาชนกันจนดูรก */
     --expectation-rule-length: 80px;
 
-    padding: var(--bt-story-section-padding-y) 0;
-    color: var(--bt-story-ink);
-    background: var(--bt-story-bg);
-    font-family: var(--bt-font);
+    padding: var(--section-padding-y) 0;
+    color: var(--color-text-primary);
+    background: var(--color-surface-page);
+    font-family: var(--font-family-base);
 
     .expectation__header {
         text-align: center;
 
         h2 {
             margin: 0;
-            font-size: var(--bt-story-title-size);
-            font-weight: var(--bt-font-weight-regular);
-            line-height: var(--bt-story-title-line-height);
-            letter-spacing: var(--bt-story-title-tracking);
+            font-size: var(--bt-expectation-title-size);
+            font-weight: var(--font-weight-regular);
+            line-height: var(--section-title-line-height);
+            letter-spacing: var(--section-title-tracking);
         }
     }
 
     /* ใช้ Bootstrap row/column เป็นโครงหลัก เส้นตั้งวางที่ขอบ column จึงคงแนวตรงกันทุกขนาด */
     .expectation__stats {
-        margin-top: var(--bt-space-16);
-    }
-
-    .expectation__stats--secondary {
-        margin-top: var(--bt-space-12);
+        margin-top: var(--space-16);
+        row-gap: var(--space-12);
     }
 
     .expectation__stat {
@@ -3046,70 +4158,81 @@ the timeline drops them under the ship once the walls have retreated. */
             display: none;
         }
 
+        /* Desktop แถวที่สองเริ่มจากรายการที่ 4 */
+        &:nth-child(4)::before {
+            display: none;
+        }
+
         strong {
-            color: var(--bt-story-accent);
-            font-size: var(--bt-story-title-size);
-            font-weight: var(--bt-font-weight-medium);
-            line-height: var(--bt-story-title-line-height);
+            font-size: var(--bt-expectation-stat-size);
+            font-weight: var(--font-weight-medium);
+            line-height: var(--bt-expectation-stat-line-height);
             letter-spacing: 0;
         }
 
         span {
-            margin-top: var(--bt-space-1);
-            font-size: var(--bt-story-body-size);
-            font-weight: var(--bt-font-weight-regular);
-            line-height: var(--bt-story-topic-line-height);
+            color: var(--color-text-muted);
+            margin-top: var(--space-1);
+            font-size: var(--section-body-size);
+            font-weight: var(--font-weight-light);
+            line-height: var(--section-topic-line-height);
             letter-spacing: 0;
         }
     }
 
     @media (max-width: 991px) {
+        --bt-expectation-stat-size: var(--section-heading-size);
+
         /* ตัวเลขเล็กลงตามกฎด้านล่าง เนื้อหาจึงเตี้ยลงเหลือ ~92px
            ถ้าคงเส้นไว้ที่ 135px ส่วนที่ยื่นเกินจะเหลือช่องไฟระหว่างแถวแค่ 5px */
         --expectation-rule-length: 122px;
 
-        padding: var(--bt-story-section-padding-y-sm) 0;
+        padding: var(--section-padding-y-sm) 0;
 
         .expectation__stats {
-            margin-top: var(--bt-space-12);
+            margin-top: var(--space-12);
+            row-gap: var(--space-12);
         }
 
-        /* ลดตัวเลขตั้งแต่ tablet เพื่อให้ 4,000+ อยู่ใน Bootstrap column โดยไม่ชนข้อมูลข้างเคียง */
-        .expectation__stat strong {
-            font-size: var(--bt-story-heading-size);
-            line-height: var(--bt-story-title-line-height);
-        }
-
-        .expectation__stats--secondary {
-            row-gap: var(--bt-space-12);
-        }
-
-        /* แถวล่างเปลี่ยนเป็น 2 คอลัมน์ เส้นของรายการที่ 3 เริ่มรอบใหม่จึงไม่ต้องแสดง */
-        .expectation__stats--secondary .expectation__stat:nth-child(3)::before {
+        /* ที่ต่ำกว่า desktop รายการที่ 7 เริ่มแถวสุดท้าย */
+        .expectation__stat:nth-child(7)::before {
             display: none;
         }
     }
 
     @media (max-width: 767px) {
-        .expectation__header h2 {
-            font-size: var(--bt-story-heading-size);
-            line-height: var(--bt-story-heading-line-height);
-        }
+        --bt-expectation-title-size: var(--section-heading-size);
 
         .expectation__stats {
-            row-gap: var(--bt-space-10);
+            row-gap: var(--space-16);
+            justify-content: center;
         }
 
         .expectation__stat {
             span {
-                font-size: var(--bt-story-body-size);
-                line-height: var(--bt-story-body-line-height);
+                font-size: var(--section-body-size);
+                line-height: var(--section-body-line-height);
             }
         }
 
-        /* แถวบนรายการที่ 3 กว้างเต็มและขึ้นบรรทัดใหม่ จึงตัดเส้นด้านซ้ายออก */
-        .expectation__stats--primary .expectation__stat:nth-child(3)::before {
+    }
+
+    @media (max-width: 575px) {
+        .expectation__stat {
+            flex: 0 0 auto;
+            width: 50%;
+        }
+
+        .expectation__stat:nth-child(odd)::before {
             display: none;
+        }
+
+        .expectation__stat:nth-child(even)::before {
+            display: block;
+        }
+
+        .expectation__stat span {
+            font-size: var(--section-small-size);
         }
     }
 }
@@ -3118,24 +4241,26 @@ the timeline drops them under the ship once the walls have retreated. */
 /* ---------- Floor Plan ----------
    แสดงหัวข้อและภาพแผนผังบูทเต็มความกว้างของ Bootstrap container */
 .floor-plan {
-    padding: var(--bt-story-section-padding-y) 0;
-    color: var(--bt-story-ink);
-    background: var(--bt-story-bg);
-    font-family: var(--bt-font);
+    --bt-floor-plan-title-size: var(--section-title-size);
+
+    padding: var(--section-padding-y) 0;
+    color: var(--color-text-primary);
+    background: var(--color-surface-page);
+    font-family: var(--font-family-base);
 
     /* หัวข้อเป็นสองบรรทัดเหมือน section อื่น จึงใช้ title-line-height (140%)
        ไม่ใช่ display-line-height (88px) ที่ตั้งไว้ตอนยังเป็นบรรทัดเดียว ไม่งั้นสองบรรทัดจะห่างเกิน */
     .floor-plan__title {
         margin: 0;
-        font-size: var(--bt-story-title-size);
-        font-weight: var(--bt-font-weight-regular);
-        line-height: var(--bt-story-title-line-height);
+        font-size: var(--bt-floor-plan-title-size);
+        font-weight: var(--font-weight-regular);
+        line-height: var(--section-title-line-height);
         letter-spacing: 0;
     }
 
     .floor-plan__figure {
         position: relative;
-        margin: var(--bt-space-12) 0 0;
+        margin: var(--space-12) 0 0;
     }
 
     .floor-plan__image {
@@ -3146,7 +4271,7 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     @media (max-width:991px) {
-        padding: var(--bt-story-section-padding-y-sm) 0;
+        padding: var(--section-padding-y-sm) 0;
 
         /* จอเล็กคืนความกว้างเต็ม ย่ออีก 20% แล้วชื่อโซนในแผนผังจะอ่านไม่ออก */
         .floor-plan__image {
@@ -3157,10 +4282,7 @@ the timeline drops them under the ship once the walls have retreated. */
     /* ลดหัวข้อลงเท่า Expectation/Concept ที่ทำไว้แล้ว ถ้าคง 48px ไว้บนจอ 375px
        จะเหลือที่ราว 16 ตัวอักษรต่อบรรทัด หัวข้อจึงตัดคำจนมีคำห้อยท้ายบรรทัดเดียวโดด ๆ */
     @media (max-width: 767px) {
-        .floor-plan__title {
-            font-size: var(--bt-story-heading-size);
-            line-height: var(--bt-story-heading-line-height);
-        }
+        --bt-floor-plan-title-size: var(--section-heading-size);
 
     }
 }
@@ -3169,49 +4291,56 @@ the timeline drops them under the ship once the walls have retreated. */
 /* ---------- Footer ----------
    ส่วนปิดท้ายแบบ contact module สำหรับงาน event แสดงเฉพาะช่องทางติดต่อและผู้สนับสนุน */
 .site-footer {
-    padding: var(--bt-story-section-padding-y-sm) 0 var(--bt-space-12);
+    padding: var(--section-padding-y-sm) 0 var(--space-12);
     color: var(--bt-footer-ink);
-    background: var(--bt-color-white);
-    font-family: var(--bt-font);
+    background: var(--color-neutral-0);
+    font-family: var(--font-family-base);
 
     .site-footer__container {
         max-width: none;
-        padding-right: var(--bt-space-12);
-        padding-left: var(--bt-space-12);
+        padding-right: var(--space-12);
+        padding-left: var(--space-12);
     }
 
     .site-footer__panel {
-        padding: var(--bt-space-20);
-        border-radius: var(--bt-radius-2);
-        background: var(--bt-story-media-bg);
+        padding: var(--space-16) var(--space-10);
+        border-radius: var(--radius-2);
+        background: var(--color-surface-inverse);
     }
 
     .site-footer__content {
         align-items: stretch;
-    }
-
-    .site-footer__brand,
-    .site-footer__column {
-        min-width: 0;
+        /* gutter เดิมของ Bootstrap (1.5rem รวม = 12px ต่อฝั่ง) แคบเกินไปสำหรับ
+           border-left ที่ทำหน้าที่เป็นเส้นแบ่ง section — โลโก้ (แคบ) กับหัวข้อ
+           "Booths & Sponsors" (เกือบเต็มคอลัมน์) กว้างต่างกันมาก พอเจอ gutter แคบ
+           เส้นเลยดูเหมือนแปะติดฝั่งขวาตลอด ไม่ใช่เส้นแบ่งกลางที่เป็นกลาง */
+        --bs-gutter-x: var(--space-16);
     }
 
     .site-footer__logo {
         display: block;
+        margin-bottom: var(--space-6);
         width: min(100%, var(--bt-footer-logo-width));
         height: auto;
     }
 
     .site-footer__column {
-        padding-top: var(--bt-space-2);
-        padding-bottom: var(--bt-space-2);
-        border-left: var(--bt-story-rule-width) solid var(--bt-footer-line);
+        min-width: 0;
+        margin: var(--space-0);
+        border-left: var(--rule-width-subtle) solid var(--bt-footer-line);
+    }
+
+    /* The contact column is first now that the logo lives inside it instead of its own
+       column, so it no longer needs a leading rule at any width. */
+    .site-footer__column:first-of-type {
+        border-left: 0;
     }
 
     .site-footer__eyebrow {
-        margin: 0 0 var(--bt-space-1);
-        font-size: var(--bt-story-body-size);
-        font-weight: var(--bt-font-weight-light);
-        line-height: var(--bt-story-body-line-height);
+        margin: var(--space-0);
+        font-size: var(--section-body-size);
+        font-weight: var(--font-weight-light);
+        line-height: var(--section-body-line-height);
         letter-spacing: 0;
         text-transform: uppercase;
     }
@@ -3219,9 +4348,9 @@ the timeline drops them under the ship once the walls have retreated. */
     h3 {
         margin: 0;
         color: var(--bt-footer-ink);
-        font-size: var(--bt-story-subheading-size);
-        font-weight: var(--bt-font-weight-regular);
-        line-height: var(--bt-story-topic-line-height);
+        font-size: var(--section-subheading-size);
+        font-weight: var(--font-weight-regular);
+        line-height: var(--section-topic-line-height);
         letter-spacing: 0;
     }
 
@@ -3233,29 +4362,27 @@ the timeline drops them under the ship once the walls have retreated. */
     .site-footer__contact-list {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        column-gap: var(--bt-space-8);
-        margin: var(--bt-space-10) 0 0;
-        padding-top: var(--bt-space-4);
-        border-top: var(--bt-story-rule-width) solid var(--bt-footer-line);
+        gap: var(--space-6);
+        margin: var(--space-0);
+        padding-top: var(--space-4);
+        /* border-top: var(--rule-width-subtle) solid var(--bt-footer-line); */
 
         a {
-            display: grid;
-            grid-template-columns: var(--bt-space-8) minmax(0, 1fr);
-            gap: var(--bt-space-3);
+            display: inline-flex;
+            gap: var(--space-3);
             align-items: center;
-            padding: var(--bt-space-4) 0;
             color: var(--bt-footer-ink);
             text-decoration: none;
-            transition: color var(--bt-duration-base) var(--bt-story-ease);
+            transition: color var(--duration-base) var(--ease-standard);
 
             &:hover,
             &:focus-visible {
-                color: var(--bt-cyan);
+                color: var(--color-category-cyan);
             }
 
             &:focus-visible {
-                outline: var(--bt-border-width-2) solid var(--bt-cyan);
-                outline-offset: var(--bt-space-1);
+                outline: var(--border-width-2) solid var(--color-category-cyan);
+                outline-offset: var(--space-1);
             }
         }
 
@@ -3266,17 +4393,17 @@ the timeline drops them under the ship once the walls have retreated. */
             color: var(--bt-footer-muted);
 
             .bt-icon {
-                width: var(--bt-space-5);
-                height: var(--bt-space-5);
+                width: var(--space-5);
+                height: var(--space-5);
             }
         }
 
         strong {
             min-width: 0;
-            overflow-wrap: anywhere;
-            font-size: var(--bt-story-body-size);
-            font-weight: var(--bt-font-weight-regular);
-            line-height: var(--bt-story-body-line-height);
+            white-space: nowrap;
+            font-size: var(--section-body-size);
+            font-weight: var(--font-weight-regular);
+            line-height: var(--section-body-line-height);
         }
 
     }
@@ -3284,97 +4411,173 @@ the timeline drops them under the ship once the walls have retreated. */
     .site-footer__people {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: var(--bt-space-8);
-        margin-top: var(--bt-space-10);
-        padding-top: var(--bt-space-4);
-        border-top: var(--bt-story-rule-width) solid var(--bt-footer-line);
+        gap: var(--space-8);
+        margin: var(--space-0);
+        padding-top: var(--space-4);
+        /* border-top: var(--rule-width-subtle) solid var(--bt-footer-line); */
     }
 
     .site-footer__person {
         display: grid;
-        gap: var(--bt-space-1);
+        gap: var(--space-1);
         margin: 0;
-        padding-top: var(--bt-space-4);
+        padding-top: var(--space-4);
 
         p,
         a {
             margin: 0;
-            font-size: var(--bt-story-body-size);
-            line-height: var(--bt-story-body-line-height);
+            font-size: var(--section-body-size);
+            line-height: var(--section-body-line-height);
         }
 
         p {
             color: var(--bt-footer-ink);
-            font-weight: var(--bt-font-weight-regular);
+            font-weight: var(--font-weight-regular);
         }
 
         p span {
             color: var(--bt-footer-muted);
-            font-weight: var(--bt-font-weight-light);
+            font-weight: var(--font-weight-light);
         }
 
         a {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-3);
             width: fit-content;
-            max-width: 100%;
-            color: var(--bt-footer-muted);
-            font-weight: var(--bt-font-weight-light);
-            overflow-wrap: anywhere;
+            color: var(--bt-footer-ink);
+            font-weight: var(--font-weight-light);
+            white-space: nowrap;
             text-decoration: none;
-            transition: color var(--bt-duration-base) var(--bt-story-ease);
+            transition: color var(--duration-base) var(--ease-standard);
 
             &:hover,
             &:focus-visible {
-                color: var(--bt-cyan);
+                color: var(--color-category-cyan);
             }
 
             &:focus-visible {
-                outline: var(--bt-border-width-2) solid var(--bt-cyan);
-                outline-offset: var(--bt-space-1);
+                outline: var(--border-width-2) solid var(--color-category-cyan);
+                outline-offset: var(--space-1);
             }
+        }
+
+        .site-footer__contact-icon {
+            display: inline-flex;
+            flex: none;
+            align-items: center;
+            justify-content: center;
+            color: var(--bt-footer-muted);
+
+            .bt-icon {
+                width: var(--space-5);
+                height: var(--space-5);
+            }
+        }
+    }
+
+    @media (max-width: 1350px) {
+
+        .site-footer__contact-list strong,
+        .site-footer__person a {
+            font-size: var(--font-size-14);
+        }
+    }
+
+    @media (max-width: 1199px) {
+        .site-footer__people {
+            grid-template-columns: 1fr;
+            gap: var(--space-4);
+        }
+
+        .site-footer__contact-list {
+            grid-template-columns: 1fr;
+            gap: var(--space-4);
+        }
+
+        .site-footer__contact-list strong,
+        .site-footer__person a {
+            font-size: var(--font-size-16);
         }
     }
 
     @media (max-width: 991px) {
         .site-footer__panel {
-            padding: var(--bt-space-16);
+            padding: var(--space-6) var(--space-8);
         }
 
-        .site-footer__brand {
-            padding-bottom: var(--bt-space-12);
-        }
-
-        .site-footer__column:first-of-type {
-            border-left: 0;
-        }
-
-    }
-
-    @media (max-width: 767px) {
         .site-footer__container {
-            padding-right: var(--bt-space-6);
-            padding-left: var(--bt-space-6);
-        }
-
-        .site-footer__panel {
-            padding: var(--bt-space-8);
+            padding-right: var(--space-6);
+            padding-left: var(--space-6);
         }
 
         .site-footer__column {
-            padding-top: var(--bt-space-8);
-            padding-bottom: var(--bt-space-8);
-            border-top: var(--bt-story-rule-width) solid var(--bt-footer-line);
+            flex: 0 0 100%;
+            max-width: 100%;
+            padding-top: var(--space-8);
+            padding-bottom: var(--space-8);
+            border-top: var(--rule-width-subtle) solid var(--bt-footer-line);
             border-left: 0;
         }
 
+        .site-footer__column:first-of-type {
+            border-top: none;
+        }
+
+        .site-footer__people {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .site-footer__contact-list {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .site-footer__person {
+            padding-top: 0;
+        }
+    }
+
+    @media (max-width: 767px) {
         .site-footer__people {
             grid-template-columns: 1fr;
-            gap: var(--bt-space-6);
+            gap: var(--space-6);
+            padding-top: var(--space-10);
+        }
+
+        .site-footer__person {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: var(--space-2) var(--space-10);
+
+            p {
+                grid-column: span 2;
+            }
+        }
+
+        .site-footer__contact-list {
+            gap: var(--space-4) var(--space-10);
         }
     }
 
     @media (max-width: 575px) {
+        & {
+            padding-bottom: var(--space-4);
+        }
+
         .site-footer__contact-list {
             grid-template-columns: 1fr;
+        }
+
+        .site-footer__people {
+            padding-top: var(--space-6);
+        }
+
+        .site-footer__person {
+            grid-template-columns: 1fr;
+
+            p {
+                grid-column: auto;
+            }
         }
     }
 }
@@ -3392,37 +4595,12 @@ the timeline drops them under the ship once the walls have retreated. */
     mix-blend-mode: difference;
 }
 
-@media (max-width:1200px) {
-    .site-header__inner {
-        width: min(calc(100% - var(--space-8)), 1460px);
-        grid-template-columns: 160px minmax(0, 1fr) auto;
-        gap: var(--space-3);
+@media (max-width:1199px) {
+    :root {
+        --hero-static-top-inset: 48px;
+        --hero-static-bottom-gap: 32px;
     }
 
-    .site-header__logo {
-        width: 160px;
-    }
-
-    .site-header__nav {
-        gap: var(--space-3);
-    }
-
-    .site-header__nav a {
-        padding: 0 var(--space-1);
-        font-size: 14px;
-    }
-
-    .site-header__nav a::after {
-        left: var(--space-1);
-        right: var(--space-1);
-    }
-
-    .bt-action-button--header {
-        padding-inline: var(--space-3);
-    }
-}
-
-@media (max-width:991px) {
     body.is-mobile-static #stagewrap {
         min-height: 0;
         background: #fff;
@@ -3438,14 +4616,19 @@ the timeline drops them under the ship once the walls have retreated. */
         display: none;
     }
 
+    /* เดิม gap ตกจาก space-10/space-8 (40/32px) ของเดสก์ท็อป ลงมาเหลือ space-2 (8px)
+       ทันทีที่ข้าม breakpoint นี้ — ชันเกินไปสำหรับจอแท็บเล็ตที่ยังมีพื้นที่เหลือเยอะ
+       ปรับให้ค่อย ๆ แคบลงเป็นขั้นแทน ดูจุดต่อที่ 991px และ 767px ด้านล่าง ส่วน 575px
+       ยังคง space-2 ไว้เท่าเดิมเพราะจอแคบระดับนั้นพื้นที่จำกัดจริง */
     body.is-mobile-static #ui {
-        z-index: 65;
-        gap: var(--space-2);
+        z-index: 120;
+        width: min(calc(100vw - var(--space-8)), 720px);
+        /* gap: var(--space-6); */
         color: #fff;
     }
 
     body.is-mobile-static #ui .event-details {
-        gap: var(--space-2);
+        /* gap: var(--space-5); */
         text-shadow: 0 2px 12px rgba(0, 0, 0, 0.72);
     }
 
@@ -3457,60 +4640,48 @@ the timeline drops them under the ship once the walls have retreated. */
         padding-top: var(--space-2);
     }
 
-    .site-header__inner {
-        width: calc(100% - var(--space-8));
-        min-height: var(--header-height);
-        display: flex;
-        justify-content: space-between;
-        position: relative;
-        z-index: 1;
-        border-bottom: 1px solid transparent;
-        transition: border-color 220ms ease;
-    }
-
-    .site-header__logo {
-        width: 144px;
-        height: var(--space-12);
-    }
-
-    .site-header__nav,
-    .site-header__actions {
-        display: none;
-    }
-
-    .site-header__toggle {
-        display: grid;
-    }
-
-    .site-header__backdrop {
-        display: block;
-        z-index: 195;
-        background: var(--bt-menu-backdrop-bg);
-        visibility: hidden;
-        opacity: 1;
-        clip-path: inset(0 0 100% 0);
-        transition:
-            clip-path var(--bt-menu-transition-duration) var(--bt-menu-transition-ease),
-            visibility 0s linear var(--bt-menu-visibility-delay);
-        will-change: clip-path;
-    }
-
-    body.menu-open .site-header__backdrop {
-        visibility: visible;
-        opacity: 1;
-        clip-path: inset(0);
-        transition:
-            clip-path var(--bt-menu-transition-duration) var(--bt-menu-transition-ease),
-            visibility 0s;
-    }
-
-    body.menu-closing .site-header__backdrop {
-        visibility: visible;
-        transition-delay: var(--bt-menu-closing-delay), 0s;
+    #ui .date,
+    #ui .time,
+    #ui .event-countdown__unit strong {
+        font-size: 24px;
     }
 }
 
-@media (max-width:480px) {
+@media (max-width:991px) {
+    :root {
+        --hero-static-top-inset: 44px;
+        --hero-static-bottom-gap: 28px;
+    }
+}
+
+@media (max-width:767px) {
+    :root {
+        --hero-static-top-inset: 40px;
+        --hero-static-bottom-gap: 24px;
+    }
+
+    /* ขั้นที่สามของการลดขนาด #ui แบบค่อยเป็นค่อยไป (ดูคอมเมนต์ที่ breakpoint 1199px) */
+    body.is-mobile-static #ui {
+        gap: var(--space-5);
+    }
+
+    body.is-mobile-static #ui .event-details {
+        gap: var(--space-5);
+    }
+
+    #ui .date,
+    #ui .time,
+    #ui .event-countdown__unit strong {
+        font-size: 20px;
+    }
+}
+
+@media (max-width:575px) {
+    :root {
+        --hero-static-top-inset: 32px;
+        --hero-static-bottom-gap: 80px;
+    }
+
     .loader-icon {
         max-width: 88px;
         max-height: 88px;
@@ -3520,13 +4691,8 @@ the timeline drops them under the ship once the walls have retreated. */
         bottom: var(--space-8);
     }
 
-    .site-header__mobile-scroll {
-        padding-left: var(--bt-menu-scroll-padding-x-sm);
-        padding-right: var(--bt-menu-scroll-padding-x-sm);
-    }
-
-    .site-header__mobile-nav a {
-        font-size: var(--bt-menu-nav-font-size-sm);
+    body.is-mobile-static #ui .venue {
+        padding-top: var(--space-0);
     }
 
     #ui {
@@ -3536,6 +4702,10 @@ the timeline drops them under the ship once the walls have retreated. */
 
     #ui .event-primary {
         gap: var(--space-2);
+    }
+
+    #ui .event-datetime {
+        row-gap: var(--space-3);
     }
 
     #ui .event-countdown {
@@ -3548,45 +4718,8 @@ the timeline drops them under the ship once the walls have retreated. */
         gap: var(--space-1);
     }
 
-    .concept__inner {
-        padding-top: var(--bt-story-section-padding-y);
-        padding-bottom: var(--bt-space-4);
-    }
-
-    .concept__title {
-        font-size: var(--bt-story-heading-size);
-        line-height: var(--bt-story-heading-line-height);
-    }
-
-    .concept__description {
-        font-size: var(--bt-story-body-size);
-        line-height: var(--bt-story-body-line-height);
-    }
-
-    .concept__video-scroll {
-        min-height: 100vh;
-    }
-
-    .concept__video-frame {
-        width: 100%;
-    }
-}
-
-@media (max-width:767px) {
-    section[aria-labelledby] h2.bt-section-title {
-        font-size: 40px;
-        line-height: var(--bt-story-heading-line-height);
-    }
-
-    .bt-section-subtext {
-        font-size: 16px;
-    }
-}
-
-@media (max-width:575px) {
-    section[aria-labelledby] h2.bt-section-title {
-        font-size: 32px;
-        line-height: var(--bt-story-topic-line-height);
+    body.is-mobile-static #ui .event-details {
+        gap: var(--space-6);
     }
 }
 
@@ -3610,6 +4743,6 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .agenda__tab-indicator {
-        transition-duration: var(--bt-duration-reduced) !important;
+        transition-duration: var(--duration-reduced) !important;
     }
 }
