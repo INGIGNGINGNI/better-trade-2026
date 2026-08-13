@@ -2396,7 +2396,7 @@ the timeline drops them under the ship once the walls have retreated. */
         .ticket__plan {
             padding: var(--space-12) var(--space-8);
 
-            &:hover {
+            &:not(.ticket__plan--ultimate):hover {
                 background: inherit;
             }
         }
@@ -4841,6 +4841,15 @@ the timeline drops them under the ship once the walls have retreated. */
     body.is-mobile-static #stage {
         transform: none !important;
         will-change: auto !important;
+    }
+
+    body.is-mobile-static #ship,
+    body.is-mobile-static #stairs,
+    body.is-mobile-static #pshadow,
+    body.is-mobile-static .person {
+        transform: none !important;
+        will-change: auto;
+        backface-visibility: visible;
     }
 
     body.is-mobile-static #ship-run-layer,

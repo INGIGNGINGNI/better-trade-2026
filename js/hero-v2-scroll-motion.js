@@ -224,6 +224,7 @@
             const img = document.createElement('img');
             img.src = `images/${r.id}.webp`;
             img.alt = '';
+            img.decoding = 'sync';
             img.className = 'person';
             img.dataset.id = r.id;
             el.stage.appendChild(img);
@@ -1100,17 +1101,16 @@
             el.stage.style.willChange = 'auto';
             gsap.set(el.walls, { zIndex: 4, x: 0, scaleX: 1 });
             gsap.set(el.ship, {
-                x: 0,
-                y: 0,
-                scale: 1,
+                clearProps: 'transform',
                 opacity: 1,
                 zIndex: 31,
-                filter: `blur(0px) brightness(${SHIP_LIGHT.brightnessTo}) saturate(${SHIP_LIGHT.saturationTo}) drop-shadow(0 14px 20px rgba(42, 62, 102, ${SHIP_LIGHT.shadowAlphaTo}))`,
+                // Complex filters make iOS Safari cache the ship as a low-resolution GPU
+                // texture before the large-viewport layout settles. Mobile does not run
+                // the ship entrance, so keep the original bitmap unfiltered and sharp.
+                filter: 'none',
             });
             gsap.set([el.stairs, el.pshadow, ...el.runners], {
-                x: 0,
-                y: 0,
-                scale: 1,
+                clearProps: 'transform',
                 opacity: 1,
             });
 

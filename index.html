@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="css/main.css?v=11">
-    <link rel="stylesheet" href="css/style.css?v=85">
+    <link rel="stylesheet" href="css/style.css?v=87">
 </head>
 
 <body class="is-loading">
@@ -128,7 +128,7 @@
             </div>
 
             <div id="stage">
-                <img id="ship" src="images/ship.webp" alt="Playbook ship">
+                <img id="ship" src="images/ship.webp" alt="Playbook ship" fetchpriority="high" decoding="sync">
                 <div id="walls" aria-hidden="true">
                     <div id="wall-left-intro" class="wall-intro-panel">
                         <img id="wall-left" class="wall-panel" src="images/wall-left-1280.webp"
@@ -141,8 +141,8 @@
                             sizes="100vw" alt="">
                     </div>
                 </div>
-                <img id="stairs" src="images/stairs.webp" alt="Staircase">
-                <img id="pshadow" src="images/people-shadow.webp" alt="">
+                <img id="stairs" src="images/stairs.webp" alt="Staircase" fetchpriority="high" decoding="sync">
+                <img id="pshadow" src="images/people-shadow.webp" alt="" fetchpriority="high" decoding="sync">
                 <!-- the eight runners are appended here by script, one element each -->
 
                 <div class="asset" id="a-title">
@@ -1334,7 +1334,7 @@
 
     <script src="vendor/gsap/gsap.min.js"></script>
     <script src="vendor/gsap/ScrollTrigger.min.js"></script>
-    <script src="js/hero-v2-scroll-motion.js?v=15"></script>
+    <script src="js/hero-v2-scroll-motion.js?v=17"></script>
     <script src="js/topics-reveal.js?v=4"></script>
     <script src="js/topics-assets-motion.js?v=7"></script>
     <!-- หลัง hero เพราะ ScrollTrigger refresh ตามลำดับที่สร้าง และ speaker อยู่ใต้ hero ในหน้า -->
