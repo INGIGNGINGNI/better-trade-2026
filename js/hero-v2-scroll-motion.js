@@ -22,7 +22,7 @@
 
         /* Frame 1 — the poster arrangement, in percentages of the viewport. */
         const POSTER = {
-            title: { cx: 50.0, cy: 35.0, w: 42.5, rot: 0, min: 255, max: 850 },
+            title: { cx: 50.0, cy: 31.0, w: 42.5, rot: 0, min: 255, max: 850 },
             triangle: { cx: 8.5, cy: 14.5, w: 13.0, rot: -10, min: 58, max: 230 },
             gold: { cx: 84.5, cy: 16.8, w: 5.5, rot: 8, min: 48, max: 130 },
             card: { cx: 91.5, cy: 42.0, w: 9.5, rot: 12, min: 52, max: 180 },
@@ -729,7 +729,7 @@
             document.getElementById('scroller').style.height = STATIC_FRAME ? vh + 'px' : scrollerHeight + 'px';
             el.stagewrap.style.height = mobileStatic ? `${scrollerHeight}px` : `${vh}px`;
             if (!mobileStatic) {
-                const uiTop = Math.min(vh * 0.59, vh - 324);
+                const uiTop = Math.min(vh * 0.55, vh - 368);
                 const ui = document.getElementById('ui');
                 ui.style.top = `${uiTop}px`;
                 ui.style.zIndex = '25';
@@ -1204,9 +1204,9 @@
             ASSET_ICON_KEYS.forEach(k => {
                 const icon = el.loaderIcons[k];
                 const target = el[k].getBoundingClientRect();
-                const renderedWidth = Math.max(1, target.width);
                 const baseWidth = Math.max(1, Number.parseFloat(el[k].style.width));
-                const parentScale = renderedWidth / baseWidth;
+                const parentScale = isMobileStatic() ? 1 : M.assets[k].scale;
+                const renderedWidth = Math.max(1, baseWidth * parentScale);
                 const parentRotation = isMobileStatic() ? KV[k].rot : M.assets[k].rotA;
                 const angle = parentRotation * Math.PI / 180;
                 const dx = M.vw / 2 - (target.left + target.width / 2);
@@ -1281,7 +1281,6 @@
             ASSET_ICON_KEYS.forEach(k => {
                 const isSeed = k === 'triangle';
                 tl.set(el.loaderIcons[k], {
-                    opacity: 0,
                     x: 0,
                     y: 0,
                     scale: isSeed ? 1 : 0.5,
@@ -1294,6 +1293,7 @@
                     transformOrigin: '50% 50%',
                 }, exitAt);
             });
+            tl.to(loaderIcons, { opacity: 0, duration: 0.16, ease: 'none' }, exitAt + 0.02);
 
             tl.to(el.loaderSurface, { opacity: 0, duration: 0.72, ease: 'power2.out' }, exitAt)
                 .to(el.wallIntroLeft, { scaleX: 1, duration: wallIntroDuration, ease: 'power3.inOut' }, exitAt + wallIntroStartOffset)

@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="css/main.css?v=12">
-    <link rel="stylesheet" href="css/style.css?v=144">
+    <link rel="stylesheet" href="css/style.css?v=158">
 </head>
 
 <body class="is-loading">
@@ -111,6 +111,20 @@
         aria-valuenow="0" tabindex="-1">
         <span class="site-scrollbar__thumb"></span>
     </div>
+    <aside class="journey-indicator" aria-hidden="true">
+        <span class="journey-indicator__title">Better Trade 2026</span>
+        <div class="journey-indicator__rail">
+            <span class="journey-indicator__track"></span>
+            <span class="journey-indicator__progress"></span>
+            <span class="journey-indicator__ship">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 3v4M8 7h8l1.5 8H6.5L8 7Z" />
+                    <path d="M4 15h16l-2.2 4H6.2L4 15ZM12 7v8" />
+                </svg>
+            </span>
+            <span class="journey-indicator__label"></span>
+        </div>
+    </aside>
     <button class="back-to-top" type="button" aria-label="กลับไปด้านบน" aria-hidden="true">
         <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-arrow-up-right"></use></svg>
     </button>
@@ -1364,6 +1378,7 @@
     <script src="js/speaker-directory.js?v=5"></script>
     <script src="js/expectation-counter.js?v=1"></script>
     <script src="js/back-to-top.js?v=2"></script>
+    <script src="js/journey-indicator.js?v=5"></script>
     <script src="js/hero-v2-header.js?v=6"></script>
     <script src="js/in-page-navigation.js?v=1"></script>
 
@@ -1374,7 +1389,7 @@
 
     <script src="vendor/gsap/gsap.min.js"></script>
     <script src="vendor/gsap/ScrollTrigger.min.js"></script>
-    <script src="js/hero-v2-scroll-motion.js?v=24"></script>
+    <script src="js/hero-v2-scroll-motion.js?v=27"></script>
     <script src="js/topics-reveal.js?v=4"></script>
     <script src="js/topics-assets-motion.js?v=7"></script>
     <!-- หลัง hero เพราะ ScrollTrigger refresh ตามลำดับที่สร้าง และ speaker อยู่ใต้ hero ในหน้า -->

@@ -1230,11 +1230,13 @@ the timeline drops them under the ship once the walls have retreated. */
 #ui .event-countdown__unit:not(:last-child)::after {
     content: '';
     position: absolute;
-    top: 3px;
+    top: calc(50% + 3px);
     right: calc(var(--space-3) * -1);
-    width: 1px;
-    height: 100%;
-    background: var(--spectrum-vertical);
+    width: 100%;
+    height: calc(100% / 9.13);
+    background: url('../images/line-star.webp') center / contain no-repeat;
+    transform: translate(50%, -50%) rotate(90deg);
+    transform-origin: center;
 }
 
 #ui .event-countdown__unit strong {
@@ -1280,18 +1282,20 @@ the timeline drops them under the ship once the walls have retreated. */
 
 #ui .event-datetime {
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
-    align-items: baseline;
+    align-items: center;
     justify-content: center;
     column-gap: var(--space-3);
-    row-gap: var(--space-2);
+    row-gap: var(--space-4);
     font-weight: 400;
     line-height: 1.05;
     letter-spacing: 0;
+    margin-bottom: var(--space-2);
 }
 
 #ui .time {
-    font-size: 24px;
+    font-size: 20px;
     line-height: inherit;
 }
 
@@ -5384,5 +5388,168 @@ the timeline drops them under the ship once the walls have retreated. */
 
     .agenda__tab-indicator {
         transition-duration: var(--duration-reduced) !important;
+    }
+}
+
+
+/* Journey indicator: a passive route map from Concept to Past Event. */
+.journey-indicator {
+    --journey-progress: 0%;
+    --journey-edge-gap: var(--space-20);
+    --journey-title-length: 160px;
+    --journey-track-color: rgba(17, 19, 24, 0.20);
+    --journey-label-color: var(--color-neutral-900);
+    --journey-ship-color: var(--color-neutral-900);
+    --journey-ship-background: rgba(255, 255, 255, 0.92);
+    --journey-ship-border: rgba(17, 19, 24, 0.12);
+
+    position: fixed;
+    top: max(var(--journey-edge-gap), env(safe-area-inset-top));
+    right: auto;
+    bottom: max(var(--journey-edge-gap), env(safe-area-inset-bottom));
+    left: max(var(--space-2), env(safe-area-inset-left));
+    z-index: 230;
+    display: block;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate3d(-12px, 0, 0);
+    transition:
+        opacity var(--duration-standard) var(--ease-standard),
+        transform var(--duration-standard) var(--ease-standard);
+}
+
+.journey-indicator.is-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+}
+
+.journey-indicator.is-on-dark {
+    --journey-track-color: rgba(255, 255, 255, 0.40);
+    --journey-label-color: var(--color-neutral-0);
+    --journey-ship-color: var(--color-neutral-0);
+    --journey-ship-background: rgba(13, 15, 20, 0.88);
+    --journey-ship-border: rgba(255, 255, 255, 0.28);
+}
+
+.journey-indicator__title {
+    position: absolute;
+    top: calc(var(--journey-title-length) - 6px);
+    left: 16px;
+    color: var(--journey-label-color);
+    font-size: var(--font-size-12);
+    font-weight: var(--font-weight-regular);
+    line-height: 1;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    transform: rotate(-90deg);
+    transform-origin: left center;
+    transition: color var(--duration-fast) var(--ease-standard);
+}
+
+.journey-indicator__rail {
+    position: absolute;
+    top: calc(var(--journey-title-length) + var(--space-3));
+    bottom: 0;
+    left: 0;
+    width: 32px;
+}
+
+.journey-indicator__track,
+.journey-indicator__progress {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 1px;
+    height: 100%;
+    border-radius: var(--radius-round);
+    transform: translateX(-50%);
+}
+
+.journey-indicator__track {
+    background: var(--journey-track-color);
+    transition: background-color var(--duration-fast) var(--ease-standard);
+}
+
+.journey-indicator__progress {
+    background: var(--gradient-spectrum-vertical);
+    clip-path: inset(0 0 calc(100% - var(--journey-progress)) 0 round var(--radius-round));
+}
+
+.journey-indicator__ship {
+    position: absolute;
+    top: var(--journey-progress);
+    left: 50%;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--journey-ship-border);
+    border-radius: 50%;
+    color: var(--journey-ship-color);
+    background: var(--journey-ship-background);
+    box-shadow: 0 5px 14px rgba(17, 19, 24, 0.18);
+    transform: translate(-50%, -50%);
+    will-change: top;
+    transition:
+        color var(--duration-fast) var(--ease-standard),
+        background-color var(--duration-fast) var(--ease-standard),
+        border-color var(--duration-fast) var(--ease-standard);
+}
+
+.journey-indicator__ship svg {
+    width: 18px;
+    height: 18px;
+    fill: rgba(97, 232, 237, 0.18);
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.journey-indicator__label {
+    position: absolute;
+    top: var(--journey-progress);
+    left: calc(100% + var(--space-1));
+    color: var(--journey-label-color);
+    font-size: var(--font-size-14);
+    font-weight: var(--font-weight-regular);
+    line-height: 1;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(-50%);
+    transition:
+        color var(--duration-fast) var(--ease-standard),
+        opacity var(--duration-fast) var(--ease-standard);
+}
+
+.journey-indicator__label.is-visible {
+    opacity: 1;
+}
+
+.journey-indicator__label.is-changing {
+    animation: journey-label-in var(--duration-standard) var(--ease-standard);
+}
+
+@keyframes journey-label-in {
+    from {
+        opacity: 0;
+        transform: translate(-8px, -50%);
+    }
+}
+
+@media (max-width: 991px) {
+    .journey-indicator {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .journey-indicator {
+        transition-duration: var(--duration-reduced);
+    }
+
+    .journey-indicator__label.is-changing {
+        animation: none;
     }
 }
