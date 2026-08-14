@@ -15,6 +15,7 @@
 
     /* Primitive: color */
     --color-neutral-0: #ffffff;
+    --color-neutral-25: #FAFBFD;
     --color-neutral-50: #f7f8f7;
     --color-neutral-100: #eef1f6;
     --color-neutral-200: #e4e8ee;
@@ -212,6 +213,7 @@
 
     /* Semantic: surface */
     --color-surface-page: var(--color-neutral-0);
+    --color-surface-raised: var(--color-neutral-25);
     --color-surface-paper: var(--color-neutral-50);
     --color-surface-soft: var(--color-neutral-100);
     --color-surface-popover: var(--alpha-white-96);
@@ -441,7 +443,7 @@
     --bt-menu-scroll-padding-bottom: var(--space-8);
     --bt-menu-nav-link-height: var(--font-size-56);
     --bt-menu-nav-font-size: var(--font-size-40);
-    --bt-menu-nav-font-size-sm: var(--font-size-32);
+    --bt-menu-nav-font-size-sm: var(--font-size-24);
     --bt-menu-nav-line-height: var(--line-height-1);
     --bt-menu-nav-tracking: var(--letter-spacing-0);
     --bt-menu-nav-hover-indent: var(--space-2);

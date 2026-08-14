@@ -160,7 +160,7 @@ body.is-loading .site-scrollbar,
         width: var(--bt-icon-size);
         height: var(--bt-icon-size);
         transform: rotate(-45deg);
-        stroke-width: 2.25;
+        stroke-width: 1.25;
         opacity: 0;
         transition: opacity var(--duration-fast) var(--ease-standard);
     }
@@ -1445,11 +1445,13 @@ the timeline drops them under the ship once the walls have retreated. */
     border: 0;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 991px) {
     #concept {
         padding: var(--section-padding-y-sm) 0;
     }
+}
 
+@media (max-width: 767px) {
     .concept__inner {
         padding-bottom: var(--space-4);
     }
@@ -1481,11 +1483,11 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 }
 
-@media (min-width: 768px) and (max-width: 1199px) {
+/* @media (min-width: 768px) and (max-width: 1199px) {
     #concept {
         padding: var(--section-padding-y-sm) 0;
     }
-}
+} */
 
 /* ---------- Featured topics ---------- */
 .topics-showcase {
@@ -1880,9 +1882,9 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
-    .topics-showcase {
+    /* .topics-showcase {
         padding: var(--section-padding-y-sm) 0;
-    }
+    } */
 
     .topics-showcase__content {
         margin-top: var(--bt-topics-content-margin-top-md);
@@ -2179,7 +2181,6 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .ticket__benefits {
-        --bs-gutter-y: var(--space-8);
 
         padding-top: var(--section-padding-y-sm);
 
@@ -2218,7 +2219,7 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .ticket__formats {
-        padding-top: var(--space-20);
+        padding-top: var(--space-12);
     }
 
     .ticket__formats-grid {
@@ -2535,7 +2536,6 @@ the timeline drops them under the ship once the walls have retreated. */
         z-index: 2;
         align-self: start;
         min-width: 0;
-        background: var(--color-surface-page);
     }
 
     /* แถวสูงตามเนื้อหาจริง ไม่ล็อกค่าคงที่ ไม่งั้นวันที่ไม่ได้เลือก (เหลือแค่บรรทัดเดียว)
@@ -2794,6 +2794,46 @@ the timeline drops them under the ship once the walls have retreated. */
         }
     }
 
+    .agenda__empty-state {
+        display: grid;
+        align-content: center;
+        min-height: 320px;
+        padding: var(--space-12) var(--space-8);
+        border-top: var(--rule-width-subtle) solid var(--color-border-faint);
+        border-bottom: var(--rule-width-subtle) solid var(--color-border-faint);
+        text-align: center;
+    }
+
+    .agenda__empty-kicker {
+        margin: 0 0 var(--space-3);
+        color: var(--color-text-muted);
+        font-family: var(--font-family-heading);
+        font-size: var(--section-small-size);
+        font-weight: var(--font-weight-semibold);
+        line-height: var(--section-body-line-height);
+        letter-spacing: 0;
+    }
+
+    .agenda__empty-state h3 {
+        margin: 0 0 var(--space-3);
+        color: var(--color-text-strong);
+        font-family: var(--font-family-heading);
+        font-size: var(--font-size-40);
+        font-weight: var(--font-weight-bold);
+        line-height: 1;
+        letter-spacing: 0;
+    }
+
+    .agenda__empty-state p:not(.agenda__empty-kicker) {
+        max-width: 360px;
+        margin: 0 auto;
+        color: var(--color-text-muted);
+        font-size: var(--section-body-size);
+        font-weight: var(--font-weight-regular);
+        line-height: var(--section-body-line-height);
+        letter-spacing: 0;
+    }
+
     .agenda__table {
         width: 100%;
         border-collapse: collapse;
@@ -2886,35 +2926,28 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .agenda__tag {
+        --agenda-tag-color: var(--color-blue-400);
+        --agenda-tag-background: var(--color-blue-100);
+
         min-height: var(--space-6);
-        padding: 0 var(--space-3);
+        padding: 2px var(--space-3);
         display: inline-flex;
         align-items: center;
         border-radius: var(--pill-radius);
         font-size: var(--section-tag-size);
-        font-weight: var(--font-weight-regular);
+        font-weight: var(--font-weight-medium);
         line-height: var(--section-body-line-height);
         letter-spacing: 0;
-        text-transform: uppercase;
+        text-transform: capitalize;
+        color: var(--agenda-tag-color);
+        background: var(--agenda-tag-background);
 
-        &.agenda__tag--capital {
-            color: var(--bt-agenda-capital);
-            background: color-mix(in srgb, var(--bt-agenda-capital) 14%, var(--color-surface-page));
-        }
-
-        &.agenda__tag--commodity {
-            color: var(--bt-agenda-commodity);
-            background: color-mix(in srgb, var(--bt-agenda-commodity) 14%, var(--color-surface-page));
-        }
-
-        &.agenda__tag--crypto {
-            color: var(--bt-agenda-crypto);
-            background: color-mix(in srgb, var(--bt-agenda-crypto) 16%, var(--color-surface-page));
-        }
-
+        &.agenda__tag--capital,
+        &.agenda__tag--commodity,
+        &.agenda__tag--crypto,
         &.agenda__tag--alternative {
-            color: var(--bt-agenda-alternative);
-            background: color-mix(in srgb, var(--bt-agenda-alternative) 14%, var(--color-surface-page));
+            color: var(--agenda-tag-color);
+            background: var(--agenda-tag-background);
         }
     }
 
@@ -2943,7 +2976,7 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .agenda__session-speaker {
-        margin-top: var(--space-4);
+        margin: var(--space-4) var(--space-0) var(--space-0);
         color: var(--color-text-muted);
         font-size: var(--section-small-size);
         font-weight: var(--font-weight-regular);
@@ -2969,11 +3002,6 @@ the timeline drops them under the ship once the walls have retreated. */
             margin-bottom: var(--space-12);
         }
 
-        .agenda__day-switcher {
-            position: static;
-            margin-bottom: var(--space-12);
-        }
-
         .agenda__day-switch-rail {
             height: var(--space-12);
         }
@@ -2992,14 +3020,66 @@ the timeline drops them under the ship once the walls have retreated. */
         }
     }
 
+    @media (min-width:768px) and (max-width:991px) {
+
+        .agenda__table,
+        .agenda__table tbody {
+            display: block;
+        }
+
+        .agenda__table colgroup {
+            display: none;
+        }
+
+        .agenda__table tr {
+            display: grid;
+            grid-template-columns: var(--bt-agenda-time-width) minmax(0, 1fr);
+        }
+
+        .agenda__table th,
+        .agenda__table td {
+            display: block;
+        }
+
+        .agenda__table th {
+            grid-column: 1;
+            grid-row: 1 / span 2;
+            padding-right: var(--space-6);
+        }
+
+        .agenda__table td:not(.agenda__speakers) {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        .agenda__table td.agenda__speakers {
+            grid-column: 2;
+            grid-row: 2;
+            padding: 0 0 var(--space-6) var(--space-6);
+            display: block;
+            border-left: var(--rule-width-subtle) solid var(--color-border-faint);
+            text-align: left;
+            white-space: normal;
+
+            &:empty {
+                display: none;
+            }
+        }
+
+        .agenda__table td.agenda__speakers .agenda__speakers {
+            text-align: left;
+            white-space: normal;
+        }
+    }
+
     /* Mobile agenda: ย้ายข้อมูลวิทยากรลงใต้ชื่อ Session เพื่อให้อ่านเป็นลำดับเดียว */
     @media (max-width:767px) {
-        --agenda-day-label-size: var(--font-size-32);
+        --agenda-day-label-size: var(--font-size-24);
         --agenda-day-label-line-height: var(--section-topic-line-height);
         --agenda-day-label-weight: var(--font-weight-regular);
-        --agenda-day-label-active-size: var(--font-size-32);
+        --agenda-day-label-active-size: var(--font-size-24);
         --agenda-day-label-active-line-height: var(--agenda-day-label-line-height);
-        --agenda-day-label-active-weight: var(--agenda-day-label-weight);
+        --agenda-day-label-active-weight: var(--font-weight-bold);
 
         .agenda__layout {
             margin-right: 0;
@@ -3011,7 +3091,7 @@ the timeline drops them under the ship once the walls have retreated. */
             width: 100%;
             margin-bottom: var(--space-0);
             padding: 0;
-            background: var(--color-surface-page);
+            background: var(--color-surface-paper);
             scroll-margin-top: calc(var(--header-height) + var(--space-4));
             display: flex;
             justify-content: center;
@@ -3024,17 +3104,25 @@ the timeline drops them under the ship once the walls have retreated. */
         }
 
         .agenda__day-switcher-inner {
+            --day-switcher-padding-y: var(--space-8);
+            --day-switcher-details-space: var(--space-8);
+            --day-switcher-rail-width: 44%;
+            --day-switcher-label-shift: 0px;
+
             position: relative;
             width: min(100%, 360px);
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            justify-items: stretch;
+            grid-template-columns: max-content var(--day-switcher-rail-width) max-content;
+            justify-content: center;
+            justify-items: center;
             align-items: end;
-            gap: 0;
-            padding-bottom: var(--space-20);
+            column-gap: var(--space-2);
+            padding-top: var(--day-switcher-padding-y);
+            padding-bottom: calc(var(--day-switcher-padding-y) + var(--day-switcher-details-space));
         }
 
         .agenda__day-switch {
-            width: 100%;
+            position: static;
+            width: auto;
             min-height: var(--touch-target-md);
             padding: 0 0 var(--space-3);
             display: flex;
@@ -3042,7 +3130,14 @@ the timeline drops them under the ship once the walls have retreated. */
             background: transparent;
             text-align: left;
 
+            &:first-of-type {
+                grid-column: 1;
+                padding-left: var(--day-switcher-label-shift);
+            }
+
             &:last-of-type {
+                grid-column: 3;
+                padding-right: var(--day-switcher-label-shift);
                 justify-content: flex-end;
                 text-align: right;
             }
@@ -3067,9 +3162,9 @@ the timeline drops them under the ship once the walls have retreated. */
         .agenda__day-switch-details,
         .agenda__day-switch[aria-current='true'] .agenda__day-switch-details {
             position: absolute;
-            top: calc(var(--touch-target-md) + var(--space-4));
+            top: calc(var(--day-switcher-padding-y) + var(--touch-target-md) + var(--space-2));
             left: 0;
-            width: 200%;
+            width: 100%;
             margin-top: 0;
             opacity: 0;
             visibility: hidden;
@@ -3078,7 +3173,7 @@ the timeline drops them under the ship once the walls have retreated. */
         }
 
         .agenda__day-switch:last-of-type .agenda__day-switch-details {
-            transform: translateX(-50%);
+            transform: none;
         }
 
         .agenda__day-switch[aria-current='true'] .agenda__day-switch-details {
@@ -3103,27 +3198,29 @@ the timeline drops them under the ship once the walls have retreated. */
 
         .agenda__day-switch-rail {
             position: absolute;
-            top: calc(var(--touch-target-md) / 2);
-            right: 34%;
-            left: 34%;
+            top: calc(var(--day-switcher-padding-y) + (var(--touch-target-md) / 2));
+            left: 50%;
             display: block;
-            width: auto;
+            width: var(--day-switcher-rail-width);
             height: var(--rule-width-subtle);
             background: var(--color-border-editorial);
-            transform: translateY(-50%);
+            transform: translate(-50%, -50%);
         }
 
         .agenda__day-switch-prompt {
             position: absolute;
-            top: calc((var(--touch-target-md) / 2) - var(--space-8));
+            top: calc(var(--day-switcher-padding-y) + (var(--touch-target-md) / 2));
             left: 50%;
             display: block;
             color: var(--color-text-muted);
-            font-size: var(--section-body-size);
+            font-size: var(--section-small-size);
             font-weight: var(--font-weight-medium);
-            line-height: var(--section-body-line-height);
-            transform: translateX(-50%);
+            line-height: var(--section-small-line-height);
+            transform: translate(-50%, calc(-100% + var(--space-2)));
             white-space: nowrap;
+            background: var(--color-surface-paper);
+            padding: var(--space-0) var(--space-2);
+            z-index: 2;
         }
 
         .agenda__day-switch-rail::after {
@@ -3146,6 +3243,7 @@ the timeline drops them under the ship once the walls have retreated. */
             top: var(--header-height);
             z-index: 2;
             display: block;
+            margin-top: var(--space-8);
             background: var(--color-surface-page);
 
             /* ปิดเนื้อหาตารางที่เลื่อนผ่านใต้ Header โดยไม่ถูก overflow แนวนอน clip */
@@ -3225,16 +3323,13 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     @media (max-width:575px) {
-        --agenda-day-label-size: var(--font-size-28);
-        --agenda-day-label-active-size: var(--font-size-28);
+        --agenda-day-label-size: var(--font-size-20);
+        --agenda-day-label-active-size: var(--font-size-20);
 
         .agenda__day-switcher-inner {
-            width: min(100%, 320px);
-        }
+            --day-switcher-rail-width: 36%;
 
-        .agenda__day-switch-rail {
-            right: 34%;
-            left: 34%;
+            width: min(100%, 320px);
         }
 
         .agenda__day-switch,
@@ -3252,6 +3347,15 @@ the timeline drops them under the ship once the walls have retreated. */
 
         .agenda__tab {
             padding: 0 var(--space-4);
+        }
+
+        .agenda__empty-state {
+            min-height: 240px;
+            padding: var(--space-8) var(--space-4);
+        }
+
+        .agenda__empty-state h3 {
+            font-size: var(--font-size-32);
         }
 
         .agenda__table th,
@@ -3320,7 +3424,7 @@ the timeline drops them under the ship once the walls have retreated. */
 
         .agenda__tag {
             min-height: var(--space-5);
-            padding: 0 var(--space-2);
+            padding: 2px var(--space-2);
         }
 
         .agenda__session-title {
@@ -3417,7 +3521,6 @@ the timeline drops them under the ship once the walls have retreated. */
         z-index: 2;
         align-self: start;
         min-width: 0;
-        /* background: var(--color-surface-page); */
     }
 
     .speaker__days {
@@ -3603,24 +3706,18 @@ the timeline drops them under the ship once the walls have retreated. */
             margin-bottom: var(--space-12);
         }
 
-        /* จอนี้เรียงซ้อนคอลัมน์เดียว ถ้าตัวสลับวันยังค้างจะกินพื้นที่จอเยอะเกิน */
-        .speaker__day-switcher {
-            position: static;
-            margin-bottom: var(--space-12);
-        }
-
         .speaker__day-switch-rail {
             height: var(--space-12);
         }
     }
 
     @media (max-width: 767px) {
-        --speaker-day-label-size: var(--font-size-32);
+        --speaker-day-label-size: var(--font-size-24);
         --speaker-day-label-line-height: var(--section-topic-line-height);
         --speaker-day-label-weight: var(--font-weight-regular);
-        --speaker-day-label-active-size: var(--font-size-32);
+        --speaker-day-label-active-size: var(--font-size-24);
         --speaker-day-label-active-line-height: var(--speaker-day-label-line-height);
-        --speaker-day-label-active-weight: var(--speaker-day-label-weight);
+        --speaker-day-label-active-weight: var(--font-weight-bold);
 
         .speaker__layout {
             margin-right: 0;
@@ -3632,6 +3729,7 @@ the timeline drops them under the ship once the walls have retreated. */
             width: 100%;
             margin-bottom: var(--space-0);
             padding: 0;
+            background: var(--color-surface-paper);
             scroll-margin-top: calc(var(--header-height) + var(--space-4));
             display: flex;
             justify-content: center;
@@ -3644,17 +3742,25 @@ the timeline drops them under the ship once the walls have retreated. */
         }
 
         .speaker__day-switcher-inner {
+            --day-switcher-padding-y: var(--space-8);
+            --day-switcher-details-space: var(--space-8);
+            --day-switcher-rail-width: 44%;
+            --day-switcher-label-shift: 0px;
+
             position: relative;
             width: min(100%, 360px);
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            justify-items: stretch;
+            grid-template-columns: max-content var(--day-switcher-rail-width) max-content;
+            justify-content: center;
+            justify-items: center;
             align-items: end;
-            gap: 0;
-            padding-bottom: var(--space-20);
+            column-gap: var(--space-2);
+            padding-top: var(--day-switcher-padding-y);
+            padding-bottom: calc(var(--day-switcher-padding-y) + var(--day-switcher-details-space));
         }
 
         .speaker__day-switch {
-            width: 100%;
+            position: static;
+            width: auto;
             min-height: var(--touch-target-md);
             padding: 0 0 var(--space-3);
             display: flex;
@@ -3664,7 +3770,14 @@ the timeline drops them under the ship once the walls have retreated. */
             background: transparent;
             text-align: left;
 
+            &:first-of-type {
+                grid-column: 1;
+                padding-left: var(--day-switcher-label-shift);
+            }
+
             &:last-of-type {
+                grid-column: 3;
+                padding-right: var(--day-switcher-label-shift);
                 justify-content: flex-end;
                 text-align: right;
             }
@@ -3684,9 +3797,9 @@ the timeline drops them under the ship once the walls have retreated. */
         .speaker__day-switch-details,
         .speaker__day-switch[aria-current='true'] .speaker__day-switch-details {
             position: absolute;
-            top: calc(var(--touch-target-md) + var(--space-4));
+            top: calc(var(--day-switcher-padding-y) + var(--touch-target-md) + var(--space-2));
             left: 0;
-            width: 200%;
+            width: 100%;
             margin-top: 0;
             opacity: 0;
             visibility: hidden;
@@ -3695,7 +3808,7 @@ the timeline drops them under the ship once the walls have retreated. */
         }
 
         .speaker__day-switch:last-of-type .speaker__day-switch-details {
-            transform: translateX(-50%);
+            transform: none;
         }
 
         .speaker__day-switch[aria-current='true'] .speaker__day-switch-details {
@@ -3720,27 +3833,29 @@ the timeline drops them under the ship once the walls have retreated. */
 
         .speaker__day-switch-rail {
             position: absolute;
-            top: calc(var(--touch-target-md) / 2);
-            right: 34%;
-            left: 34%;
+            top: calc(var(--day-switcher-padding-y) + (var(--touch-target-md) / 2));
+            left: 50%;
             display: block;
-            width: auto;
+            width: var(--day-switcher-rail-width);
             height: var(--rule-width-subtle);
             background: var(--color-border-editorial);
-            transform: translateY(-50%);
+            transform: translate(-50%, -50%);
         }
 
         .speaker__day-switch-prompt {
             position: absolute;
-            top: calc((var(--touch-target-md) / 2) - var(--space-8));
+            top: calc(var(--day-switcher-padding-y) + (var(--touch-target-md) / 2));
             left: 50%;
             display: block;
             color: var(--color-text-muted);
-            font-size: var(--section-body-size);
+            font-size: var(--section-small-size);
             font-weight: var(--font-weight-medium);
-            line-height: var(--section-body-line-height);
-            transform: translateX(-50%);
+            line-height: var(--section-small-line-height);
+            transform: translate(-50%, calc(-100% + var(--space-2)));
             white-space: nowrap;
+            background: var(--color-surface-paper);
+            padding: var(--space-0) var(--space-2);
+            z-index: 2;
         }
 
         .speaker__day-switch-rail::after {
@@ -3750,7 +3865,7 @@ the timeline drops them under the ship once the walls have retreated. */
             left: 0;
             width: 50%;
             height: var(--rule-width-emphasis);
-            background: var(--gradient-accent-spectrum);
+            background: var(--spectrum);
             transform: translateX(0);
         }
 
@@ -3760,17 +3875,174 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     @media (max-width: 575px) {
-        --speaker-day-label-size: var(--font-size-28);
-        --speaker-day-label-active-size: var(--font-size-28);
+        --speaker-day-label-size: var(--font-size-20);
+        --speaker-day-label-active-size: var(--font-size-20);
 
         .speaker__day-switcher-inner {
+            --day-switcher-label-shift: 0px;
+
             width: min(100%, 320px);
         }
+    }
+}
 
-        .speaker__day-switch-rail {
-            right: 34%;
-            left: 34%;
-        }
+
+/* Mobile day switcher pattern shared by Agenda and Speaker */
+#agenda .agenda__day-switch-date-short,
+#speaker .speaker__day-switch-date-short {
+    display: none;
+}
+
+@media (max-width: 767px) {
+
+    #agenda .agenda__day-switcher,
+    #speaker .speaker__day-switcher {
+        background: transparent;
+    }
+
+    #agenda .agenda__day-switcher-inner,
+    #speaker .speaker__day-switcher-inner {
+        position: relative;
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, 96px);
+        align-items: center;
+        justify-content: center;
+        justify-items: center;
+        column-gap: var(--space-3);
+        overflow: hidden;
+        padding: var(--space-6) var(--space-6) var(--space-16);
+        background: var(--color-surface-raised);
+    }
+
+    #agenda .agenda__day-switcher-inner::before,
+    #speaker .speaker__day-switcher-inner::before {
+        content: "/";
+        position: absolute;
+        top: calc(var(--space-6) + (var(--section-topic-line-height) / 2));
+        left: 50%;
+        z-index: 1;
+        color: var(--color-text-inverse-muted);
+        font-size: var(--font-size-18);
+        font-weight: var(--font-weight-light);
+        line-height: 1;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+    }
+
+    #agenda .agenda__day-switch,
+    #speaker .speaker__day-switch {
+        position: static;
+        width: 100%;
+        min-height: auto;
+        padding: var(--space-0);
+        display: grid;
+        justify-items: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    #agenda .agenda__day-switch-label,
+    #speaker .speaker__day-switch-label {
+        white-space: nowrap;
+    }
+
+    #agenda .agenda__day-switch:first-of-type,
+    #speaker .speaker__day-switch:first-of-type {
+        grid-column: 1;
+    }
+
+    #agenda .agenda__day-switch:last-of-type,
+    #speaker .speaker__day-switch:last-of-type {
+        grid-column: 2;
+        justify-content: center;
+        text-align: center;
+    }
+
+    #agenda .agenda__day-switch-details,
+    #speaker .speaker__day-switch-details {
+        position: absolute;
+        top: unset;
+        right: 0;
+        bottom: 28px;
+        left: 0;
+        width: 100%;
+        display: block;
+        margin-top: var(--space-0);
+        opacity: 0;
+        visibility: hidden;
+        transform: none;
+        text-align: center;
+        pointer-events: none;
+    }
+
+    #agenda .agenda__day-switch[aria-current='true'] .agenda__day-switch-details {
+        color: var(--agenda-day-label-active-color);
+        opacity: 1;
+        visibility: visible;
+    }
+
+    #speaker .speaker__day-switch[aria-current='true'] .speaker__day-switch-details {
+        color: var(--speaker-day-label-active-color);
+        opacity: 1;
+        visibility: visible;
+    }
+
+    #agenda .agenda__day-switch-details-inner,
+    #speaker .speaker__day-switch-details-inner {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-2);
+        min-height: fit-content;
+        overflow: visible;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    #agenda .agenda__day-switch-date-full,
+    #speaker .speaker__day-switch-date-full {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
+    #agenda .agenda__day-switch-date-short,
+    #speaker .speaker__day-switch-date-short {
+        display: inline;
+    }
+
+    #agenda .agenda__day-switch-prompt,
+    #speaker .speaker__day-switch-prompt,
+    #agenda .agenda__day-switch-rail,
+    #speaker .speaker__day-switch-rail {
+        display: none;
+    }
+}
+
+@media (max-width: 575px) {
+
+    #agenda .agenda__day-switcher-inner,
+    #speaker .speaker__day-switcher-inner {
+        grid-template-columns: repeat(2, 72px);
+        padding: var(--space-3) var(--space-3) var(--space-10);
+    }
+
+    #agenda .agenda__day-switcher-inner::before,
+    #speaker .speaker__day-switcher-inner::before {
+        top: calc(var(--space-3) + (var(--section-topic-line-height) / 2));
+        font-size: var(--font-size-14);
+    }
+
+    #agenda .agenda__day-switch-details,
+    #speaker .speaker__day-switch-details {
+        bottom: 18px;
+        font-size: var(--font-size-14);
+        line-height: var(--section-small-line-height);
     }
 }
 
@@ -3789,7 +4061,6 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 @media (max-width: 1199px) {
-
     .speaker__panel,
     .moderator__grid {
         gap: var(--space-16) var(--space-8);
@@ -3809,6 +4080,7 @@ the timeline drops them under the ship once the walls have retreated. */
 
     .speaker__panel,
     .moderator__grid {
+        margin-top: var(--space-8);
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: var(--space-12) var(--space-4);
     }
@@ -4432,13 +4704,13 @@ the timeline drops them under the ship once the walls have retreated. */
 
         /* ตัวเลขเล็กลงตามกฎด้านล่าง เนื้อหาจึงเตี้ยลงเหลือ ~92px
            ถ้าคงเส้นไว้ที่ 135px ส่วนที่ยื่นเกินจะเหลือช่องไฟระหว่างแถวแค่ 5px */
-        --expectation-rule-length: 122px;
+        --expectation-rule-length: 72px;
 
         padding: var(--section-padding-y-sm) 0;
 
         .expectation__stats {
             margin-top: var(--space-12);
-            row-gap: var(--space-12);
+            row-gap: var(--space-8);
             justify-content: center;
         }
 
@@ -4450,11 +4722,8 @@ the timeline drops them under the ship once the walls have retreated. */
 
     @media (max-width: 767px) {
         --bt-expectation-title-size: var(--section-heading-size);
-
-        .expectation__stats {
-            row-gap: var(--space-16);
-            justify-content: center;
-        }
+        --bt-expectation-stat-size: var(--font-size-32);
+        --expectation-rule-length: 64px;
 
         .expectation__stat {
             span {
@@ -4466,6 +4735,10 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     @media (max-width: 575px) {
+        .expectation__stats {
+            row-gap: var(--space-6);
+        }
+
         .expectation__stat {
             flex: 0 0 auto;
             width: 50%;
@@ -4989,7 +5262,7 @@ the timeline drops them under the ship once the walls have retreated. */
     #ui .event-countdown__values {
         grid-template-columns: repeat(4, minmax(48px, 1fr));
         width: 100%;
-        gap: var(--space-1);
+        gap: var(--space-6);
     }
 
     body.is-mobile-static #ui .event-details {
