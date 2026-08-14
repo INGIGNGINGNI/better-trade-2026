@@ -5,6 +5,7 @@
 .bt-icon {
     display: inline-block;
     flex: 0 0 auto;
+    font-size: var(--bt-icon-size);
     width: 1em;
     height: 1em;
     stroke: currentColor;
@@ -156,8 +157,8 @@ body.is-loading .site-scrollbar,
     .bt-icon {
         position: relative;
         z-index: 2;
-        width: var(--space-5);
-        height: var(--space-5);
+        width: var(--bt-icon-size);
+        height: var(--bt-icon-size);
         transform: rotate(-45deg);
         stroke-width: 2.25;
         opacity: 0;
@@ -672,8 +673,8 @@ body.menu-closing .site-header {
 
 .site-header__mobile-contact-grid .bt-icon {
     flex: 0 0 auto;
-    width: var(--space-5);
-    height: var(--space-5);
+    width: var(--bt-icon-size);
+    height: var(--bt-icon-size);
     color: var(--bt-menu-index);
     stroke-width: 1.8;
 }
@@ -724,8 +725,8 @@ body.menu-closing .site-header {
 
 .site-header__mobile-sponsor .bt-icon {
     flex: 0 0 auto;
-    width: var(--space-5);
-    height: var(--space-5);
+    width: var(--bt-icon-size);
+    height: var(--bt-icon-size);
     color: var(--bt-menu-index);
     stroke-width: 1.8;
 }
@@ -1317,8 +1318,8 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .bt-icon {
-        width: 18px;
-        height: 18px;
+        width: var(--bt-icon-size);
+        height: var(--bt-icon-size);
         stroke-width: 2;
     }
 
@@ -2103,8 +2104,8 @@ the timeline drops them under the ship once the walls have retreated. */
 
         >.bt-icon {
             flex: 0 0 auto;
-            width: var(--space-6);
-            height: var(--space-6);
+            width: var(--bt-icon-size);
+            height: var(--bt-icon-size);
             display: grid;
             place-items: center;
             padding: var(--space-1);
@@ -2151,7 +2152,7 @@ the timeline drops them under the ship once the walls have retreated. */
         color: var(--color-text-muted);
 
         .bt-icon {
-            font-size: var(--space-5);
+            font-size: var(--bt-icon-size);
             stroke-width: 2.25;
         }
 
@@ -2210,7 +2211,7 @@ the timeline drops them under the ship once the walls have retreated. */
 
             .bt-icon {
                 color: var(--color-accent-primary);
-                font-size: var(--space-6);
+                font-size: var(--bt-icon-size);
                 stroke-width: 1.75;
             }
         }
@@ -2236,8 +2237,8 @@ the timeline drops them under the ship once the walls have retreated. */
             display: grid;
             place-items: center;
             flex: 0 0 auto;
-            width: var(--space-6);
-            height: var(--space-6);
+            width: var(--bt-icon-size);
+            height: var(--bt-icon-size);
             padding: var(--space-1);
             border-radius: var(--radius-1);
             background: color-mix(in srgb, currentColor 16%, var(--color-surface-page));
@@ -2337,7 +2338,7 @@ the timeline drops them under the ship once the walls have retreated. */
             padding: var(--space-12) var(--space-8);
 
             &:not(:first-child) {
-                border-top: var(--rule-width-subtle) solid var(--color-border-editorial);
+                border-top: var(--rule-width-subtle) solid var(--color-border-faint);
                 border-left: 0;
             }
         }
@@ -2362,8 +2363,16 @@ the timeline drops them under the ship once the walls have retreated. */
                 gap: var(--space-2);
 
                 .bt-icon {
-                    font-size: var(--space-5);
+                    font-size: var(--bt-icon-size);
                 }
+            }
+        }
+
+        .ticket__format {
+            align-items: flex-start;
+
+            >.bt-icon {
+                margin-top: var(--space-1);
             }
         }
 
@@ -2371,9 +2380,9 @@ the timeline drops them under the ship once the walls have retreated. */
 
     @media (max-width:575px) {
         --bt-ticket-title-size: var(--section-topic-size);
-        --bt-ticket-plan-title-size: var(--font-size-28);
+        --bt-ticket-plan-title-size: var(--font-size-32);
         --bt-ticket-plan-title-line-height: var(--section-topic-line-height);
-        --bt-ticket-price-size: var(--font-size-28);
+        --bt-ticket-price-size: var(--font-size-24);
 
         .ticket__plan-header {
             margin-bottom: var(--space-4);
@@ -2394,7 +2403,7 @@ the timeline drops them under the ship once the walls have retreated. */
         }
 
         .ticket__plan {
-            padding: var(--space-12) var(--space-8);
+            padding: var(--space-8);
 
             &:not(.ticket__plan--ultimate):hover {
                 background: inherit;
@@ -2407,6 +2416,14 @@ the timeline drops them under the ship once the walls have retreated. */
 
         .ticket__access {
             margin: var(--space-4) var(--space-0) var(--space-0);
+
+            >div {
+                min-height: var(--space-10);
+            }
+        }
+
+        .ticket__status .bt-icon {
+            font-size: 16px;
         }
 
         .ticket__benefits {
@@ -2435,7 +2452,7 @@ the timeline drops them under the ship once the walls have retreated. */
                 }
 
                 .bt-icon {
-                    font-size: var(--space-5);
+                    font-size: var(--bt-icon-size);
                 }
             }
         }
@@ -2857,7 +2874,7 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .agenda__speaker-frame>.bt-icon {
-        font-size: var(--space-8);
+        font-size: var(--bt-icon-size);
         stroke-width: 1.75;
     }
 
@@ -3293,7 +3310,7 @@ the timeline drops them under the ship once the walls have retreated. */
         }
 
         .agenda__speaker-frame>.bt-icon {
-            font-size: var(--space-5);
+            font-size: var(--bt-icon-size);
         }
 
         .agenda__tags {
@@ -4180,8 +4197,8 @@ the timeline drops them under the ship once the walls have retreated. */
 .past-event__slide-frame .bt-icon {
     align-self: center;
     justify-self: center;
-    width: var(--space-12);
-    height: var(--space-12);
+    width: var(--bt-icon-size);
+    height: var(--bt-icon-size);
     fill: none;
     stroke: currentColor;
     stroke-width: 1.25;
@@ -4624,8 +4641,8 @@ the timeline drops them under the ship once the walls have retreated. */
             color: var(--bt-footer-muted);
 
             .bt-icon {
-                width: var(--space-5);
-                height: var(--space-5);
+                width: var(--bt-icon-size);
+                height: var(--bt-icon-size);
             }
         }
 
@@ -4701,8 +4718,8 @@ the timeline drops them under the ship once the walls have retreated. */
             color: var(--bt-footer-muted);
 
             .bt-icon {
-                width: var(--space-5);
-                height: var(--space-5);
+                width: var(--bt-icon-size);
+                height: var(--bt-icon-size);
             }
         }
     }
@@ -4931,6 +4948,21 @@ the timeline drops them under the ship once the walls have retreated. */
 
     .loader-progress {
         bottom: var(--space-8);
+    }
+
+    body.is-mobile-static #stagewrap::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 110;
+        height: 34%;
+        pointer-events: none;
+        background: linear-gradient(180deg,
+                rgba(0, 0, 0, 0) 0%,
+                rgba(0, 0, 0, 0.42) 44%,
+                rgba(0, 0, 0, 0.68) 100%);
     }
 
     body.is-mobile-static #ui .venue {
