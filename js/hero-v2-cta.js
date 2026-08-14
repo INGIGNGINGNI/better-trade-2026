@@ -69,7 +69,7 @@ ready.then(() => {
     const headerActionHeight = resolveCssLength('--bt-header-action-height', 40);
     const headerActionRim = resolveCssLength('--bt-header-action-rim', 2);
     const heroCtaSlot = document.getElementById('cta-slot');
-    const compactHeroCta = window.matchMedia('(max-width: 575px)');
+    const compactHeroCta = window.matchMedia('(max-width: 575px), (max-width: 1199px) and (max-height: 575px) and (orientation: landscape)');
     let heroCtaButton = null;
     let isHeroCtaCompact = null;
 

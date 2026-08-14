@@ -864,7 +864,8 @@ body.menu-open .site-header__backdrop {
     }
 
     .site-header__mobile-nav a {
-        font-size: var(--bt-menu-nav-font-size-sm);
+        min-height: var(--space-10);
+        font-size: var(--font-size-20);
     }
 
     .site-header__mobile-contact-grid {
@@ -5267,6 +5268,98 @@ the timeline drops them under the ship once the walls have retreated. */
 
     body.is-mobile-static #ui .event-details {
         gap: var(--space-6);
+    }
+}
+
+@media (max-width:1199px) and (max-height:575px) and (orientation:landscape) {
+    :root {
+        --hero-static-top-inset: 16px;
+        --hero-static-bottom-gap: 0px;
+        --hero-static-stage-max-vw: 1.32;
+    }
+
+    body.is-mobile-static #stagewrap {
+        min-height: 100svh;
+    }
+
+    body.is-mobile-static #ui {
+        top: auto;
+        bottom: var(--space-8);
+        width: min(calc(100vw - var(--space-8)), 560px);
+        gap: var(--space-3);
+    }
+
+    body.is-mobile-static #ui .event-details {
+        gap: var(--space-3);
+    }
+
+    #ui .event-datetime {
+        column-gap: var(--space-2);
+        row-gap: var(--space-1);
+    }
+
+    #ui .date,
+    #ui .time {
+        font-size: var(--font-size-18);
+    }
+
+    #ui .event-countdown {
+        min-width: min(240px, calc(100vw - var(--space-8)));
+        gap: var(--space-2);
+    }
+
+    #ui .event-countdown__values {
+        grid-template-columns: repeat(4, minmax(40px, 1fr));
+        gap: var(--space-4);
+        width: 100%;
+    }
+
+    #ui .event-countdown__unit {
+        gap: var(--space-2);
+    }
+
+    #ui .event-countdown__unit:not(:last-child)::after {
+        right: calc(var(--space-2) * -1);
+    }
+
+    #ui .event-countdown__unit strong {
+        font-size: var(--font-size-20);
+    }
+
+    #ui .event-countdown__unit small {
+        font-size: var(--font-size-12);
+    }
+
+    body.is-mobile-static #ui .venue {
+        padding-top: var(--space-0);
+        font-size: var(--font-size-14);
+    }
+}
+
+@media (max-width:767px) and (max-height:390px) and (orientation:landscape) {
+    body.is-mobile-static #ui {
+        top: auto;
+        bottom: var(--space-8);
+        gap: var(--space-2);
+    }
+
+    body.is-mobile-static #ui .event-details {
+        gap: var(--space-2);
+    }
+
+    #ui .date,
+    #ui .time,
+    #ui .event-countdown__unit strong {
+        font-size: var(--font-size-16);
+    }
+
+    #ui .event-countdown__values {
+        grid-template-columns: repeat(4, minmax(36px, 1fr));
+        gap: var(--space-3);
+    }
+
+    #ui .event-countdown__unit:not(:last-child)::after {
+        right: calc(var(--space-1) * -1);
     }
 }
 

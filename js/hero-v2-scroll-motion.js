@@ -1127,8 +1127,19 @@
             ui.style.zIndex = '120';
             const uiHeight = ui.offsetHeight || 220;
             const maxTop = Math.max(0, M.SH - uiHeight - M.staticBottomGap);
-            const minTop = Math.min(maxTop, M.SH * 0.48);
-            ui.style.top = `${clamp(M.SH * 0.70, minTop, maxTop)}px`;
+            const shortLandscape = M.vw > M.vh && M.vh <= 575;
+
+            if (shortLandscape) {
+                // In landscape the requested relationship is to the bottom of the KV stage,
+                // not to the viewport. Bottom anchoring keeps that gap stable even when the
+                // CTA, fonts or Safari viewport height finish loading at different times.
+                ui.style.top = 'auto';
+                ui.style.bottom = '32px';
+            } else {
+                ui.style.bottom = '';
+                const minTop = Math.min(maxTop, M.SH * 0.48);
+                ui.style.top = `${clamp(M.SH * 0.70, minTop, maxTop)}px`;
+            }
             el.concept.classList.remove('is-awaiting-entry', 'is-revealed');
             updateHeroRunProgress();
         }

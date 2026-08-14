@@ -1,12 +1,12 @@
-/* Scroll motion สำหรับการ์ด speaker
+/* Motion สำหรับการ์ด speaker
    โหลดหลัง gsap.min.js / ScrollTrigger.min.js และหลัง speaker-directory.js
    ที่เป็นคนสร้างการ์ดลง DOM
 
    สองเอฟเฟกต์:
-   1. reveal ผูกกับ scroll โดยตรง (scrub) — ล้อเมาส์เป็นคนคุมจังหวะ หยุดล้อภาพก็หยุด
-      เป็นสองทาง: เลื่อนขึ้นการ์ดถอยกลับไปตามช่วงเดิม trigger จึงอยู่ครบตลอดอายุแผง
-   2. pan ภาพในกรอบตาม scroll โดยขยับ --speaker-portrait-y ที่ speaker-directory.js
-      ตั้งไว้ต่อรูป ทำให้การจัดหัวให้เสมอกันทุกใบไม่เสีย */
+   1. reveal เล่นครั้งเดียวเมื่อการ์ดเข้าหน้าจอ — การ์ดเลื่อนขึ้นจากด้านล่าง
+      พร้อม fade/scale เบา ๆ และ stagger ตามลำดับในแถว
+   2. pan ภาพในกรอบตาม scroll โดยขยับ --speaker-portrait-drift แยกจาก
+      --speaker-portrait-y ที่ใช้จัดหัวให้เสมอกันทุกใบ */
 (() => {
     if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
 
@@ -23,23 +23,13 @@
     const desktopQuery = window.matchMedia('(min-width: 992px)');
     const saveData = navigator.connection?.saveData === true;
 
-    /* พาราแลกซ์ต่างคอลัมน์ถูกถอดออกแล้ว y จึงว่างให้ reveal ใช้เป็น px ได้ตรง ๆ
-       ไม่ต้องหลบไปใช้ yPercent เหมือนตอนที่สอง tween ยังใช้การ์ดใบเดียวกัน */
-    /* ไม่จางถึง 0: reveal เป็นสองทาง การ์ดที่เลื่อนย้อนขึ้นจะถอยกลับมาสถานะนี้
-       ถ้าปล่อยให้หายสนิทจะรู้สึกเหมือนเนื้อหาโดนลบทิ้ง เหลือเงาไว้บาง ๆ ให้รู้ว่ายังอยู่ */
-    const REVEAL_FROM = { opacity: 0.2, y: 56, scale: 0.96 };
+    /* reveal เล่นครั้งเดียวเมื่อเข้าหน้าจอ ไม่ scrub ตาม scroll แล้ว
+       ค่าเริ่มยังอยู่ด้านล่างเล็กน้อยเพื่อให้เห็นการ์ดลอยขึ้นมาตามคำขอ */
+    const REVEAL_FROM = { opacity: 0, y: 64, scale: 0.98 };
     const REVEAL_TO = { opacity: 1, y: 0, scale: 1 };
-    /* ช่วง scroll ที่ใช้ reveal หนึ่งใบ วัดจากขอบบนการ์ดเทียบความสูงจอ
-       92% → 72% ราว 1 ใน 5 ของจอ: สั้นพอให้แต่ละใบขึ้นจบเป็นตัว ๆ
-       ถ้ายาวกว่านี้ช่วงของใบข้าง ๆ จะทับกันจนกลืนเป็นก้อนเดียว */
-    const REVEAL_START_LINE = 92;
-    const REVEAL_END_LINE = 72;
-    /* การ์ดในแถวเดียวกันมีขอบบนตรงกันเป๊ะ ถ้าใช้เส้นเดียวกันหมดจะขึ้นพร้อมกันทั้งแถว
-       ยกเส้นของใบถัด ๆ ไปให้สูงขึ้นใบละ 14% ของจอ ใบขวาจึงต้องเลื่อนต่ออีกถึงจะเริ่ม
-       มากกว่าครึ่งของช่วง reveal (20%) แปลว่าใบแรกไปได้ 70% แล้วใบที่สองถึงเริ่ม
-       และใบที่สามเริ่มหลังใบแรกจบไปแล้ว — เห็นเป็นคิวไล่มาทีละใบชัด ๆ */
-    const REVEAL_STAGGER_LINE = 14;
-    const REVEAL_SCRUB = 0.6;  // วินาทีที่ภาพตามหลังล้อ กันกระตุกจาก scroll ที่มาเป็นก้อน
+    const REVEAL_START_LINE = 88;
+    const REVEAL_DURATION = 0.72;
+    const REVEAL_STAGGER_DELAY = 0.12;
     const ROW_TOLERANCE = 8;   // px ที่ยังนับว่าการ์ดสองใบอยู่แถวเดียวกัน กันเศษ subpixel
     const PORTRAIT_DRIFT = 7;  // % ของส่วนภาพที่กรอบ 4:5 ยังไม่ได้ใช้
 
@@ -85,22 +75,19 @@
         });
 
         ctx = gsap.context(() => {
-            /* ทีละใบ ไม่ใช่ batch: จังหวะมาจากตำแหน่งจริงของการ์ดล้วน ๆ
-               ease: 'none' เพราะจังหวะเร่ง/ผ่อนควรมาจากมือคนเลื่อน ไม่ใช่จาก easing curve */
-            /* ไม่ใช้ once: trigger อยู่ครบตลอด เลื่อนขึ้น-ลงการ์ดจึงเดินตามล้อทั้งสองทาง
-               ตอนสลับวันก็ไม่ต้องมีเคสพิเศษ: การ์ดที่เลยช่วงไปแล้วถูกคิด progress 1
-               ให้ตั้งแต่ตอนสร้าง trigger (สิ่งที่ ScrollTrigger.batch แบบเดิมทำไม่ได้) */
+            /* ทีละใบเพื่อคุม delay ตามตำแหน่งจริงในแถว ไม่ใช้ scrub แล้ว
+               การ์ดจะเล่นเมื่อเข้าหน้าจอครั้งแรกและไม่ย้อน animation ตอน scroll กลับ */
             measured.forEach(({ card, order }) => {
-                const offset = order * REVEAL_STAGGER_LINE;
-
                 gsap.fromTo(card, REVEAL_FROM, {
                     ...REVEAL_TO,
-                    ease: 'none',
+                    duration: REVEAL_DURATION,
+                    delay: order * REVEAL_STAGGER_DELAY,
+                    ease: 'power3.out',
+                    clearProps: 'opacity,transform',
                     scrollTrigger: {
                         trigger: card,
-                        start: `top ${REVEAL_START_LINE - offset}%`,
-                        end: `top ${REVEAL_END_LINE - offset}%`,
-                        scrub: REVEAL_SCRUB,
+                        start: 'top ' + REVEAL_START_LINE + '%',
+                        once: true,
                     },
                 });
             });
