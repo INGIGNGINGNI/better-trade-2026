@@ -114,7 +114,7 @@ body.is-loading .site-scrollbar,
     border-radius: 50%;
     color: var(--color-text-primary);
     background: color-mix(in srgb, var(--color-surface-page) 88%, #ffffff);
-    box-shadow: 0 var(--space-2) var(--space-6) var(--alpha-ink-16);
+    /* box-shadow: 0 var(--space-2) var(--space-6) var(--alpha-ink-16); */
     opacity: 0;
     pointer-events: none;
     transform: translateY(var(--space-3)) scale(0.94);
@@ -160,7 +160,7 @@ body.is-loading .site-scrollbar,
         width: var(--bt-icon-size);
         height: var(--bt-icon-size);
         transform: rotate(-45deg);
-        stroke-width: 1.25;
+        stroke-width: 2;
         opacity: 0;
         transition: opacity var(--duration-fast) var(--ease-standard);
     }
@@ -3639,7 +3639,6 @@ the timeline drops them under the ship once the walls have retreated. */
 
         .agenda__tag {
             min-height: var(--space-5);
-            padding: 2px var(--space-2);
         }
 
         .agenda__session-title {
@@ -4994,6 +4993,14 @@ the timeline drops them under the ship once the walls have retreated. */
    แสดงหัวข้อและภาพแผนผังบูทเต็มความกว้างของ Bootstrap container */
 .floor-plan {
     --bt-floor-plan-title-size: var(--section-title-size);
+    --bt-floor-plan-zone-label-size: var(--font-size-72);
+    --bt-floor-plan-line-width: var(--border-width-2);
+    --bt-floor-plan-image-offset: var(--space-6);
+    --bt-floor-plan-callout-offset: var(--space-2);
+    --bt-floor-plan-image-duration: calc(var(--duration-slow) + var(--duration-standard) + var(--duration-fast));
+    --bt-floor-plan-callout-duration: calc(var(--duration-slow) + var(--duration-base));
+    --bt-floor-plan-callout-start-delay: var(--bt-floor-plan-callout-duration);
+    --bt-floor-plan-callout-step-delay: calc(var(--duration-base) + var(--duration-fast));
 
     padding: var(--section-padding-y) 0;
     color: var(--color-text-primary);
@@ -5015,18 +5022,133 @@ the timeline drops them under the ship once the walls have retreated. */
         margin: var(--space-12) 0 0;
     }
 
+    /* ภาพฐานและ callout ใช้ viewBox เดียวกัน จึงย่อขยายพร้อมกันโดยตำแหน่งไม่คลาด */
+    .floor-plan__visual {
+        position: relative;
+        width: 90%;
+        margin-inline: auto;
+    }
+
     .floor-plan__image {
         display: block;
-        width: 80%;
+        width: 100%;
         height: auto;
-        margin-inline: auto;
+    }
+
+    .floor-plan__callouts {
+        position: absolute;
+        inset: 0;
+        display: block;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        pointer-events: none;
+    }
+
+    .floor-plan__callout-line {
+        fill: none;
+        stroke: var(--color-neutral-400);
+        stroke-width: var(--bt-floor-plan-line-width);
+        vector-effect: non-scaling-stroke;
+    }
+
+    .floor-plan__callout-label {
+        fill: var(--color-blue-600);
+        font-family: var(--font-family-heading);
+        font-size: var(--bt-floor-plan-zone-label-size);
+        font-weight: var(--font-weight-medium);
+        letter-spacing: 0;
+    }
+
+    /* ซ่อนเฉพาะเมื่อ JavaScript พร้อมทำ reveal เพื่อให้เนื้อหายังแสดงหาก JS ไม่ทำงาน */
+    &.is-reveal-ready {
+        .floor-plan__image {
+            opacity: 0;
+            transform: translateY(var(--bt-floor-plan-image-offset));
+        }
+
+        .floor-plan__callout-line {
+            stroke-dasharray: var(--floor-plan-line-length);
+            stroke-dashoffset: var(--floor-plan-line-length);
+        }
+
+        .floor-plan__callout-mark,
+        .floor-plan__callout-label {
+            opacity: 0;
+        }
+
+        .floor-plan__callout-mark {
+            transform-box: fill-box;
+            transform-origin: center;
+            transform: scale(0.72);
+        }
+
+        .floor-plan__callout-label {
+            transform: translateY(var(--bt-floor-plan-callout-offset));
+        }
+    }
+
+    &.is-reveal-ready.is-visible {
+        .floor-plan__image {
+            opacity: 1;
+            transform: translateY(0);
+            transition:
+                opacity var(--bt-floor-plan-image-duration) var(--ease-standard),
+                transform var(--bt-floor-plan-image-duration) var(--ease-standard);
+        }
+
+        .floor-plan__callout-line {
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset var(--bt-floor-plan-callout-duration) var(--ease-standard);
+        }
+
+        .floor-plan__callout-mark {
+            opacity: 1;
+            transform: scale(1);
+            transition:
+                opacity var(--bt-floor-plan-callout-duration) var(--ease-standard),
+                transform var(--bt-floor-plan-callout-duration) var(--ease-standard);
+        }
+
+        .floor-plan__callout-label {
+            opacity: 1;
+            transform: translateY(0);
+            transition:
+                opacity var(--bt-floor-plan-callout-duration) var(--ease-standard),
+                transform var(--bt-floor-plan-callout-duration) var(--ease-standard);
+        }
+
+        /* เริ่ม callout หลังภาพฐานตั้งตัว แล้วเว้นจังหวะแต่ละชิ้นให้สายตาตามทัน */
+        .floor-plan__callout--conference .floor-plan__callout-line {
+            transition-delay: var(--bt-floor-plan-callout-start-delay);
+        }
+
+        .floor-plan__callout--conference .floor-plan__callout-mark,
+        .floor-plan__callout--pavilions .floor-plan__callout-line {
+            transition-delay: calc(var(--bt-floor-plan-callout-start-delay) + var(--bt-floor-plan-callout-step-delay));
+        }
+
+        .floor-plan__callout--conference .floor-plan__callout-label,
+        .floor-plan__callout--pavilions .floor-plan__callout-mark,
+        .floor-plan__callout--experience .floor-plan__callout-line {
+            transition-delay: calc(var(--bt-floor-plan-callout-start-delay) + var(--bt-floor-plan-callout-step-delay) + var(--bt-floor-plan-callout-step-delay));
+        }
+
+        .floor-plan__callout--pavilions .floor-plan__callout-label,
+        .floor-plan__callout--experience .floor-plan__callout-mark {
+            transition-delay: calc(var(--bt-floor-plan-callout-start-delay) + var(--bt-floor-plan-callout-step-delay) + var(--bt-floor-plan-callout-step-delay) + var(--bt-floor-plan-callout-step-delay));
+        }
+
+        .floor-plan__callout--experience .floor-plan__callout-label {
+            transition-delay: calc(var(--bt-floor-plan-callout-start-delay) + var(--bt-floor-plan-callout-step-delay) + var(--bt-floor-plan-callout-step-delay) + var(--bt-floor-plan-callout-step-delay) + var(--bt-floor-plan-callout-step-delay));
+        }
     }
 
     @media (max-width:991px) {
         padding: var(--section-padding-y-sm) 0;
 
         /* จอเล็กคืนความกว้างเต็ม ย่ออีก 20% แล้วชื่อโซนในแผนผังจะอ่านไม่ออก */
-        .floor-plan__image {
+        .floor-plan__visual {
             width: 100%;
         }
     }
@@ -5035,7 +5157,18 @@ the timeline drops them under the ship once the walls have retreated. */
        จะเหลือที่ราว 16 ตัวอักษรต่อบรรทัด หัวข้อจึงตัดคำจนมีคำห้อยท้ายบรรทัดเดียวโดด ๆ */
     @media (max-width: 767px) {
         --bt-floor-plan-title-size: var(--section-heading-size);
+        --bt-floor-plan-zone-label-size: calc(var(--font-size-80) + var(--font-size-48));
+    }
 
+    @media (prefers-reduced-motion: reduce) {
+        .floor-plan__image,
+        .floor-plan__callout-line,
+        .floor-plan__callout-mark,
+        .floor-plan__callout-label {
+            opacity: 1;
+            transform: none;
+            transition: none;
+        }
     }
 }
 

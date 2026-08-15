@@ -10,8 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Baskervville:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="fonts/fonts.css">
-    <link rel="stylesheet" href="css/main.css?v=12">
-    <link rel="stylesheet" href="css/style.css?v=181">
+    <link rel="stylesheet" href="css/main.css?v=15">
+    <link rel="stylesheet" href="css/style.css?v=183">
 </head>
 
 <body class="is-loading">
@@ -1026,8 +1026,31 @@
                     <h2 id="floor-plan-title" class="bt-section-title floor-plan__title"><span class="bt-title-highlight">สำรวจ</span>พื้นที่<br>และโซนต่าง ๆ ในงาน</h2>
                     <p class="bt-section-subtext">Floor Plan</p>
                     <figure class="floor-plan__figure">
-                        <img class="floor-plan__image" src="images/floor-plan.png" width="3813" height="2125"
-                            alt="แผนผังตำแหน่งบูทภายในงาน Better Trade 2026">
+                        <div class="floor-plan__visual">
+                            <img class="floor-plan__image" src="images/floor-plan.webp" width="3813" height="2125"
+                                loading="lazy" decoding="async"
+                                alt="แผนผังพื้นที่ Conference, Pavilions และ Experience ภายในงาน Better Trade 2026">
+                            <svg class="floor-plan__callouts" viewBox="0 0 3813 2125" aria-hidden="true">
+                                <g class="floor-plan__callout floor-plan__callout--conference">
+                                    <line class="floor-plan__callout-line" x1="897" y1="726" x2="897" y2="438"></line>
+                                    <image class="floor-plan__callout-mark" href="images/floor-plan-star.png"
+                                        x="863" y="352" width="74" height="74"></image>
+                                    <text class="floor-plan__callout-label" x="673" y="312">CONFERENCE</text>
+                                </g>
+                                <g class="floor-plan__callout floor-plan__callout--pavilions">
+                                    <line class="floor-plan__callout-line" x1="372" y1="1504" x2="372" y2="1800"></line>
+                                    <image class="floor-plan__callout-mark" href="images/floor-plan-star.png"
+                                        x="330" y="1810" width="76" height="76"></image>
+                                    <text class="floor-plan__callout-label" x="171" y="1987">PAVILLIONS</text>
+                                </g>
+                                <g class="floor-plan__callout floor-plan__callout--experience">
+                                    <line class="floor-plan__callout-line" x1="2798" y1="1833" x2="3095" y2="1833"></line>
+                                    <image class="floor-plan__callout-mark" href="images/floor-plan-star.png"
+                                        x="3105" y="1793" width="76" height="76"></image>
+                                    <text class="floor-plan__callout-label" x="3221" y="1853">EXPERIENCE</text>
+                                </g>
+                            </svg>
+                        </div>
                     </figure>
                 </div>
             </div>
@@ -1376,6 +1399,7 @@
     <script src="js/agenda-tabs.js?v=5"></script>
     <script src="js/speaker-directory.js?v=6"></script>
     <script src="js/expectation-counter.js?v=1"></script>
+    <script src="js/floor-plan-reveal.js?v=1"></script>
     <script src="js/back-to-top.js?v=2"></script>
     <script src="js/journey-indicator.js?v=8"></script>
     <script src="js/hero-v2-header.js?v=8"></script>
