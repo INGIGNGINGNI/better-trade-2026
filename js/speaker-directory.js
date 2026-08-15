@@ -1,48 +1,48 @@
 (() => {
     const speakerDays = {
         dayOne: [
-            ['กิตติพงศ์ วัฒนชัย', 'Chief Investment Strategist, Horizon Capital'],
-            ['พิมพ์ชนก รัตนกุล', 'Founder & CEO, Future Wealth Lab'],
-            ['ธนกร ศรีวัฒน์', 'Managing Director, Atlas Securities'],
-            ['อรทัย ตั้งพิพัฒน์', 'Head of Digital Assets, NovaX'],
-            ['ชยพล เกียรติไพบูลย์', 'Partner, Momentum Ventures'],
-            ['ณัฐชา วงศ์ประเสริฐ', 'Economist & Market Commentator'],
-            ['วรเมธ ลิ้มวัฒนะ', 'Chief Technology Officer, Finverse'],
-            ['ศิริพร บุญยืน', 'Director of Sustainable Investment'],
-            ['ภาคิน อัครเดช', 'Founder, New Economy Research'],
-            ['ลลิตา จารุวัฒน์', 'Private Wealth Advisor'],
-            ['ปกรณ์ สุวรรณกิจ', 'Global Macro Fund Manager'],
-            ['รมิดา พัฒนโชติ', 'Co-founder, Wealth for Everyone'],
-            ['ธีรภัทร ชาญวิทย์', 'Digital Asset Research Lead'],
-            ['นภัสสร วัฒนศิริ', 'CEO, Capital Design Studio'],
-            ['อธิป ตั้งธนกิจ', 'Commodity Investment Specialist'],
-            ['ชุติมา รุ่งเรืองผล', 'Managing Partner, Bright Future Fund'],
-            ['กฤตภาส เมธากุล', 'AI & Quantitative Strategy Lead'],
-            ['พิชญา พงศ์พาณิชย์', 'Financial Educator & Author'],
-            ['วสุธร อินทรรักษ์', 'Chief Economist, Meridian Group'],
-            ['รวิสรา ธรรมคุณ', 'Founder, Purposeful Portfolio'],
+            ['กิตติพงศ์ วัฒนชัย', 'Chief Investment Strategist, Horizon Capital', 'man'],
+            ['พิมพ์ชนก รัตนกุล', 'Founder & CEO, Future Wealth Lab', 'woman'],
+            ['ธนกร ศรีวัฒน์', 'Managing Director, Atlas Securities', 'man'],
+            ['อรทัย ตั้งพิพัฒน์', 'Head of Digital Assets, NovaX', 'woman'],
+            ['ชยพล เกียรติไพบูลย์', 'Partner, Momentum Ventures', 'man'],
+            ['ณัฐชา วงศ์ประเสริฐ', 'Economist & Market Commentator', 'woman'],
+            ['วรเมธ ลิ้มวัฒนะ', 'Chief Technology Officer, Finverse', 'man'],
+            ['ศิริพร บุญยืน', 'Director of Sustainable Investment', 'woman'],
+            ['ภาคิน อัครเดช', 'Founder, New Economy Research', 'man'],
+            ['ลลิตา จารุวัฒน์', 'Private Wealth Advisor', 'woman'],
+            ['ปกรณ์ สุวรรณกิจ', 'Global Macro Fund Manager', 'man'],
+            ['รมิดา พัฒนโชติ', 'Co-founder, Wealth for Everyone', 'woman'],
+            ['ธีรภัทร ชาญวิทย์', 'Digital Asset Research Lead', 'man'],
+            ['นภัสสร วัฒนศิริ', 'CEO, Capital Design Studio', 'woman'],
+            ['อธิป ตั้งธนกิจ', 'Commodity Investment Specialist', 'man'],
+            ['ชุติมา รุ่งเรืองผล', 'Managing Partner, Bright Future Fund', 'woman'],
+            ['กฤตภาส เมธากุล', 'AI & Quantitative Strategy Lead', 'man'],
+            ['พิชญา พงศ์พาณิชย์', 'Financial Educator & Author', 'woman'],
+            ['วสุธร อินทรรักษ์', 'Chief Economist, Meridian Group', 'man'],
+            ['รวิสรา ธรรมคุณ', 'Founder, Purposeful Portfolio', 'woman'],
         ],
         dayTwo: [
-            ['ภานุวัฒน์ วีระกุล', 'Chief Executive Officer, Quantum Wealth'],
-            ['กัญญารัตน์ อุดมทรัพย์', 'Managing Partner, Northstar Ventures'],
-            ['สรวิศ ชาญธนกิจ', 'Global Equity Portfolio Manager'],
-            ['วริศรา เทพหัสดิน', 'Head of Alternative Investments'],
-            ['ณรงค์ฤทธิ์ วัฒนาพงศ์', 'Founder, Digital Economy Forum'],
-            ['ปิยะนุช สุขเกษม', 'Sustainable Finance Director'],
-            ['ธนวัฒน์ ชัยประสิทธิ์', 'AI Investment Researcher'],
-            ['มนัสวี รุ่งกิจ', 'Private Market Strategist'],
-            ['ชลธิชา สกุลทอง', 'Financial Technology Entrepreneur'],
-            ['อัครเดช พัฒนวงศ์', 'Chief Investment Officer, Vertex Fund'],
-            ['ศุภณัฐ รัตนวิชัย', 'Digital Asset Portfolio Manager'],
-            ['ณิชาภา ตั้งวาณิชย์', 'Founder, Future Money Studio'],
-            ['กรณ์ภพ นิลวัฒน์', 'Real Asset Investment Director'],
-            ['ศศิธร วัฒนวงศ์', 'Family Office Advisor'],
-            ['นราวิชญ์ อัครวัฒน์', 'Fintech Entrepreneur & Investor'],
-            ['อัญชลี รุ่งพิพัฒน์', 'Personal Finance Creator'],
-            ['ธนกฤต ศรีสวัสดิ์', 'Market Structure Specialist'],
-            ['พิมพ์มาดา วงศ์วาน', 'Founder, The Growth Playbook'],
-            ['กวินท์ สุวรรณเมธา', 'Macroeconomic Research Director'],
-            ['ชญานิศ วงศ์วัฒนา', 'Wealth Innovation Consultant'],
+            ['ภานุวัฒน์ วีระกุล', 'Chief Executive Officer, Quantum Wealth', 'man'],
+            ['กัญญารัตน์ อุดมทรัพย์', 'Managing Partner, Northstar Ventures', 'woman'],
+            ['สรวิศ ชาญธนกิจ', 'Global Equity Portfolio Manager', 'man'],
+            ['วริศรา เทพหัสดิน', 'Head of Alternative Investments', 'woman'],
+            ['ณรงค์ฤทธิ์ วัฒนาพงศ์', 'Founder, Digital Economy Forum', 'man'],
+            ['ปิยะนุช สุขเกษม', 'Sustainable Finance Director', 'woman'],
+            ['ธนวัฒน์ ชัยประสิทธิ์', 'AI Investment Researcher', 'man'],
+            ['มนัสวี รุ่งกิจ', 'Private Market Strategist', 'woman'],
+            ['ชลธิชา สกุลทอง', 'Financial Technology Entrepreneur', 'woman'],
+            ['อัครเดช พัฒนวงศ์', 'Chief Investment Officer, Vertex Fund', 'man'],
+            ['ศุภณัฐ รัตนวิชัย', 'Digital Asset Portfolio Manager', 'man'],
+            ['ณิชาภา ตั้งวาณิชย์', 'Founder, Future Money Studio', 'woman'],
+            ['กรณ์ภพ นิลวัฒน์', 'Real Asset Investment Director', 'man'],
+            ['ศศิธร วัฒนวงศ์', 'Family Office Advisor', 'woman'],
+            ['นราวิชญ์ อัครวัฒน์', 'Fintech Entrepreneur & Investor', 'man'],
+            ['อัญชลี รุ่งพิพัฒน์', 'Personal Finance Creator', 'woman'],
+            ['ธนกฤต ศรีสวัสดิ์', 'Market Structure Specialist', 'man'],
+            ['พิมพ์มาดา วงศ์วาน', 'Founder, The Growth Playbook', 'woman'],
+            ['กวินท์ สุวรรณเมธา', 'Macroeconomic Research Director', 'man'],
+            ['ชญานิศ วงศ์วัฒนา', 'Wealth Innovation Consultant', 'woman'],
         ],
     };
 
@@ -61,25 +61,19 @@
         [1, 8], [3, 8],
     ];
 
-    /* Each portrait is shot with a different amount of empty space above the head
-       (74px–111px on a 793px canvas). Offsetting the 4:5 crop by these amounts lands
-       every head the same short distance below the top edge of the card. */
-    const portraitFocusY = ['10.2%', '20.9%', '8.1%', '20.5%', '13.4%'];
-
-    const createSpeakerCard = ([name, role], index) => {
+    const createSpeakerCard = ([name, role, gender], index) => {
         const card = document.createElement('article');
-        const imageIndex = index % 5 + 1;
         const [column, row] = editorialLayout[index];
 
         card.className = 'speaker-card';
         card.style.setProperty('--speaker-order', String(index % 5));
         card.style.setProperty('--speaker-column', String(column));
         card.style.setProperty('--speaker-row', String(row));
-        card.style.setProperty('--speaker-portrait-y', portraitFocusY[imageIndex - 1]);
+        card.style.setProperty('--speaker-portrait-y', '0%');
         card.innerHTML = `
             <div class="speaker-card__portrait">
                 <div class="speaker-card__frame">
-                    <img src="images/speakers/speaker-${imageIndex}.png" width="397" height="793"
+                    <img src="images/speakers/profile-${gender}.webp" width="928" height="1152"
                         loading="lazy" decoding="async" alt="${name}">
                 </div>
             </div>

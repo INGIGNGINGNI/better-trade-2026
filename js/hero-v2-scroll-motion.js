@@ -895,7 +895,10 @@
                 .set('#ui', { zIndex: 5 }, 0.12)
                 .set(el.ship, { zIndex: 30 }, 0.34)
                 .set('#ui', { zIndex: 25 }, 0.34)
-                .set(el.walls, { zIndex: 4 }, M.wallCloseAt);
+                // Once the ship clears the opening, retire the wall plane before any
+                // asset changes depth relative to the ship. Leaving the walls at 20
+                // until wallCloseAt made assets snap behind them at 0.34/0.41.
+                .set(el.walls, { zIndex: 4 }, 0.34);
 
             // --- the ship sails out of the sky channel ---------------------------------
             // The wall overlay does the hiding, so the ship itself is never clipped; it

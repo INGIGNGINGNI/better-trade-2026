@@ -18,7 +18,12 @@
 
     if (route.length < 2) return;
 
+    const rail = indicator.querySelector('.journey-indicator__rail');
     const label = indicator.querySelector('.journey-indicator__label');
+    const darkSections = [...document.querySelectorAll('[data-header-theme="dark"]')];
+
+    if (!rail || !label) return;
+
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let sectionAnchors = [];
     let routeEnd = 0;
@@ -55,6 +60,97 @@
         labelRevealTimer = window.setTimeout(hideLabel, 1600);
     }
 
+    function getDarkRects() {
+        return darkSections
+            .map(section => section.getBoundingClientRect())
+            .filter(rect => rect.bottom > 0 && rect.top < window.innerHeight);
+    }
+
+    function isPointOnDark(x, y, darkRects) {
+        return darkRects.some(rect => (
+            x >= rect.left
+            && x <= rect.right
+            && y >= rect.top
+            && y < rect.bottom
+        ));
+    }
+
+    function updateDynamicColors(routeProgress) {
+        const railRect = rail.getBoundingClientRect();
+        const railX = railRect.left + (railRect.width / 2);
+        const shipY = railRect.top + (railRect.height * routeProgress);
+        const darkRects = getDarkRects();
+
+        indicator.classList.toggle(
+            'is-marker-on-dark',
+            isPointOnDark(railX, shipY, darkRects),
+        );
+
+        const lightColor = 'rgba(17, 19, 24, 0.20)';
+        const darkColor = 'rgba(255, 255, 255, 0.40)';
+        const stops = [{ position: 0, color: lightColor }];
+
+        darkRects
+            .map(rect => ({
+                start: Math.max(0, Math.min(1, (rect.top - railRect.top) / railRect.height)),
+                end: Math.max(0, Math.min(1, (rect.bottom - railRect.top) / railRect.height)),
+            }))
+            .filter(range => range.end > range.start)
+            .sort((a, b) => a.start - b.start)
+            .forEach(range => {
+                stops.push(
+                    { position: range.start, color: lightColor },
+                    { position: range.start, color: darkColor },
+                    { position: range.end, color: darkColor },
+                    { position: range.end, color: lightColor },
+                );
+            });
+
+        stops.push({ position: 1, color: lightColor });
+        const gradientStops = stops
+            .map(stop => `${stop.color} ${(stop.position * 100).toFixed(3)}%`)
+            .join(', ');
+        indicator.style.setProperty(
+            '--journey-track-background',
+            `linear-gradient(to bottom, ${gradientStops})`,
+        );
+
+        if (title) {
+            const titleRect = title.getBoundingClientRect();
+            const titleLightColor = 'var(--color-neutral-900)';
+            const titleDarkColor = 'var(--color-neutral-0)';
+            const titleStops = [{ position: 0, color: titleLightColor }];
+
+            darkRects
+                .filter(rect => rect.right > titleRect.left && rect.left < titleRect.right)
+                .map(rect => ({
+                    // The title is rotated -90deg: its local left-to-right axis runs
+                    // from the viewport bottom upward, so the section range is reversed.
+                    start: Math.max(0, Math.min(1, (titleRect.bottom - rect.bottom) / titleRect.height)),
+                    end: Math.max(0, Math.min(1, (titleRect.bottom - rect.top) / titleRect.height)),
+                }))
+                .filter(range => range.end > range.start)
+                .sort((a, b) => a.start - b.start)
+                .forEach(range => {
+                    titleStops.push(
+                        { position: range.start, color: titleLightColor },
+                        { position: range.start, color: titleDarkColor },
+                        { position: range.end, color: titleDarkColor },
+                        { position: range.end, color: titleLightColor },
+                    );
+                });
+
+            titleStops.push({ position: 1, color: titleLightColor });
+            const titleGradientStops = titleStops
+                .map(stop => `${stop.color} ${(stop.position * 100).toFixed(3)}%`)
+                .join(', ');
+            indicator.style.setProperty(
+                '--journey-title-background',
+                `linear-gradient(to right, ${titleGradientStops})`,
+            );
+        }
+    }
+
     function render() {
         frameId = null;
 
@@ -89,9 +185,8 @@
             ? 1
             : (nextActiveIndex + segmentProgress) / (route.length - 1);
 
-        const isOnDark = route[nextActiveIndex].element.dataset.headerTheme === 'dark';
         indicator.style.setProperty('--journey-progress', `${(routeProgress * 100).toFixed(2)}%`);
-        indicator.classList.toggle('is-on-dark', isOnDark);
+        updateDynamicColors(routeProgress);
         setActiveStop(nextActiveIndex);
     }
 

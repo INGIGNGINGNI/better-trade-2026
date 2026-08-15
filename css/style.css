@@ -353,6 +353,7 @@ body.menu-closing .site-header {
 
 .site-header__logo {
     width: 120px;
+    position: relative;
     display: flex;
     align-items: center;
 }
@@ -363,14 +364,17 @@ body.menu-closing .site-header {
     display: block;
     object-fit: contain;
     object-position: left center;
-    transition: filter 200ms ease;
 }
 
-/* Default is the dark logo/nav. Only over a section explicitly marked
-    data-header-theme="dark" (see the header-theme observer below) do they flip
-    light, instead of always inverting against whatever sits behind the header. */
-.site-header--on-dark .site-header__logo img {
+.site-header__logo-image--on-dark {
+    position: absolute;
+    inset: 0;
     filter: invert(1);
+    clip-path: inset(
+        var(--bt-header-logo-dark-start, 0%) 0
+        calc(100% - var(--bt-header-logo-dark-end, 0%)) 0
+    );
+    will-change: clip-path;
 }
 
 .site-header__nav {
@@ -382,6 +386,8 @@ body.menu-closing .site-header {
 }
 
 .site-header__nav a {
+    --bt-header-nav-text-light: var(--bt-header-nav-ink);
+    --bt-header-nav-text-dark: rgba(255, 255, 255, 0.82);
     position: relative;
     min-height: var(--space-10);
     padding: 0 var(--space-1);
@@ -396,7 +402,12 @@ body.menu-closing .site-header {
 }
 
 .site-header__nav-label {
-    color: inherit;
+    color: transparent;
+    background: var(--bt-header-nav-text-background, var(--bt-header-nav-text-light));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: background-color 180ms ease;
 }
 
 .site-header--on-dark .site-header__nav a {
@@ -418,6 +429,8 @@ body.menu-closing .site-header {
 
 .site-header__nav a:hover,
 .site-header__nav a:focus-visible {
+    --bt-header-nav-text-light: var(--bt-header-nav-ink-hover);
+    --bt-header-nav-text-dark: var(--bt-header-nav-ink-on-dark-hover);
     color: var(--bt-header-nav-ink-hover);
 }
 
@@ -788,6 +801,11 @@ body.menu-closing .site-header__logo img,
 body.menu-closing .site-header--on-dark .site-header__logo img,
 body.menu-open .site-header--on-dark .site-header__logo img {
     filter: none;
+}
+
+body.menu-open .site-header__logo-image--on-dark,
+body.menu-closing .site-header__logo-image--on-dark {
+    opacity: 0;
 }
 
 body.menu-open .site-header__toggle,
@@ -1342,6 +1360,8 @@ the timeline drops them under the ship once the walls have retreated. */
 
     position: relative;
     /* min-height: 180vh; */
+    overflow: clip;
+    isolation: isolate;
     background: var(--color-surface-page);
     color: var(--color-text-primary);
     display: block;
@@ -1350,7 +1370,73 @@ the timeline drops them under the ship once the walls have retreated. */
     text-align: center;
 }
 
+.concept__aurora {
+    --concept-aurora-stripes: repeating-linear-gradient(
+        100deg,
+        #fff 0%,
+        #fff 7%,
+        transparent 10%,
+        transparent 12%,
+        #fff 16%
+    );
+    --concept-aurora-rainbow: repeating-linear-gradient(
+        100deg,
+        #60a5fa 10%,
+        #e879f9 15%,
+        #60a5fa 20%,
+        #5eead4 25%,
+        #60a5fa 30%
+    );
+
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    left: -10px;
+    z-index: 0;
+    height: min(360px, 26%);
+    pointer-events: none;
+    opacity: 0.22;
+    background-image: var(--concept-aurora-stripes), var(--concept-aurora-rainbow);
+    background-position: 50% 50%, 50% 50%;
+    background-size: 300%, 200%;
+    filter: blur(10px) invert(100%);
+    -webkit-mask-image: radial-gradient(ellipse at 100% 0%, #000 40%, transparent 70%);
+    mask-image: radial-gradient(ellipse at 100% 0%, #000 40%, transparent 70%);
+}
+
+.concept__aurora::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--concept-aurora-stripes), var(--concept-aurora-rainbow);
+    background-size: 200%, 100%;
+    background-attachment: fixed;
+    mix-blend-mode: difference;
+    animation: concept-aurora-drift 60s linear infinite;
+}
+
+@keyframes concept-aurora-drift {
+    from {
+        background-position: 50% 50%, 50% 50%;
+    }
+
+    to {
+        background-position: 350% 50%, 350% 50%;
+    }
+}
+
+#concept.is-awaiting-entry .concept__aurora {
+    opacity: 0;
+}
+
+#concept.is-awaiting-entry.is-revealed .concept__aurora {
+    opacity: 0.22;
+    transition: opacity 900ms var(--ease-standard);
+}
+
 .concept__inner {
+    position: relative;
+    z-index: 1;
     display: grid;
     align-content: center;
     justify-items: center;
@@ -1384,6 +1470,7 @@ the timeline drops them under the ship once the walls have retreated. */
     min-height: 125vh;
     margin-top: var(--space-12);
     position: relative;
+    z-index: 1;
     opacity: 1;
     transform: translateY(0);
     will-change: transform, opacity;
@@ -1485,6 +1572,24 @@ the timeline drops them under the ship once the walls have retreated. */
 
     .concept__video-perspective {
         min-height: unset;
+    }
+}
+
+@media (max-width:1536px), (max-height:900px), (hover:none) and (pointer:coarse) {
+    .concept__video-scroll {
+        min-height: auto;
+    }
+
+    .concept__video-perspective {
+        min-height: unset;
+        position: relative;
+        top: auto;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .concept__aurora::after {
+        animation: none;
     }
 }
 
@@ -2022,7 +2127,7 @@ the timeline drops them under the ship once the walls have retreated. */
         margin: 0;
         font-size: var(--bt-ticket-plan-title-size);
         font-weight: var(--font-weight-regular);
-        line-height: var(--bt-ticket-plan-title-line-height);
+        /* line-height: var(--bt-ticket-plan-title-line-height); */
         letter-spacing: var(--section-heading-tracking);
     }
 
@@ -2894,34 +2999,133 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .agenda__speaker-frame {
+        --agenda-glow-a-duration: 13s;
+        --agenda-glow-b-duration: 19s;
+        --agenda-glow-a-delay: -2.4s;
+        --agenda-glow-b-delay: -8.1s;
+        --agenda-glow-a-direction: normal;
+        --agenda-glow-b-direction: reverse;
+
         position: relative;
         width: var(--bt-agenda-speaker-size);
         height: var(--bt-agenda-speaker-size);
         display: inline-grid;
         place-items: center;
-        overflow: hidden;
-        border: var(--rule-width-subtle) solid var(--color-border-editorial);
-        border-radius: 50%;
-        color: var(--color-text-muted);
+        isolation: isolate;
+        overflow: visible;
+        border: 0;
+        border-radius: 0;
         background: var(--color-surface-paper);
 
         &+.agenda__speaker-frame {
             margin-left: var(--space-2);
         }
 
-        >img {
-            width: 100%;
-            height: 100%;
-            display: block;
-            object-fit: cover;
-        }
-
     }
 
-    .agenda__speaker-frame>.bt-icon {
-        font-size: var(--bt-icon-size);
-        stroke-width: 1.75;
+    .agenda__speaker-photo {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: block;
+        overflow: hidden;
     }
+
+    .agenda__speaker-photo>img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+        object-position: center top;
+        filter: saturate(0.88) contrast(1.02);
+    }
+
+    .agenda__speaker-frame::before,
+    .agenda__speaker-frame::after {
+        content: '';
+        position: absolute;
+        inset: 12%;
+        z-index: -1;
+        border-radius: 20%;
+        filter: blur(8px);
+        pointer-events: none;
+    }
+
+    .agenda__speaker-frame::before {
+        opacity: 0.88;
+        background:
+            radial-gradient(circle at 28% 30%, var(--color-category-cyan) 0%, transparent 54%),
+            radial-gradient(circle at 72% 66%, var(--color-category-violet) 0%, transparent 54%);
+        animation: speaker-aurora-a var(--agenda-glow-a-duration) linear var(--agenda-glow-a-delay) infinite var(--agenda-glow-a-direction);
+    }
+
+    .agenda__speaker-frame::after {
+        opacity: 0.72;
+        background:
+            radial-gradient(circle at 70% 26%, var(--color-category-pink) 0%, transparent 52%),
+            radial-gradient(circle at 30% 74%, var(--color-category-yellow) 0%, transparent 56%);
+        animation: speaker-aurora-b var(--agenda-glow-b-duration) linear var(--agenda-glow-b-delay) infinite var(--agenda-glow-b-direction);
+    }
+
+    /* แต่ละ session ใช้ความเร็ว จุดเริ่ม และทิศทางต่างกัน จึงไม่เกิดภาพ glow
+       หมุนพร้อมกันเป็นแพตเทิร์นเดียว แม้ทุก avatar จะใช้ keyframes ชุดเดียวกัน */
+    .agenda__table tr:nth-child(4n + 2) .agenda__speaker-frame {
+        --agenda-glow-a-duration: 16.5s;
+        --agenda-glow-b-duration: 22s;
+        --agenda-glow-a-delay: -9.2s;
+        --agenda-glow-b-delay: -3.7s;
+        --agenda-glow-a-direction: reverse;
+        --agenda-glow-b-direction: normal;
+    }
+
+    .agenda__table tr:nth-child(4n + 3) .agenda__speaker-frame {
+        --agenda-glow-a-duration: 11.5s;
+        --agenda-glow-b-duration: 18.5s;
+        --agenda-glow-a-delay: -5.8s;
+        --agenda-glow-b-delay: -12.4s;
+    }
+
+    .agenda__table tr:nth-child(4n) .agenda__speaker-frame {
+        --agenda-glow-a-duration: 19s;
+        --agenda-glow-b-duration: 14.5s;
+        --agenda-glow-a-delay: -14.1s;
+        --agenda-glow-b-delay: -6.3s;
+        --agenda-glow-a-direction: reverse;
+    }
+
+    .agenda__speaker-frame:nth-child(2) {
+        --agenda-glow-a-duration: 17.25s;
+        --agenda-glow-b-duration: 12.75s;
+        --agenda-glow-a-delay: -11.6s;
+        --agenda-glow-b-delay: -4.4s;
+        --agenda-glow-a-direction: reverse;
+        --agenda-glow-b-direction: normal;
+    }
+
+    .agenda__speaker-frame:nth-child(3) {
+        --agenda-glow-a-duration: 14.25s;
+        --agenda-glow-b-duration: 23.5s;
+        --agenda-glow-a-delay: -7.3s;
+        --agenda-glow-b-delay: -16.8s;
+        --agenda-glow-a-direction: normal;
+        --agenda-glow-b-direction: reverse;
+    }
+
+    .agenda__table tr:nth-child(1) .agenda__speaker-frame { --agenda-glow-a-delay: -1.1s; --agenda-glow-b-delay: -10.3s; }
+    .agenda__table tr:nth-child(2) .agenda__speaker-frame { --agenda-glow-a-delay: -9.2s; --agenda-glow-b-delay: -3.7s; }
+    .agenda__table tr:nth-child(3) .agenda__speaker-frame { --agenda-glow-a-delay: -5.8s; --agenda-glow-b-delay: -12.4s; }
+    .agenda__table tr:nth-child(4) .agenda__speaker-frame { --agenda-glow-a-delay: -14.1s; --agenda-glow-b-delay: -6.3s; }
+    .agenda__table tr:nth-child(5) .agenda__speaker-frame { --agenda-glow-a-delay: -3.6s; --agenda-glow-b-delay: -15.7s; }
+    .agenda__table tr:nth-child(6) .agenda__speaker-frame { --agenda-glow-a-delay: -11.8s; --agenda-glow-b-delay: -1.9s; }
+    .agenda__table tr:nth-child(7) .agenda__speaker-frame { --agenda-glow-a-delay: -7.4s; --agenda-glow-b-delay: -17.2s; }
+    .agenda__table tr:nth-child(8) .agenda__speaker-frame { --agenda-glow-a-delay: -16.3s; --agenda-glow-b-delay: -8.6s; }
+    .agenda__table tr:nth-child(9) .agenda__speaker-frame { --agenda-glow-a-delay: -2.7s; --agenda-glow-b-delay: -13.8s; }
+    .agenda__table tr:nth-child(10) .agenda__speaker-frame { --agenda-glow-a-delay: -12.9s; --agenda-glow-b-delay: -5.1s; }
+    .agenda__table tr:nth-child(11) .agenda__speaker-frame { --agenda-glow-a-delay: -6.6s; --agenda-glow-b-delay: -18.4s; }
+    .agenda__table tr:nth-child(12) .agenda__speaker-frame { --agenda-glow-a-delay: -17.5s; --agenda-glow-b-delay: -9.7s; }
+    .agenda__table tr:nth-child(13) .agenda__speaker-frame { --agenda-glow-a-delay: -4.5s; --agenda-glow-b-delay: -14.9s; }
+    .agenda__table tr:nth-child(14) .agenda__speaker-frame { --agenda-glow-a-delay: -13.7s; --agenda-glow-b-delay: -2.8s; }
+    .agenda__table tr:nth-child(15) .agenda__speaker-frame { --agenda-glow-a-delay: -8.3s; --agenda-glow-b-delay: -16.1s; }
 
     .agenda__tags {
         margin-bottom: var(--space-4);
@@ -2934,15 +3138,17 @@ the timeline drops them under the ship once the walls have retreated. */
         --agenda-tag-color: var(--color-blue-400);
         --agenda-tag-background: var(--color-blue-100);
 
+        min-width: var(--space-12);
         min-height: var(--space-6);
         padding: 2px var(--space-3);
         display: inline-flex;
+        justify-content: center;
         align-items: center;
         border-radius: var(--pill-radius);
         font-size: var(--section-tag-size);
-        font-weight: var(--font-weight-medium);
+        font-weight: var(--font-weight-regular);
         line-height: var(--section-body-line-height);
-        letter-spacing: 0;
+        letter-spacing: 0.03em;
         text-transform: capitalize;
         color: var(--agenda-tag-color);
         background: var(--agenda-tag-background);
@@ -3484,6 +3690,11 @@ the timeline drops them under the ship once the walls have retreated. */
 
     .speaker-card:hover .speaker-card__portrait::before,
     .speaker-card:hover .speaker-card__portrait::after {
+        animation: none;
+    }
+
+    .agenda__speaker-frame::before,
+    .agenda__speaker-frame::after {
         animation: none;
     }
 }
@@ -4120,7 +4331,7 @@ the timeline drops them under the ship once the walls have retreated. */
     /* border: var(--rule-width-subtle) solid var(--color-border-editorial); */
 }
 
-/* ออร่าสเปกตรัมหลังรูปวิทยากร (รูปเป็น PNG พื้นโปร่ง แสงจึงลอดออกมารอบตัวคน)
+/* ออร่าสเปกตรัมหลังรูปวิทยากร (รูปเป็น WebP พื้นโปร่ง แสงจึงลอดออกมารอบตัวคน)
    ตั้งใจไม่ครอบด้วย overflow: hidden อีกต่อไป (เอาออกที่ .speaker-card__portrait
    ด้านล่าง) เพื่อให้แสงฟุ้งล้นออกไปนอกกรอบรูปได้จริงตามที่ต้องการ
    เพื่อไม่ให้ไปทับการ์ดใบข้างเคียง ต้องคุมด้วย "ขนาด" แทนการ "ตัดขอบ":
@@ -4297,11 +4508,11 @@ the timeline drops them under the ship once the walls have retreated. */
 /* จอสัมผัสไม่มี hover ให้เห็น โชว์ออร่าจาง ๆ ค้างไว้แทน (ไม่ต้องขยับ) */
 @media (hover: none) {
     .speaker-card__portrait::before {
-        opacity: 0.22;
+        opacity: 0;
     }
 
     .speaker-card__portrait::after {
-        opacity: 0.17;
+        opacity: 0;
     }
 }
 
@@ -5425,6 +5636,8 @@ the timeline drops them under the ship once the walls have retreated. */
     --journey-edge-gap: var(--space-20);
     --journey-title-length: 160px;
     --journey-track-color: rgba(17, 19, 24, 0.20);
+    --journey-track-background: var(--journey-track-color);
+    --journey-title-background: var(--color-neutral-900);
     --journey-label-color: var(--color-neutral-900);
     --journey-ship-color: var(--color-neutral-900);
     --journey-ship-background: rgba(255, 255, 255, 0.92);
@@ -5450,19 +5663,22 @@ the timeline drops them under the ship once the walls have retreated. */
     transform: translate3d(0, 0, 0);
 }
 
-.journey-indicator.is-on-dark {
-    --journey-track-color: rgba(255, 255, 255, 0.40);
+.journey-indicator.is-marker-on-dark {
     --journey-label-color: var(--color-neutral-0);
     --journey-ship-color: var(--color-neutral-0);
     --journey-ship-background: rgba(13, 15, 20, 0.88);
     --journey-ship-border: rgba(255, 255, 255, 0.28);
 }
 
+
 .journey-indicator__title {
     position: absolute;
-    top: calc(var(--journey-title-length) - 6px);
+    top: calc(var(--journey-title-length) - 24px);
     left: 16px;
-    color: var(--journey-label-color);
+    color: transparent;
+    background: var(--journey-title-background);
+    -webkit-background-clip: text;
+    background-clip: text;
     font-size: var(--font-size-12);
     font-weight: var(--font-weight-regular);
     line-height: 1;
@@ -5470,7 +5686,7 @@ the timeline drops them under the ship once the walls have retreated. */
     white-space: nowrap;
     transform: rotate(-90deg);
     transform-origin: left center;
-    transition: color var(--duration-fast) var(--ease-standard);
+    -webkit-text-fill-color: transparent;
 }
 
 .journey-indicator__rail {
@@ -5493,7 +5709,7 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 .journey-indicator__track {
-    background: var(--journey-track-color);
+    background: var(--journey-track-background);
     transition: background-color var(--duration-fast) var(--ease-standard);
 }
 
