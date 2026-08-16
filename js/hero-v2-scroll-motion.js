@@ -34,6 +34,8 @@
         // Ceiling on the poster title's height, as a share of the viewport. Only bites on
         // short viewports, where a width-driven title would overlap the CTA block below.
         const TITLE_MAX_VH = 0.289;
+        const TITLE_UI_GAP = { min: 24, preferredVh: 0.04, max: 44 };
+        const UI_BOTTOM_RESERVE = 32;
         // The settled video sits 48px below the description. Its entrance translation
         // subtracts this same distance so adding layout space does not push the moving
         // frame farther away before it reaches the final position.
@@ -85,8 +87,21 @@
             legacyContentHeightShare: 0.7344,
         };
         const HERO_RUN_PROGRESS_EVENT = 'bettertrade:hero-run-progress';
+        const HERO_SCROLL_CUE_EVENT = 'bettertrade:hero-scroll-cue';
+        const HERO_SCROLL_CUE_REVEAL_AT = 0.34;
         let heroRunProgressMode = '';
         let heroRunProgressValue = -1;
+        let heroScrollCueVisible = false;
+
+        function publishHeroScrollCueState(visible) {
+            window.__betterTradeHeroScrollCueVisible = visible;
+            if (visible === heroScrollCueVisible) return;
+
+            heroScrollCueVisible = visible;
+            window.dispatchEvent(new CustomEvent(HERO_SCROLL_CUE_EVENT, {
+                detail: { visible },
+            }));
+        }
 
         function publishHeroRunProgress(mode, progress = 0) {
             const value = clamp(progress, 0, 1);
@@ -102,22 +117,26 @@
 
         function updateHeroRunProgress() {
             if (STATIC_FRAME) {
+                publishHeroScrollCueState(false);
                 publishHeroRunProgress('hidden');
                 return;
             }
 
             if (isMobileStatic() || reduced) {
+                publishHeroScrollCueState(false);
                 const revealAt = Math.max(0, el.concept.offsetTop - window.innerHeight * 0.5);
                 publishHeroRunProgress(window.scrollY >= revealAt ? 'ready' : 'hidden');
                 return;
             }
 
             if (shipRunHasCompleted) {
+                publishHeroScrollCueState(true);
                 publishHeroRunProgress(window.scrollY > 10 ? 'ready' : 'hidden', 1);
                 return;
             }
 
             const timelineTime = scrollTL?.time() || 0;
+            publishHeroScrollCueState(timelineTime >= HERO_SCROLL_CUE_REVEAL_AT);
             if (timelineTime < SHIP_RUN.startAt) {
                 publishHeroRunProgress('hidden');
                 return;
@@ -728,10 +747,16 @@
             const heroScrollDistance = Math.max(1, scrollerHeight - vh);
             document.getElementById('scroller').style.height = STATIC_FRAME ? vh + 'px' : scrollerHeight + 'px';
             el.stagewrap.style.height = mobileStatic ? `${scrollerHeight}px` : `${vh}px`;
+            const ui = document.getElementById('ui');
+            const titleUiGap = clamp(vh * TITLE_UI_GAP.preferredVh, TITLE_UI_GAP.min, TITLE_UI_GAP.max);
+            const uiBottomReserve = mobileStatic ? staticBottomGap : UI_BOTTOM_RESERVE;
+            const uiHeight = ui?.offsetHeight || 0;
+            const uiMaxTop = Math.max(0, vh - uiHeight - uiBottomReserve);
+            const titleMaxHeightByUi = Math.max(
+                0,
+                2 * (uiMaxTop - titleUiGap - (vh * POSTER.title.cy / 100))
+            );
             if (!mobileStatic) {
-                const uiTop = Math.min(vh * 0.55, vh - 368);
-                const ui = document.getElementById('ui');
-                ui.style.top = `${uiTop}px`;
                 ui.style.zIndex = '25';
             }
             if (STATIC_FRAME) {
@@ -777,7 +802,10 @@
                 // enough to collide with the CTA/date block below it. Cap its poster height
                 // to a share of the viewport so both keep their own room.
                 if (!isAssetIcon && hB > 0) {
-                    wA = Math.min(wA, vh * TITLE_MAX_VH * (wB / hB));
+                    const titleMaxHeight = titleMaxHeightByUi > 0
+                        ? Math.min(vh * TITLE_MAX_VH, titleMaxHeightByUi)
+                        : vh * TITLE_MAX_VH;
+                    wA = Math.min(wA, titleMaxHeight * (wB / hB));
                 }
                 const posterCy = po.cy + (isAssetIcon ? posterIconShiftY(vw) : 0);
                 assets[k] = {
@@ -788,6 +816,19 @@
                     rotB: kv.rot,
                 };
             });
+
+            if (!mobileStatic && ui) {
+                const titleAsset = assets.title;
+                const titleNode = el.title;
+                const titleHeight = titleNode.offsetHeight * titleAsset.scale;
+                const titleBottom = (vh * POSTER.title.cy / 100) + titleHeight / 2;
+                const uiMinTop = titleBottom + titleUiGap;
+                const uiPreferredTop = Math.min(vh * 0.55, vh - 368);
+                const uiTop = uiMaxTop >= uiMinTop
+                    ? clamp(uiPreferredTop, uiMinTop, uiMaxTop)
+                    : uiMaxTop;
+                ui.style.top = `${uiTop}px`;
+            }
 
             // Where the ship starts: just past the right edge of the viewport, low in the
             // frame, so its run-in crosses the right wall before it reaches the channel.

@@ -160,6 +160,7 @@
     --font-size-24: 24px;
     --font-size-28: 28px;
     --font-size-32: 32px;
+    --font-size-36: 36px;
     --font-size-40: 40px;
     --font-size-48: 48px;
     --font-size-56: 56px;
@@ -408,10 +409,11 @@
     --bt-agenda-alternative: var(--color-topic-alternative);
     --bt-agenda-aside-width: calc(var(--space-32) + var(--space-32) + var(--space-16));
     --bt-agenda-time-width: var(--space-28);
+    --bt-agenda-time-size: var(--font-size-16);
     --bt-agenda-speaker-size: calc(var(--space-16) + var(--space-2));
     --bt-agenda-speaker-size-mobile: calc(var(--space-12) + var(--space-3));
     --bt-agenda-speaker-column-width: calc(var(--bt-agenda-speaker-size) + var(--bt-agenda-speaker-size) + var(--bt-agenda-speaker-size) + var(--space-2) + var(--space-2) + var(--space-2));
-    --bt-agenda-speaker-column-width-mobile: calc(var(--space-28) + var(--space-10));
+    --bt-agenda-speaker-column-width-mobile: calc((var(--bt-agenda-speaker-size-mobile) * 2) + var(--space-2));
 
     --bt-header-action-width: calc(var(--space-20) + var(--space-10));
     --bt-header-action-height: var(--space-10);
@@ -544,6 +546,19 @@
        และ var(--spectrum-vertical-legacy) ได้เลย */
     --spectrum: var(--gradient-kv-spectrum);
     --spectrum-vertical: var(--gradient-kv-spectrum-vertical);
+
+    /* Token เฉพาะ scroll cue ใน hero-v2 */
+    --bt-hero-scroll-cue-width: var(--space-24);
+    --bt-hero-scroll-cue-bottom: var(--space-8);
+    --bt-hero-scroll-cue-bottom-sm: var(--space-6);
+    --bt-hero-scroll-cue-gap: var(--space-2);
+    --bt-hero-scroll-cue-text-size: var(--font-size-12);
+    --bt-hero-scroll-cue-mouse-width: var(--space-5);
+    --bt-hero-scroll-cue-mouse-height: var(--space-8);
+    --bt-hero-scroll-cue-dot-width: var(--space-1);
+    --bt-hero-scroll-cue-dot-height: var(--space-1);
+    --bt-hero-scroll-cue-border-width: var(--border-width-2);
+    --bt-hero-scroll-cue-ink: var(--color-neutral-0);
 
     /* ค่าเริ่มต้นของ custom scrollbar ก่อน JavaScript คำนวณค่าจริง */
     --thumb-height: 80px;

@@ -10,8 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Baskervville:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="fonts/fonts.css">
-    <link rel="stylesheet" href="css/main.css?v=15">
-    <link rel="stylesheet" href="css/style.css?v=183">
+    <link rel="stylesheet" href="css/main.css?v=23">
+    <link rel="stylesheet" href="css/style.css?v=195">
 </head>
 
 <body class="is-loading">
@@ -277,6 +277,12 @@
                 </video>
             </div>
             <div id="ship-run-whiteout" aria-hidden="true"></div>
+            <button class="hero-scroll-cue" type="button" aria-label="เลื่อนลงเพื่อดูต่อ" data-hero-scroll-cue>
+                <span class="hero-scroll-cue__mouse" aria-hidden="true">
+                    <span class="hero-scroll-cue__wheel"></span>
+                </span>
+                <span class="hero-scroll-cue__text">Scroll Down</span>
+            </button>
 
             <div id="loader" role="status" aria-label="กำลังโหลด Better Trade 2026">
                 <div class="loader-surface"></div>
@@ -308,7 +314,7 @@
         <div class="concept__aurora" aria-hidden="true"></div>
         <div class="concept__inner container">
             <h2 id="concept-title" class="bt-section-title">โลกกำลังเปลี่ยนเร็วกว่าที่เคย <br>แต่<span class="bt-title-highlight">โอกาสก็เช่นกัน</span></h2>
-            <p class="concept__description">BETTER TRADE รวบรวมความรู้ เครื่องมือ และ Playbook ที่จะช่วยให้คุณมองเห็นโอกาส <br class="d-lg-block d-none">ตัดสินใจอย่างมั่นใจ และเติบโตไปพร้อมกับโลกยุคใหม่</p>
+            <p class="concept__description">BETTER TRADE รวบรวมความรู้ เครื่องมือ และ Playbook ที่จะช่วยให้คุณมองเห็นโอกาส <br class="d-xl-block d-none">ตัดสินใจอย่างมั่นใจ และเติบโตไปพร้อมกับโลกยุคใหม่</p>
         </div>
         <div class="concept__video-scroll container">
             <div class="concept__video-perspective">
@@ -1253,8 +1259,9 @@
                     </div>
                 </article>
             </div>
+        </div>
 
-            <div class="past-event__marquee" aria-label="พื้นที่เตรียมใส่ภาพบรรยากาศงาน Better Trade ที่ผ่านมา" tabindex="0">
+        <div class="past-event__marquee" aria-label="พื้นที่เตรียมใส่ภาพบรรยากาศงาน Better Trade ที่ผ่านมา" tabindex="0">
                 <div class="past-event__marquee-track">
                     <div class="past-event__marquee-group">
                         <figure class="past-event__slide">
@@ -1312,7 +1319,6 @@
                         </figure>
                     </div>
                 </div>
-            </div>
         </div>
     </section>
     <!-- End Section : Past Event -->
@@ -1412,7 +1418,8 @@
 
     <script src="vendor/gsap/gsap.min.js"></script>
     <script src="vendor/gsap/ScrollTrigger.min.js"></script>
-    <script src="js/hero-v2-scroll-motion.js?v=28"></script>
+    <script src="js/hero-v2-scroll-motion.js?v=30"></script>
+    <script src="js/hero-v2-scroll-cue.js?v=4"></script>
     <script src="js/topics-reveal.js?v=4"></script>
     <script src="js/topics-assets-motion.js?v=7"></script>
     <!-- หลัง hero เพราะ ScrollTrigger refresh ตามลำดับที่สร้าง และ speaker อยู่ใต้ hero ในหน้า -->
