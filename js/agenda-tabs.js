@@ -10,11 +10,8 @@
         const updateIndicator = (activeTab) => {
             if (!activeTab || tabList.closest('[hidden]')) return false;
 
-            const indicatorHeight = indicator ? indicator.offsetHeight : 0;
-            const indicatorY = activeTab.offsetTop + activeTab.offsetHeight - indicatorHeight;
-
             tabList.style.setProperty('--agenda-tab-indicator-x', `${activeTab.offsetLeft}px`);
-            tabList.style.setProperty('--agenda-tab-indicator-y', `${indicatorY}px`);
+            tabList.style.setProperty('--agenda-tab-indicator-y', '0px');
             tabList.style.setProperty('--agenda-tab-indicator-width', `${activeTab.offsetWidth}px`);
 
             return true;

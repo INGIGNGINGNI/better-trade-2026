@@ -6,12 +6,12 @@
     const route = [
         { id: 'concept', label: 'Concept' },
         { id: 'featured-topics', label: 'Topics' },
-        { id: 'ticket', label: 'Ticket' },
+        { id: 'ticket', label: 'Ticket Price' },
         { id: 'agenda', label: 'Agenda' },
-        { id: 'expectation', label: 'Experience' },
+        { id: 'expectation', label: 'Expectation' },
         { id: 'floor-plan', label: 'Floor Plan' },
         { id: 'speaker', label: 'Speakers' },
-        { id: 'moderator', label: 'Moderators' },
+        { id: 'moderator', label: 'Moderators & MC' },
         { id: 'past-event', label: 'Past Event' },
     ].map(stop => ({ ...stop, element: document.getElementById(stop.id) }))
         .filter(stop => stop.element);

@@ -360,7 +360,7 @@
     --bt-space-24: var(--space-24);
     --bt-space-28: var(--space-28);
     --bt-space-32: var(--space-32);
-    --bt-icon-size: 18px;
+    --bt-icon-size: var(--font-size-18);
 
     /* เส้นขอบและมุมโค้ง */
     --bt-radius-1: var(--radius-1);
@@ -401,6 +401,25 @@
     --bt-ticket-workshop: var(--color-access-workshop);
     --bt-ticket-private-class: var(--color-access-private-class);
     --bt-ticket-playbook: var(--color-access-playbook);
+    --bt-ticket-access-icon-size: var(--space-6);
+    --bt-ticket-format-icon-size: var(--bt-ticket-access-icon-size);
+    --bt-ticket-benefit-icon-size: var(--space-16);
+    --bt-ticket-benefit-icon-size-sm: var(--space-12);
+    --bt-ticket-benefit-text-size: var(--font-size-16);
+    --bt-ticket-benefit-text-color: var(--color-text-primary);
+    --bt-ticket-benefit-text-weight: var(--font-weight-regular);
+    --bt-ticket-benefit-bg: var(--color-neutral-50);
+    --bt-ticket-benefit-radius: var(--radius-2);
+    --bt-ticket-benefit-block-padding-y: var(--space-10);
+    --bt-ticket-benefit-block-padding-y-sm: var(--space-8);
+    --bt-ticket-benefit-block-padding-x: var(--space-10);
+    --bt-ticket-benefit-block-padding-x-sm: var(--space-6);
+    --bt-ticket-benefit-rule-length: var(--space-24);
+    --bt-ticket-benefit-rule-length-sm: var(--space-20);
+    --bt-ticket-benefit-padding-x: var(--space-10);
+    --bt-ticket-benefit-padding-x-md: var(--space-6);
+    --bt-ticket-benefit-padding-x-sm: var(--space-3);
+    --bt-ticket-benefit-icon-shadow: drop-shadow(0 var(--space-2) var(--space-4) rgba(17, 19, 24, 0.12));
 
     /* สีและสัดส่วนเฉพาะ Agenda */
     --bt-agenda-capital: var(--color-topic-capital);
@@ -559,6 +578,19 @@
     --bt-hero-scroll-cue-dot-height: var(--space-1);
     --bt-hero-scroll-cue-border-width: var(--border-width-2);
     --bt-hero-scroll-cue-ink: var(--color-neutral-0);
+    --bt-hero-countdown-divider-width: var(--space-12);
+    --bt-hero-countdown-divider-width-sm: var(--space-10);
+    --bt-hero-countdown-divider-ratio: 6.62;
+    --bt-journey-ship-width: var(--space-8);
+    --bt-journey-ship-height: var(--space-10);
+    --bt-journey-label-padding-y: var(--space-2);
+    --bt-journey-label-padding-x: var(--space-4);
+    --bt-journey-label-radius: var(--radius-1);
+    --bt-journey-label-bg: var(--color-neutral-100);
+    --bt-journey-label-bg-dark: var(--color-neutral-700);
+    --bt-journey-label-shadow: none;
+    --bt-journey-label-star-size: var(--space-3);
+    --bt-journey-label-star-offset: calc(var(--bt-journey-label-star-size) / -2);
 
     /* ค่าเริ่มต้นของ custom scrollbar ก่อน JavaScript คำนวณค่าจริง */
     --thumb-height: 80px;
