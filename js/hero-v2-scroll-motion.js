@@ -78,6 +78,7 @@
             scrollDuration: 0.86,
             whiteoutDuration: 0.42,
             conceptRevealDelay: 720,
+            playbackRate: 2,
             /* ship-new-3 is a 16:9 composition centred and bottom-aligned. */
             canvasRatio: 2560 / 1440,
             contentHeightShare: 0.7333,
@@ -89,6 +90,7 @@
         const HERO_RUN_PROGRESS_EVENT = 'bettertrade:hero-run-progress';
         const HERO_SCROLL_CUE_EVENT = 'bettertrade:hero-scroll-cue';
         const HERO_SCROLL_CUE_REVEAL_AT = 0.34;
+        const HERO_SCROLL_ACCELERATION = 1.65;
         let heroRunProgressMode = '';
         let heroRunProgressValue = -1;
         let heroScrollCueVisible = false;
@@ -397,6 +399,8 @@
         });
         el.shipRunVideo.addEventListener('seeked', alignShipRunAlpha);
         el.shipRunVideo.addEventListener('timeupdate', alignShipRunAlpha);
+        el.shipRunVideo.addEventListener('timeupdate', updateShipRunPlaybackProgress);
+        el.shipRunVideo.addEventListener('ended', completeShipRunScrub);
         el.shipRunAlpha.addEventListener('loadeddata', alignShipRunAlpha);
         el.shipRunVideo.addEventListener('loadedmetadata', () => {
             // A reload can restore the browser midway down the page. Prime the video
@@ -437,9 +441,21 @@
             return SHIP_RUN.duration;
         }
 
+        function setShipRunPlaybackRate() {
+            [el.shipRunVideo, el.shipRunAlpha].forEach(video => {
+                video.defaultPlaybackRate = SHIP_RUN.playbackRate;
+                video.playbackRate = SHIP_RUN.playbackRate;
+            });
+        }
+
         function syncShipRunToScroll() {
+            if (shipRunScrubState === 'playing') {
+                updateShipRunPlaybackProgress();
+                return;
+            }
+
             shipRunTargetTime = clamp(
-                shipRunState.time,
+                shipRunState.time * SHIP_RUN.playbackRate,
                 0,
                 Math.max(0, getShipRunDuration() - 0.001)
             );
@@ -465,11 +481,46 @@
             const whiteoutStart = getShipRunDuration() - SHIP_RUN.whiteoutDuration;
             gsap.set(el.shipRunWhiteout, {
                 opacity: clamp(
-                    (shipRunState.time - whiteoutStart) / SHIP_RUN.whiteoutDuration,
+                    (shipRunTargetTime - whiteoutStart) / SHIP_RUN.whiteoutDuration,
                     0,
                     1
                 ),
             });
+
+            if (shipRunScrubState === 'scrubbing'
+                && shipRunTargetTime >= getShipRunDuration() - 1 / SHIP_RUN.fps) {
+                completeShipRunScrub();
+            }
+        }
+
+        function updateShipRunPlaybackProgress() {
+            if (shipRunScrubState !== 'playing') return;
+            const duration = getShipRunDuration();
+            if (duration <= 0) return;
+            const currentTime = clamp(el.shipRunVideo.currentTime, 0, duration);
+            const whiteoutStart = duration - SHIP_RUN.whiteoutDuration;
+            gsap.set(el.shipRunWhiteout, {
+                opacity: clamp(
+                    (currentTime - whiteoutStart) / SHIP_RUN.whiteoutDuration,
+                    0,
+                    1
+                ),
+            });
+            publishHeroRunProgress('transition', currentTime / duration);
+        }
+
+        function playShipRunVideo(video) {
+            setShipRunPlaybackRate();
+            const playPromise = video.play();
+            if (playPromise && typeof playPromise.catch === 'function') {
+                playPromise.catch(() => {
+                    // ถ้า browser ไม่ยอม autoplay แม้จะ muted ให้กลับไปใช้ scroll scrub เดิม
+                    // เพื่อให้ sequence ยังทำงานต่อได้แทนที่จะค้างภาพว่าง
+                    if (shipRunScrubState !== 'playing') return;
+                    shipRunScrubState = 'scrubbing';
+                    syncShipRunToScroll();
+                });
+            }
         }
 
         function maintainCompletedHeroScene() {
@@ -507,6 +558,7 @@
             shipRunHeroRestored = true;
             el.shipRunVideo.pause();
             el.shipRunAlpha.pause();
+            setShipRunPlaybackRate();
             if (el.shipRunVideo.readyState >= 1) el.shipRunVideo.currentTime = 0;
             if (el.shipRunAlpha.readyState >= 1) el.shipRunAlpha.currentTime = 0;
             gsap.killTweensOf(el.shipRunWhiteout);
@@ -528,6 +580,7 @@
             shipRunTargetTime = 0;
             el.shipRunVideo.pause();
             el.shipRunAlpha.pause();
+            setShipRunPlaybackRate();
             if (el.shipRunVideo.readyState >= 1) el.shipRunVideo.currentTime = 0;
             if (el.shipRunAlpha.readyState >= 1) el.shipRunAlpha.currentTime = 0;
             gsap.set(el.shipRunWhiteout, { opacity: 0 });
@@ -539,10 +592,12 @@
         }
 
         function completeShipRunScrub() {
-            if (shipRunScrubState !== 'scrubbing') return;
+            if (shipRunScrubState !== 'scrubbing' && shipRunScrubState !== 'playing') return;
             shipRunScrubState = 'complete';
             shipRunHasCompleted = true;
             shipRunHeroRestored = false;
+            el.shipRunVideo.pause();
+            el.shipRunAlpha.pause();
             gsap.set(el.shipRunWhiteout, { opacity: 1 });
             updateHeroRunProgress();
 
@@ -561,9 +616,11 @@
                 restoreCompletedHeroScene();
                 return;
             }
-            if (shipRunScrubState === 'scrubbing') return;
-            shipRunScrubState = 'scrubbing';
+            if (shipRunScrubState === 'scrubbing' || shipRunScrubState === 'playing') return;
+            shipRunScrubState = 'playing';
             shipRunHeroRestored = false;
+            shipRunState.time = 0;
+            shipRunTargetTime = 0;
             el.concept.classList.add('is-awaiting-entry');
             el.concept.classList.remove('is-revealed');
             gsap.set(el.shipRunWhiteout, { opacity: 0 });
@@ -572,7 +629,10 @@
 
             el.shipRunVideo.pause();
             el.shipRunAlpha.pause();
-            syncShipRunToScroll();
+            if (el.shipRunVideo.readyState >= 1) el.shipRunVideo.currentTime = 0;
+            if (el.shipRunAlpha.readyState >= 1) el.shipRunAlpha.currentTime = 0;
+            playShipRunVideo(el.shipRunVideo);
+            playShipRunVideo(el.shipRunAlpha);
             requestShipRunRender();
             updateHeroRunProgress();
         }
@@ -741,9 +801,12 @@
 
             // Scroll length = the pinned view + beat 1 + however far beat 2 actually moves,
             // so a short camera move never leaves dead scroll behind it.
+            // Lowering only the extra pinned distance makes each wheel/touch scroll move
+            // the hero timeline further without changing the first viewport composition.
+            const desktopScrollExtra = (vh * 4.1 + PAN * 1.4) / HERO_SCROLL_ACCELERATION;
             const scrollerHeight = mobileStatic
                 ? bgH
-                : vh + vh * 4.1 + PAN * 1.4;
+                : vh + desktopScrollExtra;
             const heroScrollDistance = Math.max(1, scrollerHeight - vh);
             document.getElementById('scroller').style.height = STATIC_FRAME ? vh + 'px' : scrollerHeight + 'px';
             el.stagewrap.style.height = mobileStatic ? `${scrollerHeight}px` : `${vh}px`;
@@ -1076,7 +1139,7 @@
                         ease: 'none',
                         onStart: startShipRunScrub,
                         onUpdate: syncShipRunToScroll,
-                        onComplete: completeShipRunScrub,
+                        onComplete: updateShipRunPlaybackProgress,
                         onReverseComplete: resetShipRunScrub,
                     }, SHIP_RUN.startAt);
             }

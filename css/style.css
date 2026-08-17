@@ -1458,24 +1458,30 @@ the timeline drops them under the ship once the walls have retreated. */
 #concept {
     --bt-concept-description-size: var(--section-topic-size);
     --bt-concept-description-line-height: var(--section-topic-line-height);
-    --bt-concept-bg-overlay: rgba(255, 255, 255, 0.85);
+    --bt-concept-bg-opacity: 0.15;
 
     position: relative;
     /* min-height: 180vh; */
     overflow: clip;
     isolation: isolate;
-    background-color: var(--color-surface-page);
-    background-image:
-        linear-gradient(var(--bt-concept-bg-overlay), var(--bt-concept-bg-overlay)),
-        url("../images/concept-room-bg.webp");
-    background-repeat: no-repeat;
-    background-position: center top;
-    background-size: cover;
+    background: var(--color-surface-page);
     color: var(--color-text-primary);
     display: block;
     padding: var(--section-padding-y) 0;
     font-family: var(--font-family-base);
     text-align: center;
+}
+
+#concept::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: url("../images/concept-room-bg.webp") center top / cover no-repeat;
+    opacity: var(--bt-concept-bg-opacity);
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(180deg, transparent 0px, transparent 120px, #000 280px);
+    mask-image: linear-gradient(180deg, transparent 0px, transparent 120px, #000 280px);
 }
 
 .concept__aurora {
@@ -1669,8 +1675,7 @@ the timeline drops them under the ship once the walls have retreated. */
 
 @media (max-width:575px) {
     #concept {
-        --bt-concept-bg-overlay: rgba(255, 255, 255, 0.75);
-        background-position: right top;
+        --bt-concept-bg-opacity: 0.25;
     }
 
     .concept__description {
