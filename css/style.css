@@ -2567,8 +2567,11 @@ the timeline drops them under the ship once the walls have retreated. */
         }
     }
 
-    @media (max-width:1199px) {
+    @media (max-width:1399px) {
         --bt-ticket-plan-title-size: var(--font-size-36);
+    }
+
+    @media (max-width:1199px) {
         --bt-ticket-price-size: var(--font-size-28);
 
         .ticket__plan-header h3 {
@@ -2772,6 +2775,12 @@ the timeline drops them under the ship once the walls have retreated. */
 
                 &:nth-child(even) {
                     padding-left: var(--space-6);
+                }
+
+                .ticket__benefit-icon {
+                    width: var(--bt-ticket-benefit-icon-size-xs);
+                    height: var(--bt-ticket-benefit-icon-size-xs);
+                    flex: 0 0 auto;
                 }
             }
         }

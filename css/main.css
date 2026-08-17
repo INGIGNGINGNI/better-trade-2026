@@ -403,8 +403,9 @@
     --bt-ticket-playbook: var(--color-access-playbook);
     --bt-ticket-access-icon-size: var(--space-6);
     --bt-ticket-format-icon-size: var(--bt-ticket-access-icon-size);
-    --bt-ticket-benefit-icon-size: var(--space-16);
-    --bt-ticket-benefit-icon-size-sm: var(--space-12);
+    --bt-ticket-benefit-icon-size: var(--space-12);
+    --bt-ticket-benefit-icon-size-sm: var(--space-10);
+    --bt-ticket-benefit-icon-size-xs: var(--space-8);
     --bt-ticket-benefit-text-size: var(--font-size-16);
     --bt-ticket-benefit-text-color: var(--color-text-primary);
     --bt-ticket-benefit-text-weight: var(--font-weight-regular);
