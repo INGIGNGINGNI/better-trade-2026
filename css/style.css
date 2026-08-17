@@ -1668,6 +1668,11 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 @media (max-width:575px) {
+    #concept {
+        --bt-concept-bg-overlay: rgba(255, 255, 255, 0.75);
+        background-position: right top;
+    }
+
     .concept__description {
         --bt-concept-description-size: var(--section-topic-size-xs);
         --bt-concept-description-line-height: var(--section-topic-line-height-xs);
@@ -4920,7 +4925,6 @@ the timeline drops them under the ship once the walls have retreated. */
 
 .past-event__marquee {
     --marquee-fade: clamp(24px, 5vw, 80px);
-    --marquee-gap: var(--space-6);
 
     width: 100%;
     margin-top: var(--space-6);
@@ -4939,16 +4943,8 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 .past-event__marquee-track {
-    display: flex;
-    width: max-content;
-    gap: 0;
-    animation: past-event-marquee 34s linear infinite;
-    will-change: transform;
-}
-
-.past-event__marquee:hover .past-event__marquee-track,
-.past-event__marquee:focus-visible .past-event__marquee-track {
-    animation-play-state: paused;
+    align-items: stretch;
+    transition-timing-function: linear;
 }
 
 .past-event__marquee:focus-visible {
@@ -4956,15 +4952,9 @@ the timeline drops them under the ship once the walls have retreated. */
     outline-offset: var(--space-2);
 }
 
-.past-event__marquee-group {
-    display: flex;
-    flex-shrink: 0;
-    gap: var(--marquee-gap);
-    padding-inline-end: var(--marquee-gap);
-}
-
 .past-event__slide {
-    flex: 0 0 clamp(220px, 22vw, 352px);
+    width: clamp(220px, 22vw, 352px);
+    height: auto;
     margin: 0;
 }
 
@@ -4989,12 +4979,6 @@ the timeline drops them under the ship once the walls have retreated. */
     stroke-width: 1.25;
     stroke-linecap: round;
     stroke-linejoin: round;
-}
-
-@keyframes past-event-marquee {
-    to {
-        transform: translateX(-50%);
-    }
 }
 
 @media (max-width: 991px) {
@@ -5044,9 +5028,6 @@ the timeline drops them under the ship once the walls have retreated. */
         gap: var(--space-4);
     }
 
-    .past-event__marquee {
-        --marquee-gap: var(--space-4);
-    }
 }
 
 @media (max-width: 575px) {
@@ -5063,11 +5044,7 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .past-event__slide {
-        flex-basis: 240px;
-    }
-
-    .past-event__marquee {
-        --marquee-gap: var(--space-3);
+        width: 240px;
     }
 }
 
@@ -5081,13 +5058,6 @@ the timeline drops them under the ship once the walls have retreated. */
         display: none;
     }
 
-    .past-event__marquee-track {
-        animation: none;
-    }
-
-    .past-event__marquee-group[aria-hidden="true"] {
-        display: none;
-    }
 }
 
 /* หมุนรอบจุดกึ่งกลางพร้อมเลื่อน/ย่อขยายเล็กน้อยไปด้วย ทำให้ blob ลอยเป็นวงอิสระ

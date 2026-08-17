@@ -10,8 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Baskervville:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="fonts/fonts.css">
+    <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="css/main.css?v=38">
-    <link rel="stylesheet" href="css/style.css?v=215">
+    <link rel="stylesheet" href="css/style.css?v=216">
 </head>
 
 <body class="is-loading">
@@ -1258,63 +1259,48 @@
             </div>
         </div>
 
-        <div class="past-event__marquee" aria-label="พื้นที่เตรียมใส่ภาพบรรยากาศงาน Better Trade ที่ผ่านมา" tabindex="0">
-            <div class="past-event__marquee-track">
-                <div class="past-event__marquee-group">
-                    <figure class="past-event__slide">
-                        <div class="past-event__slide-frame">
-                            <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-camera"></use></svg>
-                        </div>
-                    </figure>
-                    <figure class="past-event__slide">
-                        <div class="past-event__slide-frame">
-                            <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-camera"></use></svg>
-                        </div>
-                    </figure>
-                    <figure class="past-event__slide">
-                        <div class="past-event__slide-frame">
-                            <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-camera"></use></svg>
-                        </div>
-                    </figure>
-                    <figure class="past-event__slide">
-                        <div class="past-event__slide-frame">
-                            <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-camera"></use></svg>
-                        </div>
-                    </figure>
-                    <figure class="past-event__slide">
-                        <div class="past-event__slide-frame">
-                            <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-camera"></use></svg>
-                        </div>
-                    </figure>
-                </div>
-
-                <div class="past-event__marquee-group" aria-hidden="true">
-                    <figure class="past-event__slide">
-                        <div class="past-event__slide-frame">
-                            <svg class="bt-icon"><use href="images/icons.svg#icon-camera"></use></svg>
-                        </div>
-                    </figure>
-                    <figure class="past-event__slide">
-                        <div class="past-event__slide-frame">
-                            <svg class="bt-icon"><use href="images/icons.svg#icon-camera"></use></svg>
-                        </div>
-                    </figure>
-                    <figure class="past-event__slide">
-                        <div class="past-event__slide-frame">
-                            <svg class="bt-icon"><use href="images/icons.svg#icon-camera"></use></svg>
-                        </div>
-                    </figure>
-                    <figure class="past-event__slide">
-                        <div class="past-event__slide-frame">
-                            <svg class="bt-icon"><use href="images/icons.svg#icon-camera"></use></svg>
-                        </div>
-                    </figure>
-                    <figure class="past-event__slide">
-                        <div class="past-event__slide-frame">
-                            <svg class="bt-icon"><use href="images/icons.svg#icon-camera"></use></svg>
-                        </div>
-                    </figure>
-                </div>
+        <div class="past-event__marquee swiper" aria-label="พื้นที่เตรียมใส่ภาพบรรยากาศงาน Better Trade ที่ผ่านมา" data-past-event-swiper>
+            <div class="past-event__marquee-track swiper-wrapper">
+                <figure class="past-event__slide swiper-slide">
+                    <div class="past-event__slide-frame">
+                        <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-camera"></use></svg>
+                    </div>
+                </figure>
+                <figure class="past-event__slide swiper-slide">
+                    <div class="past-event__slide-frame">
+                        <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-camera"></use></svg>
+                    </div>
+                </figure>
+                <figure class="past-event__slide swiper-slide">
+                    <div class="past-event__slide-frame">
+                        <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-camera"></use></svg>
+                    </div>
+                </figure>
+                <figure class="past-event__slide swiper-slide">
+                    <div class="past-event__slide-frame">
+                        <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-camera"></use></svg>
+                    </div>
+                </figure>
+                <figure class="past-event__slide swiper-slide">
+                    <div class="past-event__slide-frame">
+                        <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-camera"></use></svg>
+                    </div>
+                </figure>
+                <figure class="past-event__slide swiper-slide">
+                    <div class="past-event__slide-frame">
+                        <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-camera"></use></svg>
+                    </div>
+                </figure>
+                <figure class="past-event__slide swiper-slide">
+                    <div class="past-event__slide-frame">
+                        <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-camera"></use></svg>
+                    </div>
+                </figure>
+                <figure class="past-event__slide swiper-slide">
+                    <div class="past-event__slide-frame">
+                        <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-camera"></use></svg>
+                    </div>
+                </figure>
             </div>
         </div>
     </section>
@@ -1398,6 +1384,7 @@
 
 
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/swiper/swiper-bundle.min.js"></script>
     <script src="js/action-button.js"></script>
     <script src="js/agenda-tabs.js?v=6"></script>
     <script src="js/speaker-directory.js?v=6"></script>
@@ -1407,6 +1394,7 @@
     <script src="js/journey-indicator.js?v=8"></script>
     <script src="js/hero-v2-header.js?v=8"></script>
     <script src="js/in-page-navigation.js?v=1"></script>
+    <script src="js/past-event-swiper.js?v=6"></script>
 
     <!-- Liquid metal CTAs (WebGL). Module scripts are deferred, so this runs after
      the markup exists but before window 'load' fires the hero intro. -->
