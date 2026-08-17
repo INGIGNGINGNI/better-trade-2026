@@ -1458,12 +1458,19 @@ the timeline drops them under the ship once the walls have retreated. */
 #concept {
     --bt-concept-description-size: var(--section-topic-size);
     --bt-concept-description-line-height: var(--section-topic-line-height);
+    --bt-concept-bg-overlay: rgba(255, 255, 255, 0.85);
 
     position: relative;
     /* min-height: 180vh; */
     overflow: clip;
     isolation: isolate;
-    background: var(--color-surface-page);
+    background-color: var(--color-surface-page);
+    background-image:
+        linear-gradient(var(--bt-concept-bg-overlay), var(--bt-concept-bg-overlay)),
+        url("../images/concept-room-bg.webp");
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: cover;
     color: var(--color-text-primary);
     display: block;
     padding: var(--section-padding-y) 0;
@@ -4956,8 +4963,10 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 .past-event__slide {
-    flex: 0 0 clamp(220px, 22vw, 352px);
-    margin: 0 var(--marquee-gap) 0 0;
+    flex: 0 0 calc(clamp(220px, 22vw, 352px) + var(--marquee-gap));
+    box-sizing: border-box;
+    margin: 0;
+    padding-inline-end: var(--marquee-gap);
 }
 
 .past-event__slide-frame {
@@ -5054,7 +5063,7 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .past-event__slide {
-        flex-basis: 240px;
+        flex-basis: calc(240px + var(--marquee-gap));
     }
 
     .past-event__marquee {

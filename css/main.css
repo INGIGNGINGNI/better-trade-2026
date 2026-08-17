@@ -408,7 +408,7 @@
     --bt-ticket-benefit-text-size: var(--font-size-16);
     --bt-ticket-benefit-text-color: var(--color-text-primary);
     --bt-ticket-benefit-text-weight: var(--font-weight-regular);
-    --bt-ticket-benefit-bg: var(--color-neutral-50);
+    --bt-ticket-benefit-bg: var(--color-neutral-25);
     --bt-ticket-benefit-radius: var(--radius-2);
     --bt-ticket-benefit-block-padding-y: var(--space-10);
     --bt-ticket-benefit-block-padding-y-sm: var(--space-8);
