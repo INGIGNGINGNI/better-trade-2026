@@ -221,7 +221,6 @@
             shipRunLayer: document.getElementById('ship-run-layer'),
             shipRunCanvas: document.getElementById('ship-run-canvas'),
             shipRunVideo: document.getElementById('ship-run-video'),
-            shipRunAlpha: document.getElementById('ship-run-alpha'),
             shipRunWhiteout: document.getElementById('ship-run-whiteout'),
             concept: document.getElementById('concept'),
             conceptIntro: document.querySelector('.concept__inner'),
@@ -259,10 +258,6 @@
         });
 
         const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
-        const canSeekShipRunAlpha = () => {
-            const ranges = el.shipRunAlpha.seekable;
-            return ranges.length > 0 && ranges.end(ranges.length - 1) > 0.05;
-        };
         let M = {};          // measured layout
         let scrollTL = null;
         let introDone = false;
@@ -316,11 +311,13 @@
             gl.attachShader(program, compile(gl.FRAGMENT_SHADER, `
                 precision mediump float;
                 varying vec2 v_uv;
-                uniform sampler2D u_color;
-                uniform sampler2D u_alpha;
+                uniform sampler2D u_packed;
                 void main() {
-                    vec3 color = texture2D(u_color, v_uv).rgb;
-                    float alpha = texture2D(u_alpha, v_uv).r;
+                    // The left half stores color; the right half stores its alpha matte.
+                    vec2 colorUv = vec2(v_uv.x * 0.5, v_uv.y);
+                    vec2 alphaUv = vec2(0.5 + v_uv.x * 0.5, v_uv.y);
+                    vec3 color = texture2D(u_packed, colorUv).rgb;
+                    float alpha = texture2D(u_packed, alphaUv).r;
                     gl_FragColor = vec4(color, alpha);
                 }
             `));
@@ -351,34 +348,17 @@
                 gl.uniform1i(gl.getUniformLocation(program, uniform), unit);
                 return texture;
             };
-            const colorTexture = makeTexture(0, 'u_color');
-            const alphaTexture = makeTexture(1, 'u_alpha');
+            const packedTexture = makeTexture(0, 'u_packed');
 
             return () => {
-                if (el.shipRunVideo.readyState < 2 || el.shipRunAlpha.readyState < 2) return;
-                if (shipRunScrubState !== 'playing'
-                    && canSeekShipRunAlpha()
-                    && Math.abs(el.shipRunVideo.currentTime - el.shipRunAlpha.currentTime) > 1 / SHIP_RUN.fps) {
-                    if (!el.shipRunAlpha.seeking) {
-                        el.shipRunAlpha.currentTime = clamp(
-                            el.shipRunVideo.currentTime,
-                            0,
-                            Math.max(0, el.shipRunAlpha.duration - 0.001)
-                        );
-                    }
-                    return;
-                }
-                if (el.shipRunAlpha.seeking) return;
+                if (el.shipRunVideo.readyState < 2 || el.shipRunVideo.seeking) return;
                 gl.viewport(0, 0, el.shipRunCanvas.width, el.shipRunCanvas.height);
                 gl.clearColor(0, 0, 0, 0);
                 gl.clear(gl.COLOR_BUFFER_BIT);
                 gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
                 gl.activeTexture(gl.TEXTURE0);
-                gl.bindTexture(gl.TEXTURE_2D, colorTexture);
+                gl.bindTexture(gl.TEXTURE_2D, packedTexture);
                 gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, el.shipRunVideo);
-                gl.activeTexture(gl.TEXTURE1);
-                gl.bindTexture(gl.TEXTURE_2D, alphaTexture);
-                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, el.shipRunAlpha);
                 gl.drawArrays(gl.TRIANGLES, 0, 6);
             };
         }
@@ -389,37 +369,16 @@
             shipRunRenderRAF = requestAnimationFrame(() => {
                 shipRunRenderRAF = null;
                 drawShipRunFrame();
-                if (!el.shipRunVideo.paused || !el.shipRunAlpha.paused) requestShipRunRender();
+                if (!el.shipRunVideo.paused) requestShipRunRender();
             });
         }
 
-        function alignShipRunAlpha() {
-            if (el.shipRunVideo.readyState < 1 || el.shipRunAlpha.readyState < 1) return;
-            if (shipRunScrubState === 'playing') {
-                requestShipRunRender();
-                return;
-            }
-            const duration = Math.min(el.shipRunVideo.duration, el.shipRunAlpha.duration);
-            const target = clamp(el.shipRunVideo.currentTime, 0, Math.max(0, duration - 0.001));
-            if (canSeekShipRunAlpha()
-                && Math.abs(el.shipRunAlpha.currentTime - target) > 1 / SHIP_RUN.fps
-                && !el.shipRunAlpha.seeking) {
-                el.shipRunAlpha.currentTime = target;
-            }
-            requestShipRunRender();
-        }
-
         el.shipRunVideo.pause();
-        el.shipRunAlpha.pause();
-        [el.shipRunVideo, el.shipRunAlpha].forEach(video => {
-            video.addEventListener('loadeddata', requestShipRunRender);
-            video.addEventListener('seeked', requestShipRunRender);
-        });
-        el.shipRunVideo.addEventListener('seeked', alignShipRunAlpha);
-        el.shipRunVideo.addEventListener('timeupdate', alignShipRunAlpha);
+        el.shipRunVideo.addEventListener('loadeddata', requestShipRunRender);
+        el.shipRunVideo.addEventListener('seeked', requestShipRunRender);
+        el.shipRunVideo.addEventListener('timeupdate', requestShipRunRender);
         el.shipRunVideo.addEventListener('timeupdate', updateShipRunPlaybackProgress);
         el.shipRunVideo.addEventListener('ended', completeShipRunScrub);
-        el.shipRunAlpha.addEventListener('loadeddata', alignShipRunAlpha);
         el.shipRunVideo.addEventListener('loadedmetadata', () => {
             // A reload can restore the browser midway down the page. Prime the video
             // from the timeline state instead of flashing its first frame there.
@@ -429,41 +388,20 @@
                 0,
                 Math.max(0, el.shipRunVideo.duration - 0.001)
             );
-            if (el.shipRunAlpha.readyState >= 1 && canSeekShipRunAlpha()) {
-                el.shipRunAlpha.currentTime = el.shipRunVideo.currentTime;
-            }
-        }, { once: true });
-        el.shipRunAlpha.addEventListener('loadedmetadata', () => {
-            if (canSeekShipRunAlpha()) {
-                el.shipRunAlpha.currentTime = clamp(
-                    el.shipRunVideo.readyState >= 1
-                        ? el.shipRunVideo.currentTime
-                        : shipRunTargetTime,
-                    0,
-                    Math.max(0, el.shipRunAlpha.duration - 0.001)
-                );
-            }
         }, { once: true });
 
         let shipRunScrubState = 'idle';
 
         function getShipRunDuration() {
             if (Number.isFinite(el.shipRunVideo.duration)) {
-                return Math.min(
-                    el.shipRunVideo.duration,
-                    Number.isFinite(el.shipRunAlpha.duration)
-                        ? el.shipRunAlpha.duration
-                        : el.shipRunVideo.duration
-                );
+                return el.shipRunVideo.duration;
             }
             return SHIP_RUN.duration;
         }
 
         function setShipRunPlaybackRate() {
-            [el.shipRunVideo, el.shipRunAlpha].forEach(video => {
-                video.defaultPlaybackRate = SHIP_RUN.playbackRate;
-                video.playbackRate = SHIP_RUN.playbackRate;
-            });
+            el.shipRunVideo.defaultPlaybackRate = SHIP_RUN.playbackRate;
+            el.shipRunVideo.playbackRate = SHIP_RUN.playbackRate;
         }
 
         function isShipRunScrollLocked() {
@@ -580,17 +518,16 @@
             shipRunSyncRAF = requestAnimationFrame(() => {
                 shipRunSyncRAF = null;
                 const threshold = 0.5 / SHIP_RUN.fps;
-                [el.shipRunVideo, el.shipRunAlpha].forEach(video => {
-                    if (video.readyState < 1) return;
+                if (el.shipRunVideo.readyState >= 1) {
                     const target = clamp(
                         shipRunTargetTime,
                         0,
-                        Math.max(0, video.duration - 0.001)
+                        Math.max(0, el.shipRunVideo.duration - 0.001)
                     );
-                    if (Math.abs(video.currentTime - target) > threshold) {
-                        video.currentTime = target;
+                    if (Math.abs(el.shipRunVideo.currentTime - target) > threshold) {
+                        el.shipRunVideo.currentTime = target;
                     }
-                });
+                }
                 requestShipRunRender();
             });
 
@@ -679,10 +616,8 @@
             shipRunScrubState = 'complete';
             shipRunHeroRestored = true;
             el.shipRunVideo.pause();
-            el.shipRunAlpha.pause();
             setShipRunPlaybackRate();
             if (el.shipRunVideo.readyState >= 1) el.shipRunVideo.currentTime = 0;
-            if (el.shipRunAlpha.readyState >= 1) el.shipRunAlpha.currentTime = 0;
             gsap.killTweensOf(el.shipRunWhiteout);
             el.concept.classList.add('is-revealed');
             maintainCompletedHeroScene();
@@ -703,10 +638,8 @@
             shipRunState.time = 0;
             shipRunTargetTime = 0;
             el.shipRunVideo.pause();
-            el.shipRunAlpha.pause();
             setShipRunPlaybackRate();
             if (el.shipRunVideo.readyState >= 1) el.shipRunVideo.currentTime = 0;
-            if (el.shipRunAlpha.readyState >= 1) el.shipRunAlpha.currentTime = 0;
             gsap.set(el.shipRunWhiteout, { opacity: 0 });
             gsap.set(el.shipRunLayer, { opacity: 0 });
             gsap.set(shipRunStaticScene, { opacity: 1 });
@@ -723,7 +656,6 @@
             shipRunHasCompleted = true;
             shipRunHeroRestored = false;
             el.shipRunVideo.pause();
-            el.shipRunAlpha.pause();
             gsap.set(el.shipRunWhiteout, { opacity: 1 });
             updateHeroRunProgress();
 
@@ -756,11 +688,8 @@
             gsap.set(shipRunStaticScene, { opacity: 0 });
 
             el.shipRunVideo.pause();
-            el.shipRunAlpha.pause();
             if (el.shipRunVideo.readyState >= 1) el.shipRunVideo.currentTime = 0;
-            if (el.shipRunAlpha.readyState >= 1) el.shipRunAlpha.currentTime = 0;
             playShipRunVideo(el.shipRunVideo);
-            playShipRunVideo(el.shipRunAlpha);
             startShipRunWatchdog();
             requestShipRunRender();
             updateHeroRunProgress();
@@ -1336,7 +1265,6 @@
             stopShipRunWatchdog();
             unlockShipRunScroll();
             el.shipRunVideo.pause();
-            el.shipRunAlpha.pause();
             gsap.set([el.shipRunLayer, el.shipRunWhiteout], { opacity: 0 });
             gsap.set([el.bg, el.walls], { y: 0 });
             gsap.set(el.stage, { clearProps: 'transform' });
