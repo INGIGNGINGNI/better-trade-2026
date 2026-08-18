@@ -44,9 +44,14 @@
         if (reducedQuery.matches || saveData) return;
 
         /* เฉพาะแผงของวันที่แสดงอยู่ แผงที่ซ่อนเป็น display:none วัดตำแหน่งไม่ได้
-           ScrollTrigger จะได้ค่า 0 ทั้งหมดถ้าเผลอเอาไปคำนวณด้วย */
-        const visiblePanel = section?.querySelector('.speaker__day-panel:not([hidden])');
-        const scopes = [visiblePanel || section, moderatorGrid].filter(Boolean);
+           ScrollTrigger จะได้ค่า 0 ทั้งหมดถ้าเผลอเอาไปคำนวณด้วย
+           ต้องเก็บให้ครบทุกแผงที่ยังโชว์ (querySelectorAll ไม่ใช่ querySelector):
+           จอ >767px ตอนนี้ Day 1 กับ Day 2 โชว์พร้อมกันทั้งคู่ ถ้าเอาแค่แผงแรก
+           การ์ดของ Day 2 จะไม่ได้ reveal เลย */
+        const visiblePanels = section
+            ? Array.from(section.querySelectorAll('.speaker__day-panel:not([hidden])'))
+            : [];
+        const scopes = [...(visiblePanels.length ? visiblePanels : [section]), moderatorGrid].filter(Boolean);
         const cards = scopes.flatMap((scope) => Array.from(scope.querySelectorAll('.speaker-card')));
         if (!cards.length) return;
 

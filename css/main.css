@@ -164,6 +164,7 @@
     --font-size-40: 40px;
     --font-size-48: 48px;
     --font-size-56: 56px;
+    --font-size-64: 64px;
     --font-size-72: 72px;
     --font-size-80: 80px;
     --font-weight-light: 300;
@@ -441,6 +442,10 @@
     --bt-header-nav-ink: var(--color-neutral-600);
     --bt-header-nav-ink-hover: var(--color-text-primary);
     --bt-header-nav-ink-on-dark-hover: var(--color-text-inverse);
+    --bt-header-bg: var(--color-surface-page);
+    /* ต้องเป็นค่าเดียวกับ --bt-topics-bg ของ section พื้นมืด (ดูด้านล่าง) เพื่อให้แถบ header
+       กลืนไปกับพื้นหลัง section พอดี ไม่เห็นเป็นแถบสีคนละเฉดคาดอยู่ด้านบน */
+    --bt-header-bg-on-dark: var(--color-neutral-900);
 
     /* Token เฉพาะ hamburger / mobile menu */
     --bt-menu-bg: var(--color-surface-page);
@@ -841,19 +846,52 @@
 }
 
 .bt-title-highlight {
+    font-size: var(--font-size-64);
+    font-weight: var(--font-weight-medium);
     color: transparent;
     background: linear-gradient(90deg,
             #00d4fe 0%,
             #1f87e6 20%,
-            #113cf3 40%,
-            #722df4 58%,
-            #e63bd8 76%,
-            #f79319 100%);
+            #113cf3 35%,
+            #722df4 50%,
+            #e63bd8 65%,
+            #f79319 80%);
     background-size: 200% 100%;
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: bt-title-spectrum-flow 3s ease-in-out infinite alternate;
+
+    &.has-ps {
+        padding-left: var(--space-2);
+    }
+
+    &.has-pe {
+        padding-right: var(--space-2);
+    }
+
+    &.has-px {
+        padding-left: var(--space-2);
+        padding-right: var(--space-2);
+    }
+}
+
+@media (max-width:991px) {
+    .bt-title-highlight {
+        font-size: var(--font-size-56);
+    }
+}
+
+@media (max-width:767px) {
+    .bt-title-highlight {
+        font-size: var(--font-size-40);
+    }
+}
+
+@media (max-width:575px) {
+    .bt-title-highlight {
+        font-size: var(--font-size-32);
+    }
 }
 
 @keyframes bt-title-spectrum-flow {

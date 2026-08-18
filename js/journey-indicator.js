@@ -8,10 +8,15 @@
         { id: 'featured-topics', label: 'Topics' },
         { id: 'ticket', label: 'Ticket Price' },
         { id: 'agenda', label: 'Agenda' },
-        { id: 'expectation', label: 'Expectation' },
-        { id: 'floor-plan', label: 'Floor Plan' },
         { id: 'speaker', label: 'Speakers' },
         { id: 'moderator', label: 'Moderators & MC' },
+        { id: 'expectation', label: 'Expectation' },
+        { id: 'floor-plan', label: 'Floor Plan' },
+        { id: 'title-sponsor', label: 'Title Sponsor' },
+        { id: 'sponsors', label: 'Sponsors' },
+        { id: 'media-partners', label: 'Media Partners' },
+        { id: 'kol-partners', label: 'KOL Partners' },
+        { id: 'organizer', label: 'Organizer' },
         { id: 'past-event', label: 'Past Event' },
     ].map(stop => ({ ...stop, element: document.getElementById(stop.id) }))
         .filter(stop => stop.element);

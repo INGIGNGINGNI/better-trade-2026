@@ -2,6 +2,12 @@
     const tabLists = document.querySelectorAll('.agenda__tabs[role="tablist"]');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
+    /* Day 1/Day 2 อยู่ซ้อนอยู่ใน #agenda-main-stage เท่านั้น (ดูบล็อกตัวสลับวัน
+       ท้ายไฟล์) สลับไปแท็บ Stage อื่นแล้วทั้งคู่จะถูกซ่อนไปด้วย ต้องวัดตำแหน่งใหม่
+       ทุกครั้งที่สลับแท็บ Stage ไม่งั้น scrollspy จะยังอิงตำแหน่งเก่าที่ผิดไปแล้ว
+       ประกาศเป็น mutable reference ไว้ก่อน เพราะบล็อกตัวสลับวันมาทีหลังในไฟล์นี้ */
+    let refreshDaySwitcher = () => {};
+
     tabLists.forEach((tabList) => {
         const tabs = Array.from(tabList.querySelectorAll('[role="tab"]'));
         const indicator = tabList.querySelector('.agenda__tab-indicator');
@@ -62,6 +68,8 @@
             if (shouldFocus) {
                 activeTab.focus();
             }
+
+            refreshDaySwitcher();
         };
 
         tabs.forEach((tab, index) => {
@@ -97,14 +105,8 @@
         };
 
         if (initialTab) {
-            /* แถบของวันที่ยังซ่อนอยู่จะยังไม่ ready จนกว่าจะถูกแสดงจริง
-               ทำให้การวางตำแหน่งครั้งแรกของ Day 2 ไม่มี transition ค้างมาจาก 0,0 */
             syncActiveIndicator();
-
             window.addEventListener('resize', syncActiveIndicator);
-            document.addEventListener('agenda:daychange', () => {
-                requestAnimationFrame(syncActiveIndicator);
-            });
 
             if (document.fonts) {
                 document.fonts.ready.then(syncActiveIndicator);
@@ -112,134 +114,146 @@
         }
     });
 
+    /* ---- ตัวสลับวัน ----
+       จอ >767px: Day 1 กับ Day 2 อยู่ในพื้นที่เลื่อนเดียวกันตลอด ตัวสลับวันเป็นแค่
+       ลิงก์เลื่อนไปหาหัวข้อ + ตัวบอกตำแหน่งปัจจุบัน (scrollspy) แบบเดียวกับ
+       journey-indicator.js
+
+       จอ ≤767px: กลับไปพฤติกรรมแท็บแบบเดิม — โชว์ทีละวัน คลิกแล้วซ่อนอีกวันไปเลย
+       ไม่ scrollspy ตาม (applyDayVisibility ด้านล่างคุมส่วนนี้) */
     const daySwitcher = document.querySelector('.agenda__day-switcher-inner');
     const dayLinks = daySwitcher
-        ? Array.from(daySwitcher.querySelectorAll('.agenda__day-switch[role="tab"]'))
+        ? Array.from(daySwitcher.querySelectorAll('.agenda__day-switch'))
         : [];
-    const dayPanels = Array.from(document.querySelectorAll('[data-agenda-day-panel]'));
+
+    if (!daySwitcher || !dayLinks.length) return;
+
     const mobileDaySwitcher = window.matchMedia('(max-width: 767px)');
 
-    if (daySwitcher) {
-        const syncDaySwitcherOrientation = () => {
-            daySwitcher.setAttribute('aria-orientation', mobileDaySwitcher.matches ? 'horizontal' : 'vertical');
-        };
+    const panelForLink = (link) => {
+        const hash = link.getAttribute('href') || '';
+        return hash.startsWith('#') ? document.getElementById(hash.slice(1)) : null;
+    };
 
-        syncDaySwitcherOrientation();
-        mobileDaySwitcher.addEventListener('change', syncDaySwitcherOrientation);
-    }
+    const applyDayVisibility = (activeLink) => {
+        dayLinks.forEach((link) => {
+            const panel = panelForLink(link);
+            if (!panel) return;
+
+            const shouldHide = mobileDaySwitcher.matches && link !== activeLink;
+            if (panel.hidden !== shouldHide) panel.hidden = shouldHide;
+        });
+    };
 
     const updateDaySwitch = (activeLink) => {
         if (!activeLink) return;
 
         dayLinks.forEach((link) => {
-            const isActive = link === activeLink;
-
-            link.setAttribute('aria-selected', String(isActive));
-            link.tabIndex = isActive ? 0 : -1;
-
-            if (isActive) {
+            if (link === activeLink) {
                 link.setAttribute('aria-current', 'true');
             } else {
                 link.removeAttribute('aria-current');
             }
         });
-    };
-
-    const activateDay = (activeLink, { updateHistory = true, revealTop = true } = {}) => {
-        const panelId = activeLink.getAttribute('aria-controls');
-        const activePanel = panelId ? document.getElementById(panelId) : null;
-
-        if (!activePanel) return;
-
-        dayPanels.forEach((panel) => {
-            panel.hidden = panel !== activePanel;
-            panel.classList.remove('is-entering');
-        });
-
-        updateDaySwitch(activeLink);
 
         /* บอก CSS ว่าตอนนี้วันไหน active เพื่อให้ช่วงสเปกตรัมบนเส้นนำสายตา
            เลื่อนไปเกาะฝั่งของวันนั้น (ดู .agenda__day-switch-rail::after) */
-        if (daySwitcher) {
-            daySwitcher.dataset.activeDay = activePanel.dataset.agendaDayPanel || '';
-        }
+        const activePanel = panelForLink(activeLink);
+        daySwitcher.dataset.activeDay = activePanel?.dataset.agendaDayPanel || '';
 
-        /* สลับวันแล้วพากลับไปหัวตารางเสมอ ไม่งั้นถ้ากำลังดูอยู่กลาง ๆ ของวันหนึ่ง
-           พอสลับจะไปโผล่กลางตารางของอีกวันทันที scroll-margin-top ของแผงทำให้
-           หยุดใต้ header พอดี (ตั้งไว้แล้วใน .agenda__day-panel) */
-        if (revealTop) {
-            const revealTarget = mobileDaySwitcher.matches
-                ? daySwitcher.closest('.agenda__day-switcher')
-                : activePanel;
+        applyDayVisibility(activeLink);
+    };
 
-            revealTarget.scrollIntoView({
+    dayLinks.forEach((link) => {
+        link.addEventListener('click', (event) => {
+            const panel = panelForLink(link);
+            if (!panel) return;
+
+            event.preventDefault();
+            updateDaySwitch(link);
+            panel.scrollIntoView({
                 block: 'start',
                 behavior: reducedMotion.matches ? 'auto' : 'smooth',
             });
-        }
-
-        requestAnimationFrame(() => {
-            activePanel.classList.add('is-entering');
-            document.dispatchEvent(new CustomEvent('agenda:daychange', {
-                detail: { panel: activePanel }
-            }));
-        });
-
-        if (updateHistory) {
             history.replaceState(null, '', window.location.pathname + window.location.search);
-        }
-    };
-
-    dayLinks.forEach((link, index) => {
-        link.addEventListener('click', (event) => {
-            event.preventDefault();
-            activateDay(link);
-        });
-
-        link.addEventListener('keydown', (event) => {
-            let nextIndex = index;
-
-            if (event.key === 'ArrowDown' || event.key === 'ArrowRight') {
-                nextIndex = (index + 1) % dayLinks.length;
-            } else if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
-                nextIndex = (index - 1 + dayLinks.length) % dayLinks.length;
-            } else if (event.key === 'Home') {
-                nextIndex = 0;
-            } else if (event.key === 'End') {
-                nextIndex = dayLinks.length - 1;
-            } else {
-                return;
-            }
-
-            event.preventDefault();
-            dayLinks[nextIndex].focus();
-            activateDay(dayLinks[nextIndex]);
         });
     });
 
-    if (dayLinks.length) {
-        const hashLink = dayLinks.find((link) => link.getAttribute('href') === window.location.hash);
-        const initialLink = hashLink
-            || dayLinks.find((link) => link.getAttribute('aria-current') === 'true')
-            || dayLinks[0];
+    /* หาว่าแผงไหนควร active โดยวัดตำแหน่งสด ๆ ทุกครั้งที่เรียก (ไม่แคชค่า) —
+       ก่อนหน้านี้แคช panelAnchors ไว้แล้วมีบั๊ก: หน้านี้มี hero ที่คำนวณความสูง
+       ของตัวเองแบบ async (สโครลเลอร์/ภาพ/ฟอนต์) ทำให้ตำแหน่งจริงของ Day 2 ขยับ
+       หลังจากวัดครั้งแรกไปแล้ว ค่าที่แคชไว้จึงเพี้ยนเล็กน้อยจนสลับ active ก่อนเวลา
+       ทั้ง ๆ ที่ยังเลื่อนอยู่ในเนื้อหา Day 1 — วัดสดตรงนี้ตัดปัญหานั้นไปเลย
+       ล้อแพตเทิร์นเดียวกับ journey-indicator.js แต่ไม่แคชตำแหน่ง
+       แผงที่ถูกซ่อน (สลับไปแท็บ Stage อื่น หรือจอ ≤767px ที่โชว์ทีละวัน) จะมี
+       offsetParent เป็น null ตัดออกจากการวัดไปเลยแทนที่จะเทียบตำแหน่ง 0
+       ที่ไม่มีความหมาย — ไม่มีแผงให้วัดเลยก็แค่ไม่ทำอะไร (คงค่าล่าสุดไว้) */
+    let scrollSpyRAF = null;
 
-        /* ตอนโหลดหน้าห้ามเลื่อนเอง จะไปแย่งตำแหน่งที่ผู้ใช้เปิดมา
-           (เคส deep-link ด้วย hash มีตัวจัดการแยกอยู่ด้านล่าง) */
-        activateDay(initialLink, { updateHistory: false, revealTop: false });
+    const updateScrollSpy = () => {
+        scrollSpyRAF = null;
 
-        /* เปิดหน้าด้วยลิงก์ #agenda-day-two ตรง ๆ: ตอน browser เลื่อนไปหา target
-           แผงนั้นยัง hidden อยู่ (ไม่มีขนาด) เลยไม่ได้เลื่อนจริง ต้องสั่งซ้ำหลังแสดงแล้ว
-           สั่งซ้ำตอน load ด้วย เพราะระหว่าง preloader หน้ายังถูกล็อกสกอลล์อยู่ */
-        if (hashLink) {
-            const panelId = hashLink.getAttribute('aria-controls');
-            const panel = panelId ? document.getElementById(panelId) : null;
+        const anchors = dayLinks
+            .map((link) => {
+                const panel = panelForLink(link);
+                if (!panel || panel.offsetParent === null) return null;
 
-            if (panel) {
-                const scrollToPanel = () => panel.scrollIntoView();
+                return { link, top: panel.getBoundingClientRect().top + window.scrollY };
+            })
+            .filter(Boolean);
 
-                scrollToPanel();
-                window.addEventListener('load', scrollToPanel, { once: true });
-            }
+        if (!anchors.length) return;
+
+        /* เส้นอ้างอิงอยู่ค่อนไปทางบนของวิวพอร์ต ใกล้เคียงตำแหน่งที่ header
+           ลอยทับอยู่ ทำให้สลับวันพอดีตอนหัวข้อของวันถัดไปเลื่อนขึ้นมาถึงจุดนั้น */
+        const marker = window.scrollY + (window.innerHeight * 0.35);
+        let current = anchors[0];
+
+        anchors.forEach((anchor) => {
+            if (marker >= anchor.top) current = anchor;
+        });
+
+        updateDaySwitch(current.link);
+    };
+
+    const requestScrollSpyUpdate = () => {
+        if (scrollSpyRAF !== null) return;
+        scrollSpyRAF = window.requestAnimationFrame(updateScrollSpy);
+    };
+    refreshDaySwitcher = updateScrollSpy;
+
+    window.addEventListener('scroll', requestScrollSpyUpdate, { passive: true });
+    window.addEventListener('resize', updateScrollSpy);
+    window.addEventListener('load', updateScrollSpy);
+    document.fonts?.ready.then(updateScrollSpy);
+
+    /* ข้ามเกณฑ์ 767px แล้ว (เช่นหมุนจอ/ปรับขนาดหน้าต่าง) ต้องจัดการ visibility
+       ของวันให้ตรงกับโหมดใหม่ก่อน แล้วค่อยเช็ค scrollspy ไม่งั้นแผงที่ยังซ่อนอยู่
+       จากโหมดเดิมจะไม่ถูกนับ (offsetParent เป็น null อยู่) */
+    mobileDaySwitcher.addEventListener('change', () => {
+        const activeLink = dayLinks.find((link) => link.getAttribute('aria-current') === 'true') || dayLinks[0];
+
+        applyDayVisibility(activeLink);
+        updateScrollSpy();
+    });
+
+    updateScrollSpy();
+
+    /* เปิดหน้าด้วยลิงก์ #agenda-day-two ตรง ๆ: ตั้ง active ให้ตรงกับ hash ทันที
+       ไม่ต้องรอ scrollspy ตามทัน แล้วเลื่อนไปหาแผงนั้นซ้ำหลัง load เผื่อระหว่าง
+       preloader หน้ายังถูกล็อกสกอลล์อยู่ตอน browser พยายามเลื่อนตาม hash ครั้งแรก */
+    const hashLink = dayLinks.find((link) => link.getAttribute('href') === window.location.hash);
+
+    if (hashLink) {
+        const panel = panelForLink(hashLink);
+
+        updateDaySwitch(hashLink);
+
+        if (panel) {
+            const scrollToPanel = () => panel.scrollIntoView();
+
+            scrollToPanel();
+            window.addEventListener('load', scrollToPanel, { once: true });
         }
     }
 })();

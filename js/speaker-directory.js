@@ -47,28 +47,12 @@
     };
 
     const panels = Array.from(document.querySelectorAll('[data-speaker-day]'));
-    /* ผังเชิงบรรณาธิการของกริด 3 คอลัมน์: 20 ชื่อกระจายลง 8 แถว สลับแถวเต็ม
-       กับแถวที่เว้นหนึ่งช่อง และย้ายตำแหน่งช่องว่างไปเรื่อย ๆ (กลาง–ซ้าย–ขวา–กลาง)
-       แถว 5–6 เว้นคนละฝั่งติดกัน ช่องว่างจึงพาดเป็นแนวทแยงแทนที่จะเป็นรูโบ๋ช่องเดียว */
-    const editorialLayout = [
-        [1, 1], [2, 1], [3, 1],
-        [1, 2], [3, 2],
-        [1, 3], [2, 3], [3, 3],
-        [1, 4], [2, 4], [3, 4],
-        [2, 5], [3, 5],
-        [1, 6], [2, 6],
-        [1, 7], [2, 7], [3, 7],
-        [1, 8], [3, 8],
-    ];
 
     const createSpeakerCard = ([name, role, gender], index) => {
         const card = document.createElement('article');
-        const [column, row] = editorialLayout[index];
 
         card.className = 'speaker-card';
         card.style.setProperty('--speaker-order', String(index % 5));
-        card.style.setProperty('--speaker-column', String(column));
-        card.style.setProperty('--speaker-row', String(row));
         card.style.setProperty('--speaker-portrait-y', '0%');
         card.innerHTML = `
             <div class="speaker-card__portrait">
@@ -97,24 +81,24 @@
     });
 
     /* ---- ตัวสลับวัน: พฤติกรรมเดียวกับ agenda-tabs.js ----
-       แยกไฟล์กันเพราะคนละ block ของ BEM แต่ logic ตรงกันทุกขั้น */
+       แยกไฟล์กันเพราะคนละ block ของ BEM แต่ logic ตรงกันทุกขั้น
+
+       จอ >767px: Day 1 กับ Day 2 อยู่ในพื้นที่เลื่อนเดียวกันตลอด ตัวสลับวันเป็นแค่
+       ลิงก์เลื่อนไปหาหัวข้อ + ตัวบอกตำแหน่งปัจจุบัน (scrollspy)
+       จอ ≤767px: กลับไปพฤติกรรมแท็บแบบเดิม โชว์ทีละวัน คลิกแล้วซ่อนอีกวันไปเลย */
     const daySwitcher = document.querySelector('.speaker__day-switcher-inner');
     const dayLinks = daySwitcher
-        ? Array.from(daySwitcher.querySelectorAll('.speaker__day-switch[role="tab"]'))
+        ? Array.from(daySwitcher.querySelectorAll('.speaker__day-switch'))
         : [];
     const dayPanels = Array.from(document.querySelectorAll('[data-speaker-day-panel]'));
     const mobileDaySwitcher = window.matchMedia('(max-width: 767px)');
 
     if (!dayLinks.length || !dayPanels.length) return;
 
-    if (daySwitcher) {
-        const syncDaySwitcherOrientation = () => {
-            daySwitcher.setAttribute('aria-orientation', mobileDaySwitcher.matches ? 'horizontal' : 'vertical');
-        };
-
-        syncDaySwitcherOrientation();
-        mobileDaySwitcher.addEventListener('change', syncDaySwitcherOrientation);
-    }
+    const panelForLink = (link) => {
+        const hash = link.getAttribute('href') || '';
+        return hash.startsWith('#') ? document.getElementById(hash.slice(1)) : null;
+    };
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let motionRefreshTimer = 0;
@@ -160,80 +144,105 @@
         }
     };
 
+    /* ซ่อนวันที่ไม่ได้เลือกเฉพาะจอ ≤767px เท่านั้น จอใหญ่กว่านั้นโชว์ทั้งสองวันต่อกัน */
+    const applyDayVisibility = (activeLink) => {
+        dayPanels.forEach((panel) => {
+            const shouldHide = mobileDaySwitcher.matches && panel !== panelForLink(activeLink);
+            if (panel.hidden !== shouldHide) panel.hidden = shouldHide;
+        });
+    };
+
     const updateDaySwitch = (activeLink) => {
+        if (!activeLink) return;
+
         dayLinks.forEach((link) => {
-            const isActive = link === activeLink;
-
-            link.setAttribute('aria-selected', String(isActive));
-            link.tabIndex = isActive ? 0 : -1;
-
-            if (isActive) {
+            if (link === activeLink) {
                 link.setAttribute('aria-current', 'true');
             } else {
                 link.removeAttribute('aria-current');
             }
         });
-    };
-
-    const activateDay = (activeLink, { updateHistory = true, revealTop = true } = {}) => {
-        const panelId = activeLink.getAttribute('aria-controls');
-        const activePanel = panelId ? document.getElementById(panelId) : null;
-
-        if (!activePanel) return;
-
-        dayPanels.forEach((panel) => {
-            panel.hidden = panel !== activePanel;
-        });
-
-        updateDaySwitch(activeLink);
 
         /* ให้ช่วงสเปกตรัมบนเส้นนำสายตาเลื่อนไปเกาะฝั่งของวันที่เลือก */
-        daySwitcher.dataset.activeDay = activePanel.dataset.speakerDayPanel || '';
+        const activePanel = panelForLink(activeLink);
+        daySwitcher.dataset.activeDay = activePanel?.dataset.speakerDayPanel || '';
 
-        if (revealTop) {
+        applyDayVisibility(activeLink);
+    };
+
+    dayLinks.forEach((link) => {
+        link.addEventListener('click', (event) => {
+            const panel = panelForLink(link);
+            if (!panel) return;
+
+            event.preventDefault();
+            updateDaySwitch(link);
+
+            /* ≤767px สลับวันแล้วเนื้อหาถูกสลับทั้งแผง พากลับไปหัวตัวสลับวันเหมือนเดิม
+               จอใหญ่เลื่อนไปหาหัวข้อของวันนั้นในพื้นที่เลื่อนเดียวกัน */
             if (mobileDaySwitcher.matches) {
                 daySwitcher.closest('.speaker__day-switcher').scrollIntoView({
                     block: 'start',
                     behavior: reducedMotion.matches ? 'auto' : 'smooth',
                 });
-                refreshSpeakerMotion(activePanel);
+                refreshSpeakerMotion(panel);
             } else {
-                revealPanelTop(activePanel);
+                revealPanelTop(panel);
             }
-        } else {
-            refreshSpeakerMotion(activePanel);
-        }
 
-        if (updateHistory) {
             history.replaceState(null, '', window.location.pathname + window.location.search);
-        }
+        });
+    });
+
+    /* หาว่าแผงไหนควร active โดยวัดตำแหน่งสด ๆ ทุกครั้ง (ไม่แคช) — หน้านี้มี hero ที่
+       คำนวณความสูงตัวเองแบบ async และการ์ด speaker เป็นรูป lazy-load ตำแหน่งจริงของ
+       Day 2 จึงขยับหลังวัดครั้งแรก ค่าที่แคชไว้จะเพี้ยนจนสลับ active ก่อนเวลา
+       แผงที่ถูกซ่อน (จอ ≤767px ที่โชว์ทีละวัน) มี offsetParent เป็น null ตัดออกไปเลย
+       ไม่มีแผงให้วัดก็แค่ไม่ทำอะไร คงค่าล่าสุดไว้ */
+    let scrollSpyRAF = null;
+
+    const updateScrollSpy = () => {
+        scrollSpyRAF = null;
+
+        const anchors = dayLinks
+            .map((link) => {
+                const panel = panelForLink(link);
+                if (!panel || panel.offsetParent === null) return null;
+
+                return { link, top: panel.getBoundingClientRect().top + window.scrollY };
+            })
+            .filter(Boolean);
+
+        if (!anchors.length) return;
+
+        const marker = window.scrollY + (window.innerHeight * 0.35);
+        let current = anchors[0];
+
+        anchors.forEach((anchor) => {
+            if (marker >= anchor.top) current = anchor;
+        });
+
+        updateDaySwitch(current.link);
     };
 
-    dayLinks.forEach((link, index) => {
-        link.addEventListener('click', (event) => {
-            event.preventDefault();
-            activateDay(link);
-        });
+    const requestScrollSpyUpdate = () => {
+        if (scrollSpyRAF !== null) return;
+        scrollSpyRAF = window.requestAnimationFrame(updateScrollSpy);
+    };
 
-        link.addEventListener('keydown', (event) => {
-            let nextIndex = index;
+    window.addEventListener('scroll', requestScrollSpyUpdate, { passive: true });
+    window.addEventListener('resize', updateScrollSpy);
+    window.addEventListener('load', updateScrollSpy);
+    document.fonts?.ready.then(updateScrollSpy);
 
-            if (event.key === 'ArrowDown' || event.key === 'ArrowRight') {
-                nextIndex = (index + 1) % dayLinks.length;
-            } else if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
-                nextIndex = (index - 1 + dayLinks.length) % dayLinks.length;
-            } else if (event.key === 'Home') {
-                nextIndex = 0;
-            } else if (event.key === 'End') {
-                nextIndex = dayLinks.length - 1;
-            } else {
-                return;
-            }
+    /* ข้ามเกณฑ์ 767px แล้วต้องจัดการ visibility ให้ตรงโหมดใหม่ก่อน แล้วค่อยวัด
+       ไม่งั้นแผงที่ยังซ่อนจากโหมดเดิมจะไม่ถูกนับ (offsetParent เป็น null อยู่) */
+    mobileDaySwitcher.addEventListener('change', () => {
+        const activeLink = dayLinks.find((link) => link.getAttribute('aria-current') === 'true') || dayLinks[0];
 
-            event.preventDefault();
-            dayLinks[nextIndex].focus();
-            activateDay(dayLinks[nextIndex]);
-        });
+        applyDayVisibility(activeLink);
+        updateScrollSpy();
+        refreshSpeakerMotion(panelForLink(activeLink));
     });
 
     const hashLink = dayLinks.find((link) => link.getAttribute('href') === window.location.hash);
@@ -241,12 +250,14 @@
         || dayLinks.find((link) => link.getAttribute('aria-current') === 'true')
         || dayLinks[0];
 
-    activateDay(initialLink, { updateHistory: false, revealTop: false });
+    updateDaySwitch(initialLink);
+    updateScrollSpy();
+    refreshSpeakerMotion(panelForLink(initialLink));
 
-    /* เปิดหน้าด้วย #speaker-day-two ตรง ๆ: ตอน browser เลื่อนหา target แผงยัง hidden
-       (ไม่มีขนาด) จึงไม่ได้เลื่อนจริง สั่งซ้ำตอน load เผื่อ preloader ล็อกสกอลล์อยู่ */
+    /* เปิดหน้าด้วย #speaker-day-two ตรง ๆ: ตอน browser เลื่อนหา target แผงอาจยังซ่อน
+       (จอ ≤767px) จึงไม่ได้เลื่อนจริง สั่งซ้ำตอน load เผื่อ preloader ล็อกสกอลล์อยู่ */
     if (hashLink) {
-        const panel = document.getElementById(hashLink.getAttribute('aria-controls'));
+        const panel = panelForLink(hashLink);
 
         if (panel) {
             const scrollToPanel = () => panel.scrollIntoView();

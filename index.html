@@ -11,8 +11,8 @@
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
-    <link rel="stylesheet" href="css/main.css?v=38">
-    <link rel="stylesheet" href="css/style.css?v=218">
+    <link rel="stylesheet" href="css/main.css?v=39">
+    <link rel="stylesheet" href="css/style.css?v=229">
 </head>
 
 <body class="is-loading">
@@ -304,7 +304,7 @@
     <section id="concept" aria-labelledby="concept-title">
         <div class="concept__aurora" aria-hidden="true"></div>
         <div class="concept__inner container">
-            <h2 id="concept-title" class="bt-section-title">โลกกำลังเปลี่ยนเร็วกว่าที่เคย <br>แต่<span class="bt-title-highlight">โอกาสก็เช่นกัน</span></h2>
+            <h2 id="concept-title" class="bt-section-title">โลกกำลังเปลี่ยนเร็วกว่าที่เคย <br>แต่<span class="bt-title-highlight has-ps">โอกาสก็เช่นกัน</span></h2>
             <p class="concept__description">BETTER TRADE รวบรวมความรู้ เครื่องมือ และ Playbook ที่จะช่วยให้คุณมองเห็นโอกาส <br class="d-xl-block d-none">ตัดสินใจอย่างมั่นใจ และเติบโตไปพร้อมกับโลกยุคใหม่</p>
         </div>
         <div class="concept__video-scroll container">
@@ -332,7 +332,7 @@
         aria-labelledby="featured-topics-title">
         <div class="topics-showcase__inner container">
             <header class="topics-showcase__header">
-                <h2 id="featured-topics-title" class="bt-section-title">หัวข้อที่คุณ<span class="bt-title-highlight">ไม่ควรพลาด</span><br>ใน Better Trade 2026</h2>
+                <h2 id="featured-topics-title" class="bt-section-title">หัวข้อที่คุณ<span class="bt-title-highlight has-ps">ไม่ควรพลาด</span><br>ใน Better Trade 2026</h2>
                 <p>สำรวจเทรนด์ เศรษฐกิจ เทคโนโลยี และโอกาสลงทุนที่จะกำหนดโลกใบต่อไป</p>
             </header>
 
@@ -377,10 +377,11 @@
 
     <!-- Start Section : Ticket -->
     <section id="ticket" class="ticket" aria-labelledby="ticket-title">
+        <img class="ticket__backdrop" src="images/ticket-bg.webp" width="1376" height="768" loading="lazy" decoding="async" alt="">
         <div class="ticket__inner container">
             <header class="ticket__header row">
                 <div class="ticket__heading col-12 col-xl-6">
-                    <h2 id="ticket-title" class="bt-section-title">เลือก<span class="bt-title-highlight">ประสบการณ์</span>ที่ใช่<br class="d-xl-block d-none">ในแบบของคุณ</h2>
+                    <h2 id="ticket-title" class="bt-section-title">เลือก<span class="bt-title-highlight has-px">ประสบการณ์</span>ที่ใช่<br class="d-sm-block d-none">ในแบบของคุณ</h2>
                     <p class="bt-section-subtext">Ticket Price</p>
                 </div>
             </header>
@@ -537,8 +538,8 @@
             <div class="agenda__layout row">
                 <nav class="agenda__day-switcher col-12 col-md-3" aria-label="เลือกวันของ Agenda">
                     <!-- <p class="agenda__eyebrow">Agenda</p> -->
-                    <div class="agenda__day-switcher-inner" role="tablist" aria-orientation="vertical">
-                        <a id="agenda-day-one-switch" class="agenda__day-switch" href="#agenda-day-one" role="tab" aria-selected="true" aria-controls="agenda-day-one" aria-current="true">
+                    <div class="agenda__day-switcher-inner">
+                        <a id="agenda-day-one-switch" class="agenda__day-switch" href="#agenda-day-one" aria-current="true">
                             <span class="agenda__day-switch-label">Day 1</span>
                             <span class="agenda__day-switch-details">
                                 <span class="agenda__day-switch-details-inner">
@@ -550,7 +551,7 @@
                         </a>
                         <span class="agenda__day-switch-prompt" aria-hidden="true">เลือกวัน</span>
                         <span class="agenda__day-switch-rail" aria-hidden="true"></span>
-                        <a id="agenda-day-two-switch" class="agenda__day-switch" href="#agenda-day-two" role="tab" aria-selected="false" aria-controls="agenda-day-two" tabindex="-1">
+                        <a id="agenda-day-two-switch" class="agenda__day-switch" href="#agenda-day-two">
                             <span class="agenda__day-switch-label">Day 2</span>
                             <span class="agenda__day-switch-details">
                                 <span class="agenda__day-switch-details-inner">
@@ -564,19 +565,19 @@
                 </nav>
 
                 <div class="agenda__days col-12 col-md-9">
-                    <div id="agenda-day-one" class="agenda__day-panel" data-agenda-day-panel="day-one" role="tabpanel" aria-labelledby="agenda-day-one-switch">
-                        <div class="agenda__content">
-                            <div class="agenda__tabs-viewport">
-                                <div class="agenda__tabs" role="tablist" aria-label="เวทีภายในงาน">
-                                    <button id="agenda-main-stage-tab" class="agenda__tab" type="button" role="tab" aria-selected="true" aria-controls="agenda-main-stage">Main Stage</button>
-                                    <button id="agenda-mini-stage-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-mini-stage" tabindex="-1">Mini Stage</button>
-                                    <button id="agenda-workshop-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-workshop" tabindex="-1">Workshop</button>
-                                    <button id="agenda-private-class-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-private-class" tabindex="-1">Private Class</button>
-                                    <span class="agenda__tab-indicator" aria-hidden="true"></span>
-                                </div>
+                    <div class="agenda__content">
+                        <div class="agenda__tabs-viewport">
+                            <div class="agenda__tabs" role="tablist" aria-label="เวทีภายในงาน">
+                                <button id="agenda-main-stage-tab" class="agenda__tab" type="button" role="tab" aria-selected="true" aria-controls="agenda-main-stage">Main Stage</button>
+                                <button id="agenda-mini-stage-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-mini-stage" tabindex="-1">Mini Stage</button>
+                                <button id="agenda-workshop-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-workshop" tabindex="-1">Workshop</button>
+                                <button id="agenda-private-class-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-private-class" tabindex="-1">Private Class</button>
+                                <span class="agenda__tab-indicator" aria-hidden="true"></span>
                             </div>
+                        </div>
 
-                            <div id="agenda-main-stage" class="agenda__panel" role="tabpanel" aria-labelledby="agenda-main-stage-tab">
+                        <div id="agenda-main-stage" class="agenda__panel" role="tabpanel" aria-labelledby="agenda-main-stage-tab">
+                            <div id="agenda-day-one" class="agenda__day-panel" data-agenda-day-panel="day-one">
                                 <table class="agenda__table">
                                     <caption class="visually-hidden">กำหนดการ Main Stage วันที่ 31 ตุลาคม 2569</caption>
                                     <colgroup>
@@ -749,43 +750,7 @@
                                 <p class="agenda__note">*หมายเหตุ Session อาจมีการปรับเปลี่ยนตามความเหมาะสม</p>
                             </div>
 
-                            <div id="agenda-mini-stage" class="agenda__panel agenda__panel--empty" role="tabpanel" aria-labelledby="agenda-mini-stage-tab" hidden>
-                                <div class="agenda__empty-state">
-                                    <p class="agenda__empty-kicker">Mini Stage</p>
-                                    <h3>Coming Soon</h3>
-                                    <p>กำหนดการของ Mini Stage จะประกาศเพิ่มเติมเร็ว ๆ นี้</p>
-                                </div>
-                            </div>
-                            <div id="agenda-workshop" class="agenda__panel agenda__panel--empty" role="tabpanel" aria-labelledby="agenda-workshop-tab" hidden>
-                                <div class="agenda__empty-state">
-                                    <p class="agenda__empty-kicker">Workshop</p>
-                                    <h3>Coming Soon</h3>
-                                    <p>รายละเอียด Workshop จะประกาศเพิ่มเติมเร็ว ๆ นี้</p>
-                                </div>
-                            </div>
-                            <div id="agenda-private-class" class="agenda__panel agenda__panel--empty" role="tabpanel" aria-labelledby="agenda-private-class-tab" hidden>
-                                <div class="agenda__empty-state">
-                                    <p class="agenda__empty-kicker">Private Class</p>
-                                    <h3>Coming Soon</h3>
-                                    <p>รายละเอียด Private Class จะประกาศเพิ่มเติมเร็ว ๆ นี้</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="agenda-day-two" class="agenda__day-panel" data-agenda-day-panel="day-two" role="tabpanel" aria-labelledby="agenda-day-two-switch" hidden>
-                        <div class="agenda__content">
-                            <div class="agenda__tabs-viewport">
-                                <div class="agenda__tabs" role="tablist" aria-label="เวทีภายในงาน วันที่ 2">
-                                    <button id="agenda-day-two-main-stage-tab" class="agenda__tab" type="button" role="tab" aria-selected="true" aria-controls="agenda-day-two-main-stage">Main Stage</button>
-                                    <button id="agenda-day-two-mini-stage-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-day-two-mini-stage" tabindex="-1">Mini Stage</button>
-                                    <button id="agenda-day-two-workshop-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-day-two-workshop" tabindex="-1">Workshop</button>
-                                    <button id="agenda-day-two-private-class-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-day-two-private-class" tabindex="-1">Private Class</button>
-                                    <span class="agenda__tab-indicator" aria-hidden="true"></span>
-                                </div>
-                            </div>
-
-                            <div id="agenda-day-two-main-stage" class="agenda__panel" role="tabpanel" aria-labelledby="agenda-day-two-main-stage-tab">
+                            <div id="agenda-day-two" class="agenda__day-panel" data-agenda-day-panel="day-two">
                                 <table class="agenda__table">
                                     <caption class="visually-hidden">กำหนดการ Main Stage วันที่ 1 พฤศจิกายน 2569</caption>
                                     <colgroup>
@@ -937,27 +902,27 @@
 
                                 <p class="agenda__note">*หมายเหตุ Session อาจมีการปรับเปลี่ยนตามความเหมาะสม</p>
                             </div>
+                        </div>
 
-                            <div id="agenda-day-two-mini-stage" class="agenda__panel agenda__panel--empty" role="tabpanel" aria-labelledby="agenda-day-two-mini-stage-tab" hidden>
-                                <div class="agenda__empty-state">
-                                    <p class="agenda__empty-kicker">Mini Stage</p>
-                                    <h3>Coming Soon</h3>
-                                    <p>กำหนดการของ Mini Stage จะประกาศเพิ่มเติมเร็ว ๆ นี้</p>
-                                </div>
+                        <div id="agenda-mini-stage" class="agenda__panel agenda__panel--empty" role="tabpanel" aria-labelledby="agenda-mini-stage-tab" hidden>
+                            <div class="agenda__empty-state">
+                                <p class="agenda__empty-kicker">Mini Stage</p>
+                                <h3>Coming Soon</h3>
+                                <p>กำหนดการของ Mini Stage จะประกาศเพิ่มเติมเร็ว ๆ นี้</p>
                             </div>
-                            <div id="agenda-day-two-workshop" class="agenda__panel agenda__panel--empty" role="tabpanel" aria-labelledby="agenda-day-two-workshop-tab" hidden>
-                                <div class="agenda__empty-state">
-                                    <p class="agenda__empty-kicker">Workshop</p>
-                                    <h3>Coming Soon</h3>
-                                    <p>รายละเอียด Workshop จะประกาศเพิ่มเติมเร็ว ๆ นี้</p>
-                                </div>
+                        </div>
+                        <div id="agenda-workshop" class="agenda__panel agenda__panel--empty" role="tabpanel" aria-labelledby="agenda-workshop-tab" hidden>
+                            <div class="agenda__empty-state">
+                                <p class="agenda__empty-kicker">Workshop</p>
+                                <h3>Coming Soon</h3>
+                                <p>รายละเอียด Workshop จะประกาศเพิ่มเติมเร็ว ๆ นี้</p>
                             </div>
-                            <div id="agenda-day-two-private-class" class="agenda__panel agenda__panel--empty" role="tabpanel" aria-labelledby="agenda-day-two-private-class-tab" hidden>
-                                <div class="agenda__empty-state">
-                                    <p class="agenda__empty-kicker">Private Class</p>
-                                    <h3>Coming Soon</h3>
-                                    <p>รายละเอียด Private Class จะประกาศเพิ่มเติมเร็ว ๆ นี้</p>
-                                </div>
+                        </div>
+                        <div id="agenda-private-class" class="agenda__panel agenda__panel--empty" role="tabpanel" aria-labelledby="agenda-private-class-tab" hidden>
+                            <div class="agenda__empty-state">
+                                <p class="agenda__empty-kicker">Private Class</p>
+                                <h3>Coming Soon</h3>
+                                <p>รายละเอียด Private Class จะประกาศเพิ่มเติมเร็ว ๆ นี้</p>
                             </div>
                         </div>
                     </div>
@@ -968,98 +933,10 @@
     <!-- End Section : Agenda -->
 
 
-    <!-- Start Section : Expectation -->
-    <section id="expectation" class="expectation" aria-labelledby="expectation-title">
-        <div class="expectation__inner container">
-            <div class="row">
-                <div class="col-12">
-                    <header class="expectation__header">
-                        <h2 id="expectation-title" class="bt-section-title">รวม<span class="bt-title-highlight">ทุกโอกาส</span>ของโลกการลงทุน<br class="d-sm-block d-none">ไว้ในงานเดียว</h2>
-                        <p class="bt-section-subtext expectation-none">Expectation</p>
-                    </header>
-                </div>
-            </div>
-
-            <div class="expectation__stats row" aria-label="สถิติของงาน">
-                <div class="expectation__stat col-4 col-lg-4">
-                    <strong>40+</strong>
-                    <span>Speakers</span>
-                </div>
-                <div class="expectation__stat col-4 col-lg-4">
-                    <strong>4,000+</strong>
-                    <span>Attendees</span>
-                </div>
-                <div class="expectation__stat col-4 col-lg-4">
-                    <strong>20</strong>
-                    <span>Sessions</span>
-                </div>
-                <div class="expectation__stat col-4 col-lg-3">
-                    <strong>24+</strong>
-                    <span>Exhibitions</span>
-                </div>
-                <div class="expectation__stat col-4 col-lg-3">
-                    <strong>8</strong>
-                    <span>Workshops</span>
-                </div>
-                <div class="expectation__stat col-4 col-lg-3">
-                    <strong>4</strong>
-                    <span>Private Classes</span>
-                </div>
-                <div class="expectation__stat col-4 col-lg-3">
-                    <strong>93</strong>
-                    <span>Pavilion Booths</span>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- End Section : Expectation -->
-
-
-    <!-- Start Section : Floor Plan -->
-    <section id="floor-plan" class="floor-plan" aria-labelledby="floor-plan-title">
-        <div class="floor-plan__inner container">
-            <div class="row">
-                <div class="col-12">
-                    <h2 id="floor-plan-title" class="bt-section-title floor-plan__title"><span class="bt-title-highlight">สำรวจ</span>พื้นที่<br>และโซนต่าง ๆ ในงาน</h2>
-                    <p class="bt-section-subtext">Floor Plan</p>
-                    <figure class="floor-plan__figure">
-                        <div class="floor-plan__visual">
-                            <img class="floor-plan__image" src="images/floor-plan.webp" width="3813" height="2125"
-                                loading="lazy" decoding="async"
-                                alt="แผนผังพื้นที่ Conference, Pavilions และ Experience ภายในงาน Better Trade 2026">
-                            <svg class="floor-plan__callouts" viewBox="0 0 3813 2125" aria-hidden="true">
-                                <g class="floor-plan__callout floor-plan__callout--conference">
-                                    <line class="floor-plan__callout-line" x1="897" y1="726" x2="897" y2="438"></line>
-                                    <image class="floor-plan__callout-mark" href="images/floor-plan-star.png"
-                                        x="863" y="352" width="74" height="74"></image>
-                                    <text class="floor-plan__callout-label" x="673" y="312">CONFERENCE</text>
-                                </g>
-                                <g class="floor-plan__callout floor-plan__callout--pavilions">
-                                    <line class="floor-plan__callout-line" x1="372" y1="1504" x2="372" y2="1800"></line>
-                                    <image class="floor-plan__callout-mark" href="images/floor-plan-star.png"
-                                        x="330" y="1810" width="76" height="76"></image>
-                                    <text class="floor-plan__callout-label" x="171" y="1987">PAVILLIONS</text>
-                                </g>
-                                <g class="floor-plan__callout floor-plan__callout--experience">
-                                    <line class="floor-plan__callout-line" x1="2798" y1="1833" x2="3095" y2="1833"></line>
-                                    <image class="floor-plan__callout-mark" href="images/floor-plan-star.png"
-                                        x="3105" y="1793" width="76" height="76"></image>
-                                    <text class="floor-plan__callout-label" x="3221" y="1853">EXPERIENCE</text>
-                                </g>
-                            </svg>
-                        </div>
-                    </figure>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- End Section : Floor Plan -->
-
-
     <!-- Start Section : Speaker -->
     <section id="speaker" class="speaker" aria-labelledby="speaker-title">
         <header class="speaker__section-header container">
-            <h2 id="speaker-title" class="bt-section-title">พบกับผู้เชี่ยวชาญ<br>ที่กำลัง<span class="bt-title-highlight">นิยามโลกการลงทุนใหม่</span></h2>
+            <h2 id="speaker-title" class="bt-section-title">พบกับผู้เชี่ยวชาญ<br>ที่กำลัง<span class="bt-title-highlight has-ps">นิยามโลกการลงทุนใหม่</span></h2>
             <p class="bt-section-subtext">Speaker</p>
         </header>
 
@@ -1067,8 +944,8 @@
             <div class="speaker__layout row">
                 <nav class="speaker__day-switcher col-12 col-md-3" aria-label="เลือกวันของ Speaker">
                     <!-- <p class="speaker__eyebrow">Speaker</p> -->
-                    <div class="speaker__day-switcher-inner" role="tablist" aria-orientation="vertical">
-                        <a id="speaker-day-one-switch" class="speaker__day-switch" href="#speaker-day-one" role="tab" aria-selected="true" aria-controls="speaker-day-one" aria-current="true">
+                    <div class="speaker__day-switcher-inner">
+                        <a id="speaker-day-one-switch" class="speaker__day-switch" href="#speaker-day-one" aria-current="true">
                             <span class="speaker__day-switch-label">Day 1</span>
                             <span class="speaker__day-switch-details">
                                 <span class="speaker__day-switch-details-inner">
@@ -1080,7 +957,7 @@
                         </a>
                         <span class="speaker__day-switch-prompt" aria-hidden="true">เลือกวัน</span>
                         <span class="speaker__day-switch-rail" aria-hidden="true"></span>
-                        <a id="speaker-day-two-switch" class="speaker__day-switch" href="#speaker-day-two" role="tab" aria-selected="false" aria-controls="speaker-day-two" tabindex="-1">
+                        <a id="speaker-day-two-switch" class="speaker__day-switch" href="#speaker-day-two">
                             <span class="speaker__day-switch-label">Day 2</span>
                             <span class="speaker__day-switch-details">
                                 <span class="speaker__day-switch-details-inner">
@@ -1094,11 +971,11 @@
                 </nav>
 
                 <div class="speaker__days col-12 col-md-9">
-                    <div id="speaker-day-one" class="speaker__day-panel" data-speaker-day-panel="day-one" role="tabpanel" aria-labelledby="speaker-day-one-switch">
+                    <div id="speaker-day-one" class="speaker__day-panel" data-speaker-day-panel="day-one">
                         <div class="speaker__panel" data-speaker-day="dayOne"></div>
                     </div>
 
-                    <div id="speaker-day-two" class="speaker__day-panel" data-speaker-day-panel="day-two" role="tabpanel" aria-labelledby="speaker-day-two-switch" hidden>
+                    <div id="speaker-day-two" class="speaker__day-panel" data-speaker-day-panel="day-two">
                         <div class="speaker__panel" data-speaker-day="dayTwo"></div>
                     </div>
                 </div>
@@ -1111,7 +988,7 @@
     <!-- Start Section : Moderators & MC -->
     <section id="moderator" class="moderator" aria-labelledby="moderator-title">
         <header class="moderator__section-header container">
-            <h2 id="moderator-title" class="bt-section-title">ผู้ดำเนินรายการ<br>ที่จะพาคุณ<span class="bt-title-highlight">เจาะลึกทุกประเด็น</span></h2>
+            <h2 id="moderator-title" class="bt-section-title">ผู้ดำเนินรายการ<br>ที่จะพาคุณ<span class="bt-title-highlight has-ps">เจาะลึกทุกประเด็น</span></h2>
             <p class="bt-section-subtext">Moderators &amp; MC</p>
         </header>
 
@@ -1206,12 +1083,184 @@
     <!-- End Section : Moderators & MC -->
 
 
+    <!-- Start Section : Expectation -->
+    <section id="expectation" class="expectation" aria-labelledby="expectation-title">
+        <div class="expectation__inner container">
+            <div class="row">
+                <div class="col-12">
+                    <header class="expectation__header">
+                        <h2 id="expectation-title" class="bt-section-title">รวม<span class="bt-title-highlight has-px">ทุกโอกาส</span>ของโลกการลงทุน<br class="d-sm-block d-none">ไว้ในงานเดียว</h2>
+                        <p class="bt-section-subtext expectation-none">Expectation</p>
+                    </header>
+                </div>
+            </div>
+
+            <div class="expectation__stats row" aria-label="สถิติของงาน">
+                <div class="expectation__stat col-4 col-lg-4">
+                    <strong>40+</strong>
+                    <span>Speakers</span>
+                </div>
+                <div class="expectation__stat col-4 col-lg-4">
+                    <strong>4,000+</strong>
+                    <span>Attendees</span>
+                </div>
+                <div class="expectation__stat col-4 col-lg-4">
+                    <strong>20</strong>
+                    <span>Sessions</span>
+                </div>
+                <div class="expectation__stat col-4 col-lg-3">
+                    <strong>24+</strong>
+                    <span>Exhibitions</span>
+                </div>
+                <div class="expectation__stat col-4 col-lg-3">
+                    <strong>8</strong>
+                    <span>Workshops</span>
+                </div>
+                <div class="expectation__stat col-4 col-lg-3">
+                    <strong>4</strong>
+                    <span>Private Classes</span>
+                </div>
+                <div class="expectation__stat col-4 col-lg-3">
+                    <strong>93</strong>
+                    <span>Pavilion Booths</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Section : Expectation -->
+
+
+    <!-- Start Section : Floor Plan -->
+    <section id="floor-plan" class="floor-plan" aria-labelledby="floor-plan-title">
+        <div class="floor-plan__inner container">
+            <div class="row">
+                <div class="col-12">
+                    <h2 id="floor-plan-title" class="bt-section-title floor-plan__title"><span class="bt-title-highlight has-pe">สำรวจ</span>พื้นที่<br>และโซนต่าง ๆ ในงาน</h2>
+                    <p class="bt-section-subtext">Floor Plan</p>
+                    <figure class="floor-plan__figure">
+                        <div class="floor-plan__visual">
+                            <img class="floor-plan__image" src="images/floor-plan.webp" width="3813" height="2125"
+                                loading="lazy" decoding="async"
+                                alt="แผนผังพื้นที่ Conference, Pavilions และ Experience ภายในงาน Better Trade 2026">
+                            <svg class="floor-plan__callouts" viewBox="0 0 3813 2125" aria-hidden="true">
+                                <g class="floor-plan__callout floor-plan__callout--conference">
+                                    <line class="floor-plan__callout-line" x1="897" y1="726" x2="897" y2="438"></line>
+                                    <image class="floor-plan__callout-mark" href="images/floor-plan-star.png"
+                                        x="863" y="352" width="74" height="74"></image>
+                                    <text class="floor-plan__callout-label" x="673" y="312">CONFERENCE</text>
+                                </g>
+                                <g class="floor-plan__callout floor-plan__callout--pavilions">
+                                    <line class="floor-plan__callout-line" x1="372" y1="1504" x2="372" y2="1800"></line>
+                                    <image class="floor-plan__callout-mark" href="images/floor-plan-star.png"
+                                        x="330" y="1810" width="76" height="76"></image>
+                                    <text class="floor-plan__callout-label" x="171" y="1987">PAVILLIONS</text>
+                                </g>
+                                <g class="floor-plan__callout floor-plan__callout--experience">
+                                    <line class="floor-plan__callout-line" x1="2798" y1="1833" x2="3095" y2="1833"></line>
+                                    <image class="floor-plan__callout-mark" href="images/floor-plan-star.png"
+                                        x="3105" y="1793" width="76" height="76"></image>
+                                    <text class="floor-plan__callout-label" x="3221" y="1853">EXPERIENCE</text>
+                                </g>
+                            </svg>
+                        </div>
+                    </figure>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Section : Floor Plan -->
+
+
+    <!-- Start Section : Sponsor -->
+    <section id="sponsor" class="sponsor" aria-labelledby="sponsor-title">
+        <div class="sponsor__inner container">
+            <h2 id="sponsor-title" class="visually-hidden">ผู้สนับสนุนและพันธมิตร</h2>
+
+            <div class="sponsor__group" id="title-sponsor">
+                <h3 class="sponsor__group-title bt-section-title">Title Sponsor</h3>
+                <ul class="sponsor__logos sponsor__logos--lead">
+                    <li class="sponsor__logo sponsor__logo--lead"></li>
+                </ul>
+            </div>
+
+            <div class="sponsor__group" id="sponsors">
+                <h3 class="sponsor__group-title bt-section-title">Sponsors</h3>
+                <ul class="sponsor__logos sponsor__logos--md">
+                    <li class="sponsor__logo sponsor__logo--md"></li>
+                    <li class="sponsor__logo sponsor__logo--md"></li>
+                    <li class="sponsor__logo sponsor__logo--md"></li>
+                </ul>
+                <ul class="sponsor__logos sponsor__logos--sm">
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                </ul>
+            </div>
+
+            <div class="sponsor__group" id="media-partners">
+                <h3 class="sponsor__group-title bt-section-title">Media Partners</h3>
+                <ul class="sponsor__logos sponsor__logos--sm">
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                </ul>
+            </div>
+
+            <div class="sponsor__group" id="kol-partners">
+                <h3 class="sponsor__group-title bt-section-title">KOL Partners</h3>
+                <ul class="sponsor__logos sponsor__logos--sm">
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                    <li class="sponsor__logo sponsor__logo--sm"></li>
+                </ul>
+            </div>
+
+            <div class="sponsor__group" id="organizer">
+                <h3 class="sponsor__group-title bt-section-title">Organizer</h3>
+                <ul class="sponsor__logos sponsor__logos--md">
+                    <li class="sponsor__logo sponsor__logo--md"></li>
+                    <li class="sponsor__logo sponsor__logo--md"></li>
+                    <li class="sponsor__logo sponsor__logo--md"></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <!-- End Section : Sponsor -->
+
+
     <!-- Start Section : Past Event -->
     <section id="past-event" class="past-event" aria-labelledby="past-event-title">
         <div class="past-event__inner container">
             <header class="past-event__header">
                 <div class="past-event__heading">
-                    <h2 id="past-event-title" class="bt-section-title">ทุกเวทีที่ผ่านมา<br>เปลี่ยนความรู้ให้เป็น<span class="bt-title-highlight">โอกาสจริง</span></h2>
+                    <h2 id="past-event-title" class="bt-section-title">ทุกเวทีที่ผ่านมา<br>เปลี่ยนความรู้ให้เป็น<span class="bt-title-highlight has-ps">โอกาสจริง</span></h2>
                     <p class="bt-section-subtext">Past Event</p>
                 </div>
             </header>
@@ -1379,8 +1428,8 @@
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="vendor/swiper/swiper-bundle.min.js"></script>
     <script src="js/action-button.js"></script>
-    <script src="js/agenda-tabs.js?v=6"></script>
-    <script src="js/speaker-directory.js?v=6"></script>
+    <script src="js/agenda-tabs.js?v=13"></script>
+    <script src="js/speaker-directory.js?v=7"></script>
     <script src="js/expectation-counter.js?v=1"></script>
     <script src="js/floor-plan-reveal.js?v=1"></script>
     <script src="js/back-to-top.js?v=2"></script>
@@ -1401,7 +1450,7 @@
     <script src="js/topics-reveal.js?v=4"></script>
     <script src="js/topics-assets-motion.js?v=7"></script>
     <!-- หลัง hero เพราะ ScrollTrigger refresh ตามลำดับที่สร้าง และ speaker อยู่ใต้ hero ในหน้า -->
-    <script src="js/speaker-motion.js?v=1"></script>
+    <script src="js/speaker-motion.js?v=2"></script>
 </body>
 
 </html>

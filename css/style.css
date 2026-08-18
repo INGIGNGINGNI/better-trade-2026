@@ -311,7 +311,9 @@ button {
     border: 0;
     opacity: 1;
     transform: translateY(0);
-    transition: opacity 520ms cubic-bezier(0.16, 1, 0.3, 1), transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 520ms cubic-bezier(0.16, 1, 0.3, 1),
+        transform 520ms cubic-bezier(0.16, 1, 0.3, 1),
+        background-color 320ms ease;
 }
 
 .site-header,
@@ -345,6 +347,17 @@ body.menu-closing .site-header {
     grid-template-columns: minmax(152px, 0.7fr) auto minmax(264px, 0.7fr);
     align-items: center;
     gap: var(--space-8);
+}
+
+.site-header.is-sticky {
+    background: var(--bt-header-bg);
+}
+
+/* ทับด้วยพื้นมืดตอนที่ section พื้นสีดำ (data-header-theme="dark") อยู่ใต้ header พอดี
+   ใช้เฉดเดียวกับพื้นหลังของ section นั้น แถบ header จึงกลืนไปกับเนื้อหาแทนที่จะเป็น
+   แถบขาวคาดทับ ตัวอักษร/โลโก้สลับเป็นเวอร์ชันพื้นมืดอยู่แล้วผ่าน .site-header--on-dark */
+.site-header.is-sticky.site-header--on-dark {
+    background: var(--bt-header-bg-on-dark);
 }
 
 .site-header.is-sticky .site-header__inner {
@@ -1458,7 +1471,7 @@ the timeline drops them under the ship once the walls have retreated. */
 #concept {
     --bt-concept-description-size: var(--section-topic-size);
     --bt-concept-description-line-height: var(--section-topic-line-height);
-    --bt-concept-bg-opacity: 0.15;
+    --bt-concept-bg-opacity: 0.4;
 
     position: relative;
     /* min-height: 180vh; */
@@ -1480,8 +1493,21 @@ the timeline drops them under the ship once the walls have retreated. */
     background: url("../images/concept-room-bg.webp") center top / cover no-repeat;
     opacity: var(--bt-concept-bg-opacity);
     pointer-events: none;
-    -webkit-mask-image: linear-gradient(180deg, transparent 0px, transparent 120px, #000 280px);
-    mask-image: linear-gradient(180deg, transparent 0px, transparent 120px, #000 280px);
+    /* Ramp is longer and slow-start (eased) rather than a straight 2-stop linear fade so a
+       higher --bt-concept-bg-opacity still reads as a gradual reveal instead of a visible
+       edge where it crosses the hero's white into #concept. */
+    -webkit-mask-image: linear-gradient(180deg,
+            transparent 0px,
+            transparent 120px,
+            rgba(0, 0, 0, 0.12) 220px,
+            rgba(0, 0, 0, 0.45) 320px,
+            #000 460px);
+    mask-image: linear-gradient(180deg,
+            transparent 0px,
+            transparent 120px,
+            rgba(0, 0, 0, 0.12) 220px,
+            rgba(0, 0, 0, 0.45) 320px,
+            #000 460px);
 }
 
 .concept__aurora {
@@ -1657,9 +1683,18 @@ the timeline drops them under the ship once the walls have retreated. */
     #concept {
         padding: var(--section-padding-y-sm) 0;
     }
+
+    #concept::before {
+        -webkit-mask-image: none;
+        mask-image: none;
+    }
 }
 
 @media (max-width: 767px) {
+    #concept {
+        --bt-concept-bg-opacity: 0.55;
+    }
+
     .concept__inner {
         padding-bottom: var(--space-4);
     }
@@ -1674,10 +1709,6 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 @media (max-width:575px) {
-    #concept {
-        --bt-concept-bg-opacity: 0.25;
-    }
-
     .concept__description {
         --bt-concept-description-size: var(--section-topic-size-xs);
         --bt-concept-description-line-height: var(--section-topic-line-height-xs);
@@ -2144,10 +2175,13 @@ the timeline drops them under the ship once the walls have retreated. */
 /* ---------- Ticket ---------- Comparison layout แบบ editorial ใช้พื้นที่ว่างและเส้นบางแทนกรอบ card */
 .ticket {
     --bt-ticket-title-size: var(--section-title-size);
-    --bt-ticket-plan-title-size: var(--section-heading-size);
+    --bt-ticket-plan-title-size: var(--font-size-32);
     --bt-ticket-plan-title-line-height: var(--section-heading-line-height);
     --bt-ticket-price-size: var(--section-heading-size);
     --bt-ticket-price-line-height: var(--section-heading-line-height);
+    /* ความสูงของภาพประกอบที่หัว section คุมจุดที่ขอบล่างของภาพไปคร่อมการ์ดราคา
+       ปรับค่านี้ค่าเดียวก็เลื่อนระยะทับได้ทั้งชุด */
+    --bt-ticket-backdrop-height: 600px;
 
     position: relative;
     padding: var(--section-padding-y) 0;
@@ -2155,11 +2189,71 @@ the timeline drops them under the ship once the walls have retreated. */
     background: var(--color-surface-page);
     font-family: var(--font-family-base);
 
+    /* ภาพประกอบกางเต็มความกว้างที่หัว section หัวข้อวางทับอยู่บนภาพ ส่วนแผงการ์ดราคา
+       (ทึบแสง ดู .ticket__plans) เลื่อนขึ้นไปคร่อมขอบล่างของภาพตามเลย์เอาต์ที่ออกแบบไว้ */
+    .ticket__backdrop {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 0;
+        width: 100%;
+        height: var(--bt-ticket-backdrop-height);
+        object-fit: cover;
+        object-position: center;
+        pointer-events: none;
+    }
+
+    /* ฉากไล่เฉดทับภาพ กันไม่ให้ตัวหนังสือสีขาวจมหายไปกับส่วนที่สว่างของภาพ
+       ไล่จากซ้ายเพราะหัวข้อชิดซ้าย ส่วนขวาปล่อยให้เห็นภาพเต็ม ๆ */
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 0;
+        height: var(--bt-ticket-backdrop-height);
+        background: linear-gradient(90deg,
+                rgba(17, 19, 24, 0.78) 0%,
+                rgba(17, 19, 24, 0.55) 42%,
+                rgba(17, 19, 24, 0.18) 100%);
+        pointer-events: none;
+    }
+
+    /* ดันเนื้อหาทั้งหมดขึ้นมาอยู่เหนือภาพกับฉากไล่เฉด */
+    .ticket__inner {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* ต้องทึบแสง ไม่งั้นภาพด้านหลังจะทะลุขึ้นมาตรงส่วนที่การ์ดคร่อมภาพอยู่
+       ให้ทั้งแผงเป็นพื้นขาวผืนเดียว การ์ดสามใบจึงต่อกันสนิทเหมือนแบบที่ออกแบบไว้ */
+    .ticket__plans {
+        position: relative;
+        z-index: 1;
+        background: var(--color-surface-page);
+    }
+
+    /* หัวข้ออยู่บนภาพจึงต้องกลับเป็นโทนสว่าง (.bt-title-highlight เป็นไล่เฉดสีอยู่แล้ว
+       อ่านออกบนพื้นมืดได้ตามเดิม จึงไม่ต้องแตะ) */
+    .ticket__heading h2 {
+        color: var(--color-text-inverse);
+    }
+
+    .ticket__heading .bt-section-subtext {
+        color: var(--color-text-inverse-muted);
+    }
+
     .ticket__header {
         --bs-gutter-y: var(--space-6);
 
         align-items: end;
         margin-bottom: var(--section-padding-y-sm);
+    }
+
+    .ticket__heading {
+        margin-top: var(--space-16);
     }
 
     .ticket__plan-index {
@@ -2251,6 +2345,7 @@ the timeline drops them under the ship once the walls have retreated. */
         font-weight: var(--font-weight-regular);
         /* line-height: var(--bt-ticket-plan-title-line-height); */
         letter-spacing: var(--section-heading-tracking);
+        text-transform: uppercase;
     }
 
     /* หน่วยเป็น em ตั้งใจ ผูกกับขนาดฟอนต์ของ h3 ที่ครอบอยู่ (40px ปกติ, 24px บนมือถือ)
@@ -2476,6 +2571,7 @@ the timeline drops them under the ship once the walls have retreated. */
                 display: block;
                 filter: var(--bt-ticket-benefit-icon-shadow);
                 object-fit: contain;
+                filter: saturate(1.5);
             }
 
             span {
@@ -2572,12 +2668,14 @@ the timeline drops them under the ship once the walls have retreated. */
         }
     }
 
-    @media (max-width:1399px) {
-        --bt-ticket-plan-title-size: var(--font-size-36);
-    }
-
     @media (max-width:1199px) {
+        --bt-ticket-backdrop-height: 540px;
+        --bt-ticket-plan-title-size: var(--font-size-28);
         --bt-ticket-price-size: var(--font-size-28);
+
+        .ticket__plan {
+            padding: var(--space-6);
+        }
 
         .ticket__plan-header h3 {
             display: flex;
@@ -2585,8 +2683,16 @@ the timeline drops them under the ship once the walls have retreated. */
             gap: var(--space-2);
         }
 
-        .ticket__price strong {
-            font-size: var(--bt-ticket-price-size);
+        .ticket__price {
+            strong {
+                margin-top: var(--space-0);
+                font-size: var(--bt-ticket-price-size);
+            }
+
+            span,
+            small {
+                font-size: var(--font-size-14);
+            }
         }
 
         .ticket__benefits {
@@ -2641,10 +2747,20 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     @media (max-width:991px) {
-        --bt-ticket-plan-title-size: var(--font-size-40);
-        --bt-ticket-price-size: var(--font-size-32);
+        --bt-ticket-backdrop-height: 440px;
+        --bt-ticket-plan-title-size: var(--font-size-32);
+        --bt-ticket-price-size: var(--font-size-40);
 
         padding: var(--section-padding-y-sm) 0;
+
+        /* จอแคบหัวข้อกินความกว้างเกือบเต็ม ฉากไล่เฉดแนวนอนของจอใหญ่เลยคลุมทั้งภาพจนภาพจมหาย
+           เปลี่ยนเป็นไล่จากบนลงล่างและบางกว่าเดิม ภาพยังเห็นชัดแต่ตัวหนังสือยังอ่านออก */
+        &::before {
+            background: linear-gradient(180deg,
+                    rgba(17, 19, 24, 0.50) 0%,
+                    rgba(17, 19, 24, 0.34) 60%,
+                    rgba(17, 19, 24, 0.12) 100%);
+        }
 
         .ticket__header {
             margin-bottom: var(--space-16);
@@ -2704,10 +2820,11 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     @media (max-width:575px) {
+        --bt-ticket-backdrop-height: 360px;
         --bt-ticket-title-size: var(--section-topic-size);
-        --bt-ticket-plan-title-size: var(--font-size-32);
+        --bt-ticket-plan-title-size: var(--font-size-28);
         --bt-ticket-plan-title-line-height: var(--section-topic-line-height);
-        --bt-ticket-price-size: var(--font-size-24);
+        --bt-ticket-price-size: var(--font-size-32);
         --bt-ticket-benefit-text-size: var(--font-size-14);
 
         .ticket__plan-header {
@@ -2841,9 +2958,26 @@ the timeline drops them under the ship once the walls have retreated. */
         align-items: start;
     }
 
-    .agenda__inner,
-    .agenda__day-panel {
+    .agenda__inner {
         scroll-margin-top: calc(var(--header-height) + var(--space-6));
+    }
+
+    /* Day 1/Day 2 อยู่ใต้แถบแท็บ Stage ที่ sticky อยู่เสมอ (ซ้อนอยู่ใน #agenda-main-stage)
+       จึงต้องเผื่อระยะเท่ากับที่ .agenda__panel ใช้ ไม่ใช่แค่ใต้ header เฉย ๆ
+       ไม่งั้นคลิกสลับวันแล้วหัวตารางจะโผล่ไปโดนแถบแท็บบัง */
+    .agenda__day-panel {
+        scroll-margin-top: calc(var(--header-height) + var(--space-6) + var(--touch-target-md) + var(--rule-width-subtle));
+    }
+
+    /* Day 1 กับ Day 2 อยู่ในตารางต่อกันตรง ๆ ไม่งั้นดูเหมือนตารางเดียวยาวต่อเนื่อง
+       เว้นระยะ + ขีดคั่นเข้าไปให้เห็นชัดว่าขึ้นวันใหม่แล้ว (ตัวสลับวันด้านข้างบอก
+       อยู่แล้วว่าเป็นวันไหน แต่คนละองค์ประกอบกัน ตรงนี้ต้องอ่านออกในตัวมันเองด้วย)
+       :not([hidden]) ทั้งสองฝั่งกันไว้ไม่ให้กระทบจอ ≤767px ที่โชว์ทีละวัน — วันที่
+       ถูกซ่อนอยู่ตัดคู่ sibling ที่ตรงเงื่อนไขไปเลย วันที่เหลือโชว์อยู่คนเดียวเลย
+       ไม่มีระยะ/ขีดคั่นเผื่อไว้ด้านบนแบบผิดที่ */
+    .agenda__day-panel:not([hidden])+.agenda__day-panel:not([hidden]) {
+        margin-top: var(--space-12);
+        padding-top: var(--space-12);
     }
 
     .agenda__days {
@@ -3001,14 +3135,6 @@ the timeline drops them under the ship once the walls have retreated. */
 
     .agenda__day-switcher-inner[data-active-day='day-two'] .agenda__day-switch-rail::after {
         transform: translateY(100%);
-    }
-
-    .agenda__day-panel[hidden] {
-        display: none;
-    }
-
-    .agenda__day-panel.is-entering .agenda__content {
-        animation: agenda-day-enter var(--duration-base) var(--ease-standard) both;
     }
 
     .agenda__content {
@@ -3186,12 +3312,12 @@ the timeline drops them under the ship once the walls have retreated. */
 
     .agenda__table th,
     .agenda__table td {
-        padding: var(--space-6) 0;
+        padding: var(--space-4) 0;
         vertical-align: top;
     }
 
     .agenda__table th {
-        padding-right: var(--space-6);
+        padding-right: var(--space-4);
         color: var(--color-text-muted);
         font-size: var(--section-small-size);
         font-weight: var(--font-weight-regular);
@@ -3207,7 +3333,7 @@ the timeline drops them under the ship once the walls have retreated. */
 
     .agenda__table td {
         border-left: var(--rule-width-subtle) solid var(--color-border-faint);
-        padding-left: var(--space-6);
+        padding-left: var(--space-4);
     }
 
     /* กรอบรูปวิทยากรอยู่ขวาสุดของแต่ละ Session และรองรับหลายคนในแถวเดียว */
@@ -3413,7 +3539,7 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .agenda__tags {
-        margin-bottom: var(--space-4);
+        margin-bottom: var(--space-3);
         display: flex;
         flex-wrap: wrap;
         gap: var(--space-2);
@@ -3472,7 +3598,7 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .agenda__session-speaker {
-        margin: var(--space-4) var(--space-0) var(--space-0);
+        margin: var(--space-3) var(--space-0) var(--space-0);
         color: var(--color-text-muted);
         font-size: var(--section-small-size);
         font-weight: var(--font-weight-regular);
@@ -3735,21 +3861,29 @@ the timeline drops them under the ship once the walls have retreated. */
         }
 
         .agenda__tabs-viewport {
+            --agenda-tabs-gap: var(--space-8);
+
             position: sticky;
             top: var(--header-height);
             z-index: 2;
             display: block;
-            margin-top: var(--space-8);
+            margin-top: var(--agenda-tabs-gap);
             background: var(--color-surface-page);
 
-            /* ปิดเนื้อหาตารางที่เลื่อนผ่านใต้ Header โดยไม่ถูก overflow แนวนอน clip */
+            /* ปิดเนื้อหาตารางที่เลื่อนผ่านใต้ Header โดยไม่ถูก overflow แนวนอน clip
+               ความสูงต้องเท่ากับช่องว่างเหนือแถบแท็บ (--agenda-tabs-gap) เป๊ะ ๆ ห้ามสูงกว่านี้:
+               แถบนี้ sticky แต่ ::before ขยับตามแถบเสมอ ตอนที่แถบยังไม่ติดขอบบน (เช่นเพิ่งเลื่อน
+               เข้ามาถึง Agenda) ฉากทึบนี้จะยื่นขึ้นไปทับ .agenda__day-switcher ที่อยู่เหนือมัน
+               จนวันที่/เวลาใต้ปุ่ม Day หายไปทั้งแถบ (เคยสูง header+24 = 96px ทับกินเข้าไป 64px)
+               ส่วนตอนที่แถบติดขอบบนแล้ว พื้นที่เหนือมันคือใต้ Header ซึ่ง Header ทึบคลุมอยู่แล้ว
+               จึงไม่ต้องใช้ฉากสูงไปกว่าช่องว่างนี้ */
             &::before {
                 content: '';
                 position: absolute;
                 right: 0;
                 bottom: 100%;
                 left: 0;
-                height: calc(var(--header-height) + var(--space-6));
+                height: var(--agenda-tabs-gap);
                 background: var(--color-surface-page);
                 pointer-events: none;
             }
@@ -3842,7 +3976,7 @@ the timeline drops them under the ship once the walls have retreated. */
         }
 
         .agenda__tabs-viewport {
-            margin-top: var(--space-3);
+            --agenda-tabs-gap: var(--space-3);
         }
 
         .agenda__tab {
@@ -3954,22 +4088,7 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 }
 
-@keyframes agenda-day-enter {
-    from {
-        opacity: 0;
-        transform: translateY(var(--space-2));
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
 @media (prefers-reduced-motion: reduce) {
-    .agenda .agenda__day-panel.is-entering .agenda__content {
-        animation-duration: var(--duration-reduced);
-    }
 
     /* เดิมครอบแค่ตารางฝั่งขวา ตัวสลับวันยังมอร์ฟป้าย 24→48px เต็ม 240ms อยู่ */
     .agenda .agenda__day-switch,
@@ -4046,6 +4165,15 @@ the timeline drops them under the ship once the walls have retreated. */
 
     .speaker__day-panel {
         scroll-margin-top: calc(var(--header-height) + var(--space-6));
+    }
+
+    /* Day 1 กับ Day 2 ต่อกันในพื้นที่เลื่อนเดียว เว้นระยะ + ขีดคั่นให้เห็นว่าขึ้นวันใหม่
+       :not([hidden]) ทั้งสองฝั่งกันไว้ไม่ให้กระทบจอ ≤767px ที่โชว์ทีละวัน — วันที่ถูกซ่อน
+       ตัดคู่ sibling ที่ตรงเงื่อนไขไปเลย วันที่เหลือจึงไม่มีระยะ/ขีดคั่นค้างไว้ด้านบน */
+    .speaker__day-panel:not([hidden]) + .speaker__day-panel:not([hidden]) {
+        margin-top: var(--space-16);
+        padding-top: var(--space-8);
+        border-top: var(--rule-width-subtle) solid var(--color-border-editorial);
     }
 
     .speaker__day-panel[hidden] {
@@ -4192,25 +4320,6 @@ the timeline drops them under the ship once the walls have retreated. */
        (แนวเดียวกับ .agenda__panel--empty) */
     .speaker__panel--empty {
         min-height: var(--section-padding-y-sm);
-    }
-
-    /* เหลือไว้เฉพาะการวางลงผังเชิงบรรณาธิการ ซึ่งเป็นเรื่องของ section นี้เท่านั้น
-       หน้าตาของการ์ดย้ายไปเป็นคอมโพเนนต์ .speaker-card ระดับบนสุด (ใต้บล็อกนี้)
-       เพราะ Moderators & MC ใช้การ์ดหน้าตาเดียวกันแต่คนละผัง */
-    .speaker-card {
-        grid-column: var(--speaker-column);
-        grid-row: var(--speaker-row);
-    }
-
-    @media (max-width: 1199px) {
-
-        /* ปิดผังตายตัวให้การ์ดไหลต่อกันเอง ช่องว่างเชิงบรรณาธิการจึงหายไปพร้อมกัน
-           (ระยะห่างของกริดที่เปลี่ยนคู่กันอยู่ในบล็อกกริดร่วมท้ายไฟล์ section นี้) */
-        .speaker-card {
-            grid-column: auto;
-            grid-row: auto;
-        }
-
     }
 
     @media (max-width: 991px) {
@@ -5446,6 +5555,149 @@ the timeline drops them under the ship once the walls have retreated. */
             opacity: 1;
             transform: none;
             transition: none;
+        }
+    }
+}
+
+
+/* ---------- Sponsor & Partners ----------
+   กรอบเปล่ารอใส่โลโก้จริงภายหลัง ขนาดตามดีไซน์คุมด้วยแทร็กของกริด (minmax) กรอบจึงหด
+   ตามจอแคบได้เองโดยยังคงสัดส่วนเดิมไว้ด้วย aspect-ratio ไม่ต้องล็อกความสูงเป็น px */
+.sponsor {
+    --bt-sponsor-lead-width: 258px;
+    --bt-sponsor-lead-ratio: 258 / 120;
+    --bt-sponsor-md-width: 188px;
+    --bt-sponsor-md-ratio: 188 / 90;
+    --bt-sponsor-sm-width: 90px;
+    --bt-sponsor-sm-ratio: 90 / 62;
+    --bt-sponsor-sm-columns: 6;
+    --bt-sponsor-frame-bg: var(--color-neutral-100);
+
+    padding: var(--section-padding-y) 0;
+    color: var(--color-text-primary);
+    background: var(--color-surface-page);
+    font-family: var(--font-family-base);
+
+    .sponsor__group+.sponsor__group {
+        margin-top: var(--space-20);
+    }
+
+    /* หน้าตาตัวอักษรมาจาก .bt-section-title ทั้งหมด (ฟอนต์/ขนาด/น้ำหนัก/line-height/tracking)
+       ให้เหมือนหัวข้อของ section อื่น ที่นี่เหลือแค่ระยะห่างกับการจัดกึ่งกลางตามเลย์เอาต์ของ section นี้ */
+    .sponsor__group-title {
+        margin: 0 0 var(--space-8);
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    .sponsor__logos {
+        margin: 0;
+        padding: 0;
+        display: grid;
+        justify-content: center;
+        gap: var(--space-3);
+        list-style: none;
+    }
+
+    /* Sponsors มีสองแถว (3 ช่องใหญ่ + 12 ช่องเล็ก) อยู่คนละ <ul> จึงต้องคั่นระยะเอง */
+    .sponsor__logos+.sponsor__logos {
+        margin-top: var(--space-3);
+    }
+
+    .sponsor__logos--lead {
+        grid-template-columns: minmax(0, var(--bt-sponsor-lead-width));
+    }
+
+    .sponsor__logos--md {
+        grid-template-columns: repeat(3, minmax(0, var(--bt-sponsor-md-width)));
+    }
+
+    .sponsor__logos--sm {
+        grid-template-columns: repeat(var(--bt-sponsor-sm-columns), minmax(0, var(--bt-sponsor-sm-width)));
+        gap: var(--space-3);
+    }
+
+    /* กรอบเปล่า: วาง <img> เข้าไปทีหลังได้เลย รูปจะ contain อยู่ในกรอบเองไม่ล้นและไม่ยืดเสียสัดส่วน */
+    .sponsor__logo {
+        width: 100%;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        padding: var(--space-2);
+        border-radius: var(--card-radius);
+        background: var(--bt-sponsor-frame-bg);
+    }
+
+    .sponsor__logo--lead {
+        aspect-ratio: var(--bt-sponsor-lead-ratio);
+    }
+
+    .sponsor__logo--md {
+        aspect-ratio: var(--bt-sponsor-md-ratio);
+    }
+
+    .sponsor__logo--sm {
+        aspect-ratio: var(--bt-sponsor-sm-ratio);
+    }
+
+    .sponsor__logo img {
+        max-width: 100%;
+        max-height: 100%;
+        display: block;
+        object-fit: contain;
+    }
+
+    /* กฎย่อขนาดหัวข้อของส่วนกลางเจาะจงไว้ที่ h2.bt-section-title เท่านั้น หัวข้อกลุ่มที่นี่
+       เป็น h3 (ลำดับหัวข้อถูกต้องเพราะซ้อนอยู่ใต้ h2 ของ section) จึงต้องไล่ขนาดเองให้ตรงกัน
+       ไม่งั้นจอเล็กจะค้างที่ 48px ขณะที่หัวข้อ section อื่นย่อลงไปแล้ว */
+    @media (max-width: 991px) {
+        .sponsor__group-title {
+            --bt-section-title-size: var(--font-size-40);
+        }
+    }
+
+    /* ช่องเล็กเรียง 6 ต่อแถวตามดีไซน์ ลดจำนวนคอลัมน์ลงตามจอแทนที่จะปล่อยให้บีบจนโลโก้เล็กเกินอ่าน */
+    @media (max-width: 767px) {
+
+        padding: var(--section-padding-y-sm) 0;
+
+        .sponsor__group+.sponsor__group {
+            margin-top: var(--space-12);
+        }
+
+        .sponsor__group-title {
+            --bt-section-title-size: var(--font-size-32);
+
+            margin-bottom: var(--space-6);
+        }
+    }
+
+    @media (max-width: 575px) {
+
+        /* ต่ำกว่านี้ช่องขนาดกลาง/เล็กถูกแทร็กของกริดบีบให้เล็กลงตามความกว้างจอ (ราว 0.62 เท่า)
+           แต่ Title Sponsor มีคอลัมน์เดียวจึงยังกางเต็ม 258px อยู่ เลยดูใหญ่เกินสัดส่วนช่องอื่น
+           ผูกความกว้างไว้กับแทร็กจริงของช่องขนาดกลาง แล้วคูณอัตราส่วนเดิมของดีไซน์กลับเข้าไป
+           ทุกช่องจึงย่อลงพร้อมกันด้วยอัตราเดียวกัน ความสูงตามมาเองจาก aspect-ratio
+           min() ทำให้ตอนจอยังกว้างพอ (ใกล้ 575px) ได้ 258px เท่าเดิม ไม่กระโดดตรงรอยต่อ
+           เลข 258/188 คือค่าของ --bt-sponsor-lead-width กับ --bt-sponsor-md-width ด้านบน
+           (calc หารความยาวด้วยความยาวเป็นตัวเลขไม่ได้ จึงต้องเขียนซ้ำ) ถ้าแก้สองค่านั้นต้องแก้ตรงนี้ด้วย */
+        --bt-sponsor-lead-width:
+            calc(min(var(--bt-sponsor-md-width), (100% - var(--space-1) * 2) / 3) * 258 / 188);
+
+        .sponsor__group-title {
+            --bt-section-title-size: var(--font-size-28);
+        }
+
+        .sponsor__logos+.sponsor__logos {
+            margin-top: var(--space-1);
+        }
+
+        .sponsor__logos {
+            gap: var(--space-1);
+        }
+
+        .sponsor__logos--sm {
+            gap: var(--space-1);
         }
     }
 }

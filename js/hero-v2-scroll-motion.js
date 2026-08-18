@@ -132,19 +132,21 @@
             }
 
             if (shipRunHasCompleted) {
-                publishHeroScrollCueState(true);
+                publishHeroScrollCueState(false);
                 publishHeroRunProgress(window.scrollY > 10 ? 'ready' : 'hidden', 1);
                 return;
             }
 
             if (shipRunScrubState === 'playing') {
-                publishHeroScrollCueState(true);
+                publishHeroScrollCueState(false);
                 updateShipRunPlaybackProgress();
                 return;
             }
 
             const timelineTime = scrollTL?.time() || 0;
-            publishHeroScrollCueState(timelineTime >= HERO_SCROLL_CUE_REVEAL_AT);
+            publishHeroScrollCueState(
+                timelineTime >= HERO_SCROLL_CUE_REVEAL_AT && timelineTime < SHIP_RUN.startAt
+            );
             if (timelineTime < SHIP_RUN.startAt) {
                 publishHeroRunProgress('hidden');
                 return;
