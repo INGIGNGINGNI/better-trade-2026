@@ -44,6 +44,7 @@
     function hideLabel() {
         window.clearTimeout(labelRevealTimer);
         label.classList.remove('is-visible', 'is-changing');
+        indicator.classList.remove('is-marker-visible', 'is-marker-changing');
     }
 
     function setActiveStop(nextIndex) {
@@ -54,7 +55,11 @@
 
         window.requestAnimationFrame(() => {
             label.classList.add('is-visible');
-            if (!reducedMotion.matches) label.classList.add('is-changing');
+            indicator.classList.add('is-marker-visible');
+            if (!reducedMotion.matches) {
+                label.classList.add('is-changing');
+                indicator.classList.add('is-marker-changing');
+            }
         });
 
         labelRevealTimer = window.setTimeout(hideLabel, 1600);
@@ -78,12 +83,12 @@
     function updateDynamicColors(routeProgress) {
         const railRect = rail.getBoundingClientRect();
         const railX = railRect.left + (railRect.width / 2);
-        const shipY = railRect.top + (railRect.height * routeProgress);
+        const markerY = railRect.top + (railRect.height * routeProgress);
         const darkRects = getDarkRects();
 
         indicator.classList.toggle(
             'is-marker-on-dark',
-            isPointOnDark(railX, shipY, darkRects),
+            isPointOnDark(railX, markerY, darkRects),
         );
 
         const lightColor = 'rgba(17, 19, 24, 0.20)';

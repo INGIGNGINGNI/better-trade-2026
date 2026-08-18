@@ -90,7 +90,7 @@
         const HERO_RUN_PROGRESS_EVENT = 'bettertrade:hero-run-progress';
         const HERO_SCROLL_CUE_EVENT = 'bettertrade:hero-scroll-cue';
         const HERO_SCROLL_CUE_REVEAL_AT = 0.34;
-        const HERO_SCROLL_ACCELERATION = 1.65;
+        const HERO_SCROLL_ACCELERATION = 2;
         let heroRunProgressMode = '';
         let heroRunProgressValue = -1;
         let heroScrollCueVisible = false;
@@ -134,6 +134,12 @@
             if (shipRunHasCompleted) {
                 publishHeroScrollCueState(true);
                 publishHeroRunProgress(window.scrollY > 10 ? 'ready' : 'hidden', 1);
+                return;
+            }
+
+            if (shipRunScrubState === 'playing') {
+                publishHeroScrollCueState(true);
+                updateShipRunPlaybackProgress();
                 return;
             }
 
@@ -267,6 +273,13 @@
         let shipRunTargetTime = 0;
         let shipRunSyncRAF = null;
         let shipRunRenderRAF = null;
+        let shipRunWatchRAF = null;
+        let shipRunWatchLastTime = -1;
+        let shipRunWatchStallFrames = 0;
+        let shipRunProgressStartedAt = 0;
+        let shipRunProgressBaseTime = 0;
+        let shipRunScrollLockY = 0;
+        let shipRunScrollLocked = false;
         let shipRunHasCompleted = false;
         let shipRunHeroRestored = false;
         let completedHeroTimelineBuilt = false;
@@ -343,7 +356,8 @@
 
             return () => {
                 if (el.shipRunVideo.readyState < 2 || el.shipRunAlpha.readyState < 2) return;
-                if (canSeekShipRunAlpha()
+                if (shipRunScrubState !== 'playing'
+                    && canSeekShipRunAlpha()
                     && Math.abs(el.shipRunVideo.currentTime - el.shipRunAlpha.currentTime) > 1 / SHIP_RUN.fps) {
                     if (!el.shipRunAlpha.seeking) {
                         el.shipRunAlpha.currentTime = clamp(
@@ -381,6 +395,10 @@
 
         function alignShipRunAlpha() {
             if (el.shipRunVideo.readyState < 1 || el.shipRunAlpha.readyState < 1) return;
+            if (shipRunScrubState === 'playing') {
+                requestShipRunRender();
+                return;
+            }
             const duration = Math.min(el.shipRunVideo.duration, el.shipRunAlpha.duration);
             const target = clamp(el.shipRunVideo.currentTime, 0, Math.max(0, duration - 0.001));
             if (canSeekShipRunAlpha()
@@ -448,6 +466,104 @@
             });
         }
 
+        function isShipRunScrollLocked() {
+            return shipRunScrollLocked && shipRunScrubState === 'playing';
+        }
+
+        function lockShipRunScroll() {
+            shipRunScrollLockY = window.scrollY;
+            shipRunScrollLocked = true;
+        }
+
+        function unlockShipRunScroll() {
+            shipRunScrollLocked = false;
+        }
+
+        function keepShipRunScrollLocked() {
+            if (!isShipRunScrollLocked()) return;
+            if (Math.abs(window.scrollY - shipRunScrollLockY) > 1) {
+                window.scrollTo(0, shipRunScrollLockY);
+            }
+        }
+
+        function preventShipRunScroll(event) {
+            if (!isShipRunScrollLocked()) return;
+            event.preventDefault();
+        }
+
+        function preventShipRunKeyScroll(event) {
+            if (!isShipRunScrollLocked()) return;
+            const scrollKeys = [
+                'ArrowDown',
+                'ArrowLeft',
+                'ArrowRight',
+                'ArrowUp',
+                'End',
+                'Home',
+                'PageDown',
+                'PageUp',
+                ' ',
+            ];
+            if (scrollKeys.includes(event.key)) {
+                event.preventDefault();
+            }
+        }
+
+        function stopShipRunWatchdog() {
+            if (shipRunWatchRAF) cancelAnimationFrame(shipRunWatchRAF);
+            shipRunWatchRAF = null;
+            shipRunWatchLastTime = -1;
+            shipRunWatchStallFrames = 0;
+            shipRunProgressStartedAt = 0;
+            shipRunProgressBaseTime = 0;
+        }
+
+        function startShipRunWatchdog() {
+            stopShipRunWatchdog();
+            shipRunProgressStartedAt = performance.now();
+            shipRunProgressBaseTime = el.shipRunVideo.currentTime || 0;
+
+            const tick = () => {
+                shipRunWatchRAF = null;
+                if (shipRunScrubState !== 'playing') return;
+
+                const duration = getShipRunDuration();
+                const currentTime = el.shipRunVideo.currentTime || 0;
+                const elapsedTime = (performance.now() - shipRunProgressStartedAt) / 1000;
+                const progressTime = clamp(
+                    Math.max(currentTime, shipRunProgressBaseTime + elapsedTime * SHIP_RUN.playbackRate),
+                    0,
+                    duration
+                );
+
+                updateShipRunPlaybackProgress(progressTime);
+
+                if (duration > 0 && currentTime >= duration - 1 / SHIP_RUN.fps) {
+                    completeShipRunScrub();
+                    return;
+                }
+
+                const isStalled = !el.shipRunVideo.paused
+                    && !el.shipRunVideo.ended
+                    && el.shipRunVideo.readyState >= 2
+                    && Math.abs(currentTime - shipRunWatchLastTime) < 0.002;
+
+                shipRunWatchStallFrames = isStalled ? shipRunWatchStallFrames + 1 : 0;
+                shipRunWatchLastTime = currentTime;
+
+                if (shipRunWatchStallFrames > 45) {
+                    shipRunScrubState = 'scrubbing';
+                    shipRunState.time = currentTime / SHIP_RUN.playbackRate;
+                    syncShipRunToScroll();
+                    return;
+                }
+
+                shipRunWatchRAF = requestAnimationFrame(tick);
+            };
+
+            shipRunWatchRAF = requestAnimationFrame(tick);
+        }
+
         function syncShipRunToScroll() {
             if (shipRunScrubState === 'playing') {
                 updateShipRunPlaybackProgress();
@@ -493,11 +609,15 @@
             }
         }
 
-        function updateShipRunPlaybackProgress() {
+        function updateShipRunPlaybackProgress(progressTime = null) {
             if (shipRunScrubState !== 'playing') return;
             const duration = getShipRunDuration();
             if (duration <= 0) return;
-            const currentTime = clamp(el.shipRunVideo.currentTime, 0, duration);
+            const currentTime = clamp(
+                progressTime ?? el.shipRunVideo.currentTime,
+                0,
+                duration
+            );
             const whiteoutStart = duration - SHIP_RUN.whiteoutDuration;
             gsap.set(el.shipRunWhiteout, {
                 opacity: clamp(
@@ -506,7 +626,7 @@
                     1
                 ),
             });
-            publishHeroRunProgress('transition', currentTime / duration);
+            publishHeroRunProgress('progress', currentTime / duration);
         }
 
         function playShipRunVideo(video) {
@@ -554,6 +674,8 @@
             if (!shipRunHasCompleted) return;
             if (shipRunConceptRevealTimer) clearTimeout(shipRunConceptRevealTimer);
             shipRunConceptRevealTimer = null;
+            stopShipRunWatchdog();
+            unlockShipRunScroll();
             shipRunScrubState = 'complete';
             shipRunHeroRestored = true;
             el.shipRunVideo.pause();
@@ -575,6 +697,8 @@
             }
             if (shipRunConceptRevealTimer) clearTimeout(shipRunConceptRevealTimer);
             shipRunConceptRevealTimer = null;
+            stopShipRunWatchdog();
+            unlockShipRunScroll();
             shipRunScrubState = 'idle';
             shipRunState.time = 0;
             shipRunTargetTime = 0;
@@ -593,6 +717,8 @@
 
         function completeShipRunScrub() {
             if (shipRunScrubState !== 'scrubbing' && shipRunScrubState !== 'playing') return;
+            stopShipRunWatchdog();
+            unlockShipRunScroll();
             shipRunScrubState = 'complete';
             shipRunHasCompleted = true;
             shipRunHeroRestored = false;
@@ -617,8 +743,10 @@
                 return;
             }
             if (shipRunScrubState === 'scrubbing' || shipRunScrubState === 'playing') return;
+            stopShipRunWatchdog();
             shipRunScrubState = 'playing';
             shipRunHeroRestored = false;
+            lockShipRunScroll();
             shipRunState.time = 0;
             shipRunTargetTime = 0;
             el.concept.classList.add('is-awaiting-entry');
@@ -633,17 +761,22 @@
             if (el.shipRunAlpha.readyState >= 1) el.shipRunAlpha.currentTime = 0;
             playShipRunVideo(el.shipRunVideo);
             playShipRunVideo(el.shipRunAlpha);
+            startShipRunWatchdog();
             requestShipRunRender();
             updateHeroRunProgress();
         }
 
         window.addEventListener('scroll', () => {
+            keepShipRunScrollLocked();
             if (shipRunHasCompleted
                 && !shipRunHeroRestored
                 && window.scrollY < el.concept.offsetTop - 2) {
                 restoreCompletedHeroScene();
             }
         }, { passive: true });
+        window.addEventListener('wheel', preventShipRunScroll, { passive: false });
+        window.addEventListener('touchmove', preventShipRunScroll, { passive: false });
+        window.addEventListener('keydown', preventShipRunKeyScroll);
 
         function updateSiteScrollbar() {
             const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
@@ -1200,6 +1333,8 @@
 
             if (shipRunSyncRAF) cancelAnimationFrame(shipRunSyncRAF);
             shipRunSyncRAF = null;
+            stopShipRunWatchdog();
+            unlockShipRunScroll();
             el.shipRunVideo.pause();
             el.shipRunAlpha.pause();
             gsap.set([el.shipRunLayer, el.shipRunWhiteout], { opacity: 0 });
