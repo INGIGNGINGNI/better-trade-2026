@@ -2227,12 +2227,11 @@ the timeline drops them under the ship once the walls have retreated. */
         z-index: 1;
     }
 
-    /* ต้องทึบแสง ไม่งั้นภาพด้านหลังจะทะลุขึ้นมาตรงส่วนที่การ์ดคร่อมภาพอยู่
-       ให้ทั้งแผงเป็นพื้นขาวผืนเดียว การ์ดสามใบจึงต่อกันสนิทเหมือนแบบที่ออกแบบไว้ */
+    /* พื้นขาวย้ายไปอยู่ที่ .ticket__plan แต่ละใบแทน (การ์ดมีช่องว่างคั่นแล้ว
+       ไม่ได้ต่อกันสนิทเหมือนก่อน จึงไม่ต้องมีแผ่นทึบแสงผืนเดียวคลุมทั้งแถว) */
     .ticket__plans {
         position: relative;
         z-index: 1;
-        background: var(--color-surface-page);
     }
 
     /* หัวข้ออยู่บนภาพจึงต้องกลับเป็นโทนสว่าง (.bt-title-highlight เป็นไล่เฉดสีอยู่แล้ว
@@ -2283,31 +2282,47 @@ the timeline drops them under the ship once the walls have retreated. */
         letter-spacing: 0;
     }
 
+    /* เว้นระยะระหว่างการ์ด 24px แทนเส้นคาดที่ติดกันแบบเดิม (gap เดียวใช้ได้ทั้งเรียงแถว
+       บน desktop และซ้อนเป็นคอลัมน์บนจอเล็ก เพราะ .ticket__plans เป็น flex row ของ
+       bootstrap ที่ wrap ได้) */
     .ticket__plans {
-        /* border-top: var(--rule-width-subtle) solid var(--color-border-editorial); */
-        /* border-bottom: var(--rule-width-subtle) solid var(--color-border-editorial); */
+        gap: var(--space-6);
     }
 
+    /* col-lg-4 ของ bootstrap fix width ไว้ที่ 33.3333% พอมี gap แนวนอนเพิ่มเข้ามา
+       3 คอลัมน์ + gap 2 ช่องจะกว้างรวมเกิน 100% การ์ดใบสุดท้ายเลยตกไปอยู่แถวใหม่
+       ต้องคำนวณ width หัก gap ออกเองแทนค่า 33.3333% เดิม */
+    @media (min-width: 992px) {
+        .ticket__plan {
+            width: calc((100% - var(--space-6) * 2) / 3);
+        }
+    }
+
+    /* แต่ละใบยืนเป็นการ์ดของตัวเอง (กรอบรอบ + มุมโค้ง + พื้นหลัง) แทนที่จะอาศัยเส้นคาด
+       คั่นระหว่างใบที่ชนกันแบบเดิม เพราะตอนนี้มีช่องว่างจริงคั่นอยู่แล้ว */
     .ticket__plan {
         position: relative;
         min-width: 0;
         padding: var(--space-8);
         display: flex;
         flex-direction: column;
-        border-top: var(--border-width-6) solid transparent;
+        border: none;
+        background: var(--color-surface-page);
         transition: background-color var(--duration-standard) var(--ease-standard);
-
-        &:not(:first-child) {
-            border-left: var(--rule-width-subtle) solid var(--color-border-faint);
-        }
     }
 
     .ticket__plan--ultimate {
         z-index: 1;
+        /* เหลือขอบไว้แค่ด้านบน (แถบสเปกตรัมหนา) ด้านซ้าย/ขวา/ล่างไม่มีขอบเลย
+           ต่างจากใบอื่นที่มีกรอบรอบครบ 4 ด้าน
+           ต้องระบุ border-style เองเพราะ .ticket__plan ฐานตั้ง border เป็น none ไว้
+           (style: none ทำให้ width ที่ตั้งไว้ตรงนี้กลายเป็น 0 เสมอไม่ว่าจะใส่ค่าอะไร) */
+        border-style: solid;
+        border-width: var(--border-width-6) 0 0 0;
+        border-color: transparent;
         background:
             linear-gradient(color-mix(in srgb, var(--color-surface-page) 68%, var(--color-surface-paper)), color-mix(in srgb, var(--color-surface-page) 68%, var(--color-surface-paper))) padding-box,
             var(--spectrum) border-box;
-        border-top-width: var(--border-width-6);
         /* box-shadow:
             0 18px 48px rgba(17, 19, 24, 0.10),
             0 0 0 1px var(--alpha-ink-06); */
@@ -2329,10 +2344,6 @@ the timeline drops them under the ship once the walls have retreated. */
                 linear-gradient(color-mix(in srgb, var(--color-surface-page) 68%, var(--color-surface-paper)), color-mix(in srgb, var(--color-surface-page) 68%, var(--color-surface-paper))) padding-box,
                 var(--spectrum) border-box;
         }
-    }
-
-    .ticket__plan--master {
-        border-left: 0 !important;
     }
 
     .ticket__plan-header {
@@ -2778,10 +2789,22 @@ the timeline drops them under the ship once the walls have retreated. */
 
         .ticket__plan {
             padding: var(--space-12) var(--space-8);
+        }
+
+        /* จอนี้ลงไปการ์ดเรียงเป็นคอลัมน์เดียว เอา gap 24px ออกแล้วต่อกันสนิท
+           คั่นด้วยเส้นบนแทน ไม่เอาเส้นซ้าย/ขวา/ล่างของแต่ละใบ (เว้น ultimate
+           ที่ยังมีแถบสเปกตรัมหนาด้านบนเป็นจุดเด่นเดิม ไม่ไปแตะ) */
+        .ticket__plans {
+            gap: 0;
+        }
+
+        .ticket__plan {
+            border-right: 0;
+            border-bottom: 0;
+            border-left: 0;
 
             &:not(:first-child) {
                 border-top: var(--rule-width-subtle) solid var(--color-border-faint);
-                border-left: 0;
             }
         }
 
@@ -2847,10 +2870,6 @@ the timeline drops them under the ship once the walls have retreated. */
 
         .ticket__plan {
             padding: var(--space-8);
-
-            &:not(.ticket__plan--ultimate):hover {
-                background: inherit;
-            }
         }
 
         .ticket__price {
