@@ -25,7 +25,12 @@
 
     const rail = indicator.querySelector('.journey-indicator__rail');
     const label = indicator.querySelector('.journey-indicator__label');
-    const darkSections = [...document.querySelectorAll('[data-header-theme="dark"]')];
+    /* data-header-theme="dark" คือ section เต็มจอที่ header ใช้ร่วมด้วย (ทั้ง section เป็น
+       พื้นมืดจริง ๆ) ส่วน data-journey-theme="dark" ใช้แยกสำหรับจุดที่มืดแค่บางส่วนของ
+       section เช่นภาพพื้นหลังด้านบนของ ticket ไม่ผูกกับ header เพราะพื้นที่ตรงนั้นไม่ใช่
+       ทั้ง section ที่เป็นพื้นมืด แค่ผูกกับ header จะทำให้ header สลับเป็นมืดทั้งที่พื้นล่าง
+       ของ ticket section ยังเป็นสีขาวอยู่ */
+    const darkSections = [...document.querySelectorAll('[data-header-theme="dark"], [data-journey-theme="dark"]')];
 
     if (!rail || !label) return;
 

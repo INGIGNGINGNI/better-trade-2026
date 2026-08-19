@@ -15,7 +15,12 @@
 
         function getHeroScrollDistance() {
             const scroller = document.getElementById('scroller');
-            return Math.max(1, scroller.offsetHeight - window.innerHeight);
+            // document.documentElement.clientHeight ไม่ใช่ window.innerHeight เพราะหลัง
+            // resize จอ (เช่นลาก DevTools responsive mode พร้อมเปลี่ยน DPR) window.innerHeight
+            // เคยเจอค่าติดค้างจากขนาดก่อนหน้าโดยไม่อัปเดตตาม แต่ clientHeight ยังอ่านตรงกับ
+            // เลย์เอาต์จริงเสมอ ค่าติดค้างทำให้ heroScrollDistance ใกล้ 0 จนขอบ sticky กลาย
+            // เป็น 0 ไปด้วย (header เลยเป็นสีขาวค้างตั้งแต่ scroll ยังไม่เริ่ม)
+            return Math.max(1, scroller.offsetHeight - document.documentElement.clientHeight);
         }
 
         // Three phases over the hero's scroll-pin, by scroll position:
@@ -67,7 +72,7 @@
                 const wasOpen = document.body.classList.contains('menu-open');
                 document.body.classList.remove('menu-open');
 
-                if (wasOpen && window.innerWidth <= 991) {
+                if (wasOpen && document.documentElement.clientWidth <= 991) {
                     document.body.classList.add('menu-closing');
                     menuCloseTimer = setTimeout(finishSiteMenuClose, 840);
                 } else {
@@ -95,7 +100,7 @@
             };
 
             const headerHeight = siteHeader.offsetHeight || 80;
-            const bandBottom = Math.max(0, window.innerHeight - headerHeight - 1);
+            const bandBottom = Math.max(0, document.documentElement.clientHeight - headerHeight - 1);
             const observer = new IntersectionObserver(entries => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) activeDark.add(entry.target);
@@ -114,13 +119,20 @@
             const logo = siteHeader.querySelector('.site-header__logo');
             if (!darkSections.length || (!navLabels.length && !logo)) return () => {};
 
+            // ต้องเลิกนับ section ว่ามืดด้วยเกณฑ์เดียวกับ setupHeaderThemeObserver (เส้น sensor
+            // ที่ขอบล่าง header) ไม่ใช่ขอบเขตของ label เอง ไม่งั้นตอน section มืดเลื่อนผ่านพ้น
+            // header ไปแล้ว (bg สลับเป็นขาวแล้ว) แต่ rect.bottom ยังมากกว่า labelRect ที่เล็ก
+            // และอยู่ค่อนไปตรงกลาง header ตัวหนังสือ/โลโก้เลยยังโดนตัดสินว่าอยู่บนพื้นมืดอยู่
+            // ทำให้ใช้สีอ่านไม่ออกบนพื้นขาวไปอีกพักหนึ่งกว่าจะ scroll ผ่านจุดนั้นเพิ่ม
+            const headerHeight = siteHeader.offsetHeight || 80;
+
             let frameId = null;
 
             const updateTextGradients = () => {
                 frameId = null;
                 const darkRects = darkSections
                     .map(section => section.getBoundingClientRect())
-                    .filter(rect => rect.bottom > 0 && rect.top < window.innerHeight);
+                    .filter(rect => rect.bottom >= headerHeight && rect.top < document.documentElement.clientHeight);
 
                 navLabels.forEach(label => {
                     const labelRect = label.getBoundingClientRect();
@@ -304,7 +316,7 @@
         });
         window.addEventListener('scroll', updateSiteHeader, { passive: true });
         window.addEventListener('resize', () => {
-            if (window.innerWidth > 991) setSiteMenu(false);
+            if (document.documentElement.clientWidth > 991) setSiteMenu(false);
             updateSiteHeader();
             disconnectHeaderThemeObserver();
             disconnectHeaderThemeObserver = setupHeaderThemeObserver();

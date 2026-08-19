@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="css/main.css?v=39">
-    <link rel="stylesheet" href="css/style.css?v=234">
+    <link rel="stylesheet" href="css/style.css?v=246">
 </head>
 
 <body class="is-loading">
@@ -114,7 +114,7 @@
         <span class="site-scrollbar__thumb"></span>
     </div>
     <aside class="journey-indicator" aria-hidden="true">
-        <span class="journey-indicator__title">Better Trade 2026</span>
+        <span class="journey-indicator__title">BETTER TRADE 2026</span>
         <div class="journey-indicator__rail">
             <span class="journey-indicator__track"></span>
             <span class="journey-indicator__progress"></span>
@@ -124,6 +124,16 @@
     <button class="back-to-top" type="button" aria-label="กลับไปด้านบน" aria-hidden="true">
         <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-arrow-up-right"></use></svg>
     </button>
+    <!-- จอ <=575px เท่านั้น: แถบปุ่มลอยชิดขอบล่าง แสดงตั้งแต่ section concept ลงไป
+         (js/mobile-cta-bar.js คุมการโชว์/ซ่อนตาม scroll) ต้องอยู่นอก .site-header เพราะ
+         .site-header มี transform:translateY(0) ตลอดเวลา ถ้าอยู่ข้างในตำแหน่ง fixed จะไป
+         อ้างอิงกับกล่องของ header เอง (ที่สูงแค่เท่าตัว header) ไม่ใช่ทั้งหน้าจอ -->
+    <div class="mobile-cta-bar" id="mobile-cta-bar">
+        <a class="bt-action-button bt-action-button--secondary bt-action-button--xl bt-action-button--header" href="#playbook">Investor DNA</a>
+        <span class="site-header__primary-cta" data-header-register-cta>
+            <a class="bt-action-button bt-action-button--primary bt-action-button--xl bt-action-button--header" href="#ticket">ลงทะเบียน</a>
+        </span>
+    </div>
     <div id="home" aria-hidden="true"></div>
 
 
@@ -377,10 +387,12 @@
 
     <!-- Start Section : Ticket -->
     <section id="ticket" class="ticket" aria-labelledby="ticket-title">
-        <img class="ticket__backdrop" src="images/ticket-bg.webp" width="1376" height="768" loading="lazy" decoding="async" alt="">
+        <div class="ticket__backdrop-clip" data-journey-theme="dark" aria-hidden="true">
+            <img class="ticket__backdrop" src="images/ticket-bg-8.webp" width="1670" height="942" loading="lazy" decoding="async" alt="">
+        </div>
         <div class="ticket__inner container">
             <header class="ticket__header row">
-                <div class="ticket__heading col-12 col-xl-6">
+                <div class="ticket__heading col-12 col-xl-7">
                     <h2 id="ticket-title" class="bt-section-title">เลือก<span class="bt-title-highlight has-px">ประสบการณ์</span>ที่ใช่<br class="d-sm-block d-none">ในแบบของคุณ</h2>
                     <p class="bt-section-subtext">Ticket Price</p>
                 </div>
@@ -399,7 +411,7 @@
                             <strong>1,500 <small>บาท</small></strong>
                         </div>
                         <div class="ticket__price">
-                            <span>2 วัน</span>
+                            <span>2 วัน<span class="ticket__price-badge">แนะนำ</span></span>
                             <strong>2,500 <small>บาท</small></strong>
                         </div>
                     </div>
@@ -412,7 +424,7 @@
                         <div><dt class="ticket__access-label ticket__access-label--pavilions"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-store"></use></svg><span>Pavilions</span></dt><dd class="ticket__status ticket__status--included"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-check"></use></svg><span class="visually-hidden">รวมในบัตร</span></dd></div>
                         <div><dt class="ticket__access-label ticket__access-label--workshop"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-presentation"></use></svg><span>Workshop</span></dt><dd class="ticket__status ticket__status--soon"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-clock"></use></svg><span>Soon</span></dd></div>
                         <div><dt class="ticket__access-label ticket__access-label--private-class"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-users"></use></svg><span>Private Class</span></dt><dd class="ticket__status ticket__status--excluded"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-minus"></use></svg><span class="visually-hidden">ไม่รวมในบัตร</span></dd></div>
-                        <div><dt class="ticket__access-label ticket__access-label--playbook"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-book-open"></use></svg><span>Playbook</span></dt><dd class="ticket__status ticket__status--playbook">Full</dd></div>
+                        <div><dt class="ticket__access-label ticket__access-label--playbook"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-book-open"></use></svg><span>Playbook</span></dt><dd class="ticket__status ticket__status--playbook ticket__status--full">Full</dd></div>
                     </dl>
                 </article>
 
@@ -425,11 +437,11 @@
 
                     <div class="ticket__prices" aria-label="ราคาบัตร Master Class">
                         <div class="ticket__price">
-                            <span>1 คลาส / 1 วัน</span>
+                            <span>1 คลาส/1 วัน</span>
                             <strong>990 <small>บาท</small></strong>
                         </div>
                         <div class="ticket__price">
-                            <span>4 คลาส / 2 วัน</span>
+                            <span>4 คลาส/2 วัน<span class="ticket__price-badge">แนะนำ</span></span>
                             <strong>1,890 <small>บาท</small></strong>
                         </div>
                     </div>
@@ -442,7 +454,7 @@
                         <div><dt class="ticket__access-label ticket__access-label--pavilions"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-store"></use></svg><span>Pavilions</span></dt><dd class="ticket__status ticket__status--included"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-check"></use></svg><span class="visually-hidden">รวมในบัตร</span></dd></div>
                         <div><dt class="ticket__access-label ticket__access-label--workshop"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-presentation"></use></svg><span>Workshop</span></dt><dd class="ticket__status ticket__status--excluded"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-minus"></use></svg><span class="visually-hidden">ไม่รวมในบัตร</span></dd></div>
                         <div><dt class="ticket__access-label ticket__access-label--private-class"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-users"></use></svg><span>Private Class</span></dt><dd class="ticket__status ticket__status--included"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-check"></use></svg><span class="visually-hidden">รวมในบัตร</span></dd></div>
-                        <div><dt class="ticket__access-label ticket__access-label--playbook"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-book-open"></use></svg><span>Playbook</span></dt><dd class="ticket__status ticket__status--playbook">Lite</dd></div>
+                        <div><dt class="ticket__access-label ticket__access-label--playbook"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-book-open"></use></svg><span>Playbook</span></dt><dd class="ticket__status ticket__status--playbook ticket__status--lite">Lite</dd></div>
                     </dl>
                 </article>
 
@@ -459,7 +471,7 @@
                             <strong>150 <small>บาท</small></strong>
                         </div>
                         <div class="ticket__price">
-                            <span>2 วัน</span>
+                            <span>2 วัน<span class="ticket__price-badge">แนะนำ</span></span>
                             <strong>200 <small>บาท</small></strong>
                         </div>
                     </div>
@@ -472,7 +484,7 @@
                         <div><dt class="ticket__access-label ticket__access-label--pavilions"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-store"></use></svg><span>Pavilions</span></dt><dd class="ticket__status ticket__status--included"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-check"></use></svg><span class="visually-hidden">รวมในบัตร</span></dd></div>
                         <div><dt class="ticket__access-label ticket__access-label--workshop"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-presentation"></use></svg><span>Workshop</span></dt><dd class="ticket__status ticket__status--excluded"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-minus"></use></svg><span class="visually-hidden">ไม่รวมในบัตร</span></dd></div>
                         <div><dt class="ticket__access-label ticket__access-label--private-class"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-users"></use></svg><span>Private Class</span></dt><dd class="ticket__status ticket__status--excluded"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-minus"></use></svg><span class="visually-hidden">ไม่รวมในบัตร</span></dd></div>
-                        <div><dt class="ticket__access-label ticket__access-label--playbook"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-book-open"></use></svg><span>Playbook</span></dt><dd class="ticket__status ticket__status--playbook">Lite</dd></div>
+                        <div><dt class="ticket__access-label ticket__access-label--playbook"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-book-open"></use></svg><span>Playbook</span></dt><dd class="ticket__status ticket__status--playbook ticket__status--lite">Lite</dd></div>
                     </dl>
                 </article>
             </div>
@@ -1433,8 +1445,9 @@
     <script src="js/expectation-counter.js?v=1"></script>
     <script src="js/floor-plan-reveal.js?v=1"></script>
     <script src="js/back-to-top.js?v=2"></script>
-    <script src="js/journey-indicator.js?v=9"></script>
-    <script src="js/hero-v2-header.js?v=8"></script>
+    <script src="js/journey-indicator.js?v=10"></script>
+    <script src="js/mobile-cta-bar.js?v=3"></script>
+    <script src="js/hero-v2-header.js?v=10"></script>
     <script src="js/in-page-navigation.js?v=1"></script>
     <script src="js/past-event-swiper.js?v=6"></script>
 
@@ -1449,6 +1462,7 @@
     <script src="js/hero-v2-scroll-cue.js?v=4"></script>
     <script src="js/topics-reveal.js?v=4"></script>
     <script src="js/topics-assets-motion.js?v=7"></script>
+    <script src="js/ticket-backdrop-parallax.js?v=2"></script>
     <!-- หลัง hero เพราะ ScrollTrigger refresh ตามลำดับที่สร้าง และ speaker อยู่ใต้ hero ในหน้า -->
     <script src="js/speaker-motion.js?v=2"></script>
 </body>
