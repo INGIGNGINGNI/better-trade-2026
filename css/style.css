@@ -824,6 +824,7 @@ body.menu-closing .site-header {
 }
 
 body.menu-open .site-header__mobile {
+    padding-bottom: var(--space-1);
     visibility: visible;
     pointer-events: auto;
     clip-path: inset(0);
