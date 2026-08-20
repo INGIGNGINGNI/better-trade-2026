@@ -176,13 +176,17 @@
                 if (logo) {
                     const logoRect = logo.getBoundingClientRect();
                     if (logoRect.height > 0) {
-                        const ranges = darkRects
-                            .filter(rect => rect.right > logoRect.left && rect.left < logoRect.right)
-                            .map(rect => ({
-                                start: Math.max(0, Math.min(1, (rect.top - logoRect.top) / logoRect.height)),
-                                end: Math.max(0, Math.min(1, (rect.bottom - logoRect.top) / logoRect.height)),
-                            }))
-                            .filter(range => range.end > range.start);
+                        const logoOnHeroSky = siteHeader.classList.contains('site-header--hero-sky')
+                            && !siteHeader.classList.contains('is-sticky');
+                        const ranges = logoOnHeroSky
+                            ? [{ start: 0, end: 1 }]
+                            : darkRects
+                                .filter(rect => rect.right > logoRect.left && rect.left < logoRect.right)
+                                .map(rect => ({
+                                    start: Math.max(0, Math.min(1, (rect.top - logoRect.top) / logoRect.height)),
+                                    end: Math.max(0, Math.min(1, (rect.bottom - logoRect.top) / logoRect.height)),
+                                }))
+                                .filter(range => range.end > range.start);
 
                         const darkStart = ranges.length
                             ? Math.min(...ranges.map(range => range.start))
@@ -277,6 +281,8 @@
             };
         }
 
+        updateSiteHeader();
+
         let disconnectHeaderThemeObserver = setupHeaderThemeObserver();
         const disconnectHeaderTextClipping = setupHeaderTextClipping();
         const disconnectDesktopNavActiveState = setupDesktopNavActiveState();
@@ -327,5 +333,4 @@
         });
         window.addEventListener('beforeunload', disconnectDesktopNavActiveState, { once: true });
         window.addEventListener('beforeunload', disconnectHeaderTextClipping, { once: true });
-        updateSiteHeader();
     

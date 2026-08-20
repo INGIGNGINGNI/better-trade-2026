@@ -46,7 +46,7 @@ def soft_noise(
 
 
 def reduced_brick_detail(source: Image.Image, side: str) -> np.ndarray:
-    """Extract fine masonry relief from the reference without its lighting."""
+    """Extract continuous masonry relief while preserving each wall's angle."""
     crop_box = (
         (20, 220, 230, 1320)
         if side == "left"
@@ -54,22 +54,87 @@ def reduced_brick_detail(source: Image.Image, side: str) -> np.ndarray:
     )
     crop = ImageOps.grayscale(source.convert("RGB").crop(crop_box))
     crop = crop.resize(
-        (max(1, round(crop.width * 0.82)), max(1, round(crop.height * 0.82))),
+        (max(1, round(crop.width * 0.90)), max(1, round(crop.height * 0.90))),
         Image.Resampling.LANCZOS,
     )
     blurred = crop.filter(ImageFilter.GaussianBlur(radius=4.0))
     detail = np.asarray(crop, dtype=np.float32) - np.asarray(blurred, dtype=np.float32)
     detail = np.clip(detail * 1.45, -24.0, 24.0)
 
-    # Offset each boundary to the middle, then cover it with another intact
-    # region from the same draft texture. The outer edges remain continuous.
-    detail = heal_texture_seam(detail, axis=1, radius=18)
+    # Remove residual bands from the reference lighting before repeating the
+    # relief. They otherwise become increasingly obvious on the lower wall.
+    row_bias = detail.mean(axis=1, keepdims=True)
+    column_bias = detail.mean(axis=0, keepdims=True)
+    detail -= row_bias - row_bias.mean(dtype=np.float64)
+    detail -= column_bias - column_bias.mean(dtype=np.float64)
+
+    # The source already carries the correct opposing perspective: roughly 45
+    # degrees on the left and 135 degrees on the right. Keep the horizontal edge
+    # periodic, then align each following vertical repeat to that diagonal flow.
+    detail = heal_texture_seam(detail, axis=1, radius=14)
     detail -= detail.mean(dtype=np.float64)
     detail = np.clip(detail, -24.0, 24.0)
 
     repeats_x = (MASTER_WIDTH + detail.shape[1] - 1) // detail.shape[1]
     strip = np.tile(detail, (1, repeats_x))[:, :MASTER_WIDTH]
-    return stack_texture_strips(strip, side)
+    stacked = stack_aligned_texture(strip, detail)
+
+    # The source wall changes scale from top to bottom. Equalize the local
+    # relief energy after stacking so that transition does not repeat as broad
+    # horizontal bands in the lower half of the generated panel.
+    row_rms = np.sqrt(np.mean(stacked**2, axis=1, keepdims=True) + 1e-6)
+    target_rms = float(np.median(row_rms))
+    gain = np.clip(target_rms / row_rms, 0.78, 1.45)
+    return np.clip(stacked * gain, -24.0, 24.0)
+
+
+def stack_aligned_texture(strip: np.ndarray, tile: np.ndarray) -> np.ndarray:
+    """Repeat relief vertically without visible bands or broken brick angles."""
+    # Match a generous section of the relief, so the blend preserves the brick
+    # pattern instead of creating a thin low-contrast stripe at each repeat.
+    overlap = min(180, tile.shape[0] // 5)
+    search_width = tile.shape[1]
+    lower_edge = tile[-overlap:]
+
+    best_shift = 0
+    best_error = float("inf")
+    for shift in range(search_width):
+        upper_edge = np.roll(tile[:overlap], shift, axis=1)
+        error = float(np.mean((lower_edge - upper_edge) ** 2))
+        if error < best_error:
+            best_error = error
+            best_shift = shift
+
+    result = np.zeros((MASTER_HEIGHT, MASTER_WIDTH), dtype=np.float32)
+    weights = np.zeros((MASTER_HEIGHT, 1), dtype=np.float32)
+    step = strip.shape[0] - overlap
+    cursor = 0
+    index = 0
+
+    while cursor < MASTER_HEIGHT:
+        block = np.roll(strip, index * best_shift, axis=1)
+        block_height = min(block.shape[0], MASTER_HEIGHT - cursor)
+        window = np.ones((block_height, 1), dtype=np.float32)
+
+        if cursor > 0:
+            fade_height = min(overlap, block_height)
+            phase = np.linspace(0.0, 1.0, fade_height, dtype=np.float32)
+            window[:fade_height, 0] = 0.5 - 0.5 * np.cos(phase * np.pi)
+
+        if cursor + block_height < MASTER_HEIGHT:
+            fade_height = min(overlap, block_height)
+            phase = np.linspace(1.0, 0.0, fade_height, dtype=np.float32)
+            window[-fade_height:, 0] = np.minimum(
+                window[-fade_height:, 0],
+                0.5 - 0.5 * np.cos(phase * np.pi),
+            )
+
+        result[cursor : cursor + block_height] += block[:block_height] * window
+        weights[cursor : cursor + block_height] += window
+        cursor += step
+        index += 1
+
+    return result / np.maximum(weights, 1e-6)
 
 
 def heal_texture_seam(detail: np.ndarray, axis: int, radius: int) -> np.ndarray:
@@ -90,45 +155,13 @@ def heal_texture_seam(detail: np.ndarray, axis: int, radius: int) -> np.ndarray:
     return shifted * (1.0 - alpha) + donor * alpha
 
 
-def stack_texture_strips(strip: np.ndarray, side: str) -> np.ndarray:
-    """Stagger repeated source strips and crossfade their horizontal seams."""
-    result = np.zeros((MASTER_HEIGHT, MASTER_WIDTH), dtype=np.float32)
-    overlap = min(120, strip.shape[0] // 4)
-    step = strip.shape[0] - overlap
-    cursor = 0
-    index = 0
-    direction = 1 if side == "left" else -1
-
-    while cursor < MASTER_HEIGHT:
-        shift = direction * ((index * 53 + index * index * 17) % strip.shape[1])
-        block = np.roll(strip, shift, axis=1)
-        block_height = min(block.shape[0], MASTER_HEIGHT - cursor)
-        if cursor == 0:
-            result[:block_height] = block[:block_height]
-        else:
-            blend_height = min(overlap, block_height)
-            alpha = np.linspace(0.0, 1.0, blend_height, dtype=np.float32)[:, None]
-            alpha = 0.5 - 0.5 * np.cos(alpha * np.pi)
-            result[cursor : cursor + blend_height] = (
-                result[cursor : cursor + blend_height] * (1.0 - alpha)
-                + block[:blend_height] * alpha
-            )
-            result[cursor + blend_height : cursor + block_height] = block[
-                blend_height:block_height
-            ]
-        cursor += step
-        index += 1
-
-    return result
-
-
 def reference_lighting(
     source: Image.Image,
     side: str,
     wall_depth: np.ndarray,
 ) -> np.ndarray:
     """Map the old wall's blue tone and directional light onto target geometry."""
-    source = source.convert("RGB").filter(ImageFilter.GaussianBlur(radius=10.0))
+    source = source.convert("RGB").filter(ImageFilter.GaussianBlur(radius=220.0))
     source_pixels = np.asarray(source, dtype=np.float32)
     source_height, source_width = source_pixels.shape[:2]
 
@@ -154,13 +187,44 @@ def reference_lighting(
     return source_pixels[source_y, source_x]
 
 
+def sky_reflection(side: str, wall_depth: np.ndarray) -> np.ndarray:
+    """Add the cool directional light cast by the open sky above the walls."""
+    y = np.linspace(0.0, 1.0, MASTER_HEIGHT, dtype=np.float32)[:, None]
+    top_falloff = np.exp(-((y / 0.34) ** 1.45))
+
+    # The inner face sees the sky directly while the outer edge remains almost
+    # black. Smoothstep keeps that transition broad enough to read as light,
+    # rather than as another stripe in the masonry.
+    inner = np.clip((wall_depth - 0.08) / 0.92, 0.0, 1.0)
+    inner = inner * inner * (3.0 - 2.0 * inner)
+    wash = top_falloff * (0.12 * np.sqrt(inner) + 0.88 * inner**1.55)
+    rim = top_falloff * np.clip((wall_depth - 0.72) / 0.28, 0.0, 1.0) ** 1.7
+
+    if side == "left":
+        wash_color = np.array((22.0, 29.0, 38.0), dtype=np.float32)
+        rim_color = np.array((10.0, 12.0, 13.0), dtype=np.float32)
+    else:
+        wash_color = np.array((17.0, 25.0, 35.0), dtype=np.float32)
+        rim_color = np.array((7.0, 10.0, 13.0), dtype=np.float32)
+
+    reflection = wash[:, :, None] * wash_color
+    reflection += rim[:, :, None] * rim_color
+
+    # Preserve the near-black exterior corners visible in the key visual.
+    outer_shadow = top_falloff * (1.0 - inner) ** 2.4
+    reflection -= outer_shadow[:, :, None] * np.array(
+        (6.0, 5.0, 3.0), dtype=np.float32
+    )
+    return reflection
+
+
 def build_wall(
     side: str,
     texture_source: Image.Image,
     lighting_source: Image.Image,
 ) -> Image.Image:
     rng = np.random.default_rng(20261031 + (0 if side == "left" else 1))
-    broad_variation = soft_noise(rng, (54, 68), 2.4) * 7.0
+    broad_variation = soft_noise(rng, (36, 46), 3.0) * 4.5
 
     x = np.linspace(0.0, 1.0, MASTER_WIDTH, dtype=np.float32)[None, :]
     y = np.linspace(0.0, 1.0, MASTER_HEIGHT, dtype=np.float32)[:, None]
@@ -173,7 +237,11 @@ def build_wall(
 
     lighting = reference_lighting(lighting_source, side, wall_depth)
     tone = broad_variation + reduced_brick_detail(texture_source, side)
-    pixels = np.clip(lighting + tone[:, :, None], 0, 255).astype(np.uint8)
+    pixels = np.clip(
+        lighting + sky_reflection(side, wall_depth) + tone[:, :, None],
+        0,
+        255,
+    ).astype(np.uint8)
 
     alpha = np.zeros((MASTER_HEIGHT, MASTER_WIDTH), dtype=np.uint8)
     columns = np.arange(MASTER_WIDTH)[None, :]
