@@ -1353,14 +1353,16 @@
             const loaderIcons = ASSET_ICON_KEYS.map(k => el.loaderIcons[k]);
             const progress = { value: 0 };
             const assetScatterOrigins = {};
+            const sceneRevealPause = 0.12;
             const assetScatterStartOffset = 0.10;
             const assetScatterStagger = 0.045;
-            const assetScatterDuration = 1.06;
+            const assetScatterDuration = 1.12;
             const assetScatterEndOffset = assetScatterStartOffset
                 + (ASSET_ICON_KEYS.length - 1) * assetScatterStagger
                 + assetScatterDuration;
-            const wallIntroStartOffset = 0.42;
-            const wallIntroDuration = assetScatterEndOffset - wallIntroStartOffset;
+            const sceneRevealAt = exitAt + sceneRevealPause;
+            const wallIntroStartOffset = 0.46;
+            const wallIntroDuration = assetScatterEndOffset - wallIntroStartOffset + 0.08;
 
             gsap.set(el.siteHeader, { opacity: 0, y: -16 });
             gsap.set('.asset .inner', { opacity: 0 });
@@ -1471,19 +1473,19 @@
             });
             tl.to(loaderIcons, { opacity: 0, duration: 0.16, ease: 'none' }, exitAt + 0.02);
 
-            tl.to(el.loaderSurface, { opacity: 0, duration: 0.72, ease: 'power2.out' }, exitAt)
-                .to(el.wallIntroLeft, { scaleX: 1, duration: wallIntroDuration, ease: 'power3.inOut' }, exitAt + wallIntroStartOffset)
-                .to(el.wallIntroRight, { scaleX: 1, duration: wallIntroDuration, ease: 'power3.inOut' }, exitAt + wallIntroStartOffset)
+            tl.to(el.loaderSurface, { opacity: 0, duration: 0.78, ease: 'power2.out' }, sceneRevealAt)
+                .to(el.wallIntroLeft, { scaleX: 1, duration: wallIntroDuration, ease: 'power3.inOut' }, sceneRevealAt + wallIntroStartOffset)
+                .to(el.wallIntroRight, { scaleX: 1, duration: wallIntroDuration, ease: 'power3.inOut' }, sceneRevealAt + wallIntroStartOffset + 0.025)
                 .fromTo(el.titleInner,
                     { opacity: 0, y: -20, scale: 0.96 },
                     { opacity: 1, y: 0, scale: 1, duration: 0.72, ease: 'power3.out' },
-                    exitAt + 0.34
+                    sceneRevealAt + 0.38
                 )
-                .to(el.siteHeader, { opacity: 1, y: 0, duration: 0.56 }, exitAt + 0.48)
-                .to('#ui', { opacity: 1, y: 0, duration: 0.62 }, exitAt + 0.64);
+                .to(el.siteHeader, { opacity: 1, y: 0, duration: 0.56 }, sceneRevealAt + 0.52)
+                .to('#ui', { opacity: 1, y: 0, duration: 0.62 }, sceneRevealAt + 0.70);
 
             ASSET_ICON_KEYS.forEach((k, i) => {
-                const at = exitAt + assetScatterStartOffset + i * assetScatterStagger;
+                const at = sceneRevealAt + assetScatterStartOffset + i * assetScatterStagger;
 
                 tl.to(el[k + 'Inner'], {
                     opacity: 1,
@@ -1496,9 +1498,9 @@
                 }, at);
             });
 
-            tl.set('.asset .inner', { opacity: 1 }, exitAt + 1.54)
-                .set(loaderIcons, { opacity: 0 }, exitAt + 1.54)
-                .to(el.loader, { opacity: 0, duration: 0.18, ease: 'none' }, exitAt + 1.54);
+            tl.set('.asset .inner', { opacity: 1 }, sceneRevealAt + 1.62)
+                .set(loaderIcons, { opacity: 0 }, sceneRevealAt + 1.62)
+                .to(el.loader, { opacity: 0, duration: 0.18, ease: 'none' }, sceneRevealAt + 1.62);
         }
 
         /* ---------- idle float (on .floaty) ---------- */

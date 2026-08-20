@@ -219,7 +219,7 @@ def sky_reflection(side: str, wall_depth: np.ndarray) -> np.ndarray:
 
 
 def upper_edge_rim_light(side: str, edge: np.ndarray) -> np.ndarray:
-    """Create a restrained sky-lit rim along the upper inner wall edge."""
+    """Create a restrained warm sky-lit rim along the upper inner wall edge."""
     columns = np.arange(MASTER_WIDTH, dtype=np.float32)[None, :]
     rows = np.linspace(0.0, 1.0, MASTER_HEIGHT, dtype=np.float32)[:, None]
     if side == "left":
@@ -228,28 +228,82 @@ def upper_edge_rim_light(side: str, edge: np.ndarray) -> np.ndarray:
         distance = columns - edge[:, None].astype(np.float32)
 
     inside = distance >= 0.0
-    core = np.exp(-((np.maximum(distance, 0.0) / 4.5) ** 2))
-    bloom = np.exp(-((np.maximum(distance, 0.0) / 24.0) ** 2))
-
-    # Keep the light on the sloped opening. The long fade avoids a visible stop
-    # where the wall edge becomes vertical.
-    vertical_fade = np.clip((0.44 - rows) / 0.15, 0.0, 1.0)
-    vertical_fade = vertical_fade * vertical_fade * (3.0 - 2.0 * vertical_fade)
+    core = np.exp(-((np.maximum(distance, 0.0) / 3.8) ** 2))
+    bloom = np.exp(-((np.maximum(distance, 0.0) / 19.0) ** 2))
+    surface_spill = np.exp(-((np.maximum(distance, 0.0) / 115.0) ** 1.55))
 
     if side == "left":
-        core_color = np.array((86.0, 91.0, 94.0), dtype=np.float32)
-        bloom_color = np.array((24.0, 29.0, 34.0), dtype=np.float32)
-        # The cloud opening sits closer to the left wall in the key visual.
-        sky_strength = 0.82 + 0.18 * np.exp(-((rows - 0.10) / 0.13) ** 2)
+        core_color = np.array((116.0, 86.0, 40.0), dtype=np.float32)
+        bloom_color = np.array((31.0, 19.0, 7.0), dtype=np.float32)
+        spill_color = np.array((17.0, 11.0, 5.0), dtype=np.float32)
+        # The cloud opening sits closer to the left wall in the key visual. Keep
+        # the highlight in separated pools instead of tracing the full edge.
+        sky_strength = np.exp(-((rows - 0.07) / 0.11) ** 2)
+        knee_glint = 0.24 * np.exp(-((rows - 0.36) / 0.035) ** 2)
     else:
-        core_color = np.array((54.0, 70.0, 87.0), dtype=np.float32)
-        bloom_color = np.array((16.0, 23.0, 31.0), dtype=np.float32)
-        sky_strength = 0.72 + 0.12 * np.exp(-((rows - 0.08) / 0.16) ** 2)
+        core_color = np.array((94.0, 73.0, 39.0), dtype=np.float32)
+        bloom_color = np.array((25.0, 17.0, 7.0), dtype=np.float32)
+        spill_color = np.array((13.0, 9.0, 4.0), dtype=np.float32)
+        sky_strength = 0.78 * np.exp(-((rows - 0.05) / 0.095) ** 2)
+        knee_glint = 0.18 * np.exp(-((rows - 0.35) / 0.03) ** 2)
 
-    strength = vertical_fade * sky_strength * inside
+    strength = np.clip(sky_strength + knee_glint, 0.0, 1.0) * inside
     return strength[:, :, None] * (
-        core[:, :, None] * core_color + bloom[:, :, None] * bloom_color
+        core[:, :, None] * core_color
+        + bloom[:, :, None] * bloom_color
+        + surface_spill[:, :, None] * spill_color
     )
+
+
+def cinematic_grade(
+    pixels: np.ndarray,
+    side: str,
+    wall_depth: np.ndarray,
+) -> np.ndarray:
+    """Push the wall into deep navy shadow while retaining the sky-facing top."""
+    y = np.linspace(0.0, 1.0, MASTER_HEIGHT, dtype=np.float32)[:, None]
+    top_light = np.exp(-((y / 0.48) ** 1.55))
+
+    inner = np.clip((wall_depth - 0.04) / 0.96, 0.0, 1.0)
+    inner = inner * inner * (3.0 - 2.0 * inner)
+    sky_face = top_light * (0.22 + 0.78 * inner**1.35)
+
+    # Keep the top readable, then fall to an almost-black lower wall. The
+    # right panel receives slightly less ambient light in the supplied mockup.
+    exposure = 0.30 + 0.24 * top_light + 0.18 * sky_face
+    if side == "right":
+        exposure *= 0.94
+
+    graded = pixels * exposure[:, :, None]
+    graded *= np.array((0.78, 0.84, 0.94), dtype=np.float32)
+
+    lower_shadow = (3.0 + 8.0 * y**1.35)[:, :, None]
+    outer_shadow = ((1.0 - inner) ** 2.1 * (5.0 + 4.0 * y))[:, :, None]
+    return np.clip(graded - lower_shadow - outer_shadow, 0.0, 255.0)
+
+
+def regrade_existing_wall(side: str, source: Image.Image) -> Image.Image:
+    """Apply the final cinematic lighting pass without rebuilding the texture."""
+    source = source.convert("RGBA").resize(
+        (MASTER_WIDTH, MASTER_HEIGHT),
+        Image.Resampling.LANCZOS,
+    )
+    source_pixels = np.asarray(source, dtype=np.uint8)
+
+    x = np.linspace(0.0, 1.0, MASTER_WIDTH, dtype=np.float32)[None, :]
+    edge = perspective_edge(MASTER_WIDTH, MASTER_HEIGHT, side)
+    edge_fraction = edge[:, None] / MASTER_WIDTH
+    if side == "left":
+        wall_depth = np.clip(x / edge_fraction, 0.0, 1.0)
+    else:
+        wall_depth = np.clip((1.0 - x) / (1.0 - edge_fraction), 0.0, 1.0)
+
+    pixels = cinematic_grade(source_pixels[:, :, :3].astype(np.float32), side, wall_depth)
+    pixels = np.clip(pixels + upper_edge_rim_light(side, edge), 0, 255).astype(np.uint8)
+
+    result = Image.fromarray(pixels, "RGB")
+    result.putalpha(Image.fromarray(source_pixels[:, :, 3], "L"))
+    return result
 
 
 def build_wall(
@@ -298,14 +352,20 @@ def save_webp(image: Image.Image, path: Path, quality: int) -> None:
 
 def build_side(
     side: str,
-    texture_path: Path,
+    texture_path: Path | None,
     lighting_path: Path,
     output_dir: Path,
     desktop_only: bool,
+    regrade_existing: bool,
 ) -> None:
-    texture_source = Image.open(texture_path)
     lighting_source = Image.open(lighting_path)
-    master = build_wall(side, texture_source, lighting_source)
+    if regrade_existing:
+        master = regrade_existing_wall(side, lighting_source)
+    else:
+        if texture_path is None:
+            raise ValueError("A texture source is required when rebuilding walls")
+        texture_source = Image.open(texture_path)
+        master = build_wall(side, texture_source, lighting_source)
     save_webp(master, output_dir / f"wall-{side}.webp", quality=96)
 
     if desktop_only:
@@ -319,28 +379,33 @@ def build_side(
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--left-texture", type=Path, required=True)
-    parser.add_argument("--right-texture", type=Path, required=True)
+    parser.add_argument("--left-texture", type=Path)
+    parser.add_argument("--right-texture", type=Path)
     parser.add_argument("--left-lighting", type=Path, required=True)
     parser.add_argument("--right-lighting", type=Path, required=True)
     parser.add_argument("--images-dir", type=Path, default=Path("images"))
     parser.add_argument("--desktop-only", action="store_true")
+    parser.add_argument("--regrade-existing", action="store_true")
     args = parser.parse_args()
 
     images_dir = args.images_dir.resolve()
+    left_texture = args.left_texture.resolve() if args.left_texture else None
+    right_texture = args.right_texture.resolve() if args.right_texture else None
     build_side(
         "left",
-        args.left_texture.resolve(),
+        left_texture,
         args.left_lighting.resolve(),
         images_dir,
         args.desktop_only,
+        args.regrade_existing,
     )
     build_side(
         "right",
-        args.right_texture.resolve(),
+        right_texture,
         args.right_lighting.resolve(),
         images_dir,
         args.desktop_only,
+        args.regrade_existing,
     )
 
 
