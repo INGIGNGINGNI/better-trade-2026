@@ -434,17 +434,41 @@ body.menu-closing .site-header {
 .site-header__logo-image--on-dark {
     position: absolute;
     inset: 0;
-    /* filter: invert(1); */
+    filter: invert(1);
     clip-path: inset(var(--bt-header-logo-dark-start, 0%) 0 calc(100% - var(--bt-header-logo-dark-end, 0%)) 0);
     will-change: clip-path;
 }
 
 .site-header__nav {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: var(--space-10);
     min-width: 0;
+}
+
+/* Marks the nav's own footprint as "dark" only while the hero's sky is the
+   visible backdrop (toggled in hero-v2-header.js). Kept separate from the
+   logo, which sits over the wall art further left and should stay on its
+   default (light-bg) color throughout the hero — see setupHeaderTextClipping,
+   which measures this sensor's live rect against each nav label independently
+   of the logo. */
+.site-header__nav-sky-sensor {
+    display: none;
+    position: absolute;
+    inset: 0;
+}
+
+.site-header--hero-sky .site-header__nav-sky-sensor {
+    display: block;
+}
+
+.site-header--hero-sky:not(.is-sticky) .site-header__nav a {
+    --bt-header-nav-text-light: rgba(255, 255, 255, 0.86);
+    --bt-header-nav-text-dark: rgba(255, 255, 255, 0.86);
+
+    color: rgba(255, 255, 255, 0.86);
 }
 
 .site-header__nav a {

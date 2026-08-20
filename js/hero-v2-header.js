@@ -44,6 +44,10 @@
             const sticky = y >= stickyAt;
             const hidden = y >= hideAt && y < stickyAt;
             setHeaderSticky(sticky);
+            // Sky (dark, sun/clouds) is only actually behind the header during this
+            // "visible" phase — once hidden/sticky kicks in the wall-seal, ship-run
+            // and whiteout take over and the backdrop turns light again.
+            siteHeader.classList.toggle('site-header--hero-sky', y < hideAt);
 
             if (document.body.classList.contains('menu-open') || document.body.classList.contains('menu-closing')) {
                 siteHeader.classList.remove('is-hidden');
