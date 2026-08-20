@@ -218,6 +218,40 @@ def sky_reflection(side: str, wall_depth: np.ndarray) -> np.ndarray:
     return reflection
 
 
+def upper_edge_rim_light(side: str, edge: np.ndarray) -> np.ndarray:
+    """Create a restrained sky-lit rim along the upper inner wall edge."""
+    columns = np.arange(MASTER_WIDTH, dtype=np.float32)[None, :]
+    rows = np.linspace(0.0, 1.0, MASTER_HEIGHT, dtype=np.float32)[:, None]
+    if side == "left":
+        distance = edge[:, None].astype(np.float32) - 1.0 - columns
+    else:
+        distance = columns - edge[:, None].astype(np.float32)
+
+    inside = distance >= 0.0
+    core = np.exp(-((np.maximum(distance, 0.0) / 4.5) ** 2))
+    bloom = np.exp(-((np.maximum(distance, 0.0) / 24.0) ** 2))
+
+    # Keep the light on the sloped opening. The long fade avoids a visible stop
+    # where the wall edge becomes vertical.
+    vertical_fade = np.clip((0.44 - rows) / 0.15, 0.0, 1.0)
+    vertical_fade = vertical_fade * vertical_fade * (3.0 - 2.0 * vertical_fade)
+
+    if side == "left":
+        core_color = np.array((86.0, 91.0, 94.0), dtype=np.float32)
+        bloom_color = np.array((24.0, 29.0, 34.0), dtype=np.float32)
+        # The cloud opening sits closer to the left wall in the key visual.
+        sky_strength = 0.82 + 0.18 * np.exp(-((rows - 0.10) / 0.13) ** 2)
+    else:
+        core_color = np.array((54.0, 70.0, 87.0), dtype=np.float32)
+        bloom_color = np.array((16.0, 23.0, 31.0), dtype=np.float32)
+        sky_strength = 0.72 + 0.12 * np.exp(-((rows - 0.08) / 0.16) ** 2)
+
+    strength = vertical_fade * sky_strength * inside
+    return strength[:, :, None] * (
+        core[:, :, None] * core_color + bloom[:, :, None] * bloom_color
+    )
+
+
 def build_wall(
     side: str,
     texture_source: Image.Image,
@@ -238,7 +272,10 @@ def build_wall(
     lighting = reference_lighting(lighting_source, side, wall_depth)
     tone = broad_variation + reduced_brick_detail(texture_source, side)
     pixels = np.clip(
-        lighting + sky_reflection(side, wall_depth) + tone[:, :, None],
+        lighting
+        + sky_reflection(side, wall_depth)
+        + upper_edge_rim_light(side, edge)
+        + tone[:, :, None],
         0,
         255,
     ).astype(np.uint8)
