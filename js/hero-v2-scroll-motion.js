@@ -36,6 +36,8 @@
         const TITLE_MAX_VH = 0.289;
         const TITLE_UI_GAP = { min: 24, preferredVh: 0.04, max: 44 };
         const UI_BOTTOM_RESERVE = 32;
+        const mobileHeaderClearanceShift = viewportWidth => viewportWidth <= 575 ? 9 : 0;
+        const mobileUiStaticTopRatio = viewportWidth => viewportWidth <= 575 ? 0.76 : 0.70;
         // The settled video sits 48px below the description. Its entrance translation
         // subtracts this same distance so adding layout space does not push the moving
         // frame farther away before it reaches the final position.
@@ -934,7 +936,9 @@
                         : vh * TITLE_MAX_VH;
                     wA = Math.min(wA, titleMaxHeight * (wB / hB));
                 }
-                const posterCy = po.cy + (isAssetIcon ? posterIconShiftY(vw) : 0);
+                const posterCy = po.cy
+                    + (isAssetIcon ? posterIconShiftY(vw) : 0)
+                    + (!isAssetIcon && mobileStatic ? mobileHeaderClearanceShift(vw) : 0);
                 assets[k] = {
                     dx: (vw * po.cx / 100) - (stageLeft + xB),
                     dy: (vh * posterCy / 100) - yB,
@@ -1310,7 +1314,7 @@
             } else {
                 ui.style.bottom = '';
                 const minTop = Math.min(maxTop, M.SH * 0.48);
-                ui.style.top = `${clamp(M.SH * 0.70, minTop, maxTop)}px`;
+                ui.style.top = `${clamp(M.SH * mobileUiStaticTopRatio(M.vw), minTop, maxTop)}px`;
             }
             el.concept.classList.remove('is-awaiting-entry', 'is-revealed');
             updateHeroRunProgress();

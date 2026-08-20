@@ -1002,6 +1002,17 @@ body.menu-open .site-header__backdrop {
 }
 
 @media (max-width:575px) {
+    .site-header--hero-sky:not(.is-sticky) {
+        background: rgba(255, 255, 255, 0.7);
+        -webkit-backdrop-filter: blur(8px);
+        backdrop-filter: blur(8px);
+    }
+
+    .site-header__logo {
+        width: 120px;
+        height: var(--space-10);
+    }
+
     .site-header__mobile-scroll {
         padding-left: var(--bt-menu-scroll-padding-x-sm);
         padding-right: var(--bt-menu-scroll-padding-x-sm);
@@ -1042,7 +1053,10 @@ body.menu-open .site-header__backdrop {
 .loader-surface {
     position: absolute;
     inset: 0;
-    background: #f3f4f6;
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: #080b12;
     will-change: opacity;
 }
 
@@ -1067,7 +1081,7 @@ body.menu-open .site-header__backdrop {
     bottom: 64px;
     width: min(320px, calc(100% - 48px));
     transform: translateX(-50%);
-    color: #111318;
+    color: rgba(255, 255, 255, 0.88);
     font-family: var(--headline);
 }
 
@@ -1084,7 +1098,7 @@ body.menu-open .site-header__backdrop {
 .loader-progress__track {
     height: 2px;
     overflow: hidden;
-    background: rgba(17, 19, 24, 0.16);
+    background: rgba(255, 255, 255, 0.18);
 }
 
 .loader-progress__fill {
@@ -1121,7 +1135,7 @@ body.menu-open .site-header__backdrop {
     position: absolute;
     overflow: hidden;
     background-color: #9ccbf6;
-    background-image: url('../images/sky-poster.webp');
+    background-image: url('../images/sky-new.webp');
     background-size: 100% 100%;
     background-repeat: no-repeat;
     will-change: transform;
@@ -6447,7 +6461,7 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     #ui {
-        top: min(62%, 100% - 216px);
+        top: min(70%, 100% - 216px);
         gap: var(--space-2);
     }
 

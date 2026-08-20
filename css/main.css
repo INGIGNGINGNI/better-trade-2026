@@ -638,6 +638,7 @@ h6 {
     :root {
         --section-padding-y-sm: var(--space-16);
         --bt-menu-label-size: var(--font-size-14);
+        --header-height: 64px;
     }
 
     .container {
