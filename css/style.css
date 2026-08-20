@@ -434,7 +434,7 @@ body.menu-closing .site-header {
 .site-header__logo-image--on-dark {
     position: absolute;
     inset: 0;
-    filter: invert(1);
+    /* filter: invert(1); */
     clip-path: inset(var(--bt-header-logo-dark-start, 0%) 0 calc(100% - var(--bt-header-logo-dark-end, 0%)) 0);
     will-change: clip-path;
 }
@@ -1105,12 +1105,13 @@ body.menu-open .site-header__backdrop {
 
 #sky-video {
     width: 100%;
-    height: 100%;
+    height: auto;
     display: block;
     object-fit: fill;
+    object-position: -60% top;
     opacity: 0;
-    transform: scale(1.015);
-    transform-origin: 50% 38%;
+    /* transform: scale(1.015); */
+    /* transform-origin: 50% 38%; */
     filter: saturate(1.08) contrast(1.025) brightness(1.015);
     transition: opacity 480ms ease;
     will-change: opacity, transform;
@@ -1177,6 +1178,7 @@ body.menu-open .site-header__backdrop {
     display: block;
     object-fit: fill;
     will-change: transform;
+    /* filter: sepia(0.35) hue-rotate(185deg) saturate(1.5) brightness(0.4) contrast(1.1); */
 }
 
 #wall-left {
@@ -1412,7 +1414,7 @@ the timeline drops them under the ship once the walls have retreated. */
     gap: var(--space-10);
     opacity: 0;
     text-align: center;
-    color: var(--ink);
+    color: var(--bt-white);
     font-family: var(--headline);
 }
 

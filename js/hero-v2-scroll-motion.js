@@ -1543,6 +1543,10 @@
 
         function setupSkyMotion() {
             const video = el.skyVideo;
+            if (!video || video.tagName !== 'VIDEO') {
+                if (el.bg) el.bg.classList.add('is-video-ready');
+                return;
+            }
             const mediaMotionAllowed = !reduced && !saveData && !STATIC_FRAME;
 
             const syncSceneActivity = () => {
