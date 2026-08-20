@@ -1604,6 +1604,8 @@ the timeline drops them under the ship once the walls have retreated. */
     --bt-concept-description-size: var(--section-topic-size);
     --bt-concept-description-line-height: var(--section-topic-line-height);
     --bt-concept-bg-opacity: 0.4;
+    --bt-concept-bg-reveal-delay: 520ms;
+    --bt-concept-bg-reveal-duration: 980ms;
 
     position: relative;
     /* min-height: 180vh; */
@@ -1625,6 +1627,7 @@ the timeline drops them under the ship once the walls have retreated. */
     background: url("../images/concept-room-bg.webp") center top / cover no-repeat;
     opacity: var(--bt-concept-bg-opacity);
     pointer-events: none;
+    transition: opacity var(--bt-concept-bg-reveal-duration) var(--ease-standard);
     /* Ramp is longer and slow-start (eased) rather than a straight 2-stop linear fade so a
        higher --bt-concept-bg-opacity still reads as a gradual reveal instead of a visible
        edge where it crosses the hero's white into #concept. */
@@ -1640,6 +1643,15 @@ the timeline drops them under the ship once the walls have retreated. */
             rgba(0, 0, 0, 0.12) 220px,
             rgba(0, 0, 0, 0.45) 320px,
             #000 460px);
+}
+
+#concept.is-awaiting-entry::before {
+    opacity: 0;
+}
+
+#concept.is-awaiting-entry.is-revealed::before {
+    opacity: var(--bt-concept-bg-opacity);
+    transition-delay: var(--bt-concept-bg-reveal-delay);
 }
 
 .concept__aurora {
