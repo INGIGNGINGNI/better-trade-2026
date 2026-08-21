@@ -1050,7 +1050,7 @@
             // The title's poster-frame padding-left (set in CSS, outside the transform
             // above) eases out to 0 on the same window as the title's own migration, so it
             // reads as one movement instead of the padding just vanishing at the KV slot.
-            scrollTL.fromTo(el.title.querySelector('img'),
+            scrollTL.fromTo(el.title.querySelectorAll('.hero-title-video, img'),
                 { paddingLeft: 24 },
                 { paddingLeft: 0, duration: 0.45, ease: 'power2.inOut' },
                 0.10
@@ -1298,7 +1298,7 @@
                     rotation: KV[k].rot,
                 });
             });
-            gsap.set(el.title.querySelector('img'), { paddingLeft: 0 });
+            gsap.set(el.title.querySelectorAll('.hero-title-video, img'), { paddingLeft: 0 });
             const ui = document.getElementById('ui');
             ui.style.zIndex = '120';
             const uiHeight = ui.offsetHeight || 220;
@@ -1555,13 +1555,30 @@
             }
             const mediaMotionAllowed = !reduced && !saveData && !STATIC_FRAME;
 
+            const markVideoReady = () => {
+                el.bg.classList.add('is-video-ready');
+            };
+
+            const playVideo = () => {
+                if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA && !video.paused) {
+                    markVideoReady();
+                }
+
+                const playPromise = video.play();
+                if (playPromise && typeof playPromise.then === 'function') {
+                    playPromise
+                        .then(markVideoReady)
+                        .catch(() => el.bg.classList.remove('is-video-ready'));
+                }
+            };
+
             const syncSceneActivity = () => {
                 const active = sceneIsVisible && !document.hidden;
                 idleTweens.forEach(tween => tween.paused(!active));
 
                 if (!mediaMotionAllowed) return;
                 if (active) {
-                    video.play().catch(() => el.bg.classList.remove('is-video-ready'));
+                    playVideo();
                 } else {
                     video.pause();
                 }
@@ -1572,12 +1589,12 @@
                 el.bg.classList.remove('is-video-ready');
             } else {
                 video.playbackRate = 0.72;
-                video.addEventListener('playing', () => {
-                    el.bg.classList.add('is-video-ready');
-                }, { once: true });
+                video.addEventListener('playing', markVideoReady);
                 video.addEventListener('error', () => {
                     el.bg.classList.remove('is-video-ready');
                 });
+
+                playVideo();
             }
 
             if (STATIC_FRAME || reduced) return;

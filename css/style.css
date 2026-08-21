@@ -471,6 +471,7 @@ body.menu-closing .site-header {
     --bt-header-nav-text-dark: rgba(255, 255, 255, 0.86);
 
     color: rgba(255, 255, 255, 0.86);
+    text-shadow: 0 1px 3px rgba(4, 12, 24, 0.42);
 }
 
 .site-header__nav a {
@@ -486,7 +487,7 @@ body.menu-closing .site-header {
     font-size: var(--font-size-16);
     text-transform: uppercase;
     white-space: nowrap;
-    transition: color 180ms ease;
+    transition: color 180ms ease, text-shadow 180ms ease;
 }
 
 .site-header__nav-label {
@@ -496,6 +497,12 @@ body.menu-closing .site-header {
     background-clip: text;
     -webkit-text-fill-color: transparent;
     transition: background-color 180ms ease;
+}
+
+.site-header--hero-sky:not(.is-sticky) .site-header__nav-label {
+    color: currentColor;
+    background: none;
+    -webkit-text-fill-color: currentColor;
 }
 
 .site-header--on-dark .site-header__nav a {
@@ -1413,7 +1420,8 @@ body.is-loading .hero-scroll-cue,
     opacity: 0;
 }
 
-.asset img {
+.asset img,
+.asset video {
     width: 100%;
     display: block;
     /* filter: drop-shadow(0 12px 20px rgba(20, 40, 90, 0.30)); */
@@ -1431,6 +1439,20 @@ the timeline drops them under the ship once the walls have retreated. */
 
 #a-title {
     z-index: 80;
+}
+
+#a-title .inner {
+    position: relative;
+    aspect-ratio: 1800 / 724;
+}
+
+#a-title .hero-title-video {
+    height: 100%;
+    object-fit: fill;
+    filter: saturate(1.05) contrast(1.08);
+    pointer-events: none;
+    transform: scale(1.16);
+    transform-origin: center center;
 }
 
 #a-title img {
@@ -2048,7 +2070,8 @@ the timeline drops them under the ship once the walls have retreated. */
     width: 100%;
     height: auto;
     transform: rotate(var(--asset-rotation, 0deg));
-    filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.34));
+    filter: saturate(1.5);
+    /* filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.34)); */
 }
 
 .topics-showcase__asset--triangle {
