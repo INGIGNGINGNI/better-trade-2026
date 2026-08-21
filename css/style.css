@@ -1147,7 +1147,7 @@ body.menu-open .site-header__backdrop {
     position: absolute;
     overflow: hidden;
     background-color: #9ccbf6;
-    background-image: url('../images/sky-new.webp');
+    background-image: url('../images/sky-new-old2.webp');
     background-size: 100% 100%;
     background-repeat: no-repeat;
     will-change: transform;
@@ -1451,7 +1451,7 @@ the timeline drops them under the ship once the walls have retreated. */
     object-fit: fill;
     filter: saturate(1.05) contrast(1.08);
     pointer-events: none;
-    transform: scale(1.16);
+    transform: scale(1.02);
     transform-origin: center center;
 }
 
@@ -2008,7 +2008,7 @@ the timeline drops them under the ship once the walls have retreated. */
     width: var(--topic-star-size);
     height: var(--topic-star-size);
     margin-right: var(--space-4);
-    background: url("../images/star.png") center / contain no-repeat;
+    background: url("../images/star.webp") center / contain no-repeat;
 }
 
 .topics-showcase .concept__topics p::after {
@@ -2070,8 +2070,8 @@ the timeline drops them under the ship once the walls have retreated. */
     width: 100%;
     height: auto;
     transform: rotate(var(--asset-rotation, 0deg));
-    filter: saturate(1.5);
-    /* filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.34)); */
+    /* filter: saturate(1.5); */
+    filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.34));
 }
 
 .topics-showcase__asset--triangle {
@@ -6632,10 +6632,6 @@ the timeline drops them under the ship once the walls have retreated. */
 
 @media (prefers-reduced-motion:reduce) {
 
-    #sky-video {
-        display: none;
-    }
-
     .site-header__mobile,
     .site-header__mobile-scroll,
     .site-header__backdrop,
@@ -6746,7 +6742,7 @@ the timeline drops them under the ship once the walls have retreated. */
     z-index: 2;
     width: var(--journey-marker-size);
     height: var(--journey-marker-size);
-    background: url('../images/star.png') center / contain no-repeat;
+    background: url('../images/star.webp') center / contain no-repeat;
     filter: drop-shadow(0 2px 6px rgba(17, 19, 24, 0.20));
     opacity: 0;
     transform: translate(-50%, -50%);

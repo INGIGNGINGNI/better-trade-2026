@@ -6,168 +6,131 @@
     const assets = assetFrames.map(frame => frame.querySelector('.topics-showcase__asset-motion'));
     const floats = assetFrames.map(frame => frame.querySelector('.topics-showcase__asset-float'));
 
-    if (!section || !assetStage || !topics || !assets.length || !window.gsap || !window.ScrollTrigger) return;
+    if (!section || !assetStage || !topics || !assets.length || assets.some(asset => !asset)) return;
 
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reducedMotion) return;
+    const clamp = value => Math.min(1, Math.max(0, value));
 
-    gsap.registerPlugin(ScrollTrigger);
+    const init = () => {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    const media = gsap.matchMedia();
-    const idleTweens = floats.map((float, index) => {
-        const driftY = gsap.utils.random(8, 14);
-        const driftRotation = gsap.utils.random(2, 5) * (index % 2 ? -1 : 1);
+        const idleTweens = window.gsap ? floats.map((float, index) => {
+            const driftY = gsap.utils.random(8, 14);
+            const driftRotation = gsap.utils.random(2, 5) * (index % 2 ? -1 : 1);
 
-        return gsap.fromTo(float, {
-            y: -driftY / 2,
-            rotation: -driftRotation / 2,
-        }, {
-            y: driftY / 2,
-            rotation: driftRotation / 2,
-            duration: gsap.utils.random(3.2, 4.8),
-            delay: index * 0.08,
-            ease: 'sine.inOut',
-            yoyo: true,
-            repeat: -1,
-            paused: true,
-        });
-    });
-
-    let sectionIsVisible = false;
-    const syncIdleMotion = () => {
-        const shouldPlay = sectionIsVisible && !document.hidden;
-        idleTweens.forEach(tween => shouldPlay ? tween.play() : tween.pause());
-    };
-
-    const sectionObserver = new IntersectionObserver(([entry]) => {
-        sectionIsVisible = entry.isIntersecting;
-        syncIdleMotion();
-    }, { threshold: 0.04 });
-
-    sectionObserver.observe(section);
-    document.addEventListener('visibilitychange', syncIdleMotion);
-
-    const getFallDistance = frame => {
-        const sectionPaddingBottom = parseFloat(getComputedStyle(section).paddingBottom) || 0;
-        const viewportFall = window.innerHeight * (window.innerWidth < 768 ? 0.75 : 1.35);
-        return assetStage.offsetHeight - frame.offsetTop + sectionPaddingBottom + viewportFall;
-    };
-
-    const addFallTweens = timeline => {
-        const holdBeforeFall = 0.36;
-
-        assets.forEach((asset, index) => {
-            timeline.fromTo(asset, {
-                y: 0,
-                x: 0,
-                rotation: 0,
+            return gsap.fromTo(float, {
+                y: -driftY / 2,
+                rotation: -driftRotation / 2,
             }, {
-                y: () => getFallDistance(assetFrames[index]),
-                x: index % 2 ? 10 : -10,
-                rotation: index % 2 ? 8 : -8,
-                duration: 2,
-                ease: 'none',
-                immediateRender: false,
-            }, holdBeforeFall + index * 0.16);
-        });
-    };
+                y: driftY / 2,
+                rotation: driftRotation / 2,
+                duration: gsap.utils.random(3.2, 4.8),
+                delay: index * 0.08,
+                ease: 'sine.inOut',
+                yoyo: true,
+                repeat: -1,
+                paused: true,
+            });
+        }) : [];
 
-    media.add('(min-width: 768px)', () => {
-        const entryTimeline = gsap.timeline({
-            defaults: { ease: 'none' },
-            scrollTrigger: {
-                trigger: topics,
-                start: 'top 90%',
-                end: 'center center',
-                scrub: true,
-                invalidateOnRefresh: true,
-            },
-        });
-
-        assets.forEach((asset, index) => {
-            entryTimeline.fromTo(asset, {
-                y: () => {
-                    const sectionBox = section.getBoundingClientRect();
-                    const frameBox = assetFrames[index].getBoundingClientRect();
-                    return -(frameBox.top - sectionBox.top + frameBox.height + 24);
-                },
-                opacity: 0,
-                scale: 0.86,
-            }, {
-                y: 0,
-                opacity: 1,
-                scale: 1,
-                duration: 0.42,
-            }, index * 0.075);
-        });
-
-        const exitTimeline = gsap.timeline({
-            defaults: { ease: 'none' },
-            scrollTrigger: {
-                trigger: topics,
-                start: 'center center',
-                endTrigger: section,
-                end: 'bottom -30%',
-                scrub: true,
-                invalidateOnRefresh: true,
-            },
-        });
-
-        addFallTweens(exitTimeline);
-
-        return () => {
-            entryTimeline.scrollTrigger?.kill();
-            entryTimeline.kill();
-            exitTimeline.scrollTrigger?.kill();
-            exitTimeline.kill();
+        let sectionIsVisible = false;
+        const syncIdleMotion = () => {
+            const shouldPlay = sectionIsVisible && !document.hidden;
+            idleTweens.forEach(tween => shouldPlay ? tween.play() : tween.pause());
         };
-    });
 
-    media.add('(max-width: 767px)', () => {
-        const entryTimeline = gsap.timeline({
-            defaults: { ease: 'none' },
-            scrollTrigger: {
-                trigger: assetStage,
-                start: 'top 94%',
-                end: 'bottom 38%',
-                scrub: 0.75,
-                invalidateOnRefresh: true,
-            },
-        });
+        const sectionObserver = new IntersectionObserver(([entry]) => {
+            sectionIsVisible = entry.isIntersecting;
+            syncIdleMotion();
+        }, { threshold: 0.04 });
 
-        assets.forEach((asset, index) => {
-            entryTimeline.fromTo(asset, {
-                y: () => -(assetFrames[index].offsetTop + assetFrames[index].offsetHeight + 16),
-                opacity: 0,
-                scale: 0.88,
-            }, {
-                y: 0,
-                opacity: 1,
-                scale: 1,
-                duration: 0.42,
-            }, index * 0.07);
-        });
+        sectionObserver.observe(section);
+        document.addEventListener('visibilitychange', syncIdleMotion);
 
-        const exitTimeline = gsap.timeline({
-            defaults: { ease: 'none' },
-            scrollTrigger: {
-                trigger: assetStage,
-                start: 'bottom 38%',
-                end: 'bottom -65%',
-                scrub: true,
-                invalidateOnRefresh: true,
-            },
-        });
+        const getEntryProgress = (isMobile, viewportHeight) => {
+            const triggerBox = (isMobile ? assetStage : topics).getBoundingClientRect();
+            const startLine = viewportHeight * (isMobile ? 0.94 : 0.9);
+            const endTop = isMobile
+                ? viewportHeight * 0.38 - triggerBox.height
+                : viewportHeight * 0.5 - triggerBox.height * 0.5;
 
-        addFallTweens(exitTimeline);
-
-        return () => {
-            entryTimeline.scrollTrigger?.kill();
-            entryTimeline.kill();
-            exitTimeline.scrollTrigger?.kill();
-            exitTimeline.kill();
+            return clamp((startLine - triggerBox.top) / Math.max(1, startLine - endTop));
         };
-    });
 
-    window.addEventListener('load', () => ScrollTrigger.refresh(), { once: true });
+        const getExitProgress = (isMobile, viewportHeight) => {
+            const sectionBottom = section.getBoundingClientRect().bottom;
+            const endLine = isMobile ? viewportHeight * -0.65 : 0;
+
+            return clamp((viewportHeight - sectionBottom) / Math.max(1, viewportHeight - endLine));
+        };
+
+        const getEntryOffset = (frame, sectionBox, isMobile) => {
+            if (isMobile) return -(frame.offsetTop + frame.offsetHeight + 16);
+
+            const frameBox = frame.getBoundingClientRect();
+            return -(frameBox.top - sectionBox.top + frameBox.height + 24);
+        };
+
+        const getFallDistance = (frame, isMobile, viewportHeight) => {
+            const sectionPaddingBottom = parseFloat(getComputedStyle(section).paddingBottom) || 0;
+            const viewportFall = viewportHeight * (isMobile ? 0.75 : 1.35);
+            return assetStage.offsetHeight - frame.offsetTop + sectionPaddingBottom + viewportFall;
+        };
+
+        const update = () => {
+            const viewportHeight = window.innerHeight;
+            const isMobile = window.innerWidth < 768;
+            const sectionBox = section.getBoundingClientRect();
+            const entryProgress = getEntryProgress(isMobile, viewportHeight);
+            const exitProgress = getExitProgress(isMobile, viewportHeight);
+
+            assets.forEach((asset, index) => {
+                if (exitProgress > 0) {
+                    const itemProgress = clamp((exitProgress - 0.08 - index * 0.045) / 0.64);
+                    const y = getFallDistance(assetFrames[index], isMobile, viewportHeight) * itemProgress;
+                    const x = (index % 2 ? 10 : -10) * itemProgress;
+                    const rotation = (index % 2 ? 8 : -8) * itemProgress;
+
+                    asset.style.opacity = '1';
+                    asset.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${rotation}deg)`;
+                    return;
+                }
+
+                const itemProgress = clamp((entryProgress - index * 0.055) / 0.7);
+                const entryScale = isMobile ? 0.88 : 0.86;
+                const entryOffset = getEntryOffset(assetFrames[index], sectionBox, isMobile);
+                const y = entryOffset * (1 - itemProgress);
+                const scale = entryScale + (1 - entryScale) * itemProgress;
+
+                asset.style.opacity = String(itemProgress);
+                asset.style.transform = `translate3d(0, ${y}px, 0) scale(${scale})`;
+            });
+        };
+
+        let frameRequested = false;
+        const requestUpdate = () => {
+            if (frameRequested) return;
+
+            frameRequested = true;
+            requestAnimationFrame(() => {
+                frameRequested = false;
+                update();
+            });
+        };
+
+        update();
+        window.addEventListener('scroll', requestUpdate, { passive: true });
+        window.addEventListener('resize', requestUpdate);
+        window.addEventListener('load', requestUpdate, { once: true });
+    };
+
+    const waitForHeroIntro = () => {
+        if (document.body.classList.contains('is-loading') || document.getElementById('loader')) {
+            window.setTimeout(waitForHeroIntro, 120);
+            return;
+        }
+
+        init();
+    };
+
+    waitForHeroIntro();
 })();
