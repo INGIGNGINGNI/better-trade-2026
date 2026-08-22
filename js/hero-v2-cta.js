@@ -29,6 +29,10 @@ function goToRegistration() {
     }
 }
 
+function goToInvestorDna() {
+    document.getElementById('contact')?.scrollIntoView({ block: 'start' });
+}
+
 function mountRegisterButton(target, appearance, onClick) {
     if (!target) return;
 
@@ -69,8 +73,10 @@ ready.then(() => {
     const headerActionHeight = resolveCssLength('--bt-header-action-height', 40);
     const headerActionRim = resolveCssLength('--bt-header-action-rim', 2);
     const heroCtaSlot = document.getElementById('cta-slot');
+    const playbookCtaSlot = document.getElementById('playbook-cta-slot');
     const compactHeroCta = window.matchMedia('(max-width: 575px), (max-width: 1199px) and (max-height: 575px) and (orientation: landscape)');
     let heroCtaButton = null;
+    let playbookCtaButton = null;
     let isHeroCtaCompact = null;
 
     const mountHeroCta = () => {
@@ -80,11 +86,18 @@ ready.then(() => {
 
         isHeroCtaCompact = nextCompact;
         heroCtaButton?.destroy?.();
+        playbookCtaButton?.destroy?.();
         heroCtaButton = mountRegisterButton(heroCtaSlot, {
             ...(nextCompact ? compactRegisterOptions : {}),
             textColor: '#111318',
             pillBackground: 'linear-gradient(180deg, #ffffff 0%, #f3f4f8 55%, #e4e7ee 100%)',
         }, goToRegistration);
+        playbookCtaButton = mountRegisterButton(playbookCtaSlot, {
+            ...(nextCompact ? compactRegisterOptions : {}),
+            label: 'ค้นหา INVESTOR DNA',
+            textColor: '#111318',
+            pillBackground: 'linear-gradient(180deg, #ffffff 0%, #f3f4f8 55%, #e4e7ee 100%)',
+        }, goToInvestorDna);
     };
 
     mountHeroCta();

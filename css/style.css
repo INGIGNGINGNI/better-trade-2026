@@ -417,9 +417,6 @@ body.menu-closing .site-header {
 }
 
 .site-header__logo {
-    --bt-header-logo-dark-start: 0%;
-    --bt-header-logo-dark-end: 0%;
-
     width: 120px;
     position: relative;
     display: flex;
@@ -437,8 +434,13 @@ body.menu-closing .site-header {
 .site-header__logo-image--on-dark {
     position: absolute;
     inset: 0;
-    clip-path: inset(var(--bt-header-logo-dark-start, 0%) 0 calc(100% - var(--bt-header-logo-dark-end, 0%)) 0);
-    will-change: clip-path;
+    opacity: 0;
+    transition: opacity 180ms ease;
+}
+
+.site-header--on-dark .site-header__logo-image--on-dark,
+.site-header--hero-sky:not(.is-sticky) .site-header__logo-image--on-dark {
+    opacity: 1;
 }
 
 .site-header__nav {
@@ -451,11 +453,9 @@ body.menu-closing .site-header {
 }
 
 /* Marks the nav's own footprint as "dark" only while the hero's sky is the
-   visible backdrop (toggled in hero-v2-header.js). Kept separate from the
-   logo, which sits over the wall art further left and should stay on its
-   default (light-bg) color throughout the hero — see setupHeaderTextClipping,
-   which measures this sensor's live rect against each nav label independently
-   of the logo. */
+   visible backdrop (toggled in hero-v2-header.js). Tagged data-header-theme="dark"
+   so setupHeaderThemeObserver's IntersectionObserver counts the hero-sky phase
+   toward .site-header--on-dark, same as any real dark section. */
 .site-header__nav-sky-sensor {
     display: none;
     position: absolute;
@@ -467,16 +467,11 @@ body.menu-closing .site-header {
 }
 
 .site-header--hero-sky:not(.is-sticky) .site-header__nav a {
-    --bt-header-nav-text-light: rgba(255, 255, 255, 0.86);
-    --bt-header-nav-text-dark: rgba(255, 255, 255, 0.86);
-
     color: rgba(255, 255, 255, 0.86);
     text-shadow: 0 1px 3px rgba(4, 12, 24, 0.42);
 }
 
 .site-header__nav a {
-    --bt-header-nav-text-light: var(--bt-header-nav-ink);
-    --bt-header-nav-text-dark: rgba(255, 255, 255, 0.82);
     position: relative;
     min-height: var(--space-10);
     padding: 0 var(--space-1);
@@ -491,18 +486,7 @@ body.menu-closing .site-header {
 }
 
 .site-header__nav-label {
-    color: transparent;
-    background: var(--bt-header-nav-text-background, var(--bt-header-nav-text-light));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    transition: background-color 180ms ease;
-}
-
-.site-header--hero-sky:not(.is-sticky) .site-header__nav-label {
-    color: currentColor;
-    background: none;
-    -webkit-text-fill-color: currentColor;
+    transition: color 180ms ease;
 }
 
 .site-header--on-dark .site-header__nav a {
@@ -524,8 +508,6 @@ body.menu-closing .site-header {
 
 .site-header__nav a:hover,
 .site-header__nav a:focus-visible {
-    --bt-header-nav-text-light: var(--bt-header-nav-ink-hover);
-    --bt-header-nav-text-dark: var(--bt-header-nav-ink-on-dark-hover);
     color: var(--bt-header-nav-ink-hover);
 }
 
@@ -688,10 +670,9 @@ body.menu-closing .site-header {
     padding-bottom: var(--bt-menu-sponsor-padding-top);
 }
 
-/* .site-header__mobile-nav {
-    border-top: 1px solid rgba(17, 19, 24, 0.2);
-    border-bottom: 1px solid rgba(17, 19, 24, 0.2);
-} */
+.site-header__mobile-nav {
+    padding-bottom: var(--space-6);
+}
 
 .site-header__mobile-nav a {
     min-height: var(--bt-menu-nav-link-height);
@@ -900,12 +881,19 @@ body.menu-open .site-header--on-dark .site-header__logo img {
 }
 
 body.menu-open .site-header__logo-image--on-dark,
-body.menu-closing .site-header__logo-image--on-dark {
+body.menu-closing .site-header__logo-image--on-dark,
+/* .site-header--hero-sky:not(.is-sticky) ... มี specificity (0,3,0) สูงกว่า
+   body.menu-open ... (0,2,1) เฉย ๆ ต้องเติมตัวคู่แข่งเข้ามาตรง ๆ ไม่งั้นโลโก้เวอร์ชัน
+   บนพื้นมืด (ขาว) จะค้างโชว์ทับเมนูพื้นขาวจนมองไม่เห็น (เจอตอนเปิดเมนูค้างอยู่ที่หัวเฮโร่) */
+body.menu-open .site-header--hero-sky:not(.is-sticky) .site-header__logo-image--on-dark,
+body.menu-closing .site-header--hero-sky:not(.is-sticky) .site-header__logo-image--on-dark {
     opacity: 0;
 }
 
 body.menu-open .site-header__toggle,
-body.menu-closing .site-header__toggle {
+body.menu-closing .site-header__toggle,
+body.menu-open .site-header--hero-sky:not(.is-sticky) .site-header__toggle,
+body.menu-closing .site-header--hero-sky:not(.is-sticky) .site-header__toggle {
     color: var(--bt-menu-ink);
     background: transparent;
     border: 0;
@@ -1148,7 +1136,7 @@ body.menu-open .site-header__backdrop {
     overflow: hidden;
     background-color: #9ccbf6;
     background-image: url('../images/sky-new-old2.webp');
-    background-size: 100% 100%;
+    background-size: contain;
     background-repeat: no-repeat;
     will-change: transform;
 }
@@ -1160,8 +1148,9 @@ body.menu-open .site-header__backdrop {
     object-fit: fill;
     object-position: -60% top;
     opacity: 0;
-    /* transform: scale(1.015); */
-    /* transform-origin: 50% 38%; */
+    transform: translateZ(0);
+    transform-origin: 50% 38%;
+    backface-visibility: hidden;
     filter: saturate(1.08) contrast(1.025) brightness(1.015);
     transition: opacity 480ms ease;
     will-change: opacity, transform;
@@ -1439,20 +1428,6 @@ the timeline drops them under the ship once the walls have retreated. */
 
 #a-title {
     z-index: 80;
-}
-
-#a-title .inner {
-    position: relative;
-    aspect-ratio: 1800 / 724;
-}
-
-#a-title .hero-title-video {
-    height: 100%;
-    object-fit: fill;
-    filter: saturate(1.05) contrast(1.08);
-    pointer-events: none;
-    transform: scale(1.02);
-    transform-origin: center center;
 }
 
 #a-title img {
@@ -3325,11 +3300,33 @@ the timeline drops them under the ship once the walls have retreated. */
         scroll-margin-top: calc(var(--header-height) + var(--space-6));
     }
 
-    /* Day 1/Day 2 อยู่ใต้แถบแท็บ Stage ที่ sticky อยู่เสมอ (ซ้อนอยู่ใน #agenda-main-stage)
-       จึงต้องเผื่อระยะเท่ากับที่ .agenda__panel ใช้ ไม่ใช่แค่ใต้ header เฉย ๆ
-       ไม่งั้นคลิกสลับวันแล้วหัวตารางจะโผล่ไปโดนแถบแท็บบัง */
+    /* Day 1/Day 2 มีแถบแท็บ Stage sticky ของตัวเอง จึงต้องเผื่อระยะเท่ากับที่
+       .agenda__panel ใช้ ไม่ใช่แค่ใต้ header เฉย ๆ ไม่งั้นคลิกสลับวันแล้วหัวตาราง
+       จะโผล่ไปโดนแถบแท็บบัง */
     .agenda__day-panel {
         scroll-margin-top: calc(var(--header-height) + var(--space-6) + var(--touch-target-md) + var(--rule-width-subtle));
+        background: var(--color-neutral-25);
+        border-radius: var(--radius-1);
+    }
+
+    .agenda__day-panel-header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: var(--space-2) var(--space-4);
+        padding: var(--space-3) var(--space-0) var(--space-10);
+        color: var(--color-text-muted);
+        font-size: var(--section-body-size);
+        line-height: var(--section-body-line-height);
+        position: relative;
+        z-index: 3;
+    }
+
+    .agenda__day-panel-date,
+    .agenda__day-panel-time {
+        margin: 0;
+        color: var(--color-text-primary);
+        font-size: var(--font-size-24);
     }
 
     /* Day 1 กับ Day 2 อยู่ในตารางต่อกันตรง ๆ ไม่งั้นดูเหมือนตารางเดียวยาวต่อเนื่อง
@@ -3339,9 +3336,9 @@ the timeline drops them under the ship once the walls have retreated. */
        ถูกซ่อนอยู่ตัดคู่ sibling ที่ตรงเงื่อนไขไปเลย วันที่เหลือโชว์อยู่คนเดียวเลย
        ไม่มีระยะ/ขีดคั่นเผื่อไว้ด้านบนแบบผิดที่ */
     .agenda__day-panel:not([hidden])+.agenda__day-panel:not([hidden]) {
-        margin-top: var(--space-16);
-        padding-top: var(--space-16);
-        border-top: var(--rule-width-subtle) solid var(--color-border-editorial);
+        margin-top: var(--space-24);
+        /* padding-top: var(--space-16);
+        border-top: var(--rule-width-subtle) solid var(--color-border-editorial); */
     }
 
     .agenda__days {
@@ -3521,7 +3518,7 @@ the timeline drops them under the ship once the walls have retreated. */
         display: flex;
         flex-direction: row;
         align-items: flex-end;
-        border-bottom: var(--rule-width-subtle) solid var(--color-border-editorial);
+        /* border-bottom: var(--rule-width-emphasis) solid var(--color-border-editorial); */
         background: var(--color-surface-page);
         overflow: visible;
         scrollbar-width: none;
@@ -3542,6 +3539,15 @@ the timeline drops them under the ship once the walls have retreated. */
             background: var(--color-surface-page);
             pointer-events: none;
         }
+
+        /* border-bottom อยู่ที่ .agenda__tab (flex: 0 0 auto) เส้นจึงยาวแค่ความกว้าง
+           ของปุ่มแท็บรวมกัน ไม่ยาวสุดแถว — ตัวเติมนี้ยืด (flex: 1 1 auto) กินพื้นที่
+           ที่เหลือ พร้อมเส้นเดียวกัน ให้ดูเป็นเส้นเดียวยาวต่อกันสุดแถว */
+        &::after {
+            content: '';
+            flex: 1 1 auto;
+            border-bottom: var(--rule-width-emphasis) solid var(--color-border-faint);
+        }
     }
 
     .agenda__tab {
@@ -3561,6 +3567,7 @@ the timeline drops them under the ship once the walls have retreated. */
         letter-spacing: 0;
         white-space: nowrap;
         cursor: pointer;
+        border-bottom: var(--rule-width-emphasis) solid var(--color-border-faint);
         transition:
             color var(--duration-fast) var(--ease-standard),
             background-color var(--duration-fast) var(--ease-standard);
@@ -3588,7 +3595,7 @@ the timeline drops them under the ship once the walls have retreated. */
         z-index: 2;
         width: var(--agenda-tab-indicator-width);
         height: var(--rule-width-emphasis);
-        background: var(--spectrum);
+        background: var(--gradient-table-active-spectrum);
         pointer-events: none;
         transform: translateX(var(--agenda-tab-indicator-x));
         will-change: width, transform;
@@ -3601,6 +3608,7 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .agenda__panel {
+        padding: var(--space-0) var(--space-6) var(--space-6);
         min-width: 0;
         /* สลับแท็บ Stage แล้วเลื่อนมาจอดใต้แถบแท็บที่ sticky อยู่พอดี ไม่ใช่ใต้ header
            เฉย ๆ (นั่นจะทำให้แถบแท็บมาบังหัวตาราง) เผื่อความสูงแถบแท็บ+เส้นคาดเพิ่ม
@@ -3666,6 +3674,10 @@ the timeline drops them under the ship once the walls have retreated. */
         width: var(--bt-agenda-time-width);
     }
 
+    .agenda__tags-column {
+        width: var(--bt-agenda-tags-column-width);
+    }
+
     .agenda__speaker-column {
         width: var(--bt-agenda-speaker-column-width);
     }
@@ -3702,10 +3714,66 @@ the timeline drops them under the ship once the walls have retreated. */
 
     /* กรอบรูปวิทยากรอยู่ขวาสุดของแต่ละ Session และรองรับหลายคนในแถวเดียว */
     .agenda__table td.agenda__speakers {
-        padding-right: 0;
-        padding-left: 0;
+        padding-top: var(--space-0);
+        padding-left: var(--space-0);
+        padding-right: var(--space-0);
         border-left: 0;
         vertical-align: middle;
+    }
+
+    /* จอปกติ (≥992px) เท่านั้น: agenda__tags ขึ้นแถวบนกว้างเต็ม (คร่อมทั้ง td เนื้อหา
+       และ td รูปวิทยากร) แล้ว td เนื้อหา/รูปวิทยากรค่อยลงมาอยู่แถวล่างคู่กันเหมือนเดิม
+       ใช้ :first-of-type เลือก td tags (ตัวแรกใน td ของแถว ไม่นับ th) แทนการเติม class
+       ในทุกแถวของ HTML — scope ไว้เฉพาะ ≥992px ไม่ให้ไปชนกับ grid ของจอเล็กที่มีอยู่แล้ว */
+    @media (min-width: 992px) {
+        /* ต้องปลด .agenda__table/tbody ออกจาก display:table ก่อน ไม่งั้น grid บน tr
+           ยังถูกอัลกอริทึมของตาราง (colgroup/table-layout:fixed) บังคับความกว้างทับอยู่
+           แพตเทิร์นเดียวกับ breakpoint จอเล็กที่มีอยู่แล้วด้านล่าง */
+        .agenda__table,
+        .agenda__table tbody {
+            display: block;
+        }
+
+        .agenda__table colgroup {
+            display: none;
+        }
+
+        .agenda__table tr {
+            display: grid;
+            grid-template-columns: var(--bt-agenda-time-width) minmax(0, 1fr) var(--bt-agenda-speaker-column-width);
+            column-gap: var(--space-4);
+            align-items: start;
+        }
+
+        .agenda__table th[scope="row"] {
+            grid-column: 1;
+            grid-row: 1 / span 2;
+        }
+
+        .agenda__table td:first-of-type {
+            grid-column: 2 / span 2;
+            grid-row: 1;
+            padding-bottom: var(--space-0);
+
+            /* แถวที่ไม่มี tags (Registration, Lunch Break ฯลฯ) td นี้จะว่างเปล่า —
+               ตัด padding/border ทิ้งไม่งั้นเหลือช่องว่างเปล่า ๆ ค้างอยู่เหนือหัวข้อ */
+            &:empty {
+                border-left: 0;
+            }
+        }
+
+        .agenda__table td:first-of-type + td {
+            grid-column: 2;
+            grid-row: 2;
+            padding-top: var(--space-0);
+        }
+
+        .agenda__table td.agenda__speakers {
+            grid-column: 3;
+            grid-row: 2;
+            align-self: center;
+            height: 100%;
+        }
     }
 
     .agenda__speakers {
@@ -3955,14 +4023,14 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .agenda__session-summary {
-        margin-top: var(--space-1);
+        margin-top: 2px;
         font-size: var(--section-body-size);
         font-weight: var(--font-weight-regular);
         line-height: var(--section-body-line-height);
     }
 
     .agenda__session-speaker {
-        margin: var(--space-3) var(--space-0) var(--space-0);
+        margin: var(--space-2) var(--space-0) var(--space-0);
         color: var(--color-text-muted);
         font-size: var(--section-small-size);
         font-weight: var(--font-weight-regular);
@@ -4004,6 +4072,11 @@ the timeline drops them under the ship once the walls have retreated. */
         .agenda__day-switch[aria-current='true'] .agenda__day-switch-label {
             font-size: var(--agenda-day-label-active-size);
         }
+
+        .agenda__day-panel-date,
+        .agenda__day-panel-time {
+            font-size: var(--font-size-20);
+        }
     }
 
     @media (min-width:768px) and (max-width:991px) {
@@ -4029,19 +4102,26 @@ the timeline drops them under the ship once the walls have retreated. */
 
         .agenda__table th {
             grid-column: 1;
-            grid-row: 1 / span 2;
+            grid-row: 1 / span 3;
             padding-right: var(--space-6);
         }
 
-        .agenda__table td:not(.agenda__speakers) {
+        .agenda__table td:first-of-type {
             grid-column: 2;
             grid-row: 1;
+            padding-bottom: var(--space-0);
+        }
+
+        .agenda__table td:first-of-type + td {
+            grid-column: 2;
+            grid-row: 2;
+            padding-top: var(--space-0);
         }
 
         .agenda__table td.agenda__speakers {
             grid-column: 2;
-            grid-row: 2;
-            padding: 0 0 var(--space-6) var(--space-6);
+            grid-row: 3;
+            padding: var(--space-2) var(--space-0) var(--space-4) var(--space-4);
             display: block;
             border-left: var(--rule-width-subtle) solid var(--color-border-faint);
             text-align: left;
@@ -4070,6 +4150,10 @@ the timeline drops them under the ship once the walls have retreated. */
         .agenda__layout {
             margin-right: 0;
             margin-left: 0;
+        }
+
+        .agenda__day-panel-header {
+            display: none;
         }
 
         .agenda__day-switcher {
@@ -4286,19 +4370,30 @@ the timeline drops them under the ship once the walls have retreated. */
 
         .agenda__table th {
             grid-column: 1;
-            grid-row: 1 / span 2;
+            grid-row: 1 / span 3;
             padding-right: var(--space-4);
         }
 
-        .agenda__table td:not(.agenda__speakers) {
+        .agenda__table td:first-of-type {
             grid-column: 2;
             grid-row: 1;
+            padding-bottom: var(--space-0);
+
+            &:empty {
+                display: none;
+            }
+        }
+
+        .agenda__table td:first-of-type + td {
+            grid-column: 2;
+            grid-row: 2;
+            padding-top: var(--space-0);
         }
 
         .agenda__table td.agenda__speakers {
             grid-column: 2;
-            grid-row: 2;
-            padding: 0 0 var(--space-6) var(--space-6);
+            grid-row: 3;
+            padding: var(--space-2) var(--space-0) var(--space-6) var(--space-6);
             display: block;
             border-left: var(--rule-width-subtle) solid var(--color-border-faint);
             font-size: var(--section-small-size);
@@ -4319,6 +4414,15 @@ the timeline drops them under the ship once the walls have retreated. */
     @media (max-width:575px) {
         --agenda-day-label-size: var(--font-size-20);
         --agenda-day-label-active-size: var(--font-size-20);
+
+        .agenda__day-panel-date,
+        .agenda__day-panel-time {
+            font-size: var(--font-size-18);
+        }
+
+        .agenda__panel {
+            padding: var(--space-0) var(--space-4) var(--space-4);
+        }
 
         .agenda__day-switcher-inner {
             --day-switcher-rail-width: 36%;
@@ -4358,7 +4462,7 @@ the timeline drops them under the ship once the walls have retreated. */
 
         .agenda__table th,
         .agenda__table td {
-            padding-top: var(--space-6);
+            padding-top: var(--space-4);
             padding-bottom: var(--space-5);
         }
 
@@ -4384,15 +4488,25 @@ the timeline drops them under the ship once the walls have retreated. */
             border-left: 0;
         }
 
-        .agenda__table td:not(.agenda__speakers) {
-            grid-column: 1;
+        .agenda__table td:first-of-type {
+            grid-column: 1 / -1;
             grid-row: 2;
             padding-top: var(--space-0);
-            padding-bottom: var(--space-6);
+
+            &:empty {
+                display: none;
+            }
+        }
+
+        .agenda__table td:first-of-type + td {
+            grid-column: 1;
+            grid-row: 3;
+            padding-top: var(--space-0);
+            padding-bottom: var(--space-4);
         }
 
         /* Session ที่ไม่มีภาพวิทยากรให้รายละเอียดใช้พื้นที่เต็มแถว */
-        .agenda__table tr:has(td.agenda__speakers:empty) td:not(.agenda__speakers) {
+        .agenda__table tr:has(td.agenda__speakers:empty) td:first-of-type + td {
             grid-column: 1 / -1;
         }
 
@@ -4402,7 +4516,7 @@ the timeline drops them under the ship once the walls have retreated. */
 
         .agenda__table td.agenda__speakers {
             grid-column: 2;
-            grid-row: 2;
+            grid-row: 3;
             width: var(--bt-agenda-speaker-column-width-mobile);
             display: flex;
             flex-wrap: wrap;
@@ -4429,7 +4543,7 @@ the timeline drops them under the ship once the walls have retreated. */
         }
 
         .agenda__tags {
-            margin-top: var(--space-3);
+            margin-top: var(--space-2);
             margin-bottom: var(--space-3);
         }
 
@@ -4531,13 +4645,33 @@ the timeline drops them under the ship once the walls have retreated. */
         scroll-margin-top: calc(var(--header-height) + var(--space-6));
     }
 
+    .speaker__day-panel-header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: var(--space-2) var(--space-4);
+        padding: var(--space-3) var(--space-0) var(--space-10);
+        color: var(--color-text-muted);
+        font-size: var(--section-body-size);
+        line-height: var(--section-body-line-height);
+        position: relative;
+        z-index: 3;
+    }
+
+    .speaker__day-panel-date,
+    .speaker__day-panel-time {
+        margin: 0;
+        color: var(--color-text-primary);
+        font-size: var(--font-size-24);
+    }
+
     /* Day 1 กับ Day 2 ต่อกันในพื้นที่เลื่อนเดียว เว้นระยะ + ขีดคั่นให้เห็นว่าขึ้นวันใหม่
        :not([hidden]) ทั้งสองฝั่งกันไว้ไม่ให้กระทบจอ ≤767px ที่โชว์ทีละวัน — วันที่ถูกซ่อน
        ตัดคู่ sibling ที่ตรงเงื่อนไขไปเลย วันที่เหลือจึงไม่มีระยะ/ขีดคั่นค้างไว้ด้านบน */
     .speaker__day-panel:not([hidden])+.speaker__day-panel:not([hidden]) {
-        margin-top: var(--space-16);
-        padding-top: var(--space-16);
-        border-top: var(--rule-width-subtle) solid var(--color-border-editorial);
+        margin-top: var(--space-24);
+        /* padding-top: var(--space-16);
+        border-top: var(--rule-width-subtle) solid var(--color-border-editorial); */
     }
 
     .speaker__day-panel[hidden] {
@@ -4699,6 +4833,11 @@ the timeline drops them under the ship once the walls have retreated. */
         .speaker__day-switch-rail {
             height: var(--space-12);
         }
+
+        .speaker__day-panel-date,
+        .speaker__day-panel-time {
+            font-size: var(--font-size-20);
+        }
     }
 
     @media (max-width: 767px) {
@@ -4712,6 +4851,10 @@ the timeline drops them under the ship once the walls have retreated. */
         .speaker__layout {
             margin-right: 0;
             margin-left: 0;
+        }
+
+        .speaker__day-panel-header {
+            display: none;
         }
 
         .speaker__day-switcher {
@@ -4867,6 +5010,11 @@ the timeline drops them under the ship once the walls have retreated. */
     @media (max-width: 575px) {
         --speaker-day-label-size: var(--font-size-20);
         --speaker-day-label-active-size: var(--font-size-20);
+
+        .speaker__day-panel-date,
+        .speaker__day-panel-time {
+            font-size: var(--font-size-18);
+        }
 
         .speaker__day-switcher-inner {
             --day-switcher-label-shift: 0px;
@@ -5046,8 +5194,24 @@ the timeline drops them under the ship once the walls have retreated. */
     grid-template-columns: repeat(3, minmax(0, 1fr));
     align-items: start;
     grid-auto-rows: auto;
-    gap: var(--space-8) var(--space-8);
+    gap: var(--space-8) var(--space-16);
     margin-top: 0;
+}
+
+.speaker__panel {
+    padding: var(--space-8);
+    background: var(--color-neutral-25);
+    border-radius: var(--radius-1);
+}
+
+/* Moderator เต็ม 12 คอลัมน์ (ไม่เยื้องแบบเดิมแล้ว) แบ่ง 4 การ์ด/แถว แทนที่ 3 ของ Speaker
+   9÷3 = 12÷4 = 3 หน่วยคอลัมน์ต่อการ์ดเท่ากัน บวกกับ padding/gap ที่เท่ากันทุกค่า
+   การ์ดสองฝั่งจึงกว้างเท่ากันพอดี แม้พื้นที่กริดรวมกว้างไม่เท่ากันก็ตาม */
+.moderator__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    padding: var(--space-8);
+    background: var(--color-neutral-25);
+    border-radius: var(--radius-1);
 }
 
 @media (max-width: 1199px) {
@@ -5067,6 +5231,19 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 }
 
+/* 768–991px เท่านั้น: .speaker__days ยังเป็น col-md-9 (75%) แต่ .moderator__grid
+   อยู่ใน col-12 เต็มแถว (100%) ถ้าปล่อยไว้การ์ด 2 ใบของ moderator จะกว้างกว่าของ
+   speaker กีบพื้นที่ container ต่างกัน — บีบ .moderator__grid ให้เหลือ 75% เท่ากับ
+   .speaker__days พอดี การ์ดสองฝั่งเลยกลับมาเท่ากัน (ต่ำกว่า 768px ทั้งคู่เป็น col-12
+   100% อยู่แล้วโดยไม่ต้องบีบ) */
+@media (min-width: 768px) and (max-width: 991px) {
+
+    .moderator__grid {
+        width: 75%;
+        margin-inline: auto;
+    }
+}
+
 @media (max-width: 767px) {
 
     .speaker__panel,
@@ -5081,10 +5258,14 @@ the timeline drops them under the ship once the walls have retreated. */
 
     .speaker__panel {
         margin-top: var(--space-6);
+        padding: var(--space-4);
+        gap: var(--space-12) var(--space-4);
     }
-
+    
     .moderator__grid {
         margin-top: var(--space-3);
+        padding: var(--space-4);
+        gap: var(--space-12) var(--space-4);
     }
 }
 
@@ -5156,7 +5337,7 @@ the timeline drops them under the ship once the walls have retreated. */
        ไม่ใช่ขอบเขตการแสดงผลแบบ overflow) ถ้าลบออกด้วย z-index จะทะลุไปอยู่หลังทุกอย่าง
        บนหน้าเว็บเหมือนบั๊กที่เจอตอนทำ section Expectation */
     isolation: isolate;
-    background: linear-gradient(0deg, var(--color-surface-paper) 10%, transparent 80%);
+    background: linear-gradient(0deg, var(--color-surface-page) 10%, transparent 80%);
 }
 
 /* กรอบตัดภาพแยกจาก .speaker-card__portrait โดยตั้งใจ — ต้องมี overflow: hidden
@@ -5272,7 +5453,12 @@ the timeline drops them under the ship once the walls have retreated. */
 
 @media (max-width: 575px) {
     .speaker-card p {
+        margin: 2px;
         line-height: var(--section-small-line-height);
+    }
+
+    .speaker-card__meta {
+        padding: var(--space-4) var(--space-0) var(--space-0);
     }
 }
 
@@ -5417,7 +5603,7 @@ the timeline drops them under the ship once the walls have retreated. */
     margin-top: var(--space-6);
     overflow: hidden;
     outline: none;
-    -webkit-mask-image: linear-gradient(90deg,
+    /* -webkit-mask-image: linear-gradient(90deg,
             transparent 0,
             #000 var(--marquee-fade),
             #000 calc(100% - var(--marquee-fade)),
@@ -5426,7 +5612,7 @@ the timeline drops them under the ship once the walls have retreated. */
             transparent 0,
             #000 var(--marquee-fade),
             #000 calc(100% - var(--marquee-fade)),
-            transparent 100%);
+            transparent 100%); */
 }
 
 .past-event__marquee-track {
@@ -5447,25 +5633,18 @@ the timeline drops them under the ship once the walls have retreated. */
 
 .past-event__slide-frame {
     display: grid;
-    grid-template-rows: 1fr auto;
     width: 100%;
-    aspect-ratio: 4 / 3;
-    /* padding: var(--space-6); */
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
     color: var(--color-text-primary);
     background: var(--color-surface-paper);
     border-radius: var(--radius-1);
 }
 
-.past-event__slide-frame .bt-icon {
-    align-self: center;
-    justify-self: center;
-    width: var(--bt-icon-size);
-    height: var(--bt-icon-size);
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.25;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+.past-event__slide-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 @media (max-width: 991px) {
@@ -6845,5 +7024,554 @@ the timeline drops them under the ship once the walls have retreated. */
 
     .journey-indicator.is-marker-changing .journey-indicator__rail::after {
         animation: none;
+    }
+}
+
+/* ---------- Playbook ---------- grid-layered artwork with responsive content flow */
+.playbook {
+    --bt-playbook-content-top-space: calc(var(--space-32) - var(--space-3));
+    --bt-playbook-content-bottom-space: calc(var(--space-32) - var(--space-3));
+    --bt-playbook-content-middle-space: var(--space-0);
+    --bt-playbook-content-scale: 1;
+    --bt-playbook-header-scale: var(--bt-playbook-content-scale);
+    --bt-playbook-steps-scale: var(--bt-playbook-content-scale);
+    --bt-playbook-artboard-width: 100%;
+    --bt-playbook-artboard-fixed-width: calc(var(--space-32) * 7 + var(--space-24) - var(--border-width-1));
+    --bt-playbook-artboard-aspect-ratio: 2490 / 1720;
+    --bt-playbook-title-overlap-base: var(--space-3);
+    --bt-playbook-title-base-size: var(--font-size-80);
+    --bt-playbook-subtitle-space-base: var(--space-6);
+    --bt-playbook-subtitle-base-size: var(--font-size-24);
+    --bt-playbook-title-art-base-width: calc(var(--space-32) * 6 - var(--space-2));
+    --bt-playbook-title-overlap: calc(var(--bt-playbook-title-overlap-base) * var(--bt-playbook-header-scale));
+    --bt-playbook-title-size: max(var(--font-size-32), calc(var(--bt-playbook-title-base-size) * var(--bt-playbook-header-scale)));
+    --bt-playbook-subtitle-space: calc(var(--bt-playbook-subtitle-space-base) * var(--bt-playbook-header-scale));
+    --bt-playbook-subtitle-size: max(var(--font-size-16), calc(var(--bt-playbook-subtitle-base-size) * var(--bt-playbook-header-scale)));
+    --bt-playbook-subtitle-line-height: var(--line-height-normal);
+    --bt-playbook-steps-grid: repeat(3, minmax(var(--space-0), 1fr));
+    --bt-playbook-steps-gap: var(--space-0);
+    --bt-playbook-footer-gap-base: var(--space-8);
+    --bt-playbook-step-padding-inline-base: var(--space-8);
+    --bt-playbook-step-padding-bottom-base: var(--space-0);
+    --bt-playbook-step-number-base-size: var(--font-size-32);
+    --bt-playbook-step-title-base-size: var(--font-size-24);
+    --bt-playbook-step-copy-base-size: var(--font-size-16);
+    --bt-playbook-footer-gap: max(var(--space-6), calc(var(--bt-playbook-footer-gap-base) * var(--bt-playbook-steps-scale)));
+    --bt-playbook-steps-container: 1080px;
+    --bt-playbook-steps-width: auto;
+    --bt-playbook-step-padding-inline: max(var(--space-3), calc(var(--bt-playbook-step-padding-inline-base) * var(--bt-playbook-steps-scale)));
+    --bt-playbook-step-padding-bottom: calc(var(--bt-playbook-step-padding-bottom-base) * var(--bt-playbook-steps-scale));
+    --bt-playbook-step-number-size: max(var(--font-size-20), calc(var(--bt-playbook-step-number-base-size) * var(--bt-playbook-steps-scale)));
+    --bt-playbook-step-title-size: max(var(--font-size-16), calc(var(--bt-playbook-step-title-base-size) * var(--bt-playbook-steps-scale)));
+    --bt-playbook-step-copy-size: max(var(--font-size-14), calc(var(--bt-playbook-step-copy-base-size) * var(--bt-playbook-steps-scale)));
+    --bt-playbook-step-copy-margin: calc(var(--space-2) + var(--border-width-1)) var(--space-0) var(--space-0);
+    --bt-playbook-step-copy-line-height: normal;
+    --bt-playbook-divider-top: 50%;
+    --bt-playbook-divider-right: var(--space-0);
+    --bt-playbook-divider-bottom: auto;
+    --bt-playbook-divider-left: auto;
+    --bt-playbook-divider-length-base: var(--space-24);
+    --bt-playbook-divider-length: max(var(--space-12), calc(var(--bt-playbook-divider-length-base) * var(--bt-playbook-steps-scale)));
+    --bt-playbook-divider-aspect-ratio: 9.13;
+    --bt-playbook-divider-transform: translate(50%, -50%) rotate(90deg);
+    --bt-playbook-divider-filter: invert(1);
+    --bt-playbook-bitcoin-x: 19%;
+    --bt-playbook-bitcoin-y: 23%;
+    --bt-playbook-bitcoin-size: calc(var(--space-32) + var(--space-4));
+    --bt-playbook-bitcoin-rotation: -4deg;
+    --bt-playbook-gold-x: 79%;
+    --bt-playbook-gold-y: 26%;
+    --bt-playbook-gold-size: var(--space-28);
+    --bt-playbook-gold-rotation: 18deg;
+    --bt-playbook-triangle-x: 88%;
+    --bt-playbook-triangle-y: 48%;
+    --bt-playbook-triangle-size: var(--space-28);
+    --bt-playbook-triangle-rotation: -8deg;
+    --bt-playbook-heart-x: 84%;
+    --bt-playbook-heart-y: 73%;
+    --bt-playbook-heart-size: calc(var(--space-32) + var(--space-12));
+    --bt-playbook-heart-rotation: 8deg;
+    --bt-playbook-stock-x: 11%;
+    --bt-playbook-stock-y: 73%;
+    --bt-playbook-stock-size: var(--space-20);
+    --bt-playbook-stock-rotation: -34deg;
+    --bt-playbook-arrow-up-x: 11%;
+    --bt-playbook-arrow-up-y: 48%;
+    --bt-playbook-arrow-up-size: var(--space-32);
+    --bt-playbook-arrow-up-rotation: 0deg;
+    --bt-playbook-asset-image-filter: saturate(1.3) drop-shadow(0 var(--space-2) var(--space-3) var(--alpha-ink-34));
+    --bt-playbook-title-art-width: calc(var(--bt-playbook-title-art-base-width) * var(--bt-playbook-header-scale));
+    --bt-playbook-title-art-max-width: 100%;
+    --bt-playbook-title-art-margin-left: auto;
+    --bt-playbook-title-art-transform: none;
+    --bt-playbook-overlay-background: linear-gradient(180deg, var(--alpha-ink-08) 52%, color-mix(in srgb, var(--color-neutral-900) 58%, transparent) 100%);
+    --bt-playbook-ink-soft: color-mix(in srgb, var(--color-neutral-0) 92%, transparent);
+    --bt-playbook-ink-dim: color-mix(in srgb, var(--color-neutral-0) 86%, transparent);
+    --bt-playbook-step-1-color: #ff5d43;
+    --bt-playbook-step-2-color: #ff168d;
+    --bt-playbook-step-3-color: #a91cff;
+    --bt-playbook-shadow-soft: 0 var(--border-width-2) calc(var(--space-4) + var(--border-width-2)) var(--alpha-ink-34);
+    --bt-playbook-shadow-strong: 0 var(--border-width-2) calc(var(--space-3) + var(--border-width-2)) color-mix(in srgb, var(--color-neutral-900) 58%, transparent);
+
+    position: relative;
+    display: grid;
+    overflow: visible;
+    isolation: isolate;
+    color: var(--color-neutral-0);
+    background: var(--color-neutral-900);
+    font-family: var(--font-family-base);
+
+    &::after {
+        content: '';
+        position: absolute;
+        inset: var(--space-0);
+        z-index: 1;
+        background: var(--bt-playbook-overlay-background);
+        pointer-events: none;
+    }
+
+    .playbook__background,
+    .playbook__assets,
+    .playbook__scene,
+    .playbook__content {
+        grid-area: 1 / 1;
+    }
+
+    .playbook__background {
+        z-index: 0;
+        width: 100%;
+        max-width: none;
+        justify-self: stretch;
+        overflow: hidden;
+        pointer-events: none;
+    }
+
+    .playbook__background picture,
+    .playbook__scene picture {
+        width: var(--bt-playbook-artboard-width);
+        max-width: none;
+        display: block;
+        margin-inline: auto;
+    }
+
+    .playbook__background-image {
+        width: var(--bt-playbook-artboard-width);
+        max-width: none;
+        height: auto;
+        display: block;
+        margin-inline: auto;
+    }
+
+    .playbook__assets {
+        position: absolute;
+        inset: var(--space-0);
+        z-index: 2;
+        overflow: hidden;
+        pointer-events: none;
+    }
+
+    .playbook__assets-artboard {
+        position: relative;
+        width: var(--bt-playbook-artboard-width);
+        max-width: none;
+        aspect-ratio: var(--bt-playbook-artboard-aspect-ratio);
+        margin-inline: auto;
+    }
+
+    .playbook__asset {
+        position: absolute;
+        top: var(--bt-playbook-asset-y);
+        left: var(--bt-playbook-asset-x);
+        width: var(--bt-playbook-asset-size);
+        display: block;
+        transform: translate(-50%, -50%);
+    }
+
+    .playbook__asset-motion,
+    .playbook__asset-float {
+        display: block;
+        will-change: transform;
+    }
+
+    .playbook__asset-motion {
+        will-change: transform, opacity;
+    }
+
+    .playbook__asset img {
+        width: 100%;
+        height: auto;
+        display: block;
+        filter: var(--bt-playbook-asset-image-filter);
+        transform: rotate(var(--bt-playbook-asset-rotation));
+    }
+
+    .playbook__asset--bitcoin {
+        --bt-playbook-asset-x: var(--bt-playbook-bitcoin-x);
+        --bt-playbook-asset-y: var(--bt-playbook-bitcoin-y);
+        --bt-playbook-asset-size: var(--bt-playbook-bitcoin-size);
+        --bt-playbook-asset-rotation: var(--bt-playbook-bitcoin-rotation);
+    }
+
+    .playbook__asset--gold {
+        --bt-playbook-asset-x: var(--bt-playbook-gold-x);
+        --bt-playbook-asset-y: var(--bt-playbook-gold-y);
+        --bt-playbook-asset-size: var(--bt-playbook-gold-size);
+        --bt-playbook-asset-rotation: var(--bt-playbook-gold-rotation);
+    }
+
+    .playbook__asset--triangle {
+        --bt-playbook-asset-x: var(--bt-playbook-triangle-x);
+        --bt-playbook-asset-y: var(--bt-playbook-triangle-y);
+        --bt-playbook-asset-size: var(--bt-playbook-triangle-size);
+        --bt-playbook-asset-rotation: var(--bt-playbook-triangle-rotation);
+    }
+
+    .playbook__asset--heart {
+        --bt-playbook-asset-x: var(--bt-playbook-heart-x);
+        --bt-playbook-asset-y: var(--bt-playbook-heart-y);
+        --bt-playbook-asset-size: var(--bt-playbook-heart-size);
+        --bt-playbook-asset-rotation: var(--bt-playbook-heart-rotation);
+    }
+
+    .playbook__asset--stock {
+        --bt-playbook-asset-x: var(--bt-playbook-stock-x);
+        --bt-playbook-asset-y: var(--bt-playbook-stock-y);
+        --bt-playbook-asset-size: var(--bt-playbook-stock-size);
+        --bt-playbook-asset-rotation: var(--bt-playbook-stock-rotation);
+    }
+
+    .playbook__asset--arrow-up {
+        --bt-playbook-asset-x: var(--bt-playbook-arrow-up-x);
+        --bt-playbook-asset-y: var(--bt-playbook-arrow-up-y);
+        --bt-playbook-asset-size: var(--bt-playbook-arrow-up-size);
+        --bt-playbook-asset-rotation: var(--bt-playbook-arrow-up-rotation);
+    }
+
+    .playbook__scene {
+        z-index: 3;
+        align-self: start;
+        width: 100%;
+        max-width: none;
+        justify-self: stretch;
+        overflow: hidden;
+        pointer-events: none;
+    }
+
+    .playbook__book {
+        width: var(--bt-playbook-artboard-width);
+        max-width: none;
+        height: auto;
+        display: block;
+        margin-inline: auto;
+    }
+
+    .playbook__content {
+        z-index: 4;
+        align-self: stretch;
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-rows:
+            var(--bt-playbook-content-top-space) auto minmax(var(--bt-playbook-content-middle-space), 1fr) auto var(--bt-playbook-content-bottom-space);
+    }
+
+    .playbook__header {
+        grid-row: 2;
+        margin: var(--space-0) auto;
+        text-align: center;
+        text-shadow: var(--bt-playbook-shadow-soft);
+
+        h2 {
+            margin: var(--bt-playbook-title-overlap) var(--space-0) var(--space-0);
+            color: inherit;
+            font-size: var(--bt-playbook-title-size);
+            font-weight: var(--font-weight-medium);
+            line-height: var(--line-height-1);
+            letter-spacing: var(--letter-spacing-0);
+        }
+
+        p {
+            margin: var(--bt-playbook-subtitle-space) var(--space-0) var(--space-0);
+            color: var(--alpha-white-96);
+            font-size: var(--bt-playbook-subtitle-size);
+            font-weight: var(--font-weight-regular);
+            line-height: var(--bt-playbook-subtitle-line-height);
+        }
+    }
+
+    .playbook__title-art {
+        max-width: var(--bt-playbook-title-art-max-width);
+        width: var(--bt-playbook-title-art-width);
+        height: auto;
+        display: block;
+        margin: var(--space-0) auto;
+        margin-left: var(--bt-playbook-title-art-margin-left);
+        transform: var(--bt-playbook-title-art-transform);
+    }
+
+    .playbook__footer {
+        grid-row: 4;
+        display: grid;
+        gap: var(--bt-playbook-footer-gap);
+    }
+
+    .playbook__steps {
+        width: var(--bt-playbook-steps-width);
+        margin: var(--space-0) auto;
+        padding: var(--space-0);
+        max-width: var(--bt-playbook-steps-container);
+        display: grid;
+        grid-template-columns: var(--bt-playbook-steps-grid);
+        gap: var(--bt-playbook-steps-gap);
+        list-style: none;
+    }
+
+    .playbook__step {
+        position: relative;
+        min-width: var(--space-0);
+        padding: var(--space-0) var(--bt-playbook-step-padding-inline) var(--bt-playbook-step-padding-bottom);
+        text-align: center;
+        text-shadow: var(--bt-playbook-shadow-strong);
+
+        &:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: var(--bt-playbook-divider-top);
+            right: var(--bt-playbook-divider-right);
+            bottom: var(--bt-playbook-divider-bottom);
+            left: var(--bt-playbook-divider-left);
+            width: var(--bt-playbook-divider-length);
+            height: calc(var(--bt-playbook-divider-length) / var(--bt-playbook-divider-aspect-ratio));
+            background: url('../images/line-star.webp') center / contain no-repeat;
+            filter: var(--bt-playbook-divider-filter);
+            transform: var(--bt-playbook-divider-transform);
+        }
+
+        strong {
+            display: block;
+            color: var(--bt-playbook-step-1-color);
+            font-size: var(--bt-playbook-step-number-size);
+            font-weight: var(--font-weight-medium);
+            line-height: var(--line-height-1);
+        }
+
+        &:nth-child(2) strong {
+            color: var(--bt-playbook-step-2-color);
+        }
+
+        &:nth-child(3) strong {
+            color: var(--bt-playbook-step-3-color);
+        }
+
+        h3 {
+            margin: var(--space-2) var(--space-0) var(--space-0);
+            color: inherit;
+            font-size: var(--bt-playbook-step-title-size);
+            font-weight: var(--font-weight-medium);
+            line-height: var(--line-height-1);
+        }
+
+        p {
+            margin: var(--bt-playbook-step-copy-margin);
+            color: var(--bt-playbook-ink-soft);
+            font-size: var(--bt-playbook-step-copy-size);
+            font-weight: var(--font-weight-regular);
+            line-height: var(--bt-playbook-step-copy-line-height);
+        }
+    }
+
+    .playbook__action {
+        display: grid;
+        place-items: center;
+
+        .lmb button:focus-visible {
+            outline-color: var(--color-neutral-0);
+        }
+    }
+
+    @media (max-width: 1699px) {
+        --bt-playbook-header-scale: 0.9;
+    }
+
+    @media (max-width: 1599px) {
+        /* --bt-playbook-content-scale: 0.8; */
+        --bt-playbook-header-scale: 0.8;
+    }
+
+    @media (max-width: 1499px) {
+        --bt-playbook-content-top-space: var(--space-24);
+        --bt-playbook-content-bottom-space: var(--space-24);
+        --bt-playbook-steps-container: 890px;
+        /* --bt-playbook-content-scale: 0.7; */
+        --bt-playbook-bitcoin-size: calc(var(--space-28) + var(--space-2));
+        --bt-playbook-gold-size: var(--space-24);
+        --bt-playbook-triangle-size: var(--space-24);
+        --bt-playbook-heart-x: 88%;
+        --bt-playbook-heart-size: calc(var(--space-32) + var(--space-4));
+        --bt-playbook-stock-size: calc(var(--space-16) + var(--space-2));
+        --bt-playbook-arrow-up-size: var(--space-28);
+    }
+
+    @media (max-width: 1399px) {
+        --bt-playbook-header-scale: 0.7;
+        --bt-playbook-content-scale: 0.8;
+    }
+
+    @media (max-width: 1299px) {
+        --bt-playbook-content-top-space: var(--space-20);
+        --bt-playbook-content-bottom-space: var(--space-20);
+        --bt-playbook-steps-container: 720px;
+    }
+
+    @media (max-width: 1199px) {
+        --bt-playbook-content-top-space: var(--space-24);
+        --bt-playbook-content-bottom-space: var(--space-24);
+        --bt-playbook-content-middle-space: calc(var(--space-32) * 3 + var(--space-16));
+        --bt-playbook-content-scale: 1;
+        --bt-playbook-header-scale: 0.85;
+        --bt-playbook-steps-container: 960px;
+        --bt-playbook-bitcoin-x: 12%;
+        --bt-playbook-bitcoin-y: 22%;
+        --bt-playbook-bitcoin-size: var(--space-28);
+        --bt-playbook-gold-x: 86%;
+        --bt-playbook-gold-y: 24%;
+        --bt-playbook-gold-size: var(--space-20);
+        --bt-playbook-triangle-x: 81%;
+        --bt-playbook-triangle-y: 42%;
+        --bt-playbook-triangle-size: var(--space-20);
+        --bt-playbook-heart-x: 88%;
+        --bt-playbook-heart-y: 60%;
+        --bt-playbook-heart-size: var(--space-32);
+        --bt-playbook-stock-x: 12%;
+        --bt-playbook-stock-y: 54%;
+        --bt-playbook-stock-size: calc(var(--space-16) - var(--space-2));
+        --bt-playbook-arrow-up-x: 24%;
+        --bt-playbook-arrow-up-y: 40%;
+        --bt-playbook-arrow-up-size: var(--space-24);
+
+
+        .playbook__background,
+        .playbook__scene {
+            display: flex;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .playbook__background-image {
+            object-fit: cover;
+            height: 100%;
+        }
+
+        .playbook__book {
+            object-fit: cover;
+            height: 100%;
+        }
+
+        .playbook__assets-artboard {
+            height: 100%;
+        }
+    }
+
+    @media (max-width: 991px) {
+        --bt-playbook-header-scale: 0.7;
+        --bt-playbook-steps-scale: 0.85;
+        --bt-playbook-content-top-space: var(--space-20);
+        --bt-playbook-content-bottom-space: var(--space-20);
+        --bt-playbook-content-middle-space: calc(var(--space-32) * 2 + var(--space-16));
+        --bt-playbook-footer-gap: var(--space-6);
+        --bt-playbook-bitcoin-y: 24%;
+        --bt-playbook-bitcoin-size: calc(var(--space-28) - var(--space-2));
+        --bt-playbook-gold-x: 88%;
+        --bt-playbook-gold-y: 28%;
+        --bt-playbook-gold-size: calc(var(--space-16) - var(--space-1));
+        --bt-playbook-triangle-y: 44%;
+        --bt-playbook-overlay-background:
+            linear-gradient(180deg,
+                color-mix(in srgb, var(--color-neutral-900) 2%, transparent) 28%,
+                color-mix(in srgb, var(--color-neutral-900) 58%, transparent) 55%,
+                color-mix(in srgb, var(--color-neutral-900) 88%, transparent) 100%);
+
+    }
+
+    @media (max-width: 767px) {
+        --bt-playbook-content-top-space: var(--space-24);
+        --bt-playbook-content-bottom-space: var(--space-24);
+        --bt-playbook-header-scale: 0.65;
+        --bt-playbook-steps-scale: 0.6;
+        --bt-playbook-subtitle-line-height: 1.2;
+        --bt-playbook-title-art-margin-left: auto;
+        --bt-playbook-title-art-transform: none;
+        --bt-playbook-content-middle-space: calc(var(--space-32) * 3 + var(--space-16));
+        --bt-playbook-footer-gap: var(--space-8);
+        --bt-playbook-steps-grid: repeat(3, minmax(var(--space-0), 1fr));
+        --bt-playbook-steps-gap: var(--space-0);
+        --bt-playbook-step-padding-inline: var(--space-3);
+        --bt-playbook-step-padding-bottom: var(--space-0);
+        --bt-playbook-divider-top: 50%;
+        --bt-playbook-divider-right: var(--space-0);
+        --bt-playbook-divider-bottom: auto;
+        --bt-playbook-divider-left: auto;
+        --bt-playbook-divider-length: var(--space-16);
+        --bt-playbook-divider-transform: translate(50%, -50%) rotate(90deg);
+        --bt-playbook-bitcoin-x: 12%;
+        --bt-playbook-bitcoin-y: 26%;
+        --bt-playbook-bitcoin-size: var(--space-20);
+        --bt-playbook-gold-x: 86%;
+        --bt-playbook-gold-y: 28%;
+        --bt-playbook-gold-size: var(--space-16);
+        --bt-playbook-triangle-size: var(--space-16);
+        --bt-playbook-heart-x: 88%;
+        --bt-playbook-heart-y: 62%;
+        --bt-playbook-heart-size: var(--space-20);
+        --bt-playbook-stock-x: 12%;
+        --bt-playbook-stock-y: 58%;
+        --bt-playbook-stock-size: var(--space-12);
+        --bt-playbook-arrow-up-x: 16%;
+        --bt-playbook-arrow-up-y: 40%;
+        --bt-playbook-arrow-up-size: var(--space-20);
+    }
+
+    @media (max-width: 575px) {
+        --bt-playbook-content-top-space: var(--space-24);
+        --bt-playbook-content-bottom-space: var(--space-24);
+        --bt-playbook-content-middle-space: calc(var(--space-32) * 2 + var(--space-16));
+        --bt-playbook-header-scale: 1;
+        --bt-playbook-steps-scale: 1;
+        --bt-playbook-title-art-max-width: var(--size-320);
+        --bt-playbook-title-size: var(--font-size-36);
+        --bt-playbook-subtitle-size: var(--font-size-14);
+        --bt-playbook-subtitle-space: var(--space-4);
+        --bt-playbook-step-number-size: var(--font-size-24);
+        --bt-playbook-step-title-size: var(--font-size-20);
+        --bt-playbook-step-copy-margin: var(--space-2) var(--space-0) var(--space-0);
+        --bt-playbook-step-copy-size: var(--font-size-14);
+        --bt-playbook-step-copy-line-height: var(--line-height-normal);
+        --bt-playbook-artboard-aspect-ratio: 2490 / 2100;
+        --bt-playbook-bitcoin-size: var(--space-16);
+        --bt-playbook-gold-size: var(--space-12);
+        --bt-playbook-triangle-size: var(--space-12);
+        --bt-playbook-heart-size: var(--space-16);
+        --bt-playbook-stock-size: var(--space-10);
+        --bt-playbook-arrow-up-size: var(--space-16);
+        --bt-playbook-steps-width: 100%;
+        --bt-playbook-steps-grid: 1fr;
+        --bt-playbook-steps-gap: calc(var(--space-6) + var(--space-1));
+        --bt-playbook-step-padding-inline: var(--space-0);
+        --bt-playbook-step-padding-bottom: var(--space-8);
+        --bt-playbook-divider-top: auto;
+        --bt-playbook-divider-right: auto;
+        --bt-playbook-divider-bottom: var(--space-0);
+        --bt-playbook-divider-left: 50%;
+        --bt-playbook-divider-length: var(--space-32);
+        --bt-playbook-divider-transform: translate(-50%, 50%);
+        --bt-playbook-footer-gap: var(--space-3);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+        .playbook__asset-motion,
+        .playbook__asset-float {
+            transform: none !important;
+        }
     }
 }

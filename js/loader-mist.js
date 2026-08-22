@@ -141,10 +141,17 @@
     const mistColorLoc = gl.getUniformLocation(program, 'u_mist_color');
     const accentColorLoc = gl.getUniformLocation(program, 'u_accent_color');
 
+    let isRunning = true;
+    const stopRendering = () => {
+        isRunning = false;
+    };
+
+    window.addEventListener('loader:mist-stop', stopRendering, { once: true });
+
     const render = (time) => {
         /* loader ถูก .remove() ออกจาก DOM ทันทีที่ intro จบ (ดู hero-v2-scroll-motion.js)
            ต้องเช็ค isConnected ทุกเฟรมไม่งั้น rAF จะวนค้างไปเรื่อย ๆ ทั้งที่ canvas หลุดจากหน้าไปแล้ว */
-        if (!canvas.isConnected) return;
+        if (!isRunning || !canvas.isConnected) return;
 
         if (canvas.width !== canvas.clientWidth || canvas.height !== canvas.clientHeight) {
             canvas.width = canvas.clientWidth;

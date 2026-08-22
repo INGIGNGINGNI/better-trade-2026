@@ -1050,7 +1050,7 @@
             // The title's poster-frame padding-left (set in CSS, outside the transform
             // above) eases out to 0 on the same window as the title's own migration, so it
             // reads as one movement instead of the padding just vanishing at the KV slot.
-            scrollTL.fromTo(el.title.querySelectorAll('.hero-title-video, img'),
+            scrollTL.fromTo(el.title.querySelector('img'),
                 { paddingLeft: 24 },
                 { paddingLeft: 0, duration: 0.45, ease: 'power2.inOut' },
                 0.10
@@ -1298,7 +1298,7 @@
                     rotation: KV[k].rot,
                 });
             });
-            gsap.set(el.title.querySelectorAll('.hero-title-video, img'), { paddingLeft: 0 });
+            gsap.set(el.title.querySelector('img'), { paddingLeft: 0 });
             const ui = document.getElementById('ui');
             ui.style.zIndex = '120';
             const uiHeight = ui.offsetHeight || 220;
@@ -1467,13 +1467,21 @@
                 tl.set(el[k + 'Inner'], {
                     ...assetScatterOrigins[k],
                     scale: assetScatterOrigins[k].scale * (isSeed ? 1 : 0.5),
-                    opacity: isSeed ? 1 : 0,
+                    opacity: 0,
                     transformOrigin: '50% 50%',
+                    force3D: true,
                 }, exitAt);
             });
+            // Crossfade the loader's final triangle into the real hero node. Keeping
+            // their combined opacity near one avoids the brief brightness pulse that
+            // previously read as a hitch before the assets started moving.
             tl.to(loaderIcons, { opacity: 0, duration: 0.16, ease: 'none' }, exitAt + 0.02);
+            tl.to(el.triangleInner, { opacity: 1, duration: 0.16, ease: 'none' }, exitAt + 0.02);
 
-            tl.to(el.loaderSurface, { opacity: 0, duration: 0.78, ease: 'power2.out' }, sceneRevealAt)
+            // Freeze the mist on its current frame before the reveal. The canvas can
+            // still fade visually without competing with the walls and assets for GPU time.
+            tl.call(() => window.dispatchEvent(new Event('loader:mist-stop')), null, exitAt)
+                .to(el.loaderSurface, { opacity: 0, duration: 0.78, ease: 'power2.out' }, sceneRevealAt)
                 .to(el.wallIntroLeft, { scaleX: 1, duration: wallIntroDuration, ease: 'power3.inOut' }, sceneRevealAt + wallIntroStartOffset)
                 .to(el.wallIntroRight, { scaleX: 1, duration: wallIntroDuration, ease: 'power3.inOut' }, sceneRevealAt + wallIntroStartOffset + 0.025)
                 .fromTo(el.titleInner,
@@ -1484,6 +1492,8 @@
                 .to(el.siteHeader, { opacity: 1, y: 0, duration: 0.56 }, sceneRevealAt + 0.52)
                 .to('#ui', { opacity: 1, y: 0, duration: 0.62 }, sceneRevealAt + 0.70);
 
+            tl.set(el.loaderSurface, { display: 'none' }, sceneRevealAt + 0.78);
+
             ASSET_ICON_KEYS.forEach((k, i) => {
                 const at = sceneRevealAt + assetScatterStartOffset + i * assetScatterStagger;
 
@@ -1493,6 +1503,7 @@
                     y: 0,
                     scale: 1,
                     rotation: 0,
+                    force3D: true,
                     duration: assetScatterDuration,
                     ease: 'power3.inOut',
                 }, at);
@@ -1554,7 +1565,6 @@
                 return;
             }
             const mediaMotionAllowed = !reduced && !saveData && !STATIC_FRAME;
-
             const markVideoReady = () => {
                 el.bg.classList.add('is-video-ready');
             };

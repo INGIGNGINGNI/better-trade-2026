@@ -61,8 +61,8 @@
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
-    <link rel="stylesheet" href="css/main.css?v=39">
-    <link rel="stylesheet" href="css/style.css?v=262">
+    <link rel="stylesheet" href="css/main.css?v=40">
+    <link rel="stylesheet" href="css/style.css?v=301">
 </head>
 
 <body class="is-loading">
@@ -88,7 +88,7 @@
             <nav class="site-header__nav" aria-label="เมนูหลัก">
                 <a href="#home" aria-current="page"><span class="site-header__nav-label">Home</span></a>
                 <a href="#ticket"><span class="site-header__nav-label">Ticket</span></a>
-                <a href="#game"><span class="site-header__nav-label">Game</span></a>
+                <a href="#playbook"><span class="site-header__nav-label">Game</span></a>
                 <a href="#agenda"><span class="site-header__nav-label">Agenda</span></a>
                 <a href="#speaker"><span class="site-header__nav-label">Speaker</span></a>
                 <a href="#contact"><span class="site-header__nav-label">Contact</span></a>
@@ -117,7 +117,7 @@
             <nav class="site-header__mobile-nav" aria-label="เมนูหลักสำหรับมือถือ">
                 <a href="#home"><span>Home</span><span class="site-header__mobile-nav-index">01</span></a>
                 <a href="#ticket"><span>Ticket</span><span class="site-header__mobile-nav-index">02</span></a>
-                <a href="#game"><span>Game</span><span class="site-header__mobile-nav-index">03</span></a>
+                <a href="#playbook"><span>Game</span><span class="site-header__mobile-nav-index">03</span></a>
                 <a href="#agenda"><span>Agenda</span><span class="site-header__mobile-nav-index">04</span></a>
                 <a href="#speaker"><span>Speaker</span><span class="site-header__mobile-nav-index">05</span></a>
                 <a href="#contact"><span>Contact</span><span class="site-header__mobile-nav-index">06</span></a>
@@ -194,7 +194,7 @@
             <div id="bg" aria-hidden="true">
                 <video id="sky-video" autoplay muted loop playsinline preload="auto"
                     poster="images/sky-new-old2.webp">
-                    <source src="video/sky-video-new-2-loop.mp4?v=1" type="video/mp4">
+                    <source src="video/sky-video-v3.mp4" type="video/mp4">
                 </video>
             </div>
 
@@ -219,10 +219,7 @@
             <div class="asset" id="a-title">
                 <div class="floaty">
                     <div class="inner">
-                        <video class="hero-title-video" aria-label="New World New Playbook — Better Trade 2026"
-                            autoplay muted loop playsinline preload="auto" poster="images/title.webp" width="1800" height="724">
-                            <source src="video/logo-title-2-alpha.webm?v=1" type="video/webm">
-                        </video>
+                        <img src="images/title.webp" alt="New World New Playbook — Better Trade 2026">
                     </div>
                 </div>
             </div>
@@ -599,6 +596,105 @@
     <!-- End Section : Ticket -->
 
 
+    <!-- Start Section : Playbook -->
+    <section id="playbook" class="playbook" data-header-theme="dark" aria-labelledby="playbook-title">
+        <div class="playbook__background" aria-hidden="true">
+            <picture>
+                <source srcset="images/playbook-bg-mobile.webp" media="(max-width: 575px)" width="2490" height="2100">
+                <img class="playbook__background-image" src="images/playbook-bg.webp" width="2490" height="1720"
+                    decoding="async" alt="">
+            </picture>
+        </div>
+
+        <div class="playbook__assets" aria-hidden="true">
+            <div class="playbook__assets-artboard">
+                <span class="playbook__asset playbook__asset--bitcoin" data-playbook-asset>
+                    <span class="playbook__asset-motion">
+                        <span class="playbook__asset-float">
+                            <img src="images/bitcoin.webp" width="787" height="800" alt="" loading="lazy" decoding="async">
+                        </span>
+                    </span>
+                </span>
+                <span class="playbook__asset playbook__asset--gold" data-playbook-asset>
+                    <span class="playbook__asset-motion">
+                        <span class="playbook__asset-float">
+                            <img src="images/gold.webp" width="369" height="800" alt="" loading="lazy" decoding="async">
+                        </span>
+                    </span>
+                </span>
+                <span class="playbook__asset playbook__asset--triangle" data-playbook-asset>
+                    <span class="playbook__asset-motion">
+                        <span class="playbook__asset-float">
+                            <img src="images/triangle.webp" width="800" height="769" alt="" loading="lazy" decoding="async">
+                        </span>
+                    </span>
+                </span>
+                <span class="playbook__asset playbook__asset--heart" data-playbook-asset>
+                    <span class="playbook__asset-motion">
+                        <span class="playbook__asset-float">
+                            <img src="images/heart.webp" width="800" height="750" alt="" loading="lazy" decoding="async">
+                        </span>
+                    </span>
+                </span>
+                <span class="playbook__asset playbook__asset--stock" data-playbook-asset>
+                    <span class="playbook__asset-motion">
+                        <span class="playbook__asset-float">
+                            <img src="images/stock.webp" width="178" height="800" alt="" loading="lazy" decoding="async">
+                        </span>
+                    </span>
+                </span>
+                <span class="playbook__asset playbook__asset--arrow-up" data-playbook-asset>
+                    <span class="playbook__asset-motion">
+                        <span class="playbook__asset-float">
+                            <img src="images/arrow-up.webp" width="787" height="800" alt="" loading="lazy" decoding="async">
+                        </span>
+                    </span>
+                </span>
+            </div>
+        </div>
+
+        <div class="playbook__scene" aria-hidden="true">
+            <picture>
+                <source srcset="images/playbook-book-mobile.webp" media="(max-width: 575px)" width="2490" height="2100">
+                <img class="playbook__book" src="images/playbook-book.webp" width="2490" height="1720"
+                    decoding="async" alt="">
+            </picture>
+        </div>
+
+        <div class="playbook__content container-xl">
+            <header class="playbook__header">
+                <img class="playbook__title-art" src="images/playbook-title.webp" width="1692" height="237"
+                    decoding="async" alt="PLAYBOOK">
+                <h2 id="playbook-title">ไอเทมลับของคุณ</h2>
+                <p>ไม่ใช่พอร์ตสำเร็จรูป แต่คือเครื่องมือการลงทุน ที่ออกแบบมาเพื่อคุณโดยเฉพาะ</p>
+            </header>
+
+            <div class="playbook__footer">
+                <ol class="playbook__steps" aria-label="3 ขั้นตอนค้นหา Investor DNA">
+                    <li class="playbook__step">
+                        <strong>1</strong>
+                        <h3>ทำแบบสอบถาม</h3>
+                        <p>เข้าใจเป้าหมายและระดับความเสี่ยง<br class="d-block d-sm-none d-md-block">เพื่อสร้างโครงสร้างที่เหมาะกับคุณ</p>
+                    </li>
+                    <li class="playbook__step">
+                        <strong>2</strong>
+                        <h3>เก็บ Data สไตล์คุณ</h3>
+                        <p>สแกน QR Code ในงาน<br class="d-block d-sm-none d-md-block">ระบบคำนวณ Interest score แบบเรียลไทม์</p>
+                    </li>
+                    <li class="playbook__step">
+                        <strong>3</strong>
+                        <h3>รับแผนที่ใช่</h3>
+                        <p>ระบบสร้างแผนการลงทุนบุคคล<br class="d-block d-sm-none d-md-block">ระยะเวลา 1 ปี เพื่อคุณโดยเฉพาะ</p>
+                    </li>
+                </ol>
+
+                <div id="playbook-cta-slot" class="playbook__action"></div>
+            </div>
+        </div>
+    </section>
+    <!-- End Section : Playbook -->
+
+
     <!-- Start Section : Agenda -->
     <section id="agenda" class="agenda" aria-labelledby="agenda-title">
         <header class="agenda__section-header container">
@@ -637,44 +733,56 @@
                 </nav>
 
                 <div class="agenda__days col-12 col-md-9">
-                    <div class="agenda__content">
-                        <div class="agenda__tabs-viewport">
-                            <div class="agenda__tabs" role="tablist" aria-label="เวทีภายในงาน">
-                                <button id="agenda-main-stage-tab" class="agenda__tab" type="button" role="tab" aria-selected="true" aria-controls="agenda-main-stage">Main Stage</button>
-                                <button id="agenda-mini-stage-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-mini-stage" tabindex="-1">Mini Stage</button>
-                                <button id="agenda-workshop-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-workshop" tabindex="-1">Workshop</button>
-                                <button id="agenda-private-class-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-private-class" tabindex="-1">Private Class</button>
-                                <span class="agenda__tab-indicator" aria-hidden="true"></span>
-                            </div>
+                    <div id="agenda-day-one" class="agenda__day-panel" data-agenda-day-panel="day-one">
+                        <div class="agenda__day-panel-header">
+                            <p class="agenda__day-panel-date">31 ตุลาคม 2569</p>
+                            <time class="agenda__day-panel-time">09:00 – 18:30 น.</time>
                         </div>
+                        <div class="agenda__content">
+                            <div class="agenda__tabs-viewport">
+                                <div class="agenda__tabs" role="tablist" aria-label="เวทีภายในงาน วันที่ 1">
+                                    <button id="agenda-day-one-main-stage-tab" class="agenda__tab" type="button" role="tab" aria-selected="true" aria-controls="agenda-day-one-main-stage">Main Stage</button>
+                                    <button id="agenda-day-one-mini-stage-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-day-one-mini-stage" tabindex="-1">Mini Stage</button>
+                                    <button id="agenda-day-one-workshop-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-day-one-workshop" tabindex="-1">Workshop</button>
+                                    <button id="agenda-day-one-private-class-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-day-one-private-class" tabindex="-1">Private Class</button>
+                                    <span class="agenda__tab-indicator" aria-hidden="true"></span>
+                                </div>
+                            </div>
 
-                        <div id="agenda-main-stage" class="agenda__panel" role="tabpanel" aria-labelledby="agenda-main-stage-tab">
-                            <div id="agenda-day-one" class="agenda__day-panel" data-agenda-day-panel="day-one">
+                            <div id="agenda-day-one-main-stage" class="agenda__panel" role="tabpanel" aria-labelledby="agenda-day-one-main-stage-tab">
                                 <table class="agenda__table">
                                     <caption class="visually-hidden">กำหนดการ Main Stage วันที่ 31 ตุลาคม 2569</caption>
                                     <colgroup>
                                         <col class="agenda__time-column">
+                                        <col class="agenda__tags-column">
                                         <col>
                                         <col class="agenda__speaker-column">
                                     </colgroup>
                                     <thead class="visually-hidden">
-                                        <tr><th scope="col">เวลา</th><th scope="col">รายการ</th><th scope="col">วิทยากร</th></tr>
+                                        <tr><th scope="col">เวลา</th><th scope="col">หมวดหมู่</th><th scope="col">รายการ</th><th scope="col">วิทยากร</th></tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <th scope="row"><time>09:00 – 10:00</time></th>
+                                            <td></td>
                                             <td><p class="agenda__session-title agenda__session-title--simple">Registration</p></td>
                                             <td class="agenda__speakers"></td>
                                         </tr>
                                         <tr>
                                             <th scope="row"><time>10:00 – 10:05</time></th>
-                                            <td><p class="agenda__session-title agenda__session-title--simple">Welcome Speech</p></td>
+                                            <td></td>
+                                            <td>
+                                                <p class="agenda__session-title agenda__session-title--simple">Welcome Speech</p>
+                                                 <p class="agenda__session-speaker">คุณพรเลิศ เตชะรัตโนภาส</p>
+                                            </td>
                                             <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="agenda__speaker-photo"><img src="images/speakers/profile-man.webp" width="928" height="1152" loading="lazy" decoding="async" alt=""></span></span></td>
                                         </tr>
                                         <tr>
                                             <th scope="row"><time>10:05 – 10:20</time></th>
                                             <td>
-                                                <div class="agenda__tags"><span class="agenda__tag">Macro/New world</span></div>
+                                                <div class="agenda__tags"><span class="agenda__tag">Macro</span><span class="agenda__tag">New world</span></div>
+                                            </td>
+                                            <td>
                                                 <p class="agenda__session-title">NEW WORLD, NEW PLAYBOOK</p>
                                                 <p class="agenda__session-summary">โลกใหม่ กติกาใหม่ โอกาสใหม่</p>
                                                 <p class="agenda__session-speaker">ดร.เอกนิติ นิติทัณฑ์ประภาศ</p>
@@ -685,6 +793,8 @@
                                             <th scope="row"><time>10:20 – 11:20</time></th>
                                             <td>
                                                 <div class="agenda__tags"><span class="agenda__tag">Capital Flow</span></div>
+                                            </td>
+                                            <td>
                                                 <p class="agenda__session-title">The Great Reallocation</p>
                                                 <p class="agenda__session-summary">เมื่อโลกเขย่า พอร์ตต้องขยับ</p>
                                                 <p class="agenda__session-speaker">ดร.ฐิติมา ชูเชิด และ ดร.พิพัฒน์ เหลืองนฤมิตชัย</p>
@@ -698,14 +808,17 @@
                                             <th scope="row"><time>11:20 – 12:00</time></th>
                                             <td>
                                                 <div class="agenda__tags"><span class="agenda__tag">Portfolio strategy</span></div>
+                                            </td>
+                                            <td>
                                                 <p class="agenda__session-title">The Death of Average Returns</p>
                                                 <p class="agenda__session-summary">สูตรเดิมกำลังหมดอายุ พอร์ตแบบไหนจะรอด ?</p>
-                                                <p class="agenda__session-speaker">TBD</p>
+                                                <p class="agenda__session-speaker">KTB</p>
                                             </td>
                                             <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="agenda__speaker-photo"><img src="images/speakers/profile-man.webp" width="928" height="1152" loading="lazy" decoding="async" alt=""></span></span></td>
                                         </tr>
                                         <tr>
                                             <th scope="row"><time>12:00 – 13:00</time></th>
+                                            <td></td>
                                             <td><p class="agenda__session-title agenda__session-title--simple">Lunch Break</p></td>
                                             <td class="agenda__speakers"></td>
                                         </tr>
@@ -713,8 +826,10 @@
                                             <th scope="row"><time>13:00 – 13:40</time></th>
                                             <td>
                                                 <div class="agenda__tags"><span class="agenda__tag">Personal wealth</span><span class="agenda__tag">Portfolio</span></div>
-                                                <p class="agenda__session-title">Young Money, Long Game</p>
-                                                <p class="agenda__session-summary">อายุยังน้อย แต่เลือกเล่นเกมยาว</p>
+                                            </td>
+                                            <td>
+                                                <p class="agenda__session-title">From Earning to Growing</p>
+                                                <p class="agenda__session-summary">เมื่อถึงวันที่เงินต้องทำงาน</p>
                                                 <p class="agenda__session-speaker">TBD</p>
                                             </td>
                                             <td class="agenda__speakers">
@@ -726,6 +841,8 @@
                                             <th scope="row"><time>13:40 – 14:10</time></th>
                                             <td>
                                                 <div class="agenda__tags"><span class="agenda__tag">Future of money</span><span class="agenda__tag">Digital asset</span></div>
+                                            </td>
+                                            <td>
                                                 <p class="agenda__session-title">The Reinvention of Money</p>
                                                 <p class="agenda__session-summary">เมื่อ “เงิน” กำลังถูกนิยามใหม่</p>
                                                 <p class="agenda__session-speaker">TBD</p>
@@ -739,9 +856,11 @@
                                             <th scope="row"><time>14:10 – 14:40</time></th>
                                             <td>
                                                 <div class="agenda__tags"><span class="agenda__tag">Digital asset</span><span class="agenda__tag">Cryptocurrency</span></div>
-                                                <p class="agenda__session-title">The Allocation Era</p>
-                                                <p class="agenda__session-summary">จากของเก็งกำไร สู่ของที่พอร์ตต้องมี</p>
-                                                <p class="agenda__session-speaker">TBD</p>
+                                            </td>
+                                            <td>
+                                                <p class="agenda__session-title">From Speculation to Allocation</p>
+                                                <p class="agenda__session-summary">จากสินทรัพย์เก็งกำไร สู่ของที่พอร์ตต้องมี</p>
+                                                <p class="agenda__session-speaker">Binance TH</p>
                                             </td>
                                             <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="agenda__speaker-photo"><img src="images/speakers/profile-man.webp" width="928" height="1152" loading="lazy" decoding="async" alt=""></span></span></td>
                                         </tr>
@@ -749,45 +868,50 @@
                                             <th scope="row"><time>14:40 – 15:10</time></th>
                                             <td>
                                                 <div class="agenda__tags"><span class="agenda__tag">AI</span><span class="agenda__tag">Investment tech</span></div>
-                                                <p class="agenda__session-title">The Insight Edge</p>
-                                                <p class="agenda__session-summary">ข้อมูลเหนือกว่า ลงทุนได้เปรียบกว่า</p>
+                                            </td>
+                                            <td>
+                                                <p class="agenda__session-title">Turn Insights to Invest</p>
+                                                <p class="agenda__session-summary">เชื่อมทุกข้อมูล ลงทุนอย่างมีชั้นเชิงด้วย AI</p>
                                                 <p class="agenda__session-speaker">คุณพสุธา ไดจิ อิเดะ</p>
                                             </td>
                                             <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="agenda__speaker-photo"><img src="images/speakers/profile-man.webp" width="928" height="1152" loading="lazy" decoding="async" alt=""></span></span></td>
                                         </tr>
                                         <tr>
-                                            <th scope="row"><time>15:10 – 15:25</time></th>
+                                            <th scope="row"><time>15:10 – 15:20</time></th>
+                                            <td></td>
                                             <td><p class="agenda__session-title agenda__session-title--simple">Lucky Draw</p></td>
                                             <td class="agenda__speakers"></td>
                                         </tr>
                                         <tr>
-                                            <th scope="row"><time>15:25 – 16:05</time></th>
+                                            <th scope="row"><time>15:20 – 16:00</time></th>
                                             <td>
-                                                <div class="agenda__tags"><span class="agenda__tag">Multi Asset</span><span class="agenda__tag">Capital</span><span class="agenda__tag">Bitcoin</span></div>
+                                                <div class="agenda__tags"><span class="agenda__tag">Big Asset</span></div>
+                                            </td>
+                                            <td>
                                                 <p class="agenda__session-title">The Big Asset Debate</p>
                                                 <p class="agenda__session-summary">ศึกสินทรัพย์ใหญ่ หุ้น ทอง Bitcoin ใครไปต่อ</p>
-                                                <p class="agenda__session-speaker">TBD</p>
+                                                <p class="agenda__session-speaker">คุณวิน พรหมแพทย์</p>
                                             </td>
-                                            <td class="agenda__speakers">
-                                                    <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 1"><span class="agenda__speaker-photo"><img src="images/speakers/profile-man.webp" width="928" height="1152" loading="lazy" decoding="async" alt=""></span></span>
-                                                    <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 2"><span class="agenda__speaker-photo"><img src="images/speakers/profile-woman.webp" width="928" height="1152" loading="lazy" decoding="async" alt=""></span></span>
-                                                    <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 3"><span class="agenda__speaker-photo"><img src="images/speakers/profile-man.webp" width="928" height="1152" loading="lazy" decoding="async" alt=""></span></span>
-                                                </td>
+                                            <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="agenda__speaker-photo"><img src="images/speakers/profile-man.webp" width="928" height="1152" loading="lazy" decoding="async" alt=""></span></span></td>
                                             </tr>
                                         <tr>
-                                            <th scope="row"><time>16:05 – 16:45</time></th>
+                                            <th scope="row"><time>16:00 – 16:40</time></th>
                                             <td>
                                                 <div class="agenda__tags"><span class="agenda__tag">Commodity </span><span class="agenda__tag">Property</span></div>
+                                            </td>
+                                            <td>
                                                 <p class="agenda__session-title">The Power of Real Assets</p>
                                                 <p class="agenda__session-summary">โภคภัณฑ์และอสังหาฯ ของจริงยังไปต่อได้แค่ไหน</p>
-                                                <p class="agenda__session-speaker">TBD</p>
+                                                <p class="agenda__session-speaker">คุณธนรัชต์ พสวงศ์</p>
                                             </td>
                                             <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="agenda__speaker-photo"><img src="images/speakers/profile-man.webp" width="928" height="1152" loading="lazy" decoding="async" alt=""></span></span></td>
                                         </tr>
                                         <tr>
-                                            <th scope="row"><time>16:45 – 17:30</time></th>
+                                            <th scope="row"><time>16:40 – 17:20</time></th>
                                             <td>
                                                 <div class="agenda__tags"><span class="agenda__tag">Alternative asset</span></div>
+                                            </td>
+                                            <td>
                                                 <p class="agenda__session-title">When Passion Becomes an Asset</p>
                                                 <p class="agenda__session-summary">ของที่คุณรัก มีมูลค่ามากกว่าที่คิด</p>
                                                 <p class="agenda__session-speaker">TBD</p>
@@ -798,21 +922,19 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th scope="row"><time>17:25 – 18:25</time></th>
+                                            <th scope="row"><time>17:20 – 18:20</time></th>
                                             <td>
-                                                <div class="agenda__tags"><span class="agenda__tag">Life/Wealth philosophy</span></div>
+                                                <div class="agenda__tags"><span class="agenda__tag">Life</span><span class="agenda__tag">Wealth philosophy</span></div>
+                                            </td>
+                                            <td>
                                                 <p class="agenda__session-title">Beyond Wealth</p>
                                                 <p class="agenda__session-summary">เมื่อการลงทุน ให้มากกว่าความมั่งคั่ง</p>
-                                                <p class="agenda__session-speaker">TBD</p>
+                                                <p class="agenda__session-speaker">ดร.นิเวศน์  เหมวชิรวรากร</p>
                                             </td>
-                                            <td class="agenda__speakers">
-                                                <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 1"><span class="agenda__speaker-photo"><img src="images/speakers/profile-man.webp" width="928" height="1152" loading="lazy" decoding="async" alt=""></span></span>
-                                                <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 2"><span class="agenda__speaker-photo"><img src="images/speakers/profile-woman.webp" width="928" height="1152" loading="lazy" decoding="async" alt=""></span></span>
-                                                <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 3"><span class="agenda__speaker-photo"><img src="images/speakers/profile-man.webp" width="928" height="1152" loading="lazy" decoding="async" alt=""></span></span>
-                                            </td>
-                                        </tr>
+                                            <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 1"><span class="agenda__speaker-photo"><img src="images/speakers/17.20-18.20-ดร.นิเวศน์-เหมวชิรวรากร.webp" width="928" height="1204" loading="lazy" decoding="async" alt="ดร.นิเวศน์ เหมวชิรวรากร"></span></span></td>                                        </tr>
                                         <tr>
-                                            <th scope="row"><time>18:25 – 18:30</time></th>
+                                            <th scope="row"><time>18:20 – 18:30</time></th>
+                                            <td></td>
                                             <td><p class="agenda__session-title agenda__session-title--simple">Grand Lucky Draw &amp; Closing Remark</p></td>
                                             <td class="agenda__speakers"></td>
                                         </tr>
@@ -821,26 +943,68 @@
 
                                 <p class="agenda__note">*หมายเหตุ Session อาจมีการปรับเปลี่ยนตามความเหมาะสม</p>
                             </div>
+                            <div id="agenda-day-one-mini-stage" class="agenda__panel agenda__panel--empty" role="tabpanel" aria-labelledby="agenda-day-one-mini-stage-tab" hidden>
+                                <div class="agenda__empty-state">
+                                    <p class="agenda__empty-kicker">Mini Stage</p>
+                                    <h3>Coming Soon</h3>
+                                    <p>กำหนดการของ Mini Stage จะประกาศเพิ่มเติมเร็ว ๆ นี้</p>
+                                </div>
+                            </div>
+                            <div id="agenda-day-one-workshop" class="agenda__panel agenda__panel--empty" role="tabpanel" aria-labelledby="agenda-day-one-workshop-tab" hidden>
+                                <div class="agenda__empty-state">
+                                    <p class="agenda__empty-kicker">Workshop</p>
+                                    <h3>Coming Soon</h3>
+                                    <p>รายละเอียด Workshop จะประกาศเพิ่มเติมเร็ว ๆ นี้</p>
+                                </div>
+                            </div>
+                            <div id="agenda-day-one-private-class" class="agenda__panel agenda__panel--empty" role="tabpanel" aria-labelledby="agenda-day-one-private-class-tab" hidden>
+                                <div class="agenda__empty-state">
+                                    <p class="agenda__empty-kicker">Private Class</p>
+                                    <h3>Coming Soon</h3>
+                                    <p>รายละเอียด Private Class จะประกาศเพิ่มเติมเร็ว ๆ นี้</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                            <div id="agenda-day-two" class="agenda__day-panel" data-agenda-day-panel="day-two">
+                    <div id="agenda-day-two" class="agenda__day-panel" data-agenda-day-panel="day-two">
+                        <div class="agenda__day-panel-header">
+                            <p class="agenda__day-panel-date">1 พฤศจิกายน 2569</p>
+                            <time class="agenda__day-panel-time">09:00 – 17:30 น.</time>
+                        </div>
+                        <div class="agenda__content">
+                            <div class="agenda__tabs-viewport">
+                                <div class="agenda__tabs" role="tablist" aria-label="เวทีภายในงาน วันที่ 2">
+                                    <button id="agenda-day-two-main-stage-tab" class="agenda__tab" type="button" role="tab" aria-selected="true" aria-controls="agenda-day-two-main-stage">Main Stage</button>
+                                    <button id="agenda-day-two-mini-stage-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-day-two-mini-stage" tabindex="-1">Mini Stage</button>
+                                    <button id="agenda-day-two-workshop-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-day-two-workshop" tabindex="-1">Workshop</button>
+                                    <button id="agenda-day-two-private-class-tab" class="agenda__tab" type="button" role="tab" aria-selected="false" aria-controls="agenda-day-two-private-class" tabindex="-1">Private Class</button>
+                                    <span class="agenda__tab-indicator" aria-hidden="true"></span>
+                                </div>
+                            </div>
+
+                            <div id="agenda-day-two-main-stage" class="agenda__panel" role="tabpanel" aria-labelledby="agenda-day-two-main-stage-tab">
                                 <table class="agenda__table">
                                     <caption class="visually-hidden">กำหนดการ Main Stage วันที่ 1 พฤศจิกายน 2569</caption>
                                     <colgroup>
                                         <col class="agenda__time-column">
+                                        <col class="agenda__tags-column">
                                         <col>
                                         <col class="agenda__speaker-column">
                                     </colgroup>
                                     <thead class="visually-hidden">
-                                        <tr><th scope="col">เวลา</th><th scope="col">รายการ</th><th scope="col">วิทยากร</th></tr>
+                                        <tr><th scope="col">เวลา</th><th scope="col">หมวดหมู่</th><th scope="col">รายการ</th><th scope="col">วิทยากร</th></tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <th scope="row"><time>09:00 – 10:00</time></th>
+                                            <td></td>
                                             <td><p class="agenda__session-title agenda__session-title--simple">Registration</p></td>
                                             <td class="agenda__speakers"></td>
                                         </tr>
                                         <tr>
                                             <th scope="row"><time>10:00 – 10:05</time></th>
+                                            <td></td>
                                             <td><p class="agenda__session-title agenda__session-title--simple">Welcome Speech</p></td>
                                             <td class="agenda__speakers"></td>
                                         </tr>
@@ -848,6 +1012,8 @@
                                             <th scope="row"><time>10:05 – 11:05</time></th>
                                             <td>
                                                 <div class="agenda__tags"><span class="agenda__tag">Macro / Wealth Outlook</span></div>
+                                            </td>
+                                            <td>
                                                 <p class="agenda__session-title">The Next Decade of Wealth</p>
                                                 <p class="agenda__session-summary">ความมั่งคั่งทศวรรษหน้า อยู่ตรงไหน</p>
                                                 <p class="agenda__session-speaker">ดร. กอบศักดิ์ ภูตระกูล</p>
@@ -858,6 +1024,8 @@
                                             <th scope="row"><time>11:05 – 11:45</time></th>
                                             <td>
                                                 <div class="agenda__tags"><span class="agenda__tag">Investment Strategy</span><span class="agenda__tag">Stock & Asset Selection</span></div>
+                                            </td>
+                                            <td>
                                                 <p class="agenda__session-title">Must-Have Thai Stocks 2027</p>
                                                 <p class="agenda__session-summary">หุ้นไทยที่ต้องมีในพอร์ต ปี 2570</p>
                                                 <p class="agenda__session-speaker">TBD</p>
@@ -869,6 +1037,7 @@
                                         </tr>
                                         <tr>
                                             <th scope="row"><time>11:45 – 12:45</time></th>
+                                            <td></td>
                                             <td><p class="agenda__session-title agenda__session-title--simple">Lunch Break</p></td>
                                             <td class="agenda__speakers"></td>
                                         </tr>
@@ -876,6 +1045,8 @@
                                             <th scope="row"><time>12:45 – 13:25</time></th>
                                             <td>
                                                 <div class="agenda__tags"><span class="agenda__tag">Private Wealth</span><span class="agenda__tag">Wealth Management</span></div>
+                                            </td>
+                                            <td>
                                                 <p class="agenda__session-title">Wealth That Outlives You</p>
                                                 <p class="agenda__session-summary">สร้าง รักษา ส่งต่อ ความมั่งคั่งข้ามรุ่น</p>
                                                 <p class="agenda__session-speaker">TBD</p>
@@ -889,6 +1060,8 @@
                                             <th scope="row"><time>13:25 – 14:05</time></th>
                                             <td>
                                                 <div class="agenda__tags"><span class="agenda__tag">Alternative Assets</span><span class="agenda__tag">Income Investing</span></div>
+                                            </td>
+                                            <td>
                                                 <p class="agenda__session-title">The Tax Advantage</p>
                                                 <p class="agenda__session-summary">รู้ภาษี มีแต้มต่อ</p>
                                                 <p class="agenda__session-speaker">TBD</p>
@@ -899,6 +1072,8 @@
                                             <th scope="row"><time>14:05 – 14:35</time></th>
                                             <td>
                                                 <div class="agenda__tags"><span class="agenda__tag">Investment Technology</span><span class="agenda__tag">AI</span></div>
+                                            </td>
+                                            <td>
                                                 <p class="agenda__session-title">AI in Action </p>
                                                 <p class="agenda__session-summary">ให้ AI ช่วยคิด ก่อนเงินคุณทำงาน</p>
                                                 <p class="agenda__session-speaker">อ.วชิรเมษฐ์ ธเนศสถิตพงษ์</p>
@@ -907,6 +1082,7 @@
                                         </tr>
                                         <tr>
                                             <th scope="row"><time>14:35 – 14:45</time></th>
+                                            <td></td>
                                             <td><p class="agenda__session-title agenda__session-title--simple">Lucky Draw</p></td>
                                             <td class="agenda__speakers"></td>
                                         </tr>
@@ -914,6 +1090,8 @@
                                             <th scope="row"><time>14:45 – 15:25</time></th>
                                             <td>
                                                 <div class="agenda__tags"><span class="agenda__tag">Digital Asset</span><span class="agenda__tag">Bitcoin</span></div>
+                                            </td>
+                                            <td>
                                                 <p class="agenda__session-title">Bitcoin in the New World</p>
                                                 <p class="agenda__session-summary">โลกใหม่ Bitcoin ยืนอยู่ตรงไหน</p>
                                                 <p class="agenda__session-speaker">TBD</p>
@@ -924,6 +1102,8 @@
                                             <th scope="row"><time>15:25 – 16:05</time></th>
                                             <td>
                                                 <div class="agenda__tags"><span class="agenda__tag">Alternative Assets</span><span class="agenda__tag">Private Markets</span></div>
+                                            </td>
+                                            <td>
                                                 <p class="agenda__session-title">The Collector's Rules</p>
                                                 <p class="agenda__session-summary">ของสะสมแบบไหน ควรซื้อ ถือ และขาย</p>
                                                 <p class="agenda__session-speaker">TBD</p>
@@ -934,6 +1114,8 @@
                                             <th scope="row"><time>16:05 – 16:45</time></th>
                                             <td>
                                                 <div class="agenda__tags"><span class="agenda__tag">Longevity</span><span class="agenda__tag">Financial Planning</span></div>
+                                            </td>
+                                            <td>
                                                 <p class="agenda__session-title">Wealth for Longevity</p>
                                                 <p class="agenda__session-summary">เตรียมกายให้อยู่ยาว เตรียมเงินให้อยู่ยืน</p>
                                                 <p class="agenda__session-speaker">TBD</p>
@@ -944,6 +1126,8 @@
                                             <th scope="row"><time>16:45 – 17:25</time></th>
                                             <td>
                                                 <div class="agenda__tags"><span class="agenda__tag">Investment Philosophy</span><span class="agenda__tag"> Wisdom</span></div>
+                                            </td>
+                                            <td>
                                                 <p class="agenda__session-title">The Playbook I Never Break</p>
                                                 <p class="agenda__session-summary">กฎเหล็กการลงทุนที่ไม่มีข้อยกเว้น</p>
                                                 <p class="agenda__session-speaker">TBD</p>
@@ -956,6 +1140,7 @@
                                         </tr>
                                         <tr>
                                             <th scope="row"><time>17:25 – 17:30</time></th>
+                                            <td></td>
                                             <td><p class="agenda__session-title agenda__session-title--simple">Grand Lucky draw &amp; Closing Remark</p></td>
                                             <td class="agenda__speakers"></td>
                                         </tr>
@@ -964,27 +1149,26 @@
 
                                 <p class="agenda__note">*หมายเหตุ Session อาจมีการปรับเปลี่ยนตามความเหมาะสม</p>
                             </div>
-                        </div>
-
-                        <div id="agenda-mini-stage" class="agenda__panel agenda__panel--empty" role="tabpanel" aria-labelledby="agenda-mini-stage-tab" hidden>
-                            <div class="agenda__empty-state">
-                                <p class="agenda__empty-kicker">Mini Stage</p>
-                                <h3>Coming Soon</h3>
-                                <p>กำหนดการของ Mini Stage จะประกาศเพิ่มเติมเร็ว ๆ นี้</p>
+                            <div id="agenda-day-two-mini-stage" class="agenda__panel agenda__panel--empty" role="tabpanel" aria-labelledby="agenda-day-two-mini-stage-tab" hidden>
+                                <div class="agenda__empty-state">
+                                    <p class="agenda__empty-kicker">Mini Stage</p>
+                                    <h3>Coming Soon</h3>
+                                    <p>กำหนดการของ Mini Stage จะประกาศเพิ่มเติมเร็ว ๆ นี้</p>
+                                </div>
                             </div>
-                        </div>
-                        <div id="agenda-workshop" class="agenda__panel agenda__panel--empty" role="tabpanel" aria-labelledby="agenda-workshop-tab" hidden>
-                            <div class="agenda__empty-state">
-                                <p class="agenda__empty-kicker">Workshop</p>
-                                <h3>Coming Soon</h3>
-                                <p>รายละเอียด Workshop จะประกาศเพิ่มเติมเร็ว ๆ นี้</p>
+                            <div id="agenda-day-two-workshop" class="agenda__panel agenda__panel--empty" role="tabpanel" aria-labelledby="agenda-day-two-workshop-tab" hidden>
+                                <div class="agenda__empty-state">
+                                    <p class="agenda__empty-kicker">Workshop</p>
+                                    <h3>Coming Soon</h3>
+                                    <p>รายละเอียด Workshop จะประกาศเพิ่มเติมเร็ว ๆ นี้</p>
+                                </div>
                             </div>
-                        </div>
-                        <div id="agenda-private-class" class="agenda__panel agenda__panel--empty" role="tabpanel" aria-labelledby="agenda-private-class-tab" hidden>
-                            <div class="agenda__empty-state">
-                                <p class="agenda__empty-kicker">Private Class</p>
-                                <h3>Coming Soon</h3>
-                                <p>รายละเอียด Private Class จะประกาศเพิ่มเติมเร็ว ๆ นี้</p>
+                            <div id="agenda-day-two-private-class" class="agenda__panel agenda__panel--empty" role="tabpanel" aria-labelledby="agenda-day-two-private-class-tab" hidden>
+                                <div class="agenda__empty-state">
+                                    <p class="agenda__empty-kicker">Private Class</p>
+                                    <h3>Coming Soon</h3>
+                                    <p>รายละเอียด Private Class จะประกาศเพิ่มเติมเร็ว ๆ นี้</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1025,7 +1209,7 @@
                                 <span class="speaker__day-switch-details-inner">
                                     <span class="speaker__day-switch-date-full">1 พฤศจิกายน 2569</span>
                                     <span class="speaker__day-switch-date-short" aria-hidden="true">1 พฤศจิกายน 69</span>
-                                    <span>09:00 – 18:30 น.</span>
+                                    <span>09:00 – 17:30 น.</span>
                                 </span>
                             </span>
                         </a>
@@ -1034,10 +1218,18 @@
 
                 <div class="speaker__days col-12 col-md-9">
                     <div id="speaker-day-one" class="speaker__day-panel" data-speaker-day-panel="day-one">
+                        <div class="speaker__day-panel-header">
+                            <p class="speaker__day-panel-date">31 ตุลาคม 2569</p>
+                            <time class="speaker__day-panel-time">09:00 – 18:30 น.</time>
+                        </div>
                         <div class="speaker__panel" data-speaker-day="dayOne"></div>
                     </div>
 
                     <div id="speaker-day-two" class="speaker__day-panel" data-speaker-day-panel="day-two">
+                        <div class="speaker__day-panel-header">
+                            <p class="speaker__day-panel-date">1 พฤศจิกายน 2569</p>
+                            <time class="speaker__day-panel-time">09:00 – 17:30 น.</time>
+                        </div>
                         <div class="speaker__panel" data-speaker-day="dayTwo"></div>
                     </div>
                 </div>
@@ -1056,9 +1248,9 @@
 
         <div class="moderator__inner container">
             <div class="row">
-                <!-- เยื้อง 3 ช่องให้ตรงกับ .speaker__days ที่มีตัวสลับวันกินพื้นที่อยู่
-                     แทร็กของกริดจึงกว้างเท่ากัน การ์ดสองฝั่งเลยมีขนาดเดียวกัน -->
-                <div class="col-12 offset-lg-3 col-lg-9">
+                <!-- เต็ม 12 คอลัมน์ แบ่ง 4 การ์ดต่อแถว (12÷4 = 9÷3 = 3 หน่วยคอลัมน์ต่อการ์ด)
+                     การ์ดจึงกว้างเท่ากับการ์ดของ .speaker__panel ที่แบ่ง 3 การ์ดบน 9 คอลัมน์ -->
+                <div class="col-12">
                     <div class="moderator__grid">
                         <article class="speaker-card" style="--speaker-portrait-y: 0%">
                             <div class="speaker-card__portrait">
@@ -1135,6 +1327,19 @@
                             <div class="speaker-card__meta">
                                 <h3>ปิยะดา วัชรพล</h3>
                                 <p>Moderator, Mini Stage</p>
+                            </div>
+                        </article>
+
+                        <article class="speaker-card" style="--speaker-portrait-y: 0%">
+                            <div class="speaker-card__portrait">
+                                <div class="speaker-card__frame">
+                                    <img src="images/speakers/profile-man.webp" width="928" height="1152"
+                                        loading="lazy" decoding="async" alt="ธนกฤต ศิริวัฒนา">
+                                </div>
+                            </div>
+                            <div class="speaker-card__meta">
+                                <h3>ธนกฤต ศิริวัฒนา</h3>
+                                <p>Moderator, Workshop</p>
                             </div>
                         </article>
                     </div>
@@ -1363,46 +1568,51 @@
             </div>
         </div>
 
-        <div class="past-event__marquee swiper" aria-label="พื้นที่เตรียมใส่ภาพบรรยากาศงาน Better Trade ที่ผ่านมา" data-past-event-swiper>
+        <div class="past-event__marquee swiper" aria-label="ภาพบรรยากาศงาน Better Trade ที่ผ่านมา" data-past-event-swiper>
             <div class="past-event__marquee-track swiper-wrapper">
                 <figure class="past-event__slide swiper-slide">
                     <div class="past-event__slide-frame">
-                        <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-camera"></use></svg>
+                        <img src="images/pass-event/1.webp" width="2000" height="1333" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน Better Trade ที่ผ่านมา">
                     </div>
                 </figure>
                 <figure class="past-event__slide swiper-slide">
                     <div class="past-event__slide-frame">
-                        <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-camera"></use></svg>
+                        <img src="images/pass-event/2.webp" width="2000" height="1333" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน Better Trade ที่ผ่านมา">
                     </div>
                 </figure>
                 <figure class="past-event__slide swiper-slide">
                     <div class="past-event__slide-frame">
-                        <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-camera"></use></svg>
+                        <img src="images/pass-event/3.webp" width="2000" height="1333" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน Better Trade ที่ผ่านมา">
                     </div>
                 </figure>
                 <figure class="past-event__slide swiper-slide">
                     <div class="past-event__slide-frame">
-                        <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-camera"></use></svg>
+                        <img src="images/pass-event/4.webp" width="2000" height="1333" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน Better Trade ที่ผ่านมา">
                     </div>
                 </figure>
                 <figure class="past-event__slide swiper-slide">
                     <div class="past-event__slide-frame">
-                        <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-camera"></use></svg>
+                        <img src="images/pass-event/5.webp" width="2000" height="1333" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน Better Trade ที่ผ่านมา">
                     </div>
                 </figure>
                 <figure class="past-event__slide swiper-slide">
                     <div class="past-event__slide-frame">
-                        <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-camera"></use></svg>
+                        <img src="images/pass-event/6.webp" width="1000" height="667" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน Better Trade ที่ผ่านมา">
                     </div>
                 </figure>
                 <figure class="past-event__slide swiper-slide">
                     <div class="past-event__slide-frame">
-                        <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-camera"></use></svg>
+                        <img src="images/pass-event/7.webp" width="1000" height="667" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน Better Trade ที่ผ่านมา">
                     </div>
                 </figure>
                 <figure class="past-event__slide swiper-slide">
                     <div class="past-event__slide-frame">
-                        <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-camera"></use></svg>
+                        <img src="images/pass-event/8.webp" width="1000" height="667" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน Better Trade ที่ผ่านมา">
+                    </div>
+                </figure>
+                <figure class="past-event__slide swiper-slide">
+                    <div class="past-event__slide-frame">
+                        <img src="images/pass-event/9.webp" width="1000" height="667" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน Better Trade ที่ผ่านมา">
                     </div>
                 </figure>
             </div>
@@ -1495,7 +1705,7 @@
     <script src="js/expectation-counter.js?v=1"></script>
     <script src="js/floor-plan-reveal.js?v=1"></script>
     <script src="js/back-to-top.js?v=2"></script>
-    <script src="js/journey-indicator.js?v=10"></script>
+    <script src="js/journey-indicator.js?v=12"></script>
     <script src="js/mobile-cta-bar.js?v=3"></script>
     <script src="js/hero-v2-header.js?v=12"></script>
     <script src="js/in-page-navigation.js?v=1"></script>
@@ -1503,16 +1713,17 @@
 
     <!-- Liquid metal CTAs (WebGL). Module scripts are deferred, so this runs after
      the markup exists but before window 'load' fires the hero intro. -->
-    <script type="module" src="js/hero-v2-cta.js?v=4"></script>
+    <script type="module" src="js/hero-v2-cta.js?v=5"></script>
     <script src="js/event-countdown.js"></script>
-    <script src="js/loader-mist.js?v=2"></script>
+    <script src="js/loader-mist.js?v=3"></script>
     <script src="vendor/gsap/gsap.min.js"></script>
     <script src="vendor/gsap/ScrollTrigger.min.js"></script>
-    <script src="js/hero-v2-scroll-motion.js?v=42"></script>
+    <script src="js/hero-v2-scroll-motion.js?v=44"></script>
     <script src="js/hero-v2-scroll-cue.js?v=4"></script>
     <script src="js/topics-reveal.js?v=4"></script>
     <script src="js/topics-assets-motion.js?v=14"></script>
     <script src="js/ticket-backdrop-parallax.js?v=4"></script>
+    <script src="js/playbook-assets-motion.js?v=4"></script>
     <!-- หลัง hero เพราะ ScrollTrigger refresh ตามลำดับที่สร้าง และ speaker อยู่ใต้ hero ในหน้า -->
     <script src="js/speaker-motion.js?v=2"></script>
 </body>

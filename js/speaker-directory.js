@@ -1,63 +1,70 @@
 (() => {
     const speakerDays = {
         dayOne: [
-            ['กิตติพงศ์ วัฒนชัย', 'Chief Investment Strategist, Horizon Capital', 'man'],
-            ['พิมพ์ชนก รัตนกุล', 'Founder & CEO, Future Wealth Lab', 'woman'],
-            ['ธนกร ศรีวัฒน์', 'Managing Director, Atlas Securities', 'man'],
-            ['อรทัย ตั้งพิพัฒน์', 'Head of Digital Assets, NovaX', 'woman'],
-            ['ชยพล เกียรติไพบูลย์', 'Partner, Momentum Ventures', 'man'],
-            ['ณัฐชา วงศ์ประเสริฐ', 'Economist & Market Commentator', 'woman'],
-            ['วรเมธ ลิ้มวัฒนะ', 'Chief Technology Officer, Finverse', 'man'],
-            ['ศิริพร บุญยืน', 'Director of Sustainable Investment', 'woman'],
-            ['ภาคิน อัครเดช', 'Founder, New Economy Research', 'man'],
-            ['ลลิตา จารุวัฒน์', 'Private Wealth Advisor', 'woman'],
-            ['ปกรณ์ สุวรรณกิจ', 'Global Macro Fund Manager', 'man'],
-            ['รมิดา พัฒนโชติ', 'Co-founder, Wealth for Everyone', 'woman'],
-            ['ธีรภัทร ชาญวิทย์', 'Digital Asset Research Lead', 'man'],
-            ['นภัสสร วัฒนศิริ', 'CEO, Capital Design Studio', 'woman'],
-            ['อธิป ตั้งธนกิจ', 'Commodity Investment Specialist', 'man'],
-            ['ชุติมา รุ่งเรืองผล', 'Managing Partner, Bright Future Fund', 'woman'],
-            ['กฤตภาส เมธากุล', 'AI & Quantitative Strategy Lead', 'man'],
-            ['พิชญา พงศ์พาณิชย์', 'Financial Educator & Author', 'woman'],
-            ['วสุธร อินทรรักษ์', 'Chief Economist, Meridian Group', 'man'],
-            ['รวิสรา ธรรมคุณ', 'Founder, Purposeful Portfolio', 'woman'],
+            { name: 'ดร.นิเวศน์ เหมวชิรวรากร', role: 'Value Investor (VI) เบอร์หนึ่งของเมืองไทย', image: '17.20-18.20-ดร.นิเวศน์-เหมวชิรวรากร.webp', imageY: '0%', imageWidth: 928, imageHeight: 1204 },
+            { name: 'พิมพ์ชนก รัตนกุล', role: 'Founder & CEO, Future Wealth Lab', image: 'profile-woman.webp', imageY: '0%' },
+            { name: 'ธนกร ศรีวัฒน์', role: 'Managing Director, Atlas Securities', image: 'profile-man.webp', imageY: '0%' },
+            { name: 'อรทัย ตั้งพิพัฒน์', role: 'Head of Digital Assets, NovaX', image: 'profile-woman.webp', imageY: '0%' },
+            { name: 'ชยพล เกียรติไพบูลย์', role: 'Partner, Momentum Ventures', image: 'profile-man.webp', imageY: '0%' },
+            { name: 'ณัฐชา วงศ์ประเสริฐ', role: 'Economist & Market Commentator', image: 'profile-woman.webp', imageY: '0%' },
+            { name: 'วรเมธ ลิ้มวัฒนะ', role: 'Chief Technology Officer, Finverse', image: 'profile-man.webp', imageY: '0%' },
+            { name: 'ศิริพร บุญยืน', role: 'Director of Sustainable Investment', image: 'profile-woman.webp', imageY: '0%' },
+            { name: 'ภาคิน อัครเดช', role: 'Founder, New Economy Research', image: 'profile-man.webp', imageY: '0%' },
+            { name: 'ลลิตา จารุวัฒน์', role: 'Private Wealth Advisor', image: 'profile-woman.webp', imageY: '0%' },
+            { name: 'ปกรณ์ สุวรรณกิจ', role: 'Global Macro Fund Manager', image: 'profile-man.webp', imageY: '0%' },
+            { name: 'รมิดา พัฒนโชติ', role: 'Co-founder, Wealth for Everyone', image: 'profile-woman.webp', imageY: '0%' },
+            { name: 'ธีรภัทร ชาญวิทย์', role: 'Digital Asset Research Lead', image: 'profile-man.webp', imageY: '0%' },
+            { name: 'นภัสสร วัฒนศิริ', role: 'CEO, Capital Design Studio', image: 'profile-woman.webp', imageY: '0%' },
+            { name: 'อธิป ตั้งธนกิจ', role: 'Commodity Investment Specialist', image: 'profile-man.webp', imageY: '0%' },
+            { name: 'ชุติมา รุ่งเรืองผล', role: 'Managing Partner, Bright Future Fund', image: 'profile-woman.webp', imageY: '0%' },
+            { name: 'กฤตภาส เมธากุล', role: 'AI & Quantitative Strategy Lead', image: 'profile-man.webp', imageY: '0%' },
+            { name: 'พิชญา พงศ์พาณิชย์', role: 'Financial Educator & Author', image: 'profile-woman.webp', imageY: '0%' },
+            { name: 'วสุธร อินทรรักษ์', role: 'Chief Economist, Meridian Group', image: 'profile-man.webp', imageY: '0%' },
+            { name: 'รวิสรา ธรรมคุณ', role: 'Founder, Purposeful Portfolio', image: 'profile-woman.webp', imageY: '0%' },
         ],
         dayTwo: [
-            ['ภานุวัฒน์ วีระกุล', 'Chief Executive Officer, Quantum Wealth', 'man'],
-            ['กัญญารัตน์ อุดมทรัพย์', 'Managing Partner, Northstar Ventures', 'woman'],
-            ['สรวิศ ชาญธนกิจ', 'Global Equity Portfolio Manager', 'man'],
-            ['วริศรา เทพหัสดิน', 'Head of Alternative Investments', 'woman'],
-            ['ณรงค์ฤทธิ์ วัฒนาพงศ์', 'Founder, Digital Economy Forum', 'man'],
-            ['ปิยะนุช สุขเกษม', 'Sustainable Finance Director', 'woman'],
-            ['ธนวัฒน์ ชัยประสิทธิ์', 'AI Investment Researcher', 'man'],
-            ['มนัสวี รุ่งกิจ', 'Private Market Strategist', 'woman'],
-            ['ชลธิชา สกุลทอง', 'Financial Technology Entrepreneur', 'woman'],
-            ['อัครเดช พัฒนวงศ์', 'Chief Investment Officer, Vertex Fund', 'man'],
-            ['ศุภณัฐ รัตนวิชัย', 'Digital Asset Portfolio Manager', 'man'],
-            ['ณิชาภา ตั้งวาณิชย์', 'Founder, Future Money Studio', 'woman'],
-            ['กรณ์ภพ นิลวัฒน์', 'Real Asset Investment Director', 'man'],
-            ['ศศิธร วัฒนวงศ์', 'Family Office Advisor', 'woman'],
-            ['นราวิชญ์ อัครวัฒน์', 'Fintech Entrepreneur & Investor', 'man'],
-            ['อัญชลี รุ่งพิพัฒน์', 'Personal Finance Creator', 'woman'],
-            ['ธนกฤต ศรีสวัสดิ์', 'Market Structure Specialist', 'man'],
-            ['พิมพ์มาดา วงศ์วาน', 'Founder, The Growth Playbook', 'woman'],
-            ['กวินท์ สุวรรณเมธา', 'Macroeconomic Research Director', 'man'],
-            ['ชญานิศ วงศ์วัฒนา', 'Wealth Innovation Consultant', 'woman'],
+            { name: 'ภานุวัฒน์ วีระกุล', role: 'Chief Executive Officer, Quantum Wealth', image: 'profile-man.webp', imageY: '0%' },
+            { name: 'กัญญารัตน์ อุดมทรัพย์', role: 'Managing Partner, Northstar Ventures', image: 'profile-woman.webp', imageY: '0%' },
+            { name: 'สรวิศ ชาญธนกิจ', role: 'Global Equity Portfolio Manager', image: 'profile-man.webp', imageY: '0%' },
+            { name: 'วริศรา เทพหัสดิน', role: 'Head of Alternative Investments', image: 'profile-woman.webp', imageY: '0%' },
+            { name: 'ณรงค์ฤทธิ์ วัฒนาพงศ์', role: 'Founder, Digital Economy Forum', image: 'profile-man.webp', imageY: '0%' },
+            { name: 'ปิยะนุช สุขเกษม', role: 'Sustainable Finance Director', image: 'profile-woman.webp', imageY: '0%' },
+            { name: 'ธนวัฒน์ ชัยประสิทธิ์', role: 'AI Investment Researcher', image: 'profile-man.webp', imageY: '0%' },
+            { name: 'มนัสวี รุ่งกิจ', role: 'Private Market Strategist', image: 'profile-woman.webp', imageY: '0%' },
+            { name: 'ชลธิชา สกุลทอง', role: 'Financial Technology Entrepreneur', image: 'profile-woman.webp', imageY: '0%' },
+            { name: 'อัครเดช พัฒนวงศ์', role: 'Chief Investment Officer, Vertex Fund', image: 'profile-man.webp', imageY: '0%' },
+            { name: 'ศุภณัฐ รัตนวิชัย', role: 'Digital Asset Portfolio Manager', image: 'profile-man.webp', imageY: '0%' },
+            { name: 'ณิชาภา ตั้งวาณิชย์', role: 'Founder, Future Money Studio', image: 'profile-woman.webp', imageY: '0%' },
+            { name: 'กรณ์ภพ นิลวัฒน์', role: 'Real Asset Investment Director', image: 'profile-man.webp', imageY: '0%' },
+            { name: 'ศศิธร วัฒนวงศ์', role: 'Family Office Advisor', image: 'profile-woman.webp', imageY: '0%' },
+            { name: 'นราวิชญ์ อัครวัฒน์', role: 'Fintech Entrepreneur & Investor', image: 'profile-man.webp', imageY: '0%' },
+            { name: 'อัญชลี รุ่งพิพัฒน์', role: 'Personal Finance Creator', image: 'profile-woman.webp', imageY: '0%' },
+            { name: 'ธนกฤต ศรีสวัสดิ์', role: 'Market Structure Specialist', image: 'profile-man.webp', imageY: '0%' },
+            { name: 'พิมพ์มาดา วงศ์วาน', role: 'Founder, The Growth Playbook', image: 'profile-woman.webp', imageY: '0%' },
+            { name: 'กวินท์ สุวรรณเมธา', role: 'Macroeconomic Research Director', image: 'profile-man.webp', imageY: '0%' },
+            { name: 'ชญานิศ วงศ์วัฒนา', role: 'Wealth Innovation Consultant', image: 'profile-woman.webp', imageY: '0%' },
         ],
     };
 
     const panels = Array.from(document.querySelectorAll('[data-speaker-day]'));
 
-    const createSpeakerCard = ([name, role, gender], index) => {
+    const createSpeakerCard = ({
+        name,
+        role,
+        image = 'profile-man.webp',
+        imageY = '0%',
+        imageWidth = 928,
+        imageHeight = 1152,
+    }, index) => {
         const card = document.createElement('article');
 
         card.className = 'speaker-card';
         card.style.setProperty('--speaker-order', String(index % 5));
-        card.style.setProperty('--speaker-portrait-y', '0%');
+        card.style.setProperty('--speaker-portrait-y', imageY);
         card.innerHTML = `
             <div class="speaker-card__portrait">
                 <div class="speaker-card__frame">
-                    <img src="images/speakers/profile-${gender}.webp" width="928" height="1152"
+                    <img src="images/speakers/${image}" width="${imageWidth}" height="${imageHeight}"
                         loading="lazy" decoding="async" alt="${name}">
                 </div>
             </div>
@@ -102,7 +109,7 @@
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let motionRefreshTimer = 0;
-    let removeScrollEndListener = () => {};
+    let removeScrollEndListener = () => { };
 
     const refreshSpeakerMotion = (panel) => {
         document.dispatchEvent(new CustomEvent('speaker:daychange', {
@@ -123,7 +130,7 @@
             isComplete = true;
             window.clearTimeout(motionRefreshTimer);
             removeScrollEndListener();
-            removeScrollEndListener = () => {};
+            removeScrollEndListener = () => { };
             refreshSpeakerMotion(panel);
         };
 

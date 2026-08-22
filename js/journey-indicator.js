@@ -7,6 +7,7 @@
         { id: 'concept', label: 'Concept' },
         { id: 'featured-topics', label: 'Topics' },
         { id: 'ticket', label: 'Ticket Price' },
+        { id: 'playbook', label: 'Playbook' },
         { id: 'agenda', label: 'Agenda' },
         { id: 'speaker', label: 'Speakers' },
         { id: 'moderator', label: 'Moderators & MC' },
@@ -36,16 +37,28 @@
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let sectionAnchors = [];
+    let routeStart = 0;
     let routeEnd = 0;
     let activeIndex = -1;
     let frameId = null;
     let labelRevealTimer = null;
+
+    function getHeaderOffset() {
+        const rootStyle = getComputedStyle(document.documentElement);
+        const tokenHeight = Number.parseFloat(rootStyle.getPropertyValue('--header-height'));
+        if (Number.isFinite(tokenHeight) && tokenHeight > 0) return tokenHeight;
+
+        const header = document.getElementById('site-header');
+        const headerHeight = header?.getBoundingClientRect().height || 0;
+        return Number.isFinite(headerHeight) ? headerHeight : 0;
+    }
 
     function measure() {
         if (title) {
             indicator.style.setProperty('--journey-title-length', `${Math.ceil(title.scrollWidth)}px`);
         }
         sectionAnchors = route.map(stop => stop.element.getBoundingClientRect().top + window.scrollY);
+        routeStart = sectionAnchors[0];
         const lastSection = route[route.length - 1].element;
         routeEnd = lastSection.getBoundingClientRect().bottom + window.scrollY;
         requestRender();
@@ -169,11 +182,16 @@
     function render() {
         frameId = null;
 
-        const marker = window.scrollY + (window.innerHeight * 0.46);
+        /* Label activation follows the real reading edge of the page: just below the
+           sticky header. The old 46vh marker made the indicator enter while the top of
+           the viewport was still in the hero, and it also promoted the next label while
+           the current section was still visually dominant. */
+        const activationLine = window.scrollY + getHeaderOffset() + 1;
+        const progressLine = window.scrollY + Math.min(window.innerHeight * 0.28, getHeaderOffset() + 160);
         const isSuppressed = document.body.classList.contains('is-loading')
             || document.body.classList.contains('menu-open')
             || document.body.classList.contains('menu-closing');
-        const isWithinRoute = marker >= sectionAnchors[0] && marker <= routeEnd;
+        const isWithinRoute = activationLine >= routeStart && activationLine <= routeEnd;
 
         indicator.classList.toggle('is-visible', isWithinRoute && !isSuppressed);
         if (!isWithinRoute) {
@@ -184,7 +202,7 @@
 
         let nextActiveIndex = sectionAnchors.length - 1;
         for (let index = 0; index < sectionAnchors.length - 1; index += 1) {
-            if (marker < sectionAnchors[index + 1]) {
+            if (activationLine < sectionAnchors[index + 1]) {
                 nextActiveIndex = index;
                 break;
             }
@@ -195,7 +213,7 @@
         const segmentEnd = nextActiveIndex === nextIndex
             ? routeEnd
             : sectionAnchors[nextIndex];
-        const segmentProgress = Math.min(1, Math.max(0, (marker - segmentStart) / Math.max(1, segmentEnd - segmentStart)));
+        const segmentProgress = Math.min(1, Math.max(0, (progressLine - segmentStart) / Math.max(1, segmentEnd - segmentStart)));
         const routeProgress = nextActiveIndex === route.length - 1
             ? 1
             : (nextActiveIndex + segmentProgress) / (route.length - 1);

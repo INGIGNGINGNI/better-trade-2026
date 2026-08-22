@@ -117,112 +117,6 @@
             return () => observer.disconnect();
         }
 
-        function setupHeaderTextClipping() {
-            const darkSections = [...document.querySelectorAll('[data-header-theme="dark"]')];
-            const navLabels = [...siteHeader.querySelectorAll('.site-header__nav-label')];
-            const logo = siteHeader.querySelector('.site-header__logo');
-            if (!darkSections.length || (!navLabels.length && !logo)) return () => {};
-
-            // ต้องเลิกนับ section ว่ามืดด้วยเกณฑ์เดียวกับ setupHeaderThemeObserver (เส้น sensor
-            // ที่ขอบล่าง header) ไม่ใช่ขอบเขตของ label เอง ไม่งั้นตอน section มืดเลื่อนผ่านพ้น
-            // header ไปแล้ว (bg สลับเป็นขาวแล้ว) แต่ rect.bottom ยังมากกว่า labelRect ที่เล็ก
-            // และอยู่ค่อนไปตรงกลาง header ตัวหนังสือ/โลโก้เลยยังโดนตัดสินว่าอยู่บนพื้นมืดอยู่
-            // ทำให้ใช้สีอ่านไม่ออกบนพื้นขาวไปอีกพักหนึ่งกว่าจะ scroll ผ่านจุดนั้นเพิ่ม
-            const headerHeight = siteHeader.offsetHeight || 80;
-
-            let frameId = null;
-
-            const updateTextGradients = () => {
-                frameId = null;
-                const darkRects = darkSections
-                    .map(section => section.getBoundingClientRect())
-                    .filter(rect => rect.bottom >= headerHeight && rect.top < document.documentElement.clientHeight);
-
-                navLabels.forEach(label => {
-                    const labelRect = label.getBoundingClientRect();
-                    if (labelRect.height <= 0) return;
-
-                    const lightColor = 'var(--bt-header-nav-text-light)';
-                    const darkColor = 'var(--bt-header-nav-text-dark)';
-                    const stops = [{ position: 0, color: lightColor }];
-
-                    darkRects
-                        .filter(rect => rect.right > labelRect.left && rect.left < labelRect.right)
-                        .map(rect => ({
-                            start: Math.max(0, Math.min(1, (rect.top - labelRect.top) / labelRect.height)),
-                            end: Math.max(0, Math.min(1, (rect.bottom - labelRect.top) / labelRect.height)),
-                        }))
-                        .filter(range => range.end > range.start)
-                        .sort((a, b) => a.start - b.start)
-                        .forEach(range => {
-                            stops.push(
-                                { position: range.start, color: lightColor },
-                                { position: range.start, color: darkColor },
-                                { position: range.end, color: darkColor },
-                                { position: range.end, color: lightColor },
-                            );
-                        });
-
-                    stops.push({ position: 1, color: lightColor });
-                    const gradientStops = stops
-                        .map(stop => `${stop.color} ${(stop.position * 100).toFixed(3)}%`)
-                        .join(', ');
-                    label.style.setProperty(
-                        '--bt-header-nav-text-background',
-                        `linear-gradient(to bottom, ${gradientStops})`,
-                    );
-                });
-
-                if (logo) {
-                    const logoRect = logo.getBoundingClientRect();
-                    if (logoRect.height > 0) {
-                        const logoOnHeroSky = siteHeader.classList.contains('site-header--hero-sky')
-                            && !siteHeader.classList.contains('is-sticky');
-                        const ranges = logoOnHeroSky
-                            ? [{ start: 0, end: 1 }]
-                            : darkRects
-                                .filter(rect => rect.right > logoRect.left && rect.left < logoRect.right)
-                                .map(rect => ({
-                                    start: Math.max(0, Math.min(1, (rect.top - logoRect.top) / logoRect.height)),
-                                    end: Math.max(0, Math.min(1, (rect.bottom - logoRect.top) / logoRect.height)),
-                                }))
-                                .filter(range => range.end > range.start);
-
-                        const darkStart = ranges.length
-                            ? Math.min(...ranges.map(range => range.start))
-                            : 0;
-                        const darkEnd = ranges.length
-                            ? Math.max(...ranges.map(range => range.end))
-                            : 0;
-
-                        logo.style.setProperty(
-                            '--bt-header-logo-dark-start',
-                            `${(darkStart * 100).toFixed(3)}%`,
-                        );
-                        logo.style.setProperty(
-                            '--bt-header-logo-dark-end',
-                            `${(darkEnd * 100).toFixed(3)}%`,
-                        );
-                    }
-                }
-            };
-
-            const requestUpdate = () => {
-                if (frameId !== null) return;
-                frameId = window.requestAnimationFrame(updateTextGradients);
-            };
-
-            updateTextGradients();
-            window.addEventListener('scroll', requestUpdate, { passive: true });
-            window.addEventListener('resize', requestUpdate);
-
-            return () => {
-                if (frameId !== null) window.cancelAnimationFrame(frameId);
-                window.removeEventListener('scroll', requestUpdate);
-                window.removeEventListener('resize', requestUpdate);
-            };
-        }
-
         function setupDesktopNavActiveState() {
             const entries = siteHeaderDesktopLinks
                 .map(link => {
@@ -284,7 +178,6 @@
         updateSiteHeader();
 
         let disconnectHeaderThemeObserver = setupHeaderThemeObserver();
-        const disconnectHeaderTextClipping = setupHeaderTextClipping();
         const disconnectDesktopNavActiveState = setupDesktopNavActiveState();
 
         siteHeaderToggle.addEventListener('click', () => {
@@ -332,5 +225,4 @@
             disconnectHeaderThemeObserver = setupHeaderThemeObserver();
         });
         window.addEventListener('beforeunload', disconnectDesktopNavActiveState, { once: true });
-        window.addEventListener('beforeunload', disconnectHeaderTextClipping, { once: true });
     

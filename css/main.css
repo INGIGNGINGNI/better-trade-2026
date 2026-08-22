@@ -138,8 +138,10 @@
     --space-24: 96px;
     --space-28: 112px;
     --space-32: 128px;
+    --size-320: 320px;
 
     /* Primitive: border และ radius */
+    --radius-0: 0;
     --radius-1: 4px;
     --radius-2: 8px;
     --radius-pill: 48px;
@@ -430,6 +432,7 @@
     --bt-agenda-alternative: var(--color-topic-alternative);
     --bt-agenda-aside-width: calc(var(--space-32) + var(--space-32) + var(--space-16));
     --bt-agenda-time-width: var(--space-28);
+    --bt-agenda-tags-column-width: var(--space-32);
     --bt-agenda-time-size: var(--font-size-16);
     --bt-agenda-speaker-size: calc(var(--space-16) + var(--space-2));
     --bt-agenda-speaker-size-mobile: calc(var(--space-12) + var(--space-3));
@@ -465,9 +468,9 @@
     --bt-menu-toggle-line-height: var(--border-width-2);
     --bt-menu-toggle-line-middle: var(--space-2);
     --bt-menu-toggle-line-bottom: var(--space-4);
-    --bt-menu-scroll-padding-y: var(--space-4);
+    --bt-menu-scroll-padding-y: var(--space-6);
     --bt-menu-scroll-padding-x: var(--space-6);
-    --bt-menu-scroll-padding-x-sm: var(--space-5);
+    --bt-menu-scroll-padding-x-sm: var(--space-6);
     --bt-menu-scroll-padding-bottom: var(--space-8);
     --bt-menu-nav-link-height: var(--font-size-56);
     --bt-menu-nav-font-size: var(--font-size-40);
@@ -551,6 +554,7 @@
     --color-kv-spectrum-4: #722df4;
     --color-kv-spectrum-5: #e63bd8;
     --color-kv-spectrum-6: #f79319;
+    --gradient-table-active-spectrum: linear-gradient(90deg, var(--color-border-faint), var(--color-kv-spectrum-1), var(--color-kv-spectrum-2), var(--color-kv-spectrum-3), var(--color-kv-spectrum-4), var(--color-kv-spectrum-5), var(--color-kv-spectrum-6), var(--color-border-faint));
     --gradient-kv-spectrum: linear-gradient(90deg,
             var(--color-kv-spectrum-1),
             var(--color-kv-spectrum-2),
@@ -902,7 +906,7 @@ h6 {
 
 @media (max-width:575px) {
     .bt-title-highlight {
-        font-size: var(--font-size-32);
+        font-size: var(--font-size-36);
 
         &.has-ps {
             padding-left: var(--space-1);
