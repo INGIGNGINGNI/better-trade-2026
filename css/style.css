@@ -246,6 +246,195 @@ body.menu-closing .back-to-top {
     transform: translateY(var(--space-3)) scale(0.94);
 }
 
+/* Temporary preview control for comparing the two desktop Hero continuations. */
+.hero-motion-picker {
+    position: fixed;
+    right: max(var(--space-5), env(safe-area-inset-right));
+    bottom: calc(max(var(--space-5), env(safe-area-inset-bottom)) + var(--touch-target-md) + var(--space-3));
+    z-index: 280;
+}
+
+.hero-motion-picker__trigger {
+    width: var(--touch-target-md);
+    height: var(--touch-target-md);
+    display: inline-grid;
+    place-items: center;
+    padding: 0;
+    border: var(--border-width-1) solid var(--alpha-ink-12);
+    border-radius: 50%;
+    color: var(--color-text-primary);
+    background: color-mix(in srgb, var(--color-surface-page) 88%, #ffffff);
+    box-shadow: 0 var(--space-2) var(--space-6) var(--alpha-ink-16);
+    cursor: pointer;
+    appearance: none;
+    transition:
+        color var(--duration-fast) var(--ease-standard),
+        background-color var(--duration-fast) var(--ease-standard),
+        border-color var(--duration-fast) var(--ease-standard),
+        transform var(--duration-fast) var(--ease-standard);
+}
+
+.hero-motion-picker__trigger span {
+    font-family: var(--font);
+    font-size: var(--font-size-18);
+    line-height: 1;
+    transition: transform var(--duration-standard) var(--ease-standard);
+}
+
+.hero-motion-picker__trigger:hover,
+.hero-motion-picker.is-open .hero-motion-picker__trigger {
+    border-color: var(--color-text-primary);
+    color: var(--color-surface-page);
+    background: var(--color-text-primary);
+}
+
+.hero-motion-picker.is-open .hero-motion-picker__trigger span {
+    transform: rotate(180deg);
+}
+
+.hero-motion-picker__trigger:focus-visible,
+.hero-motion-picker__option:focus-visible {
+    outline: var(--border-width-2) solid var(--color-accent-primary);
+    outline-offset: var(--space-1);
+}
+
+.hero-motion-picker__panel {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + var(--space-3));
+    width: 236px;
+    padding: var(--space-3);
+    border: var(--border-width-1) solid rgba(255, 255, 255, 0.18);
+    border-radius: var(--radius-3);
+    color: var(--color-neutral-0);
+    background: rgba(8, 11, 18, 0.94);
+    box-shadow: 0 var(--space-3) var(--space-8) rgba(0, 0, 0, 0.28);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(var(--space-2)) scale(0.97);
+    transform-origin: 100% 100%;
+    transition:
+        opacity var(--duration-fast) var(--ease-standard),
+        visibility 0s linear var(--duration-fast),
+        transform var(--duration-fast) var(--ease-standard);
+}
+
+.hero-motion-picker.is-open .hero-motion-picker__panel {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+    transition-delay: 0s;
+}
+
+.hero-motion-picker__eyebrow {
+    display: block;
+    padding: var(--space-1) var(--space-2) var(--space-3);
+    color: rgba(255, 255, 255, 0.56);
+    font-family: var(--font);
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.hero-motion-picker__option {
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-2);
+    border: 0;
+    border-radius: var(--radius-2);
+    color: rgba(255, 255, 255, 0.76);
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    appearance: none;
+    transition:
+        color var(--duration-fast) var(--ease-standard),
+        background-color var(--duration-fast) var(--ease-standard);
+}
+
+.hero-motion-picker__option:hover {
+    color: var(--color-neutral-0);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.hero-motion-picker__option.is-selected {
+    color: var(--color-neutral-0);
+    background: rgba(255, 255, 255, 0.11);
+}
+
+.hero-motion-picker__option strong,
+.hero-motion-picker__option small {
+    display: block;
+    font-family: var(--font);
+}
+
+.hero-motion-picker__option strong {
+    font-size: var(--font-size-14);
+    font-weight: 500;
+    line-height: 1.15;
+}
+
+.hero-motion-picker__option small {
+    margin-top: var(--space-1);
+    color: rgba(255, 255, 255, 0.52);
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+.hero-motion-picker__status {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.26);
+}
+
+.hero-motion-picker__option.is-selected .hero-motion-picker__status {
+    background: var(--color-kv-spectrum-1);
+    box-shadow: 0 0 0 3px rgba(0, 212, 254, 0.16);
+}
+
+.hero-motion-picker__check {
+    opacity: 0;
+    font-family: var(--font);
+    font-size: var(--font-size-14);
+}
+
+.hero-motion-picker__option.is-selected .hero-motion-picker__check {
+    opacity: 1;
+}
+
+body.is-loading .hero-motion-picker,
+body.menu-open .hero-motion-picker,
+body.menu-closing .hero-motion-picker {
+    opacity: 0;
+    pointer-events: none;
+}
+
+@media (max-width:1199px) {
+    .hero-motion-picker {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-motion-picker__trigger,
+    .hero-motion-picker__trigger span,
+    .hero-motion-picker__panel,
+    .hero-motion-picker__option {
+        transition: none;
+    }
+}
+
 /* ---------- แถบปุ่มลอยชิดขอบล่าง (จอ <=575px เท่านั้น) ---------- */
 .mobile-cta-bar {
     display: none;
@@ -6246,7 +6435,9 @@ the timeline drops them under the ship once the walls have retreated. */
     .site-footer__panel {
         padding: var(--space-16) var(--space-10);
         border-radius: var(--radius-1);
-        background: var(--color-surface-inverse);
+        background:
+            radial-gradient(35% 80% at 30% 0%, color-mix(in srgb, var(--bt-footer-ink) 28%, transparent), transparent),
+            var(--color-surface-inverse);
     }
 
     .site-footer__content {
@@ -7027,6 +7218,11 @@ the timeline drops them under the ship once the walls have retreated. */
     --bt-playbook-title-art-base-width: calc(var(--space-32) * 6 - var(--space-2));
     --bt-playbook-title-overlap: calc(var(--bt-playbook-title-overlap-base) * var(--bt-playbook-header-scale));
     --bt-playbook-title-size: max(var(--font-size-32), calc(var(--bt-playbook-title-base-size) * var(--bt-playbook-header-scale)));
+    --bt-playbook-title-color: inherit;
+    --bt-playbook-title-shine: linear-gradient(120deg,
+            rgba(255, 255, 255, 0) 40%,
+            rgba(255, 255, 255, 0.8) 50%,
+            rgba(255, 255, 255, 0) 60%);
     --bt-playbook-subtitle-space: calc(var(--bt-playbook-subtitle-space-base) * var(--bt-playbook-header-scale));
     --bt-playbook-subtitle-size: max(var(--font-size-16), calc(var(--bt-playbook-subtitle-base-size) * var(--bt-playbook-header-scale)));
     --bt-playbook-subtitle-line-height: var(--line-height-normal);
@@ -7264,12 +7460,30 @@ the timeline drops them under the ship once the walls have retreated. */
         text-shadow: var(--bt-playbook-shadow-soft);
 
         h2 {
+            position: relative;
             margin: var(--bt-playbook-title-overlap) var(--space-0) var(--space-0);
-            color: inherit;
+            color: var(--bt-playbook-title-color);
             font-size: var(--bt-playbook-title-size);
             font-weight: var(--font-weight-medium);
             line-height: var(--line-height-1);
             letter-spacing: var(--letter-spacing-0);
+        }
+
+        h2::after {
+            content: attr(data-shiny-text);
+            position: absolute;
+            inset: 0;
+            color: transparent;
+            background: var(--bt-playbook-title-shine);
+            background-size: 200% 100%;
+            background-position: 100% 50%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: playbook-title-shine 5s linear infinite;
+            filter:
+                drop-shadow(0 0 0.06em rgba(255, 255, 255, 0.72)) drop-shadow(0 0 0.14em rgba(255, 255, 255, 0.34));
+            -webkit-text-fill-color: transparent;
+            pointer-events: none;
         }
 
         p {
@@ -7555,5 +7769,20 @@ the timeline drops them under the ship once the walls have retreated. */
         .playbook__asset-float {
             transform: none !important;
         }
+
+        .playbook__header h2::after {
+            animation: none;
+            background-position: 100% 50%;
+        }
+    }
+}
+
+@keyframes playbook-title-shine {
+    0% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: -100% 50%;
     }
 }

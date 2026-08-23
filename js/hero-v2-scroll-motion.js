@@ -84,6 +84,8 @@
             legacyCanvasRatio: 1248 / 1664,
             legacyContentHeightShare: 0.7344,
         };
+        const HERO_MOTION_MODE = window.__betterTradeHeroMotionMode === 'basic' ? 'basic' : 'full';
+        const HAS_SHIP_RUN = HERO_MOTION_MODE === 'full';
         const HERO_RUN_PROGRESS_EVENT = 'bettertrade:hero-run-progress';
         const HERO_SCROLL_CUE_EVENT = 'bettertrade:hero-scroll-cue';
         const HERO_SCROLL_CUE_REVEAL_AT = 0.34;
@@ -125,6 +127,22 @@
                 publishHeroScrollCueState(false);
                 const revealAt = Math.max(0, el.concept.offsetTop - document.documentElement.clientHeight * 0.5);
                 publishHeroRunProgress(window.scrollY >= revealAt ? 'ready' : 'hidden');
+                return;
+            }
+
+            if (!HAS_SHIP_RUN) {
+                const timelineTime = scrollTL?.time() || 0;
+                const progress = clamp(timelineTime / SHIP_RUN.startAt, 0, 1);
+                publishHeroScrollCueState(
+                    timelineTime >= HERO_SCROLL_CUE_REVEAL_AT
+                    && timelineTime < SHIP_RUN.startAt - 0.002
+                );
+                publishHeroRunProgress(
+                    progress >= 0.998 || window.scrollY >= el.concept.offsetTop - 2
+                        ? 'ready'
+                        : timelineTime >= HERO_SCROLL_CUE_REVEAL_AT ? 'progress' : 'hidden',
+                    progress
+                );
                 return;
             }
 
@@ -864,7 +882,12 @@
             // so a short camera move never leaves dead scroll behind it.
             // Lowering only the extra pinned distance makes each wheel/touch scroll move
             // the hero timeline further without changing the first viewport composition.
-            const desktopScrollExtra = (vh * 4.1 + PAN * 1.4) / HERO_SCROLL_ACCELERATION;
+            const fullMotionDuration = SHIP_RUN.startAt + SHIP_RUN.scrollDuration;
+            const activeMotionDuration = HAS_SHIP_RUN ? fullMotionDuration : SHIP_RUN.startAt;
+            const motionDistanceRatio = activeMotionDuration / fullMotionDuration;
+            const desktopScrollExtra = (
+                (vh * 4.1 + PAN * 1.4) / HERO_SCROLL_ACCELERATION
+            ) * motionDistanceRatio;
             const scrollerHeight = mobileStatic
                 ? bgH
                 : vh + desktopScrollExtra;
@@ -1183,7 +1206,7 @@
 
             // Map the existing continuation range directly onto the video duration. Both
             // sources stay paused; scroll position selects their matching color/alpha frame.
-            if (!completedHeroTimelineBuilt) {
+            if (HAS_SHIP_RUN && !completedHeroTimelineBuilt) {
                 scrollTL
                     .set(el.shipRunLayer, {
                         left: videoEnter.left,
@@ -1205,6 +1228,10 @@
                         onComplete: updateShipRunPlaybackProgress,
                         onReverseComplete: resetShipRunScrub,
                     }, SHIP_RUN.startAt);
+            } else if (!HAS_SHIP_RUN) {
+                gsap.set([el.shipRunLayer, el.shipRunWhiteout], { opacity: 0 });
+                gsap.set(shipRunStaticScene, { opacity: 1 });
+                el.concept.classList.remove('is-awaiting-entry', 'is-revealed');
             }
 
             syncWalls();
@@ -1213,7 +1240,7 @@
             } else {
                 const restoreTimelineFromCurrentScroll = () => {
                     const trigger = scrollTL.scrollTrigger;
-                    if (window.scrollY >= el.concept.offsetTop - M.vh * 0.5) {
+                    if (HAS_SHIP_RUN && window.scrollY >= el.concept.offsetTop - M.vh * 0.5) {
                         shipRunHasCompleted = true;
                         shipRunScrubState = 'complete';
                         shipRunHeroRestored = false;
@@ -1238,7 +1265,7 @@
                     syncShipLookToTimeline();
                     if (!shipRunHasCompleted && restoredTime < SHIP_RUN.startAt) {
                         gsap.set([el.shipRunLayer, el.shipRunWhiteout], { opacity: 0 });
-                    } else if (!shipRunHasCompleted) {
+                    } else if (HAS_SHIP_RUN && !shipRunHasCompleted) {
                         startShipRunScrub();
                         syncShipRunToScroll();
                     }
