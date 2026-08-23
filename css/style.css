@@ -2045,8 +2045,8 @@ the timeline drops them under the ship once the walls have retreated. */
     width: 100%;
     height: auto;
     transform: rotate(var(--asset-rotation, 0deg));
-    /* filter: saturate(1.5); */
-    filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.34));
+    filter: saturate(1.5);
+    /* filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.34)); */
 }
 
 .topics-showcase__asset--triangle {

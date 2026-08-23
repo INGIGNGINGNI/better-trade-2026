@@ -14,7 +14,7 @@
     function shouldHideCue() {
         const loading = document.body.classList.contains('is-loading');
         const conceptThreshold = concept
-            ? concept.offsetTop - window.innerHeight * 0.35
+            ? concept.offsetTop - document.documentElement.clientHeight * 0.35
             : Number.POSITIVE_INFINITY;
 
         return loading
@@ -59,8 +59,8 @@
     });
 
     cue.addEventListener('click', () => {
-        const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-        const nextY = Math.min(maxScroll, window.scrollY + window.innerHeight * 0.72);
+        const maxScroll = Math.max(0, document.documentElement.scrollHeight - document.documentElement.clientHeight);
+        const nextY = Math.min(maxScroll, window.scrollY + document.documentElement.clientHeight * 0.72);
         window.scrollTo({
             top: nextY,
             behavior: reducedMotion.matches ? 'auto' : 'smooth',
