@@ -2103,12 +2103,6 @@ the timeline drops them under the ship once the walls have retreated. */
     --asset-z: 3;
 }
 
-.topics-showcase.is-reveal-ready .topics-showcase__header h2,
-.topics-showcase.is-reveal-ready .topics-showcase__header p {
-    opacity: 0;
-    transform: translateY(var(--space-4));
-}
-
 .topics-showcase.is-reveal-ready .concept__topics p {
     opacity: 0;
     transform: translateX(calc(var(--space-8) * -1));
@@ -2117,18 +2111,6 @@ the timeline drops them under the ship once the walls have retreated. */
 .topics-showcase.is-reveal-ready .concept__topics p::after {
     opacity: 0;
     transform: translateX(calc(var(--space-8) * -1)) scaleX(0);
-}
-
-.topics-showcase.is-reveal-ready.is-header-visible .topics-showcase__header h2 {
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 700ms ease, transform 820ms var(--ease-standard);
-}
-
-.topics-showcase.is-reveal-ready.is-header-visible .topics-showcase__header p {
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 620ms ease 140ms, transform 760ms var(--ease-standard) 140ms;
 }
 
 .topics-showcase.is-reveal-ready .concept__topics p.is-topic-visible {

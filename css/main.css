@@ -861,6 +861,40 @@ h6 {
     letter-spacing: var(--section-title-tracking);
 }
 
+body.reveal-on-scroll-ready [data-reveal] {
+    --reveal-y: var(--space-20);
+    --reveal-duration: 920ms;
+    --reveal-delay: 0ms;
+
+    opacity: 0;
+    transform: translate3d(0, var(--reveal-y), 0);
+    transition:
+        opacity 760ms ease var(--reveal-delay),
+        transform var(--reveal-duration) var(--ease-standard) var(--reveal-delay);
+    will-change: opacity, transform;
+}
+
+body.reveal-on-scroll-ready [data-reveal].is-revealed {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    will-change: auto;
+}
+
+@media (max-width: 767px) {
+    body.reveal-on-scroll-ready [data-reveal] {
+        --reveal-y: var(--space-12);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.reveal-on-scroll-ready [data-reveal] {
+        opacity: 1;
+        transform: none;
+        transition: none;
+        will-change: auto;
+    }
+}
+
 .bt-title-highlight {
     font-size: var(--font-size-64);
     font-weight: var(--font-weight-medium);

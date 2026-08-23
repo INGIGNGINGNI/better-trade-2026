@@ -25,19 +25,21 @@
 
     /* reveal เล่นครั้งเดียวเมื่อเข้าหน้าจอ ไม่ scrub ตาม scroll แล้ว
        ค่าเริ่มยังอยู่ด้านล่างเล็กน้อยเพื่อให้เห็นการ์ดลอยขึ้นมาตามคำขอ */
-    const REVEAL_FROM = { opacity: 0, y: 64, scale: 0.98 };
+    const REVEAL_FROM = { opacity: 0, y: 112, scale: 0.96 };
     const REVEAL_TO = { opacity: 1, y: 0, scale: 1 };
-    const REVEAL_START_LINE = 88;
-    const REVEAL_DURATION = 0.72;
-    const REVEAL_STAGGER_DELAY = 0.12;
+    const REVEAL_DURATION = 0.92;
+    const REVEAL_STAGGER_DELAY = 0.1;
     const ROW_TOLERANCE = 8;   // px ที่ยังนับว่าการ์ดสองใบอยู่แถวเดียวกัน กันเศษ subpixel
     const PORTRAIT_DRIFT = 7;  // % ของส่วนภาพที่กรอบ 4:5 ยังไม่ได้ใช้
 
     let ctx = null;
+    let revealObserver = null;
 
     const build = () => {
         /* revert คืนค่า inline style ที่ gsap.set ไว้ และ kill ScrollTrigger เดิมทั้งหมด
            ที่สร้างในคอนเท็กซ์นี้ กันไม่ให้ trigger ค้างบนการ์ดของแท็บก่อนหน้า */
+        revealObserver?.disconnect();
+        revealObserver = null;
         ctx?.revert();
         ctx = null;
 
@@ -79,24 +81,54 @@
                 .forEach((item, order) => { item.order = order; });
         });
 
-        ctx = gsap.context(() => {
-            /* ทีละใบเพื่อคุม delay ตามตำแหน่งจริงในแถว ไม่ใช้ scrub แล้ว
-               การ์ดจะเล่นเมื่อเข้าหน้าจอครั้งแรกและไม่ย้อน animation ตอน scroll กลับ */
-            measured.forEach(({ card, order }) => {
-                gsap.fromTo(card, REVEAL_FROM, {
-                    ...REVEAL_TO,
-                    duration: REVEAL_DURATION,
-                    delay: order * REVEAL_STAGGER_DELAY,
-                    ease: 'power3.out',
-                    clearProps: 'opacity,transform',
-                    scrollTrigger: {
-                        trigger: card,
-                        start: 'top ' + REVEAL_START_LINE + '%',
-                        once: true,
-                    },
+        const revealCard = (card, order) => {
+            card.classList.add('is-speaker-card-revealed');
+            gsap.to(card, {
+                ...REVEAL_TO,
+                duration: REVEAL_DURATION,
+                delay: order * REVEAL_STAGGER_DELAY,
+                ease: 'power3.out',
+                clearProps: 'opacity,transform',
+            });
+        };
+
+        measured.forEach(({ card }) => {
+            if (card.classList.contains('is-speaker-card-revealed')) return;
+            gsap.set(card, REVEAL_FROM);
+        });
+
+        if ('IntersectionObserver' in window) {
+            revealObserver = new IntersectionObserver((entries) => {
+                const arriving = entries
+                    .filter(entry => entry.isIntersecting)
+                    .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+                arriving.forEach((entry) => {
+                    const item = measured.find(({ card }) => card === entry.target);
+                    if (!item) return;
+
+                    revealCard(item.card, item.order);
+                    revealObserver.unobserve(item.card);
                 });
+            }, {
+                threshold: 0.18,
+                rootMargin: '0px 0px -8% 0px',
             });
 
+            measured.forEach(({ card }) => {
+                if (!card.classList.contains('is-speaker-card-revealed')) {
+                    revealObserver.observe(card);
+                }
+            });
+        } else {
+            measured.forEach(({ card, order }) => {
+                if (!card.classList.contains('is-speaker-card-revealed')) {
+                    revealCard(card, order);
+                }
+            });
+        }
+
+        ctx = gsap.context(() => {
             if (!withScrub) return;
 
             cards.forEach((card) => {

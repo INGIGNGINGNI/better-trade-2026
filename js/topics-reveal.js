@@ -2,9 +2,8 @@
     const section = document.querySelector('.topics-showcase');
     if (!section) return;
 
-    const header = section.querySelector('.topics-showcase__header');
     const topics = [...section.querySelectorAll('.concept__topics p')];
-    if (!header || !topics.length) return;
+    if (!topics.length) return;
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reducedMotion || !('IntersectionObserver' in window)) {
@@ -14,16 +13,6 @@
     // Without this class the hidden state never applies, so bailing out above leaves the
     // topics plainly visible.
     section.classList.add('is-reveal-ready');
-
-    const headerObserver = new IntersectionObserver(([entry]) => {
-        if (!entry.isIntersecting) return;
-        section.classList.add('is-header-visible');
-        headerObserver.disconnect();
-    }, {
-        threshold: 0.16,
-        rootMargin: '0px 0px -8% 0px',
-    });
-    headerObserver.observe(header);
 
     /* The whole list is shorter than a desktop viewport, so scrolling the section into view
        brings several topics past the line in one callback. Those get a small increasing

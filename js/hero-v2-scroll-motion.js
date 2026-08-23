@@ -38,11 +38,6 @@
         const UI_BOTTOM_RESERVE = 32;
         const mobileHeaderClearanceShift = viewportWidth => viewportWidth <= 575 ? 9 : 0;
         const mobileUiStaticTopRatio = viewportWidth => viewportWidth <= 575 ? 0.76 : 0.70;
-        // The settled video sits 48px below the description. Its entrance translation
-        // subtracts this same distance so adding layout space does not push the moving
-        // frame farther away before it reaches the final position.
-        const CONCEPT_VIDEO_GAP = 48;
-
         /* The eight runners, split out of the PSD's คน+เงา group. Listed far -> near so
            the reveal stagger reads as a crowd arriving from the distance. revealAngle
            is measured from vertical: positive rises right, negative rises left. */
@@ -128,7 +123,7 @@
 
             if (isMobileStatic() || reduced) {
                 publishHeroScrollCueState(false);
-                const revealAt = Math.max(0, el.concept.offsetTop - window.innerHeight * 0.5);
+                const revealAt = Math.max(0, el.concept.offsetTop - document.documentElement.clientHeight * 0.5);
                 publishHeroRunProgress(window.scrollY >= revealAt ? 'ready' : 'hidden');
                 return;
             }
@@ -178,7 +173,7 @@
         const mobileStaticQuery = window.matchMedia('(max-width: 1199px)');
         const isMobileStatic = () => mobileStaticQuery.matches && !STATIC_FRAME;
         const readLargeViewportHeight = () => {
-            if (!window.CSS?.supports?.('height', '100lvh')) return window.innerHeight;
+            if (!window.CSS?.supports?.('height', '100lvh')) return document.documentElement.clientHeight;
 
             const probe = document.createElement('div');
             probe.setAttribute('aria-hidden', 'true');
@@ -194,7 +189,7 @@
             document.body.appendChild(probe);
             const height = probe.getBoundingClientRect().height;
             probe.remove();
-            return Number.isFinite(height) && height > 0 ? height : window.innerHeight;
+            return Number.isFinite(height) && height > 0 ? height : document.documentElement.clientHeight;
         };
         // iOS Safari changes window.innerHeight whenever its bottom toolbar collapses.
         // Size the mobile hero from the large viewport up front, then keep that reference
@@ -712,10 +707,10 @@
         window.addEventListener('keydown', preventShipRunKeyScroll);
 
         function updateSiteScrollbar() {
-            const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+            const maxScroll = Math.max(0, document.documentElement.scrollHeight - document.documentElement.clientHeight);
             const trackHeight = el.siteScrollbar.clientHeight;
             const thumbHeight = maxScroll > 0
-                ? Math.max(32, trackHeight * window.innerHeight / document.documentElement.scrollHeight)
+                ? Math.max(32, trackHeight * document.documentElement.clientHeight / document.documentElement.scrollHeight)
                 : trackHeight;
             const travel = Math.max(0, trackHeight - thumbHeight);
             const progress = maxScroll > 0 ? clamp(window.scrollY / maxScroll, 0, 1) : 0;
@@ -736,7 +731,7 @@
         }
 
         function revealSiteScrollbar() {
-            const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+            const maxScroll = Math.max(0, document.documentElement.scrollHeight - document.documentElement.clientHeight);
             if (document.body.classList.contains('is-loading') || maxScroll <= 0) return;
 
             el.siteScrollbar.classList.add('is-visible');
@@ -755,7 +750,7 @@
         }
 
         function scrollFromScrollbarPointer(clientY, startScroll, startPointerY) {
-            const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+            const maxScroll = Math.max(0, document.documentElement.scrollHeight - document.documentElement.clientHeight);
             const thumbHeight = parseFloat(getComputedStyle(el.siteScrollbar).getPropertyValue('--thumb-height')) || 32;
             const travel = Math.max(1, el.siteScrollbar.clientHeight - thumbHeight);
             window.scrollTo(0, clamp(startScroll + (clientY - startPointerY) * maxScroll / travel, 0, maxScroll));
@@ -790,7 +785,7 @@
             if (event.target === el.siteScrollbarThumb) return;
             revealSiteScrollbar();
             const track = el.siteScrollbar.getBoundingClientRect();
-            const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+            const maxScroll = Math.max(0, document.documentElement.scrollHeight - document.documentElement.clientHeight);
             const thumbHeight = parseFloat(getComputedStyle(el.siteScrollbar).getPropertyValue('--thumb-height')) || 32;
             const travel = Math.max(1, track.height - thumbHeight);
             const progress = clamp((event.clientY - track.top - thumbHeight / 2) / travel, 0, 1);
@@ -798,12 +793,12 @@
         });
 
         el.siteScrollbar.addEventListener('keydown', event => {
-            const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+            const maxScroll = Math.max(0, document.documentElement.scrollHeight - document.documentElement.clientHeight);
             const keyTargets = {
                 ArrowUp: window.scrollY - 64,
                 ArrowDown: window.scrollY + 64,
-                PageUp: window.scrollY - window.innerHeight * 0.8,
-                PageDown: window.scrollY + window.innerHeight * 0.8,
+                PageUp: window.scrollY - document.documentElement.clientHeight * 0.8,
+                PageDown: window.scrollY + document.documentElement.clientHeight * 0.8,
                 Home: 0,
                 End: maxScroll,
             };
@@ -825,8 +820,8 @@
            --------------------------------------------------------- */
         function layout() {
             const mobileStatic = isMobileStatic();
-            const vw = window.innerWidth;
-            const vh = mobileStatic ? mobileLayoutViewportHeight : window.innerHeight;
+            const vw = document.documentElement.clientWidth;
+            const vh = mobileStatic ? mobileLayoutViewportHeight : document.documentElement.clientHeight;
             const staticTopInset = mobileStatic
                 ? readRootPixelValue('--hero-static-top-inset', 48)
                 : 0;
@@ -1525,8 +1520,12 @@
 
         function setupConceptVideoMotion() {
             if (conceptVideoMotion) {
-                conceptVideoMotion.scrollTrigger?.kill();
-                conceptVideoMotion.kill();
+                if (typeof conceptVideoMotion === 'function') {
+                    conceptVideoMotion();
+                } else {
+                    conceptVideoMotion.scrollTrigger?.kill();
+                    conceptVideoMotion.kill?.();
+                }
                 conceptVideoMotion = null;
             }
 
@@ -1535,27 +1534,44 @@
                 return;
             }
 
-            conceptVideoMotion = gsap.timeline({
-                scrollTrigger: {
-                    trigger: el.conceptVideoScroll,
-                    start: 'top 92%',
-                    end: 'top 18%',
-                    scrub: 0.8,
-                    invalidateOnRefresh: true,
+            let frameRequested = false;
+
+            const update = () => {
+                frameRequested = false;
+
+                const box = el.conceptVideoScroll.getBoundingClientRect();
+                const startLine = M.vh * 0.92;
+                const endLine = M.vh * 0.48;
+                const progress = clamp((startLine - box.top) / Math.max(1, startLine - endLine), 0, 1);
+                const isMobile = document.documentElement.clientWidth <= 768;
+                const fromRotateX = isMobile ? 12 : 20;
+                const fromScale = isMobile ? 0.94 : 0.90;
+                const fromY = isMobile ? 56 : 96;
+
+                gsap.set(el.conceptVideoFrame, {
+                    rotateX: fromRotateX * (1 - progress),
+                    scale: fromScale + (1 - fromScale) * progress,
+                    y: fromY * (1 - progress),
+                    force3D: true,
+                });
+            };
+
+            const requestUpdate = () => {
+                if (frameRequested) return;
+                frameRequested = true;
+                requestAnimationFrame(update);
+            };
+
+            update();
+            window.addEventListener('scroll', requestUpdate, { passive: true });
+            window.addEventListener('resize', requestUpdate);
+            conceptVideoMotion = () => {
+                window.removeEventListener('scroll', requestUpdate);
+                window.removeEventListener('resize', requestUpdate);
+                if (frameRequested) {
+                    frameRequested = false;
                 }
-            }).fromTo(el.conceptVideoFrame, {
-                rotateX: () => window.innerWidth <= 768 ? 12 : 20,
-                scale: () => window.innerWidth <= 768 ? 0.94 : 0.90,
-                y: () => (window.innerWidth <= 768 ? 32 : 24) - CONCEPT_VIDEO_GAP,
-                force3D: true,
-            }, {
-                rotateX: 0,
-                scale: 1,
-                y: 0,
-                duration: 1,
-                ease: 'none',
-                force3D: true,
-            });
+            };
         }
 
         function setupSkyMotion() {
@@ -1672,11 +1688,11 @@
         else window.addEventListener('load', boot);
 
         let rAF = null;
-        let viewportWidth = window.innerWidth;
-        let viewportHeight = window.innerHeight;
+        let viewportWidth = document.documentElement.clientWidth;
+        let viewportHeight = document.documentElement.clientHeight;
         window.addEventListener('resize', () => {
-            const nextWidth = window.innerWidth;
-            const nextHeight = window.innerHeight;
+            const nextWidth = document.documentElement.clientWidth;
+            const nextHeight = document.documentElement.clientHeight;
             if (nextWidth === viewportWidth && nextHeight === viewportHeight) return;
             const widthChanged = nextWidth !== viewportWidth;
             viewportWidth = nextWidth;
