@@ -427,6 +427,7 @@ body.menu-closing .hero-motion-picker {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     .hero-motion-picker__trigger,
     .hero-motion-picker__trigger span,
     .hero-motion-picker__panel,
@@ -2699,6 +2700,9 @@ the timeline drops them under the ship once the walls have retreated. */
        bootstrap ที่ wrap ได้) */
     .ticket__plans {
         gap: var(--space-4);
+        padding: var(--space-6) 0;
+        justify-content: center;
+        border-radius: var(--bt-ticket-benefit-radius);
     }
 
     /* col-lg-4 ของ bootstrap fix width ไว้ที่ 33.3333% พอมี gap แนวนอนเพิ่มเข้ามา
@@ -2706,7 +2710,7 @@ the timeline drops them under the ship once the walls have retreated. */
        ต้องคำนวณ width หัก gap ออกเองแทนค่า 33.3333% เดิม */
     @media (min-width: 992px) {
         .ticket__plan {
-            width: calc((100% - var(--space-6) * 2) / 3);
+            width: calc((100% - var(--space-4) * 2) / 3);
         }
     }
 
@@ -2715,25 +2719,57 @@ the timeline drops them under the ship once the walls have retreated. */
     .ticket__plan {
         position: relative;
         min-width: 0;
-        padding: var(--space-8);
+        padding: var(--space-12) var(--space-8);
         display: flex;
         flex-direction: column;
         border-top: var(--border-width-6) solid transparent;
+        border-radius: var(--card-radius);
         background: var(--color-surface-page);
         transition: background-color var(--duration-standard) var(--ease-standard);
     }
 
+    /* พื้นผิว grain: noise แบบ feTurbulence เบลนด์ overlay ทับการ์ดราคาทั้ง 3 ใบแบบบาง ๆ
+       ความทึบต่ำจงใจ ให้แค่รู้สึกถึงพื้นผิวโดยไม่รบกวนการอ่านตัวเลข/ราคา */
+    .ticket__plan::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+        opacity: 0.05;
+        mix-blend-mode: overlay;
+        pointer-events: none;
+    }
+
+    /* ใบข้าง ๆ (Master Class/Explorer) เตี้ยกว่าใบ Ultimate ที่มีแถบริบบอนแนะนำเพิ่มขึ้น
+       มา ดัน margin-top ลงมาให้ขอบบนของใบข้างอยู่ต่ำกว่าใบ Ultimate แทนที่จะเสมอกัน
+       ตอกย้ำว่า Ultimate เป็นใบเด่น */
+    .ticket__plan--master,
+    .ticket__plan--explorer {
+        margin-top: calc(var(--space-16) - var(--space-2));
+    }
+
     .ticket__plan--ultimate {
+        padding-top: var(--space-8);
         z-index: 1;
-        /* เหลือขอบไว้แค่ด้านบน (แถบสเปกตรัมหนา) ด้านซ้าย/ขวา/ล่างไม่มีขอบเลย
-           ต่างจากใบอื่นที่มีกรอบรอบครบ 4 ด้าน
+        /* ใบนี้ใบเดียวเปลี่ยนเป็นกรอบไล่สเปกตรัมรอบครบ 4 ด้าน (ใบอื่นยังเป็นการ์ดแบบ
+           editorial ไม่มีกรอบสีตามเดิม) เพื่อดันให้ใบ Ultimate เด่นเป็น "แนะนำที่สุด"
            ต้องระบุ border-style เองเพราะ .ticket__plan ฐานตั้ง border เป็น none ไว้
-           (style: none ทำให้ width ที่ตั้งไว้ตรงนี้กลายเป็น 0 เสมอไม่ว่าจะใส่ค่าอะไร) */
+           (style: none ทำให้ width ที่ตั้งไว้ตรงนี้กลายเป็น 0 เสมอไม่ว่าจะใส่ค่าอะไร)
+           มุมโค้งใช้ค่าเดียวกับ .ticket__plan ฐานอยู่แล้ว (ไม่ต้องประกาศซ้ำ) overflow:
+           hidden ไว้ตัดมุมของแถบริบบอน (.ticket__plan-ribbon) กับแสง glow (::before)
+           ให้โค้งตามมุมการ์ดพอดี ไม่โผล่เหลี่ยมออกมานอกกรอบโค้ง */
         border-style: solid;
-        border-width: var(--border-width-6) 0 0 0;
+        border-width: var(--border-width-6);
         border-color: transparent;
+        overflow: hidden;
+        /* ทินต์เดิมเคยทึบ 100% (mix กับสีทึบ ไม่ใช่ transparent) พอจะใส่รูป ultimate.jpg
+           เป็นพื้นหลังด้วย ต้องลดความทึบของทินต์ลง (mix กับ transparent แทน) ให้รูป
+           โปร่งผ่านออกมาเห็นได้ ส่วนรูปกับทินต์วางใน padding-box เหมือนกัน ให้เส้นขอบ
+           ไล่สเปกตรัม (border-box) ยังคงล้อมกรอบอยู่ด้านนอกตามเดิม */
         background:
-            linear-gradient(color-mix(in srgb, var(--color-surface-page) 68%, var(--color-surface-paper)), color-mix(in srgb, var(--color-surface-page) 68%, var(--color-surface-paper))) padding-box,
+            linear-gradient(color-mix(in srgb, #ffffff 72%, transparent), color-mix(in srgb, var(--color-surface-page) 64%, transparent)) padding-box,
+            url('../images/ultimate.jpg') center / cover no-repeat padding-box,
             var(--spectrum) border-box;
         /* box-shadow:
             0 18px 48px rgba(17, 19, 24, 0.10),
@@ -2753,28 +2789,57 @@ the timeline drops them under the ship once the walls have retreated. */
 
         &:hover {
             background:
-                linear-gradient(color-mix(in srgb, var(--color-surface-page) 68%, var(--color-surface-paper)), color-mix(in srgb, var(--color-surface-page) 68%, var(--color-surface-paper))) padding-box,
+                linear-gradient(color-mix(in srgb, #ffffff 64%, transparent), color-mix(in srgb, var(--color-surface-page) 56%, transparent)) padding-box,
+                url('../images/ultimate.jpg') center / cover no-repeat padding-box,
                 var(--spectrum) border-box;
         }
+    }
+
+    /* แถบริบบอนบนสุดของใบ Ultimate เท่านั้น ดึงชิดขอบทั้ง 3 ด้าน (บน-ซ้าย-ขวา) ด้วย
+       margin ลบเท่ากับ padding ของ .ticket__plan (var(--space-8)) ให้ทับเนื้อในเดิม
+       จนสุดขอบด้านในของกรอบสเปกตรัมพอดี มุมบนโค้งเท่ากับ card-radius หักความหนาของ
+       border ออก (มุมด้านในของกรอบย่อมโค้งน้อยกว่ามุมด้านนอกเสมอ) */
+    .ticket__plan-ribbon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-2);
+        margin: calc(var(--space-8) * -1) calc(var(--space-8) * -1) var(--space-6);
+        padding: var(--space-3) var(--space-4);
+        border-radius: calc(var(--card-radius) - var(--border-width-6)) calc(var(--card-radius) - var(--border-width-6)) 0 0;
+        background: var(--spectrum);
+        color: var(--color-text-inverse);
+        font-size: var(--section-small-size);
+        font-weight: var(--font-weight-medium);
+        letter-spacing: 0.02em;
     }
 
     .ticket__plan-header {
         margin-bottom: var(--space-8);
     }
 
+    /* ไอคอนประจำแพ็กเกจ: รูปมงกุฎ/เพชร/เข็มทิศ (ultimate/masterclass/explorer.webp)
+       ทั้ง 3 ใบ มีแสง/เงาในตัวรูปอยู่แล้ว ไม่ต้องเติม filter engrave แบบไอคอนเส้นเดิม */
+    .ticket__plan-icon {
+        width: 44px;
+        height: 44px;
+        margin-bottom: var(--space-4);
+        object-fit: contain;
+    }
+
+    .ticket__plan-icon--ultimate {
+        width: 80px;
+        height: 80px;
+    }
+
     .ticket__plan-header h3 {
         margin: 0;
+        font-family: 'Baskervville', var(--font-family-base);
         font-size: var(--bt-ticket-plan-title-size);
         font-weight: var(--font-weight-regular);
         /* line-height: var(--bt-ticket-plan-title-line-height); */
         letter-spacing: var(--section-heading-tracking);
         text-transform: uppercase;
-    }
-
-    /* หน่วยเป็น em ตั้งใจ ผูกกับขนาดฟอนต์ของ h3 ที่ครอบอยู่ (40px ปกติ, 24px บนมือถือ)
-       คำว่า "Ticket" จึงเล็กลงตามสัดส่วนเดิมเสมอโดยไม่ต้องตั้งค่าซ้ำใน media query มือถือ */
-    .ticket__plan-title-suffix {
-        font-size: 0.5em;
     }
 
     .ticket__plan-note {
@@ -3167,6 +3232,10 @@ the timeline drops them under the ship once the walls have retreated. */
         --bt-ticket-price-size: var(--font-size-32);
 
         .ticket__plan {
+            padding: var(--space-10) var(--space-6);
+        }
+
+        .ticket__plan--ultimate {
             padding: var(--space-6);
         }
 
@@ -3186,10 +3255,6 @@ the timeline drops them under the ship once the walls have retreated. */
     @media (max-width:1199px) {
         --bt-ticket-backdrop-height: 540px;
         --bt-ticket-price-size: var(--font-size-36);
-
-        .ticket__plan {
-            padding: var(--space-6);
-        }
 
         .ticket__plan-header h3 {
             display: flex;
@@ -3321,18 +3386,16 @@ the timeline drops them under the ship once the walls have retreated. */
             }
         }
 
+        /* จอนี้ลงไปการ์ดเรียงเป็นคอลัมน์เดียว เอา gap ออกแล้วต่อกันสนิท
+           Master Class และ Explorer ใช้เส้นบนเป็นตัวคั่น ส่วน Ultimate ยังคงกรอบ
+           spectrum ครบทั้ง 4 ด้าน */
+        .ticket__plans {
+            gap: var(--space-0);
+            padding: var(--space-0);
+        }
+
         .ticket__plan {
             padding: var(--space-12) var(--space-8);
-        }
-
-        /* จอนี้ลงไปการ์ดเรียงเป็นคอลัมน์เดียว เอา gap 24px ออกแล้วต่อกันสนิท
-           คั่นด้วยเส้นบนแทน ไม่เอาเส้นซ้าย/ขวา/ล่างของแต่ละใบ (เว้น ultimate
-           ที่ยังมีแถบสเปกตรัมหนาด้านบนเป็นจุดเด่นเดิม ไม่ไปแตะ) */
-        .ticket__plans {
-            gap: 0;
-        }
-
-        .ticket__plan {
             border-right: 0;
             border-bottom: 0;
             border-left: 0;
@@ -3340,6 +3403,31 @@ the timeline drops them under the ship once the walls have retreated. */
             &:not(:first-child) {
                 border-top: var(--rule-width-subtle) solid var(--color-border-faint);
             }
+        }
+
+        .ticket__plan--master {
+            margin-top: var(--space-12);
+        }
+
+        .ticket__plan--explorer {
+            margin-top: var(--space-0);
+        }
+
+
+        .ticket__plan--ultimate {
+            order: 1;
+            padding: var(--space-8);
+            border: var(--border-width-6) solid transparent;
+            border-top: none !important;
+        }
+
+        .ticket__plan--master {
+            order: 2;
+            border-top: var(--rule-width-subtle) solid var(--color-border-faint);
+        }
+
+        .ticket__plan--explorer {
+            order: 3;
         }
 
         .ticket__plan-header {
@@ -3404,6 +3492,10 @@ the timeline drops them under the ship once the walls have retreated. */
 
         .ticket__plan {
             padding: var(--space-8) var(--space-6);
+        }
+
+        .ticket__plan--master {
+            margin-top: var(--space-8);
         }
 
         .ticket__price {
@@ -3521,6 +3613,9 @@ the timeline drops them under the ship once the walls have retreated. */
     --agenda-day-details-active-weight: var(--agenda-day-details-weight);
     --agenda-day-details-active-color: var(--agenda-day-details-color);
     --agenda-day-switch-details-gap: var(--space-3);
+    --agenda-sticky-gap: var(--space-6);
+    --agenda-sticky-top: calc(var(--header-height) + var(--agenda-sticky-gap));
+    --agenda-day-panel-header-height: calc(var(--space-12) + var(--space-6));
 
     /* margin-bottom ต้องไม่แคบกว่าฉากขาว ::before ของ .agenda__tabs (บรรทัดล่าง)
        ที่ยื่นขึ้นมาปิดพื้นที่เหนือแถบ sticky สูง calc(header-height + space-6)
@@ -3552,22 +3647,38 @@ the timeline drops them under the ship once the walls have retreated. */
        .agenda__panel ใช้ ไม่ใช่แค่ใต้ header เฉย ๆ ไม่งั้นคลิกสลับวันแล้วหัวตาราง
        จะโผล่ไปโดนแถบแท็บบัง */
     .agenda__day-panel {
-        scroll-margin-top: calc(var(--header-height) + var(--space-6) + var(--touch-target-md) + var(--rule-width-subtle));
+        scroll-margin-top: calc(var(--agenda-sticky-top) + var(--agenda-day-panel-header-height) + var(--touch-target-md) + var(--rule-width-subtle));
         background: var(--color-neutral-25);
         border-radius: var(--radius-1);
     }
 
     .agenda__day-panel-header {
+        position: sticky;
+        top: var(--agenda-sticky-top);
+        z-index: 3;
+        height: var(--agenda-day-panel-header-height);
         display: flex;
         flex-wrap: wrap;
         align-items: baseline;
         gap: var(--space-2) var(--space-4);
-        padding: var(--space-3) var(--space-0) var(--space-10);
+        padding: var(--space-3) var(--space-0) var(--space-8);
         color: var(--color-text-muted);
         font-size: var(--section-body-size);
         line-height: var(--section-body-line-height);
-        position: relative;
-        z-index: 3;
+        background: var(--color-neutral-0);
+    }
+
+    /* ปิดช่องว่างระหว่าง site header กับหัววันที่ ไม่ให้ข้อมูลตารางที่เลื่อนผ่าน
+       มองเห็นลอดขึ้นมา โดยยังคง breathing room เดิมของ layout ไว้ */
+    .agenda__day-panel-header::before {
+        content: '';
+        position: absolute;
+        right: 0;
+        bottom: 100%;
+        left: 0;
+        height: var(--agenda-sticky-gap);
+        background: var(--color-surface-page);
+        pointer-events: none;
     }
 
     .agenda__day-panel-date,
@@ -3762,7 +3873,7 @@ the timeline drops them under the ship once the walls have retreated. */
         --agenda-tab-indicator-width: 0px;
 
         position: sticky;
-        top: calc(var(--header-height) + var(--space-6));
+        top: calc(var(--agenda-sticky-top) + var(--agenda-day-panel-header-height));
         z-index: 2;
         min-height: var(--touch-target-md);
         display: flex;
@@ -3976,6 +4087,7 @@ the timeline drops them under the ship once the walls have retreated. */
        ใช้ :first-of-type เลือก td tags (ตัวแรกใน td ของแถว ไม่นับ th) แทนการเติม class
        ในทุกแถวของ HTML — scope ไว้เฉพาะ ≥992px ไม่ให้ไปชนกับ grid ของจอเล็กที่มีอยู่แล้ว */
     @media (min-width: 992px) {
+
         /* ต้องปลด .agenda__table/tbody ออกจาก display:table ก่อน ไม่งั้น grid บน tr
            ยังถูกอัลกอริทึมของตาราง (colgroup/table-layout:fixed) บังคับความกว้างทับอยู่
            แพตเทิร์นเดียวกับ breakpoint จอเล็กที่มีอยู่แล้วด้านล่าง */
@@ -4007,12 +4119,12 @@ the timeline drops them under the ship once the walls have retreated. */
 
             /* แถวที่ไม่มี tags (Registration, Lunch Break ฯลฯ) td นี้จะว่างเปล่า —
                ตัด padding/border ทิ้งไม่งั้นเหลือช่องว่างเปล่า ๆ ค้างอยู่เหนือหัวข้อ */
-            &:empty {
+            /* &:empty {
                 border-left: 0;
-            }
+            } */
         }
 
-        .agenda__table td:first-of-type + td {
+        .agenda__table td:first-of-type+td {
             grid-column: 2;
             grid-row: 2;
             padding-top: var(--space-0);
@@ -4296,11 +4408,25 @@ the timeline drops them under the ship once the walls have retreated. */
         letter-spacing: 0;
     }
 
+    @media (max-width:1199px) {
+        --agenda-day-panel-header-height: calc(var(--space-10) + var(--space-6));
+
+        .agenda__day-panel-header {
+            padding: var(--space-1) var(--space-0) var(--space-6);
+        }
+    }
+
     @media (max-width:991px) {
         --agenda-day-label-size: var(--font-size-24);
         --agenda-day-label-active-size: var(--font-size-40);
+        --agenda-sticky-gap: var(--space-0);
+        --agenda-day-panel-header-height: calc(var(--space-12) + var(--space-8) + var(--space-1));
 
         padding: var(--section-padding-y-sm) 0;
+
+        .agenda__day-panel-header {
+            padding: var(--space-8) var(--space-0) var(--space-6);
+        }
 
         .agenda__section-header {
             margin-bottom: var(--space-12);
@@ -4311,7 +4437,7 @@ the timeline drops them under the ship once the walls have retreated. */
         }
 
         .agenda__tabs {
-            top: var(--header-height);
+            top: calc(var(--agenda-sticky-top) + var(--agenda-day-panel-header-height));
         }
 
         .agenda__day-switch,
@@ -4362,7 +4488,7 @@ the timeline drops them under the ship once the walls have retreated. */
             padding-bottom: var(--space-0);
         }
 
-        .agenda__table td:first-of-type + td {
+        .agenda__table td:first-of-type+td {
             grid-column: 2;
             grid-row: 2;
             padding-top: var(--space-0);
@@ -4629,12 +4755,12 @@ the timeline drops them under the ship once the walls have retreated. */
             grid-row: 1;
             padding-bottom: var(--space-0);
 
-            &:empty {
+            /* &:empty {
                 display: none;
-            }
+            } */
         }
 
-        .agenda__table td:first-of-type + td {
+        .agenda__table td:first-of-type+td {
             grid-column: 2;
             grid-row: 2;
             padding-top: var(--space-0);
@@ -4748,7 +4874,7 @@ the timeline drops them under the ship once the walls have retreated. */
             }
         }
 
-        .agenda__table td:first-of-type + td {
+        .agenda__table td:first-of-type+td {
             grid-column: 1;
             grid-row: 3;
             padding-top: var(--space-0);
@@ -4756,7 +4882,7 @@ the timeline drops them under the ship once the walls have retreated. */
         }
 
         /* Session ที่ไม่มีภาพวิทยากรให้รายละเอียดใช้พื้นที่เต็มแถว */
-        .agenda__table tr:has(td.agenda__speakers:empty) td:first-of-type + td {
+        .agenda__table tr:has(td.agenda__speakers:empty) td:first-of-type+td {
             grid-column: 1 / -1;
         }
 
@@ -4860,6 +4986,9 @@ the timeline drops them under the ship once the walls have retreated. */
     --speaker-day-label-active-weight: var(--font-weight-regular);
     --speaker-day-label-active-color: var(--color-text-primary);
     --speaker-day-switch-details-gap: var(--space-3);
+    --speaker-sticky-gap: var(--space-6);
+    --speaker-sticky-top: calc(var(--header-height) + var(--speaker-sticky-gap));
+    --speaker-day-panel-header-height: calc(var(--space-12) + var(--space-6));
 
     .speaker__section-header {
         margin-bottom: var(--space-20);
@@ -4882,7 +5011,7 @@ the timeline drops them under the ship once the walls have retreated. */
     /* ---- ตัวสลับวัน: ก๊อปแพตเทิร์นจาก .agenda__day-switcher ทั้งชุด ---- */
     .speaker__day-switcher {
         position: sticky;
-        top: calc(var(--header-height) + var(--space-6));
+        top: var(--speaker-sticky-top);
         z-index: 2;
         align-self: start;
         min-width: 0;
@@ -4893,20 +5022,35 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .speaker__day-panel {
-        scroll-margin-top: calc(var(--header-height) + var(--space-6));
+        scroll-margin-top: var(--speaker-sticky-top);
     }
 
     .speaker__day-panel-header {
+        position: sticky;
+        top: var(--speaker-sticky-top);
+        z-index: 3;
+        height: var(--speaker-day-panel-header-height);
         display: flex;
         flex-wrap: wrap;
         align-items: baseline;
         gap: var(--space-2) var(--space-4);
-        padding: var(--space-3) var(--space-0) var(--space-10);
+        padding: var(--space-3) var(--space-0) var(--space-8);
         color: var(--color-text-muted);
         font-size: var(--section-body-size);
         line-height: var(--section-body-line-height);
-        position: relative;
-        z-index: 3;
+        background: var(--color-surface-page);
+    }
+
+    /* ปิดช่องว่างใต้ site header ไม่ให้การ์ดวิทยากรที่เลื่อนผ่านมองเห็นลอดขึ้นมา */
+    .speaker__day-panel-header::before {
+        content: '';
+        position: absolute;
+        right: 0;
+        bottom: 100%;
+        left: 0;
+        height: var(--speaker-sticky-gap);
+        background: var(--color-surface-page);
+        pointer-events: none;
     }
 
     .speaker__day-panel-date,
@@ -5074,11 +5218,25 @@ the timeline drops them under the ship once the walls have retreated. */
         min-height: var(--section-padding-y-sm);
     }
 
+    @media (max-width: 1199px) {
+        --speaker-day-panel-header-height: calc(var(--space-10) + var(--space-6));
+
+        .speaker__day-panel-header {
+            padding: var(--space-1) var(--space-0) var(--space-8);
+        }
+    }
+
     @media (max-width: 991px) {
         --speaker-day-label-size: var(--font-size-24);
         --speaker-day-label-active-size: var(--font-size-40);
+        --speaker-sticky-gap: var(--space-0);
 
         padding: var(--section-padding-y-sm) 0;
+
+
+        .speaker__day-panel-header {
+            padding: var(--space-2) var(--space-0) var(--space-8);
+        }
 
         .speaker__section-header {
             margin-bottom: var(--space-12);
@@ -5515,7 +5673,7 @@ the timeline drops them under the ship once the walls have retreated. */
         padding: var(--space-4);
         gap: var(--space-12) var(--space-4);
     }
-    
+
     .moderator__grid {
         margin-top: var(--space-3);
         padding: var(--space-4);

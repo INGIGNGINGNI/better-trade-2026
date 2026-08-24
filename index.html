@@ -62,7 +62,7 @@
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="css/main.css?v=40">
-    <link rel="stylesheet" href="css/style.css?v=309">
+    <link rel="stylesheet" href="css/style.css?v=318">
 </head>
 
 <body class="is-loading">
@@ -483,39 +483,11 @@
             </header>
 
             <div class="ticket__plans row g-0">
-                <article class="ticket__plan ticket__plan--ultimate col-12 col-lg-4" aria-labelledby="ticket-ultimate-title">
-                    <header class="ticket__plan-header">
-                        <p class="ticket__plan-index">New World</p>
-                        <h3 id="ticket-ultimate-title">Ultimate <span class="ticket__plan-title-suffix">Ticket</span></h3>
-                    </header>
-
-                    <div class="ticket__prices" aria-label="ราคาบัตร Ultimate">
-                        <div class="ticket__price">
-                            <span>1 วัน</span>
-                            <strong>1,500 <small>บาท</small></strong>
-                        </div>
-                        <div class="ticket__price">
-                            <span>2 วัน<span class="ticket__price-badge">แนะนำ</span></span>
-                            <strong>2,500 <small>บาท</small></strong>
-                        </div>
-                    </div>
-
-                    <a class="bt-action-button bt-action-button--primary bt-action-button--xl ticket__action" href="#contact">เลือก Ultimate</a>
-
-                    <dl class="ticket__access">
-                        <div><dt class="ticket__access-label ticket__access-label--conference"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-presentation"></use></svg><span>Conference</span></dt><dd class="ticket__status ticket__status--included"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-check"></use></svg><span class="visually-hidden">รวมในบัตร</span></dd></div>
-                        <div><dt class="ticket__access-label ticket__access-label--experience"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-box"></use></svg><span>Experience</span></dt><dd class="ticket__status ticket__status--included"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-check"></use></svg><span class="visually-hidden">รวมในบัตร</span></dd></div>
-                        <div><dt class="ticket__access-label ticket__access-label--pavilions"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-store"></use></svg><span>Pavilions</span></dt><dd class="ticket__status ticket__status--included"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-check"></use></svg><span class="visually-hidden">รวมในบัตร</span></dd></div>
-                        <div><dt class="ticket__access-label ticket__access-label--workshop"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-presentation"></use></svg><span>Workshop</span></dt><dd class="ticket__status ticket__status--soon"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-clock"></use></svg><span>Soon</span></dd></div>
-                        <div><dt class="ticket__access-label ticket__access-label--private-class"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-users"></use></svg><span>Private Class</span></dt><dd class="ticket__status ticket__status--excluded"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-minus"></use></svg><span class="visually-hidden">ไม่รวมในบัตร</span></dd></div>
-                        <div><dt class="ticket__access-label ticket__access-label--playbook"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-book-open"></use></svg><span>Playbook</span></dt><dd class="ticket__status ticket__status--playbook ticket__status--full">Full</dd></div>
-                    </dl>
-                </article>
-
                 <article class="ticket__plan ticket__plan--master col-12 col-lg-4" aria-labelledby="ticket-master-title">
                     <header class="ticket__plan-header">
+                        <img class="ticket__plan-icon" src="images/masterclass.webp" alt="" aria-hidden="true">
                         <p class="ticket__plan-index">New World</p>
-                        <h3 id="ticket-master-title">Master Class <span class="ticket__plan-title-suffix">Ticket</span></h3>
+                        <h3 id="ticket-master-title">Master Class</h3>
                         <!-- <p class="ticket__plan-note">เลือกเจาะลึกหัวข้อสำคัญกับผู้เชี่ยวชาญในคลาสขนาดเข้มข้น</p> -->
                     </header>
 
@@ -542,10 +514,42 @@
                     </dl>
                 </article>
 
-                <article class="ticket__plan col-12 col-lg-4" aria-labelledby="ticket-explorer-title">
+                <article class="ticket__plan ticket__plan--ultimate col-12 col-lg-4" aria-labelledby="ticket-ultimate-title">
+                    <p class="ticket__plan-ribbon"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-zap"></use></svg><span>แนะนำที่สุด</span></p>
                     <header class="ticket__plan-header">
+                        <img class="ticket__plan-icon ticket__plan-icon--ultimate" src="images/ultimate.webp" alt="" aria-hidden="true">
                         <p class="ticket__plan-index">New World</p>
-                        <h3 id="ticket-explorer-title">Explorer <span class="ticket__plan-title-suffix">Ticket</span></h3>
+                        <h3 id="ticket-ultimate-title">Ultimate</h3>
+                    </header>
+
+                    <div class="ticket__prices" aria-label="ราคาบัตร Ultimate">
+                        <div class="ticket__price">
+                            <span>1 วัน</span>
+                            <strong>1,500 <small>บาท</small></strong>
+                        </div>
+                        <div class="ticket__price">
+                            <span>2 วัน<span class="ticket__price-badge">แนะนำ</span></span>
+                            <strong>2,500 <small>บาท</small></strong>
+                        </div>
+                    </div>
+
+                    <a class="bt-action-button bt-action-button--primary bt-action-button--xl ticket__action" href="#contact">เลือก Ultimate</a>
+
+                    <dl class="ticket__access">
+                        <div><dt class="ticket__access-label ticket__access-label--conference"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-presentation"></use></svg><span>Conference</span></dt><dd class="ticket__status ticket__status--included"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-check"></use></svg><span class="visually-hidden">รวมในบัตร</span></dd></div>
+                        <div><dt class="ticket__access-label ticket__access-label--experience"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-box"></use></svg><span>Experience</span></dt><dd class="ticket__status ticket__status--included"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-check"></use></svg><span class="visually-hidden">รวมในบัตร</span></dd></div>
+                        <div><dt class="ticket__access-label ticket__access-label--pavilions"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-store"></use></svg><span>Pavilions</span></dt><dd class="ticket__status ticket__status--included"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-check"></use></svg><span class="visually-hidden">รวมในบัตร</span></dd></div>
+                        <div><dt class="ticket__access-label ticket__access-label--workshop"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-presentation"></use></svg><span>Workshop</span></dt><dd class="ticket__status ticket__status--soon"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-clock"></use></svg><span>Soon</span></dd></div>
+                        <div><dt class="ticket__access-label ticket__access-label--private-class"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-users"></use></svg><span>Private Class</span></dt><dd class="ticket__status ticket__status--excluded"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-minus"></use></svg><span class="visually-hidden">ไม่รวมในบัตร</span></dd></div>
+                        <div><dt class="ticket__access-label ticket__access-label--playbook"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-book-open"></use></svg><span>Playbook</span></dt><dd class="ticket__status ticket__status--playbook ticket__status--full">Full</dd></div>
+                    </dl>
+                </article>
+
+                <article class="ticket__plan ticket__plan--explorer col-12 col-lg-4" aria-labelledby="ticket-explorer-title">
+                    <header class="ticket__plan-header">
+                        <img class="ticket__plan-icon" src="images/explorer.webp" alt="" aria-hidden="true">
+                        <p class="ticket__plan-index">New World</p>
+                        <h3 id="ticket-explorer-title">Explorer</h3>
                         <!-- <p class="ticket__plan-note">เริ่มสำรวจเทรนด์และโอกาสใหม่ด้วยประสบการณ์ที่เข้าถึงง่าย</p> -->
                     </header>
 
