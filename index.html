@@ -62,7 +62,7 @@
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="css/main.css?v=40">
-    <link rel="stylesheet" href="css/style.css?v=303">
+    <link rel="stylesheet" href="css/style.css?v=309">
 </head>
 
 <body class="is-loading">
@@ -397,9 +397,16 @@
         <div class="concept__video-scroll container">
             <div class="concept__video-perspective">
                 <div class="concept__video-frame">
-                    <div class="concept__video-media">
+                    <div class="concept__video-media" data-concept-video>
+                        <button class="concept__video-poster" type="button" aria-label="เล่นวิดีโอ Better Trade 2026">
+                            <img src="images/youtube-thumbnail.webp" width="1281" height="721" loading="lazy"
+                                decoding="async" alt="">
+                            <span class="concept__video-play" aria-hidden="true">
+                                <svg class="bt-icon"><use href="images/icons.svg#icon-play"></use></svg>
+                            </span>
+                        </button>
                         <iframe
-                            src="https://www.youtube-nocookie.com/embed/hL-qQp0bVPw?rel=0"
+                            data-src="https://www.youtube-nocookie.com/embed/hL-qQp0bVPw?rel=0&autoplay=1"
                             title="Better Trade 2026"
                             loading="lazy"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -1731,6 +1738,7 @@
     <script src="js/hero-v2-header.js?v=12"></script>
     <script src="js/in-page-navigation.js?v=1"></script>
     <script src="js/reveal-on-scroll.js?v=2"></script>
+    <script src="js/concept-video.js?v=1"></script>
     <script src="js/past-event-swiper.js?v=6"></script>
 
     <!-- Liquid metal CTAs (WebGL). Module scripts are deferred, so this runs after
