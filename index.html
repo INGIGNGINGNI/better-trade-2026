@@ -61,8 +61,8 @@
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
-    <link rel="stylesheet" href="css/main.css?v=40">
-    <link rel="stylesheet" href="css/style.css?v=318">
+    <link rel="stylesheet" href="css/main.css?v=44">
+    <link rel="stylesheet" href="css/style.css?v=325">
 </head>
 
 <body class="is-loading">
@@ -517,7 +517,7 @@
                 <article class="ticket__plan ticket__plan--ultimate col-12 col-lg-4" aria-labelledby="ticket-ultimate-title">
                     <p class="ticket__plan-ribbon"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-zap"></use></svg><span>แนะนำที่สุด</span></p>
                     <header class="ticket__plan-header">
-                        <img class="ticket__plan-icon ticket__plan-icon--ultimate" src="images/ultimate.webp" alt="" aria-hidden="true">
+                        <img class="ticket__plan-icon ticket__plan-icon--ultimate" src="images/ultimate-2.webp" alt="" aria-hidden="true">
                         <p class="ticket__plan-index">New World</p>
                         <h3 id="ticket-ultimate-title">Ultimate</h3>
                     </header>
@@ -685,6 +685,11 @@
         </div>
 
         <div class="playbook__scene" aria-hidden="true">
+            <picture class="playbook__glow playbook__glow--base">
+                <source srcset="images/playbook-book-glow-mobile.webp" media="(max-width: 575px)" width="2490" height="2100">
+                <img class="playbook__glow-image" src="images/playbook-book-glow.webp" width="2490" height="1720"
+                    decoding="async" alt="">
+            </picture>
             <picture>
                 <source srcset="images/playbook-book-mobile.webp" media="(max-width: 575px)" width="2490" height="2100">
                 <img class="playbook__book" src="images/playbook-book.webp" width="2490" height="1720"
@@ -1741,7 +1746,7 @@
     <script src="js/mobile-cta-bar.js?v=3"></script>
     <script src="js/hero-v2-header.js?v=12"></script>
     <script src="js/in-page-navigation.js?v=1"></script>
-    <script src="js/reveal-on-scroll.js?v=2"></script>
+    <script src="js/reveal-on-scroll.js?v=5"></script>
     <script src="js/concept-video.js?v=1"></script>
     <script src="js/past-event-swiper.js?v=6"></script>
 
@@ -1752,12 +1757,13 @@
     <script src="js/loader-mist.js?v=3"></script>
     <script src="vendor/gsap/gsap.min.js"></script>
     <script src="vendor/gsap/ScrollTrigger.min.js"></script>
-    <script src="js/hero-v2-scroll-motion.js?v=46"></script>
+    <script src="js/hero-v2-scroll-motion.js?v=48"></script>
     <script src="js/hero-v2-scroll-cue.js?v=4"></script>
     <script src="js/topics-reveal.js?v=5"></script>
     <script src="js/topics-assets-motion.js?v=14"></script>
     <script src="js/ticket-backdrop-parallax.js?v=4"></script>
     <script src="js/playbook-assets-motion.js?v=4"></script>
+    <script src="js/playbook-glow-motion.js?v=1"></script>
     <!-- หลัง hero เพราะ ScrollTrigger refresh ตามลำดับที่สร้าง และ speaker อยู่ใต้ hero ในหน้า -->
     <script src="js/speaker-motion.js?v=4"></script>
 </body>

@@ -75,7 +75,7 @@
             scrollDuration: 0.86,
             whiteoutDuration: 0.42,
             conceptRevealDelay: 720,
-            playbackRate: 1.75,
+            playbackRate: 1.35,
             /* ship-new-3 is a 16:9 composition centred and bottom-aligned. */
             canvasRatio: 2560 / 1440,
             contentHeightShare: 0.7333,
@@ -89,7 +89,7 @@
         const HERO_RUN_PROGRESS_EVENT = 'bettertrade:hero-run-progress';
         const HERO_SCROLL_CUE_EVENT = 'bettertrade:hero-scroll-cue';
         const HERO_SCROLL_CUE_REVEAL_AT = 0.34;
-        const HERO_SCROLL_ACCELERATION = 2;
+        const HERO_SCROLL_ACCELERATION = 1.8;
         let heroRunProgressMode = '';
         let heroRunProgressValue = -1;
         let heroScrollCueVisible = false;
@@ -179,6 +179,13 @@
         const stageHeightVH = aspect => aspect >= 1.2 ? 1.40 : 1.15;
 
         const KEYS = ['title', 'triangle', 'bitcoin', 'gold', 'heart', 'card', 'stock'];
+        const HERO_ASSET_MOTION_KEYS = ['triangle', 'bitcoin', 'gold', 'heart', 'card', 'stock'];
+        const HERO_ASSET_MOVE_START = 0.118;
+        const HERO_ASSET_MOVE_DURATION = 0.52;
+        const HERO_ASSET_MOVE_STAGGER = 0.045;
+        const HERO_ASSET_MOVE_END = HERO_ASSET_MOVE_START
+            + (HERO_ASSET_MOTION_KEYS.length - 1) * HERO_ASSET_MOVE_STAGGER
+            + HERO_ASSET_MOVE_DURATION;
         // All 6 asset icons — regroups at the center and scatters to its poster slot as a
         // full set once loading ends, regardless of how many cycled through the spinner.
         const ASSET_ICON_KEYS = ['stock', 'bitcoin', 'gold', 'card', 'heart', 'triangle'];
@@ -1007,7 +1014,7 @@
              0.47–0.55  the staircase rises into place
              0.55–1.00  camera pans down while the runners arrive far -> near
            --------------------------------------------------------- */
-        function buildScroll() {
+        function buildScroll({ restoreProgress = null } = {}) {
             if (scrollTL) { scrollTL.scrollTrigger?.kill(); scrollTL.kill(); }
 
             shipRunState.time = 0;
@@ -1043,6 +1050,10 @@
                     syncWalls();
                     syncShipLookToTimeline();
                     maintainCompletedHeroScene();
+                    setAssetTravelActive(
+                        scrollTL.time() >= HERO_ASSET_MOVE_START - 0.02
+                        && scrollTL.time() <= HERO_ASSET_MOVE_END
+                    );
                     updateHeroRunProgress();
                 },
                 scrollTrigger: STATIC_FRAME ? undefined : {
@@ -1056,12 +1067,40 @@
                 }
             });
 
-            KEYS.forEach((k, i) => {
+            const titleAsset = M.assets.title;
+            scrollTL.fromTo(el.title,
+                {
+                    x: titleAsset.dx,
+                    y: titleAsset.dy,
+                    scale: titleAsset.scale,
+                    rotation: titleAsset.rotA,
+                },
+                {
+                    x: 0,
+                    y: 0,
+                    scale: 1,
+                    rotation: titleAsset.rotB,
+                    duration: 0.45,
+                    ease: 'power2.inOut',
+                },
+                0.10
+            );
+
+            // Keep the icons scroll-driven, but give each one a Playbook-like fast launch
+            // and long, soft landing. The wider stagger makes their arrivals readable.
+            HERO_ASSET_MOTION_KEYS.forEach((k, i) => {
                 const a = M.assets[k];
                 scrollTL.fromTo(el[k],
                     { x: a.dx, y: a.dy, scale: a.scale, rotation: a.rotA },
-                    { x: 0, y: 0, scale: 1, rotation: a.rotB, duration: 0.45, ease: 'power2.inOut' },
-                    0.10 + i * 0.018
+                    {
+                        x: 0,
+                        y: 0,
+                        scale: 1,
+                        rotation: a.rotB,
+                        duration: HERO_ASSET_MOVE_DURATION,
+                        ease: 'power3.out',
+                    },
+                    HERO_ASSET_MOVE_START + i * HERO_ASSET_MOVE_STAGGER
                 );
             });
 
@@ -1238,9 +1277,17 @@
             if (STATIC_FRAME) {
                 scrollTL.progress(clamp(parseFloat(FRAME) || 0, 0, 1)).pause();
             } else {
+                const timelineForRestore = scrollTL;
                 const restoreTimelineFromCurrentScroll = () => {
-                    const trigger = scrollTL.scrollTrigger;
-                    if (HAS_SHIP_RUN && window.scrollY >= el.concept.offsetTop - M.vh * 0.5) {
+                    // A resize can replace the timeline before this deferred restore runs.
+                    // Never let a callback from the discarded geometry mutate the new one.
+                    if (scrollTL !== timelineForRestore) return;
+                    const trigger = timelineForRestore.scrollTrigger;
+                    if (!trigger) return;
+                    const hasResizeProgress = Number.isFinite(restoreProgress);
+                    if (!hasResizeProgress
+                        && HAS_SHIP_RUN
+                        && window.scrollY >= el.concept.offsetTop - M.vh * 0.5) {
                         shipRunHasCompleted = true;
                         shipRunScrubState = 'complete';
                         shipRunHeroRestored = false;
@@ -1252,16 +1299,20 @@
                     }
 
                     const scrollRange = Math.max(1, trigger.end - trigger.start);
-                    let restoredProgress = clamp(
-                        (window.scrollY - trigger.start) / scrollRange,
-                        0,
-                        1
-                    );
-                    let restoredTime = restoredProgress * scrollTL.duration();
+                    const restoredProgress = hasResizeProgress
+                        ? clamp(restoreProgress, 0, 1)
+                        : clamp((window.scrollY - trigger.start) / scrollRange, 0, 1);
+                    if (hasResizeProgress) {
+                        const restoredScrollY = trigger.start + scrollRange * restoredProgress;
+                        if (Math.abs(window.scrollY - restoredScrollY) > 1) {
+                            window.scrollTo(0, restoredScrollY);
+                        }
+                    }
+                    const restoredTime = restoredProgress * timelineForRestore.duration();
 
                     ScrollTrigger.update();
                     trigger.getTween()?.progress(1);
-                    scrollTL.progress(restoredProgress, false);
+                    timelineForRestore.progress(restoredProgress, false);
                     syncShipLookToTimeline();
                     if (!shipRunHasCompleted && restoredTime < SHIP_RUN.startAt) {
                         gsap.set([el.shipRunLayer, el.shipRunWhiteout], { opacity: 0 });
@@ -1541,6 +1592,7 @@
         const saveData = navigator.connection?.saveData === true;
         let idleStarted = false;
         let idleTweens = [];
+        let assetTravelActive = false;
         let sceneIsVisible = true;
         let skyObserver = null;
         let conceptVideoMotion = null;
@@ -1627,7 +1679,10 @@
 
             const syncSceneActivity = () => {
                 const active = sceneIsVisible && !document.hidden;
-                idleTweens.forEach(tween => tween.paused(!active));
+                idleTweens.forEach(tween => {
+                    if (assetTravelActive) tween.pause(0);
+                    else tween.paused(!active);
+                });
 
                 if (!mediaMotionAllowed) return;
                 if (active) {
@@ -1661,6 +1716,16 @@
             document.addEventListener('visibilitychange', syncSceneActivity);
         }
 
+        function setAssetTravelActive(active) {
+            if (assetTravelActive === active) return;
+            assetTravelActive = active;
+
+            idleTweens.forEach(tween => {
+                if (active) tween.pause(0);
+                else tween.paused(!sceneIsVisible || document.hidden);
+            });
+        }
+
         function startIdle() {
             if (!ASSET_IDLE_ENABLED || idleStarted || reduced || STATIC_FRAME) return;
             idleStarted = true;
@@ -1671,7 +1736,7 @@
                     rotate: `+=${gsap.utils.random(3, 8) * (Math.random() > 0.5 ? 1 : -1)}`,
                     duration: gsap.utils.random(3, 5),
                     ease: 'sine.inOut', yoyo: true, repeat: -1,
-                    paused: !sceneIsVisible || document.hidden,
+                    paused: assetTravelActive || !sceneIsVisible || document.hidden,
                 });
                 idleTweens.push(tween);
             });
@@ -1735,13 +1800,32 @@
 
             if (rAF) cancelAnimationFrame(rAF);
             rAF = requestAnimationFrame(() => {
+                // Preserve the same visual beat while the viewport geometry changes.
+                // Absolute scrollY is not enough because the Hero's scroll distance is
+                // recalculated from the new viewport dimensions.
+                const previousTrigger = scrollTL?.scrollTrigger;
+                const previousScrollY = window.scrollY;
+                const wasInsideHero = previousTrigger
+                    && previousScrollY >= previousTrigger.start - 1
+                    && previousScrollY <= previousTrigger.end + 1;
+                const resizeProgress = wasInsideHero
+                    ? clamp(
+                        (previousScrollY - previousTrigger.start)
+                        / Math.max(1, previousTrigger.end - previousTrigger.start),
+                        0,
+                        1
+                    )
+                    : null;
+
                 // A real width change (orientation or responsive breakpoint) gets a fresh
                 // large-viewport baseline after Safari has applied the new orientation.
                 if (widthChanged) mobileLayoutViewportHeight = readLargeViewportHeight();
 
-                // Killing the pin can restore the height captured when ScrollTrigger was
-                // created, so do it before layout writes the new static hero dimensions.
-                if (isMobileStatic() && scrollTL) {
+                // ScrollTrigger restores the styles captured when its pin was created.
+                // Always remove that old pin before layout writes the new geometry;
+                // otherwise the old height/transform can overwrite the fresh values and
+                // leave the stage over-panned with a large empty band below the artwork.
+                if (scrollTL) {
                     scrollTL.scrollTrigger?.kill();
                     scrollTL.kill();
                     scrollTL = null;
@@ -1751,7 +1835,7 @@
                     setupMobileStaticHero();
                 } else {
                     document.body.classList.remove('is-mobile-static');
-                    buildScroll();
+                    buildScroll({ restoreProgress: resizeProgress });
                 }
                 setupConceptVideoMotion();
                 ScrollTrigger.refresh();

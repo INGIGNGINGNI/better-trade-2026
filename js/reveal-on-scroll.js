@@ -4,6 +4,12 @@
         '.bt-section-subtext',
         '.concept__description',
         '.topics-showcase__header p',
+        '.ticket__plan',
+        '.ticket__formats',
+        '.ticket__benefits h3',
+        '.ticket__benefits-list li',
+        '.playbook__step',
+        '.playbook__action',
         '[data-reveal]',
     ].join(', ');
     const targets = Array.from(document.querySelectorAll(revealSelector));
@@ -45,4 +51,23 @@
 
         observer.observe(target);
     });
+
+    const setDelay = (selector, callback) => {
+        document.querySelectorAll(selector).forEach((target, index) => {
+            if (target.hasAttribute('data-reveal-delay')) return;
+            target.style.setProperty('--reveal-delay', `${callback(target, index)}ms`);
+        });
+    };
+
+    setDelay('.ticket__plan', (target) => {
+        if (target.classList.contains('ticket__plan--ultimate')) return 0;
+        if (target.classList.contains('ticket__plan--master')) return 120;
+        if (target.classList.contains('ticket__plan--explorer')) return 240;
+        return 120;
+    });
+
+    setDelay('.ticket__benefits h3', () => 0);
+    setDelay('.ticket__benefits-list li', (_, index) => 100 + index * 80);
+    setDelay('.playbook__step', (_, index) => index * 120);
+    setDelay('.playbook__action', () => 420);
 })();

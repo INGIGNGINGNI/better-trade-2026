@@ -1944,7 +1944,7 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 .concept__video-scroll {
-    min-height: 125vh;
+    min-height: unset;
     margin-top: var(--space-12);
     position: relative;
     z-index: 1;
@@ -1982,7 +1982,7 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 .concept__video-perspective {
-    min-height: calc(100vh - var(--header-height));
+    /* min-height: calc(100vh - var(--header-height)); */
     position: sticky;
     top: var(--header-height);
     display: grid;
@@ -2763,14 +2763,15 @@ the timeline drops them under the ship once the walls have retreated. */
         border-width: var(--border-width-6);
         border-color: transparent;
         overflow: hidden;
-        /* ทินต์เดิมเคยทึบ 100% (mix กับสีทึบ ไม่ใช่ transparent) พอจะใส่รูป ultimate.jpg
+        /* ทินต์เดิมเคยทึบ 100% (mix กับสีทึบ ไม่ใช่ transparent) พอจะใส่รูป ultimate-bg.webp
            เป็นพื้นหลังด้วย ต้องลดความทึบของทินต์ลง (mix กับ transparent แทน) ให้รูป
            โปร่งผ่านออกมาเห็นได้ ส่วนรูปกับทินต์วางใน padding-box เหมือนกัน ให้เส้นขอบ
            ไล่สเปกตรัม (border-box) ยังคงล้อมกรอบอยู่ด้านนอกตามเดิม */
         background:
             linear-gradient(color-mix(in srgb, #ffffff 72%, transparent), color-mix(in srgb, var(--color-surface-page) 64%, transparent)) padding-box,
-            url('../images/ultimate.jpg') center / cover no-repeat padding-box,
+           url('../images/ultimate-bg.webp') center / cover no-repeat padding-box,
             var(--spectrum) border-box;
+        transition: all var(--duration-standard) var(--ease-standard);
         /* box-shadow:
             0 18px 48px rgba(17, 19, 24, 0.10),
             0 0 0 1px var(--alpha-ink-06); */
@@ -2790,7 +2791,7 @@ the timeline drops them under the ship once the walls have retreated. */
         &:hover {
             background:
                 linear-gradient(color-mix(in srgb, #ffffff 64%, transparent), color-mix(in srgb, var(--color-surface-page) 56%, transparent)) padding-box,
-                url('../images/ultimate.jpg') center / cover no-repeat padding-box,
+                url('../images/ultimate-bg.webp') center / cover no-repeat padding-box,
                 var(--spectrum) border-box;
         }
     }
@@ -2830,6 +2831,7 @@ the timeline drops them under the ship once the walls have retreated. */
     .ticket__plan-icon--ultimate {
         width: 80px;
         height: 80px;
+        filter: saturate(1.5);
     }
 
     .ticket__plan-header h3 {
@@ -3665,7 +3667,7 @@ the timeline drops them under the ship once the walls have retreated. */
         color: var(--color-text-muted);
         font-size: var(--section-body-size);
         line-height: var(--section-body-line-height);
-        background: var(--color-neutral-0);
+        background: var(--color-surface-page);
     }
 
     /* ปิดช่องว่างระหว่าง site header กับหัววันที่ ไม่ให้ข้อมูลตารางที่เลื่อนผ่าน
@@ -3990,8 +3992,6 @@ the timeline drops them under the ship once the walls have retreated. */
         align-content: center;
         min-height: 320px;
         padding: var(--space-12) var(--space-8);
-        border-top: var(--rule-width-subtle) solid var(--color-border-faint);
-        border-bottom: var(--rule-width-subtle) solid var(--color-border-faint);
         text-align: center;
     }
 
@@ -4071,6 +4071,7 @@ the timeline drops them under the ship once the walls have retreated. */
     .agenda__table td {
         border-left: var(--rule-width-subtle) solid var(--color-border-faint);
         padding-left: var(--space-4);
+        height: 100%;
     }
 
     /* กรอบรูปวิทยากรอยู่ขวาสุดของแต่ละ Session และรองรับหลายคนในแถวเดียว */
@@ -6527,7 +6528,7 @@ the timeline drops them under the ship once the walls have retreated. */
     --bt-sponsor-sm-width: 90px;
     --bt-sponsor-sm-ratio: 90 / 62;
     --bt-sponsor-sm-columns: 6;
-    --bt-sponsor-frame-bg: var(--color-neutral-100);
+    --bt-sponsor-frame-bg: #e6e6e6;
 
     padding: var(--section-padding-y) 0;
     color: var(--color-text-primary);
@@ -6664,7 +6665,7 @@ the timeline drops them under the ship once the walls have retreated. */
 .site-footer {
     padding: var(--section-padding-y-sm) 0 var(--space-12);
     color: var(--bt-footer-ink);
-    background: var(--color-neutral-0);
+    background: var(--color-surface-page);
     font-family: var(--font-family-base);
 
     .site-footer__container {
@@ -7531,6 +7532,12 @@ the timeline drops them under the ship once the walls have retreated. */
     --bt-playbook-step-3-color: #a91cff;
     --bt-playbook-shadow-soft: 0 var(--border-width-2) calc(var(--space-4) + var(--border-width-2)) var(--alpha-ink-34);
     --bt-playbook-shadow-strong: 0 var(--border-width-2) calc(var(--space-3) + var(--border-width-2)) color-mix(in srgb, var(--color-neutral-900) 58%, transparent);
+    --bt-playbook-glow-breathe-duration: var(--duration-ambient);
+    --bt-playbook-glow-ease: var(--ease-ambient);
+    --bt-playbook-glow-base-opacity-low: 0.5;
+    --bt-playbook-glow-base-opacity-high: 1;
+    --bt-playbook-glow-base-brightness-low: 1.08;
+    --bt-playbook-glow-base-brightness-high: 2;
     position: relative;
     display: grid;
     overflow: visible;
@@ -7666,6 +7673,7 @@ the timeline drops them under the ship once the walls have retreated. */
     }
 
     .playbook__scene {
+        position: relative;
         z-index: 3;
         align-self: start;
         width: 100%;
@@ -7675,7 +7683,45 @@ the timeline drops them under the ship once the walls have retreated. */
         pointer-events: none;
     }
 
+    .playbook__glow {
+        position: absolute;
+        top: var(--space-0);
+        left: 50%;
+        z-index: 0;
+        height: 100%;
+        opacity: 0;
+        transform: translateX(-50%);
+        mix-blend-mode: screen;
+        pointer-events: none;
+    }
+
+    .playbook__glow-image {
+        width: var(--bt-playbook-artboard-width);
+        max-width: none;
+        height: auto;
+        display: block;
+        margin-inline: auto;
+        will-change: opacity, filter;
+    }
+
+    .playbook__glow--base .playbook__glow-image {
+        animation: playbook-glow-breathe var(--bt-playbook-glow-breathe-duration) var(--bt-playbook-glow-ease) infinite;
+        animation-play-state: paused;
+    }
+
+    .playbook__glow--base {
+        opacity: 1;
+    }
+
+    &.playbook--glow-running {
+        .playbook__glow--base .playbook__glow-image {
+            animation-play-state: running;
+        }
+    }
+
     .playbook__book {
+        position: relative;
+        z-index: 1;
         width: var(--bt-playbook-artboard-width);
         max-width: none;
         height: auto;
@@ -7905,6 +7951,11 @@ the timeline drops them under the ship once the walls have retreated. */
             height: 100%;
         }
 
+        .playbook__glow-image {
+            object-fit: cover;
+            height: 100%;
+        }
+
         .playbook__assets-artboard {
             height: 100%;
         }
@@ -8017,6 +8068,25 @@ the timeline drops them under the ship once the walls have retreated. */
             background-position: 100% 50%;
         }
 
+        .playbook__glow--base .playbook__glow-image {
+            animation: none;
+            opacity: var(--bt-playbook-glow-base-opacity-low);
+            filter: brightness(var(--bt-playbook-glow-base-brightness-low));
+        }
+
+    }
+}
+
+@keyframes playbook-glow-breathe {
+    0%,
+    100% {
+        opacity: var(--bt-playbook-glow-base-opacity-low);
+        filter: brightness(var(--bt-playbook-glow-base-brightness-low));
+    }
+
+    50% {
+        opacity: var(--bt-playbook-glow-base-opacity-high);
+        filter: brightness(var(--bt-playbook-glow-base-brightness-high));
     }
 }
 
