@@ -676,7 +676,10 @@ body.menu-closing .site-header.is-sticky.site-header--on-dark {
     font-size: var(--font-size-16);
     text-transform: uppercase;
     white-space: nowrap;
-    transition: color 180ms ease, text-shadow 180ms ease;
+    transition:
+        color 180ms ease,
+        opacity 180ms ease,
+        text-shadow 180ms ease;
 }
 
 .site-header__nav-label {
@@ -700,12 +703,14 @@ body.menu-closing .site-header.is-sticky.site-header--on-dark {
     transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.site-header__nav a:hover,
+.site-header__nav a:hover {
+    opacity: 0.64;
+}
+
 .site-header__nav a:focus-visible {
     color: var(--bt-header-nav-ink-hover);
 }
 
-.site-header--on-dark .site-header__nav a:hover,
 .site-header--on-dark .site-header__nav a:focus-visible {
     color: var(--bt-header-nav-ink-on-dark-hover);
 }
@@ -1954,8 +1959,9 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 .concept__video-scroll {
+    max-width: 88vw;
     min-height: unset;
-    margin-top: var(--space-12);
+    margin-top: var(--space-8);
     position: relative;
     z-index: 1;
     opacity: 1;
@@ -1977,6 +1983,10 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 @media (max-width:1199px) {
+    .concept__video-scroll {
+        max-width: 100%;
+    }
+
     .concept__description {
         text-wrap: unset;
     }
@@ -2002,8 +2012,11 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 .concept__video-frame {
-    width: min(100%, calc((100vh - var(--header-height) - var(--space-24)) * 16 / 9));
+    position: relative;
+    width: 100%;
     aspect-ratio: 16 / 9;
+    display: grid;
+    place-items: center;
     padding: 0;
     border: 0;
     border-radius: var(--card-radius);
@@ -2013,10 +2026,23 @@ the timeline drops them under the ship once the walls have retreated. */
     will-change: transform;
 }
 
-.concept__video-media {
-    position: relative;
+.concept__video-frame-art {
+    position: absolute;
+    z-index: 3;
+    inset: 0;
     width: 100%;
     height: 100%;
+    display: block;
+    object-fit: contain;
+    pointer-events: none;
+    user-select: none;
+}
+
+.concept__video-media {
+    position: relative;
+    width: 82.5%;
+    height: auto;
+    aspect-ratio: 16 / 9;
     overflow: hidden;
     border-radius: var(--radius-1);
     background: var(--color-surface-inverse);
@@ -2046,24 +2072,63 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 .concept__video-play {
+    --bt-concept-video-play-ring-color: color-mix(in srgb, var(--color-surface-page) 72%, transparent);
+
     position: absolute;
     top: 50%;
     left: 50%;
     width: clamp(var(--space-12), 7vw, calc(var(--space-24) - var(--space-1)));
     aspect-ratio: 1;
-    display: grid;
-    place-items: center;
     border-radius: 50%;
-    background: linear-gradient(180deg, #9b9b9b 0%, #191a1d 100%);
-    box-shadow:
-        0 0 0 var(--space-2) color-mix(in srgb, var(--color-surface-page) 72%, transparent),
-        inset 0 var(--border-width-1) color-mix(in srgb, var(--color-neutral-0) 26%, transparent),
-        0 14px 28px color-mix(in srgb, var(--color-neutral-900) 34%, transparent);
     transform: translate(-50%, -50%);
     filter: brightness(1);
+    isolation: isolate;
     transition:
         filter var(--duration-fast) var(--ease-standard),
         transform var(--duration-fast) var(--ease-standard);
+}
+
+.concept__video-play::before,
+.concept__video-play::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    background: var(--bt-concept-video-play-ring-color);
+    pointer-events: none;
+    animation: concept-video-play-pulse 1.8s ease-out infinite;
+}
+
+.concept__video-play::after {
+    animation-delay: 0.9s;
+}
+
+.concept__video-play-surface {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    border-radius: inherit;
+    background: linear-gradient(180deg, #9b9b9b 0%, #191a1d 100%);
+    box-shadow:
+        0 0 0 var(--space-1) var(--bt-concept-video-play-ring-color),
+        inset 0 var(--border-width-1) color-mix(in srgb, var(--color-neutral-0) 26%, transparent),
+        0 14px 28px color-mix(in srgb, var(--color-neutral-900) 34%, transparent);
+}
+
+@keyframes concept-video-play-pulse {
+    0% {
+        opacity: 0.7;
+        transform: scale(1);
+    }
+
+    75%,
+    100% {
+        opacity: 0;
+        transform: scale(1.45);
+    }
 }
 
 .concept__video-play .bt-icon {
@@ -2165,6 +2230,11 @@ the timeline drops them under the ship once the walls have retreated. */
 
 @media (prefers-reduced-motion: reduce) {
     .concept__aurora::after {
+        animation: none;
+    }
+
+    .concept__video-play::before,
+    .concept__video-play::after {
         animation: none;
     }
 }
@@ -6519,7 +6589,7 @@ the timeline drops them under the ship once the walls have retreated. */
     --bt-sponsor-sm-width: 90px;
     --bt-sponsor-sm-ratio: 90 / 62;
     --bt-sponsor-sm-columns: 6;
-    --bt-sponsor-frame-bg: #e6e6e6;
+    --bt-sponsor-frame-bg: #eaeaea;
 
     padding: var(--section-padding-y) 0;
     color: var(--color-text-primary);
@@ -6738,14 +6808,16 @@ the timeline drops them under the ship once the walls have retreated. */
             align-items: center;
             color: var(--bt-footer-ink);
             text-decoration: none;
-            transition: color var(--duration-base) var(--ease-standard);
+            transition:
+                color var(--duration-base) var(--ease-standard),
+                opacity var(--duration-base) var(--ease-standard);
 
-            &:hover,
-            &:focus-visible {
-                color: var(--color-category-cyan);
+            &:hover {
+                opacity: 0.64;
             }
 
             &:focus-visible {
+                color: var(--color-category-cyan);
                 outline: var(--border-width-2) solid var(--color-category-cyan);
                 outline-offset: var(--space-1);
             }
@@ -6814,14 +6886,16 @@ the timeline drops them under the ship once the walls have retreated. */
             font-weight: var(--font-weight-light);
             white-space: nowrap;
             text-decoration: none;
-            transition: color var(--duration-base) var(--ease-standard);
+            transition:
+                color var(--duration-base) var(--ease-standard),
+                opacity var(--duration-base) var(--ease-standard);
 
-            &:hover,
-            &:focus-visible {
-                color: var(--color-category-cyan);
+            &:hover {
+                opacity: 0.64;
             }
 
             &:focus-visible {
+                color: var(--color-category-cyan);
                 outline: var(--border-width-2) solid var(--color-category-cyan);
                 outline-offset: var(--space-1);
             }
@@ -6869,6 +6943,9 @@ the timeline drops them under the ship once the walls have retreated. */
     @media (max-width: 991px) {
         .site-footer__panel {
             padding: var(--space-6) var(--space-8);
+            background:
+                radial-gradient(circle at 30% 0%, color-mix(in srgb, var(--bt-footer-ink) 28%, transparent), transparent 48%),
+                var(--color-surface-inverse);
         }
 
         .site-footer__container {
