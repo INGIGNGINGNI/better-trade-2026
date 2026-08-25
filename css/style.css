@@ -4236,8 +4236,8 @@ body.is-loading .hero-scroll-cue,
         place-items: center;
         isolation: isolate;
         overflow: visible;
-        border: 0;
-        border-radius: 0;
+        border: var(--rule-width-subtle) solid var(--color-border-faint);
+        border-radius: var(--radius-1);
         background: var(--color-surface-paper);
 
         &+.agenda__speaker-frame {
