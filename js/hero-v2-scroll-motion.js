@@ -182,8 +182,8 @@
         const stageHeightVH = aspect => aspect >= 1.2 ? 1.40 : 1.15;
 
         const KEYS = ['title', 'triangle', 'bitcoin', 'gold', 'heart', 'card', 'stock'];
-        const HERO_ASSET_MOTION_KEYS = ['triangle', 'bitcoin', 'gold', 'heart', 'card', 'stock'];
-        const HERO_ASSET_MOVE_START = 0.118;
+        const HERO_ASSET_MOTION_KEYS = ['triangle', 'bitcoin', 'gold', 'stock', 'heart', 'card'];
+        const HERO_ASSET_MOVE_START = 0.20;
         const HERO_ASSET_MOVE_DURATION = 0.52;
         const HERO_ASSET_MOVE_STAGGER = 0.045;
         const HERO_ASSET_MOVE_END = HERO_ASSET_MOVE_START
@@ -1091,8 +1091,9 @@
                 0.10
             );
 
-            // Keep the icons scroll-driven, but give each one a Playbook-like fast launch
-            // and long, soft landing. The wider stagger makes their arrivals readable.
+            // Keep the motion scroll-driven, but use Playbook's quick launch, long landing
+            // and stagger-to-duration ratio. Starting later and travelling longer keeps
+            // every discrete depth handoff ahead of the asset's first contact with the ship.
             HERO_ASSET_MOTION_KEYS.forEach((k, i) => {
                 const a = M.assets[k];
                 scrollTL.fromTo(el[k],
@@ -1204,12 +1205,11 @@
                 // uncovers a strip of sky at the left or right edge of the screen.
                 .to(el.wallLeft, { x: 0, scaleX: M.wallSealScale, duration: 0.34, ease: 'power2.inOut' }, M.wallCloseAt)
                 .to(el.wallRight, { x: 0, scaleX: M.wallSealScale, duration: 0.34, ease: 'power2.inOut' }, M.wallCloseAt)
-                // Triangle crosses the ship earlier than the other assets, so it changes
-                // depth just before their bounds meet. The remaining assets keep the
-                // original switch point after the walls have mostly retreated.
+                // These switches happen before the relevant icon reaches the hull. The
+                // delayed, longer Playbook-like move leaves no overlapping pixels at the
+                // handoff, so each icon subsequently travels behind the ship naturally.
                 .set('#a-triangle', { zIndex: 5 }, 0.34)
                 .set(['#a-bitcoin', '#a-gold', '#a-card'], { zIndex: 5 }, 0.41)
-
                 // --- then the ground arrives: stairs first, runners one at a time --------
                 .fromTo(el.stairs, { y: 90, opacity: 0 },
                     { y: 0, opacity: 1, duration: 0.14, ease: 'power2.out' }, 0.47)
@@ -1367,7 +1367,6 @@
                 clearProps: 'transform',
                 opacity: 1,
             });
-
             KEYS.forEach(k => {
                 gsap.set(el[k], {
                     x: 0,

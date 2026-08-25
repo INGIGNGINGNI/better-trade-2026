@@ -1625,9 +1625,8 @@ body.is-loading .hero-scroll-cue,
     /* filter: drop-shadow(0 12px 20px rgba(20, 40, 90, 0.30)); */
 }
 
-/* These end up tucked behind the ship. They start above the wall overlay,
-because they cross it while migrating in and would otherwise blink out;
-the timeline drops them under the ship once the walls have retreated. */
+/* These begin above the wall plane. The timeline moves them behind the ship before
+   their bounds make contact, matching the reference motion without a visible snap. */
 #a-triangle,
 #a-bitcoin,
 #a-gold,
@@ -1959,7 +1958,6 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 .concept__video-scroll {
-    max-width: 88vw;
     min-height: unset;
     margin-top: var(--space-8);
     position: relative;
@@ -1983,10 +1981,6 @@ the timeline drops them under the ship once the walls have retreated. */
 }
 
 @media (max-width:1199px) {
-    .concept__video-scroll {
-        max-width: 100%;
-    }
-
     .concept__description {
         text-wrap: unset;
     }
@@ -2013,7 +2007,7 @@ the timeline drops them under the ship once the walls have retreated. */
 
 .concept__video-frame {
     position: relative;
-    width: 100%;
+    width: min(100%, calc((100vh - var(--header-height) - var(--space-24)) * 16 / 9));
     aspect-ratio: 16 / 9;
     display: grid;
     place-items: center;
@@ -2183,12 +2177,8 @@ the timeline drops them under the ship once the walls have retreated. */
         --bt-concept-bg-opacity: 0.55;
     }
 
-    .concept__inner {
-        padding-bottom: var(--space-4);
-    }
-
     .concept__video-scroll {
-        min-height: 100vh;
+        margin-top: var(--space-6);
     }
 
     .concept__video-frame {
@@ -2225,6 +2215,12 @@ the timeline drops them under the ship once the walls have retreated. */
         min-height: unset;
         position: relative;
         top: auto;
+    }
+}
+
+@media (max-width: 575px) {
+    .concept__inner {
+        gap: var(--space-3);
     }
 }
 
