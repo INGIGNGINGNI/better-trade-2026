@@ -8,6 +8,8 @@
         '.ticket__formats',
         '.ticket__benefits h3',
         '.ticket__benefits-list li',
+        '.playbook__header h2',
+        '.playbook__header p',
         '.playbook__step',
         '.playbook__action',
         '[data-reveal]',
@@ -47,6 +49,13 @@
             target.style.setProperty('--reveal-delay', '120ms');
         } else if (target.classList.contains('concept__description') || target.matches('.topics-showcase__header p')) {
             target.style.setProperty('--reveal-delay', '160ms');
+        } else if (target.matches('.playbook__header p')) {
+            target.style.setProperty('--reveal-delay', '160ms');
+        }
+
+        if (target.classList.contains('playbook__action')) {
+            target.setAttribute('data-reveal', 'fade');
+            target.style.setProperty('--reveal-y', '0px');
         }
 
         observer.observe(target);
@@ -69,5 +78,5 @@
     setDelay('.ticket__benefits h3', () => 0);
     setDelay('.ticket__benefits-list li', (_, index) => 100 + index * 80);
     setDelay('.playbook__step', (_, index) => index * 120);
-    setDelay('.playbook__action', () => 420);
+    setDelay('.playbook__action', () => 300);
 })();

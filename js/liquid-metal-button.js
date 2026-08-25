@@ -98,6 +98,8 @@ function measureLabel(text, fontSize, fontWeight, fontFamily) {
  * @param {number}   [opts.metalShiftRed]  Red-channel dispersion in the metal
  *                                    shader; lower reads as less "chrome".
  * @param {number}   [opts.metalShiftBlue] Same, blue channel.
+ * @param {string}   [opts.href]     Optional link destination. When omitted,
+ *                                   the action renders as a button.
  * @param {Function} [opts.onClick]
  * @returns {{ el: HTMLElement, destroy: Function }}
  */
@@ -119,6 +121,7 @@ export function createLiquidMetalButton(opts = {}) {
         rim = 8,
         metalShiftRed = 0.3,
         metalShiftBlue = 0.3,
+        href,
         onClick,
     } = opts;
 
@@ -205,8 +208,14 @@ export function createLiquidMetalButton(opts = {}) {
     shaderLayer.appendChild(shaderFrame);
 
     // --- z40: the real button (transparent hit area + ripples) -----------------
-    const btn = document.createElement('button');
-    btn.type = 'button';
+    const btn = document.createElement(href ? 'a' : 'button');
+
+    if (href) {
+        btn.href = href;
+    } else {
+        btn.type = 'button';
+    }
+
     btn.setAttribute('aria-label', label);
     btn.style.cssText =
         layerBase(40, 25) +

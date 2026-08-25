@@ -653,6 +653,7 @@ body.menu-closing .site-header.is-sticky.site-header--on-dark {
     display: none;
     position: absolute;
     inset: 0;
+    pointer-events: none;
 }
 
 .site-header--hero-sky .site-header__nav-sky-sensor {
@@ -1328,7 +1329,7 @@ body.menu-open .site-header__backdrop {
 #bg {
     position: absolute;
     overflow: hidden;
-    background-color: #9ccbf6;
+    background-color: var(--color-neutral-950);
     background-image: url('../images/sky-new-old2.webp');
     background-size: contain;
     background-repeat: no-repeat;
@@ -1348,6 +1349,15 @@ body.menu-open .site-header__backdrop {
     filter: saturate(1.08) contrast(1.025) brightness(1.015);
     transition: opacity 480ms ease;
     will-change: opacity, transform;
+}
+
+/* Width-driven height:auto preserves the intended crop on regular viewports. When the
+   viewport is taller than that rendered video height, layout() enables this fallback so
+   the moving sky continues to cover the full background instead of exposing a gap below. */
+#bg.is-tall-video-cover #sky-video {
+    height: 100%;
+    object-fit: cover;
+    object-position: 40% top;
 }
 
 #bg.is-video-ready #sky-video {
@@ -3650,7 +3660,7 @@ the timeline drops them under the ship once the walls have retreated. */
        จะโผล่ไปโดนแถบแท็บบัง */
     .agenda__day-panel {
         scroll-margin-top: calc(var(--agenda-sticky-top) + var(--agenda-day-panel-header-height) + var(--touch-target-md) + var(--rule-width-subtle));
-        background: var(--color-neutral-25);
+        background: var(--color-neutral-50);
         border-radius: var(--radius-1);
     }
 
@@ -4342,6 +4352,7 @@ the timeline drops them under the ship once the walls have retreated. */
 
     .agenda__tag {
         --agenda-tag-color: var(--color-blue-400);
+        --agenda-tag-border-color: var(--color-blue-200);
         --agenda-tag-background: var(--color-blue-100);
 
         min-width: var(--space-12);
@@ -4351,6 +4362,7 @@ the timeline drops them under the ship once the walls have retreated. */
         justify-content: center;
         align-items: center;
         border-radius: var(--pill-radius);
+        border: var(--rule-width-subtle) solid var(--agenda-tag-border-color);
         font-size: var(--section-tag-size);
         font-weight: var(--font-weight-regular);
         line-height: var(--section-body-line-height);
@@ -5463,7 +5475,7 @@ the timeline drops them under the ship once the walls have retreated. */
         column-gap: var(--space-3);
         overflow: hidden;
         padding: var(--space-6) var(--space-6) var(--space-16);
-        background: var(--color-surface-raised);
+        background: var(--color-surface-paper);
     }
 
     #agenda .agenda__day-switcher-inner::before,
@@ -5613,7 +5625,7 @@ the timeline drops them under the ship once the walls have retreated. */
 
 .speaker__panel {
     padding: var(--space-8);
-    background: var(--color-neutral-25);
+    background: var(--color-neutral-50);
     border-radius: var(--radius-1);
 }
 
@@ -5623,7 +5635,7 @@ the timeline drops them under the ship once the walls have retreated. */
 .moderator__grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     padding: var(--space-8);
-    background: var(--color-neutral-25);
+    background: var(--color-neutral-50);
     border-radius: var(--radius-1);
 }
 
@@ -5805,26 +5817,17 @@ the timeline drops them under the ship once the walls have retreated. */
 .speaker-card h3 {
     margin: 0;
     font-size: var(--section-body-size);
-    font-weight: var(--font-weight-regular);
+    font-weight: var(--font-weight-medium);
     line-height: var(--space-6);
     letter-spacing: 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
 }
 
 .speaker-card p {
     margin: var(--space-1) 0 0;
     color: var(--color-text-muted);
-    font-size: var(--section-small-size);
+    font-size: var(--section-body-size);
     font-weight: var(--font-weight-light);
-    line-height: var(--section-small-line-height);
-    min-height: calc(var(--section-body-line-height) * 2);
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    line-height: var(--section-body-line-height);
 }
 
 /* ต่ำกว่า 1200px การ์ดไหลตามกริดปกติ เพดาน 260px กันไม่ให้ใบเดียวยืดจนเสียสัดส่วน */
@@ -6192,7 +6195,7 @@ the timeline drops them under the ship once the walls have retreated. */
     --bt-expectation-title-size: var(--section-title-size);
     --bt-expectation-stat-size: var(--section-title-size);
     --bt-expectation-stat-line-height: var(--section-title-line-height);
-    --bt-expectation-bg: var(--color-neutral-25);
+    --bt-expectation-bg: var(--color-neutral-50);
 
     /* ความยาวของเส้นคั่นระหว่างช่อง (ดู .expectation__stat::before)
        เพดานอยู่ที่ ~150px เพราะเนื้อหาสูง 103px และช่องไฟระหว่างสองแถวมี 48px
@@ -6461,29 +6464,17 @@ the timeline drops them under the ship once the walls have retreated. */
                 transform var(--bt-floor-plan-callout-duration) var(--ease-standard);
         }
 
-        /* เริ่ม callout หลังภาพฐานตั้งตัว แล้วเว้นจังหวะแต่ละชิ้นให้สายตาตามทัน */
-        .floor-plan__callout--conference .floor-plan__callout-line {
+        /* Callouts reveal by layer: every line, then every star, then every label. */
+        .floor-plan__callout-line {
             transition-delay: var(--bt-floor-plan-callout-start-delay);
         }
 
-        .floor-plan__callout--conference .floor-plan__callout-mark,
-        .floor-plan__callout--pavilions .floor-plan__callout-line {
+        .floor-plan__callout-mark {
             transition-delay: calc(var(--bt-floor-plan-callout-start-delay) + var(--bt-floor-plan-callout-step-delay));
         }
 
-        .floor-plan__callout--conference .floor-plan__callout-label,
-        .floor-plan__callout--pavilions .floor-plan__callout-mark,
-        .floor-plan__callout--experience .floor-plan__callout-line {
+        .floor-plan__callout-label {
             transition-delay: calc(var(--bt-floor-plan-callout-start-delay) + var(--bt-floor-plan-callout-step-delay) + var(--bt-floor-plan-callout-step-delay));
-        }
-
-        .floor-plan__callout--pavilions .floor-plan__callout-label,
-        .floor-plan__callout--experience .floor-plan__callout-mark {
-            transition-delay: calc(var(--bt-floor-plan-callout-start-delay) + var(--bt-floor-plan-callout-step-delay) + var(--bt-floor-plan-callout-step-delay) + var(--bt-floor-plan-callout-step-delay));
-        }
-
-        .floor-plan__callout--experience .floor-plan__callout-label {
-            transition-delay: calc(var(--bt-floor-plan-callout-start-delay) + var(--bt-floor-plan-callout-step-delay) + var(--bt-floor-plan-callout-step-delay) + var(--bt-floor-plan-callout-step-delay) + var(--bt-floor-plan-callout-step-delay));
         }
     }
 

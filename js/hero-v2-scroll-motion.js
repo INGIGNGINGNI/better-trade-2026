@@ -68,6 +68,9 @@
 
         const WALL_DEPTH = 0.72;
         const SKY_DEPTH = { scaleFrom: 1.015, scaleTo: 1.035, liftPercent: -0.4 };
+        // Intrinsic dimensions of sky-video-v3.mp4. Used only to detect when width-driven
+        // height:auto can no longer cover the viewport and the tall-screen fallback is needed.
+        const SKY_VIDEO_RATIO = 3364 / 2464;
         const SHIP_RUN = {
             duration: 4.037367,
             fps: 30000 / 1001,
@@ -883,6 +886,8 @@
             el.bg.style.height = bgH + 'px';
             el.bg.style.left = ((vw - bgW) / 2) + 'px';
             el.bg.style.top = '0px';
+            const skyVideoAutoHeight = bgW / SKY_VIDEO_RATIO;
+            el.bg.classList.toggle('is-tall-video-cover', vh > skyVideoAutoHeight + 1);
             const PANBG = Math.min(PAN * (bgH / SH), Math.max(0, bgH - vh));
 
             // Scroll length = the pinned view + beat 1 + however far beat 2 actually moves,

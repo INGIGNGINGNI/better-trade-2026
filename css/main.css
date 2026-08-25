@@ -15,8 +15,8 @@
 
     /* Primitive: color */
     --color-neutral-0: #ffffff;
-    --color-neutral-25: #f4f4f4;
-    --color-neutral-50: #f7f8f7;
+    --color-neutral-25: #fbfbfb;
+    --color-neutral-50: #f5f5f5;
     --color-neutral-100: #eef1f6;
     --color-neutral-200: #e4e8ee;
     --color-neutral-300: #c9d0d8;
@@ -220,7 +220,7 @@
     --color-text-inverse-muted: #aeb4bb;
 
     /* Semantic: surface */
-    --color-surface-page: var(--color-neutral-50);
+    --color-surface-page: var(--color-neutral-25);
     --color-surface-raised: var(--color-neutral-25);
     --color-surface-paper: var(--color-neutral-50);
     --color-surface-soft: var(--color-neutral-100);
@@ -415,7 +415,7 @@
     --bt-ticket-benefit-text-size: var(--font-size-16);
     --bt-ticket-benefit-text-color: var(--color-text-primary);
     --bt-ticket-benefit-text-weight: var(--font-weight-regular);
-    --bt-ticket-benefit-bg: var(--color-neutral-25);
+    --bt-ticket-benefit-bg: var(--color-neutral-50);
     --bt-ticket-benefit-radius: var(--radius-2);
     --bt-ticket-benefit-block-padding-y: var(--space-10);
     --bt-ticket-benefit-block-padding-y-sm: var(--space-8);

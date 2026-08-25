@@ -29,8 +29,8 @@ function goToRegistration() {
     }
 }
 
-function goToInvestorDna() {
-    document.getElementById('contact')?.scrollIntoView({ block: 'start' });
+function keepInvestorDnaPlaceholder(event) {
+    event.preventDefault();
 }
 
 function mountRegisterButton(target, appearance, onClick) {
@@ -95,9 +95,10 @@ ready.then(() => {
         playbookCtaButton = mountRegisterButton(playbookCtaSlot, {
             ...(nextCompact ? compactRegisterOptions : {}),
             label: 'ค้นหา INVESTOR DNA',
+            href: '#',
             textColor: '#111318',
             pillBackground: 'linear-gradient(180deg, #ffffff 0%, #f3f4f8 55%, #e4e7ee 100%)',
-        }, goToInvestorDna);
+        }, keepInvestorDnaPlaceholder);
     };
 
     mountHeroCta();
