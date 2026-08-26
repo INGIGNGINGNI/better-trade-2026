@@ -1959,7 +1959,7 @@ body.is-loading .hero-scroll-cue,
 
 .concept__video-scroll {
     min-height: unset;
-    margin-top: var(--space-8);
+    margin-top: var(--space-12);
     position: relative;
     z-index: 1;
     opacity: 1;
@@ -2178,7 +2178,7 @@ body.is-loading .hero-scroll-cue,
     }
 
     .concept__video-scroll {
-        margin-top: var(--space-6);
+        margin-top: var(--space-8);
     }
 
     .concept__video-frame {
@@ -2196,7 +2196,7 @@ body.is-loading .hero-scroll-cue,
 
     .concept__video-scroll {
         min-height: unset;
-        margin-top: var(--space-3);
+        margin-top: var(--space-6);
     }
 
     .concept__video-perspective {
@@ -2271,7 +2271,6 @@ body.is-loading .hero-scroll-cue,
     line-height: var(--section-title-line-height);
     letter-spacing: var(--section-title-tracking);
     text-wrap-style: balance;
-    text-transform: uppercase;
 }
 
 .topics-showcase__header p {
@@ -2840,7 +2839,7 @@ body.is-loading .hero-scroll-cue,
     .ticket__plan--ultimate {
         padding-top: var(--space-8);
         z-index: 1;
-        /* ใบนี้ใบเดียวเปลี่ยนเป็นกรอบไล่สเปกตรัมรอบครบ 4 ด้าน (ใบอื่นยังเป็นการ์ดแบบ
+        /* ใบนี้ใบเดียวเปลี่ยนเป็นกรอบสีน้ำเงินรอบครบ 4 ด้าน (ใบอื่นยังเป็นการ์ดแบบ
            editorial ไม่มีกรอบสีตามเดิม) เพื่อดันให้ใบ Ultimate เด่นเป็น "แนะนำที่สุด"
            ต้องระบุ border-style เองเพราะ .ticket__plan ฐานตั้ง border เป็น none ไว้
            (style: none ทำให้ width ที่ตั้งไว้ตรงนี้กลายเป็น 0 เสมอไม่ว่าจะใส่ค่าอะไร)
@@ -2848,7 +2847,7 @@ body.is-loading .hero-scroll-cue,
            hidden ไว้ตัดมุมของแถบริบบอน (.ticket__plan-ribbon) กับแสง glow (::before)
            ให้โค้งตามมุมการ์ดพอดี ไม่โผล่เหลี่ยมออกมานอกกรอบโค้ง */
         border-style: solid;
-        border-width: var(--border-width-6);
+        border-width: var(--border-width-2);
         border-color: transparent;
         overflow: hidden;
         /* ทินต์เดิมเคยทึบ 100% (mix กับสีทึบ ไม่ใช่ transparent) พอจะใส่รูป ultimate-bg.webp
@@ -2857,8 +2856,8 @@ body.is-loading .hero-scroll-cue,
            ไล่สเปกตรัม (border-box) ยังคงล้อมกรอบอยู่ด้านนอกตามเดิม */
         background:
             linear-gradient(color-mix(in srgb, #ffffff 72%, transparent), color-mix(in srgb, var(--color-surface-page) 64%, transparent)) padding-box,
-           url('../images/ultimate-bg.webp') center / cover no-repeat padding-box,
-            var(--spectrum) border-box;
+            url('../images/ultimate-bg.webp') center / cover no-repeat padding-box,
+            var(--color-accent-primary) border-box;
         transition: all var(--duration-standard) var(--ease-standard);
         /* box-shadow:
             0 18px 48px rgba(17, 19, 24, 0.10),
@@ -2880,7 +2879,7 @@ body.is-loading .hero-scroll-cue,
             background:
                 linear-gradient(color-mix(in srgb, #ffffff 64%, transparent), color-mix(in srgb, var(--color-surface-page) 56%, transparent)) padding-box,
                 url('../images/ultimate-bg.webp') center / cover no-repeat padding-box,
-                var(--spectrum) border-box;
+                var(--color-accent-primary) border-box;
         }
     }
 
@@ -2895,10 +2894,10 @@ body.is-loading .hero-scroll-cue,
         gap: var(--space-2);
         margin: calc(var(--space-8) * -1) calc(var(--space-8) * -1) var(--space-6);
         padding: var(--space-3) var(--space-4);
-        border-radius: calc(var(--card-radius) - var(--border-width-6)) calc(var(--card-radius) - var(--border-width-6)) 0 0;
-        background: var(--spectrum);
+        border-radius: calc(var(--card-radius) - var(--border-width-2)) calc(var(--card-radius) - var(--border-width-2)) 0 0;
+        background: var(--color-accent-primary);
         color: var(--color-text-inverse);
-        font-size: var(--section-small-size);
+        font-size: var(--font-size-18);
         font-weight: var(--font-weight-medium);
         letter-spacing: 0.02em;
     }
@@ -2914,12 +2913,12 @@ body.is-loading .hero-scroll-cue,
         height: 44px;
         margin-bottom: var(--space-4);
         object-fit: contain;
+        filter: saturate(1.5);
     }
 
     .ticket__plan-icon--ultimate {
         width: 80px;
         height: 80px;
-        filter: saturate(1.5);
     }
 
     .ticket__plan-header h3 {
@@ -2946,6 +2945,47 @@ body.is-loading .hero-scroll-cue,
         grid-template-columns: repeat(2, minmax(0, 1fr));
         border-top: var(--rule-width-subtle) solid var(--color-border-editorial);
         border-bottom: var(--rule-width-subtle) solid var(--color-border-editorial);
+    }
+
+    .ticket__prices--coming-soon {
+        position: relative;
+        align-items: center;
+        text-align: center;
+    }
+
+    .ticket__price--placeholder {
+        visibility: hidden;
+        pointer-events: none;
+        user-select: none;
+    }
+
+    .ticket__coming-soon {
+        margin: 0;
+        min-width: 0;
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: grid;
+        place-content: center;
+        gap: var(--space-1);
+        color: var(--color-text-muted);
+
+        strong {
+            color: var(--color-text-primary);
+            font-size: var(--font-size-28);
+            font-weight: var(--font-weight-regular);
+            line-height: var(--section-subheading-line-height);
+            letter-spacing: 0;
+        }
+
+        span {
+            color: var(--color-text-muted);
+            font-size: var(--font-size-14);
+            font-weight: var(--font-weight-regular);
+            line-height: var(--section-small-line-height);
+            letter-spacing: 0;
+            text-align: center;
+        }
     }
 
     .ticket__price {
@@ -3037,9 +3077,11 @@ body.is-loading .hero-scroll-cue,
 
             /* Playbook เป็นสิทธิ์เด่นเฉพาะของ Better Trade (ปุ่ม Investor DNA ก็พาไปหา
                section นี้โดยตรง) เลยแยกแถวนี้ด้วยพื้นหลังโทนอ่อนของสีหมวดตัวเอง แค่พอ
-               สังเกตออกว่าต่างจากแถวอื่น ไม่ใช้สีเข้มจนกลายเป็นจุดเด่นเกินจริง */
-            &:last-child {
-                /* margin-top: var(--space-1); */
+               สังเกตออกว่าต่างจากแถวอื่น ไม่ใช้สีเข้มจนกลายเป็นจุดเด่นเกินจริง
+               ชี้เป้าด้วย :has(...--playbook) ตรง ๆ แทน :last-child เพราะการ์ดที่ไม่มีแถว
+               Playbook (Explorer, Master Class) จะมี Master Class เป็นแถวสุดท้ายแทน ทำให้
+               ได้พื้นหลังนี้ไปผิด ๆ */
+            &:has(.ticket__access-label--playbook) {
                 border-top: 0;
                 background: color-mix(in srgb, var(--bt-ticket-playbook) 10%, transparent);
             }
@@ -3059,7 +3101,7 @@ body.is-loading .hero-scroll-cue,
         min-width: 0;
         display: inline-flex;
         align-items: center;
-        gap: var(--space-2);
+        gap: var(--space-3);
 
         >.bt-icon {
             flex: 0 0 auto;
@@ -3067,38 +3109,15 @@ body.is-loading .hero-scroll-cue,
             height: var(--bt-ticket-access-icon-size);
             display: grid;
             place-items: center;
-            padding: var(--space-1);
+            color: var(--color-blue-500);
             border-radius: var(--radius-1);
-            background: color-mix(in srgb, currentColor 16%, var(--color-surface-page));
+            /* background: var(--color-blue-100); */
+            /* border: 1px solid var(--color-blue-200); */
             stroke-width: 1.75;
         }
 
         >span:last-child {
             color: var(--color-text-primary);
-        }
-
-        &.ticket__access-label--conference>.bt-icon {
-            color: var(--bt-ticket-conference);
-        }
-
-        &.ticket__access-label--experience>.bt-icon {
-            color: var(--bt-ticket-experience);
-        }
-
-        &.ticket__access-label--pavilions>.bt-icon {
-            color: var(--bt-ticket-pavilions);
-        }
-
-        &.ticket__access-label--workshop>.bt-icon {
-            color: var(--bt-ticket-workshop);
-        }
-
-        &.ticket__access-label--private-class>.bt-icon {
-            color: var(--bt-ticket-private-class);
-        }
-
-        &.ticket__access-label--playbook>.bt-icon {
-            color: var(--bt-ticket-playbook);
         }
     }
 
@@ -3116,7 +3135,8 @@ body.is-loading .hero-scroll-cue,
         }
 
         &.ticket__status--included {
-            color: var(--color-accent-primary);
+            color: var(--color-text-primary);
+            /* color: var(--color-accent-primary); */
         }
 
         &.ticket__status--soon {
@@ -3246,7 +3266,7 @@ body.is-loading .hero-scroll-cue,
         min-width: 0;
         display: flex;
         align-items: center;
-        gap: var(--space-4);
+        gap: var(--space-3);
 
         >.bt-icon {
             display: grid;
@@ -3254,15 +3274,15 @@ body.is-loading .hero-scroll-cue,
             flex: 0 0 auto;
             width: var(--bt-ticket-format-icon-size);
             height: var(--bt-ticket-format-icon-size);
-            padding: var(--space-1);
+            color: var(--color-blue-500);
             border-radius: var(--radius-1);
-            background: color-mix(in srgb, currentColor 16%, var(--color-surface-page));
+            /* background: var(--color-blue-100); */
+            /* border: 1px solid var(--color-blue-200); */
             stroke-width: 1.75;
         }
 
         .ticket__format-copy {
             min-width: 0;
-            padding-top: var(--space-1);
             font-size: var(--font-size-14);
             line-height: var(--section-body-line-height);
 
@@ -3292,29 +3312,6 @@ body.is-loading .hero-scroll-cue,
             }
         }
 
-        &.ticket__format--conference>.bt-icon {
-            color: var(--bt-ticket-conference);
-        }
-
-        &.ticket__format--experience>.bt-icon {
-            color: var(--bt-ticket-experience);
-        }
-
-        &.ticket__format--pavilions>.bt-icon {
-            color: var(--bt-ticket-pavilions);
-        }
-
-        &.ticket__format--workshop>.bt-icon {
-            color: var(--bt-ticket-workshop);
-        }
-
-        &.ticket__format--private-class>.bt-icon {
-            color: var(--bt-ticket-private-class);
-        }
-
-        &.ticket__format--playbook>.bt-icon {
-            color: var(--bt-ticket-playbook);
-        }
     }
 
     @media (max-width:1399px) {
@@ -5525,6 +5522,16 @@ body.is-loading .hero-scroll-cue,
             width: min(100%, 320px);
         }
     }
+
+    @media (max-width: 395px) {
+        .speaker__section-header {
+            .bt-title-highlight {
+                &.has-ps {
+                    padding-left: var(--space-0);
+                }
+            }
+        }
+    }
 }
 
 
@@ -5762,13 +5769,23 @@ body.is-loading .hero-scroll-cue,
     .speaker__panel {
         margin-top: var(--space-6);
         padding: var(--space-4);
-        gap: var(--space-12) var(--space-4);
+        gap: var(--space-8) var(--space-4);
     }
 
     .moderator__grid {
         margin-top: var(--space-3);
         padding: var(--space-4);
         gap: var(--space-12) var(--space-4);
+    }
+}
+
+@media (max-width: 393px) {
+    .moderator__section-header {
+        .bt-title-highlight {
+            &.has-ps {
+                padding-left: var(--space-0);
+            }
+        }
     }
 }
 
@@ -5893,15 +5910,15 @@ body.is-loading .hero-scroll-cue,
 }
 
 .speaker-card h3 {
-    margin: 0;
+    margin: var(--space-0);
     font-size: var(--section-body-size);
     font-weight: var(--font-weight-medium);
-    line-height: var(--space-6);
+    line-height: var(--section-body-line-height);
     letter-spacing: 0;
 }
 
 .speaker-card p {
-    margin: var(--space-1) 0 0;
+    margin: var(--space-1) var(--space-0) var(--space-0);
     color: var(--color-text-muted);
     font-size: var(--section-body-size);
     font-weight: var(--font-weight-light);
@@ -5929,25 +5946,16 @@ body.is-loading .hero-scroll-cue,
     .speaker-card__meta {
         padding: var(--space-5) var(--space-2) 0;
     }
-
-    .speaker-card h3 {
-        -webkit-line-clamp: 2;
-        line-height: 28px;
-    }
-
-    .speaker-card p {
-        display: block;
-        min-height: 0;
-        overflow: visible;
-        -webkit-line-clamp: unset;
-        -webkit-box-orient: initial;
-        line-height: var(--section-body-line-height);
-    }
 }
 
 @media (max-width: 575px) {
+    .speaker-card h3 {
+        font-size: var(--font-size-14);
+        line-height: var(--section-small-line-height);
+    }
+    
     .speaker-card p {
-        margin: 2px;
+        font-size: var(--font-size-14);
         line-height: var(--section-small-line-height);
     }
 
@@ -6417,7 +6425,7 @@ body.is-loading .hero-scroll-cue,
    แสดงหัวข้อและภาพแผนผังบูทเต็มความกว้างของ Bootstrap container */
 .floor-plan {
     --bt-floor-plan-title-size: var(--section-title-size);
-    --bt-floor-plan-zone-label-size: var(--font-size-72);
+    --bt-floor-plan-zone-label-size: var(--font-size-36);
     --bt-floor-plan-line-width: var(--border-width-2);
     --bt-floor-plan-image-offset: var(--space-6);
     --bt-floor-plan-callout-offset: var(--space-2);
@@ -6569,7 +6577,7 @@ body.is-loading .hero-scroll-cue,
        จะเหลือที่ราว 16 ตัวอักษรต่อบรรทัด หัวข้อจึงตัดคำจนมีคำห้อยท้ายบรรทัดเดียวโดด ๆ */
     @media (max-width: 767px) {
         --bt-floor-plan-title-size: var(--section-heading-size);
-        --bt-floor-plan-zone-label-size: calc(var(--font-size-80) + var(--font-size-16));
+        --bt-floor-plan-zone-label-size: var(--font-size-48);
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -8154,6 +8162,7 @@ body.is-loading .hero-scroll-cue,
 }
 
 @keyframes playbook-glow-breathe {
+
     0%,
     100% {
         opacity: var(--bt-playbook-glow-base-opacity-low);

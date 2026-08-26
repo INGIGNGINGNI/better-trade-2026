@@ -78,7 +78,7 @@
             scrollDuration: 0.86,
             whiteoutDuration: 0.42,
             conceptRevealDelay: 720,
-            playbackRate: 1.35,
+            playbackRate: 1,
             /* ship-new-3 is a 16:9 composition centred and bottom-aligned. */
             canvasRatio: 2560 / 1440,
             contentHeightShare: 0.7333,

@@ -407,7 +407,7 @@
     --bt-ticket-workshop: var(--color-access-workshop);
     --bt-ticket-private-class: var(--color-access-private-class);
     --bt-ticket-playbook: var(--color-access-playbook);
-    --bt-ticket-access-icon-size: var(--space-6);
+    --bt-ticket-access-icon-size: var(--font-size-18);
     --bt-ticket-format-icon-size: var(--bt-ticket-access-icon-size);
     --bt-ticket-benefit-icon-size: var(--space-12);
     --bt-ticket-benefit-icon-size-sm: var(--space-10);
@@ -723,8 +723,15 @@ h6 {
 
     &[aria-disabled="true"],
     &:disabled {
+        --bt-action-fill: var(--color-surface-soft);
+
         pointer-events: none;
-        opacity: 0.64;
+        border-color: var(--alpha-ink-12);
+        color: var(--color-text-inverse-muted);
+        background: var(--color-surface-soft);
+        box-shadow: none;
+        filter: grayscale(0.15);
+        opacity: 0.8;
     }
 
     &[data-loading] {
