@@ -2034,7 +2034,7 @@ body.is-loading .hero-scroll-cue,
 
 .concept__video-media {
     position: relative;
-    width: 82.5%;
+    width: 93%;
     height: auto;
     aspect-ratio: 16 / 9;
     overflow: hidden;
@@ -2825,6 +2825,18 @@ body.is-loading .hero-scroll-cue,
         margin-top: calc(var(--space-16) - var(--space-2));
     }
 
+    .ticket__plan--explorer {
+        order: 1;
+    }
+
+    .ticket__plan--ultimate {
+        order: 2;
+    }
+
+    .ticket__plan--master {
+        order: 3;
+    }
+
     .ticket__plan--ultimate {
         padding-top: var(--space-8);
         z-index: 1;
@@ -2895,7 +2907,7 @@ body.is-loading .hero-scroll-cue,
         margin-bottom: var(--space-8);
     }
 
-    /* ไอคอนประจำแพ็กเกจ: รูปมงกุฎ/เพชร/เข็มทิศ (ultimate/masterclass/explorer.webp)
+    /* ไอคอนประจำแพ็กเกจ: รูปมงกุฎ/เพชร/เข็มทิศ (ultimate/master/explorer)
        ทั้ง 3 ใบ มีแสง/เงาในตัวรูปอยู่แล้ว ไม่ต้องเติม filter engrave แบบไอคอนเส้นเดิม */
     .ticket__plan-icon {
         width: 44px;
@@ -3465,7 +3477,7 @@ body.is-loading .hero-scroll-cue,
         }
 
         /* จอนี้ลงไปการ์ดเรียงเป็นคอลัมน์เดียว เอา gap ออกแล้วต่อกันสนิท
-           Master Class และ Explorer ใช้เส้นบนเป็นตัวคั่น ส่วน Ultimate ยังคงกรอบ
+           Explorer และ Master Class ใช้เส้นบนเป็นตัวคั่น ส่วน Ultimate ยังคงกรอบ
            spectrum ครบทั้ง 4 ด้าน */
         .ticket__plans {
             gap: var(--space-0);
@@ -3493,19 +3505,19 @@ body.is-loading .hero-scroll-cue,
 
 
         .ticket__plan--ultimate {
-            order: 1;
+            order: 2;
             padding: var(--space-8);
             border: var(--border-width-6) solid transparent;
             border-top: none !important;
         }
 
         .ticket__plan--master {
-            order: 2;
+            order: 3;
             border-top: var(--rule-width-subtle) solid var(--color-border-faint);
         }
 
         .ticket__plan--explorer {
-            order: 3;
+            order: 1;
         }
 
         .ticket__plan-header {

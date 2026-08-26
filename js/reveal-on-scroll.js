@@ -25,12 +25,16 @@
 
     document.body.classList.add('reveal-on-scroll-ready');
 
+    const revealTarget = (entry, activeObserver) => {
+        if (!entry.isIntersecting) return;
+
+        entry.target.classList.add('is-revealed');
+        activeObserver.unobserve(entry.target);
+    };
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-
-            entry.target.classList.add('is-revealed');
-            observer.unobserve(entry.target);
+            revealTarget(entry, observer);
         });
     }, {
         threshold: 0.18,
@@ -69,9 +73,9 @@
     };
 
     setDelay('.ticket__plan', (target) => {
-        if (target.classList.contains('ticket__plan--ultimate')) return 0;
-        if (target.classList.contains('ticket__plan--master')) return 120;
-        if (target.classList.contains('ticket__plan--explorer')) return 240;
+        if (target.classList.contains('ticket__plan--explorer')) return 0;
+        if (target.classList.contains('ticket__plan--ultimate')) return 120;
+        if (target.classList.contains('ticket__plan--master')) return 240;
         return 120;
     });
 

@@ -877,6 +877,10 @@ body.reveal-on-scroll-ready [data-reveal] {
     will-change: opacity, transform;
 }
 
+body.reveal-on-scroll-ready [data-reveal="slide-up"] {
+    opacity: 1;
+}
+
 body.reveal-on-scroll-ready [data-reveal].is-revealed {
     opacity: 1;
     transform: translate3d(0, 0, 0);

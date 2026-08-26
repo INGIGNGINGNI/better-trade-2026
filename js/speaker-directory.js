@@ -1,11 +1,11 @@
 (() => {
     const speakerDays = {
         dayOne: [
-            { name: 'ดร.นิเวศน์ เหมวชิรวรากร', role: 'Value Investor (VI) เบอร์หนึ่งของเมืองไทย', image: '17.20-18.20-ดร.นิเวศน์-เหมวชิรวรากร.webp', imageY: '0%', imageWidth: 928, imageHeight: 1204 },
-            { name: 'พิมพ์ชนก รัตนกุล', role: 'Founder & CEO, Future Wealth Lab', image: 'speaker_4.webp', imageY: '0%' },
+            { name: 'ดร.นิเวศน์ เหมวชิรวรากร', role: 'Value Investor (VI) เบอร์หนึ่งของเมืองไทย', image: 'speaker_3.webp', imageY: '0%', imageWidth: 928, imageHeight: 1204 },
+            { name: 'พิมพ์ชนก รัตนกุล', role: 'Founder & CEO, Future Wealth Lab', image: 'speaker_5.webp', imageY: '0%' },
             { name: 'ธนกร ศรีวัฒน์', role: 'Managing Director, Atlas Securities', image: 'profile-man.webp', imageY: '0%' },
-            { name: 'อรทัย ตั้งพิพัฒน์', role: 'Head of Digital Assets, NovaX', image: 'speaker_3.webp', imageY: '0%' },
-            { name: 'ชยพล เกียรติไพบูลย์', role: 'Partner, Momentum Ventures', image: 'speaker_5.webp', imageY: '0%' },
+            { name: 'อรทัย ตั้งพิพัฒน์', role: 'Head of Digital Assets, NovaX', image: 'profile-woman.webp', imageY: '0%' },
+            { name: 'ชยพล เกียรติไพบูลย์', role: 'Partner, Momentum Ventures', image: 'profile-man.webp', imageY: '0%' },
             { name: 'ณัฐชา วงศ์ประเสริฐ', role: 'Economist & Market Commentator', image: 'profile-woman.webp', imageY: '0%' },
             { name: 'วรเมธ ลิ้มวัฒนะ', role: 'Chief Technology Officer, Finverse', image: 'profile-man.webp', imageY: '0%' },
             { name: 'ศิริพร บุญยืน', role: 'Director of Sustainable Investment', image: 'profile-woman.webp', imageY: '0%' },
