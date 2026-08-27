@@ -3617,9 +3617,9 @@ body.is-loading .hero-scroll-cue,
         .ticket__format {
             align-items: flex-start;
 
-            >.bt-icon {
+            /* >.bt-icon {
                 margin-top: var(--space-1);
-            }
+            } */
         }
 
     }
