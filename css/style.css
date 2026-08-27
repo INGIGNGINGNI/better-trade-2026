@@ -2692,7 +2692,7 @@ body.is-loading .hero-scroll-cue,
 
     @media (max-width: 767px) {
         .ticket__backdrop {
-            object-position: 62% center;
+            object-position: 72% center;
         }
     }
 
