@@ -2839,25 +2839,16 @@ body.is-loading .hero-scroll-cue,
     .ticket__plan--ultimate {
         padding-top: var(--space-8);
         z-index: 1;
-        /* ใบนี้ใบเดียวเปลี่ยนเป็นกรอบสีน้ำเงินรอบครบ 4 ด้าน (ใบอื่นยังเป็นการ์ดแบบ
-           editorial ไม่มีกรอบสีตามเดิม) เพื่อดันให้ใบ Ultimate เด่นเป็น "แนะนำที่สุด"
-           ต้องระบุ border-style เองเพราะ .ticket__plan ฐานตั้ง border เป็น none ไว้
-           (style: none ทำให้ width ที่ตั้งไว้ตรงนี้กลายเป็น 0 เสมอไม่ว่าจะใส่ค่าอะไร)
-           มุมโค้งใช้ค่าเดียวกับ .ticket__plan ฐานอยู่แล้ว (ไม่ต้องประกาศซ้ำ) overflow:
-           hidden ไว้ตัดมุมของแถบริบบอน (.ticket__plan-ribbon) กับแสง glow (::before)
-           ให้โค้งตามมุมการ์ดพอดี ไม่โผล่เหลี่ยมออกมานอกกรอบโค้ง */
-        border-style: solid;
-        border-width: var(--border-width-2);
-        border-color: transparent;
+        /* ต้องระบุ border-style เองเพราะ .ticket__plan ฐานตั้ง border เป็น none ไว้
+           overflow: hidden ใช้ตัดมุม ribbon และ glow ให้โค้งตามการ์ดพอดี */
+        border: var(--border-width-2) solid #19274A;
+        border-top: none;
         overflow: hidden;
         /* ทินต์เดิมเคยทึบ 100% (mix กับสีทึบ ไม่ใช่ transparent) พอจะใส่รูป ultimate-bg.webp
-           เป็นพื้นหลังด้วย ต้องลดความทึบของทินต์ลง (mix กับ transparent แทน) ให้รูป
-           โปร่งผ่านออกมาเห็นได้ ส่วนรูปกับทินต์วางใน padding-box เหมือนกัน ให้เส้นขอบ
-           ไล่สเปกตรัม (border-box) ยังคงล้อมกรอบอยู่ด้านนอกตามเดิม */
+           เป็นพื้นหลังด้วย ต้องลดความทึบของทินต์ลง (mix กับ transparent แทน) ให้รูปโปร่งผ่านออกมาเห็นได้ */
         background:
-            linear-gradient(color-mix(in srgb, #ffffff 72%, transparent), color-mix(in srgb, var(--color-surface-page) 64%, transparent)) padding-box,
-            url('../images/ultimate-bg.webp') center / cover no-repeat padding-box,
-            var(--color-accent-primary) border-box;
+            linear-gradient(color-mix(in srgb, #ffffff 72%, transparent), color-mix(in srgb, var(--color-surface-page) 64%, transparent)),
+            url('../images/ultimate-bg.webp') center / cover no-repeat;
         transition: all var(--duration-standard) var(--ease-standard);
         /* box-shadow:
             0 18px 48px rgba(17, 19, 24, 0.10),
@@ -2877,9 +2868,8 @@ body.is-loading .hero-scroll-cue,
 
         &:hover {
             background:
-                linear-gradient(color-mix(in srgb, #ffffff 64%, transparent), color-mix(in srgb, var(--color-surface-page) 56%, transparent)) padding-box,
-                url('../images/ultimate-bg.webp') center / cover no-repeat padding-box,
-                var(--color-accent-primary) border-box;
+                linear-gradient(color-mix(in srgb, #ffffff 64%, transparent), color-mix(in srgb, var(--color-surface-page) 56%, transparent)),
+                url('../images/ultimate-bg.webp') center / cover no-repeat;
         }
     }
 
@@ -2888,6 +2878,9 @@ body.is-loading .hero-scroll-cue,
        จนสุดขอบด้านในของกรอบสเปกตรัมพอดี มุมบนโค้งเท่ากับ card-radius หักความหนาของ
        border ออก (มุมด้านในของกรอบย่อมโค้งน้อยกว่ามุมด้านนอกเสมอ) */
     .ticket__plan-ribbon {
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -2895,11 +2888,78 @@ body.is-loading .hero-scroll-cue,
         margin: calc(var(--space-8) * -1) calc(var(--space-8) * -1) var(--space-6);
         padding: var(--space-3) var(--space-4);
         border-radius: calc(var(--card-radius) - var(--border-width-2)) calc(var(--card-radius) - var(--border-width-2)) 0 0;
-        background: var(--color-accent-primary);
+        background: linear-gradient(180deg, #19274A 0%, #020B1E 100%);
         color: var(--color-text-inverse);
         font-size: var(--font-size-18);
-        font-weight: var(--font-weight-medium);
+        font-weight: var(--font-weight-regular);
         letter-spacing: 0.02em;
+
+        span {
+            position: relative;
+            z-index: 1;
+            display: inline-block;
+            color: transparent;
+            background: linear-gradient(105deg,
+                    #c9d1df 0%,
+                    #f7f9ff 26%,
+                    #ffffff 38%,
+                    #b7c0cf 46%,
+                    #ffffff 54%,
+                    #f7f9ff 66%,
+                    #c9d1df 100%);
+            background-size: 280% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            text-shadow:
+                0 0 0.03em rgba(255, 255, 255, 0.18);
+            animation: ticket-ribbon-text-glow 4.6s ease-in-out infinite;
+        }
+
+        span::after {
+            content: none;
+        }
+
+        &::before,
+        &::after {
+            content: "";
+            position: absolute;
+            pointer-events: none;
+        }
+
+        &::before {
+            inset: calc(var(--space-4) * -1) var(--space-8) auto;
+            z-index: -1;
+            height: calc(100% + var(--space-8));
+            background:
+                radial-gradient(ellipse at 50% 0%, rgba(244, 221, 178, 0.3) 0%, rgba(214, 171, 104, 0.16) 36%, transparent 74%);
+            filter: blur(10px);
+            opacity: 0.94;
+        }
+
+        &::after {
+            top: 0;
+            left: 50%;
+            z-index: -1;
+            width: min(72%, 280px);
+            height: var(--border-width-1);
+            background: linear-gradient(90deg,
+                    transparent 0%,
+                    rgba(244, 221, 178, 0.18) 14%,
+                    rgba(231, 201, 151, 0.82) 50%,
+                    rgba(214, 171, 104, 0.22) 86%,
+                    transparent 100%);
+            box-shadow:
+                0 0 14px rgba(231, 201, 151, 0.34),
+                0 0 24px rgba(214, 171, 104, 0.16);
+            opacity: 0.86;
+            transform: translateX(-50%);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .ticket__plan-ribbon span {
+            animation: none;
+        }
     }
 
     .ticket__plan-header {
@@ -3101,7 +3161,7 @@ body.is-loading .hero-scroll-cue,
         min-width: 0;
         display: inline-flex;
         align-items: center;
-        gap: var(--space-3);
+        gap: var(--space-2);
 
         >.bt-icon {
             flex: 0 0 auto;
@@ -3109,10 +3169,11 @@ body.is-loading .hero-scroll-cue,
             height: var(--bt-ticket-access-icon-size);
             display: grid;
             place-items: center;
-            color: var(--color-blue-500);
+            padding: var(--space-1);
+            color: var(--color-blue-600);
             border-radius: var(--radius-1);
-            /* background: var(--color-blue-100); */
-            /* border: 1px solid var(--color-blue-200); */
+            /* background: var(--color-blue-100);
+            border: 1px solid var(--color-blue-200); */
             stroke-width: 1.75;
         }
 
@@ -3266,7 +3327,7 @@ body.is-loading .hero-scroll-cue,
         min-width: 0;
         display: flex;
         align-items: center;
-        gap: var(--space-3);
+        gap: var(--space-2);
 
         >.bt-icon {
             display: grid;
@@ -3274,10 +3335,11 @@ body.is-loading .hero-scroll-cue,
             flex: 0 0 auto;
             width: var(--bt-ticket-format-icon-size);
             height: var(--bt-ticket-format-icon-size);
-            color: var(--color-blue-500);
+            padding: var(--space-1);
+            color: var(--color-blue-600);
             border-radius: var(--radius-1);
-            /* background: var(--color-blue-100); */
-            /* border: 1px solid var(--color-blue-200); */
+            /* background: var(--color-blue-100);
+            border: 1px solid var(--color-blue-200); */
             stroke-width: 1.75;
         }
 
@@ -3336,6 +3398,10 @@ body.is-loading .hero-scroll-cue,
             strong {
                 margin-top: var(--space-1);
             }
+        }
+
+        .ticket__plan-ribbon {
+            margin: calc(var(--space-6) * -1) calc(var(--space-8) * -1) var(--space-6);
         }
     }
 
@@ -3483,9 +3549,10 @@ body.is-loading .hero-scroll-cue,
 
         .ticket__plan {
             padding: var(--space-12) var(--space-8);
-            border-right: 0;
+            border-radius: var(--radius-0);
+            /* border-right: 0;
             border-bottom: 0;
-            border-left: 0;
+            border-left: 0; */
 
             &:not(:first-child) {
                 border-top: var(--rule-width-subtle) solid var(--color-border-faint);
@@ -3493,28 +3560,34 @@ body.is-loading .hero-scroll-cue,
         }
 
         .ticket__plan--master {
-            margin-top: var(--space-12);
+            margin-top: var(--space-0);
         }
 
         .ticket__plan--explorer {
-            margin-top: var(--space-0);
+            margin-top: var(--space-12);
         }
 
 
         .ticket__plan--ultimate {
-            order: 2;
+            order: 1;
             padding: var(--space-8);
-            border: var(--border-width-6) solid transparent;
+            border-radius: var(--radius-1);
+            /* border: var(--border-width-6) solid transparent; */
             border-top: none !important;
+        }
+
+        .ticket__plan-ribbon {
+            margin: calc(var(--space-8) * -1) calc(var(--space-8) * -1) var(--space-6);
         }
 
         .ticket__plan--master {
             order: 3;
             border-top: var(--rule-width-subtle) solid var(--color-border-faint);
+            margin-top: var(--space-0);
         }
 
         .ticket__plan--explorer {
-            order: 1;
+            order: 2;
         }
 
         .ticket__plan-header {
@@ -3581,9 +3654,9 @@ body.is-loading .hero-scroll-cue,
             padding: var(--space-8) var(--space-6);
         }
 
-        .ticket__plan--master {
+        /* .ticket__plan--master {
             margin-top: var(--space-8);
-        }
+        } */
 
         .ticket__price {
             padding: var(--space-3) var(--space-3) var(--space-3) var(--space-0);
@@ -4211,7 +4284,7 @@ body.is-loading .hero-scroll-cue,
         }
 
         .agenda__table td:first-of-type+td {
-            grid-column: 2;
+            grid-column: span 2;
             grid-row: 2;
             padding-top: var(--space-0);
         }
@@ -4225,6 +4298,7 @@ body.is-loading .hero-scroll-cue,
     }
 
     .agenda__speakers {
+        display: none !important;
         font-size: 0;
         text-align: right;
         white-space: nowrap;
@@ -4457,6 +4531,7 @@ body.is-loading .hero-scroll-cue,
 
     .agenda__session-title,
     .agenda__session-summary {
+        display: inline;
         margin: 0;
         letter-spacing: 0;
     }
@@ -4470,16 +4545,20 @@ body.is-loading .hero-scroll-cue,
         &.agenda__session-title--simple {
             font-weight: var(--font-weight-regular);
         }
+
+        &::after {
+            content: ' ';
+        }
     }
 
     .agenda__session-summary {
-        margin-top: 2px;
         font-size: var(--section-body-size);
         font-weight: var(--font-weight-regular);
         line-height: var(--section-body-line-height);
     }
 
     .agenda__session-speaker {
+        display: none;
         margin: var(--space-2) var(--space-0) var(--space-0);
         color: var(--color-text-muted);
         font-size: var(--section-small-size);
@@ -4544,6 +4623,21 @@ body.is-loading .hero-scroll-cue,
     }
 
     @media (min-width:768px) and (max-width:991px) {
+
+        /* ป้ายแท็บ 4 อัน (Conference Stage/Exprerience Stage/Workshop/Master Class)
+           รวมกันกว้างเกินคอลัมน์เนื้อหาที่เหลือหลังหักแถบ day-switcher ด้านซ้าย ทำให้
+           ล้นออกนอกกรอบ (overflow: visible จากค่าฐาน) — เปลี่ยนเป็นเลื่อนแนวนอนได้แทน
+           เหมือนที่ ≤767px ใช้อยู่แล้ว ต้องปิด ::before (ฉากกันเนื้อหาโผล่ใต้ header ตอน
+           sticky) ไปด้วย เพราะตั้ง overflow-x แล้ว browser จะเซ็ต overflow-y เป็น auto
+           ให้อัตโนมัติ ไปครอบตัด ::before ที่ยื่นขึ้นเหนือกล่อง (bottom: 100%) ทิ้ง */
+        .agenda__tabs {
+            overflow-x: auto;
+            overflow-y: hidden;
+
+            &::before {
+                display: none;
+            }
+        }
 
         .agenda__table,
         .agenda__table tbody {
@@ -4963,7 +5057,7 @@ body.is-loading .hero-scroll-cue,
         }
 
         .agenda__table td:first-of-type+td {
-            grid-column: 1;
+            grid-column: span 2;
             grid-row: 3;
             padding-top: var(--space-0);
             padding-bottom: var(--space-4);
@@ -5059,6 +5153,8 @@ body.is-loading .hero-scroll-cue,
 
 /* ---------- Speakers ---------- */
 .speaker {
+    /* ซ่อนไว้ก่อนสำหรับรอบ launch จริง — ยังไม่ลบเพราะจะกลับมาใช้ทีหลัง */
+    display: none;
     position: relative;
     scroll-margin-top: var(--header-height);
     padding: var(--section-padding-y) 0;
@@ -5981,6 +6077,8 @@ body.is-loading .hero-scroll-cue,
    กริดจึงต้องอยู่ในคอลัมน์ 9 ช่องที่เยื้อง 3 ช่องเท่ากับ .speaker__days
    เพื่อให้แทร็กกว้างเท่ากัน การ์ดสองฝั่งจึงมีขนาดตรงกันเป๊ะโดยไม่ต้องล็อกค่าใด */
 .moderator {
+    /* ซ่อนไว้ก่อนสำหรับรอบ launch จริง — ยังไม่ลบเพราะจะกลับมาใช้ทีหลัง */
+    display: none;
     position: relative;
     scroll-margin-top: var(--header-height);
     /* เว้นบน-ล่างเต็มเท่า section อื่นทุกอัน ระยะระหว่าง Speaker กับ section นี้
@@ -6598,6 +6696,8 @@ body.is-loading .hero-scroll-cue,
    กรอบเปล่ารอใส่โลโก้จริงภายหลัง ขนาดตามดีไซน์คุมด้วยแทร็กของกริด (minmax) กรอบจึงหด
    ตามจอแคบได้เองโดยยังคงสัดส่วนเดิมไว้ด้วย aspect-ratio ไม่ต้องล็อกความสูงเป็น px */
 .sponsor {
+    /* ซ่อนไว้ก่อนสำหรับรอบ launch จริง — ยังไม่ลบเพราะจะกลับมาใช้ทีหลัง */
+    display: none;
     --bt-sponsor-lead-width: 258px;
     --bt-sponsor-lead-ratio: 258 / 120;
     --bt-sponsor-md-width: 192px;
@@ -6752,14 +6852,58 @@ body.is-loading .hero-scroll-cue,
     }
 
     .site-footer__panel {
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
         padding: var(--space-16) var(--space-10);
         border-radius: var(--radius-1);
         background:
-            radial-gradient(35% 80% at 30% 0%, color-mix(in srgb, var(--bt-footer-ink) 28%, transparent), transparent),
-            var(--color-surface-inverse);
+            radial-gradient(35% 80% at 30% 0%, rgba(115, 130, 170, 0.28), transparent),
+            linear-gradient(180deg, #19274A 0%, #020B1E 100%);
+
+        &::before,
+        &::after {
+            content: "";
+            position: absolute;
+            pointer-events: none;
+        }
+
+        &::before {
+            top: calc(var(--space-10) * -1);
+            left: 50%;
+            z-index: 0;
+            width: min(78%, 900px);
+            height: min(76%, 280px);
+            background:
+                radial-gradient(ellipse at 50% 0%, rgba(244, 221, 178, 0.3) 0%, rgba(214, 171, 104, 0.16) 30%, rgba(115, 130, 170, 0.1) 56%, transparent 78%);
+            filter: blur(20px);
+            opacity: 0.94;
+            transform: translateX(-50%);
+        }
+
+        &::after {
+            top: var(--space-0);
+            left: 50%;
+            z-index: 0;
+            width: min(58%, 680px);
+            height: var(--border-width-2);
+            background: linear-gradient(90deg,
+                    transparent 0%,
+                    rgba(244, 221, 178, 0.16) 14%,
+                    rgba(231, 201, 151, 0.88) 50%,
+                    rgba(214, 171, 104, 0.2) 86%,
+                    transparent 100%);
+            box-shadow:
+                0 0 16px rgba(231, 201, 151, 0.42),
+                0 0 34px rgba(214, 171, 104, 0.2);
+            opacity: 0.9;
+            transform: translateX(-50%);
+        }
     }
 
     .site-footer__content {
+        position: relative;
+        z-index: 1;
         align-items: stretch;
         /* gutter เดิมของ Bootstrap (1.5rem รวม = 12px ต่อฝั่ง) แคบเกินไปสำหรับ
            border-left ที่ทำหน้าที่เป็นเส้นแบ่ง section — โลโก้ (แคบ) กับหัวข้อ
@@ -6960,8 +7104,8 @@ body.is-loading .hero-scroll-cue,
         .site-footer__panel {
             padding: var(--space-6) var(--space-8);
             background:
-                radial-gradient(circle at 30% 0%, color-mix(in srgb, var(--bt-footer-ink) 28%, transparent), transparent 48%),
-                var(--color-surface-inverse);
+                radial-gradient(circle at 30% 0%, rgba(115, 130, 170, 0.28), transparent 48%),
+                linear-gradient(180deg, #19274A 0%, #020B1E 100%);
         }
 
         .site-footer__container {
@@ -8182,5 +8326,45 @@ body.is-loading .hero-scroll-cue,
 
     100% {
         background-position: -100% 50%;
+    }
+}
+
+@keyframes ticket-ribbon-text-glow {
+
+    0%,
+    100% {
+        background-position: 0% 50%;
+        text-shadow:
+            0 0 6px rgba(255, 255, 255, 0.18),
+            0 0 16px rgba(115, 130, 170, 0.14);
+    }
+
+    48% {
+        background-position: 100% 50%;
+        text-shadow:
+            0 0 10px rgba(255, 255, 255, 0.34),
+            0 0 24px rgba(173, 190, 226, 0.22);
+    }
+}
+
+@keyframes ticket-ribbon-text-sweep {
+    0% {
+        background-position: 150% 50%;
+        opacity: 0;
+    }
+
+    18%,
+    62% {
+        opacity: 0.72;
+    }
+
+    76% {
+        background-position: -70% 50%;
+        opacity: 0;
+    }
+
+    100% {
+        background-position: -70% 50%;
+        opacity: 0;
     }
 }
