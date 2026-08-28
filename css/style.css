@@ -2827,6 +2827,10 @@ body.is-loading .hero-scroll-cue,
 
     .ticket__plan--ultimate {
         order: 2;
+
+        .ticket__plan-header {
+            margin-top: calc(var(--space-10) + 2px);
+        }
     }
 
     .ticket__plan--master {
@@ -2875,16 +2879,18 @@ body.is-loading .hero-scroll-cue,
        จนสุดขอบด้านในของกรอบสเปกตรัมพอดี มุมบนโค้งเท่ากับ card-radius หักความหนาของ
        border ออก (มุมด้านในของกรอบย่อมโค้งน้อยกว่ามุมด้านนอกเสมอ) */
     .ticket__plan-ribbon {
-        position: relative;
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: max-content;
         isolation: isolate;
         overflow: hidden;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: var(--space-2);
-        margin: calc(var(--space-8) * -1) calc(var(--space-8) * -1) var(--space-6);
+        /* margin: calc(var(--space-8) * -1) calc(var(--space-8) * -1) var(--space-6); */
         padding: var(--space-3) var(--space-4);
-        border-radius: calc(var(--card-radius) - var(--border-width-2)) calc(var(--card-radius) - var(--border-width-2)) 0 0;
         background: linear-gradient(180deg, #19274A 0%, #020B1E 100%);
         color: var(--color-text-inverse);
         font-size: var(--font-size-18);
@@ -3396,10 +3402,6 @@ body.is-loading .hero-scroll-cue,
                 margin-top: var(--space-1);
             }
         }
-
-        .ticket__plan-ribbon {
-            margin: calc(var(--space-6) * -1) calc(var(--space-8) * -1) var(--space-6);
-        }
     }
 
     @media (max-width:1199px) {
@@ -3571,10 +3573,6 @@ body.is-loading .hero-scroll-cue,
             border-radius: var(--radius-1);
             /* border: var(--border-width-6) solid transparent; */
             border-top: none !important;
-        }
-
-        .ticket__plan-ribbon {
-            margin: calc(var(--space-8) * -1) calc(var(--space-8) * -1) var(--space-6);
         }
 
         .ticket__plan--master {

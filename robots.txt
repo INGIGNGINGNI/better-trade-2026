@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://better-trade-2026.vercel.app/sitemap.xml
+Sitemap: https://www.efin.finance/events/better-trade/better-trade2026/sitemap.xml
