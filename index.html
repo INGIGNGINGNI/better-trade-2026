@@ -65,7 +65,7 @@
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="css/main.css?v=45">
-    <link rel="stylesheet" href="css/style.css?v=356">
+    <link rel="stylesheet" href="css/style.css?v=359">
 </head>
 
 <body class="is-loading">
@@ -1755,7 +1755,7 @@
     <!-- Start Component : Cookie Banner -->
     <section class="cookie-banner container" data-cookie-banner aria-label="การตั้งค่าคุกกี้" hidden>
         <div class="cookie-banner__content">
-            <svg class="bt-icon cookie-banner__icon" aria-hidden="true"><use href="images/icons.svg?v=2#icon-cookie"></use></svg>
+            <svg class="bt-icon cookie-banner__icon" aria-hidden="true"><use href="images/icons.svg?v=3#icon-cookie"></use></svg>
             <p class="cookie-banner__message">
                 เราใช้คุกกี้เพื่อให้คุณได้รับประสบการณ์ที่ดี และพัฒนาคุณภาพการให้บริการเว็บไซต์ที่ตรงกับความต้องการของคุณมากยิ่งขึ้น คุณสามารถทราบรายละเอียด<br class="d-none d-xl-block">เกี่ยวกับคุกกี้ได้ที่<a href="https://www.efin.finance/privacy-policy" target="_blank" rel="noopener noreferrer">นโยบายการใช้คุกกี้</a>
             </p>
@@ -1763,8 +1763,10 @@
         <div class="cookie-banner__actions">
             <button class="bt-action-button bt-action-button--primary bt-action-button--sm cookie-banner__button" type="button"
                 data-cookie-accept>ตกลง</button>
-            <button class="bt-action-button bt-action-button--secondary bt-action-button--sm cookie-banner__button" type="button"
-                data-cookie-decline>ปฏิเสธ</button>
+            <button class="cookie-banner__dismiss" type="button" data-cookie-decline aria-label="ปฏิเสธคุกกี้"
+                title="ปฏิเสธคุกกี้">
+                <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg?v=3#icon-x"></use></svg>
+            </button>
         </div>
     </section>
     <!-- End Component : Cookie Banner -->
