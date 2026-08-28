@@ -65,7 +65,7 @@
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="css/main.css?v=45">
-    <link rel="stylesheet" href="css/style.css?v=349">
+    <link rel="stylesheet" href="css/style.css?v=356">
 </head>
 
 <body class="is-loading">
@@ -1752,6 +1752,24 @@
     <!-- End Component : Footer -->
 
 
+    <!-- Start Component : Cookie Banner -->
+    <section class="cookie-banner container" data-cookie-banner aria-label="การตั้งค่าคุกกี้" hidden>
+        <div class="cookie-banner__content">
+            <svg class="bt-icon cookie-banner__icon" aria-hidden="true"><use href="images/icons.svg?v=2#icon-cookie"></use></svg>
+            <p class="cookie-banner__message">
+                เราใช้คุกกี้เพื่อให้คุณได้รับประสบการณ์ที่ดี และพัฒนาคุณภาพการให้บริการเว็บไซต์ที่ตรงกับความต้องการของคุณมากยิ่งขึ้น คุณสามารถทราบรายละเอียด<br class="d-none d-xl-block">เกี่ยวกับคุกกี้ได้ที่<a href="https://www.efin.finance/privacy-policy" target="_blank" rel="noopener noreferrer">นโยบายการใช้คุกกี้</a>
+            </p>
+        </div>
+        <div class="cookie-banner__actions">
+            <button class="bt-action-button bt-action-button--primary bt-action-button--sm cookie-banner__button" type="button"
+                data-cookie-accept>ยอมรับ</button>
+            <button class="bt-action-button bt-action-button--secondary bt-action-button--sm cookie-banner__button" type="button"
+                data-cookie-decline>ปฏิเสธ</button>
+        </div>
+    </section>
+    <!-- End Component : Cookie Banner -->
+
+
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="vendor/swiper/swiper-bundle.min.js"></script>
     <script src="js/action-button.js"></script>
@@ -1768,6 +1786,7 @@
     <script src="js/reveal-on-scroll.js?v=10"></script>
     <script src="js/concept-video.js?v=1"></script>
     <script src="js/past-event-swiper.js?v=6"></script>
+    <script src="js/cookie-banner.js?v=1"></script>
 
     <!-- Liquid metal CTAs (WebGL). Module scripts are deferred, so this runs after
      the markup exists but before window 'load' fires the hero intro. -->
