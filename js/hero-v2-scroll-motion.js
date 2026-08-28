@@ -82,6 +82,7 @@
             /* ship-new-3 is a 16:9 composition centred and bottom-aligned. */
             canvasRatio: 2560 / 1440,
             contentHeightShare: 0.7333,
+            tabletOverscan: 1.045,
             // The portrait asset this sequence was originally aligned to: its aspect and
             // content share are the reference the entry size is reproduced from.
             legacyCanvasRatio: 1248 / 1664,
@@ -1292,9 +1293,18 @@
 
             // Cover the viewport without distorting the source. Keep the composition
             // bottom-aligned so the stairs and runners retain their original position;
-            // narrow viewports crop the excess equally from the left and right.
+            // narrow viewports crop the excess equally from the left and right. Tall
+            // landscape tablets get a little overscan to remove the source's transparent
+            // headroom without noticeably cropping the stairs.
             const videoEnter = {};
-            videoEnter.height = Math.max(M.vh, M.vw / SHIP_RUN.canvasRatio);
+            const viewportRatio = M.vw / M.vh;
+            const isTallLandscapeTablet = matchMedia('(any-pointer: coarse)').matches
+                && M.vw >= 1200
+                && M.vw <= 1440
+                && viewportRatio >= 1.3
+                && viewportRatio <= 1.6;
+            const tabletOverscan = isTallLandscapeTablet ? SHIP_RUN.tabletOverscan : 1;
+            videoEnter.height = Math.max(M.vh, M.vw / SHIP_RUN.canvasRatio) * tabletOverscan;
             videoEnter.width = videoEnter.height * SHIP_RUN.canvasRatio;
             videoEnter.left = (M.vw - videoEnter.width) / 2;
 

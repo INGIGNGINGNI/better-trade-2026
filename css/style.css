@@ -3746,7 +3746,7 @@ body.is-loading .hero-scroll-cue,
    ตารางกำหนดการแบบ editorial เน้นลำดับเวลา พื้นที่ว่าง และเส้นบาง */
 .agenda {
     position: relative;
-    scroll-margin-top: calc(var(--header-height) + var(--space-4));
+    scroll-margin-top: calc(var(--header-height) - var(--space-2));
     padding: var(--section-padding-y) 0;
     color: var(--color-text-primary);
     background: var(--color-surface-page);
@@ -7209,6 +7209,21 @@ body.is-loading .hero-scroll-cue,
         will-change: auto !important;
     }
 
+    body.is-mobile-static #stagewrap::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 110;
+        height: 28%;
+        pointer-events: none;
+        background: linear-gradient(180deg,
+                rgba(0, 0, 0, 0) 0%,
+                rgba(0, 0, 0, 0.42) 44%,
+                rgba(0, 0, 0, 0.68) 100%);
+    }
+
     body.is-mobile-static #ship,
     body.is-mobile-static #stairs,
     body.is-mobile-static #pshadow,
@@ -7300,18 +7315,7 @@ body.is-loading .hero-scroll-cue,
     }
 
     body.is-mobile-static #stagewrap::after {
-        content: '';
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 110;
         height: 34%;
-        pointer-events: none;
-        background: linear-gradient(180deg,
-                rgba(0, 0, 0, 0) 0%,
-                rgba(0, 0, 0, 0.42) 44%,
-                rgba(0, 0, 0, 0.68) 100%);
     }
 
     body.is-mobile-static #ui .venue {
