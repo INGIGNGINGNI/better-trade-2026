@@ -667,32 +667,19 @@
             return true;
         }
 
-        function restoreFullHeroForHomeNavigation(navigate) {
-            if (!HAS_SHIP_RUN || !completedHeroTimelineBuilt || typeof navigate !== 'function') {
+        function navigateHomeWithCompletedHero(target, navigate) {
+            if (!completedHeroTimelineBuilt) {
                 return false;
             }
 
-            completedHeroTimelineBuilt = false;
-            shipRunHasCompleted = false;
-            shipRunHeroRestored = false;
-            shipRunScrubState = 'idle';
-            el.concept.classList.remove('is-awaiting-entry', 'is-revealed');
-            // Move to the top before rebuilding. If the old deep scroll position remains
-            // for one frame, buildScroll() correctly assumes a restored below-Hero page
-            // and immediately completes the sequence again, leaving the runners hidden.
-            navigate();
-            buildScroll();
-            ScrollTrigger.refresh();
-            ScrollTrigger.update();
-            requestSiteScrollbarUpdate();
-            return true;
+            return skipShipRunForHeaderNavigation(target, navigate);
         }
 
         window.addEventListener(HERO_SKIP_NAVIGATION_EVENT, event => {
             const detail = event.detail;
             if (!detail || detail.handled) return;
             detail.handled = detail.target?.id === 'home'
-                ? restoreFullHeroForHomeNavigation(detail.navigate)
+                ? navigateHomeWithCompletedHero(detail.target, detail.navigate)
                 : skipShipRunForHeaderNavigation(detail.target, detail.navigate);
         });
 
