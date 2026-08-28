@@ -91,6 +91,7 @@
         const HAS_SHIP_RUN = HERO_MOTION_MODE === 'full';
         const HERO_RUN_PROGRESS_EVENT = 'bettertrade:hero-run-progress';
         const HERO_SCROLL_CUE_EVENT = 'bettertrade:hero-scroll-cue';
+        const HERO_SKIP_NAVIGATION_EVENT = 'bettertrade:hero-skip-navigation';
         const HERO_SCROLL_CUE_REVEAL_AT = 0.34;
         const HERO_SCROLL_ACCELERATION = 1.8;
         let heroRunProgressMode = '';
@@ -275,7 +276,7 @@
         // One <img> per runner, so each can be revealed on its own beat.
         el.runners = RUNNERS.map(r => {
             const img = document.createElement('img');
-            img.src = `images/${r.id}.webp`;
+            img.src = `images/${r.id}.webp?v=restored-1`;
             img.alt = '';
             img.decoding = 'sync';
             img.className = 'person';
@@ -633,6 +634,67 @@
             window.scrollTo(0, el.concept.offsetTop);
             requestSiteScrollbarUpdate();
         }
+
+        function skipShipRunForHeaderNavigation(target, navigate) {
+            if (!HAS_SHIP_RUN || STATIC_FRAME || isMobileStatic() || !target || typeof navigate !== 'function') {
+                return false;
+            }
+
+            if (shipRunConceptRevealTimer) clearTimeout(shipRunConceptRevealTimer);
+            shipRunConceptRevealTimer = null;
+            stopShipRunWatchdog();
+            unlockShipRunScroll();
+            shipRunScrubState = 'complete';
+            shipRunHasCompleted = true;
+            shipRunHeroRestored = true;
+            el.shipRunVideo.pause();
+            setShipRunPlaybackRate();
+            if (el.shipRunVideo.readyState >= 1) el.shipRunVideo.currentTime = 0;
+            gsap.killTweensOf(el.shipRunWhiteout);
+            gsap.set([el.shipRunLayer, el.shipRunWhiteout], { opacity: 0 });
+            el.concept.classList.add('is-revealed');
+
+            // Rebuild without the running-video range before measuring the destination.
+            // This prevents the old pin distance and scroll lock from pulling navigation
+            // back into the Hero while still preserving normal scroll-driven playback.
+            activateCompletedHeroTimeline();
+            requestAnimationFrame(() => {
+                navigate();
+                ScrollTrigger.update();
+                requestSiteScrollbarUpdate();
+            });
+            updateHeroRunProgress();
+            return true;
+        }
+
+        function restoreFullHeroForHomeNavigation(navigate) {
+            if (!HAS_SHIP_RUN || !completedHeroTimelineBuilt || typeof navigate !== 'function') {
+                return false;
+            }
+
+            completedHeroTimelineBuilt = false;
+            shipRunHasCompleted = false;
+            shipRunHeroRestored = false;
+            shipRunScrubState = 'idle';
+            el.concept.classList.remove('is-awaiting-entry', 'is-revealed');
+            // Move to the top before rebuilding. If the old deep scroll position remains
+            // for one frame, buildScroll() correctly assumes a restored below-Hero page
+            // and immediately completes the sequence again, leaving the runners hidden.
+            navigate();
+            buildScroll();
+            ScrollTrigger.refresh();
+            ScrollTrigger.update();
+            requestSiteScrollbarUpdate();
+            return true;
+        }
+
+        window.addEventListener(HERO_SKIP_NAVIGATION_EVENT, event => {
+            const detail = event.detail;
+            if (!detail || detail.handled) return;
+            detail.handled = detail.target?.id === 'home'
+                ? restoreFullHeroForHomeNavigation(detail.navigate)
+                : skipShipRunForHeaderNavigation(detail.target, detail.navigate);
+        });
 
         function restoreCompletedHeroScene() {
             if (!shipRunHasCompleted) return;

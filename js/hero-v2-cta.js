@@ -2,6 +2,7 @@ import { createLiquidMetalButton } from './liquid-metal-button.js';
 
 const sharedRegisterOptions = {
     label: 'ลงทะเบียน',
+    href: '#',
     height: 56,
     fontSize: 20,
     fontWeight: 400,
@@ -20,16 +21,7 @@ const compactRegisterOptions = {
     paddingX: 42,
 };
 
-function goToRegistration() {
-    document.getElementById('ticket')?.scrollIntoView({ block: 'start' });
-    history.replaceState(null, '', window.location.pathname + window.location.search);
-
-    if (document.body.classList.contains('menu-open')) {
-        document.querySelector('.site-header__backdrop')?.click();
-    }
-}
-
-function keepInvestorDnaPlaceholder(event) {
+function keepPlaceholderLink(event) {
     event.preventDefault();
 }
 
@@ -91,14 +83,14 @@ ready.then(() => {
             ...(nextCompact ? compactRegisterOptions : {}),
             textColor: '#111318',
             pillBackground: 'linear-gradient(180deg, #ffffff 0%, #f3f4f8 55%, #e4e7ee 100%)',
-        }, goToRegistration);
+        }, keepPlaceholderLink);
         playbookCtaButton = mountRegisterButton(playbookCtaSlot, {
             ...(nextCompact ? compactRegisterOptions : {}),
             label: 'ค้นหา INVESTOR DNA',
             href: '#',
             textColor: '#111318',
             pillBackground: 'linear-gradient(180deg, #ffffff 0%, #f3f4f8 55%, #e4e7ee 100%)',
-        }, keepInvestorDnaPlaceholder);
+        }, keepPlaceholderLink);
     };
 
     mountHeroCta();
@@ -112,7 +104,7 @@ ready.then(() => {
             rim: headerActionRim,
             textColor: '#ffffff',
             pillBackground: 'linear-gradient(180deg, #20242a 0%, #111318 55%, #050607 100%)',
-        }, goToRegistration);
+        }, keepPlaceholderLink);
     });
 });
     

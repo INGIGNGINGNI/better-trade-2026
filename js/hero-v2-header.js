@@ -118,6 +118,7 @@
         }
 
         function setupDesktopNavActiveState() {
+            const SECTION_NAVIGATION_EVENT = 'bettertrade:section-navigation';
             const entries = siteHeaderDesktopLinks
                 .map(link => {
                     const id = link.getAttribute('href')?.slice(1);
@@ -146,12 +147,16 @@
             const updateActiveLink = () => {
                 ticking = false;
 
-                const probeY = window.scrollY + (siteHeader.offsetHeight || 80) + 8;
+                const headerProbeOffset = (siteHeader.offsetHeight || 80) + 8;
                 let nextEntry = entries[0];
 
                 entries.forEach(entry => {
                     const sectionTop = entry.section.getBoundingClientRect().top + window.scrollY;
-                    if (sectionTop <= probeY) {
+                    const scrollMarginTop = Number.parseFloat(
+                        window.getComputedStyle(entry.section).scrollMarginTop
+                    ) || 0;
+                    const activationY = window.scrollY + Math.max(headerProbeOffset, scrollMarginTop);
+                    if (sectionTop <= activationY) {
                         nextEntry = entry;
                     }
                 });
@@ -168,10 +173,18 @@
             updateActiveLink();
             window.addEventListener('scroll', requestUpdate, { passive: true });
             window.addEventListener('resize', requestUpdate);
+            const syncToNavigationTarget = event => {
+                const nextEntry = entries.find(entry => entry.section.id === event.detail?.targetId);
+                if (!nextEntry) return;
+                setActiveLink(nextEntry.link);
+                requestUpdate();
+            };
+            window.addEventListener(SECTION_NAVIGATION_EVENT, syncToNavigationTarget);
 
             return () => {
                 window.removeEventListener('scroll', requestUpdate);
                 window.removeEventListener('resize', requestUpdate);
+                window.removeEventListener(SECTION_NAVIGATION_EVENT, syncToNavigationTarget);
             };
         }
 
