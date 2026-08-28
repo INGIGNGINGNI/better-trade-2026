@@ -631,10 +631,23 @@
         function activateCompletedHeroTimeline() {
             if (completedHeroTimelineBuilt) return;
             completedHeroTimelineBuilt = true;
+
+            // The completed timeline no longer contains the runner-video range. Remove
+            // the old pin before measuring again so its spacer cannot restore the stale
+            // full-motion height over the shorter completed layout.
+            if (scrollTL) {
+                scrollTL.scrollTrigger?.kill();
+                scrollTL.kill();
+                scrollTL = null;
+            }
+            layout();
             buildScroll();
             ScrollTrigger.refresh();
-            window.scrollTo(0, el.concept.offsetTop);
-            requestSiteScrollbarUpdate();
+            requestAnimationFrame(() => {
+                window.scrollTo(0, el.concept.offsetTop);
+                ScrollTrigger.update();
+                requestSiteScrollbarUpdate();
+            });
         }
 
         function skipShipRunForHeaderNavigation(target, navigate) {
@@ -946,7 +959,8 @@
             // Lowering only the extra pinned distance makes each wheel/touch scroll move
             // the hero timeline further without changing the first viewport composition.
             const fullMotionDuration = SHIP_RUN.startAt + SHIP_RUN.scrollDuration;
-            const activeMotionDuration = HAS_SHIP_RUN ? fullMotionDuration : SHIP_RUN.startAt;
+            const hasActiveShipRun = HAS_SHIP_RUN && !completedHeroTimelineBuilt;
+            const activeMotionDuration = hasActiveShipRun ? fullMotionDuration : SHIP_RUN.startAt;
             const motionDistanceRatio = activeMotionDuration / fullMotionDuration;
             const desktopScrollExtra = (
                 (vh * 4.1 + PAN * 1.4) / HERO_SCROLL_ACCELERATION
