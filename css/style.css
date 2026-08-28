@@ -2880,8 +2880,8 @@ body.is-loading .hero-scroll-cue,
        border ออก (มุมด้านในของกรอบย่อมโค้งน้อยกว่ามุมด้านนอกเสมอ) */
     .ticket__plan-ribbon {
         position: absolute;
-        inset: 0;
-        width: 100%;
+        inset: 0 -1px auto 0;
+        width: auto;
         height: max-content;
         isolation: isolate;
         overflow: hidden;
