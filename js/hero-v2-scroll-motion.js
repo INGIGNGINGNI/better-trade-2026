@@ -92,6 +92,7 @@
         const HERO_RUN_PROGRESS_EVENT = 'bettertrade:hero-run-progress';
         const HERO_SCROLL_CUE_EVENT = 'bettertrade:hero-scroll-cue';
         const HERO_SKIP_NAVIGATION_EVENT = 'bettertrade:hero-skip-navigation';
+        const LOADER_COMPLETE_EVENT = 'bettertrade:loader-complete';
         const HERO_SCROLL_CUE_REVEAL_AT = 0.34;
         const HERO_SCROLL_ACCELERATION = 1.8;
         let heroRunProgressMode = '';
@@ -1462,6 +1463,7 @@
                 gsap.set(el.siteHeader, { clearProps: 'opacity,transform' });
                 startIdle();
                 requestSiteScrollbarUpdate();
+                window.dispatchEvent(new Event(LOADER_COMPLETE_EVENT));
             };
 
             // Reloading mid-page and accessibility/static modes skip decorative motion.
@@ -1541,6 +1543,7 @@
                     ScrollTrigger.refresh();
                     startIdle();
                     requestSiteScrollbarUpdate();
+                    window.dispatchEvent(new Event(LOADER_COMPLETE_EVENT));
                 },
             });
 
