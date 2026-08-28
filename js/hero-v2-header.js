@@ -119,6 +119,7 @@
 
         function setupDesktopNavActiveState() {
             const SECTION_NAVIGATION_EVENT = 'bettertrade:section-navigation';
+            const SECTION_ACTIVATION_TOLERANCE = 2;
             const entries = siteHeaderDesktopLinks
                 .map(link => {
                     const id = link.getAttribute('href')?.slice(1);
@@ -147,6 +148,15 @@
             const updateActiveLink = () => {
                 ticking = false;
 
+                const maxScrollY = Math.max(
+                    0,
+                    document.documentElement.scrollHeight - document.documentElement.clientHeight
+                );
+                if (window.scrollY >= maxScrollY - 2) {
+                    setActiveLink(entries[entries.length - 1].link);
+                    return;
+                }
+
                 const headerProbeOffset = (siteHeader.offsetHeight || 80) + 8;
                 let nextEntry = entries[0];
 
@@ -155,7 +165,9 @@
                     const scrollMarginTop = Number.parseFloat(
                         window.getComputedStyle(entry.section).scrollMarginTop
                     ) || 0;
-                    const activationY = window.scrollY + Math.max(headerProbeOffset, scrollMarginTop);
+                    const activationY = window.scrollY
+                        + Math.max(headerProbeOffset, scrollMarginTop)
+                        + SECTION_ACTIVATION_TOLERANCE;
                     if (sectionTop <= activationY) {
                         nextEntry = entry;
                     }
