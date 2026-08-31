@@ -643,11 +643,13 @@
             layout();
             buildScroll();
             ScrollTrigger.refresh();
-            requestAnimationFrame(() => {
-                window.scrollTo(0, el.concept.offsetTop);
-                ScrollTrigger.update();
-                requestSiteScrollbarUpdate();
-            });
+
+            // Keep the layout swap and its destination in the same animation frame.
+            // Deferring this scroll by another rAF lets the shortened Hero paint once at
+            // the old scroll position, exposing its tail above Concept as a visible jump.
+            window.scrollTo(0, el.concept.offsetTop);
+            ScrollTrigger.update();
+            requestSiteScrollbarUpdate();
         }
 
         function skipShipRunForHeaderNavigation(target, navigate) {
