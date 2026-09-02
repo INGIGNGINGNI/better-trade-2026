@@ -439,8 +439,12 @@
     --bt-agenda-time-size: var(--font-size-16);
     --bt-agenda-speaker-size: calc(var(--space-16) + var(--space-2));
     --bt-agenda-speaker-size-mobile: calc(var(--space-12) + var(--space-3));
-    --bt-agenda-speaker-column-width: calc(var(--bt-agenda-speaker-size) + var(--bt-agenda-speaker-size) + var(--bt-agenda-speaker-size) + var(--space-2) + var(--space-2) + var(--space-2));
+    --bt-agenda-speaker-column-width: calc((var(--bt-agenda-speaker-size) * 2) + var(--space-2));
     --bt-agenda-speaker-column-width-mobile: calc((var(--bt-agenda-speaker-size-mobile) * 2) + var(--space-2));
+
+    @media (max-width: 575px) {
+        --bt-agenda-time-size: var(--font-size-14);
+    }
 
     --bt-header-action-width: calc(var(--space-20) + var(--space-10));
     --bt-header-action-height: var(--space-10);
