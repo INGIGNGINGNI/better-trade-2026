@@ -5148,8 +5148,6 @@ body.is-loading .hero-scroll-cue,
 
 /* ---------- Speakers ---------- */
 .speaker {
-    /* ซ่อนไว้ก่อนสำหรับรอบ launch จริง — ยังไม่ลบเพราะจะกลับมาใช้ทีหลัง */
-    display: none;
     position: relative;
     scroll-margin-top: var(--header-height);
     padding: var(--section-padding-y) 0;
@@ -5721,8 +5719,8 @@ body.is-loading .hero-scroll-cue,
         visibility: visible;
     }
 
-    #speaker .speaker__day-switch:not([aria-current='true']) .speaker__day-switch-details {
-        color: var(--speaker-day-label-color);
+    #speaker .speaker__day-switch[aria-current='true'] .speaker__day-switch-details {
+        color: var(--speaker-day-label-active-color);
         opacity: 1;
         visibility: visible;
     }
@@ -5795,7 +5793,7 @@ body.is-loading .hero-scroll-cue,
     grid-template-columns: repeat(3, minmax(0, 1fr));
     align-items: start;
     grid-auto-rows: auto;
-    gap: var(--space-8) var(--space-16);
+    gap: var(--space-8) var(--space-12);
     margin-top: 0;
 }
 
@@ -5975,7 +5973,7 @@ body.is-loading .hero-scroll-cue,
        เพื่อให้ revert ของ gsap ล้าง drift ได้โดยค่าจัดหัวยังอยู่ครบ */
     object-position: center calc(var(--speaker-portrait-y, 0%) + var(--speaker-portrait-drift, 0%));
     filter: saturate(0.88) contrast(1.02);
-    transform: scale(1);
+    transform: scale(var(--speaker-portrait-scale, 1));
     transform-origin: center top;
     transition:
         filter var(--duration-slow) var(--ease-standard),
@@ -5984,7 +5982,7 @@ body.is-loading .hero-scroll-cue,
 
 .speaker-card:hover .speaker-card__portrait img {
     filter: saturate(1) contrast(1);
-    transform: scale(1.03);
+    transform: scale(calc(var(--speaker-portrait-scale, 1) + 0.03));
 }
 
 .speaker-card__meta {
@@ -6011,9 +6009,8 @@ body.is-loading .hero-scroll-cue,
 .speaker-card p {
     margin: var(--space-1) var(--space-0) var(--space-0);
     color: var(--color-text-muted);
-    font-size: var(--section-body-size);
+    font-size: var(--section-small-size);
     font-weight: var(--font-weight-light);
-    line-height: var(--section-body-line-height);
 }
 
 /* ต่ำกว่า 1200px การ์ดไหลตามกริดปกติ เพดาน 260px กันไม่ให้ใบเดียวยืดจนเสียสัดส่วน */

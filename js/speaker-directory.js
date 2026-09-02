@@ -1,48 +1,22 @@
 (() => {
     const speakerDays = {
         dayOne: [
-            { name: 'ดร.นิเวศน์ เหมวชิรวรากร', role: 'Value Investor (VI) เบอร์หนึ่งของเมืองไทย', image: 'speaker_3.webp', imageY: '0%', imageWidth: 928, imageHeight: 1204 },
-            { name: 'พิมพ์ชนก รัตนกุล', role: 'Founder & CEO, Future Wealth Lab', image: 'speaker_5.webp', imageY: '0%' },
-            { name: 'ธนกร ศรีวัฒน์', role: 'Managing Director, Atlas Securities', image: 'profile-man.webp', imageY: '0%' },
-            { name: 'อรทัย ตั้งพิพัฒน์', role: 'Head of Digital Assets, NovaX', image: 'profile-woman.webp', imageY: '0%' },
-            { name: 'ชยพล เกียรติไพบูลย์', role: 'Partner, Momentum Ventures', image: 'profile-man.webp', imageY: '0%' },
-            { name: 'ณัฐชา วงศ์ประเสริฐ', role: 'Economist & Market Commentator', image: 'profile-woman.webp', imageY: '0%' },
-            { name: 'วรเมธ ลิ้มวัฒนะ', role: 'Chief Technology Officer, Finverse', image: 'profile-man.webp', imageY: '0%' },
-            { name: 'ศิริพร บุญยืน', role: 'Director of Sustainable Investment', image: 'profile-woman.webp', imageY: '0%' },
-            { name: 'ภาคิน อัครเดช', role: 'Founder, New Economy Research', image: 'profile-man.webp', imageY: '0%' },
-            { name: 'ลลิตา จารุวัฒน์', role: 'Private Wealth Advisor', image: 'profile-woman.webp', imageY: '0%' },
-            { name: 'ปกรณ์ สุวรรณกิจ', role: 'Global Macro Fund Manager', image: 'profile-man.webp', imageY: '0%' },
-            { name: 'รมิดา พัฒนโชติ', role: 'Co-founder, Wealth for Everyone', image: 'profile-woman.webp', imageY: '0%' },
-            { name: 'ธีรภัทร ชาญวิทย์', role: 'Digital Asset Research Lead', image: 'profile-man.webp', imageY: '0%' },
-            { name: 'นภัสสร วัฒนศิริ', role: 'CEO, Capital Design Studio', image: 'profile-woman.webp', imageY: '0%' },
-            { name: 'อธิป ตั้งธนกิจ', role: 'Commodity Investment Specialist', image: 'profile-man.webp', imageY: '0%' },
-            { name: 'ชุติมา รุ่งเรืองผล', role: 'Managing Partner, Bright Future Fund', image: 'profile-woman.webp', imageY: '0%' },
-            { name: 'กฤตภาส เมธากุล', role: 'AI & Quantitative Strategy Lead', image: 'profile-man.webp', imageY: '0%' },
-            { name: 'พิชญา พงศ์พาณิชย์', role: 'Financial Educator & Author', image: 'profile-woman.webp', imageY: '0%' },
-            { name: 'วสุธร อินทรรักษ์', role: 'Chief Economist, Meridian Group', image: 'profile-man.webp', imageY: '0%' },
-            { name: 'รวิสรา ธรรมคุณ', role: 'Founder, Purposeful Portfolio', image: 'profile-woman.webp', imageY: '0%' },
+            { name: 'ดร.ฐิติมา ชูเชิด', role: 'ผู้อำนวยการอาวุโส ผู้บริหารฝ่ายวิจัยเศรษฐกิจมหภาค, ศูนย์วิจัยเศรษฐกิจและธุรกิจ (SCB EIC)', image: 'day-1/D1-Dr.Thitima.webp', },
+            { name: 'ดร.พิพัฒน์ เหลืองนฤมิตชัย', role: 'Lorem ipsum dolor sit amet.', image: 'day-1/D1-Pipat.webp', },
+            { name: 'BILLKIN', role: 'Lorem ipsum dolor sit amet.', image: 'day-1/D1-Bilkin.webp', },
+            { name: 'Winni', role: 'Lorem ipsum dolor sit amet.', image: 'day-1/D1-Winni.webp', },
+            { name: 'คุณพสุธา ไดจิ อิเดะ', role: 'Head of business development , <br>efin group', image: 'day-1/D1-Phasutha.webp', },
+            { name: 'คุณวิน พรหมแพทย์', role: 'ประธานกรรมการบริหาร <br>บลจ. กสิกรไทย จำกัด', image: 'day-1/D1-Win.webp', },
+            { name: 'ดร.นิเวศน์ เหมวชิรวรากร', role: 'Lorem ipsum dolor sit amet.', image: 'day-1/D1-Dr.Nivet.webp', },
         ],
         dayTwo: [
-            { name: 'ภานุวัฒน์ วีระกุล', role: 'Chief Executive Officer, Quantum Wealth', image: 'profile-man.webp', imageY: '0%' },
-            { name: 'กัญญารัตน์ อุดมทรัพย์', role: 'Managing Partner, Northstar Ventures', image: 'profile-woman.webp', imageY: '0%' },
-            { name: 'สรวิศ ชาญธนกิจ', role: 'Global Equity Portfolio Manager', image: 'profile-man.webp', imageY: '0%' },
-            { name: 'วริศรา เทพหัสดิน', role: 'Head of Alternative Investments', image: 'profile-woman.webp', imageY: '0%' },
-            { name: 'ณรงค์ฤทธิ์ วัฒนาพงศ์', role: 'Founder, Digital Economy Forum', image: 'profile-man.webp', imageY: '0%' },
-            { name: 'ปิยะนุช สุขเกษม', role: 'Sustainable Finance Director', image: 'profile-woman.webp', imageY: '0%' },
-            { name: 'ธนวัฒน์ ชัยประสิทธิ์', role: 'AI Investment Researcher', image: 'profile-man.webp', imageY: '0%' },
-            { name: 'มนัสวี รุ่งกิจ', role: 'Private Market Strategist', image: 'profile-woman.webp', imageY: '0%' },
-            { name: 'ชลธิชา สกุลทอง', role: 'Financial Technology Entrepreneur', image: 'profile-woman.webp', imageY: '0%' },
-            { name: 'อัครเดช พัฒนวงศ์', role: 'Chief Investment Officer, Vertex Fund', image: 'profile-man.webp', imageY: '0%' },
-            { name: 'ศุภณัฐ รัตนวิชัย', role: 'Digital Asset Portfolio Manager', image: 'profile-man.webp', imageY: '0%' },
-            { name: 'ณิชาภา ตั้งวาณิชย์', role: 'Founder, Future Money Studio', image: 'profile-woman.webp', imageY: '0%' },
-            { name: 'กรณ์ภพ นิลวัฒน์', role: 'Real Asset Investment Director', image: 'profile-man.webp', imageY: '0%' },
-            { name: 'ศศิธร วัฒนวงศ์', role: 'Family Office Advisor', image: 'profile-woman.webp', imageY: '0%' },
-            { name: 'นราวิชญ์ อัครวัฒน์', role: 'Fintech Entrepreneur & Investor', image: 'profile-man.webp', imageY: '0%' },
-            { name: 'อัญชลี รุ่งพิพัฒน์', role: 'Personal Finance Creator', image: 'profile-woman.webp', imageY: '0%' },
-            { name: 'ธนกฤต ศรีสวัสดิ์', role: 'Market Structure Specialist', image: 'profile-man.webp', imageY: '0%' },
-            { name: 'พิมพ์มาดา วงศ์วาน', role: 'Founder, The Growth Playbook', image: 'profile-woman.webp', imageY: '0%' },
-            { name: 'กวินท์ สุวรรณเมธา', role: 'Macroeconomic Research Director', image: 'profile-man.webp', imageY: '0%' },
-            { name: 'ชญานิศ วงศ์วัฒนา', role: 'Wealth Innovation Consultant', image: 'profile-woman.webp', imageY: '0%' },
+            { name: 'คุณกวี ชูกิจเกษม', role: 'Chief Portfolio Advisory<br>ประธานเจ้าหน้าที่ สายการบริหารพอร์ตการลงทุน', image: 'day-2/D2-Kawee.webp' },
+            { name: 'คุณณริดา มานะสมจิตร', role: 'Director, regional wealth solution: Icham pte Ltd<br>Director ฝ่าย Wealth Solutions ประจำภูมิภาค', image: 'day-2/D2-Narida.webp' },
+            { name: 'คุณณฤทธิ์ โกสาลาทิพย์', role: 'กรรมการผู้จัดการ หัวหน้าสายงานที่ปรึกษาและบริหารการลงทุนลูกค้าบุคคล บริษัทหลักทรัพย์เกียรตินาคินภัทร จำกัด (มหาชน)', image: 'day-2/D2-Narit.webp' },
+            { name: 'คุณวชิรเมษฐ์ ธเนศสถิตพงศ์', role: 'Lorem ipsum dolor sit amet.', image: 'day-2/D2-Wachiramet.webp' },
+            { name: 'คุณพิริยะ สัมพันธารักษ์', role: 'Ceo and Co Founder Right Shift', image: 'day-2/D2-Piriya.webp' },
+            { name: 'คุณสุธน สิงหสิทธางกูร', role: 'Co-Founder, ABCD fund', image: 'day-2/D2-Jakky.webp' },
+            { name: 'คุณเบียร์ วนนท์', role: 'Lorem ipsum dolor sit amet.', image: 'day-2/D2-Beerwanon.webp' },
         ],
     };
 
@@ -50,27 +24,33 @@
 
     const createSpeakerCard = ({
         name,
-        role,
-        image = 'profile-man.webp',
+        role = '',
+        image,
         imageY = '0%',
-        imageWidth = 928,
-        imageHeight = 1152,
+        imageScale = 1,
+        imageWidth,
+        imageHeight,
     }, index) => {
         const card = document.createElement('article');
+        const isDayOnePortrait = image.startsWith('day-1/');
+        const isDayTwoPortrait = image.startsWith('day-2/');
+        const intrinsicWidth = imageWidth || (isDayOnePortrait ? 960 : 928);
+        const intrinsicHeight = imageHeight || (isDayOnePortrait ? 1200 : (isDayTwoPortrait ? 1204 : 1152));
 
         card.className = 'speaker-card';
         card.style.setProperty('--speaker-order', String(index % 5));
         card.style.setProperty('--speaker-portrait-y', imageY);
+        card.style.setProperty('--speaker-portrait-scale', String(imageScale));
         card.innerHTML = `
             <div class="speaker-card__portrait">
                 <div class="speaker-card__frame">
-                    <img src="images/speakers/${image}" width="${imageWidth}" height="${imageHeight}"
+                    <img src="images/speakers/${image}" width="${intrinsicWidth}" height="${intrinsicHeight}"
                         loading="lazy" decoding="async" alt="${name}">
                 </div>
             </div>
             <div class="speaker-card__meta">
                 <h3>${name}</h3>
-                <p>${role}</p>
+                ${role ? `<p>${role}</p>` : ''}
             </div>`;
 
         return card;
