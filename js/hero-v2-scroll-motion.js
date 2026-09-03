@@ -1522,8 +1522,8 @@
             gsap.set('.asset .inner', { opacity: 0 });
             gsap.set('#ui', { opacity: 0, y: 16 });
             gsap.set(loaderIcons, {
-                left: M.vw / 2,
-                top: M.vh / 2,
+                left: '50%',
+                top: '50%',
                 xPercent: -50,
                 yPercent: -50,
                 x: 0,
@@ -1533,27 +1533,33 @@
                 opacity: 0,
             });
 
-            ASSET_ICON_KEYS.forEach(k => {
-                const icon = el.loaderIcons[k];
-                const target = el[k].getBoundingClientRect();
-                const baseWidth = Math.max(1, Number.parseFloat(el[k].style.width));
-                const parentScale = isMobileStatic() ? 1 : M.assets[k].scale;
-                const renderedWidth = Math.max(1, baseWidth * parentScale);
-                const parentRotation = isMobileStatic() ? KV[k].rot : M.assets[k].rotA;
-                const angle = parentRotation * Math.PI / 180;
-                const dx = M.vw / 2 - (target.left + target.width / 2);
-                const dy = M.vh / 2 - (target.top + target.height / 2);
+            const measureAssetScatterOrigins = () => {
+                const loaderBounds = el.loader.getBoundingClientRect();
+                const loaderCenterX = loaderBounds.left + loaderBounds.width / 2;
+                const loaderCenterY = loaderBounds.top + loaderBounds.height / 2;
 
-                // Convert the viewport-space offset back into the asset's local axes.
-                // The real asset can then take over from the loader at the exact same
-                // centre point while retaining its own z-index relative to the ship.
-                assetScatterOrigins[k] = {
-                    x: (Math.cos(angle) * dx + Math.sin(angle) * dy) / parentScale,
-                    y: (-Math.sin(angle) * dx + Math.cos(angle) * dy) / parentScale,
-                    scale: Math.max(1, icon.offsetWidth) / renderedWidth,
-                    rotation: -parentRotation,
-                };
-            });
+                ASSET_ICON_KEYS.forEach(k => {
+                    const icon = el.loaderIcons[k];
+                    const target = el[k].getBoundingClientRect();
+                    const baseWidth = Math.max(1, Number.parseFloat(el[k].style.width));
+                    const parentScale = isMobileStatic() ? 1 : M.assets[k].scale;
+                    const renderedWidth = Math.max(1, baseWidth * parentScale);
+                    const parentRotation = isMobileStatic() ? KV[k].rot : M.assets[k].rotA;
+                    const angle = parentRotation * Math.PI / 180;
+                    const dx = loaderCenterX - (target.left + target.width / 2);
+                    const dy = loaderCenterY - (target.top + target.height / 2);
+
+                    // Convert the viewport-space offset back into the asset's local axes.
+                    // The real asset can then take over from the loader at the exact same
+                    // centre point while retaining its own z-index relative to the ship.
+                    assetScatterOrigins[k] = {
+                        x: (Math.cos(angle) * dx + Math.sin(angle) * dy) / parentScale,
+                        y: (-Math.sin(angle) * dx + Math.cos(angle) * dy) / parentScale,
+                        scale: Math.max(1, icon.offsetWidth) / renderedWidth,
+                        rotation: -parentRotation,
+                    };
+                });
+            };
 
             gsap.set(el.walls, { zIndex: 20 });
             gsap.set(el.wallIntroLeft, { x: 0, scaleX: 1.38 });
@@ -1611,22 +1617,26 @@
             // Hand the centre icon over to the real hero assets before scattering. Using
             // the actual nodes here keeps every icon in its intended layer relative to the
             // ship; loader copies would all sit in the loader's topmost stacking context.
-            ASSET_ICON_KEYS.forEach(k => {
-                const isSeed = k === 'triangle';
-                tl.set(el.loaderIcons[k], {
-                    x: 0,
-                    y: 0,
-                    scale: isSeed ? 1 : 0.5,
-                    rotation: 0,
-                }, exitAt);
-                tl.set(el[k + 'Inner'], {
-                    ...assetScatterOrigins[k],
-                    scale: assetScatterOrigins[k].scale * (isSeed ? 1 : 0.5),
-                    opacity: 0,
-                    transformOrigin: '50% 50%',
-                    force3D: true,
-                }, exitAt);
-            });
+            tl.call(() => {
+                measureAssetScatterOrigins();
+
+                ASSET_ICON_KEYS.forEach(k => {
+                    const isSeed = k === 'triangle';
+                    gsap.set(el.loaderIcons[k], {
+                        x: 0,
+                        y: 0,
+                        scale: isSeed ? 1 : 0.5,
+                        rotation: 0,
+                    });
+                    gsap.set(el[k + 'Inner'], {
+                        ...assetScatterOrigins[k],
+                        scale: assetScatterOrigins[k].scale * (isSeed ? 1 : 0.5),
+                        opacity: 0,
+                        transformOrigin: '50% 50%',
+                        force3D: true,
+                    });
+                });
+            }, null, exitAt);
             // Crossfade the loader's final triangle into the real hero node. Keeping
             // their combined opacity near one avoids the brief brightness pulse that
             // previously read as a hitch before the assets started moving.
