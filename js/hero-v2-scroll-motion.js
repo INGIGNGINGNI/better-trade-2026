@@ -94,11 +94,28 @@
         const HERO_SCROLL_CUE_EVENT = 'bettertrade:hero-scroll-cue';
         const HERO_SKIP_NAVIGATION_EVENT = 'bettertrade:hero-skip-navigation';
         const LOADER_COMPLETE_EVENT = 'bettertrade:loader-complete';
+        const SHIP_RUN_SEEN_STORAGE_KEY = 'bettertrade:ship-run-seen:v1';
         const HERO_SCROLL_CUE_REVEAL_AT = 0.34;
         const HERO_SCROLL_ACCELERATION = 1.8;
         let heroRunProgressMode = '';
         let heroRunProgressValue = -1;
         let heroScrollCueVisible = false;
+
+        function hasSeenShipRun() {
+            try {
+                return window.localStorage.getItem(SHIP_RUN_SEEN_STORAGE_KEY) === '1';
+            } catch (error) {
+                return false;
+            }
+        }
+
+        function rememberShipRunSeen() {
+            try {
+                window.localStorage.setItem(SHIP_RUN_SEEN_STORAGE_KEY, '1');
+            } catch (error) {
+                // Storage may be unavailable in restricted/private browsing contexts.
+            }
+        }
 
         function publishHeroScrollCueState(visible) {
             window.__betterTradeHeroScrollCueVisible = visible;
@@ -305,11 +322,17 @@
         let shipRunProgressBaseTime = 0;
         let shipRunScrollLockY = 0;
         let shipRunScrollLocked = false;
-        let shipRunHasCompleted = false;
-        let shipRunHeroRestored = false;
-        let completedHeroTimelineBuilt = false;
+        const shipRunWasSeen = HAS_SHIP_RUN && hasSeenShipRun();
+        let shipRunHasCompleted = shipRunWasSeen;
+        let shipRunHeroRestored = shipRunWasSeen;
+        let completedHeroTimelineBuilt = shipRunWasSeen;
         let shipRunConceptRevealTimer = null;
-        let shipRunStaticScene = [];
+        let shipRunStaticScene = [
+            el.ship,
+            el.stairs,
+            el.pshadow,
+            ...el.runners,
+        ];
         let syncShipLookToTimeline = () => {};
 
         function createShipRunRenderer() {
@@ -768,6 +791,9 @@
                 return;
             }
             if (shipRunScrubState === 'scrubbing' || shipRunScrubState === 'playing') return;
+            // Persist at the first real playback attempt so refreshing midway through
+            // the sequence does not make the same browser play it again.
+            rememberShipRunSeen();
             stopShipRunWatchdog();
             shipRunScrubState = 'playing';
             shipRunHeroRestored = false;
