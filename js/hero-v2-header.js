@@ -133,6 +133,11 @@
             let activeLink = null;
             let ticking = false;
 
+            const getVisibleEntries = () => entries.filter(entry => (
+                entry.section.getClientRects().length > 0
+                && window.getComputedStyle(entry.section).visibility !== 'hidden'
+            ));
+
             const setActiveLink = nextLink => {
                 if (activeLink === nextLink) return;
                 siteHeaderDesktopLinks.forEach(link => {
@@ -148,19 +153,29 @@
             const updateActiveLink = () => {
                 ticking = false;
 
+                // Hidden launch sections (for example #speaker) remain in the DOM so
+                // they can be enabled later. Their geometry collapses to the document
+                // origin, which would otherwise make the last hidden nav item active
+                // for most of the page.
+                const visibleEntries = getVisibleEntries();
+                if (!visibleEntries.length) {
+                    setActiveLink(null);
+                    return;
+                }
+
                 const maxScrollY = Math.max(
                     0,
                     document.documentElement.scrollHeight - document.documentElement.clientHeight
                 );
                 if (window.scrollY >= maxScrollY - 2) {
-                    setActiveLink(entries[entries.length - 1].link);
+                    setActiveLink(visibleEntries[visibleEntries.length - 1].link);
                     return;
                 }
 
                 const headerProbeOffset = (siteHeader.offsetHeight || 80) + 8;
-                let nextEntry = entries[0];
+                let nextEntry = visibleEntries[0];
 
-                entries.forEach(entry => {
+                visibleEntries.forEach(entry => {
                     const sectionTop = entry.section.getBoundingClientRect().top + window.scrollY;
                     const scrollMarginTop = Number.parseFloat(
                         window.getComputedStyle(entry.section).scrollMarginTop
@@ -186,7 +201,8 @@
             window.addEventListener('scroll', requestUpdate, { passive: true });
             window.addEventListener('resize', requestUpdate);
             const syncToNavigationTarget = event => {
-                const nextEntry = entries.find(entry => entry.section.id === event.detail?.targetId);
+                const nextEntry = getVisibleEntries()
+                    .find(entry => entry.section.id === event.detail?.targetId);
                 if (!nextEntry) return;
                 setActiveLink(nextEntry.link);
                 requestUpdate();
