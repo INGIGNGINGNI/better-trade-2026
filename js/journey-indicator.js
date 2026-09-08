@@ -35,6 +35,7 @@
     if (!rail || !label) return;
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const sectionExitLine = 320;
     let activeIndex = -1;
     let frameId = null;
     let labelRevealTimer = null;
@@ -173,14 +174,14 @@
         }
     }
 
-    function getActiveStopIndex(sectionRects) {
+    function getActiveStopIndex(sectionRects, exitLine) {
         let nextActiveIndex = 0;
 
         /* Keep the current label for as long as any part of its section remains in
-           the viewport. Promote the next stop only after the current section's bottom
-           has passed the physical top edge of the screen. */
+           the visible content area. Promote the next stop as soon as the current
+           section's bottom reaches the lower edge of the sticky header. */
         for (let index = 0; index < sectionRects.length - 1; index += 1) {
-            if (sectionRects[index].bottom <= 0) {
+            if (Math.round(sectionRects[index].bottom) <= exitLine) {
                 nextActiveIndex = index + 1;
                 continue;
             }
@@ -196,7 +197,7 @@
             && sectionRects[sectionRects.length - 1].bottom > 0;
 
         if (isWithinRoute) {
-            setActiveStop(getActiveStopIndex(sectionRects));
+            setActiveStop(getActiveStopIndex(sectionRects, sectionExitLine));
         }
     }
 
@@ -223,7 +224,7 @@
             return;
         }
 
-        const nextActiveIndex = getActiveStopIndex(sectionRects);
+        const nextActiveIndex = getActiveStopIndex(sectionRects, sectionExitLine);
 
         /* Update the label before the progress/color work below. Native scrolling can
            stay compositor-smooth while the main thread is busy in content-heavy
