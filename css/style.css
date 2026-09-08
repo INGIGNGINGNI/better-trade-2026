@@ -6358,6 +6358,13 @@ body.is-loading .hero-scroll-cue,
     position: relative;
 }
 
+.faq__header-col {
+    /* Bootstrap's align-items-start keeps this column at its content height, which
+       leaves the sticky header with no vertical travel. Stretch only the left column
+       to the FAQ row height so it can remain pinned beside the sticky tabs. */
+    align-self: stretch;
+}
+
 .faq__header {
     position: sticky;
     top: calc(var(--header-height) + var(--space-8));
@@ -6373,6 +6380,8 @@ body.is-loading .hero-scroll-cue,
 
 .faq__content {
     min-width: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
 }
 
 .faq__content-col {
@@ -6390,7 +6399,7 @@ body.is-loading .hero-scroll-cue,
     top: var(--header-height);
     z-index: 20;
     margin-bottom: var(--space-0);
-    padding: var(--space-6) var(--space-0) var(--space-0);
+    padding: var(--space-12) var(--space-0) var(--space-0);
     background: var(--color-surface-page);
 }
 
@@ -6471,8 +6480,19 @@ body.is-loading .hero-scroll-cue,
         transform var(--duration-base) linear;
 }
 
+.faq__panel {
+    grid-column: 1;
+    grid-row: 2;
+    min-width: 0;
+}
+
+/* Stack every tab panel in the same grid cell so the row is sized by the tallest
+   panel (currently Tickets). Hidden panels still contribute their intrinsic height,
+   while visibility + the hidden attribute keep them non-interactive and inaccessible. */
 .faq__panel[hidden] {
-    display: none;
+    display: block !important;
+    visibility: hidden;
+    pointer-events: none;
 }
 
 .faq__accordion {
@@ -6631,6 +6651,7 @@ body.is-loading .hero-scroll-cue,
 
     .faq__tabs-viewport {
         top: var(--header-height);
+        padding-top: var(--space-8);
     }
 }
 
@@ -6672,6 +6693,7 @@ body.is-loading .hero-scroll-cue,
     }
 
     .faq__question:not(.collapsed) {
+        padding-top: var(--space-8);
         padding-bottom: var(--space-2);
     }
 
@@ -6681,7 +6703,7 @@ body.is-loading .hero-scroll-cue,
     }
 
     .faq__answer-body {
-        padding: var(--space-0) var(--space-0) var(--space-6) var(--space-3);
+        padding: var(--space-0) var(--space-0) var(--space-8) var(--space-3);
     }
 
     .faq__answer-body p+ul,

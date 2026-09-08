@@ -119,12 +119,15 @@
 
         function setupDesktopNavActiveState() {
             const SECTION_NAVIGATION_EVENT = 'bettertrade:section-navigation';
-            const SECTION_ACTIVATION_TOLERANCE = 2;
             const entries = siteHeaderDesktopLinks
                 .map(link => {
                     const id = link.getAttribute('href')?.slice(1);
-                    const section = id ? document.getElementById(id) : null;
-                    return section ? { link, section } : null;
+                    /* #home is a zero-height anchor immediately before the hero. Use
+                       the actual hero scroller as Home's observable section instead. */
+                    const section = id === 'home'
+                        ? document.getElementById('scroller')
+                        : (id ? document.getElementById(id) : null);
+                    return section ? { id, link, section } : null;
                 })
                 .filter(Boolean);
 
@@ -148,32 +151,37 @@
             const updateActiveLink = () => {
                 ticking = false;
 
+                const headerProbeOffset = (siteHeader.offsetHeight || 80) + 8;
+                const visibleEntry = entries.find(entry => {
+                    const rect = entry.section.getBoundingClientRect();
+                    return rect.top <= headerProbeOffset && rect.bottom > headerProbeOffset;
+                });
+
+                if (visibleEntry) {
+                    setActiveLink(visibleEntry.link);
+                    return;
+                }
+
+                /* The footer may be shorter than the viewport and therefore unable to
+                   reach the header probe. At the true document end, allow Contact to be
+                   active once its section is visible. */
                 const maxScrollY = Math.max(
                     0,
                     document.documentElement.scrollHeight - document.documentElement.clientHeight
                 );
-                if (window.scrollY >= maxScrollY - 2) {
-                    setActiveLink(entries[entries.length - 1].link);
+                const contactEntry = entries.find(entry => entry.id === 'contact');
+                const contactRect = contactEntry?.section.getBoundingClientRect();
+                const contactIsVisible = contactRect
+                    && contactRect.top < document.documentElement.clientHeight
+                    && contactRect.bottom > 0;
+
+                if (window.scrollY >= maxScrollY - 2 && contactEntry && contactIsVisible) {
+                    setActiveLink(contactEntry.link);
                     return;
                 }
 
-                const headerProbeOffset = (siteHeader.offsetHeight || 80) + 8;
-                let nextEntry = entries[0];
-
-                entries.forEach(entry => {
-                    const sectionTop = entry.section.getBoundingClientRect().top + window.scrollY;
-                    const scrollMarginTop = Number.parseFloat(
-                        window.getComputedStyle(entry.section).scrollMarginTop
-                    ) || 0;
-                    const activationY = window.scrollY
-                        + Math.max(headerProbeOffset, scrollMarginTop)
-                        + SECTION_ACTIVATION_TOLERANCE;
-                    if (sectionTop <= activationY) {
-                        nextEntry = entry;
-                    }
-                });
-
-                setActiveLink(nextEntry.link);
+                /* The current section has no matching header item. */
+                setActiveLink(null);
             };
 
             const requestUpdate = () => {
