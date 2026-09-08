@@ -173,23 +173,30 @@
         }
     }
 
-    function getActiveStopIndex(sectionRects, activationLine) {
+    function getActiveStopIndex(sectionRects) {
         let nextActiveIndex = 0;
-        for (let index = 0; index < sectionRects.length; index += 1) {
-            if (sectionRects[index].top <= activationLine) {
-                nextActiveIndex = index;
+
+        /* Keep the current label for as long as any part of its section remains in
+           the viewport. Promote the next stop only after the current section's bottom
+           has passed the physical top edge of the screen. */
+        for (let index = 0; index < sectionRects.length - 1; index += 1) {
+            if (sectionRects[index].bottom <= 0) {
+                nextActiveIndex = index + 1;
+                continue;
             }
+            break;
         }
+
         return nextActiveIndex;
     }
 
     function updateActiveStopImmediately() {
         const sectionRects = route.map(stop => stop.element.getBoundingClientRect());
         const isWithinRoute = sectionRects[0].top <= activationLine
-            && sectionRects[sectionRects.length - 1].bottom >= activationLine;
+            && sectionRects[sectionRects.length - 1].bottom > 0;
 
         if (isWithinRoute) {
-            setActiveStop(getActiveStopIndex(sectionRects, activationLine));
+            setActiveStop(getActiveStopIndex(sectionRects));
         }
     }
 
@@ -207,7 +214,7 @@
             || document.body.classList.contains('menu-open')
             || document.body.classList.contains('menu-closing');
         const isWithinRoute = sectionRects[0].top <= activationLine
-            && sectionRects[sectionRects.length - 1].bottom >= activationLine;
+            && sectionRects[sectionRects.length - 1].bottom > 0;
 
         indicator.classList.toggle('is-visible', isWithinRoute && !isSuppressed);
         if (!isWithinRoute) {
@@ -216,7 +223,7 @@
             return;
         }
 
-        const nextActiveIndex = getActiveStopIndex(sectionRects, activationLine);
+        const nextActiveIndex = getActiveStopIndex(sectionRects);
 
         /* Update the label before the progress/color work below. Native scrolling can
            stay compositor-smooth while the main thread is busy in content-heavy
