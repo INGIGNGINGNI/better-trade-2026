@@ -279,8 +279,6 @@
             loaderProgressFill: document.querySelector('.loader-progress__fill'),
             loaderProgressValue: document.querySelector('.loader-progress__value'),
             siteHeader: document.getElementById('site-header'),
-            siteScrollbar: document.getElementById('site-scrollbar'),
-            siteScrollbarThumb: document.querySelector('.site-scrollbar__thumb'),
         };
         KEYS.forEach(k => {
             el[k] = document.getElementById('a-' + k);
@@ -308,9 +306,7 @@
         let M = {};          // measured layout
         let scrollTL = null;
         let introDone = false;
-        let scrollbarRAF = null;
-        let scrollbarRevealTimer = null;
-        let scrollbarDrag = null;
+        let heroScrollProgressRAF = null;
         const shipRunState = { time: 0 };
         let shipRunTargetTime = 0;
         let shipRunSyncRAF = null;
@@ -672,7 +668,7 @@
             // the old scroll position, exposing its tail above Concept as a visible jump.
             window.scrollTo(0, el.concept.offsetTop);
             ScrollTrigger.update();
-            requestSiteScrollbarUpdate();
+            requestHeroScrollProgressUpdate();
         }
 
         function skipShipRunForHeaderNavigation(target, navigate) {
@@ -701,7 +697,7 @@
             requestAnimationFrame(() => {
                 navigate();
                 ScrollTrigger.update();
-                requestSiteScrollbarUpdate();
+                requestHeroScrollProgressUpdate();
             });
             updateHeroRunProgress();
             return true;
@@ -826,108 +822,17 @@
         window.addEventListener('touchmove', preventShipRunScroll, { passive: false });
         window.addEventListener('keydown', preventShipRunKeyScroll);
 
-        function updateSiteScrollbar() {
-            const maxScroll = Math.max(0, document.documentElement.scrollHeight - document.documentElement.clientHeight);
-            const trackHeight = el.siteScrollbar.clientHeight;
-            const thumbHeight = maxScroll > 0
-                ? Math.max(32, trackHeight * document.documentElement.clientHeight / document.documentElement.scrollHeight)
-                : trackHeight;
-            const travel = Math.max(0, trackHeight - thumbHeight);
-            const progress = maxScroll > 0 ? clamp(window.scrollY / maxScroll, 0, 1) : 0;
-
-            el.siteScrollbar.style.setProperty('--thumb-height', `${thumbHeight}px`);
-            el.siteScrollbar.style.setProperty('--thumb-y', `${travel * progress}px`);
-            el.siteScrollbar.classList.toggle('is-hidden', maxScroll <= 0);
-            el.siteScrollbar.tabIndex = document.body.classList.contains('is-loading') || maxScroll <= 0 ? -1 : 0;
-            el.siteScrollbar.setAttribute('aria-valuenow', String(Math.round(progress * 100)));
-        }
-
-        function requestSiteScrollbarUpdate() {
-            if (scrollbarRAF) return;
-            scrollbarRAF = requestAnimationFrame(() => {
-                scrollbarRAF = null;
-                updateSiteScrollbar();
+        // Keep the Hero progress indicator in sync with ordinary document scrolling.
+        // This does not intercept, alter, or proxy the browser's native scrollbar.
+        function requestHeroScrollProgressUpdate() {
+            if (heroScrollProgressRAF) return;
+            heroScrollProgressRAF = requestAnimationFrame(() => {
+                heroScrollProgressRAF = null;
+                updateHeroRunProgress();
             });
         }
 
-        function revealSiteScrollbar() {
-            const maxScroll = Math.max(0, document.documentElement.scrollHeight - document.documentElement.clientHeight);
-            if (document.body.classList.contains('is-loading') || maxScroll <= 0) return;
-
-            el.siteScrollbar.classList.add('is-visible');
-            clearTimeout(scrollbarRevealTimer);
-            scrollbarRevealTimer = setTimeout(() => {
-                if (!scrollbarDrag) {
-                    el.siteScrollbar.classList.remove('is-visible');
-                }
-            }, 1100);
-        }
-
-        function handleSiteScrollbarScroll() {
-            revealSiteScrollbar();
-            requestSiteScrollbarUpdate();
-            updateHeroRunProgress();
-        }
-
-        function scrollFromScrollbarPointer(clientY, startScroll, startPointerY) {
-            const maxScroll = Math.max(0, document.documentElement.scrollHeight - document.documentElement.clientHeight);
-            const thumbHeight = parseFloat(getComputedStyle(el.siteScrollbar).getPropertyValue('--thumb-height')) || 32;
-            const travel = Math.max(1, el.siteScrollbar.clientHeight - thumbHeight);
-            window.scrollTo(0, clamp(startScroll + (clientY - startPointerY) * maxScroll / travel, 0, maxScroll));
-        }
-
-        el.siteScrollbarThumb.addEventListener('pointerdown', event => {
-            event.preventDefault();
-            scrollbarDrag = { pointerY: event.clientY, scrollY: window.scrollY };
-            revealSiteScrollbar();
-            el.siteScrollbar.classList.add('is-dragging');
-            el.siteScrollbarThumb.setPointerCapture(event.pointerId);
-        });
-
-        el.siteScrollbarThumb.addEventListener('pointermove', event => {
-            if (!scrollbarDrag) return;
-            scrollFromScrollbarPointer(event.clientY, scrollbarDrag.scrollY, scrollbarDrag.pointerY);
-        });
-
-        const stopScrollbarDrag = event => {
-            if (!scrollbarDrag) return;
-            scrollbarDrag = null;
-            el.siteScrollbar.classList.remove('is-dragging');
-            revealSiteScrollbar();
-            if (el.siteScrollbarThumb.hasPointerCapture(event.pointerId)) {
-                el.siteScrollbarThumb.releasePointerCapture(event.pointerId);
-            }
-        };
-        el.siteScrollbarThumb.addEventListener('pointerup', stopScrollbarDrag);
-        el.siteScrollbarThumb.addEventListener('pointercancel', stopScrollbarDrag);
-
-        el.siteScrollbar.addEventListener('pointerdown', event => {
-            if (event.target === el.siteScrollbarThumb) return;
-            revealSiteScrollbar();
-            const track = el.siteScrollbar.getBoundingClientRect();
-            const maxScroll = Math.max(0, document.documentElement.scrollHeight - document.documentElement.clientHeight);
-            const thumbHeight = parseFloat(getComputedStyle(el.siteScrollbar).getPropertyValue('--thumb-height')) || 32;
-            const travel = Math.max(1, track.height - thumbHeight);
-            const progress = clamp((event.clientY - track.top - thumbHeight / 2) / travel, 0, 1);
-            window.scrollTo({ top: progress * maxScroll, behavior: 'smooth' });
-        });
-
-        el.siteScrollbar.addEventListener('keydown', event => {
-            const maxScroll = Math.max(0, document.documentElement.scrollHeight - document.documentElement.clientHeight);
-            const keyTargets = {
-                ArrowUp: window.scrollY - 64,
-                ArrowDown: window.scrollY + 64,
-                PageUp: window.scrollY - document.documentElement.clientHeight * 0.8,
-                PageDown: window.scrollY + document.documentElement.clientHeight * 0.8,
-                Home: 0,
-                End: maxScroll,
-            };
-            if (!(event.key in keyTargets)) return;
-            event.preventDefault();
-            window.scrollTo(0, clamp(keyTargets[event.key], 0, maxScroll));
-        });
-
-        window.addEventListener('scroll', handleSiteScrollbarScroll, { passive: true });
+        window.addEventListener('scroll', requestHeroScrollProgressUpdate, { passive: true });
 
         /* ?frame=0.55 renders one still frame of the scroll timeline instead of wiring
            it to the scrollbar: no ScrollTrigger, no pin, document exactly one viewport.
@@ -1427,7 +1332,7 @@
                         startShipRunScrub();
                         syncShipRunToScroll();
                     }
-                    requestSiteScrollbarUpdate();
+                    requestHeroScrollProgressUpdate();
                     updateHeroRunProgress();
                 };
 
@@ -1507,14 +1412,19 @@
             if (introDone) return;
             introDone = true;
 
+            const showPageScrollbar = () => {
+                document.documentElement.classList.remove('is-preparing-page-scroll');
+            };
+
             const finishImmediately = () => {
+                showPageScrollbar();
                 document.body.classList.remove('is-loading');
                 el.loader?.remove();
                 gsap.set('.asset .inner', { opacity: 1, clearProps: 'transform' });
                 gsap.set('#ui', { opacity: 1, y: 0 });
                 gsap.set(el.siteHeader, { clearProps: 'opacity,transform' });
                 startIdle();
-                requestSiteScrollbarUpdate();
+                requestHeroScrollProgressUpdate();
                 window.dispatchEvent(new Event(LOADER_COMPLETE_EVENT));
             };
 
@@ -1595,12 +1505,13 @@
                 defaults: { ease: 'power3.out' },
                 onComplete: () => {
                     gsap.set('.asset .inner', { opacity: 1, clearProps: 'transform' });
+                    showPageScrollbar();
                     document.body.classList.remove('is-loading');
                     el.loader.remove();
                     gsap.set(el.siteHeader, { clearProps: 'opacity,transform' });
                     ScrollTrigger.refresh();
                     startIdle();
-                    requestSiteScrollbarUpdate();
+                    requestHeroScrollProgressUpdate();
                     window.dispatchEvent(new Event(LOADER_COMPLETE_EVENT));
                 },
             });
@@ -1671,7 +1582,17 @@
 
             // Freeze the mist on its current frame before the reveal. The canvas can
             // still fade visually without competing with the walls and assets for GPU time.
+            // Unlock native scrolling while the loader is still fully opaque. This gives
+            // the browser time to allocate its scrollbar and complete any resulting
+            // viewport relayout before the real page becomes visible.
+            tl.call(() => {
+                document.documentElement.classList.add('is-preparing-page-scroll');
+                document.body.classList.remove('is-loading');
+                window.dispatchEvent(new Event('resize'));
+            }, null, sceneRevealAt - 0.16);
+
             tl.call(() => window.dispatchEvent(new Event('loader:mist-stop')), null, exitAt)
+                .call(showPageScrollbar, null, sceneRevealAt)
                 .to(el.loaderSurface, { opacity: 0, duration: 0.78, ease: 'power2.out' }, sceneRevealAt)
                 .to(el.wallIntroLeft, { scaleX: 1, duration: wallIntroDuration, ease: 'power3.inOut' }, sceneRevealAt + wallIntroStartOffset)
                 .to(el.wallIntroRight, { scaleX: 1, duration: wallIntroDuration, ease: 'power3.inOut' }, sceneRevealAt + wallIntroStartOffset + 0.025)
@@ -1871,7 +1792,7 @@
                 setupMobileStaticHero();
                 playIntro();
                 setupConceptVideoMotion();
-                requestSiteScrollbarUpdate();
+                requestHeroScrollProgressUpdate();
                 updateHeroRunProgress();
                 return;
             }
@@ -1889,7 +1810,7 @@
                 playIntro();
             }
             setupConceptVideoMotion();
-            requestSiteScrollbarUpdate();
+            requestHeroScrollProgressUpdate();
             updateHeroRunProgress();
 
         }
@@ -1911,7 +1832,7 @@
             // Collapsing/expanding Safari chrome is a height-only resize. Rebuilding the
             // mobile scene here caused the ship, people and asset icons to grow mid-scroll.
             if (isMobileStatic() && !widthChanged) {
-                requestSiteScrollbarUpdate();
+                requestHeroScrollProgressUpdate();
                 updateHeroRunProgress();
                 return;
             }
@@ -1957,7 +1878,7 @@
                 }
                 setupConceptVideoMotion();
                 ScrollTrigger.refresh();
-                requestSiteScrollbarUpdate();
+                requestHeroScrollProgressUpdate();
                 updateHeroRunProgress();
             });
         });

@@ -1,8 +1,13 @@
 import { createLiquidMetalButton } from './liquid-metal-button.js';
 
+const REGISTER_URL = 'https://www.efin.finance/events/better-trade/better-trade2026/buy-ticket';
+const INVESTOR_DNA_URL = 'https://egames.efin.finance/games/investor-dna-quest';
+
 const sharedRegisterOptions = {
     label: 'ลงทะเบียน',
-    href: '#',
+    href: REGISTER_URL,
+    target: '_blank',
+    rel: 'noopener noreferrer',
     height: 56,
     fontSize: 20,
     fontWeight: 400,
@@ -21,17 +26,12 @@ const compactRegisterOptions = {
     paddingX: 42,
 };
 
-function keepPlaceholderLink(event) {
-    event.preventDefault();
-}
-
-function mountRegisterButton(target, appearance, onClick) {
+function mountRegisterButton(target, appearance) {
     if (!target) return;
 
     const button = createLiquidMetalButton({
         ...sharedRegisterOptions,
         ...appearance,
-        onClick,
     });
 
     target.replaceChildren(button.el);
@@ -83,14 +83,14 @@ ready.then(() => {
             ...(nextCompact ? compactRegisterOptions : {}),
             textColor: '#111318',
             pillBackground: 'linear-gradient(180deg, #ffffff 0%, #f3f4f8 55%, #e4e7ee 100%)',
-        }, keepPlaceholderLink);
+        });
         playbookCtaButton = mountRegisterButton(playbookCtaSlot, {
             ...(nextCompact ? compactRegisterOptions : {}),
             label: 'ค้นหา INVESTOR DNA',
-            href: '#',
+            href: INVESTOR_DNA_URL,
             textColor: '#111318',
             pillBackground: 'linear-gradient(180deg, #ffffff 0%, #f3f4f8 55%, #e4e7ee 100%)',
-        }, keepPlaceholderLink);
+        });
     };
 
     mountHeroCta();
@@ -104,7 +104,7 @@ ready.then(() => {
             rim: headerActionRim,
             textColor: '#ffffff',
             pillBackground: 'linear-gradient(180deg, #20242a 0%, #111318 55%, #050607 100%)',
-        }, keepPlaceholderLink);
+        });
     });
 });
     
