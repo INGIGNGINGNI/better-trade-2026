@@ -1,22 +1,66 @@
 (() => {
     const speakerDays = {
         dayOne: [
-            { name: 'ดร.ฐิติมา ชูเชิด', role: 'ผู้อำนวยการอาวุโส ผู้บริหารฝ่ายวิจัยเศรษฐกิจมหภาค, ศูนย์วิจัยเศรษฐกิจและธุรกิจ (SCB EIC)', image: 'day-1/D1-Dr.Thitima.webp', },
-            { name: 'ดร.พิพัฒน์ เหลืองนฤมิตชัย', role: 'Lorem ipsum dolor sit amet.', image: 'day-1/D1-Pipat.webp', },
-            { name: 'BILLKIN', role: 'Lorem ipsum dolor sit amet.', image: 'day-1/D1-Bilkin.webp', },
-            { name: 'Winni', role: 'Lorem ipsum dolor sit amet.', image: 'day-1/D1-Winni.webp', },
-            { name: 'คุณพสุธา ไดจิ อิเดะ', role: 'Head of business development , <br>efin group', image: 'day-1/D1-Phasutha.webp', },
-            { name: 'คุณวิน พรหมแพทย์', role: 'ประธานกรรมการบริหาร <br>บลจ. กสิกรไทย จำกัด', image: 'day-1/D1-Win.webp', },
-            { name: 'ดร.นิเวศน์ เหมวชิรวรากร', role: 'Lorem ipsum dolor sit amet.', image: 'day-1/D1-Dr.Nivet.webp', },
+            {
+                name: 'ดร.ฐิติมา ชูเชิด',
+                role: 'ผู้อำนวยการอาวุโส ผู้บริหารฝ่ายวิจัยเศรษฐกิจมหภาค, ศูนย์วิจัยเศรษฐกิจและธุรกิจ (SCB EIC)',
+                image: 'day-1/D1-Dr.Thitima.webp', },
+            {
+                name: 'ดร.พิพัฒน์ เหลืองนฤมิตชัย',
+                role: 'Lorem ipsum dolor sit amet.',
+                image: 'day-1/D1-Pipat.webp', },
+            {
+                name: 'BILLKIN',
+                role: 'Lorem ipsum dolor sit amet.',
+                image: 'day-1/D1-Bilkin.webp', },
+            {
+                name: 'Winni',
+                role: 'Lorem ipsum dolor sit amet.',
+                image: 'day-1/D1-Winni.webp', },
+            {
+                name: 'คุณพสุธา ไดจิ อิเดะ',
+                role: 'Head of business development , <br>efin group',
+                image: 'day-1/D1-Phasutha.webp', },
+            {
+                name: 'คุณวิน พรหมแพทย์',
+                role: 'ประธานกรรมการบริหาร <br>บลจ. กสิกรไทย จำกัด',
+                image: 'day-1/D1-Win.webp', },
+            {
+                name: 'ดร.นิเวศน์ เหมวชิรวรากร',
+                role: 'Lorem ipsum dolor sit amet.',
+                image: 'day-1/D1-Dr.Nivet.webp',
+            },
         ],
         dayTwo: [
-            { name: 'คุณกวี ชูกิจเกษม', role: 'Chief Portfolio Advisory<br>ประธานเจ้าหน้าที่ สายการบริหารพอร์ตการลงทุน', image: 'day-2/D2-Kawee.webp' },
-            { name: 'คุณณริดา มานะสมจิตร', role: 'Director, regional wealth solution: Icham pte Ltd<br>Director ฝ่าย Wealth Solutions ประจำภูมิภาค', image: 'day-2/D2-Narida.webp' },
-            { name: 'คุณณฤทธิ์ โกสาลาทิพย์', role: 'กรรมการผู้จัดการ หัวหน้าสายงานที่ปรึกษาและบริหารการลงทุนลูกค้าบุคคล บริษัทหลักทรัพย์เกียรตินาคินภัทร จำกัด (มหาชน)', image: 'day-2/D2-Narit.webp' },
-            { name: 'คุณวชิรเมษฐ์ ธเนศสถิตพงศ์', role: 'Lorem ipsum dolor sit amet.', image: 'day-2/D2-Wachiramet.webp' },
-            { name: 'คุณพิริยะ สัมพันธารักษ์', role: 'Ceo and Co Founder Right Shift', image: 'day-2/D2-Piriya.webp' },
-            { name: 'คุณสุธน สิงหสิทธางกูร', role: 'Co-Founder, ABCD fund', image: 'day-2/D2-Jakky.webp' },
-            { name: 'คุณเบียร์ วนนท์', role: 'Lorem ipsum dolor sit amet.', image: 'day-2/D2-Beerwanon.webp' },
+            {
+                name: 'คุณกวี ชูกิจเกษม',
+                role: 'Chief Portfolio Advisory<br>ประธานเจ้าหน้าที่ สายการบริหารพอร์ตการลงทุน',
+                image: 'day-2/D2-Kawee.webp' },
+            {
+                name: 'คุณณริดา มานะสมจิตร',
+                role: 'Director, regional wealth solution: Icham pte Ltd<br>Director ฝ่าย Wealth Solutions ประจำภูมิภาค',
+                image: 'day-2/D2-Narida.webp' },
+            {
+                name: 'คุณณฤทธิ์ โกสาลาทิพย์',
+                role: 'กรรมการผู้จัดการ หัวหน้าสายงานที่ปรึกษาและบริหารการลงทุนลูกค้าบุคคล บริษัทหลักทรัพย์เกียรตินาคินภัทร จำกัด (มหาชน)',
+                image: 'day-2/D2-Narit.webp' },
+            {
+                name: 'คุณวชิรเมษฐ์ ธเนศสถิตพงศ์',
+                role: 'Lorem ipsum dolor sit amet.',
+                image: 'day-2/D2-Wachiramet.webp' },
+            {
+                name: 'คุณพิริยะ สัมพันธารักษ์',
+                role: 'Ceo and Co Founder Right Shift',
+                image: 'day-2/D2-Piriya.webp' },
+            {
+                name: 'คุณสุธน สิงหสิทธางกูร',
+                role: 'Co-Founder, ABCD fund',
+                image: 'day-2/D2-Jakky.webp' },
+            {
+                name: 'คุณเบียร์ วนนท์',
+                role: 'Lorem ipsum dolor sit amet.',
+                image: 'day-2/D2-Beerwanon.webp'
+            },
         ],
     };
 
