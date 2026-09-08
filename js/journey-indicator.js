@@ -17,6 +17,7 @@
         { id: 'expectation', label: 'Expectation' },
         { id: 'floor-plan', label: 'Floor Plan' },
         { id: 'past-event', label: 'Past Event' },
+        { id: 'faq', label: 'FAQ' },
     ].map(stop => ({ ...stop, element: document.getElementById(stop.id) }))
         .filter(stop => stop.element);
 
@@ -37,6 +38,7 @@
     let activeIndex = -1;
     let frameId = null;
     let labelRevealTimer = null;
+    let activationLine = 1;
 
     function getHeaderOffset() {
         const rootStyle = getComputedStyle(document.documentElement);
@@ -49,6 +51,7 @@
     }
 
     function measure() {
+        activationLine = getHeaderOffset() + 1;
         if (title) {
             indicator.style.setProperty('--journey-title-length', `${Math.ceil(title.scrollWidth)}px`);
         }
@@ -170,6 +173,26 @@
         }
     }
 
+    function getActiveStopIndex(sectionRects, activationLine) {
+        let nextActiveIndex = 0;
+        for (let index = 0; index < sectionRects.length; index += 1) {
+            if (sectionRects[index].top <= activationLine) {
+                nextActiveIndex = index;
+            }
+        }
+        return nextActiveIndex;
+    }
+
+    function updateActiveStopImmediately() {
+        const sectionRects = route.map(stop => stop.element.getBoundingClientRect());
+        const isWithinRoute = sectionRects[0].top <= activationLine
+            && sectionRects[sectionRects.length - 1].bottom >= activationLine;
+
+        if (isWithinRoute) {
+            setActiveStop(getActiveStopIndex(sectionRects, activationLine));
+        }
+    }
+
     function render() {
         frameId = null;
 
@@ -179,8 +202,7 @@
            us that the old anchors are stale. Live rects keep visibility and labels tied
            to the section that is actually below the sticky header. */
         const sectionRects = route.map(stop => stop.element.getBoundingClientRect());
-        const activationLine = getHeaderOffset() + 1;
-        const progressLine = Math.min(window.innerHeight * 0.28, getHeaderOffset() + 160);
+        const progressLine = activationLine;
         const isSuppressed = document.body.classList.contains('is-loading')
             || document.body.classList.contains('menu-open')
             || document.body.classList.contains('menu-closing');
@@ -194,13 +216,12 @@
             return;
         }
 
-        let nextActiveIndex = sectionRects.length - 1;
-        for (let index = 0; index < sectionRects.length - 1; index += 1) {
-            if (activationLine < sectionRects[index + 1].top) {
-                nextActiveIndex = index;
-                break;
-            }
-        }
+        const nextActiveIndex = getActiveStopIndex(sectionRects, activationLine);
+
+        /* Update the label before the progress/color work below. Native scrolling can
+           stay compositor-smooth while the main thread is busy in content-heavy
+           sections; keeping this first prevents a label from visibly arriving late. */
+        setActiveStop(nextActiveIndex);
 
         const nextIndex = Math.min(nextActiveIndex + 1, sectionRects.length - 1);
         const segmentStart = sectionRects[nextActiveIndex].top;
@@ -214,7 +235,6 @@
 
         indicator.style.setProperty('--journey-progress', `${(routeProgress * 100).toFixed(2)}%`);
         updateDynamicColors(routeProgress);
-        setActiveStop(nextActiveIndex);
     }
 
     function requestRender() {
@@ -229,7 +249,12 @@
     if (heroScroller) resizeObserver?.observe(heroScroller);
     route.forEach(stop => resizeObserver?.observe(stop.element));
 
-    window.addEventListener('scroll', requestRender, { passive: true });
+    window.addEventListener('scroll', () => {
+        /* Section activation is deliberately synchronous and lightweight. Progress and
+           dynamic colors remain throttled to one animation frame in requestRender(). */
+        updateActiveStopImmediately();
+        requestRender();
+    }, { passive: true });
     window.addEventListener('resize', measure);
     window.addEventListener('load', measure);
     document.fonts?.ready.then(measure);
