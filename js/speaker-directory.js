@@ -4,62 +4,104 @@
             {
                 name: 'ดร.ฐิติมา ชูเชิด',
                 role: 'ผู้อำนวยการอาวุโส ผู้บริหารฝ่ายวิจัยเศรษฐกิจมหภาค, ศูนย์วิจัยเศรษฐกิจและธุรกิจ (SCB EIC)',
-                image: 'day-1/D1-Dr.Thitima.webp', },
+                image: 'day-1/D1-ดร.ฐิติมา-ชูเชิด.webp',
+            },
             {
                 name: 'ดร.พิพัฒน์ เหลืองนฤมิตชัย',
-                role: 'Lorem ipsum dolor sit amet.',
-                image: 'day-1/D1-Pipat.webp', },
+                role: 'ผู้ช่วยกรรมการผู้จัดการ หัวหน้านักเศรษฐศาสตร์ (Chief Economist) และหัวหน้าฝ่ายวิเคราะห์เศรษฐกิจและการลงทุน กลุ่มธุรกิจการเงินเกียรตินาคินภัทร ธนาคารเกียรตินาคินภัทร จำกัด (มหาชน)',
+                image: 'day-1/D1-ดร.พิพัฒน์-เหลืองนฤมิตชัย.webp',
+            },
             {
                 name: 'BILLKIN',
                 role: 'Lorem ipsum dolor sit amet.',
-                image: 'day-1/D1-Bilkin.webp', },
+                image: 'day-1/D1-บิวกิ้น.webp',
+            },
             {
                 name: 'Winni',
                 role: 'Lorem ipsum dolor sit amet.',
-                image: 'day-1/D1-Winni.webp', },
+                image: 'day-1/D1-วินนี่.webp',
+            },
+            {
+                name: 'คุณอภิชัย เอี่ยมไพศาล',
+                role: 'Research and Listing Manager, <br>BINANCE TH Academy',
+                image: 'day-1/D1-อภิชัย-เอี่ยมไพศาล.webp',
+            },
             {
                 name: 'คุณพสุธา ไดจิ อิเดะ',
                 role: 'Head of business development , <br>efin group',
-                image: 'day-1/D1-Phasutha.webp', },
+                image: 'day-1/D1-พสุธา-ไดจิ-อิเดะ.webp',
+            },
             {
-                name: 'คุณวิน พรหมแพทย์',
-                role: 'ประธานกรรมการบริหาร <br>บลจ. กสิกรไทย จำกัด',
-                image: 'day-1/D1-Win.webp', },
+                name: 'คุณมทินา วัชรวราทร',
+                role: 'CFA, Head of Investment Strategy, KAsset',
+                image: 'day-1/D1-มทินา-วัชรวราทร.webp',
+            },
+            // {
+            //     name: 'คุณวิน พรหมแพทย์',
+            //     role: 'ประธานกรรมการบริหาร <br>บลจ. กสิกรไทย จำกัด',
+            //     image: 'day-1/D1-วิน-พรหมแพทย์.webp',
+            // },
+            {
+                name: 'คุณธนรัชต์ พสวงศ์',
+                role: 'ประธานเจ้าหน้าที่บริหาร กลุ่มฮั่วเซ่งเฮง',
+                image: 'day-1/D1-ธนรัชต์-พสวงศ์.webp',
+            },
+            {
+                name: 'คุณนภดนัย พัฒนาภิวัฒน์',
+                role: 'Co-Owner & Second-Generation Successo',
+                image: 'day-1/D1-นภดนัย-พัฒนาภิวัฒน์.webp',
+            },
+            {
+                name: 'คุณกฤช แก้วสุวรรณ',
+                role: 'Co founder Card World',
+                image: 'day-1/D1-กฤช-แก้วสุวรรณ.webp',
+            },
             {
                 name: 'ดร.นิเวศน์ เหมวชิรวรากร',
-                role: 'Lorem ipsum dolor sit amet.',
-                image: 'day-1/D1-Dr.Nivet.webp',
+                role: 'นักลงทุนหุ้นเน้นคุณค่า(VI)',
+                image: 'day-1/D1-ดร.นิเวศน์-เหมวชิรวรากร.webp',
             },
         ],
         dayTwo: [
             {
                 name: 'คุณกวี ชูกิจเกษม',
                 role: 'Chief Portfolio Advisory<br>ประธานเจ้าหน้าที่ สายการบริหารพอร์ตการลงทุน',
-                image: 'day-2/D2-Kawee.webp' },
+                image: 'day-2/D2-กวี-ชูกิจเกษม.webp'
+            },
             {
                 name: 'คุณณริดา มานะสมจิตร',
                 role: 'Director, regional wealth solution: Icham pte Ltd<br>Director ฝ่าย Wealth Solutions ประจำภูมิภาค',
-                image: 'day-2/D2-Narida.webp' },
+                image: 'day-2/D2-ณริดา-มานะสมจิตร.webp'
+            },
             {
                 name: 'คุณณฤทธิ์ โกสาลาทิพย์',
                 role: 'กรรมการผู้จัดการ หัวหน้าสายงานที่ปรึกษาและบริหารการลงทุนลูกค้าบุคคล บริษัทหลักทรัพย์เกียรตินาคินภัทร จำกัด (มหาชน)',
-                image: 'day-2/D2-Narit.webp' },
+                image: 'day-2/D2-ณฤทธิ์-โกสาลาทิพย์.webp'
+            },
             {
                 name: 'คุณวชิรเมษฐ์ ธเนศสถิตพงศ์',
-                role: 'Lorem ipsum dolor sit amet.',
-                image: 'day-2/D2-Wachiramet.webp' },
+                role: 'Head of Investment Analytics & Innovation, efin Group',
+                image: 'day-2/D2-วชิรเมษฐ์-ธเนศสถิตพงศ์.webp'
+            },
             {
                 name: 'คุณพิริยะ สัมพันธารักษ์',
                 role: 'Ceo and Co Founder Right Shift',
-                image: 'day-2/D2-Piriya.webp' },
+                image: 'day-2/D2-พิริยะ-สัมพันธารักษ์.webp'
+            },
+            {
+                name: 'คุณกฤษฎิ์ ชวาลรัตน์',
+                role: 'Property Developer & Collector',
+                image: 'day-2/D2-กฤษฎิ์-ชวาลรัตน์.webp'
+            },
             {
                 name: 'คุณสุธน สิงหสิทธางกูร',
                 role: 'Co-Founder, ABCD fund',
-                image: 'day-2/D2-Jakky.webp' },
+                image: 'day-2/D2-สุธน-สิงหสิทธางกูร.webp'
+            },
             {
                 name: 'คุณเบียร์ วนนท์',
-                role: 'Lorem ipsum dolor sit amet.',
-                image: 'day-2/D2-Beerwanon.webp'
+                role: 'Full-time Trader',
+                image: 'day-2/D2-วนนท์-วรรณป้าน.webp'
             },
         ],
     };
@@ -141,12 +183,12 @@
         }));
     };
 
-    const revealPanelTop = (panel) => {
+    const revealTargetTop = (target, panel) => {
         window.clearTimeout(motionRefreshTimer);
         removeScrollEndListener();
 
-        const scrollMargin = Number.parseFloat(getComputedStyle(panel).scrollMarginTop) || 0;
-        const distance = Math.abs(panel.getBoundingClientRect().top - scrollMargin);
+        const scrollMargin = Number.parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+        const distance = Math.abs(target.getBoundingClientRect().top - scrollMargin);
         let isComplete = false;
 
         const completeReveal = () => {
@@ -165,7 +207,7 @@
             motionRefreshTimer = window.setTimeout(completeReveal, 1000);
         }
 
-        panel.scrollIntoView({
+        target.scrollIntoView({
             block: 'start',
             behavior: reducedMotion.matches ? 'auto' : 'smooth',
         });
@@ -174,6 +216,8 @@
             requestAnimationFrame(completeReveal);
         }
     };
+
+    const revealPanelTop = (panel) => revealTargetTop(panel, panel);
 
     /* ซ่อนวันที่ไม่ได้เลือกเฉพาะจอ ≤767px เท่านั้น จอใหญ่กว่านั้นโชว์ทั้งสองวันต่อกัน */
     const applyDayVisibility = (activeLink) => {
@@ -212,11 +256,8 @@
             /* ≤767px สลับวันแล้วเนื้อหาถูกสลับทั้งแผง พากลับไปหัวตัวสลับวันเหมือนเดิม
                จอใหญ่เลื่อนไปหาหัวข้อของวันนั้นในพื้นที่เลื่อนเดียวกัน */
             if (mobileDaySwitcher.matches) {
-                daySwitcher.closest('.speaker__day-switcher').scrollIntoView({
-                    block: 'start',
-                    behavior: reducedMotion.matches ? 'auto' : 'smooth',
-                });
-                refreshSpeakerMotion(panel);
+                const switcher = daySwitcher.closest('.speaker__day-switcher');
+                revealTargetTop(switcher, panel);
             } else {
                 revealPanelTop(panel);
             }

@@ -1,4 +1,5 @@
 (() => {
+    const FAQ_TAB_CHANGE_EVENT = 'bettertrade:faq-tab-change';
     const tablists = document.querySelectorAll('.faq__tabs[role="tablist"]');
     if (!tablists.length) return;
 
@@ -57,7 +58,10 @@
 
             if (updateIndicator(activeTab)) markIndicatorReady();
             if (shouldFocus) activeTab.focus();
-            if (shouldScroll) scrollToFirstQuestion(activeTab);
+            if (shouldScroll) {
+                window.dispatchEvent(new CustomEvent(FAQ_TAB_CHANGE_EVENT));
+                scrollToFirstQuestion(activeTab);
+            }
         }
 
         tabs.forEach((tab, index) => {

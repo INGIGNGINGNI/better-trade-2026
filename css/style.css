@@ -440,6 +440,10 @@ body.menu-closing .hero-motion-picker {
 }
 
 @media (max-width:575px) {
+    #cta-slot {
+        display: none;
+    }
+
     .mobile-cta-bar {
         display: flex;
         align-items: center;
@@ -620,6 +624,10 @@ body.menu-closing .site-header.is-sticky.site-header--on-dark {
     display: block;
     object-fit: contain;
     object-position: left center;
+}
+
+.site-header:not(.is-sticky) .site-header__logo img {
+    filter: drop-shadow(0 0px 4px rgba(0, 0, 0, 0.5));
 }
 
 .site-header__logo-image--on-dark {
@@ -4317,6 +4325,7 @@ body.is-loading .hero-scroll-cue,
         border: var(--rule-width-subtle) solid var(--color-border-faint);
         border-radius: var(--radius-1);
         background: var(--color-surface-paper);
+        overflow: hidden;
 
         &+.agenda__speaker-frame {
             margin-left: 0;
@@ -4338,33 +4347,34 @@ body.is-loading .hero-scroll-cue,
         display: block;
         object-fit: cover;
         object-position: center top;
-        filter: saturate(0.88) contrast(1.02);
+        border-radius: var(--radius-1);
+        filter: saturate(1.1);
     }
 
     .agenda__speaker-frame::before,
     .agenda__speaker-frame::after {
         content: '';
         position: absolute;
-        inset: 12%;
-        z-index: -1;
+        inset: 10%;
+        z-index: 0;
         border-radius: 20%;
-        filter: blur(8px);
+        filter: blur(4px) saturate(1.5);
         pointer-events: none;
     }
 
     .agenda__speaker-frame::before {
-        opacity: 0.88;
+        opacity: 0.52;
         background:
-            radial-gradient(circle at 28% 30%, var(--color-category-cyan) 0%, transparent 54%),
-            radial-gradient(circle at 72% 66%, var(--color-category-violet) 0%, transparent 54%);
+            radial-gradient(circle at 28% 30%, var(--color-cyan-400) 0%, transparent 52%),
+            radial-gradient(circle at 72% 66%, var(--color-violet-400) 0%, transparent 52%);
         animation: speaker-aurora-a var(--agenda-glow-a-duration) linear var(--agenda-glow-a-delay) infinite var(--agenda-glow-a-direction);
     }
 
     .agenda__speaker-frame::after {
-        opacity: 0.72;
+        opacity: 0.42;
         background:
-            radial-gradient(circle at 70% 26%, var(--color-category-pink) 0%, transparent 52%),
-            radial-gradient(circle at 30% 74%, var(--color-category-yellow) 0%, transparent 56%);
+            radial-gradient(circle at 70% 26%, var(--color-pink-400) 0%, transparent 50%),
+            radial-gradient(circle at 30% 74%, var(--color-yellow-500) 0%, transparent 54%);
         animation: speaker-aurora-b var(--agenda-glow-b-duration) linear var(--agenda-glow-b-delay) infinite var(--agenda-glow-b-direction);
     }
 
@@ -5921,10 +5931,10 @@ body.is-loading .hero-scroll-cue,
 .speaker-card__portrait::after {
     content: '';
     position: absolute;
-    inset: 16%;
+    inset: 14%;
     z-index: -1;
     border-radius: 50%;
-    filter: blur(10px);
+    filter: blur(8px) saturate(1.5);
     opacity: 0;
     pointer-events: none;
     transition: opacity var(--duration-slow) var(--ease-standard);
@@ -5988,10 +5998,10 @@ body.is-loading .hero-scroll-cue,
        ให้ฝั่ง Speaker ส่วน Moderators & MC เขียนไว้ที่ style ของการ์ดใน HTML)
        ส่วน --speaker-portrait-drift เป็นตัวที่ ScrollTrigger ขยับเท่านั้น แยกกันไว้
        เพื่อให้ revert ของ gsap ล้าง drift ได้โดยค่าจัดหัวยังอยู่ครบ */
-    object-position: center calc(var(--speaker-portrait-y, 0%) + var(--speaker-portrait-drift, 0%));
-    filter: saturate(0.88) contrast(1.02);
+    object-position: center;
+    filter: saturate(1.1);
     transform: scale(var(--speaker-portrait-scale, 1));
-    transform-origin: center top;
+    transform-origin: center;
     transition:
         filter var(--duration-slow) var(--ease-standard),
         transform var(--duration-slow) var(--ease-standard);
@@ -6082,12 +6092,10 @@ body.is-loading .hero-scroll-cue,
 
 
 /* ---------- Moderators & MC ----------
-   โครงเดียวกับ Speaker ทุกอย่าง ต่างแค่ไม่มีตัวสลับวันและมีการ์ดชุดเดียว 5 ใบ
+   โครงเดียวกับ Speaker ทุกอย่าง ต่างแค่ไม่มีตัวสลับวันและมีการ์ดชุดเดียว
    กริดจึงต้องอยู่ในคอลัมน์ 9 ช่องที่เยื้อง 3 ช่องเท่ากับ .speaker__days
    เพื่อให้แทร็กกว้างเท่ากัน การ์ดสองฝั่งจึงมีขนาดตรงกันเป๊ะโดยไม่ต้องล็อกค่าใด */
 .moderator {
-    /* ซ่อนไว้ก่อนสำหรับรอบ launch จริง — ยังไม่ลบเพราะจะกลับมาใช้ทีหลัง */
-    display: none;
     position: relative;
     scroll-margin-top: var(--header-height);
     /* เว้นบน-ล่างเต็มเท่า section อื่นทุกอัน ระยะระหว่าง Speaker กับ section นี้
@@ -6110,9 +6118,7 @@ body.is-loading .hero-scroll-cue,
         letter-spacing: 0;
     }
 
-    /* 5 ใบลงกริด 3 คอลัมน์ชุดเดียวกับฝั่ง Speaker (นิยามอยู่ในบล็อกกริดร่วมด้านบน):
-       เต็มแถวแรก 3 ใบ เหลือ 2 ใบชิดซ้ายแถวล่าง ช่องว่างท้ายแถวจึงเข้าจังหวะเดียวกับ
-       ผังเว้นช่องของ Speaker พอดี ไม่ต้องกำหนดอะไรเพิ่มตรงนี้ */
+    /* ใช้กริด 3 คอลัมน์ชุดเดียวกับฝั่ง Speaker (นิยามอยู่ในบล็อกกริดร่วมด้านบน) */
 
     @media (max-width: 991px) {
         padding: var(--section-padding-y-sm) 0;
@@ -6380,8 +6386,6 @@ body.is-loading .hero-scroll-cue,
 
 .faq__content {
     min-width: 0;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
 }
 
 .faq__content-col {
@@ -6480,19 +6484,8 @@ body.is-loading .hero-scroll-cue,
         transform var(--duration-base) linear;
 }
 
-.faq__panel {
-    grid-column: 1;
-    grid-row: 2;
-    min-width: 0;
-}
-
-/* Stack every tab panel in the same grid cell so the row is sized by the tallest
-   panel (currently Tickets). Hidden panels still contribute their intrinsic height,
-   while visibility + the hidden attribute keep them non-interactive and inaccessible. */
 .faq__panel[hidden] {
-    display: block !important;
-    visibility: hidden;
-    pointer-events: none;
+    display: none;
 }
 
 .faq__accordion {

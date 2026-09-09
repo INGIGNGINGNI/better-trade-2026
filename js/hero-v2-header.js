@@ -119,6 +119,7 @@
 
         function setupDesktopNavActiveState() {
             const SECTION_NAVIGATION_EVENT = 'bettertrade:section-navigation';
+            const FAQ_TAB_CHANGE_EVENT = 'bettertrade:faq-tab-change';
             const entries = siteHeaderDesktopLinks
                 .map(link => {
                     const id = link.getAttribute('href')?.slice(1);
@@ -135,6 +136,7 @@
 
             let activeLink = null;
             let ticking = false;
+            let suppressContactUntilUserScroll = false;
 
             const setActiveLink = nextLink => {
                 if (activeLink === nextLink) return;
@@ -162,20 +164,29 @@
                     return;
                 }
 
-                /* The footer may be shorter than the viewport and therefore unable to
-                   reach the header probe. At the true document end, allow Contact to be
-                   active once its section is visible. */
+                /* Contact uses a later activation point because the footer can be
+                   visible beneath a short FAQ panel while the user is still reading
+                   the FAQ. Activate it only once the footer reaches mid-viewport. */
+                const contactEntry = entries.find(entry => entry.id === 'contact');
+                const contactRect = contactEntry?.section.getBoundingClientRect();
+                const contactActivationY = document.documentElement.clientHeight * 0.5;
                 const maxScrollY = Math.max(
                     0,
                     document.documentElement.scrollHeight - document.documentElement.clientHeight
                 );
-                const contactEntry = entries.find(entry => entry.id === 'contact');
-                const contactRect = contactEntry?.section.getBoundingClientRect();
-                const contactIsVisible = contactRect
-                    && contactRect.top < document.documentElement.clientHeight
-                    && contactRect.bottom > 0;
+                const isAtPageEnd = window.scrollY >= maxScrollY - 2;
 
-                if (window.scrollY >= maxScrollY - 2 && contactEntry && contactIsVisible) {
+                if (
+                    !suppressContactUntilUserScroll
+                    && contactEntry
+                    && (
+                        (
+                            contactRect.top <= contactActivationY
+                            && contactRect.bottom > contactActivationY
+                        )
+                        || isAtPageEnd
+                    )
+                ) {
                     setActiveLink(contactEntry.link);
                     return;
                 }
@@ -193,6 +204,25 @@
             updateActiveLink();
             window.addEventListener('scroll', requestUpdate, { passive: true });
             window.addEventListener('resize', requestUpdate);
+
+            const allowContactActivation = () => {
+                if (!suppressContactUntilUserScroll) return;
+                suppressContactUntilUserScroll = false;
+                requestUpdate();
+            };
+            const allowContactActivationFromKeyboard = event => {
+                if (!['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' '].includes(event.key)) return;
+                allowContactActivation();
+            };
+            const suppressContactAfterFaqTabChange = () => {
+                suppressContactUntilUserScroll = true;
+                requestUpdate();
+            };
+
+            window.addEventListener('wheel', allowContactActivation, { passive: true });
+            window.addEventListener('touchstart', allowContactActivation, { passive: true });
+            window.addEventListener('keydown', allowContactActivationFromKeyboard);
+            window.addEventListener(FAQ_TAB_CHANGE_EVENT, suppressContactAfterFaqTabChange);
             const syncToNavigationTarget = event => {
                 const nextEntry = entries.find(entry => entry.section.id === event.detail?.targetId);
                 if (!nextEntry) return;
@@ -204,6 +234,10 @@
             return () => {
                 window.removeEventListener('scroll', requestUpdate);
                 window.removeEventListener('resize', requestUpdate);
+                window.removeEventListener('wheel', allowContactActivation);
+                window.removeEventListener('touchstart', allowContactActivation);
+                window.removeEventListener('keydown', allowContactActivationFromKeyboard);
+                window.removeEventListener(FAQ_TAB_CHANGE_EVENT, suppressContactAfterFaqTabChange);
                 window.removeEventListener(SECTION_NAVIGATION_EVENT, syncToNavigationTarget);
             };
         }

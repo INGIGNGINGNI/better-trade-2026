@@ -10,10 +10,7 @@
         { id: 'playbook', label: 'Playbook' },
         { id: 'agenda', label: 'Agenda' },
         { id: 'speaker', label: 'Speaker' },
-        /* moderator, sponsor ถูกซ่อนไว้ก่อนสำหรับรอบ launch จริง — เอา route
-           ของ section เหล่านี้ออกด้วย ไม่งั้น .filter(stop => stop.element) จะยังเจอ
-           element อยู่ (แค่ display:none ไม่ใช่ถูกลบออกจาก DOM) กลายเป็นจุดค้างในแถบ
-           journey-indicator ที่กดแล้วไม่มีอะไรให้เลื่อนไปหา */
+        { id: 'moderator', label: 'Moderators & MC' },
         { id: 'expectation', label: 'Expectation' },
         { id: 'floor-plan', label: 'Floor Plan' },
         { id: 'past-event', label: 'Past Event' },
