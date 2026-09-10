@@ -48,7 +48,7 @@
             },
             {
                 name: 'คุณพสุธา ไดจิ อิเดะ',
-                role: 'Head of business development , <br>efin group',
+                role: 'Head of business development, <br>efin Group',
                 image: 'day-1/D1-พสุธา-ไดจิ-อิเดะ.webp',
             },
             // {

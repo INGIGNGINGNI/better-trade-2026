@@ -6,7 +6,40 @@
     tablists.forEach(tablist => {
         const tabs = Array.from(tablist.querySelectorAll('[role="tab"]'));
         const indicator = tablist.querySelector('.faq__tab-indicator');
+        const tabsViewport = tablist.closest('.faq__tabs-viewport');
         if (!tabs.length) return;
+
+        if (tabsViewport) {
+            const stickySentinel = document.createElement('span');
+            stickySentinel.className = 'faq__tabs-sticky-sentinel';
+            stickySentinel.setAttribute('aria-hidden', 'true');
+            tabsViewport.before(stickySentinel);
+
+            let stickyFrame = null;
+
+            const updateStickyState = () => {
+                stickyFrame = null;
+                const siteHeader = document.getElementById('site-header');
+                const rootStyle = getComputedStyle(document.documentElement);
+                const stickyGap = Number.parseFloat(rootStyle.getPropertyValue('--space-12')) || 48;
+                const stickyTop = (siteHeader?.offsetHeight || 0) + stickyGap;
+                const faqSection = tabsViewport.closest('.faq');
+                const hasReachedStickyTop = stickySentinel.getBoundingClientRect().top <= stickyTop;
+                const isInsideFaq = !faqSection
+                    || faqSection.getBoundingClientRect().bottom > stickyTop + tabsViewport.offsetHeight;
+
+                tabsViewport.classList.toggle('is-sticky', hasReachedStickyTop && isInsideFaq);
+            };
+
+            const requestStickyUpdate = () => {
+                if (stickyFrame !== null) return;
+                stickyFrame = window.requestAnimationFrame(updateStickyState);
+            };
+
+            updateStickyState();
+            window.addEventListener('scroll', requestStickyUpdate, { passive: true });
+            window.addEventListener('resize', requestStickyUpdate, { passive: true });
+        }
 
         function updateIndicator(activeTab) {
             if (!indicator || !activeTab || tablist.closest('[hidden]')) return false;
@@ -25,7 +58,6 @@
 
         function getStickyOffset() {
             const siteHeader = document.getElementById('site-header');
-            const tabsViewport = tablist.closest('.faq__tabs-viewport');
 
             return (siteHeader?.offsetHeight || 0) + (tabsViewport?.offsetHeight || 0);
         }
