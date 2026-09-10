@@ -2,9 +2,9 @@
     const speakerDays = {
         dayOne: [
             {
-                name: 'ดร.ฐิติมา ชูเชิด',
-                role: 'ผู้อำนวยการอาวุโส ผู้บริหารฝ่ายวิจัยเศรษฐกิจมหภาค, ศูนย์วิจัยเศรษฐกิจและธุรกิจ (SCB EIC)',
-                image: 'day-1/D1-ดร.ฐิติมา-ชูเชิด.webp',
+                name: 'ดร.นิเวศน์ เหมวชิรวรากร',
+                role: 'นักลงทุนหุ้นเน้นคุณค่า(VI)',
+                image: 'day-1/D1-ดร.นิเวศน์-เหมวชิรวรากร.webp',
             },
             {
                 name: 'ดร.พิพัฒน์ เหลืองนฤมิตชัย',
@@ -12,14 +12,19 @@
                 image: 'day-1/D1-ดร.พิพัฒน์-เหลืองนฤมิตชัย.webp',
             },
             {
-                name: 'BILLKIN',
-                role: 'Lorem ipsum dolor sit amet.',
-                image: 'day-1/D1-บิวกิ้น.webp',
+                name: 'ดร.ฐิติมา ชูเชิด',
+                role: 'ผู้อำนวยการอาวุโส ผู้บริหารฝ่ายวิจัยเศรษฐกิจมหภาค, ศูนย์วิจัยเศรษฐกิจและธุรกิจ (SCB EIC)',
+                image: 'day-1/D1-ดร.ฐิติมา-ชูเชิด.webp',
             },
             {
-                name: 'Winni',
-                role: 'Lorem ipsum dolor sit amet.',
-                image: 'day-1/D1-วินนี่.webp',
+                name: 'คุณธนรัชต์ พสวงศ์',
+                role: 'ประธานเจ้าหน้าที่บริหาร กลุ่มฮั่วเซ่งเฮง',
+                image: 'day-1/D1-ธนรัชต์-พสวงศ์.webp',
+            },
+            {
+                name: 'คุณมทินา วัชรวราทร',
+                role: 'CFA, Head of Investment Strategy, KAsset',
+                image: 'day-1/D1-มทินา-วัชรวราทร.webp',
             },
             {
                 name: 'คุณอภิชัย เอี่ยมไพศาล',
@@ -27,24 +32,9 @@
                 image: 'day-1/D1-อภิชัย-เอี่ยมไพศาล.webp',
             },
             {
-                name: 'คุณพสุธา ไดจิ อิเดะ',
-                role: 'Head of business development , <br>efin group',
-                image: 'day-1/D1-พสุธา-ไดจิ-อิเดะ.webp',
-            },
-            {
-                name: 'คุณมทินา วัชรวราทร',
-                role: 'CFA, Head of Investment Strategy, KAsset',
-                image: 'day-1/D1-มทินา-วัชรวราทร.webp',
-            },
-            // {
-            //     name: 'คุณวิน พรหมแพทย์',
-            //     role: 'ประธานกรรมการบริหาร <br>บลจ. กสิกรไทย จำกัด',
-            //     image: 'day-1/D1-วิน-พรหมแพทย์.webp',
-            // },
-            {
-                name: 'คุณธนรัชต์ พสวงศ์',
-                role: 'ประธานเจ้าหน้าที่บริหาร กลุ่มฮั่วเซ่งเฮง',
-                image: 'day-1/D1-ธนรัชต์-พสวงศ์.webp',
+                name: 'คุณศุภวิชญ์ พูลเพิ่มทรัพย์',
+                role: 'Investment Analyst, BINANCE TH Academy',
+                image: 'profile-empty.webp',
             },
             {
                 name: 'คุณนภดนัย พัฒนาภิวัฒน์',
@@ -57,10 +47,27 @@
                 image: 'day-1/D1-กฤช-แก้วสุวรรณ.webp',
             },
             {
-                name: 'ดร.นิเวศน์ เหมวชิรวรากร',
-                role: 'นักลงทุนหุ้นเน้นคุณค่า(VI)',
-                image: 'day-1/D1-ดร.นิเวศน์-เหมวชิรวรากร.webp',
+                name: 'คุณพสุธา ไดจิ อิเดะ',
+                role: 'Head of business development , <br>efin group',
+                image: 'day-1/D1-พสุธา-ไดจิ-อิเดะ.webp',
             },
+            // {
+            //     name: 'คุณวิน พรหมแพทย์',
+            //     role: 'ประธานกรรมการบริหาร <br>บลจ. กสิกรไทย จำกัด',
+            //     image: 'day-1/D1-วิน-พรหมแพทย์.webp',
+            // },
+            // {
+            //     name: 'BILLKIN',
+            //     role: 'Lorem ipsum dolor sit amet.',
+            //     image: 'day-1/D1-บิวกิ้น.webp',
+            //     overview: false,
+            // },
+            // {
+            //     name: 'Winni',
+            //     role: 'Lorem ipsum dolor sit amet.',
+            //     image: 'day-1/D1-วินนี่.webp',
+            //     overview: false,
+            // },
         ],
         dayTwo: [
             {
@@ -70,7 +77,7 @@
             },
             {
                 name: 'คุณณริดา มานะสมจิตร',
-                role: 'Director, regional wealth solution: Icham pte Ltd<br>Director ฝ่าย Wealth Solutions ประจำภูมิภาค',
+                role: 'Director, regional wealth solution: Icham pte Ltd',
                 image: 'day-2/D2-ณริดา-มานะสมจิตร.webp'
             },
             {
@@ -79,19 +86,14 @@
                 image: 'day-2/D2-ณฤทธิ์-โกสาลาทิพย์.webp'
             },
             {
-                name: 'คุณวชิรเมษฐ์ ธเนศสถิตพงศ์',
-                role: 'Head of Investment Analytics & Innovation, efin Group',
-                image: 'day-2/D2-วชิรเมษฐ์-ธเนศสถิตพงศ์.webp'
-            },
-            {
                 name: 'คุณพิริยะ สัมพันธารักษ์',
                 role: 'Ceo and Co Founder Right Shift',
                 image: 'day-2/D2-พิริยะ-สัมพันธารักษ์.webp'
             },
             {
-                name: 'คุณกฤษฎิ์ ชวาลรัตน์',
-                role: 'Property Developer & Collector',
-                image: 'day-2/D2-กฤษฎิ์-ชวาลรัตน์.webp'
+                name: 'คุณวชิรเมษฐ์ ธเนศสถิตพงศ์',
+                role: 'Head of Investment Analytics & Innovation, efin Group',
+                image: 'day-2/D2-วชิรเมษฐ์-ธเนศสถิตพงศ์.webp'
             },
             {
                 name: 'คุณสุธน สิงหสิทธางกูร',
@@ -99,9 +101,14 @@
                 image: 'day-2/D2-สุธน-สิงหสิทธางกูร.webp'
             },
             {
-                name: 'คุณเบียร์ วนนท์',
+                name: 'คุณเบียร์ วนนท์ วรรณป้าน',
                 role: 'Full-time Trader',
                 image: 'day-2/D2-วนนท์-วรรณป้าน.webp'
+            },
+            {
+                name: 'คุณกฤษฎิ์ ชวาลรัตน์',
+                role: 'Property Developer & Collector',
+                image: 'day-2/D2-กฤษฎิ์-ชวาลรัตน์.webp'
             },
         ],
     };

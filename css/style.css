@@ -6096,6 +6096,8 @@ body.is-loading .hero-scroll-cue,
    กริดจึงต้องอยู่ในคอลัมน์ 9 ช่องที่เยื้อง 3 ช่องเท่ากับ .speaker__days
    เพื่อให้แทร็กกว้างเท่ากัน การ์ดสองฝั่งจึงมีขนาดตรงกันเป๊ะโดยไม่ต้องล็อกค่าใด */
 .moderator {
+    /* ข้อมูลและการ์ดพร้อมใช้งานแล้ว แต่ซ่อน section ไว้จนกว่าจะประกาศเปิดตัว */
+    display: none;
     position: relative;
     scroll-margin-top: var(--header-height);
     /* เว้นบน-ล่างเต็มเท่า section อื่นทุกอัน ระยะระหว่าง Speaker กับ section นี้
@@ -7075,8 +7077,6 @@ body.is-loading .hero-scroll-cue,
    กรอบเปล่ารอใส่โลโก้จริงภายหลัง ขนาดตามดีไซน์คุมด้วยแทร็กของกริด (minmax) กรอบจึงหด
    ตามจอแคบได้เองโดยยังคงสัดส่วนเดิมไว้ด้วย aspect-ratio ไม่ต้องล็อกความสูงเป็น px */
 .sponsor {
-    /* ซ่อนไว้ก่อนสำหรับรอบ launch จริง — ยังไม่ลบเพราะจะกลับมาใช้ทีหลัง */
-    display: none;
     --bt-sponsor-lead-width: 258px;
     --bt-sponsor-lead-ratio: 258 / 120;
     --bt-sponsor-md-width: 192px;
@@ -7091,7 +7091,7 @@ body.is-loading .hero-scroll-cue,
     background: var(--color-surface-page);
     font-family: var(--font-family-base);
 
-    .sponsor__group+.sponsor__group {
+    .sponsor__group:not([hidden]) ~ .sponsor__group:not([hidden]) {
         margin-top: var(--space-20);
     }
 
@@ -7101,6 +7101,15 @@ body.is-loading .hero-scroll-cue,
         margin: 0 0 var(--space-8);
         text-align: center;
         text-transform: uppercase;
+    }
+
+    .sponsor__image {
+        width: 100%;
+        max-width: 610px;
+        height: auto;
+        margin: 0 auto;
+        display: block;
+        filter: drop-shadow(0 1px 3px rgba(7, 16, 28, 0.04));
     }
 
     .sponsor__logos {
@@ -7174,7 +7183,7 @@ body.is-loading .hero-scroll-cue,
 
         padding: var(--section-padding-y-sm) 0;
 
-        .sponsor__group+.sponsor__group {
+        .sponsor__group:not([hidden]) ~ .sponsor__group:not([hidden]) {
             margin-top: var(--space-12);
         }
 

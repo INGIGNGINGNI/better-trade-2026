@@ -10,7 +10,6 @@
         { id: 'playbook', label: 'Playbook' },
         { id: 'agenda', label: 'Agenda' },
         { id: 'speaker', label: 'Speaker' },
-        { id: 'moderator', label: 'Moderators & MC' },
         { id: 'expectation', label: 'Expectation' },
         { id: 'floor-plan', label: 'Floor Plan' },
         { id: 'past-event', label: 'Past Event' },
