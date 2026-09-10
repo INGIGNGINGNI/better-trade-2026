@@ -43,12 +43,12 @@
             },
             {
                 name: 'คุณกฤช แก้วสุวรรณ',
-                role: 'Co founder Card World',
+                role: 'Co-Founder Card World',
                 image: 'day-1/D1-กฤช-แก้วสุวรรณ.webp',
             },
             {
                 name: 'คุณพสุธา ไดจิ อิเดะ',
-                role: 'Head of business development, <br>efin Group',
+                role: 'Head of Business Development, <br>efin Group',
                 image: 'day-1/D1-พสุธา-ไดจิ-อิเดะ.webp',
             },
             // {
@@ -87,7 +87,7 @@
             },
             {
                 name: 'คุณพิริยะ สัมพันธารักษ์',
-                role: 'Ceo and Co Founder Right Shift',
+                role: 'Ceo and Co-Founder Right Shift',
                 image: 'day-2/D2-พิริยะ-สัมพันธารักษ์.webp'
             },
             {
