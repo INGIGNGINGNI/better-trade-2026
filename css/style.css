@@ -6334,6 +6334,7 @@ body.is-loading .hero-scroll-cue,
     --faq-question-font-weight: var(--font-weight-medium);
     --faq-answer-font-size: var(--font-size-16);
     --faq-answer-font-weight: var(--font-weight-regular);
+    --faq-sticky-gap: var(--space-12);
 
     position: relative;
     scroll-margin-top: var(--header-height);
@@ -6360,7 +6361,7 @@ body.is-loading .hero-scroll-cue,
 
 .faq__header {
     position: sticky;
-    top: calc(var(--header-height) + var(--space-12));
+    top: calc(var(--header-height) + var(--faq-sticky-gap));
     align-self: start;
 }
 
@@ -6384,10 +6385,10 @@ body.is-loading .hero-scroll-cue,
    ตัวแปรของ FAQ เองทั้งหมด ไม่ได้ดึง CSS ของ agenda มาใช้ */
 .faq__tabs-viewport {
     position: sticky;
-    top: calc(var(--header-height) + var(--space-12));
+    top: calc(var(--header-height) + var(--faq-sticky-gap));
     z-index: 20;
     margin-bottom: var(--space-0);
-    padding: var(--space-6) var(--space-0) var(--space-0);
+    padding: var(--space-0);
     background: var(--color-surface-page);
 }
 
@@ -6397,7 +6398,7 @@ body.is-loading .hero-scroll-cue,
     right: 0;
     bottom: 100%;
     left: 0;
-    height: var(--space-12);
+    height: var(--faq-sticky-gap);
     background: var(--color-surface-page);
     pointer-events: none;
 }
@@ -6635,10 +6636,14 @@ body.is-loading .hero-scroll-cue,
 
     .faq__header {
         position: static;
+        margin-bottom: var(--space-12);
     }
 
-    .faq__tabs-viewport {
-        top: calc(var(--header-height) + var(--space-12));
+}
+
+@media (max-width: 767px) {
+    .faq {
+        --faq-sticky-gap: var(--space-4);
     }
 }
 
@@ -6646,10 +6651,6 @@ body.is-loading .hero-scroll-cue,
    เดียวกับ .agenda__tabs) จึงเปลี่ยนเป็นเลื่อนแนวนอนได้แทนการหด/ตัดคำ เพื่อให้
    อ่านป้ายแท็บครบทุกคำ โดยไม่ดันหน้าเว็บล้นออกด้านขวา */
 @media (max-width: 1399px) {
-    .faq__tabs-viewport {
-        overflow-x: hidden;
-    }
-
     .faq__tabs {
         overflow-x: auto;
         overflow-y: hidden;

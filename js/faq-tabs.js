@@ -57,9 +57,13 @@
         }
 
         function getStickyOffset() {
-            const siteHeader = document.getElementById('site-header');
+            if (!tabsViewport) {
+                return document.getElementById('site-header')?.offsetHeight || 0;
+            }
 
-            return (siteHeader?.offsetHeight || 0) + (tabsViewport?.offsetHeight || 0);
+            const stickyTop = Number.parseFloat(getComputedStyle(tabsViewport).top) || 0;
+
+            return stickyTop + tabsViewport.offsetHeight;
         }
 
         function scrollToFirstQuestion(activeTab) {
