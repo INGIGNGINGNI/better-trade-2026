@@ -3789,7 +3789,7 @@ body.is-loading .hero-scroll-cue,
        จะโผล่ไปโดนแถบแท็บบัง */
     .agenda__day-panel {
         scroll-margin-top: calc(var(--agenda-sticky-top) + var(--agenda-day-panel-header-height) + var(--touch-target-md) + var(--rule-width-subtle));
-        background: var(--color-neutral-50);
+        padding-left: var(--space-12);
         border-radius: var(--radius-1);
     }
 
@@ -4002,6 +4002,8 @@ body.is-loading .hero-scroll-cue,
 
     .agenda__content {
         min-width: 0;
+        background: var(--color-neutral-50);
+        border-radius: var(--radius-1);
     }
 
     .agenda__tabs-viewport {
@@ -4566,6 +4568,10 @@ body.is-loading .hero-scroll-cue,
 
     @media (max-width:1199px) {
         --agenda-day-panel-header-height: calc(var(--space-10) + var(--space-6));
+
+        .agenda__day-panel {
+            padding-left: var(--space-0);
+        }
 
         .agenda__day-panel-header {
             padding: var(--space-1) var(--space-0) var(--space-6);
@@ -5212,6 +5218,7 @@ body.is-loading .hero-scroll-cue,
 
     .speaker__day-panel {
         scroll-margin-top: var(--speaker-sticky-top);
+        padding-left: var(--space-12);
     }
 
     .speaker__day-panel-header {
@@ -5409,6 +5416,10 @@ body.is-loading .hero-scroll-cue,
 
     @media (max-width: 1199px) {
         --speaker-day-panel-header-height: calc(var(--space-10) + var(--space-6));
+
+        .speaker__day-panel {
+            padding-left: var(--space-0);
+        }
 
         .speaker__day-panel-header {
             padding: var(--space-1) var(--space-0) var(--space-8);
@@ -5829,7 +5840,15 @@ body.is-loading .hero-scroll-cue,
 
     .speaker__panel,
     .moderator__grid {
-        gap: var(--space-16) var(--space-8);
+        gap: var(--space-12) var(--space-8);
+    }
+
+    .speaker__panel {
+        padding: var(--space-8) var(--space-6) var(--space-12);
+    }
+
+    .speaker-card h3 {
+        text-wrap: nowrap;
     }
 }
 
@@ -5861,7 +5880,11 @@ body.is-loading .hero-scroll-cue,
     .moderator__grid {
         margin-top: var(--space-8);
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: var(--space-12) var(--space-4);
+        gap: var(--space-12) var(--space-6);
+    }
+
+    .speaker__panel {
+        padding: var(--space-8) var(--space-8) var(--space-12);
     }
 }
 
@@ -6006,7 +6029,7 @@ body.is-loading .hero-scroll-cue,
     position: relative;
     z-index: 1;
     min-width: 0;
-    padding: var(--space-6) var(--space-3) var(--space-0);
+    padding: var(--space-6) var(--space-0) var(--space-0);
     /* border-top: var(--rule-width-subtle) solid var(--color-border-editorial); */
 }
 
@@ -6044,7 +6067,15 @@ body.is-loading .hero-scroll-cue,
        เผื่อไว้ 2 บรรทัดเท่ากันทุกใบ ชื่อจึงไม่โดนตัดและการ์ดยังสูงเท่ากัน
        ระยะบรรทัด 28px เผื่อที่ให้วรรณยุกต์/สระบนของไทยไม่ชนกัน */
     .speaker-card__meta {
-        padding: var(--space-5) var(--space-2) 0;
+        padding: var(--space-5) var(--space-0) var(--space-0);
+    }
+
+    .speaker-card h3 {
+        text-wrap: auto;
+    }
+
+    .speaker-card p {
+        text-wrap: balance;
     }
 }
 
@@ -6052,6 +6083,10 @@ body.is-loading .hero-scroll-cue,
     .speaker-card h3 {
         font-size: var(--font-size-14);
         line-height: var(--section-small-line-height);
+    }
+
+    .speaker-card h3 {
+        text-wrap: pretty;
     }
 
     .speaker-card p {
@@ -6388,7 +6423,7 @@ body.is-loading .hero-scroll-cue,
     top: calc(var(--header-height) + var(--faq-sticky-gap));
     z-index: 20;
     margin-bottom: var(--space-0);
-    padding: var(--space-0);
+    padding: var(--space-4) var(--space-0) var(--space-0);
     background: var(--color-surface-page);
 }
 
@@ -6639,6 +6674,10 @@ body.is-loading .hero-scroll-cue,
         margin-bottom: var(--space-12);
     }
 
+    .faq__tabs-viewport {
+        padding: var(--space-0);
+    }
+
 }
 
 @media (max-width: 767px) {
@@ -6664,6 +6703,7 @@ body.is-loading .hero-scroll-cue,
         padding-left: var(--space-0);
     }
 }
+
 @media (max-width: 575px) {
     .faq {
         --faq-question-font-size: var(--font-size-14);
@@ -6692,6 +6732,7 @@ body.is-loading .hero-scroll-cue,
 
     .faq__answer-body {
         padding: var(--space-0) var(--space-0) var(--space-8) var(--space-3);
+        line-height: var(--section-small-line-height);
     }
 
     .faq__answer-body p+ul,
@@ -7084,7 +7125,7 @@ body.is-loading .hero-scroll-cue,
     background: var(--color-surface-page);
     font-family: var(--font-family-base);
 
-    .sponsor__group:not([hidden]) ~ .sponsor__group:not([hidden]) {
+    .sponsor__group:not([hidden])~.sponsor__group:not([hidden]) {
         margin-top: var(--space-20);
     }
 
@@ -7176,7 +7217,7 @@ body.is-loading .hero-scroll-cue,
 
         padding: var(--section-padding-y-sm) 0;
 
-        .sponsor__group:not([hidden]) ~ .sponsor__group:not([hidden]) {
+        .sponsor__group:not([hidden])~.sponsor__group:not([hidden]) {
             margin-top: var(--space-12);
         }
 

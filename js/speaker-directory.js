@@ -3,7 +3,7 @@
         dayOne: [
             {
                 name: 'ดร.นิเวศน์ เหมวชิรวรากร',
-                role: 'นักลงทุนหุ้นเน้นคุณค่า(VI)',
+                role: 'นักลงทุนหุ้นเน้นคุณค่า (VI)',
                 image: 'day-1/D1-ดร.นิเวศน์-เหมวชิรวรากร.webp',
             },
             {
@@ -28,7 +28,7 @@
             },
             {
                 name: 'คุณอภิชัย เอี่ยมไพศาล',
-                role: 'Research and Listing Manager, <br>BINANCE TH Academy',
+                role: 'Research and Listing Manager, BINANCE TH Academy',
                 image: 'day-1/D1-อภิชัย-เอี่ยมไพศาล.webp',
             },
             {
@@ -48,12 +48,12 @@
             },
             {
                 name: 'คุณพสุธา ไดจิ อิเดะ',
-                role: 'Head of Business Development, <br>efin Group',
+                role: 'Head of Business Development, efin Group',
                 image: 'day-1/D1-พสุธา-ไดจิ-อิเดะ.webp',
             },
             // {
             //     name: 'คุณวิน พรหมแพทย์',
-            //     role: 'ประธานกรรมการบริหาร <br>บลจ. กสิกรไทย จำกัด',
+            //     role: 'ประธานกรรมการบริหาร บลจ. กสิกรไทย จำกัด',
             //     image: 'day-1/D1-วิน-พรหมแพทย์.webp',
             // },
             // {
@@ -72,12 +72,12 @@
         dayTwo: [
             {
                 name: 'คุณกวี ชูกิจเกษม',
-                role: 'Chief Portfolio Advisory<br>ประธานเจ้าหน้าที่ สายการบริหารพอร์ตการลงทุน',
+                role: 'Chief Portfolio Advisory ประธานเจ้าหน้าที่ สายการบริหารพอร์ตการลงทุน',
                 image: 'day-2/D2-กวี-ชูกิจเกษม.webp'
             },
             {
                 name: 'คุณณริดา มานะสมจิตร',
-                role: 'Director, regional wealth solution: Icham pte Ltd',
+                role: 'Director, regional wealth solution: <br class="d-none d-xl-block">Icham pte Ltd',
                 image: 'day-2/D2-ณริดา-มานะสมจิตร.webp'
             },
             {
@@ -87,7 +87,7 @@
             },
             {
                 name: 'คุณพิริยะ สัมพันธารักษ์',
-                role: 'Ceo and Co-Founder Right Shift',
+                role: 'CEO and Co-Founder Right Shift',
                 image: 'day-2/D2-พิริยะ-สัมพันธารักษ์.webp'
             },
             {
@@ -97,12 +97,12 @@
             },
             {
                 name: 'คุณสุธน สิงหสิทธางกูร',
-                role: 'Co-Founder, ABCD fund',
+                role: 'Co-Founder, ABCD Fund',
                 image: 'day-2/D2-สุธน-สิงหสิทธางกูร.webp'
             },
             {
                 name: 'คุณเบียร์ วนนท์ วรรณป้าน',
-                role: 'Full-time Trader',
+                role: 'Full-Time Trader',
                 image: 'day-2/D2-วนนท์-วรรณป้าน.webp'
             },
             {
