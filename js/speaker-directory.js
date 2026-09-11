@@ -160,6 +160,137 @@
         panel.appendChild(fragment);
     });
 
+    /* ภาพรวม Speaker ใต้ Featured Topics ใช้ข้อมูลชุดเดียวกับ directory ด้านล่าง */
+    const overviewGrid = document.querySelector('[data-speaker-overview]');
+    const overviewSection = document.querySelector('#speaker-overview');
+    const overviewScroller = overviewGrid?.closest('.speaker-overview__scroller');
+    const overviewPicker = document.querySelector('[data-speaker-overview-picker]');
+    const overviewTrigger = overviewPicker?.querySelector('[data-speaker-overview-trigger]');
+    const overviewPanel = overviewPicker?.querySelector('[data-speaker-overview-panel]');
+    const overviewViewButtons = Array.from(document.querySelectorAll('[data-speaker-overview-view]'));
+    const overviewCompactCount = document.querySelector('[data-speaker-overview-compact-count]');
+
+    if (overviewGrid && overviewSection) {
+        const overviewSpeakers = Object.values(speakerDays)
+            .flat()
+            .filter(({ overview = true }) => overview);
+        const expandedSpeakerCount = 36;
+        const expandedColorRows = [
+            [1, 2, 3, 4, 5, 6, 1, 2, 3],
+            [3, 4, 5, 6, 1, 2, 4, 5, 6],
+            [5, 6, 1, 2, 3, 4, 5, 1, 3],
+            [2, 3, 4, 5, 6, 1, 2, 4, 6],
+        ];
+
+        if (overviewCompactCount) {
+            overviewCompactCount.textContent = String(overviewSpeakers.length);
+        }
+
+        const renderOverview = (layout = 'compact') => {
+            const isExpanded = layout === 'expanded';
+            const visibleSpeakers = isExpanded
+                ? Array.from(
+                    { length: expandedSpeakerCount },
+                    (_, index) => overviewSpeakers[index % overviewSpeakers.length],
+                )
+                : overviewSpeakers;
+            const overviewFragment = document.createDocumentFragment();
+
+            visibleSpeakers.forEach(({ name, image }, index) => {
+                const card = document.createElement('article');
+                const portrait = document.createElement('img');
+
+                card.className = 'speaker-overview__card';
+                card.setAttribute('role', 'listitem');
+                card.setAttribute('aria-label', name);
+                card.style.setProperty('--speaker-overview-order', String(index));
+
+                if (isExpanded) {
+                    const rowIndex = index % expandedColorRows.length;
+                    const columnIndex = Math.floor(index / expandedColorRows.length);
+                    const spectrumIndex = expandedColorRows[rowIndex][columnIndex];
+                    card.style.setProperty(
+                        '--speaker-overview-circle-color',
+                        `var(--color-kv-spectrum-${spectrumIndex})`,
+                    );
+                }
+
+                portrait.src = `images/speakers/${image}`;
+                portrait.width = 928;
+                portrait.height = 1204;
+                portrait.loading = 'lazy';
+                portrait.decoding = 'async';
+                portrait.alt = name;
+
+                card.appendChild(portrait);
+                overviewFragment.appendChild(card);
+            });
+
+            overviewGrid.replaceChildren(overviewFragment);
+            overviewSection.dataset.speakerOverviewLayout = layout;
+
+            if (overviewScroller) {
+                overviewScroller.scrollLeft = 0;
+                overviewScroller.setAttribute(
+                    'aria-label',
+                    `รายชื่อ Speaker ${isExpanded ? 'สี่' : 'สาม'}แถว เลื่อนแนวนอนเพื่อดูเพิ่มเติม`,
+                );
+            }
+
+            overviewViewButtons.forEach((button) => {
+                const isActive = button.dataset.speakerOverviewView === layout;
+                button.classList.toggle('is-active', isActive);
+                button.setAttribute('aria-pressed', String(isActive));
+            });
+
+            overviewTrigger?.setAttribute(
+                'aria-label',
+                `เลือกรูปแบบ Speaker ขณะนี้แสดง ${isExpanded ? 36 : overviewSpeakers.length} Speakers`,
+            );
+        };
+
+        const setOverviewPickerOpen = (open) => {
+            if (!overviewPicker || !overviewTrigger || !overviewPanel) return;
+
+            overviewPicker.classList.toggle('is-open', open);
+            overviewTrigger.setAttribute('aria-expanded', String(open));
+            overviewPanel.setAttribute('aria-hidden', String(!open));
+            overviewViewButtons.forEach((button) => {
+                button.tabIndex = open ? 0 : -1;
+            });
+
+            if (open) {
+                overviewViewButtons.find((button) => button.classList.contains('is-active'))?.focus();
+            }
+        };
+
+        overviewViewButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                renderOverview(button.dataset.speakerOverviewView);
+                setOverviewPickerOpen(false);
+                overviewTrigger?.focus();
+            });
+        });
+
+        renderOverview('compact');
+        setOverviewPickerOpen(false);
+
+        overviewTrigger?.addEventListener('click', () => {
+            setOverviewPickerOpen(!overviewPicker.classList.contains('is-open'));
+        });
+
+        document.addEventListener('pointerdown', (event) => {
+            if (!overviewPicker?.classList.contains('is-open') || overviewPicker.contains(event.target)) return;
+            setOverviewPickerOpen(false);
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key !== 'Escape' || !overviewPicker?.classList.contains('is-open')) return;
+            setOverviewPickerOpen(false);
+            overviewTrigger?.focus();
+        });
+    }
+
     /* ---- ตัวสลับวัน: พฤติกรรมเดียวกับ agenda-tabs.js ----
        แยกไฟล์กันเพราะคนละ block ของ BEM แต่ logic ตรงกันทุกขั้น
 

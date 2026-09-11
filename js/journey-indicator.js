@@ -6,6 +6,7 @@
     const route = [
         { id: 'concept', label: 'Concept' },
         { id: 'featured-topics', label: 'Topics' },
+        { id: 'speaker-overview', label: 'Speaker Overview' },
         { id: 'ticket', label: 'Ticket Price' },
         { id: 'playbook', label: 'Playbook' },
         { id: 'agenda', label: 'Agenda' },

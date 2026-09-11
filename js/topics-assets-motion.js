@@ -103,7 +103,7 @@
                     x: index % 2 ? 10 : -10,
                     rotation: index % 2 ? 8 : -8,
                     duration: 2,
-                    ease: 'none',
+                    ease: 'power2.in',
                     immediateRender: false,
                 }, 0.36 + index * 0.16);
             });
@@ -127,7 +127,12 @@
 
             const getExitProgress = viewportHeight => {
                 const sectionBottom = section.getBoundingClientRect().bottom;
-                return clamp((viewportHeight - sectionBottom) / Math.max(1, viewportHeight));
+                const naturalProgress = clamp((viewportHeight - sectionBottom) / Math.max(1, viewportHeight));
+                const transitionProgress = Number.parseFloat(
+                    section.style.getPropertyValue('--topic-speaker-transition-progress')
+                ) || 0;
+
+                return Math.max(naturalProgress, transitionProgress);
             };
 
             const update = () => {
@@ -138,14 +143,15 @@
 
                 assets.forEach((asset, index) => {
                     const itemEntryProgress = clamp((entryProgress - index * 0.055) / 0.7);
-                    const itemExitProgress = clamp((exitProgress - 0.08 - index * 0.045) / 0.64);
+                    const itemExitProgress = clamp((exitProgress - 0.1 - index * 0.04) / 0.82);
+                    const fallProgress = Math.pow(itemExitProgress, 1.65);
                     const frameBox = assetFrames[index].getBoundingClientRect();
                     const entryOffset = -(frameBox.top - sectionBox.top + frameBox.height + 24);
                     const entryY = entryOffset * (1 - itemEntryProgress);
-                    const exitY = getFallDistance(assetFrames[index], false) * itemExitProgress;
+                    const exitY = getFallDistance(assetFrames[index], false) * fallProgress;
                     const y = entryY + exitY;
-                    const x = (index % 2 ? 10 : -10) * itemExitProgress;
-                    const rotation = (index % 2 ? 8 : -8) * itemExitProgress;
+                    const x = (index % 2 ? 10 : -10) * fallProgress;
+                    const rotation = (index % 2 ? 8 : -8) * fallProgress;
                     const scale = 0.86 + 0.14 * itemEntryProgress;
 
                     asset.style.opacity = String(Math.max(itemEntryProgress, itemExitProgress));
@@ -167,10 +173,16 @@
             update();
             window.addEventListener('scroll', requestUpdate, { passive: true });
             window.addEventListener('resize', requestUpdate);
+            document.addEventListener('topic-speaker-transition:update', requestUpdate);
 
             return () => {
                 window.removeEventListener('scroll', requestUpdate);
                 window.removeEventListener('resize', requestUpdate);
+                document.removeEventListener('topic-speaker-transition:update', requestUpdate);
+                assets.forEach(asset => {
+                    asset.style.removeProperty('opacity');
+                    asset.style.removeProperty('transform');
+                });
             };
         });
 

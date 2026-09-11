@@ -69,7 +69,7 @@
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="css/main.css?v=46">
-    <link rel="stylesheet" href="css/style.css?v=471">
+    <link rel="stylesheet" href="css/style.css?v=479">
 </head>
 
 <body class="is-loading">
@@ -476,6 +476,61 @@
     <!-- End Section : Featured Topics -->
 
 
+    <!-- Start Section : Speaker Overview -->
+    <section id="speaker-overview" class="speaker-overview" data-header-theme="dark"
+        data-speaker-overview-layout="compact"
+        aria-labelledby="speaker-overview-title">
+        <div class="speaker-overview__inner container">
+            <div class="speaker-overview__layout row align-items-stretch">
+                <header class="speaker-overview__intro col-12 col-lg-4">
+                    <p class="speaker-overview__eyebrow">Journey into the new world</p>
+                    <img class="speaker-overview__event-mark" src="images/title.webp" width="1800" height="724"
+                        loading="lazy" decoding="async" alt="New World, New Playbook — BetterTrade 2026">
+                    <h2 id="speaker-overview-title">พบกับเหล่าผู้เชี่ยวชาญ <br>ที่จะมาเปิดมุมมองสู่<br><span class="bt-title-highlight has-pe">โลกการลงทุน</span>ใบใหม่</h2>
+
+                    <div class="speaker-overview__event-info" aria-label="รายละเอียดการจัดงาน">
+                        <p><time datetime="2026-10-31">31 ตุลาคม</time> – <time datetime="2026-11-01">1 พฤศจิกายน 2569</time></p>
+                        <p>SAMYAN MITRTOWN HALL</p>
+                    </div>
+                </header>
+
+                <div class="speaker-overview__gallery col-12 col-lg-8">
+                    <div class="speaker-overview__scroller" tabindex="0"
+                        aria-label="รายชื่อ Speaker สามแถว เลื่อนแนวนอนเพื่อดูเพิ่มเติม">
+                        <div class="speaker-overview__grid" data-speaker-overview role="list"></div>
+                    </div>
+                    <p class="speaker-overview__scroll-hint" aria-hidden="true">Swipe to explore <span>→</span></p>
+                </div>
+            </div>
+        </div>
+        <div class="speaker-overview__view-switch" data-speaker-overview-picker>
+            <button class="speaker-overview__view-trigger" type="button" data-speaker-overview-trigger
+                aria-label="เลือกรูปแบบ Speaker ขณะนี้แสดง 18 Speakers" aria-expanded="false"
+                aria-controls="speaker-overview-view-options">
+                <span aria-hidden="true">⇄</span>
+            </button>
+            <div class="speaker-overview__view-panel" id="speaker-overview-view-options"
+                data-speaker-overview-panel role="group" aria-label="เลือกรูปแบบการแสดง Speaker"
+                aria-hidden="true">
+                <span class="speaker-overview__view-eyebrow">Speaker Layout</span>
+                <button class="speaker-overview__view-button is-active" type="button"
+                    data-speaker-overview-view="compact" aria-pressed="true">
+                    <span class="speaker-overview__view-status" aria-hidden="true"></span>
+                    <span><strong><span data-speaker-overview-compact-count>18</span> Speakers</strong><small>3 rows</small></span>
+                    <span class="speaker-overview__view-check" aria-hidden="true">✓</span>
+                </button>
+                <button class="speaker-overview__view-button" type="button"
+                    data-speaker-overview-view="expanded" aria-pressed="false">
+                    <span class="speaker-overview__view-status" aria-hidden="true"></span>
+                    <span><strong>36 Speakers</strong><small>4 rows</small></span>
+                    <span class="speaker-overview__view-check" aria-hidden="true">✓</span>
+                </button>
+            </div>
+        </div>
+    </section>
+    <!-- End Section : Speaker Overview -->
+
+
     <!-- Start Section : Ticket -->
     <section id="ticket" class="ticket" aria-labelledby="ticket-title">
         <div class="ticket__backdrop-clip" data-journey-theme="dark" aria-hidden="true">
@@ -877,12 +932,13 @@
                                             <td>
                                                 <p class="agenda__session-title">FROM EARNING TO GROWING</p>
                                                 <p class="agenda__session-summary">เมื่อถึงวันที่เงินต้องทำงาน</p>
-                                                <p class="agenda__session-speaker">BILLKIN and Winni</p>
+                                                <p class="agenda__session-speaker">To Be Determined</p>
                                             </td>
-                                            <td class="agenda__speakers">
+                                            <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="agenda__speaker-photo"><img src="images/agenda/profile-empty.webp" width="928" height="1152" loading="lazy" decoding="async" alt=""></span></span></td>
+                                            <!-- <td class="agenda__speakers">
                                                 <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 1"><span class="agenda__speaker-photo"><img src="images/agenda/day-1/D1-บิวกิ้น.webp" width="240" height="240" loading="lazy" decoding="async" alt="BILLKIN"></span></span>
                                                 <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 2"><span class="agenda__speaker-photo"><img src="images/agenda/day-1/D1-วินนี่.webp" width="240" height="240" loading="lazy" decoding="async" alt="Winni"></span></span>
-                                            </td>
+                                            </td> -->
                                         </tr>
                                         <tr>
                                             <th scope="row"><time>13:40 – 14:10</time></th>
@@ -894,10 +950,11 @@
                                                 <p class="agenda__session-summary">เมื่อ “เงิน” กำลังถูกนิยามใหม่</p>
                                                 <p class="agenda__session-speaker">To Be Determined</p>
                                             </td>
-                                            <td class="agenda__speakers">
+                                            <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="agenda__speaker-photo"><img src="images/agenda/profile-empty.webp" width="928" height="1152" loading="lazy" decoding="async" alt=""></span></span></td>
+                                            <!-- <td class="agenda__speakers">
                                                 <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 1"><span class="agenda__speaker-photo"><img src="images/agenda/profile-empty.webp" width="928" height="1152" loading="lazy" decoding="async" alt=""></span></span>
                                                 <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 2"><span class="agenda__speaker-photo"><img src="images/agenda/profile-empty.webp" width="928" height="1152" loading="lazy" decoding="async" alt=""></span></span>
-                                            </td>
+                                            </td> -->
                                         </tr>
                                         <tr>
                                             <th scope="row"><time>14:10 – 14:40</time></th>
@@ -1051,7 +1108,7 @@
                                         <tr>
                                             <th scope="row"><time>09:00 – 10:00</time></th>
                                             <td></td>
-                                            <td><p class="agenda__session-title agenda__session-title--simple">Registration & Future Finance Experience Zone</p></td>
+                                            <td><p class="agenda__session-title agenda__session-title--simple">Registration</p></td>
                                             <td class="agenda__speakers"></td>
                                         </tr>
                                         <tr>
@@ -1910,7 +1967,7 @@
     <script src="vendor/swiper/swiper-bundle.min.js"></script>
     <script src="js/action-button.js"></script>
     <script src="js/agenda-tabs.js?v=13"></script>
-    <script src="js/speaker-directory.js?v=18"></script>
+    <script src="js/speaker-directory.js?v=20"></script>
     <script src="js/moderator-directory.js?v=1"></script>
     <script src="js/expectation-counter.js?v=1"></script>
     <script src="js/floor-plan-reveal.js?v=1"></script>
@@ -1936,7 +1993,8 @@
     <script src="js/hero-v2-scroll-motion.js?v=71"></script>
     <script src="js/hero-v2-scroll-cue.js?v=4"></script>
     <script src="js/topics-reveal.js?v=5"></script>
-    <script src="js/topics-assets-motion.js?v=16"></script>
+    <script src="js/topics-assets-motion.js?v=21"></script>
+    <script src="js/topic-speaker-transition.js?v=4"></script>
     <script src="js/ticket-backdrop-parallax.js?v=4"></script>
     <script src="js/playbook-assets-motion.js?v=4"></script>
     <script src="js/playbook-glow-motion.js?v=1"></script>
