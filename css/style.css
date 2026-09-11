@@ -9482,3 +9482,8 @@ body.is-loading .hero-scroll-cue,
         transition-duration: var(--duration-reduced);
     }
 }
+
+/* Temporarily hidden on pre-production. */
+.speaker-overview {
+    display: none;
+}
