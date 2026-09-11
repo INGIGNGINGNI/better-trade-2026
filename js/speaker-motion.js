@@ -1,5 +1,5 @@
 /* Motion สำหรับการ์ด speaker
-   โหลดหลัง gsap.min.js / ScrollTrigger.min.js และหลัง speaker-directory.js
+   โหลดหลัง gsap.min.js / ScrollTrigger.min.js และหลัง directory scripts
    ที่เป็นคนสร้างการ์ดลง DOM
 
    สองเอฟเฟกต์:
@@ -53,7 +53,8 @@
         const visiblePanels = section
             ? Array.from(section.querySelectorAll('.speaker__day-panel:not([hidden])'))
             : [];
-        const scopes = [...(visiblePanels.length ? visiblePanels : [section]), moderatorGrid].filter(Boolean);
+        const visibleModeratorGrid = moderatorGrid?.getClientRects().length ? moderatorGrid : null;
+        const scopes = [...(visiblePanels.length ? visiblePanels : [section]), visibleModeratorGrid].filter(Boolean);
         const cards = scopes.flatMap((scope) => Array.from(scope.querySelectorAll('.speaker-card')));
         if (!cards.length) return;
 

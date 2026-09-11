@@ -1,5 +1,7 @@
 * {
     box-sizing: border-box;
+    padding: 0;
+    margin: 0;
 }
 
 .bt-icon {
@@ -20,22 +22,64 @@
     fill: currentColor;
 }
 
-html {
+html,
+body {
+    background-color: var(--color-surface-page);
     scroll-behavior: auto;
-    scrollbar-width: none;
+    scrollbar-color: rgba(108, 117, 125, 0.75) transparent;
+    scrollbar-width: thin;
+    /* scrollbar-gutter: stable; */
 }
 
-html::-webkit-scrollbar {
-    width: 0;
-    height: 0;
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    width: 4px !important;
+    height: 4px !important;
+    background: transparent;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
+    border: 0;
+    background: transparent;
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+    border: 0;
+    border-radius: 999px;
+    background: rgba(108, 117, 125, 0.75);
+}
+
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover {
+    background: rgba(73, 80, 87, 0.9);
+}
+
+html::-webkit-scrollbar-corner,
+body::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+/* Reserve and calculate the native scrollbar while the opaque loader still covers
+   the page, but keep its thumb invisible until the page reveal actually begins. */
+html.is-preparing-page-scroll,
+html.is-preparing-page-scroll body {
+    scrollbar-color: transparent transparent;
+}
+
+html.is-preparing-page-scroll::-webkit-scrollbar-thumb,
+html.is-preparing-page-scroll body::-webkit-scrollbar-thumb {
+    background: transparent;
 }
 
 /* Nothing in the design is dark, so this only ever shows through a gap — during a
    resize, or as overscroll. Matching #stagewrap keeps such a gap invisible instead
    of flashing near-black. */
 body {
+    width: 100%;
     margin: 0;
-    background: #dfe6ee;
+    background-color: var(--color-surface-page);
     font-family: var(--font);
     overflow-x: hidden;
 }
@@ -48,52 +92,6 @@ body.menu-closing {
 body.is-loading {
     height: 100%;
     overflow: hidden;
-}
-
-.site-scrollbar {
-    position: fixed;
-    top: var(--space-2);
-    right: 0;
-    bottom: var(--space-2);
-    z-index: 260;
-    width: var(--space-2);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 240ms ease;
-    touch-action: none;
-}
-
-.site-scrollbar__thumb {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 6px;
-    height: var(--thumb-height);
-    min-height: var(--space-8);
-    border: 1px solid rgba(17, 19, 24, 0.16);
-    border-radius: var(--space-1);
-    background: #ffffff;
-    box-shadow: 0 2px 8px rgba(17, 19, 24, 0.20);
-    transform: translateY(var(--thumb-y));
-    will-change: transform;
-}
-
-.site-scrollbar.is-visible,
-.site-scrollbar.is-dragging {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.site-scrollbar:hover .site-scrollbar__thumb,
-.site-scrollbar.is-dragging .site-scrollbar__thumb {
-    border-color: rgba(17, 19, 24, 0.28);
-    box-shadow: 0 2px 12px rgba(17, 19, 24, 0.28);
-}
-
-body.is-loading .site-scrollbar,
-.site-scrollbar.is-hidden {
-    opacity: 0;
-    pointer-events: none;
 }
 
 .back-to-top {
@@ -442,6 +440,10 @@ body.menu-closing .hero-motion-picker {
 }
 
 @media (max-width:575px) {
+    #cta-slot {
+        display: none;
+    }
+
     .mobile-cta-bar {
         display: flex;
         align-items: center;
@@ -622,6 +624,10 @@ body.menu-closing .site-header.is-sticky.site-header--on-dark {
     display: block;
     object-fit: contain;
     object-position: left center;
+}
+
+.site-header:not(.is-sticky) .site-header__logo img {
+    filter: drop-shadow(0 0px 4px rgba(0, 0, 0, 0.5));
 }
 
 .site-header__logo-image--on-dark {
@@ -1065,12 +1071,6 @@ body.menu-closing .site-header__mobile-scroll {
 body.menu-open .site-header__inner,
 body.menu-closing .site-header__inner {
     border-bottom-color: var(--bt-menu-line);
-}
-
-body.menu-open .site-scrollbar,
-body.menu-closing .site-scrollbar {
-    opacity: 0;
-    pointer-events: none;
 }
 
 body.menu-open .site-header__logo img,
@@ -2310,7 +2310,7 @@ body.is-loading .hero-scroll-cue,
     margin: 0;
     padding: var(--space-4) 0;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     color: var(--bt-topics-ink);
     font-size: var(--section-topic-size);
     font-weight: var(--font-weight-regular);
@@ -2323,6 +2323,7 @@ body.is-loading .hero-scroll-cue,
     flex: 0 0 var(--topic-star-size);
     width: var(--topic-star-size);
     height: var(--topic-star-size);
+    margin-top: var(--space-2);
     margin-right: var(--space-4);
     background: url("../images/star.webp") center / contain no-repeat;
 }
@@ -2482,8 +2483,8 @@ body.is-loading .hero-scroll-cue,
     }
 
     .topics-showcase__content {
-        --topics-asset-left: 15%;
-        --topics-asset-right: 85%;
+        --topics-asset-left: 10%;
+        --topics-asset-right: 90%;
 
         position: relative;
         margin-top: var(--bt-topics-content-margin-top-md);
@@ -2581,9 +2582,9 @@ body.is-loading .hero-scroll-cue,
         margin-top: var(--bt-topics-content-margin-top-sm);
     }
 
-    .topics-showcase .concept__topics {
+    /* .topics-showcase .concept__topics {
         width: min(calc(100% - 72px), 480px);
-    }
+    } */
 
     .topics-showcase .concept__topics p {
         --topic-star-size: var(--bt-topics-star-size-sm);
@@ -2651,11 +2652,7 @@ body.is-loading .hero-scroll-cue,
     --bt-ticket-plan-title-line-height: var(--section-heading-line-height);
     --bt-ticket-price-size: var(--section-heading-size);
     --bt-ticket-price-line-height: var(--section-heading-line-height);
-    /* ความสูงของภาพประกอบที่หัว section คุมจุดที่ขอบล่างของภาพไปคร่อมการ์ดราคา
-       ปรับค่านี้ค่าเดียวก็เลื่อนระยะทับได้ทั้งชุด */
     --bt-ticket-backdrop-height: 600px;
-    /* ระยะเผื่อขอบบน-ล่างของรูปสำหรับเลื่อน parallax (js/ticket-backdrop-parallax.js)
-       อิงเป็นสัดส่วนของความสูงภาพ ปรับตามแต่ละ breakpoint เองโดยอัตโนมัติ */
     --bt-ticket-backdrop-parallax-bleed: calc(var(--bt-ticket-backdrop-height) * 0.15);
 
     position: relative;
@@ -2664,10 +2661,6 @@ body.is-loading .hero-scroll-cue,
     background: var(--color-surface-page);
     font-family: var(--font-family-base);
 
-    /* ภาพประกอบกางเต็มความกว้างที่หัว section หัวข้อวางทับอยู่บนภาพ ส่วนแผงการ์ดราคา
-       (ทึบแสง ดู .ticket__plans) เลื่อนขึ้นไปคร่อมขอบล่างของภาพตามเลย์เอาต์ที่ออกแบบไว้
-       .ticket__backdrop-clip ครอบตัดตามความสูงที่ตั้งใจไว้จริง ส่วน .ticket__backdrop (img)
-       ข้างในสูงเกินกว่านั้นและเลื่อน translateY ได้ (ผ่าน JS) โดยไม่โผล่ขอบให้เห็น */
     .ticket__backdrop-clip {
         position: absolute;
         top: 0;
@@ -2696,8 +2689,6 @@ body.is-loading .hero-scroll-cue,
         }
     }
 
-    /* ฉากไล่เฉดทับภาพ กันไม่ให้ตัวหนังสือสีขาวจมหายไปกับส่วนที่สว่างของภาพ
-       ไล่จากซ้ายเพราะหัวข้อชิดซ้าย ส่วนขวาปล่อยให้เห็นภาพเต็ม ๆ */
     &::before {
         content: '';
         position: absolute;
@@ -2710,7 +2701,6 @@ body.is-loading .hero-scroll-cue,
         pointer-events: none;
     }
 
-    /* ดันเนื้อหาทั้งหมดขึ้นมาอยู่เหนือภาพกับฉากไล่เฉด */
     .ticket__inner {
         position: relative;
         z-index: 1;
@@ -2723,8 +2713,6 @@ body.is-loading .hero-scroll-cue,
         z-index: 1;
     }
 
-    /* หัวข้ออยู่บนภาพจึงต้องกลับเป็นโทนสว่าง (.bt-title-highlight เป็นไล่เฉดสีอยู่แล้ว
-       อ่านออกบนพื้นมืดได้ตามเดิม จึงไม่ต้องแตะ) */
     .ticket__heading h2 {
         color: var(--color-text-inverse);
     }
@@ -3205,7 +3193,7 @@ body.is-loading .hero-scroll-cue,
 
         &.ticket__status--soon {
             color: var(--color-text-primary);
-            text-transform: uppercase;
+            /* text-transform: uppercase; */
         }
 
         /* Full/Lite เป็น tag หน้าตาเดียวกันทั้งคู่ ต่างกันแค่สี: Full (Ultimate) พื้นน้ำเงิน
@@ -3494,8 +3482,6 @@ body.is-loading .hero-scroll-cue,
 
         padding: var(--section-padding-y-sm) 0;
 
-        /* จอแคบหัวข้อกินความกว้างเกือบเต็ม ฉากไล่เฉดแนวนอนของจอใหญ่เลยคลุมทั้งภาพจนภาพจมหาย
-           เปลี่ยนเป็นไล่จากบนลงล่างและบางกว่าเดิม ภาพยังเห็นชัดแต่ตัวหนังสือยังอ่านออก */
         &::before {
             background: linear-gradient(180deg,
                     rgba(17, 19, 24, 0.50) 0%,
@@ -3803,7 +3789,7 @@ body.is-loading .hero-scroll-cue,
        จะโผล่ไปโดนแถบแท็บบัง */
     .agenda__day-panel {
         scroll-margin-top: calc(var(--agenda-sticky-top) + var(--agenda-day-panel-header-height) + var(--touch-target-md) + var(--rule-width-subtle));
-        background: var(--color-neutral-50);
+        padding-left: var(--space-12);
         border-radius: var(--radius-1);
     }
 
@@ -4016,6 +4002,8 @@ body.is-loading .hero-scroll-cue,
 
     .agenda__content {
         min-width: 0;
+        background: var(--color-neutral-50);
+        border-radius: var(--radius-1);
     }
 
     .agenda__tabs-viewport {
@@ -4227,7 +4215,7 @@ body.is-loading .hero-scroll-cue,
         height: 100%;
     }
 
-    /* กรอบรูปวิทยากรอยู่ขวาสุดของแต่ละ Session และรองรับหลายคนในแถวเดียว */
+    /* กรอบรูปวิทยากรอยู่ขวาสุดของแต่ละ Session แถวละไม่เกิน 2 คน */
     .agenda__table td.agenda__speakers {
         padding-top: var(--space-0);
         padding-left: var(--space-0);
@@ -4279,7 +4267,7 @@ body.is-loading .hero-scroll-cue,
         }
 
         .agenda__table td:first-of-type+td {
-            grid-column: span 2;
+            grid-column: 2;
             grid-row: 2;
             padding-top: var(--space-0);
         }
@@ -4293,10 +4281,17 @@ body.is-loading .hero-scroll-cue,
     }
 
     .agenda__speakers {
-        display: none !important;
+        display: grid;
+        grid-template-columns: repeat(2, var(--bt-agenda-speaker-size));
+        justify-content: end;
+        gap: var(--space-2);
         font-size: 0;
         text-align: right;
-        white-space: nowrap;
+        white-space: normal;
+    }
+
+    .agenda__speakers>.agenda__speaker-frame:last-child:nth-child(odd) {
+        grid-column: 2;
     }
 
     .agenda__speaker-frame {
@@ -4317,9 +4312,10 @@ body.is-loading .hero-scroll-cue,
         border: var(--rule-width-subtle) solid var(--color-border-faint);
         border-radius: var(--radius-1);
         background: var(--color-surface-paper);
+        overflow: hidden;
 
         &+.agenda__speaker-frame {
-            margin-left: var(--space-2);
+            margin-left: 0;
         }
 
     }
@@ -4338,33 +4334,34 @@ body.is-loading .hero-scroll-cue,
         display: block;
         object-fit: cover;
         object-position: center top;
-        filter: saturate(0.88) contrast(1.02);
+        border-radius: var(--radius-1);
+        filter: saturate(1.1);
     }
 
     .agenda__speaker-frame::before,
     .agenda__speaker-frame::after {
         content: '';
         position: absolute;
-        inset: 12%;
-        z-index: -1;
+        inset: 10%;
+        z-index: 0;
         border-radius: 20%;
-        filter: blur(8px);
+        filter: blur(4px) saturate(1.5);
         pointer-events: none;
     }
 
     .agenda__speaker-frame::before {
-        opacity: 0.88;
+        opacity: 0.52;
         background:
-            radial-gradient(circle at 28% 30%, var(--color-category-cyan) 0%, transparent 54%),
-            radial-gradient(circle at 72% 66%, var(--color-category-violet) 0%, transparent 54%);
+            radial-gradient(circle at 28% 30%, var(--color-cyan-400) 0%, transparent 52%),
+            radial-gradient(circle at 72% 66%, var(--color-violet-400) 0%, transparent 52%);
         animation: speaker-aurora-a var(--agenda-glow-a-duration) linear var(--agenda-glow-a-delay) infinite var(--agenda-glow-a-direction);
     }
 
     .agenda__speaker-frame::after {
-        opacity: 0.72;
+        opacity: 0.42;
         background:
-            radial-gradient(circle at 70% 26%, var(--color-category-pink) 0%, transparent 52%),
-            radial-gradient(circle at 30% 74%, var(--color-category-yellow) 0%, transparent 56%);
+            radial-gradient(circle at 70% 26%, var(--color-pink-400) 0%, transparent 50%),
+            radial-gradient(circle at 30% 74%, var(--color-yellow-500) 0%, transparent 54%);
         animation: speaker-aurora-b var(--agenda-glow-b-duration) linear var(--agenda-glow-b-delay) infinite var(--agenda-glow-b-direction);
     }
 
@@ -4541,7 +4538,7 @@ body.is-loading .hero-scroll-cue,
             font-weight: var(--font-weight-regular);
         }
 
-        &::after {
+        &:has(+ .agenda__session-summary)::after {
             content: ' ';
         }
     }
@@ -4553,8 +4550,7 @@ body.is-loading .hero-scroll-cue,
     }
 
     .agenda__session-speaker {
-        display: none;
-        margin: var(--space-2) var(--space-0) var(--space-0);
+        margin: var(--space-1) var(--space-0) var(--space-0);
         color: var(--color-text-muted);
         font-size: var(--section-small-size);
         font-weight: var(--font-weight-regular);
@@ -4572,6 +4568,10 @@ body.is-loading .hero-scroll-cue,
 
     @media (max-width:1199px) {
         --agenda-day-panel-header-height: calc(var(--space-10) + var(--space-6));
+
+        .agenda__day-panel {
+            padding-left: var(--space-0);
+        }
 
         .agenda__day-panel-header {
             padding: var(--space-1) var(--space-0) var(--space-6);
@@ -4614,6 +4614,14 @@ body.is-loading .hero-scroll-cue,
         .agenda__day-panel-date,
         .agenda__day-panel-time {
             font-size: var(--font-size-20);
+        }
+
+        .agenda__speakers {
+            justify-content: start;
+        }
+
+        .agenda__speakers>.agenda__speaker-frame:last-child:nth-child(odd) {
+            grid-column: 1;
         }
     }
 
@@ -4675,7 +4683,8 @@ body.is-loading .hero-scroll-cue,
             grid-column: 2;
             grid-row: 3;
             padding: var(--space-2) var(--space-0) var(--space-4) var(--space-4);
-            display: block;
+            display: grid;
+            justify-content: start;
             border-left: var(--rule-width-subtle) solid var(--color-border-faint);
             text-align: left;
             white-space: normal;
@@ -4947,7 +4956,8 @@ body.is-loading .hero-scroll-cue,
             grid-column: 2;
             grid-row: 3;
             padding: var(--space-2) var(--space-0) var(--space-6) var(--space-6);
-            display: block;
+            display: grid;
+            justify-content: start;
             border-left: var(--rule-width-subtle) solid var(--color-border-faint);
             font-size: var(--section-small-size);
             text-align: left;
@@ -4967,6 +4977,7 @@ body.is-loading .hero-scroll-cue,
     @media (max-width:575px) {
         --agenda-day-label-size: var(--font-size-20);
         --agenda-day-label-active-size: var(--font-size-20);
+        --bt-agenda-speaker-column-width-mobile: var(--bt-agenda-speaker-size-mobile);
 
         .agenda__day-panel-date,
         .agenda__day-panel-time {
@@ -5033,7 +5044,7 @@ body.is-loading .hero-scroll-cue,
 
         .agenda__table tr {
             grid-template-columns: minmax(0, 1fr) var(--bt-agenda-speaker-column-width-mobile);
-            column-gap: var(--space-4);
+            column-gap: var(--space-5);
         }
 
         .agenda__table td {
@@ -5052,7 +5063,7 @@ body.is-loading .hero-scroll-cue,
         }
 
         .agenda__table td:first-of-type+td {
-            grid-column: span 2;
+            grid-column: 1;
             grid-row: 3;
             padding-top: var(--space-0);
             padding-bottom: var(--space-4);
@@ -5071,14 +5082,18 @@ body.is-loading .hero-scroll-cue,
             grid-column: 2;
             grid-row: 3;
             width: var(--bt-agenda-speaker-column-width-mobile);
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: var(--bt-agenda-speaker-size-mobile);
             align-content: flex-end;
             justify-content: end;
             gap: var(--space-2);
             padding: 0 0 var(--space-6);
             border-left: 0;
             text-align: right;
+        }
+
+        .agenda__speakers>.agenda__speaker-frame:last-child:nth-child(odd) {
+            grid-column: 1;
         }
 
         .agenda__speaker-frame {
@@ -5098,14 +5113,17 @@ body.is-loading .hero-scroll-cue,
         .agenda__tags {
             margin-top: var(--space-2);
             margin-bottom: var(--space-3);
+            gap: var(--space-1);
         }
 
         .agenda__tag {
             min-height: var(--space-5);
+            padding: 1px var(--space-3);
+            font-size: var(--font-size-12);
         }
 
         .agenda__session-title {
-            font-size: var(--font-size-16);
+            font-size: var(--font-size-14);
         }
 
         .agenda__session-summary {
@@ -5113,7 +5131,7 @@ body.is-loading .hero-scroll-cue,
         }
 
         .agenda__session-speaker {
-            margin: var(--space-3) var(--space-0) var(--space-0);
+            margin: var(--space-2) var(--space-0) var(--space-0);
             font-size: var(--section-small-size);
         }
     }
@@ -5148,8 +5166,6 @@ body.is-loading .hero-scroll-cue,
 
 /* ---------- Speakers ---------- */
 .speaker {
-    /* ซ่อนไว้ก่อนสำหรับรอบ launch จริง — ยังไม่ลบเพราะจะกลับมาใช้ทีหลัง */
-    display: none;
     position: relative;
     scroll-margin-top: var(--header-height);
     padding: var(--section-padding-y) 0;
@@ -5202,6 +5218,7 @@ body.is-loading .hero-scroll-cue,
 
     .speaker__day-panel {
         scroll-margin-top: var(--speaker-sticky-top);
+        padding-left: var(--space-12);
     }
 
     .speaker__day-panel-header {
@@ -5399,6 +5416,10 @@ body.is-loading .hero-scroll-cue,
 
     @media (max-width: 1199px) {
         --speaker-day-panel-header-height: calc(var(--space-10) + var(--space-6));
+
+        .speaker__day-panel {
+            padding-left: var(--space-0);
+        }
 
         .speaker__day-panel-header {
             padding: var(--space-1) var(--space-0) var(--space-8);
@@ -5721,8 +5742,8 @@ body.is-loading .hero-scroll-cue,
         visibility: visible;
     }
 
-    #speaker .speaker__day-switch:not([aria-current='true']) .speaker__day-switch-details {
-        color: var(--speaker-day-label-color);
+    #speaker .speaker__day-switch[aria-current='true'] .speaker__day-switch-details {
+        color: var(--speaker-day-label-active-color);
         opacity: 1;
         visibility: visible;
     }
@@ -5795,12 +5816,12 @@ body.is-loading .hero-scroll-cue,
     grid-template-columns: repeat(3, minmax(0, 1fr));
     align-items: start;
     grid-auto-rows: auto;
-    gap: var(--space-8) var(--space-16);
+    gap: var(--space-8) var(--space-12);
     margin-top: 0;
 }
 
 .speaker__panel {
-    padding: var(--space-8);
+    padding: var(--space-8) var(--space-8) var(--space-12);
     background: var(--color-neutral-50);
     border-radius: var(--radius-1);
 }
@@ -5819,7 +5840,15 @@ body.is-loading .hero-scroll-cue,
 
     .speaker__panel,
     .moderator__grid {
-        gap: var(--space-16) var(--space-8);
+        gap: var(--space-12) var(--space-8);
+    }
+
+    .speaker__panel {
+        padding: var(--space-8) var(--space-6) var(--space-12);
+    }
+
+    .speaker-card h3 {
+        text-wrap: nowrap;
     }
 }
 
@@ -5851,7 +5880,11 @@ body.is-loading .hero-scroll-cue,
     .moderator__grid {
         margin-top: var(--space-8);
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: var(--space-12) var(--space-4);
+        gap: var(--space-12) var(--space-6);
+    }
+
+    .speaker__panel {
+        padding: var(--space-8) var(--space-8) var(--space-12);
     }
 }
 
@@ -5859,7 +5892,7 @@ body.is-loading .hero-scroll-cue,
 
     .speaker__panel {
         margin-top: var(--space-6);
-        padding: var(--space-4);
+        padding: var(--space-4) var(--space-4) var(--space-8);
         gap: var(--space-8) var(--space-4);
     }
 
@@ -5906,10 +5939,10 @@ body.is-loading .hero-scroll-cue,
 .speaker-card__portrait::after {
     content: '';
     position: absolute;
-    inset: 16%;
+    inset: 14%;
     z-index: -1;
     border-radius: 50%;
-    filter: blur(10px);
+    filter: blur(8px) saturate(1.5);
     opacity: 0;
     pointer-events: none;
     transition: opacity var(--duration-slow) var(--ease-standard);
@@ -5973,10 +6006,10 @@ body.is-loading .hero-scroll-cue,
        ให้ฝั่ง Speaker ส่วน Moderators & MC เขียนไว้ที่ style ของการ์ดใน HTML)
        ส่วน --speaker-portrait-drift เป็นตัวที่ ScrollTrigger ขยับเท่านั้น แยกกันไว้
        เพื่อให้ revert ของ gsap ล้าง drift ได้โดยค่าจัดหัวยังอยู่ครบ */
-    object-position: center calc(var(--speaker-portrait-y, 0%) + var(--speaker-portrait-drift, 0%));
-    filter: saturate(0.88) contrast(1.02);
-    transform: scale(1);
-    transform-origin: center top;
+    object-position: center;
+    filter: saturate(1.1);
+    transform: scale(var(--speaker-portrait-scale, 1));
+    transform-origin: center;
     transition:
         filter var(--duration-slow) var(--ease-standard),
         transform var(--duration-slow) var(--ease-standard);
@@ -5984,7 +6017,7 @@ body.is-loading .hero-scroll-cue,
 
 .speaker-card:hover .speaker-card__portrait img {
     filter: saturate(1) contrast(1);
-    transform: scale(1.03);
+    transform: scale(calc(var(--speaker-portrait-scale, 1) + 0.03));
 }
 
 .speaker-card__meta {
@@ -5996,7 +6029,7 @@ body.is-loading .hero-scroll-cue,
     position: relative;
     z-index: 1;
     min-width: 0;
-    padding: var(--space-6) var(--space-3) var(--space-0);
+    padding: var(--space-6) var(--space-0) var(--space-0);
     /* border-top: var(--rule-width-subtle) solid var(--color-border-editorial); */
 }
 
@@ -6011,9 +6044,8 @@ body.is-loading .hero-scroll-cue,
 .speaker-card p {
     margin: var(--space-1) var(--space-0) var(--space-0);
     color: var(--color-text-muted);
-    font-size: var(--section-body-size);
+    font-size: var(--section-small-size);
     font-weight: var(--font-weight-light);
-    line-height: var(--section-body-line-height);
 }
 
 /* ต่ำกว่า 1200px การ์ดไหลตามกริดปกติ เพดาน 260px กันไม่ให้ใบเดียวยืดจนเสียสัดส่วน */
@@ -6035,7 +6067,15 @@ body.is-loading .hero-scroll-cue,
        เผื่อไว้ 2 บรรทัดเท่ากันทุกใบ ชื่อจึงไม่โดนตัดและการ์ดยังสูงเท่ากัน
        ระยะบรรทัด 28px เผื่อที่ให้วรรณยุกต์/สระบนของไทยไม่ชนกัน */
     .speaker-card__meta {
-        padding: var(--space-5) var(--space-2) 0;
+        padding: var(--space-5) var(--space-0) var(--space-0);
+    }
+
+    .speaker-card h3 {
+        text-wrap: auto;
+    }
+
+    .speaker-card p {
+        text-wrap: balance;
     }
 }
 
@@ -6045,8 +6085,12 @@ body.is-loading .hero-scroll-cue,
         line-height: var(--section-small-line-height);
     }
 
+    .speaker-card h3 {
+        text-wrap: pretty;
+    }
+
     .speaker-card p {
-        font-size: var(--font-size-14);
+        font-size: var(--font-size-12);
         line-height: var(--section-small-line-height);
     }
 
@@ -6068,11 +6112,11 @@ body.is-loading .hero-scroll-cue,
 
 
 /* ---------- Moderators & MC ----------
-   โครงเดียวกับ Speaker ทุกอย่าง ต่างแค่ไม่มีตัวสลับวันและมีการ์ดชุดเดียว 5 ใบ
+   โครงเดียวกับ Speaker ทุกอย่าง ต่างแค่ไม่มีตัวสลับวันและมีการ์ดชุดเดียว
    กริดจึงต้องอยู่ในคอลัมน์ 9 ช่องที่เยื้อง 3 ช่องเท่ากับ .speaker__days
    เพื่อให้แทร็กกว้างเท่ากัน การ์ดสองฝั่งจึงมีขนาดตรงกันเป๊ะโดยไม่ต้องล็อกค่าใด */
 .moderator {
-    /* ซ่อนไว้ก่อนสำหรับรอบ launch จริง — ยังไม่ลบเพราะจะกลับมาใช้ทีหลัง */
+    /* ข้อมูลและการ์ดพร้อมใช้งานแล้ว แต่ซ่อน section ไว้จนกว่าจะประกาศเปิดตัว */
     display: none;
     position: relative;
     scroll-margin-top: var(--header-height);
@@ -6096,9 +6140,7 @@ body.is-loading .hero-scroll-cue,
         letter-spacing: 0;
     }
 
-    /* 5 ใบลงกริด 3 คอลัมน์ชุดเดียวกับฝั่ง Speaker (นิยามอยู่ในบล็อกกริดร่วมด้านบน):
-       เต็มแถวแรก 3 ใบ เหลือ 2 ใบชิดซ้ายแถวล่าง ช่องว่างท้ายแถวจึงเข้าจังหวะเดียวกับ
-       ผังเว้นช่องของ Speaker พอดี ไม่ต้องกำหนดอะไรเพิ่มตรงนี้ */
+    /* ใช้กริด 3 คอลัมน์ชุดเดียวกับฝั่ง Speaker (นิยามอยู่ในบล็อกกริดร่วมด้านบน) */
 
     @media (max-width: 991px) {
         padding: var(--section-padding-y-sm) 0;
@@ -6319,6 +6361,384 @@ body.is-loading .hero-scroll-cue,
         display: none;
     }
 
+}
+
+/* ---------- FAQ ---------- */
+.faq {
+    --faq-question-font-size: var(--font-size-16);
+    --faq-question-font-weight: var(--font-weight-medium);
+    --faq-answer-font-size: var(--font-size-16);
+    --faq-answer-font-weight: var(--font-weight-regular);
+    --faq-sticky-gap: var(--space-12);
+
+    position: relative;
+    scroll-margin-top: var(--header-height);
+    padding: var(--section-padding-y) 0;
+    color: var(--color-text-primary);
+    /* background:
+        radial-gradient(circle at 12% 0%, rgba(78, 92, 255, 0.08), transparent 34%),
+        radial-gradient(circle at 88% 100%, rgba(255, 95, 173, 0.08), transparent 30%),
+        var(--color-surface-page); */
+    background: var(--color-surface-page);
+    font-family: var(--font-family-base);
+}
+
+.faq__inner {
+    position: relative;
+}
+
+.faq__header-col {
+    /* Bootstrap's align-items-start keeps this column at its content height, which
+       leaves the sticky header with no vertical travel. Stretch only the left column
+       to the FAQ row height so it can remain pinned beside the sticky tabs. */
+    align-self: stretch;
+}
+
+.faq__header {
+    position: sticky;
+    top: calc(var(--header-height) + var(--faq-sticky-gap));
+    align-self: start;
+}
+
+.faq__header h2 {
+    margin: 0;
+    font-size: var(--section-title-size);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--section-title-line-height);
+}
+
+.faq__content {
+    min-width: 0;
+}
+
+.faq__content-col {
+    min-width: 0;
+}
+
+/* ---- แท็บหมวดคำถาม: ทำสไตล์ตามแนวเดียวกับ .agenda__tabs (แถบปุ่ม + เส้น
+   indicator ไล่สีที่เลื่อนตามตำแหน่งจริงของปุ่มที่เลือก) แต่เป็น class และ
+   ตัวแปรของ FAQ เองทั้งหมด ไม่ได้ดึง CSS ของ agenda มาใช้ */
+.faq__tabs-viewport {
+    position: sticky;
+    top: calc(var(--header-height) + var(--faq-sticky-gap));
+    z-index: 20;
+    margin-bottom: var(--space-0);
+    padding: var(--space-4) var(--space-0) var(--space-0);
+    background: var(--color-surface-page);
+}
+
+.faq__tabs-viewport.is-sticky::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 100%;
+    left: 0;
+    height: var(--faq-sticky-gap);
+    background: var(--color-surface-page);
+    pointer-events: none;
+}
+
+.faq__tabs {
+    --faq-tab-indicator-x: 0px;
+    --faq-tab-indicator-width: 0px;
+
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    min-height: var(--touch-target-md);
+    margin: 0;
+    overflow: visible;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* เส้นใต้แถบแท็บยาวสุดแถวเสมอ ไม่ใช่แค่ความกว้างของปุ่มรวมกัน */
+    &::after {
+        content: '';
+        flex: 1 1 auto;
+        border-bottom: var(--rule-width-emphasis) solid var(--color-border-faint);
+    }
+}
+
+.faq__tab {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 auto;
+    min-height: var(--touch-target-md);
+    padding: 0 var(--space-6);
+    border: 0;
+    border-bottom: var(--rule-width-emphasis) solid var(--color-border-faint);
+    color: var(--color-text-muted);
+    background: transparent;
+    font: inherit;
+    font-size: var(--section-body-size);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--section-body-line-height);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: color var(--duration-fast) var(--ease-standard);
+
+    &:hover {
+        color: var(--color-text-primary);
+    }
+
+    &:focus-visible {
+        outline: var(--border-width-2) solid var(--color-focus-ring);
+        outline-offset: calc(var(--border-width-2) * -1);
+    }
+
+    &[aria-selected="true"] {
+        color: var(--color-text-primary);
+        font-weight: var(--font-weight-medium);
+    }
+}
+
+.faq__tab-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    width: var(--faq-tab-indicator-width);
+    height: var(--rule-width-emphasis);
+    background: var(--gradient-table-active-spectrum);
+    pointer-events: none;
+    transform: translateX(var(--faq-tab-indicator-x));
+    will-change: width, transform;
+}
+
+.faq__tabs[data-indicator-ready="true"] .faq__tab-indicator {
+    transition:
+        width var(--duration-base) linear,
+        transform var(--duration-base) linear;
+}
+
+.faq__panel[hidden] {
+    display: none;
+}
+
+.faq__accordion {
+    border-top: 0;
+    --bs-accordion-bg: transparent;
+    --bs-accordion-border-width: 0;
+    --bs-accordion-border-color: transparent;
+    --bs-accordion-border-radius: 0;
+    --bs-accordion-inner-border-radius: 0;
+    --bs-accordion-active-bg: transparent;
+    --bs-accordion-active-color: var(--color-text-primary);
+    --bs-accordion-btn-bg: transparent;
+    --bs-accordion-btn-color: var(--color-text-primary);
+    --bs-accordion-btn-focus-border-color: transparent;
+    --bs-accordion-btn-focus-box-shadow: none;
+}
+
+.faq__item {
+    background: transparent;
+    border-bottom: var(--rule-width-subtle) solid var(--color-border-faint);
+    /* border-bottom: var(--rule-width-subtle) solid var(--color-border-editorial); */
+}
+
+.faq__question-heading {
+    margin: 0;
+}
+
+.faq__question {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--space-10);
+    gap: var(--space-6);
+    align-items: center;
+    padding: var(--space-5) var(--space-6);
+    color: var(--color-text-primary);
+    font-size: var(--faq-question-font-size);
+    font-weight: var(--faq-question-font-weight);
+    line-height: 1.45;
+    cursor: pointer;
+    list-style: none;
+    box-shadow: none;
+}
+
+.faq__question::after {
+    display: none;
+}
+
+.faq__question:not(.collapsed) {
+    padding-top: var(--space-10);
+    padding-bottom: var(--space-4);
+}
+
+.faq__question:focus-visible {
+    outline: 2px solid #315efb;
+    outline-offset: var(--space-1);
+}
+
+.faq__icon {
+    position: relative;
+    /* width: var(--space-10);
+    height: var(--space-10);
+    border-radius: 50%; */
+}
+
+.faq__icon::before,
+.faq__icon::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 14px;
+    height: 1.5px;
+    border-radius: 999px;
+    background: currentColor;
+    transform: translate(-50%, -50%);
+    transition:
+        opacity var(--duration-base) var(--ease-standard),
+        transform var(--duration-base) var(--ease-standard);
+}
+
+.faq__icon::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.faq__question:not(.collapsed) .faq__icon::after {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(90deg) scaleX(0.2);
+}
+
+.faq__answer {
+    box-sizing: border-box;
+    color: var(--color-text-muted);
+    font-size: var(--faq-answer-font-size);
+    font-weight: var(--faq-answer-font-weight);
+    line-height: var(--section-body-line-height);
+}
+
+.faq__answer-body {
+    box-sizing: border-box;
+    padding: var(--space-0) var(--space-6) var(--space-10);
+    color: var(--color-text-muted);
+    font-size: var(--faq-answer-font-size);
+    font-weight: var(--faq-answer-font-weight);
+    line-height: var(--section-body-line-height);
+}
+
+.faq__answer-body p {
+    margin: 0;
+}
+
+.faq__answer-body p+ul,
+.faq__answer-body ul+p {
+    margin-top: var(--space-2);
+}
+
+.faq__answer-body ul {
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style: none;
+}
+
+.faq__answer-body li {
+    display: flex;
+    gap: var(--space-3);
+    align-items: flex-start;
+}
+
+.faq__answer-body li::before {
+    content: "";
+    flex: 0 0 var(--space-3);
+    width: var(--space-3);
+    height: var(--space-3);
+    margin-top: calc((var(--section-body-line-height) - var(--space-3)) / 2);
+    background: url("../images/star.webp") center / contain no-repeat;
+}
+
+.faq__answer-body li+li {
+    margin-top: var(--space-1);
+}
+
+.faq__answer-body a {
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-medium);
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+}
+
+@media (max-width: 991px) {
+    .faq {
+        padding: var(--section-padding-y-sm) 0;
+    }
+
+    .faq__header {
+        position: static;
+        margin-bottom: var(--space-12);
+    }
+
+    .faq__tabs-viewport {
+        padding: var(--space-0);
+    }
+
+}
+
+@media (max-width: 767px) {
+    .faq {
+        --faq-sticky-gap: var(--space-4);
+    }
+}
+
+/* ป้ายแท็บ 4 อันรวมกันกว้างเกินพื้นที่คอลัมน์ขวาในบาง breakpoint (เหมือนปัญหา
+   เดียวกับ .agenda__tabs) จึงเปลี่ยนเป็นเลื่อนแนวนอนได้แทนการหด/ตัดคำ เพื่อให้
+   อ่านป้ายแท็บครบทุกคำ โดยไม่ดันหน้าเว็บล้นออกด้านขวา */
+@media (max-width: 1399px) {
+    .faq__tabs {
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding-right: var(--space-4);
+        scroll-padding-inline: var(--space-4);
+    }
+}
+
+@media (max-width: 1399px) and (min-width: 992px) {
+    .faq .bt-title-highlight.has-px {
+        padding-left: var(--space-0);
+    }
+}
+
+@media (max-width: 575px) {
+    .faq {
+        --faq-question-font-size: var(--font-size-14);
+        --faq-answer-font-size: var(--font-size-14);
+    }
+
+    .faq__tab {
+        padding: 0 var(--space-4);
+    }
+
+    .faq__question {
+        grid-template-columns: minmax(0, 1fr) var(--space-8);
+        gap: var(--space-4);
+        padding: var(--space-4) var(--space-3);
+    }
+
+    .faq__question:not(.collapsed) {
+        padding-top: var(--space-8);
+        padding-bottom: var(--space-2);
+    }
+
+    .faq__icon {
+        width: var(--space-8);
+        height: var(--space-8);
+    }
+
+    .faq__answer-body {
+        padding: var(--space-0) var(--space-0) var(--space-8) var(--space-3);
+        line-height: var(--section-small-line-height);
+    }
+
+    .faq__answer-body p+ul,
+    .faq__answer-body ul+p {
+        margin-top: var(--space-1);
+    }
 }
 
 /* หมุนรอบจุดกึ่งกลางพร้อมเลื่อน/ย่อขยายเล็กน้อยไปด้วย ทำให้ blob ลอยเป็นวงอิสระ
@@ -6691,8 +7111,6 @@ body.is-loading .hero-scroll-cue,
    กรอบเปล่ารอใส่โลโก้จริงภายหลัง ขนาดตามดีไซน์คุมด้วยแทร็กของกริด (minmax) กรอบจึงหด
    ตามจอแคบได้เองโดยยังคงสัดส่วนเดิมไว้ด้วย aspect-ratio ไม่ต้องล็อกความสูงเป็น px */
 .sponsor {
-    /* ซ่อนไว้ก่อนสำหรับรอบ launch จริง — ยังไม่ลบเพราะจะกลับมาใช้ทีหลัง */
-    display: none;
     --bt-sponsor-lead-width: 258px;
     --bt-sponsor-lead-ratio: 258 / 120;
     --bt-sponsor-md-width: 192px;
@@ -6707,7 +7125,7 @@ body.is-loading .hero-scroll-cue,
     background: var(--color-surface-page);
     font-family: var(--font-family-base);
 
-    .sponsor__group+.sponsor__group {
+    .sponsor__group:not([hidden])~.sponsor__group:not([hidden]) {
         margin-top: var(--space-20);
     }
 
@@ -6717,6 +7135,15 @@ body.is-loading .hero-scroll-cue,
         margin: 0 0 var(--space-8);
         text-align: center;
         text-transform: uppercase;
+    }
+
+    .sponsor__image {
+        width: 100%;
+        max-width: 610px;
+        height: auto;
+        margin: 0 auto;
+        display: block;
+        filter: drop-shadow(0 1px 3px rgba(7, 16, 28, 0.04));
     }
 
     .sponsor__logos {
@@ -6790,7 +7217,7 @@ body.is-loading .hero-scroll-cue,
 
         padding: var(--section-padding-y-sm) 0;
 
-        .sponsor__group+.sponsor__group {
+        .sponsor__group:not([hidden])~.sponsor__group:not([hidden]) {
             margin-top: var(--space-12);
         }
 
@@ -7467,6 +7894,10 @@ body.is-loading .hero-scroll-cue,
     }
 
     .agenda__tab-indicator {
+        transition-duration: var(--duration-reduced) !important;
+    }
+
+    .faq__tab-indicator {
         transition-duration: var(--duration-reduced) !important;
     }
 }

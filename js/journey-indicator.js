@@ -9,13 +9,11 @@
         { id: 'ticket', label: 'Ticket Price' },
         { id: 'playbook', label: 'Playbook' },
         { id: 'agenda', label: 'Agenda' },
-        /* speaker, moderator, sponsor ถูกซ่อนไว้ก่อนสำหรับรอบ launch จริง — เอา route
-           ของ section เหล่านี้ออกด้วย ไม่งั้น .filter(stop => stop.element) จะยังเจอ
-           element อยู่ (แค่ display:none ไม่ใช่ถูกลบออกจาก DOM) กลายเป็นจุดค้างในแถบ
-           journey-indicator ที่กดแล้วไม่มีอะไรให้เลื่อนไปหา */
+        { id: 'speaker', label: 'Speaker' },
         { id: 'expectation', label: 'Expectation' },
         { id: 'floor-plan', label: 'Floor Plan' },
         { id: 'past-event', label: 'Past Event' },
+        { id: 'faq', label: 'FAQ' },
     ].map(stop => ({ ...stop, element: document.getElementById(stop.id) }))
         .filter(stop => stop.element);
 
@@ -33,9 +31,11 @@
     if (!rail || !label) return;
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const sectionExitLine = 320;
     let activeIndex = -1;
     let frameId = null;
     let labelRevealTimer = null;
+    let activationLine = 1;
 
     function getHeaderOffset() {
         const rootStyle = getComputedStyle(document.documentElement);
@@ -48,6 +48,7 @@
     }
 
     function measure() {
+        activationLine = getHeaderOffset() + 1;
         if (title) {
             indicator.style.setProperty('--journey-title-length', `${Math.ceil(title.scrollWidth)}px`);
         }
@@ -169,6 +170,33 @@
         }
     }
 
+    function getActiveStopIndex(sectionRects, exitLine) {
+        let nextActiveIndex = 0;
+
+        /* Keep the current label for as long as any part of its section remains in
+           the visible content area. Promote the next stop as soon as the current
+           section's bottom reaches the lower edge of the sticky header. */
+        for (let index = 0; index < sectionRects.length - 1; index += 1) {
+            if (Math.round(sectionRects[index].bottom) <= exitLine) {
+                nextActiveIndex = index + 1;
+                continue;
+            }
+            break;
+        }
+
+        return nextActiveIndex;
+    }
+
+    function updateActiveStopImmediately() {
+        const sectionRects = route.map(stop => stop.element.getBoundingClientRect());
+        const isWithinRoute = sectionRects[0].top <= activationLine
+            && sectionRects[sectionRects.length - 1].bottom > 0;
+
+        if (isWithinRoute) {
+            setActiveStop(getActiveStopIndex(sectionRects, sectionExitLine));
+        }
+    }
+
     function render() {
         frameId = null;
 
@@ -178,13 +206,12 @@
            us that the old anchors are stale. Live rects keep visibility and labels tied
            to the section that is actually below the sticky header. */
         const sectionRects = route.map(stop => stop.element.getBoundingClientRect());
-        const activationLine = getHeaderOffset() + 1;
-        const progressLine = Math.min(window.innerHeight * 0.28, getHeaderOffset() + 160);
+        const progressLine = activationLine;
         const isSuppressed = document.body.classList.contains('is-loading')
             || document.body.classList.contains('menu-open')
             || document.body.classList.contains('menu-closing');
         const isWithinRoute = sectionRects[0].top <= activationLine
-            && sectionRects[sectionRects.length - 1].bottom >= activationLine;
+            && sectionRects[sectionRects.length - 1].bottom > 0;
 
         indicator.classList.toggle('is-visible', isWithinRoute && !isSuppressed);
         if (!isWithinRoute) {
@@ -193,13 +220,12 @@
             return;
         }
 
-        let nextActiveIndex = sectionRects.length - 1;
-        for (let index = 0; index < sectionRects.length - 1; index += 1) {
-            if (activationLine < sectionRects[index + 1].top) {
-                nextActiveIndex = index;
-                break;
-            }
-        }
+        const nextActiveIndex = getActiveStopIndex(sectionRects, sectionExitLine);
+
+        /* Update the label before the progress/color work below. Native scrolling can
+           stay compositor-smooth while the main thread is busy in content-heavy
+           sections; keeping this first prevents a label from visibly arriving late. */
+        setActiveStop(nextActiveIndex);
 
         const nextIndex = Math.min(nextActiveIndex + 1, sectionRects.length - 1);
         const segmentStart = sectionRects[nextActiveIndex].top;
@@ -213,7 +239,6 @@
 
         indicator.style.setProperty('--journey-progress', `${(routeProgress * 100).toFixed(2)}%`);
         updateDynamicColors(routeProgress);
-        setActiveStop(nextActiveIndex);
     }
 
     function requestRender() {
@@ -228,7 +253,12 @@
     if (heroScroller) resizeObserver?.observe(heroScroller);
     route.forEach(stop => resizeObserver?.observe(stop.element));
 
-    window.addEventListener('scroll', requestRender, { passive: true });
+    window.addEventListener('scroll', () => {
+        /* Section activation is deliberately synchronous and lightweight. Progress and
+           dynamic colors remain throttled to one animation frame in requestRender(). */
+        updateActiveStopImmediately();
+        requestRender();
+    }, { passive: true });
     window.addEventListener('resize', measure);
     window.addEventListener('load', measure);
     document.fonts?.ready.then(measure);

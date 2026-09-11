@@ -119,12 +119,16 @@
 
         function setupDesktopNavActiveState() {
             const SECTION_NAVIGATION_EVENT = 'bettertrade:section-navigation';
-            const SECTION_ACTIVATION_TOLERANCE = 2;
+            const FAQ_TAB_CHANGE_EVENT = 'bettertrade:faq-tab-change';
             const entries = siteHeaderDesktopLinks
                 .map(link => {
                     const id = link.getAttribute('href')?.slice(1);
-                    const section = id ? document.getElementById(id) : null;
-                    return section ? { link, section } : null;
+                    /* #home is a zero-height anchor immediately before the hero. Use
+                       the actual hero scroller as Home's observable section instead. */
+                    const section = id === 'home'
+                        ? document.getElementById('scroller')
+                        : (id ? document.getElementById(id) : null);
+                    return section ? { id, link, section } : null;
                 })
                 .filter(Boolean);
 
@@ -132,11 +136,7 @@
 
             let activeLink = null;
             let ticking = false;
-
-            const getVisibleEntries = () => entries.filter(entry => (
-                entry.section.getClientRects().length > 0
-                && window.getComputedStyle(entry.section).visibility !== 'hidden'
-            ));
+            let suppressContactUntilUserScroll = false;
 
             const setActiveLink = nextLink => {
                 if (activeLink === nextLink) return;
@@ -153,42 +153,46 @@
             const updateActiveLink = () => {
                 ticking = false;
 
-                // Hidden launch sections (for example #speaker) remain in the DOM so
-                // they can be enabled later. Their geometry collapses to the document
-                // origin, which would otherwise make the last hidden nav item active
-                // for most of the page.
-                const visibleEntries = getVisibleEntries();
-                if (!visibleEntries.length) {
-                    setActiveLink(null);
+                const headerProbeOffset = (siteHeader.offsetHeight || 80) + 8;
+                const visibleEntry = entries.find(entry => {
+                    const rect = entry.section.getBoundingClientRect();
+                    return rect.top <= headerProbeOffset && rect.bottom > headerProbeOffset;
+                });
+
+                if (visibleEntry) {
+                    setActiveLink(visibleEntry.link);
                     return;
                 }
 
+                /* Contact uses a later activation point because the footer can be
+                   visible beneath a short FAQ panel while the user is still reading
+                   the FAQ. Activate it only once the footer reaches mid-viewport. */
+                const contactEntry = entries.find(entry => entry.id === 'contact');
+                const contactRect = contactEntry?.section.getBoundingClientRect();
+                const contactActivationY = document.documentElement.clientHeight * 0.5;
                 const maxScrollY = Math.max(
                     0,
                     document.documentElement.scrollHeight - document.documentElement.clientHeight
                 );
-                if (window.scrollY >= maxScrollY - 2) {
-                    setActiveLink(visibleEntries[visibleEntries.length - 1].link);
+                const isAtPageEnd = window.scrollY >= maxScrollY - 2;
+
+                if (
+                    !suppressContactUntilUserScroll
+                    && contactEntry
+                    && (
+                        (
+                            contactRect.top <= contactActivationY
+                            && contactRect.bottom > contactActivationY
+                        )
+                        || isAtPageEnd
+                    )
+                ) {
+                    setActiveLink(contactEntry.link);
                     return;
                 }
 
-                const headerProbeOffset = (siteHeader.offsetHeight || 80) + 8;
-                let nextEntry = visibleEntries[0];
-
-                visibleEntries.forEach(entry => {
-                    const sectionTop = entry.section.getBoundingClientRect().top + window.scrollY;
-                    const scrollMarginTop = Number.parseFloat(
-                        window.getComputedStyle(entry.section).scrollMarginTop
-                    ) || 0;
-                    const activationY = window.scrollY
-                        + Math.max(headerProbeOffset, scrollMarginTop)
-                        + SECTION_ACTIVATION_TOLERANCE;
-                    if (sectionTop <= activationY) {
-                        nextEntry = entry;
-                    }
-                });
-
-                setActiveLink(nextEntry.link);
+                /* The current section has no matching header item. */
+                setActiveLink(null);
             };
 
             const requestUpdate = () => {
@@ -200,9 +204,27 @@
             updateActiveLink();
             window.addEventListener('scroll', requestUpdate, { passive: true });
             window.addEventListener('resize', requestUpdate);
+
+            const allowContactActivation = () => {
+                if (!suppressContactUntilUserScroll) return;
+                suppressContactUntilUserScroll = false;
+                requestUpdate();
+            };
+            const allowContactActivationFromKeyboard = event => {
+                if (!['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' '].includes(event.key)) return;
+                allowContactActivation();
+            };
+            const suppressContactAfterFaqTabChange = () => {
+                suppressContactUntilUserScroll = true;
+                requestUpdate();
+            };
+
+            window.addEventListener('wheel', allowContactActivation, { passive: true });
+            window.addEventListener('touchstart', allowContactActivation, { passive: true });
+            window.addEventListener('keydown', allowContactActivationFromKeyboard);
+            window.addEventListener(FAQ_TAB_CHANGE_EVENT, suppressContactAfterFaqTabChange);
             const syncToNavigationTarget = event => {
-                const nextEntry = getVisibleEntries()
-                    .find(entry => entry.section.id === event.detail?.targetId);
+                const nextEntry = entries.find(entry => entry.section.id === event.detail?.targetId);
                 if (!nextEntry) return;
                 setActiveLink(nextEntry.link);
                 requestUpdate();
@@ -212,6 +234,10 @@
             return () => {
                 window.removeEventListener('scroll', requestUpdate);
                 window.removeEventListener('resize', requestUpdate);
+                window.removeEventListener('wheel', allowContactActivation);
+                window.removeEventListener('touchstart', allowContactActivation);
+                window.removeEventListener('keydown', allowContactActivationFromKeyboard);
+                window.removeEventListener(FAQ_TAB_CHANGE_EVENT, suppressContactAfterFaqTabChange);
                 window.removeEventListener(SECTION_NAVIGATION_EVENT, syncToNavigationTarget);
             };
         }

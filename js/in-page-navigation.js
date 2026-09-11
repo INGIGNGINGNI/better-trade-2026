@@ -5,7 +5,10 @@
     document.addEventListener('click', (event) => {
         const link = event.target.closest('a[href^="#"]');
 
-        if (!link || link.matches('[role="tab"]')) return;
+        /* Component-owned tabs/day switchers calculate their own sticky offsets.
+           Let their local handlers scroll them so this generic anchor navigation
+           does not immediately override the intended landing position. */
+        if (!link || link.matches('[role="tab"], .agenda__day-switch, .speaker__day-switch')) return;
         if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
 
         const hash = link.getAttribute('href');

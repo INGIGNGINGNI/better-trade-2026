@@ -100,6 +100,8 @@ function measureLabel(text, fontSize, fontWeight, fontFamily) {
  * @param {number}   [opts.metalShiftBlue] Same, blue channel.
  * @param {string}   [opts.href]     Optional link destination. When omitted,
  *                                   the action renders as a button.
+ * @param {string}   [opts.target]   Optional browsing context for links.
+ * @param {string}   [opts.rel]      Optional link relationship tokens.
  * @param {Function} [opts.onClick]
  * @returns {{ el: HTMLElement, destroy: Function }}
  */
@@ -122,6 +124,8 @@ export function createLiquidMetalButton(opts = {}) {
         metalShiftRed = 0.3,
         metalShiftBlue = 0.3,
         href,
+        target,
+        rel,
         onClick,
     } = opts;
 
@@ -212,6 +216,8 @@ export function createLiquidMetalButton(opts = {}) {
 
     if (href) {
         btn.href = href;
+        if (target) btn.target = target;
+        if (rel) btn.rel = rel;
     } else {
         btn.type = 'button';
     }
