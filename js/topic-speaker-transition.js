@@ -2,13 +2,33 @@
     const topicsSection = document.querySelector('.topics-showcase');
     const speakerOverview = document.querySelector('.speaker-overview');
 
-    if (!topicsSection || !speakerOverview || !window.gsap || !window.ScrollTrigger) return;
+    if (!speakerOverview) return;
+
+    let glowFrame = 0;
+
+    const syncTopGlow = () => {
+        glowFrame = 0;
+        const bounds = speakerOverview.getBoundingClientRect();
+        const isTopReached = bounds.top <= 0.5 && bounds.bottom > 0.5;
+        speakerOverview.classList.toggle('is-top-glow-visible', isTopReached);
+    };
+
+    const requestTopGlowSync = () => {
+        if (glowFrame) return;
+        glowFrame = window.requestAnimationFrame(syncTopGlow);
+    };
+
+    requestTopGlowSync();
+    window.addEventListener('scroll', requestTopGlowSync, { passive: true });
+    window.addEventListener('resize', requestTopGlowSync, { passive: true });
+    window.visualViewport?.addEventListener('resize', requestTopGlowSync, { passive: true });
+
+    if (!topicsSection || !window.gsap || !window.ScrollTrigger) return;
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const parallaxViewport = window.matchMedia('(min-width: 992px)');
 
     const init = () => {
-        if (reducedMotion.matches) return;
-
         gsap.registerPlugin(ScrollTrigger);
 
         let transition = null;
@@ -101,14 +121,43 @@
         };
     };
 
+    let isReady = false;
+    let disposeTransition = null;
+
+    const resetTransitionProgress = () => {
+        topicsSection.style.removeProperty('--topic-speaker-transition-progress');
+        document.dispatchEvent(new CustomEvent('topic-speaker-transition:update'));
+    };
+
+    const syncTransitionMode = () => {
+        if (!isReady) return;
+
+        disposeTransition?.();
+        disposeTransition = null;
+
+        if (parallaxViewport.matches && !reducedMotion.matches) {
+            disposeTransition = init();
+            return;
+        }
+
+        /* Tablet and mobile use normal document flow. Refresh after reverting the
+           desktop pin so every downstream section is measured from its CSS layout. */
+        resetTransitionProgress();
+        requestAnimationFrame(() => ScrollTrigger.refresh());
+    };
+
     const waitForHeroIntro = () => {
         if (document.body.classList.contains('is-loading') || document.getElementById('loader')) {
             window.setTimeout(waitForHeroIntro, 120);
             return;
         }
 
-        init();
+        isReady = true;
+        syncTransitionMode();
     };
+
+    parallaxViewport.addEventListener('change', syncTransitionMode);
+    reducedMotion.addEventListener('change', syncTransitionMode);
 
     waitForHeroIntro();
 })();

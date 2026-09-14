@@ -2649,9 +2649,8 @@ body.is-loading .hero-scroll-cue,
 /* ---------- Speaker overview ---------- */
 .speaker-overview {
     --speaker-overview-rows: 3;
-    --speaker-overview-columns-visible: var(--bt-speaker-overview-grid-columns-visible);
+    --speaker-overview-columns: 6;
     --speaker-overview-card-min-width: var(--bt-speaker-overview-card-min-width);
-    --speaker-overview-scroller-height: calc(var(--space-28) * 4 + var(--space-8));
 
     position: relative;
     z-index: 2;
@@ -2665,20 +2664,49 @@ body.is-loading .hero-scroll-cue,
     background: var(--bt-speaker-overview-bg);
     font-family: var(--font-family-base);
 
+    &::before {
+        content: '';
+        position: fixed;
+        z-index: 0;
+        top: calc(clamp(15rem, 34vw, 30rem) * -0.58);
+        left: 50%;
+        width: min(112vw, 100rem);
+        height: clamp(15rem, 34vw, 30rem);
+        border-radius: 50%;
+        pointer-events: none;
+        opacity: 0;
+        transform: translate3d(-50%, -1.5rem, 0) scale(.96);
+        background: radial-gradient(ellipse at 50% 72%,
+                rgba(79, 91, 158, .28) 0%,
+                rgba(46, 54, 103, .21) 34%,
+                rgba(24, 28, 52, .12) 53%,
+                rgba(10, 11, 17, 0) 76%);
+        filter: blur(2rem);
+        transition: opacity .65s ease, transform .9s cubic-bezier(.2, .7, .2, 1);
+        will-change: opacity, transform;
+    }
+
+    &.is-top-glow-visible::before {
+        opacity: 1;
+        transform: translate3d(-50%, 0, 0) scale(1);
+    }
+
     &[data-speaker-overview-layout="expanded"] {
         --speaker-overview-rows: 4;
-        --speaker-overview-columns-visible: 9;
+        --speaker-overview-columns: 9;
         --speaker-overview-card-min-width: var(--space-20);
     }
 
     .speaker-overview__inner {
         position: relative;
+        z-index: 1;
+        min-width: 0;
         width: 100%;
     }
 
-    .speaker-overview__layout {
+    /* .speaker-overview__layout {
         --bs-gutter-x: var(--space-8);
-    }
+    } */
 
     .speaker-overview__intro {
         min-width: 0;
@@ -2692,9 +2720,9 @@ body.is-loading .hero-scroll-cue,
         margin: var(--space-0) var(--space-0) var(--space-10);
         display: flex;
         align-items: center;
-        color: var(--bt-speaker-overview-ink-muted);
+        /* color: var(--bt-speaker-overview-ink-muted); */
         font-size: var(--font-size-18);
-        font-weight: var(--font-weight-medium);
+        font-weight: var(--font-weight-regular);
         line-height: var(--section-small-line-height);
         letter-spacing: var(--section-heading-tracking);
         text-transform: uppercase;
@@ -2712,7 +2740,7 @@ body.is-loading .hero-scroll-cue,
         margin: var(--space-0);
         font-size: var(--font-size-32);
         font-weight: var(--font-weight-regular);
-        line-height: 1.25;
+        line-height: 1.5;
         letter-spacing: var(--section-heading-tracking);
         text-wrap-style: balance;
 
@@ -2756,14 +2784,72 @@ body.is-loading .hero-scroll-cue,
     }
 
     .speaker-overview__gallery {
+        position: relative;
         min-width: 0;
+        margin-block: auto;
+    }
+
+    .speaker-overview__scroll-overlay {
+        position: absolute;
+        z-index: 5;
+        inset: var(--space-0);
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        pointer-events: none;
+        visibility: hidden;
+        opacity: 0;
+        background:
+            radial-gradient(circle at center,
+                color-mix(in srgb, var(--color-kv-spectrum-4) 17%, transparent) 0%,
+                transparent 42%),
+            rgba(8, 10, 15, .72);
+
+        &.is-visible {
+            visibility: visible;
+            animation: speaker-overview-scroll-overlay 3.2s ease both;
+        }
+    }
+
+    .speaker-overview__scroll-gesture {
+        width: clamp(4.75rem, 8vw, 6.75rem);
+        aspect-ratio: 1;
+        height: auto;
+        overflow: visible;
+        filter: drop-shadow(0 0 18px rgba(255, 255, 255, .24));
+
+        svg {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+            overflow: visible;
+        }
     }
 
     .speaker-overview__view-switch {
-        position: absolute;
-        z-index: 4;
+        position: fixed;
+        z-index: 270;
         right: var(--space-20);
         bottom: var(--space-6);
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(var(--space-2)) scale(0.94);
+        transition:
+            opacity var(--duration-fast) var(--ease-standard),
+            transform var(--duration-fast) var(--ease-standard),
+            bottom var(--duration-slow) var(--ease-standard);
+    }
+
+    &.is-view-switch-visible .speaker-overview__view-switch {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0) scale(1);
+    }
+
+    /* Keep the layout switch accessible while the cookie notice occupies the bottom
+       of the viewport. Once the notice closes, the button returns to its usual edge. */
+    body:has(.cookie-banner.is-visible) & .speaker-overview__view-switch {
+        bottom: calc(var(--space-24) + var(--space-8));
     }
 
     .speaker-overview__view-trigger {
@@ -2951,43 +3037,28 @@ body.is-loading .hero-scroll-cue,
 
     .speaker-overview__scroller {
         width: 100%;
-        height: var(--speaker-overview-scroller-height);
-        overflow-x: auto;
-        overflow-y: hidden;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-        overscroll-behavior-inline: contain;
-
-        &::-webkit-scrollbar {
-            display: none;
-            width: 0;
-            height: 0;
-        }
-
-        &:focus-visible {
-            outline: var(--border-width-2) solid var(--color-focus-ring);
-            outline-offset: var(--space-2);
-        }
+        height: auto;
+        overflow: visible;
     }
 
     .speaker-overview__grid {
-        --speaker-overview-track-width: calc((100% - (var(--bt-speaker-overview-grid-gap) * (var(--speaker-overview-columns-visible) - 1))) / var(--speaker-overview-columns-visible));
-
         width: 100%;
-        min-width: max-content;
-        height: 100%;
+        min-width: 0;
+        height: auto;
         display: grid;
-        grid-template-rows: repeat(var(--speaker-overview-rows), minmax(0, 1fr));
+        grid-template-columns: repeat(var(--speaker-overview-columns), minmax(0, 1fr));
+        grid-template-rows: repeat(var(--speaker-overview-rows), auto);
         grid-auto-flow: column;
-        grid-auto-columns: max(var(--speaker-overview-card-min-width), var(--speaker-overview-track-width));
         gap: var(--bt-speaker-overview-grid-gap);
     }
 
     .speaker-overview__card {
         --speaker-overview-circle-color: var(--color-kv-spectrum-1);
         --speaker-overview-circle-x: 76%;
+        --speaker-overview-portrait-x: 0%;
 
         position: relative;
+        aspect-ratio: 4 / 5;
         min-width: 0;
         min-height: 0;
         margin: var(--space-0);
@@ -3061,42 +3132,169 @@ body.is-loading .hero-scroll-cue,
         }
     }
 
-    .speaker-overview__scroll-hint {
-        display: none;
+    @media (max-width: 1399px) {
+        h2 {
+            .bt-title-highlight {
+                font-size: var(--font-size-40);
+            }
+        }
+    }
+
+    @media (max-width: 1199px) {
+        .speaker-overview__scroller {
+            overflow-x: auto;
+            overflow-y: hidden;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            overscroll-behavior-inline: contain;
+            scroll-snap-type: inline proximity;
+
+            &::-webkit-scrollbar {
+                display: none;
+                width: 0;
+                height: 0;
+            }
+
+            &:focus-visible {
+                outline: var(--border-width-2) solid var(--color-focus-ring);
+                outline-offset: var(--space-2);
+            }
+        }
+
+        .speaker-overview__grid {
+            --speaker-overview-track-width: calc((100% - (var(--bt-speaker-overview-grid-gap) * (var(--speaker-overview-columns) - 1))) / var(--speaker-overview-columns));
+
+            min-width: max-content;
+            grid-template-columns: none;
+            grid-template-rows: repeat(var(--speaker-overview-rows), max-content);
+            grid-auto-columns: max(var(--speaker-overview-card-min-width), var(--speaker-overview-track-width));
+        }
+
+        .speaker-overview__card {
+            scroll-snap-align: start;
+        }
+
     }
 
     @media (max-width: 991px) {
-        --speaker-overview-scroller-height: calc(var(--space-24) * 4 + var(--space-12));
+        padding: var(--section-padding-y-sm) var(--space-0);
 
-        padding-bottom: var(--section-padding-y-sm);
+        /* จอนี้การ์ด compact (18) เต็มความกว้างพอดี ให้ expanded (36) ใช้ขนาดการ์ดเท่ากัน
+           แต่ยังคง 4 แถวเหมือนเดิม (ไม่แตะ --speaker-overview-rows) แค่ scroll แนวนอนยาวขึ้น */
+        &[data-speaker-overview-layout="expanded"] {
+            --speaker-overview-card-min-width: var(--bt-speaker-overview-card-min-width);
+        }
 
         .speaker-overview__intro {
             padding-right: calc(var(--bs-gutter-x) * 0.5);
+            display: grid;
+            grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1.1fr);
+            grid-template-areas:
+                "eyebrow eyebrow"
+                "mark headline"
+                "mark event";
+            column-gap: var(--space-12);
+            align-items: start;
         }
 
         .speaker-overview__gallery {
             margin-top: var(--space-12);
         }
 
+        .speaker-overview__eyebrow {
+            grid-area: eyebrow;
+            margin-bottom: var(--space-8);
+            font-size: var(--font-size-16);
+        }
+
+        .speaker-overview__event-mark {
+            grid-area: mark;
+            width: 100%;
+            max-width: 360px;
+            margin-bottom: var(--space-0);
+        }
+
+        h2 {
+            grid-area: headline;
+            font-size: var(--font-size-28);
+
+            .bt-title-highlight {
+                font-size: var(--font-size-40);
+            }
+        }
+
+        .speaker-overview__event-info {
+            grid-area: event;
+            margin-top: var(--space-6);
+        }
     }
 
     @media (max-width: 767px) {
+        --speaker-overview-card-min-width: var(--bt-speaker-overview-card-min-width-sm);
+
+        /* กลับไปใช้ขนาดเดิมของ expanded บนมือถือ ไม่ให้ค่าจาก breakpoint 991px ด้านบนไหลลงมาทับ */
+        &[data-speaker-overview-layout="expanded"] {
+            --speaker-overview-card-min-width: var(--space-20);
+        }
+
+        .speaker-overview__intro {
+            display: flex;
+            align-items: center;
+            text-align: center;
+        }
+
         .speaker-overview__view-switch {
             right: var(--space-16);
             bottom: var(--space-4);
         }
 
+        body:has(.cookie-banner.is-visible) & .speaker-overview__view-switch {
+            bottom: calc(var(--space-32) + var(--space-12));
+        }
+
+        .speaker-overview__eyebrow {
+            justify-content: center;
+            margin-bottom: var(--space-6);
+            font-size: var(--font-size-14);
+        }
+
+        .speaker-overview__event-mark {
+            width: min(72%, 360px);
+            margin-bottom: var(--space-6);
+        }
+
         h2 {
-            font-size: var(--font-size-32);
+            font-size: var(--font-size-28);
 
             .bt-title-highlight {
-                font-size: var(--font-size-48);
+                font-size: var(--font-size-40);
+
+                &.has-pe {
+                    padding-left: var(--space-1);
+                    padding-right: var(--space-1);
+                }
+            }
+        }
+
+        .speaker-overview__event-info {
+            width: fit-content;
+            max-width: 100%;
+            margin-top: var(--space-6);
+            align-self: center;
+            text-align: left;
+
+            p {
+                font-size: var(--font-size-16);
+            }
+
+            p:last-child {
+                font-size: var(--font-size-14);
             }
         }
 
         .speaker-overview__gallery {
             margin-top: var(--space-10);
-            padding-right: var(--space-0);
+            /* padding-right: var(--space-0); */
         }
 
         .speaker-overview__speaker-count {
@@ -3111,43 +3309,63 @@ body.is-loading .hero-scroll-cue,
             }
         }
 
-        .speaker-overview__grid {
-            --speaker-overview-card-min-width: var(--bt-speaker-overview-card-min-width-sm);
-        }
-
-        &[data-speaker-overview-layout="expanded"] .speaker-overview__grid {
-            --speaker-overview-card-min-width: var(--space-20);
-        }
-
-        .speaker-overview__scroll-hint {
-            margin: var(--space-3) var(--space-0) var(--space-0);
-            display: flex;
-            justify-content: flex-end;
-            gap: var(--space-2);
-            color: var(--bt-speaker-overview-ink-muted);
-            font-size: var(--font-size-12);
-            line-height: var(--section-small-line-height);
-            letter-spacing: var(--section-heading-tracking);
-            text-transform: uppercase;
-        }
     }
 
     @media (max-width: 575px) {
+        /* จอนี้บีบการ์ดลงอีกให้สูงแค่ 120px (aspect-ratio 4/5 → กว้าง 96px) ทั้ง compact และ expanded */
+        --speaker-overview-card-min-width: var(--space-24);
+
+        &[data-speaker-overview-layout="expanded"] {
+            --speaker-overview-card-min-width: var(--space-24);
+        }
+
+        /* ล็อกความกว้างการ์ดตรงตาม min-width ไปเลย ไม่ยอมให้ track-width (max()) ดันการ์ดกว้างขึ้นจนสูงเกิน 120px */
+        .speaker-overview__grid {
+            grid-auto-columns: var(--speaker-overview-card-min-width);
+        }
+
+        body:has(.mobile-cta-bar.is-visible) & .speaker-overview__view-switch {
+            bottom: calc(var(--space-10) + var(--space-3) + var(--space-5) + max(var(--space-3), env(safe-area-inset-bottom)));
+        }
+
+        body:has(.cookie-banner.is-visible) & .speaker-overview__view-switch {
+            bottom: calc(var(--space-32) + var(--space-32));
+        }
+
         .speaker-overview__event-mark {
-            width: 92%;
+            width: min(82%, 320px);
         }
 
-        .speaker-overview__subtext {
-            font-size: var(--font-size-14);
-            line-height: var(--section-small-line-height);
-        }
+        h2 {
+            font-size: var(--font-size-24);
 
+            .bt-title-highlight {
+                font-size: var(--font-size-36);
+                ;
+            }
+        }
     }
 
     @media (prefers-reduced-motion: reduce) {
         .speaker-overview__card img {
             transition-duration: var(--duration-reduced);
         }
+
+    }
+}
+
+@keyframes speaker-overview-scroll-overlay {
+    0% {
+        opacity: 0;
+    }
+
+    12%,
+    76% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
     }
 }
 
@@ -7649,12 +7867,7 @@ body.is-loading .hero-scroll-cue,
         height: auto;
         margin: 0 auto;
         display: block;
-        filter: drop-shadow(
-            0
-            clamp(0.5px, 0.16vw, 1px)
-            clamp(1.5px, 0.5vw, 3px)
-            rgba(7, 16, 28, 0.04)
-        );
+        filter: drop-shadow(0 clamp(0.5px, 0.16vw, 1px) clamp(1.5px, 0.5vw, 3px) rgba(7, 16, 28, 0.04));
     }
 
     .sponsor__logos {
@@ -9481,9 +9694,4 @@ body.is-loading .hero-scroll-cue,
     .cookie-banner {
         transition-duration: var(--duration-reduced);
     }
-}
-
-/* Temporarily hidden on pre-production. */
-.speaker-overview {
-    display: none;
 }

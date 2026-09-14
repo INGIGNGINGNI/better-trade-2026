@@ -5,51 +5,61 @@
                 name: 'ดร.นิเวศน์ เหมวชิรวรากร',
                 role: 'นักลงทุนหุ้นเน้นคุณค่า (VI)',
                 image: 'day-1/D1-ดร.นิเวศน์-เหมวชิรวรากร.webp',
+                overviewClass: 'niwes',
             },
             {
                 name: 'ดร.พิพัฒน์ เหลืองนฤมิตชัย',
-                role: 'ผู้ช่วยกรรมการผู้จัดการ หัวหน้านักเศรษฐศาสตร์ (Chief Economist) และหัวหน้าฝ่ายวิเคราะห์เศรษฐกิจและการลงทุน กลุ่มธุรกิจการเงินเกียรตินาคินภัทร ธนาคารเกียรตินาคินภัทร จำกัด (มหาชน)',
+                role: 'ผู้ช่วยกรรมการผู้จัดการ หัวหน้านักเศรษฐศาสตร์ (Chief Economist) และหัวหน้าฝ่ายวิเคราะห์เศรษฐกิจและการลงทุน กลุ่มธุรกิจการเงิน<br class="d-none d-md-block">เกียรตินาคินภัทร ธนาคาร<br class="d-none d-md-block d-xl-none">เกียรตินาคินภัทร จำกัด (มหาชน)',
                 image: 'day-1/D1-ดร.พิพัฒน์-เหลืองนฤมิตชัย.webp',
+                overviewClass: 'pipat',
             },
             {
                 name: 'ดร.ฐิติมา ชูเชิด',
                 role: 'ผู้อำนวยการอาวุโส ผู้บริหารฝ่ายวิจัยเศรษฐกิจมหภาค, ศูนย์วิจัยเศรษฐกิจและธุรกิจ (SCB EIC)',
                 image: 'day-1/D1-ดร.ฐิติมา-ชูเชิด.webp',
+                overviewClass: 'thitima',
             },
             {
                 name: 'คุณธนรัชต์ พสวงศ์',
                 role: 'ประธานเจ้าหน้าที่บริหาร กลุ่มฮั่วเซ่งเฮง',
                 image: 'day-1/D1-ธนรัชต์-พสวงศ์.webp',
+                overviewClass: 'thanarat',
             },
             {
                 name: 'คุณมทินา วัชรวราทร',
                 role: 'CFA, Head of Investment Strategy, KAsset',
                 image: 'day-1/D1-มทินา-วัชรวราทร.webp',
+                overviewClass: 'matina',
             },
             {
                 name: 'คุณอภิชัย เอี่ยมไพศาล',
                 role: 'Research and Listing Manager, BINANCE TH Academy',
                 image: 'day-1/D1-อภิชัย-เอี่ยมไพศาล.webp',
+                overviewClass: 'apichai',
             },
             {
                 name: 'คุณศุภวิชญ์ พูลเพิ่มทรัพย์',
                 role: 'Investment Analyst, BINANCE TH Academy',
                 image: 'profile-empty.webp',
+                overviewClass: 'supawit',
             },
             {
                 name: 'คุณนภดนัย พัฒนาภิวัฒน์',
                 role: 'Co-Owner & Second-Generation Successo',
                 image: 'day-1/D1-นภดนัย-พัฒนาภิวัฒน์.webp',
+                overviewClass: 'noppadanai',
             },
             {
                 name: 'คุณกฤช แก้วสุวรรณ',
                 role: 'Co-Founder Card World',
                 image: 'day-1/D1-กฤช-แก้วสุวรรณ.webp',
+                overviewClass: 'krit',
             },
             {
                 name: 'คุณพสุธา ไดจิ อิเดะ',
                 role: 'Head of Business Development, efin Group',
                 image: 'day-1/D1-พสุธา-ไดจิ-อิเดะ.webp',
+                overviewClass: 'pasutha',
             },
             // {
             //     name: 'คุณวิน พรหมแพทย์',
@@ -73,42 +83,50 @@
             {
                 name: 'คุณกวี ชูกิจเกษม',
                 role: 'Chief Portfolio Advisory ประธานเจ้าหน้าที่ สายการบริหารพอร์ตการลงทุน',
-                image: 'day-2/D2-กวี-ชูกิจเกษม.webp'
+                image: 'day-2/D2-กวี-ชูกิจเกษม.webp',
+                overviewClass: 'kawee',
             },
             {
                 name: 'คุณณริดา มานะสมจิตร',
                 role: 'Director, regional wealth solution: <br class="d-none d-xl-block">Icham pte Ltd',
-                image: 'day-2/D2-ณริดา-มานะสมจิตร.webp'
+                image: 'day-2/D2-ณริดา-มานะสมจิตร.webp',
+                overviewClass: 'narida',
             },
             {
                 name: 'คุณณฤทธิ์ โกสาลาทิพย์',
                 role: 'กรรมการผู้จัดการ หัวหน้าสายงานที่ปรึกษาและบริหารการลงทุนลูกค้าบุคคล บริษัทหลักทรัพย์เกียรตินาคินภัทร จำกัด (มหาชน)',
-                image: 'day-2/D2-ณฤทธิ์-โกสาลาทิพย์.webp'
+                image: 'day-2/D2-ณฤทธิ์-โกสาลาทิพย์.webp',
+                overviewClass: 'narit',
             },
             {
                 name: 'คุณพิริยะ สัมพันธารักษ์',
                 role: 'CEO and Co-Founder Right Shift',
-                image: 'day-2/D2-พิริยะ-สัมพันธารักษ์.webp'
+                image: 'day-2/D2-พิริยะ-สัมพันธารักษ์.webp',
+                overviewClass: 'piriya',
             },
             {
                 name: 'คุณวชิรเมษฐ์ ธเนศสถิตพงศ์',
                 role: 'Head of Investment Analytics & Innovation, efin Group',
-                image: 'day-2/D2-วชิรเมษฐ์-ธเนศสถิตพงศ์.webp'
+                image: 'day-2/D2-วชิรเมษฐ์-ธเนศสถิตพงศ์.webp',
+                overviewClass: 'wachiramet',
             },
             {
                 name: 'คุณสุธน สิงหสิทธางกูร',
                 role: 'Co-Founder, ABCD Fund',
-                image: 'day-2/D2-สุธน-สิงหสิทธางกูร.webp'
+                image: 'day-2/D2-สุธน-สิงหสิทธางกูร.webp',
+                overviewClass: 'suthon',
             },
             {
                 name: 'คุณเบียร์ วนนท์ วรรณป้าน',
                 role: 'Full-Time Trader',
-                image: 'day-2/D2-วนนท์-วรรณป้าน.webp'
+                image: 'day-2/D2-วนนท์-วรรณป้าน.webp',
+                overviewClass: 'wanon',
             },
             {
                 name: 'คุณกฤษฎิ์ ชวาลรัตน์',
                 role: 'Property Developer & Collector',
-                image: 'day-2/D2-กฤษฎิ์-ชวาลรัตน์.webp'
+                image: 'day-2/D2-กฤษฎิ์-ชวาลรัตน์.webp',
+                overviewClass: 'krits',
             },
         ],
     };
@@ -164,6 +182,8 @@
     const overviewGrid = document.querySelector('[data-speaker-overview]');
     const overviewSection = document.querySelector('#speaker-overview');
     const overviewScroller = overviewGrid?.closest('.speaker-overview__scroller');
+    const overviewScrollOverlay = document.querySelector('[data-speaker-overview-scroll-overlay]');
+    const overviewScrollLottie = document.querySelector('[data-speaker-overview-scroll-lottie]');
     const overviewPicker = document.querySelector('[data-speaker-overview-picker]');
     const overviewTrigger = overviewPicker?.querySelector('[data-speaker-overview-trigger]');
     const overviewPanel = overviewPicker?.querySelector('[data-speaker-overview-panel]');
@@ -175,12 +195,89 @@
             .flat()
             .filter(({ overview = true }) => overview);
         const expandedSpeakerCount = 36;
-        const expandedColorRows = [
-            [1, 2, 3, 4, 5, 6, 1, 2, 3],
-            [3, 4, 5, 6, 1, 2, 4, 5, 6],
-            [5, 6, 1, 2, 3, 4, 5, 1, 3],
-            [2, 3, 4, 5, 6, 1, 2, 4, 6],
-        ];
+        let currentOverviewLayout = 'compact';
+        let renderedOverviewRowCount = 0;
+        let overviewResizeFrame = 0;
+        let overviewIsVisible = false;
+        let overviewIsScrollable = false;
+        let scrollOverlayTimer = 0;
+        let scrollAnimationReady = false;
+        const layoutsWithShownScrollOverlay = new Set();
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const overviewScrollAnimation = overviewScrollLottie && window.lottie
+            ? window.lottie.loadAnimation({
+                container: overviewScrollLottie,
+                renderer: 'svg',
+                loop: true,
+                autoplay: false,
+                path: 'images/animations/speaker-scroll-slide.json',
+                rendererSettings: {
+                    preserveAspectRatio: 'xMidYMid meet',
+                },
+            })
+            : null;
+
+        const playOverviewScrollAnimation = () => {
+            if (!overviewScrollAnimation || !scrollAnimationReady) return;
+
+            if (reducedMotion.matches) {
+                overviewScrollAnimation.goToAndStop(0, true);
+                return;
+            }
+
+            overviewScrollAnimation.goToAndPlay(0, true);
+        };
+
+        overviewScrollAnimation?.addEventListener('DOMLoaded', () => {
+            scrollAnimationReady = true;
+            if (overviewScrollOverlay?.classList.contains('is-visible')) {
+                playOverviewScrollAnimation();
+            }
+        });
+
+        const hideOverviewScrollOverlay = () => {
+            window.clearTimeout(scrollOverlayTimer);
+            overviewScrollOverlay?.classList.remove('is-visible');
+            overviewScrollAnimation?.stop();
+        };
+
+        const showOverviewScrollOverlay = () => {
+            if (!overviewScrollOverlay
+                || !overviewIsVisible
+                || !overviewIsScrollable
+                || layoutsWithShownScrollOverlay.has(currentOverviewLayout)) return;
+
+            layoutsWithShownScrollOverlay.add(currentOverviewLayout);
+            overviewScrollOverlay.classList.add('is-visible');
+            playOverviewScrollAnimation();
+            scrollOverlayTimer = window.setTimeout(hideOverviewScrollOverlay, 3300);
+        };
+
+        const updateOverviewScrollerState = (speakerCount) => {
+            if (!overviewScroller) return;
+
+            const isScrollable = overviewScroller.scrollWidth > overviewScroller.clientWidth + 1;
+            overviewIsScrollable = isScrollable;
+            overviewScroller.classList.toggle('is-scrollable', isScrollable);
+
+            if (isScrollable) {
+                requestAnimationFrame(showOverviewScrollOverlay);
+            } else {
+                hideOverviewScrollOverlay();
+            }
+
+            if (isScrollable) {
+                overviewScroller.tabIndex = 0;
+                overviewScroller.setAttribute(
+                    'aria-label',
+                    `รายชื่อ Speaker ${speakerCount} คน เลื่อนแนวนอนเพื่อดูเพิ่มเติม`,
+                );
+                return;
+            }
+
+            overviewScroller.removeAttribute('tabindex');
+            overviewScroller.setAttribute('aria-label', `รายชื่อ Speaker ${speakerCount} คน`);
+        };
 
         if (overviewCompactCount) {
             overviewCompactCount.textContent = String(overviewSpeakers.length);
@@ -188,6 +285,15 @@
 
         const renderOverview = (layout = 'compact') => {
             const isExpanded = layout === 'expanded';
+            currentOverviewLayout = layout;
+            overviewSection.dataset.speakerOverviewLayout = layout;
+
+            const overviewRowCount = Number.parseInt(
+                getComputedStyle(overviewSection).getPropertyValue('--speaker-overview-rows'),
+                10,
+            ) || 3;
+            renderedOverviewRowCount = overviewRowCount;
+
             const visibleSpeakers = isExpanded
                 ? Array.from(
                     { length: expandedSpeakerCount },
@@ -196,45 +302,46 @@
                 : overviewSpeakers;
             const overviewFragment = document.createDocumentFragment();
 
-            visibleSpeakers.forEach(({ name, image }, index) => {
+            visibleSpeakers.forEach(({ name, image, overviewClass }, index) => {
                 const card = document.createElement('article');
                 const portrait = document.createElement('img');
 
                 card.className = 'speaker-overview__card';
+                card.classList.add(`speaker-overview__card--${overviewClass}`);
                 card.setAttribute('role', 'listitem');
                 card.setAttribute('aria-label', name);
                 card.style.setProperty('--speaker-overview-order', String(index));
 
-                if (isExpanded) {
-                    const rowIndex = index % expandedColorRows.length;
-                    const columnIndex = Math.floor(index / expandedColorRows.length);
-                    const spectrumIndex = expandedColorRows[rowIndex][columnIndex];
-                    card.style.setProperty(
-                        '--speaker-overview-circle-color',
-                        `var(--color-kv-spectrum-${spectrumIndex})`,
-                    );
-                }
+                const rowIndex = index % overviewRowCount;
+                const columnIndex = Math.floor(index / overviewRowCount);
+                const spectrumIndex = ((columnIndex + (rowIndex * 2)) % 6) + 1;
+                card.style.setProperty(
+                    '--speaker-overview-circle-color',
+                    `var(--color-kv-spectrum-${spectrumIndex})`,
+                );
 
-                portrait.src = `images/speakers/${image}`;
-                portrait.width = 928;
-                portrait.height = 1204;
+                const originalPortraitSrc = `images/speakers/${image}`;
+                const overviewPortraitName = image.split('/').pop();
+
+                portrait.src = `images/speakers/overview/${overviewPortraitName}`;
+                portrait.width = 696;
+                portrait.height = 904;
                 portrait.loading = 'lazy';
                 portrait.decoding = 'async';
                 portrait.alt = name;
+                portrait.addEventListener('error', () => {
+                    portrait.src = originalPortraitSrc;
+                }, { once: true });
 
                 card.appendChild(portrait);
                 overviewFragment.appendChild(card);
             });
 
             overviewGrid.replaceChildren(overviewFragment);
-            overviewSection.dataset.speakerOverviewLayout = layout;
 
             if (overviewScroller) {
                 overviewScroller.scrollLeft = 0;
-                overviewScroller.setAttribute(
-                    'aria-label',
-                    `รายชื่อ Speaker ${isExpanded ? 'สี่' : 'สาม'}แถว เลื่อนแนวนอนเพื่อดูเพิ่มเติม`,
-                );
+                requestAnimationFrame(() => updateOverviewScrollerState(visibleSpeakers.length));
             }
 
             overviewViewButtons.forEach((button) => {
@@ -275,6 +382,33 @@
         renderOverview('compact');
         setOverviewPickerOpen(false);
 
+        if (overviewScroller && overviewScrollOverlay && 'IntersectionObserver' in window) {
+            const overviewScrollOverlayObserver = new IntersectionObserver(([entry]) => {
+                /* Wait until the speaker cards are materially inside the viewport.
+                   This prevents the hint animation from finishing while the user is
+                   still scrolling through the section above. */
+                overviewIsVisible = entry.isIntersecting && entry.intersectionRatio >= 0.6;
+
+                if (overviewIsVisible) {
+                    showOverviewScrollOverlay();
+                } else {
+                    hideOverviewScrollOverlay();
+                }
+            }, {
+                threshold: [0, 0.6],
+                rootMargin: '0px 0px -8% 0px',
+            });
+
+            overviewScrollOverlayObserver.observe(overviewScroller);
+        } else {
+            overviewIsVisible = true;
+            showOverviewScrollOverlay();
+        }
+
+        overviewScroller?.addEventListener('pointerdown', hideOverviewScrollOverlay, { passive: true });
+        overviewScroller?.addEventListener('wheel', hideOverviewScrollOverlay, { passive: true });
+        overviewScroller?.addEventListener('scroll', hideOverviewScrollOverlay, { passive: true });
+
         overviewTrigger?.addEventListener('click', () => {
             setOverviewPickerOpen(!overviewPicker.classList.contains('is-open'));
         });
@@ -289,6 +423,41 @@
             setOverviewPickerOpen(false);
             overviewTrigger?.focus();
         });
+
+        if (overviewPicker && overviewTrigger && 'IntersectionObserver' in window) {
+            const overviewPickerObserver = new IntersectionObserver(([entry]) => {
+                const isVisible = entry.isIntersecting;
+
+                overviewSection.classList.toggle('is-view-switch-visible', isVisible);
+                overviewPicker.setAttribute('aria-hidden', String(!isVisible));
+                overviewTrigger.tabIndex = isVisible ? 0 : -1;
+
+                if (!isVisible) setOverviewPickerOpen(false);
+            }, { threshold: 0.01 });
+
+            overviewPickerObserver.observe(overviewSection);
+        } else {
+            overviewSection.classList.add('is-view-switch-visible');
+        }
+
+        window.addEventListener('resize', () => {
+            window.cancelAnimationFrame(overviewResizeFrame);
+            overviewResizeFrame = window.requestAnimationFrame(() => {
+                const nextRowCount = Number.parseInt(
+                    getComputedStyle(overviewSection).getPropertyValue('--speaker-overview-rows'),
+                    10,
+                ) || 3;
+
+                if (nextRowCount !== renderedOverviewRowCount) {
+                    renderOverview(currentOverviewLayout);
+                    return;
+                }
+
+                updateOverviewScrollerState(currentOverviewLayout === 'expanded'
+                    ? expandedSpeakerCount
+                    : overviewSpeakers.length);
+            });
+        }, { passive: true });
     }
 
     /* ---- ตัวสลับวัน: พฤติกรรมเดียวกับ agenda-tabs.js ----

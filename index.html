@@ -68,8 +68,8 @@
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
-    <link rel="stylesheet" href="css/main.css?v=46">
-    <link rel="stylesheet" href="css/style.css?v=479">
+    <link rel="stylesheet" href="css/main.css?v=48">
+    <link rel="stylesheet" href="css/style.css?v=507">
 </head>
 
 <body class="is-loading">
@@ -477,16 +477,16 @@
 
 
     <!-- Start Section : Speaker Overview -->
-    <section id="speaker-overview" class="speaker-overview" data-header-theme="dark" hidden
+    <section id="speaker-overview" class="speaker-overview" data-header-theme="dark"
         data-speaker-overview-layout="compact"
         aria-labelledby="speaker-overview-title">
         <div class="speaker-overview__inner container">
             <div class="speaker-overview__layout row align-items-stretch">
-                <header class="speaker-overview__intro col-12 col-lg-4">
+                <header class="speaker-overview__intro col-12 col-lg-5 col-xl-4">
                     <p class="speaker-overview__eyebrow">Journey into the new world</p>
                     <img class="speaker-overview__event-mark" src="images/title.webp" width="1800" height="724"
                         loading="lazy" decoding="async" alt="New World, New Playbook — BetterTrade 2026">
-                    <h2 id="speaker-overview-title">พบกับเหล่าผู้เชี่ยวชาญ <br>ที่จะมาเปิดมุมมองสู่<br><span class="bt-title-highlight has-pe">โลกการลงทุน</span>ใบใหม่</h2>
+                    <h2 id="speaker-overview-title">พบกับเหล่าผู้เชี่ยวชาญ <br class="d-none d-lg-block">ที่จะมาเปิดมุมมอง<br class="d-block d-md-none">สู่<br class="d-none d-md-block"><span class="bt-title-highlight has-pe">โลกการลงทุน</span>ใบใหม่</h2>
 
                     <div class="speaker-overview__event-info" aria-label="รายละเอียดการจัดงาน">
                         <p><time datetime="2026-10-31">31 ตุลาคม</time> – <time datetime="2026-11-01">1 พฤศจิกายน 2569</time></p>
@@ -494,12 +494,14 @@
                     </div>
                 </header>
 
-                <div class="speaker-overview__gallery col-12 col-lg-8">
-                    <div class="speaker-overview__scroller" tabindex="0"
-                        aria-label="รายชื่อ Speaker สามแถว เลื่อนแนวนอนเพื่อดูเพิ่มเติม">
+                <div class="speaker-overview__gallery col-12 col-lg-7 col-xl-8">
+                    <div class="speaker-overview__scroller" aria-label="รายชื่อ Speaker">
                         <div class="speaker-overview__grid" data-speaker-overview role="list"></div>
                     </div>
-                    <p class="speaker-overview__scroll-hint" aria-hidden="true">Swipe to explore <span>→</span></p>
+                    <div class="speaker-overview__scroll-overlay" data-speaker-overview-scroll-overlay
+                        aria-hidden="true">
+                        <div class="speaker-overview__scroll-gesture" data-speaker-overview-scroll-lottie></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1967,7 +1969,8 @@
     <script src="vendor/swiper/swiper-bundle.min.js"></script>
     <script src="js/action-button.js"></script>
     <script src="js/agenda-tabs.js?v=13"></script>
-    <script src="js/speaker-directory.js?v=20"></script>
+    <script src="vendor/lottie/lottie_svg.min.js?v=5.13.0"></script>
+    <script src="js/speaker-directory.js?v=31"></script>
     <script src="js/moderator-directory.js?v=1"></script>
     <script src="js/expectation-counter.js?v=1"></script>
     <script src="js/floor-plan-reveal.js?v=1"></script>
@@ -1994,6 +1997,7 @@
     <script src="js/hero-v2-scroll-cue.js?v=4"></script>
     <script src="js/topics-reveal.js?v=5"></script>
     <script src="js/topics-assets-motion.js?v=21"></script>
+    <script src="js/topic-speaker-transition.js?v=7"></script>
     <script src="js/ticket-backdrop-parallax.js?v=4"></script>
     <script src="js/playbook-assets-motion.js?v=4"></script>
     <script src="js/playbook-glow-motion.js?v=1"></script>
