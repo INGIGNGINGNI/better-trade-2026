@@ -202,6 +202,7 @@
         let overviewIsScrollable = false;
         let scrollOverlayTimer = 0;
         let scrollAnimationReady = false;
+        let lastOverviewScrollLeft = overviewScroller?.scrollLeft || 0;
         const layoutsWithShownScrollOverlay = new Set();
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
         const overviewScrollAnimation = overviewScrollLottie && window.lottie
@@ -250,7 +251,7 @@
             layoutsWithShownScrollOverlay.add(currentOverviewLayout);
             overviewScrollOverlay.classList.add('is-visible');
             playOverviewScrollAnimation();
-            scrollOverlayTimer = window.setTimeout(hideOverviewScrollOverlay, 3300);
+            scrollOverlayTimer = window.setTimeout(hideOverviewScrollOverlay, 5100);
         };
 
         const updateOverviewScrollerState = (speakerCount) => {
@@ -340,6 +341,7 @@
             overviewGrid.replaceChildren(overviewFragment);
 
             if (overviewScroller) {
+                lastOverviewScrollLeft = 0;
                 overviewScroller.scrollLeft = 0;
                 requestAnimationFrame(() => updateOverviewScrollerState(visibleSpeakers.length));
             }
@@ -405,9 +407,13 @@
             showOverviewScrollOverlay();
         }
 
-        overviewScroller?.addEventListener('pointerdown', hideOverviewScrollOverlay, { passive: true });
-        overviewScroller?.addEventListener('wheel', hideOverviewScrollOverlay, { passive: true });
-        overviewScroller?.addEventListener('scroll', hideOverviewScrollOverlay, { passive: true });
+        overviewScroller?.addEventListener('scroll', () => {
+            const nextScrollLeft = overviewScroller.scrollLeft;
+            const hasActuallyScrolled = Math.abs(nextScrollLeft - lastOverviewScrollLeft) > 0.5;
+            lastOverviewScrollLeft = nextScrollLeft;
+
+            if (hasActuallyScrolled) hideOverviewScrollOverlay();
+        }, { passive: true });
 
         overviewTrigger?.addEventListener('click', () => {
             setOverviewPickerOpen(!overviewPicker.classList.contains('is-open'));

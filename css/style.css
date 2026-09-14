@@ -2807,7 +2807,7 @@ body.is-loading .hero-scroll-cue,
 
         &.is-visible {
             visibility: visible;
-            animation: speaker-overview-scroll-overlay 3.2s ease both;
+            animation: speaker-overview-scroll-overlay 5s ease both;
         }
     }
 
@@ -3054,7 +3054,6 @@ body.is-loading .hero-scroll-cue,
 
     .speaker-overview__card {
         --speaker-overview-circle-color: var(--color-kv-spectrum-1);
-        --speaker-overview-circle-x: 76%;
         --speaker-overview-portrait-x: 0%;
 
         position: relative;
@@ -3065,11 +3064,11 @@ body.is-loading .hero-scroll-cue,
         isolation: isolate;
         overflow: hidden;
         background:
-            radial-gradient(circle at var(--speaker-overview-circle-x) 20%,
-                var(--speaker-overview-circle-color) 0 20%,
-                color-mix(in srgb, var(--speaker-overview-circle-color) 72%, transparent) 42%,
-                color-mix(in srgb, var(--speaker-overview-circle-color) 30%, transparent) 60%,
-                transparent 76%),
+            radial-gradient(ellipse 105% 82% at 50% 0%,
+                var(--speaker-overview-circle-color) 0 18%,
+                color-mix(in srgb, var(--speaker-overview-circle-color) 72%, transparent) 40%,
+                color-mix(in srgb, var(--speaker-overview-circle-color) 30%, transparent) 62%,
+                transparent 82%),
             var(--bt-speaker-overview-card-bg);
 
         &::before {
@@ -3078,13 +3077,9 @@ body.is-loading .hero-scroll-cue,
             z-index: 0;
             inset: var(--space-0);
             background: url('../images/speaker-bg-overlay.webp') center / cover no-repeat;
-            opacity: 0.16;
+            opacity: 0.3;
             mix-blend-mode: soft-light;
             pointer-events: none;
-        }
-
-        &:nth-child(even) {
-            --speaker-overview-circle-x: 24%;
         }
 
         &:is(:nth-child(18n + 1), :nth-child(18n + 9), :nth-child(18n + 14)) {
