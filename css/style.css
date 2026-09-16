@@ -3131,18 +3131,23 @@ body.is-loading .hero-scroll-cue,
         --asset-y: -2%;
     }
 
+    .topics-showcase__asset--gold {
+        --asset-x: 94%;
+        --asset-y: 6%;
+    }
+
     .topics-showcase__asset--card {
-        --asset-x: 92%;
+        --asset-x: 98%;
         --asset-y: 42%;
     }
 
     .topics-showcase__asset--bitcoin {
-        --asset-x: 6%;
+        --asset-x: 2%;
         --asset-y: 64%;
     }
 
     .topics-showcase__asset--heart {
-        --asset-x: 94%;
+        --asset-x: 98%;
         --asset-y: 82%;
     }
 
@@ -5025,6 +5030,7 @@ body.is-loading .hero-scroll-cue,
 
     @media (max-width:425px) {
         .ticket__price {
+
             span,
             small {
                 font-size: var(--font-size-14);
