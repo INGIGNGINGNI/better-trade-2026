@@ -255,9 +255,10 @@ body.menu-closing .back-to-top {
     bottom: max(var(--space-5), env(safe-area-inset-bottom));
     z-index: 250;
     /* แถบหัวการ์ดดึงขอบด้วย margin ลบเท่าค่านี้ ประกาศเป็นตัวแปรเพื่อให้ทั้งสองค่าตรงกันเสมอ */
-    --early-bird-float-pad: var(--space-5);
+    --early-bird-float-pad: var(--space-4);
 
-    width: min(calc(100% - var(--space-12)), 320px);
+    width: auto;
+    /* width: min(calc(100% - var(--space-12)), 280px); */
     padding: var(--early-bird-float-pad);
     overflow: hidden;
     border-radius: var(--radius-1);
@@ -284,7 +285,7 @@ body.menu-closing .back-to-top {
     justify-content: space-between;
     gap: var(--space-3);
     margin: calc(var(--early-bird-float-pad) * -1) calc(var(--early-bird-float-pad) * -1) 0;
-    padding: var(--space-2) var(--space-3) var(--space-2) var(--space-6);
+    padding: var(--space-1) var(--space-2) var(--space-1) var(--space-4);
     color: var(--color-text-inverse);
     background: linear-gradient(180deg, #19274A 0%, #020B1E 100%);
     border-radius: var(--radius-1) var(--radius-1) var(--radius-0) var(--radius-0);
@@ -331,41 +332,27 @@ body.menu-closing .back-to-top {
 
 .early-bird-float__offer {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: var(--space-2);
     flex: 1 1 auto;
     min-width: 0;
     margin: 0;
     color: inherit;
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-12);
     font-weight: var(--font-weight-regular);
     line-height: var(--section-small-line-height);
 }
 
-/* eyebrow แพตเทิร์นเดียวกับ .bt-section-subtext (เซริฟ ตัวใหญ่ เว้นวรรคตัวอักษร) */
-/* อยู่บรรทัดเดียวกับข้อความส่วนลด (inline-block เพราะ background-clip: text ต้องมีกล่องของตัวเอง)
-   เอฟเฟกต์ตัวอักษรไล่เงาคัดลอกจาก .ticket__plan-ribbon span ("คุ้มที่สุด") ทั้งชุด */
-.early-bird-float__offer strong {
+.early-bird-float__discount {
     display: inline-block;
-    font-size: var(--font-size-16);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--pill-radius);
+    color: var(--color-neutral-0);
+    background: var(--color-danger-600);
+    font-size: var(--font-size-12);
     font-weight: var(--font-weight-medium);
-    line-height: 1.5;
-    text-transform: uppercase;
-    color: transparent;
-    background: linear-gradient(105deg,
-            #c9d1df 0%,
-            #f7f9ff 26%,
-            #ffffff 38%,
-            #b7c0cf 46%,
-            #ffffff 54%,
-            #f7f9ff 66%,
-            #c9d1df 100%);
-    background-size: 280% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    text-shadow:
-        0 0 0.03em rgba(255, 255, 255, 0.18);
-    animation: ticket-ribbon-text-glow 4.6s ease-in-out infinite;
+    line-height: 1;
+    white-space: nowrap;
 }
 
 /* ชุดเดียวกับ .cookie-banner__dismiss (คัดลอกค่ามาตรง ๆ) */
@@ -419,7 +406,7 @@ body.menu-closing .back-to-top {
 
 .early-bird-float__body {
     max-height: 360px;
-    margin-top: var(--space-5);
+    margin-top: var(--space-3);
     overflow: hidden;
     opacity: 1;
     transition:
@@ -430,9 +417,11 @@ body.menu-closing .back-to-top {
 
 /* ชื่อบัตร (ซ้าย) กับราคา (ขวา) วางคู่กันในแถวเดียว ส่วนที่เหลือกินความกว้างเต็ม
    วางตำแหน่งทุกชิ้นชัดเจน ไม่พึ่ง auto-placement เพื่อไม่ให้ลำดับใน HTML ทำให้ช่องเพี้ยน */
+/* คอลัมน์ซ้ายกว้างเท่าข้อความที่ยาวที่สุดในบล็อกชื่อบัตร (ULTIMATE) พอดี
+   พื้นที่ที่เหลือไปอยู่ในคอลัมน์ราคา ซึ่งจัดราคาชิดขวาไว้ ตำแหน่งที่เห็นจึงเหมือนเดิม */
 .early-bird-float__body-inner {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: max-content minmax(0, 1fr);
     column-gap: var(--space-3);
 }
 
@@ -459,14 +448,14 @@ body.menu-closing .back-to-top {
 }
 
 .early-bird-float__countdown-label {
-    padding-top: var(--space-5);
+    padding-top: var(--space-3);
     border-top: var(--rule-width-subtle) solid var(--color-border-faint);
 }
 
 /* ชื่อแพ็กเกจใช้ค่าเดียวกับหัวการ์ด Ticket: .ticket__plan-index (บรรทัดบน) และ .ticket__plan-header h3 (บรรทัดล่าง) */
 .early-bird-float__plan-index {
     margin: 0 0 var(--space-2);
-    font-size: var(--font-size-12);
+    font-size: 10px;
     font-weight: var(--font-weight-regular);
     line-height: var(--section-small-line-height);
     letter-spacing: 0;
@@ -476,7 +465,7 @@ body.menu-closing .back-to-top {
 .early-bird-float__plan-name {
     margin: 0;
     font-family: 'Baskervville', var(--font-family-base);
-    font-size: var(--font-size-24);
+    font-size: var(--font-size-20);
     font-weight: var(--font-weight-regular);
     /* 1.2 เท่ากับที่หัวการ์ด Ticket คำนวณได้ (h3 รับค่ามาจากกฎหัวข้อรวม) */
     line-height: 1.2;
@@ -490,7 +479,7 @@ body.menu-closing .back-to-top {
     margin-top: var(--space-2);
     display: block;
     font-family: var(--font);
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-12);
     font-weight: var(--font-weight-regular);
 }
 
@@ -511,16 +500,17 @@ body.menu-closing .back-to-top {
 /* = .ticket__price-original */
 .early-bird-float__price del {
     color: var(--color-text-inverse-muted);
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-12);
     font-weight: var(--font-weight-regular);
     line-height: var(--section-small-line-height);
     text-decoration-thickness: var(--border-width-1);
+    margin-bottom: var(--space-1);
 }
 
 /* = .ticket__price strong ที่สถานะ is-active (ราคาเดิมอยู่ก่อนหน้า จึงไม่มี margin-top เหมือนกฎ .ticket__price-original+strong) */
 .early-bird-float__price strong {
     color: var(--color-blue-600);
-    font-size: var(--font-size-28);
+    font-size: 22px;
     font-weight: var(--font-weight-medium);
     line-height: 1.2;
     letter-spacing: 0;
@@ -535,15 +525,15 @@ body.menu-closing .back-to-top {
 }
 
 .early-bird-float__countdown-label {
-    margin: var(--space-5) 0 0;
+    margin: var(--space-3) 0 0;
     color: var(--color-text-muted);
-    font-size: var(--font-size-14);
+    font-size: 10px;
     line-height: var(--section-small-line-height);
 }
 
 .early-bird-float__countdown {
     display: grid;
-    margin-top: var(--space-4);
+    margin-top: var(--space-3);
     font-variant-numeric: tabular-nums;
 }
 
@@ -552,7 +542,7 @@ body.menu-closing .back-to-top {
 .early-bird-float__countdown-values {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-8);
+    gap: var(--space-6);
 }
 
 .early-bird-float__countdown-unit {
@@ -560,7 +550,7 @@ body.menu-closing .back-to-top {
     min-width: 0;
     display: grid;
     justify-items: center;
-    gap: var(--space-2);
+    gap: var(--space-1);
 }
 
 /* เส้น-ดาวคั่นตัวเลขชุดเดียวกับ countdown ใน hero (หมุนตั้งเหมือนกัน)
@@ -569,7 +559,8 @@ body.menu-closing .back-to-top {
     content: '';
     position: absolute;
     top: 50%;
-    left: calc(100% + var(--space-4));
+    /* ครึ่งหนึ่งของ gap (space-6) เส้นคั่นจึงอยู่กลางช่องไฟพอดี — เปลี่ยน gap ต้องเปลี่ยนค่านี้ตาม */
+    left: calc(100% + var(--space-3));
     width: var(--space-10);
     height: calc(var(--space-10) / var(--bt-hero-countdown-divider-ratio));
     background: url('../images/line-star-countdown.webp') center / contain no-repeat;
@@ -578,14 +569,14 @@ body.menu-closing .back-to-top {
 }
 
 .early-bird-float__countdown-unit strong {
-    font-size: var(--font-size-24);
+    font-size: var(--font-size-16);
     font-weight: var(--font-weight-medium);
     line-height: 1;
 }
 
 .early-bird-float__countdown-unit small {
     color: var(--color-text-muted);
-    font-size: var(--font-size-14);
+    font-size: 10px;
     font-weight: var(--font-weight-regular);
     line-height: 1;
 }
@@ -608,11 +599,15 @@ body.menu-closing .back-to-top {
     display: flex;
 }
 
+/* ความสูง/padding มาจาก .bt-action-button--sm ของระบบ ส่วนฟอนต์ย่อเหลือ 12px เฉพาะปุ่มนี้
+   (ผูก selector กับ --sm ไว้เพื่อให้ชนะกฎของระบบ โดยไม่แตะปุ่ม --sm อื่นในหน้า) */
 .early-bird-float__action {
     width: 100%;
-    min-height: var(--space-10);
-    margin-top: var(--space-6);
-    padding-inline: var(--space-4);
+    margin-top: var(--space-4);
+}
+
+.early-bird-float__action.bt-action-button--sm {
+    font-size: var(--font-size-12);
 }
 
 /* Match the solid black treatment used by the Ultimate ticket action. */
@@ -656,9 +651,10 @@ body.menu-closing .early-bird-float {
 
 @media (max-width:575px) {
     .early-bird-float {
-        right: var(--space-3);
+        right: 50%;
         bottom: calc(var(--space-10) + var(--space-6) + max(var(--space-3), env(safe-area-inset-bottom)));
-        width: calc(100% - var(--space-6));
+        transform: translateX(50%);
+        width: calc(100% - var(--space-24));
     }
 
     /* JS keeps this height variable in sync while the offer expands and collapses. */
@@ -686,10 +682,6 @@ body.menu-closing .early-bird-float {
         transition-duration: var(--duration-reduced);
     }
 
-    /* ปิดเอฟเฟกต์ไล่เงาของป้าย Early Bird เหมือนที่ริบบิ้น Ticket ทำ */
-    .early-bird-float__offer strong {
-        animation: none;
-    }
 }
 
 /* Temporary preview control for comparing the two desktop Hero continuations. */
@@ -4332,7 +4324,7 @@ body.is-loading .hero-scroll-cue,
         width: 100%;
         min-height: var(--bt-ticket-price-equal-height, auto);
         min-width: 0;
-        padding: 20px;
+        padding: var(--space-6);
         display: flex;
         flex-direction: column;
         align-items: flex-start;
@@ -4377,23 +4369,6 @@ body.is-loading .hero-scroll-cue,
             background: color-mix(in srgb, var(--color-blue-100) 72%, transparent);
             box-shadow: inset 0 0 0 var(--border-width-1) var(--color-blue-300);
 
-            .ticket__price-day {
-                width: 100%;
-            }
-
-            .ticket__price-day::after {
-                content: "เลือกอยู่";
-                margin-left: auto;
-                padding: var(--space-1) var(--space-2);
-                border: var(--border-width-1) solid var(--color-blue-600);
-                border-radius: var(--pill-radius);
-                color: var(--color-neutral-0);
-                background: var(--color-blue-600);
-                font-size: var(--font-size-12);
-                font-weight: var(--font-weight-medium);
-                line-height: 1;
-            }
-
             strong {
                 color: var(--color-blue-600);
                 font-weight: var(--font-weight-medium);
@@ -4412,6 +4387,29 @@ body.is-loading .hero-scroll-cue,
             font-size: var(--font-size-14);
             font-weight: var(--font-weight-medium);
             line-height: var(--section-small-line-height);
+        }
+
+        &:not(:disabled) .ticket__price-day {
+            width: 100%;
+        }
+
+        &:not(:disabled) .ticket__price-day::after {
+            content: "";
+            width: var(--space-4);
+            height: var(--space-4);
+            margin-left: auto;
+            flex: 0 0 auto;
+            border: var(--border-width-1) solid var(--color-border-default);
+            border-radius: var(--radius-round);
+            background: var(--color-neutral-0);
+            box-shadow: inset 0 0 0 var(--border-width-2) var(--color-neutral-0);
+        }
+
+        &.is-active:not(:disabled) .ticket__price-day::after {
+            background: var(--color-blue-600);
+            box-shadow:
+                inset 0 0 0 var(--border-width-2) var(--color-neutral-0),
+                0 0 0 var(--border-width-1) var(--color-blue-600);
         }
 
         small {
@@ -4920,7 +4918,7 @@ body.is-loading .hero-scroll-cue,
         }
 
         .ticket__plan-header {
-            margin-bottom: var(--space-4);
+            margin-bottom: var(--space-6);
         }
 
         .ticket__plan-header h3 {
@@ -4930,6 +4928,10 @@ body.is-loading .hero-scroll-cue,
         .ticket__plan-index {
             margin: 0 0 var(--space-1);
             font-size: var(--section-small-size);
+        }
+
+        .ticket__price {
+            padding: var(--space-4);
         }
 
         .ticket__price strong {
@@ -5023,11 +5025,21 @@ body.is-loading .hero-scroll-cue,
 
     @media (max-width:425px) {
         .ticket__price {
-
             span,
             small {
                 font-size: var(--font-size-14);
             }
+        }
+
+        .ticket__plan {
+            padding: var(--space-8) var(--space-5);
+        }
+    }
+
+    @media (max-width:390px) {
+        .ticket__price .ticket__price-day {
+            flex-wrap: nowrap;
+            gap: 2px;
         }
     }
 }
@@ -5608,6 +5620,9 @@ body.is-loading .hero-scroll-cue,
         object-position: center top;
         border-radius: var(--radius-1);
         filter: saturate(1.1);
+        /* ซูมหน้าวิทยากรให้ใกล้ขึ้น โดยยึดขอบบนไว้ ส่วนที่ล้นด้านข้าง/ล่างถูก frame (overflow: hidden) ตัดออก */
+        transform: scale(1.2);
+        transform-origin: center top;
     }
 
     .agenda__speaker-frame::before,
