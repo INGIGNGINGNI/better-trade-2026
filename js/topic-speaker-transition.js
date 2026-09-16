@@ -1,15 +1,19 @@
 (() => {
     const topicsSection = document.querySelector('.topics-showcase');
     const speakerOverview = document.querySelector('.speaker-overview');
+    const siteHeader = document.querySelector('.site-header');
 
-    if (!speakerOverview) return;
+    if (!speakerOverview || speakerOverview.hidden) return;
 
     let glowFrame = 0;
 
     const syncTopGlow = () => {
         glowFrame = 0;
         const bounds = speakerOverview.getBoundingClientRect();
-        const isTopReached = bounds.top <= 0.5 && bounds.bottom > 0.5;
+        const headerBounds = siteHeader?.getBoundingClientRect();
+        const headerBottom = Math.max(0, headerBounds?.bottom || 0);
+        const isTopReached = bounds.top <= headerBottom + 0.5
+            && bounds.bottom > headerBottom + 0.5;
         speakerOverview.classList.toggle('is-top-glow-visible', isTopReached);
     };
 

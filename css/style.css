@@ -244,6 +244,454 @@ body.menu-closing .back-to-top {
     transform: translateY(var(--space-3)) scale(0.94);
 }
 
+/* ---------- Early Bird floating offer ----------
+   ใช้ภาษาเดียวกับ section อื่นของเว็บ: การ์ดพื้นขาวเส้นขอบบาง คั่นแต่ละส่วนด้วยเส้น hairline
+   (ไม่ซ้อนกล่องในกล่อง) ป้ายหัวเป็น eyebrow เซริฟตัวใหญ่แบบ .bt-section-subtext
+   เส้นสเปกตรัมด้านบนคือแอคเซนต์เดียวกับเส้นใต้แท็บ ส่วนสีน้ำเงินเก็บไว้ที่ราคาอย่างเดียว
+   เหมือนช่องราคาที่ถูกเลือกในตาราง Ticket */
+.early-bird-float {
+    position: fixed;
+    right: max(var(--space-5), env(safe-area-inset-right));
+    bottom: max(var(--space-5), env(safe-area-inset-bottom));
+    z-index: 250;
+    /* แถบหัวการ์ดดึงขอบด้วย margin ลบเท่าค่านี้ ประกาศเป็นตัวแปรเพื่อให้ทั้งสองค่าตรงกันเสมอ */
+    --early-bird-float-pad: var(--space-5);
+
+    width: min(calc(100% - var(--space-12)), 320px);
+    padding: var(--early-bird-float-pad);
+    overflow: hidden;
+    border-radius: var(--radius-1);
+    color: var(--color-text-primary);
+    background: var(--color-surface-popover);
+    box-shadow: 0 var(--space-3) var(--space-8) var(--alpha-ink-12);
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+        opacity var(--duration-standard) var(--ease-standard),
+        transform var(--duration-standard) var(--ease-standard),
+        box-shadow var(--duration-fast) var(--ease-standard);
+}
+
+/* พื้นหลังชุดเดียวกับ .ticket__plan-ribbon (คัดลอกค่ามาตรง ๆ) แล้วดึงเต็มขอบการ์ดด้วย margin ลบ
+   เท่ากับ padding ของการ์ด ให้เป็นแถบคาดหัวการ์ดเหมือนริบบิ้นของแพ็กเกจ Ticket
+   พื้นเข้มจึงต้องสลับสีตัวอักษรเป็นชุด inverse ตามที่ริบบิ้นทำ */
+.early-bird-float__header {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin: calc(var(--early-bird-float-pad) * -1) calc(var(--early-bird-float-pad) * -1) 0;
+    padding: var(--space-2) var(--space-3) var(--space-2) var(--space-6);
+    color: var(--color-text-inverse);
+    background: linear-gradient(180deg, #19274A 0%, #020B1E 100%);
+    border-radius: var(--radius-1) var(--radius-1) var(--radius-0) var(--radius-0);
+}
+
+/* แสงทองและเส้นเรืองด้านบน คัดลอกจาก .ticket__plan-ribbon ทั้งชุด
+   ต้องมี position/isolation/overflow ที่ตัวแถบ (ด้านบน) เหมือนริบบิ้น
+   ไม่งั้น z-index: -1 จะหลุดไปอยู่หลังพื้นการ์ดและ glow จะไม่ถูกตัดขอบ */
+.early-bird-float__header::before,
+.early-bird-float__header::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+}
+
+.early-bird-float__header::before {
+    inset: calc(var(--space-4) * -1) var(--space-8) auto;
+    z-index: -1;
+    height: calc(100% + var(--space-8));
+    background:
+        radial-gradient(ellipse at 50% 0%, rgba(244, 221, 178, 0.3) 0%, rgba(214, 171, 104, 0.16) 36%, transparent 74%);
+    filter: blur(10px);
+    opacity: 0.94;
+}
+
+.early-bird-float__header::after {
+    top: 0;
+    left: 50%;
+    z-index: -1;
+    width: min(72%, 280px);
+    height: var(--border-width-1);
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(244, 221, 178, 0.18) 14%,
+            rgba(231, 201, 151, 0.82) 50%,
+            rgba(214, 171, 104, 0.22) 86%,
+            transparent 100%);
+    box-shadow:
+        0 0 14px rgba(231, 201, 151, 0.34),
+        0 0 24px rgba(214, 171, 104, 0.16);
+    opacity: 0.86;
+    transform: translateX(-50%);
+}
+
+.early-bird-float__offer {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+    color: inherit;
+    font-size: var(--font-size-14);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--section-small-line-height);
+}
+
+/* eyebrow แพตเทิร์นเดียวกับ .bt-section-subtext (เซริฟ ตัวใหญ่ เว้นวรรคตัวอักษร) */
+/* อยู่บรรทัดเดียวกับข้อความส่วนลด (inline-block เพราะ background-clip: text ต้องมีกล่องของตัวเอง)
+   เอฟเฟกต์ตัวอักษรไล่เงาคัดลอกจาก .ticket__plan-ribbon span ("คุ้มที่สุด") ทั้งชุด */
+.early-bird-float__offer strong {
+    display: inline-block;
+    font-size: var(--font-size-16);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+    text-transform: uppercase;
+    color: transparent;
+    background: linear-gradient(105deg,
+            #c9d1df 0%,
+            #f7f9ff 26%,
+            #ffffff 38%,
+            #b7c0cf 46%,
+            #ffffff 54%,
+            #f7f9ff 66%,
+            #c9d1df 100%);
+    background-size: 280% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    text-shadow:
+        0 0 0.03em rgba(255, 255, 255, 0.18);
+    animation: ticket-ribbon-text-glow 4.6s ease-in-out infinite;
+}
+
+/* ชุดเดียวกับ .cookie-banner__dismiss (คัดลอกค่ามาตรง ๆ) */
+.early-bird-float__toggle {
+    width: var(--space-10);
+    height: var(--space-10);
+    padding: 0;
+    display: grid;
+    flex: 0 0 auto;
+    place-items: center;
+    border: 0;
+    border-radius: var(--radius-round);
+    color: var(--color-text-secondary);
+    background: transparent;
+    cursor: pointer;
+    transition:
+        color var(--duration-fast) var(--ease-standard),
+        background-color var(--duration-fast) var(--ease-standard);
+}
+
+/* ปุ่มอยู่บนแถบหัวพื้นเข้ม สีชุดของ cookie banner (หมึกบนพื้นสว่าง) จะจมหายไป
+   จึงสลับเป็นชุด inverse เฉพาะสี ส่วนขนาด/รูปทรง/จังหวะ transition คงตามต้นฉบับ */
+.early-bird-float__header .early-bird-float__toggle {
+    color: var(--color-text-inverse);
+}
+
+.early-bird-float__toggle:hover {
+    color: var(--color-text-primary);
+    /* background: var(--alpha-ink-06); */
+}
+
+/* hover ของต้นฉบับเป็นฟิล์มหมึกจาง ๆ บนพื้นสว่าง บนแถบเข้มจึงใช้ฟิล์มขาวแทนให้เห็นผลเหมือนกัน */
+.early-bird-float__header .early-bird-float__toggle:hover {
+    color: var(--color-text-inverse);
+    /* background: var(--alpha-white-12); */
+}
+
+.early-bird-float__toggle:focus-visible {
+    outline: var(--border-width-2) solid var(--color-focus-ring);
+    outline-offset: var(--space-1);
+}
+
+.early-bird-float__toggle-icon {
+    width: var(--space-2);
+    height: var(--space-2);
+    border-right: var(--border-width-2) solid currentColor;
+    border-bottom: var(--border-width-2) solid currentColor;
+    transform: rotate(45deg);
+    transition: transform var(--duration-standard) var(--ease-standard);
+}
+
+.early-bird-float__body {
+    max-height: 360px;
+    margin-top: var(--space-5);
+    overflow: hidden;
+    opacity: 1;
+    transition:
+        max-height var(--duration-slow) var(--ease-standard),
+        margin-top var(--duration-standard) var(--ease-standard),
+        opacity var(--duration-fast) var(--ease-standard);
+}
+
+/* ชื่อบัตร (ซ้าย) กับราคา (ขวา) วางคู่กันในแถวเดียว ส่วนที่เหลือกินความกว้างเต็ม
+   วางตำแหน่งทุกชิ้นชัดเจน ไม่พึ่ง auto-placement เพื่อไม่ให้ลำดับใน HTML ทำให้ช่องเพี้ยน */
+.early-bird-float__body-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--space-3);
+}
+
+.early-bird-float__plan-index {
+    grid-area: 1 / 1;
+}
+
+.early-bird-float__plan-name {
+    grid-area: 2 / 1;
+}
+
+/* คร่อมสองแถวของบล็อกชื่อบัตร แล้วชิดขวา-ชิดล่างให้ราคาอยู่ระดับเดียวกับบรรทัดล่างสุดของชื่อบัตร */
+.early-bird-float__price {
+    grid-area: 1 / 2 / 3 / 3;
+    justify-self: end;
+    align-self: self-start;
+    align-items: flex-end;
+}
+
+.early-bird-float__countdown-label,
+.early-bird-float__countdown,
+.early-bird-float__action {
+    grid-column: 1 / -1;
+}
+
+.early-bird-float__countdown-label {
+    padding-top: var(--space-5);
+    border-top: var(--rule-width-subtle) solid var(--color-border-faint);
+}
+
+/* ชื่อแพ็กเกจใช้ค่าเดียวกับหัวการ์ด Ticket: .ticket__plan-index (บรรทัดบน) และ .ticket__plan-header h3 (บรรทัดล่าง) */
+.early-bird-float__plan-index {
+    margin: 0 0 var(--space-2);
+    font-size: var(--font-size-12);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--section-small-line-height);
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+.early-bird-float__plan-name {
+    margin: 0;
+    font-family: 'Baskervville', var(--font-family-base);
+    font-size: var(--font-size-24);
+    font-weight: var(--font-weight-regular);
+    /* 1.2 เท่ากับที่หัวการ์ด Ticket คำนวณได้ (h3 รับค่ามาจากกฎหัวข้อรวม) */
+    line-height: 1.2;
+    letter-spacing: var(--section-heading-tracking);
+    text-transform: uppercase;
+}
+
+/* จำนวนวันต่อท้ายชื่อแพ็กเกจ ตัวเล็กกว่าเพื่อไม่แย่งน้ำหนักกับชื่อบัตร */
+/* จำนวนวันลงมาอยู่บรรทัดใต้ชื่อบัตร ชิดแนวเดียวกัน */
+.early-bird-float__plan-name small {
+    margin-top: var(--space-2);
+    display: block;
+    font-family: var(--font);
+    font-size: var(--font-size-14);
+    font-weight: var(--font-weight-regular);
+}
+
+/* จำนวนวัน ราคาเดิม และราคา Early Bird อยู่บรรทัดเดียวกัน เรียงตามเส้นฐานตัวอักษร
+   ขนาดของแต่ละชิ้นยังเท่ากับช่องราคาที่ถูกเลือกในตาราง Ticket (.ticket__price.is-active) */
+.early-bird-float__price {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    /* ชิดขวาเพราะบล็อกราคาอยู่ฝั่งขวาของชื่อบัตร ราคาเดิมกับราคาใหม่จะได้ตรงขอบขวาเดียวกัน */
+    align-items: flex-end;
+    gap: var(--space-0);
+    font-variant-numeric: tabular-nums;
+}
+
+/* = .ticket__price-day */
+/* = .ticket__price-original */
+.early-bird-float__price del {
+    color: var(--color-text-inverse-muted);
+    font-size: var(--font-size-14);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--section-small-line-height);
+    text-decoration-thickness: var(--border-width-1);
+}
+
+/* = .ticket__price strong ที่สถานะ is-active (ราคาเดิมอยู่ก่อนหน้า จึงไม่มี margin-top เหมือนกฎ .ticket__price-original+strong) */
+.early-bird-float__price strong {
+    color: var(--color-blue-600);
+    font-size: var(--font-size-28);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.2;
+    letter-spacing: 0;
+    white-space: nowrap;
+}
+
+/* = หน่วยเงินใน .ticket__price strong small */
+.early-bird-float__price strong small {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-14);
+    font-weight: var(--font-weight-medium);
+}
+
+.early-bird-float__countdown-label {
+    margin: var(--space-5) 0 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-14);
+    line-height: var(--section-small-line-height);
+}
+
+.early-bird-float__countdown {
+    display: grid;
+    margin-top: var(--space-4);
+    font-variant-numeric: tabular-nums;
+}
+
+/* กลไกเดียวกับ countdown ใน hero: คอลัมน์กว้างเท่ากัน ตัวเลขกับหน่วยอยู่กลางคอลัมน์
+   และเส้นคั่นอยู่กลางช่องไฟพอดี (ดู ::after ด้านล่าง) ระยะสองข้างเส้นจึงเท่ากัน */
+.early-bird-float__countdown-values {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-8);
+}
+
+.early-bird-float__countdown-unit {
+    position: relative;
+    min-width: 0;
+    display: grid;
+    justify-items: center;
+    gap: var(--space-2);
+}
+
+/* เส้น-ดาวคั่นตัวเลขชุดเดียวกับ countdown ใน hero (หมุนตั้งเหมือนกัน)
+   left: 100% + ครึ่งหนึ่งของ gap แล้วเลื่อนกลับครึ่งตัวเอง = จุดกึ่งกลางช่องไฟเป๊ะ */
+.early-bird-float__countdown-unit:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: calc(100% + var(--space-4));
+    width: var(--space-10);
+    height: calc(var(--space-10) / var(--bt-hero-countdown-divider-ratio));
+    background: url('../images/line-star-countdown.webp') center / contain no-repeat;
+    transform: translate(-50%, -50%) rotate(90deg);
+    transform-origin: center;
+}
+
+.early-bird-float__countdown-unit strong {
+    font-size: var(--font-size-24);
+    font-weight: var(--font-weight-medium);
+    line-height: 1;
+}
+
+.early-bird-float__countdown-unit small {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-14);
+    font-weight: var(--font-weight-regular);
+    line-height: 1;
+}
+
+.early-bird-float__countdown-status {
+    display: none;
+    min-height: var(--space-8);
+    align-items: center;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-16);
+    font-weight: var(--font-weight-regular);
+    line-height: 1.3;
+}
+
+.early-bird-float__countdown.is-status .early-bird-float__countdown-values {
+    display: none;
+}
+
+.early-bird-float__countdown.is-status .early-bird-float__countdown-status {
+    display: flex;
+}
+
+.early-bird-float__action {
+    width: 100%;
+    min-height: var(--space-10);
+    margin-top: var(--space-6);
+    padding-inline: var(--space-4);
+}
+
+/* Match the solid black treatment used by the Ultimate ticket action. */
+.early-bird-float__action.bt-action-button--primary {
+    border-color: var(--bt-action-fill);
+    background: var(--bt-action-fill);
+}
+
+/* ย่อแล้วเหลือแค่แถบหัว ตัด padding ล่างออกไม่ให้มีแถบพื้นขาวค้างใต้ริบบิ้น */
+.early-bird-float.is-collapsed {
+    padding-bottom: 0;
+    box-shadow: 0 var(--space-2) var(--space-6) var(--alpha-ink-12);
+}
+
+.early-bird-float.is-collapsed .early-bird-float__body {
+    max-height: 0;
+    margin-top: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.early-bird-float.is-collapsed .early-bird-float__toggle-icon {
+    transform: rotate(225deg);
+}
+
+body.is-loading .early-bird-float,
+body.menu-open .early-bird-float,
+body.menu-closing .early-bird-float {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(var(--space-4));
+}
+
+/* Keep Back to top above the offer while preserving its original visibility logic. */
+@media (min-width:576px) {
+    .back-to-top {
+        right: max(var(--space-5), env(safe-area-inset-right));
+        bottom: calc(max(var(--space-5), env(safe-area-inset-bottom)) + var(--early-bird-float-height, 246px) + var(--space-3));
+    }
+}
+
+@media (max-width:575px) {
+    .early-bird-float {
+        right: var(--space-3);
+        bottom: calc(var(--space-10) + var(--space-6) + max(var(--space-3), env(safe-area-inset-bottom)));
+        width: calc(100% - var(--space-6));
+    }
+
+    /* JS keeps this height variable in sync while the offer expands and collapses. */
+    .back-to-top {
+        right: max(var(--space-3), env(safe-area-inset-right));
+        bottom: calc(var(--space-10) + var(--space-6) + max(var(--space-3), env(safe-area-inset-bottom)) + var(--early-bird-float-height, 58px) + var(--space-3));
+    }
+}
+
+@media (max-width:359px) {
+    .early-bird-float {
+        --early-bird-float-pad: var(--space-3);
+    }
+
+    .early-bird-float__price strong {
+        font-size: var(--font-size-24);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .early-bird-float,
+    .early-bird-float__body,
+    .early-bird-float__toggle-icon {
+        transition-duration: var(--duration-reduced);
+    }
+
+    /* ปิดเอฟเฟกต์ไล่เงาของป้าย Early Bird เหมือนที่ริบบิ้น Ticket ทำ */
+    .early-bird-float__offer strong {
+        animation: none;
+    }
+}
+
 /* Temporary preview control for comparing the two desktop Hero continuations. */
 .hero-motion-picker {
     position: fixed;
@@ -464,6 +912,12 @@ body.menu-closing .hero-motion-picker {
             opacity var(--duration-standard) var(--ease-standard),
             transform var(--duration-standard) var(--ease-standard);
 
+        /* padding แคบกว่า --xl ปกติ เพื่อให้ปุ่มสองตัวเรียงกันได้ครบบนจอ 360px
+           โดยยังคงขนาดตัวอักษร 16px ไว้ (ต่างจากปุ่มบนแถบ header ที่ย่อเหลือ 14px) */
+        .bt-action-button--header {
+            padding-inline: var(--space-4);
+        }
+
         /* .bt-action-button {
             flex: 1;
         } */
@@ -483,10 +937,9 @@ body.menu-closing .hero-motion-picker {
         transform: translateY(100%);
     }
 
-    /* ดันปุ่มกลับขึ้นบนสุดให้พ้นแถบด้านบนนี้เสมอ (40 ปุ่ม + 12 padding บน + 20 เว้นระยะ
-       + safe-area ด้านล่างของแถบ) จะไม่ชนกันไม่ว่าแถบจะกำลังโชว์อยู่หรือไม่ */
+    /* วางเหนือทั้งแถบ CTA และกล่อง Early Bird โดย JS อัปเดตความสูงกล่องให้ตรงกับสถานะ */
     .back-to-top {
-        bottom: calc(var(--space-10) + var(--space-3) + var(--space-5) + max(var(--space-3), env(safe-area-inset-bottom)));
+        bottom: calc(var(--space-10) + var(--space-6) + max(var(--space-3), env(safe-area-inset-bottom)) + var(--early-bird-float-height, 72px) + var(--space-3));
     }
 }
 
@@ -591,7 +1044,7 @@ body.menu-closing .site-header.is-sticky.site-header--on-dark {
     min-height: var(--header-height);
     margin: 0 auto;
     display: grid;
-    grid-template-columns: minmax(152px, 0.7fr) auto minmax(264px, 0.7fr);
+    grid-template-columns: minmax(152px, 0.7fr) auto minmax(288px, 0.7fr);
     align-items: center;
     gap: var(--space-8);
 }
@@ -738,6 +1191,14 @@ body.menu-closing .site-header.is-sticky.site-header--on-dark {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+}
+
+/* ปุ่มใน header ใช้สเกลเล็กกว่า --xl ปกติ เพราะต้องแชร์แถวเดียวกับโลโก้และ nav
+   ทั้งแถบ ถ้าคงไว้ที่ 16px ป้าย "ซื้อบัตร Early Bird" จะดันจนตัวหนังสือของ
+   INVESTOR DNA ขาด (js/hero-v2-cta.js mount ปุ่ม liquid metal ด้วยสเกลเดียวกัน) */
+.site-header .bt-action-button--header {
+    padding-inline: var(--space-4);
+    font-size: var(--font-size-14);
 }
 
 .site-header .bt-action-button--primary {
@@ -1112,7 +1573,7 @@ body.menu-open .site-header__backdrop {
         }
 
         .site-header__inner {
-            grid-template-columns: minmax(104px, 0.7fr) auto minmax(264px, 0.7fr);
+            grid-template-columns: minmax(104px, 0.7fr) auto minmax(288px, 0.7fr);
 
             .site-header__nav {
                 gap: var(--space-4);
@@ -1120,9 +1581,14 @@ body.menu-open .site-header__backdrop {
         }
     }
 
+    /* ช่วงนี้แถบแคบที่สุดที่ยังโชว์ nav เต็ม คอลัมน์โลโก้จึงลดเหลือเท่าความกว้างโลโก้จริง
+       และ nav บีบ gap ลงเท่าตอน sticky เพื่อให้เหลือที่พอสำหรับปุ่มสองตัวทางขวา */
+    .site-header__inner {
+        grid-template-columns: minmax(120px, 0.7fr) auto minmax(288px, 0.7fr);
+    }
 
     .site-header__nav {
-        gap: var(--space-6);
+        gap: var(--space-4);
     }
 
     .site-header__nav a {
@@ -1660,7 +2126,7 @@ body.is-loading .hero-scroll-cue,
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-10);
+    gap: var(--space-12);
     opacity: 0;
     text-align: center;
     color: var(--bt-white);
@@ -1762,7 +2228,7 @@ body.is-loading .hero-scroll-cue,
     align-items: center;
     justify-content: center;
     column-gap: var(--space-3);
-    row-gap: var(--space-4);
+    row-gap: var(--space-8);
     font-weight: 400;
     line-height: 1.05;
     letter-spacing: 0;
@@ -1770,17 +2236,17 @@ body.is-loading .hero-scroll-cue,
 }
 
 #ui .time {
-    font-size: 20px;
+    font-size: 24px;
     line-height: inherit;
 }
 
 #ui .date {
-    font-size: 24px;
+    font-size: 28px;
     white-space: nowrap;
 }
 
 #ui .venue {
-    font-size: 18px;
+    font-size: 24px;
     font-weight: 400;
     line-height: 1.25;
     padding-top: 0;
@@ -2285,19 +2751,28 @@ body.is-loading .hero-scroll-cue,
 }
 
 .topics-showcase__content {
+    --topics-asset-left: 10%;
+    --topics-asset-right: 90%;
+
+    position: relative;
     margin-top: var(--bt-topics-content-margin-top);
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(420px, 0.94fr);
-    gap: var(--bt-topics-content-gap);
-    align-items: center;
+    display: block;
 }
 
 .topics-showcase .concept__topics {
-    width: 100%;
-    display: grid;
+    position: relative;
+    z-index: 2;
+    width: min(calc(100% - 280px), 1200px);
+    margin: var(--space-0);
+    margin-inline: auto;
+    padding: var(--space-0);
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: var(--space-8);
+    list-style: none;
 }
 
-.topics-showcase .concept__topics p {
+.topics-showcase .concept__topic {
     /* Each topic reveals when it scrolls in, so timing comes from scroll position rather
        than a fixed sequence. topics-reveal.js sets --topic-delay only on topics that cross
        the line in the same batch (a whole screenful arriving at once), so those fan out
@@ -2307,59 +2782,84 @@ body.is-loading .hero-scroll-cue,
     --topic-star-size: var(--bt-topics-star-size);
 
     position: relative;
-    min-height: calc(var(--section-topic-line-height) + var(--space-5));
-    margin: 0;
-    padding: var(--space-4) 0;
-    display: flex;
-    align-items: flex-start;
+    flex: 0 0 calc(50% - var(--space-4));
+    min-height: calc(var(--space-16) + var(--space-2));
+    margin: var(--space-0);
+    padding: var(--space-6) var(--space-0) var(--space-6) calc(var(--topic-star-size) + var(--space-6));
+    display: grid;
+    align-content: center;
     color: var(--bt-topics-ink);
-    font-size: var(--section-topic-size);
-    font-weight: var(--font-weight-regular);
-    line-height: var(--section-topic-line-height);
     letter-spacing: 0;
 }
 
-.topics-showcase .concept__topics p::before {
+.topics-showcase .concept__topic::before {
     content: "";
-    flex: 0 0 var(--topic-star-size);
+    position: absolute;
+    top: 50%;
+    left: var(--space-0);
     width: var(--topic-star-size);
     height: var(--topic-star-size);
-    margin-top: var(--space-2);
-    margin-right: var(--space-4);
     background: url("../images/star.webp") center / contain no-repeat;
+    transform: translateY(-50%);
 }
 
-.topics-showcase .concept__topics p::after {
+.topics-showcase .concept__topic::after {
     content: "";
     position: absolute;
     left: 0;
     bottom: 0;
-    width: min(100%, 50vw);
+    width: 100%;
     height: 1px;
     background: var(--bt-topics-rule);
     transform-origin: left center;
 }
 
+.topics-showcase .concept__topic-label,
+.topics-showcase .concept__topic-title,
+.topics-showcase .concept__topic-description {
+    display: block;
+}
+
+.topics-showcase .concept__topic-label {
+    color: var(--bt-topics-ink-muted);
+    font-size: var(--font-size-14);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--section-small-line-height);
+    letter-spacing: var(--section-heading-tracking);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.topics-showcase .concept__topic-title {
+    margin-top: var(--space-1);
+    color: var(--bt-topics-ink);
+    font-size: var(--font-size-24);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--section-topic-line-height);
+}
+
+.topics-showcase .concept__topic-description {
+    margin-top: var(--space-1);
+    color: var(--bt-topics-ink-muted);
+    font-size: var(--font-size-16);
+    font-weight: var(--font-weight-light);
+    line-height: var(--section-body-line-height);
+}
+
 .topics-showcase__assets {
-    position: relative;
-    width: 100%;
-    min-height: var(--bt-topics-assets-min-height);
-    align-self: stretch;
+    position: absolute;
+    inset-block: 0;
+    left: calc(50% - 50vw);
+    right: calc(50% - 50vw);
+    z-index: 1;
+    width: auto;
+    min-height: 0;
     isolation: isolate;
+    pointer-events: none;
 }
 
 .topics-showcase__assets::before {
-    content: "";
-    position: absolute;
-    left: 50%;
-    top: 51%;
-    width: min(78%, 460px);
-    aspect-ratio: 1;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(107, 124, 198, 0.12), rgba(16, 17, 20, 0) 68%);
-    filter: blur(20px);
-    transform: translate(-50%, -50%);
-    pointer-events: none;
+    display: none;
 }
 
 .topics-showcase__asset {
@@ -2371,6 +2871,7 @@ body.is-loading .hero-scroll-cue,
     max-width: var(--asset-max, 240px);
     margin: 0;
     translate: -50% -50%;
+    scale: 0.8;
 }
 
 .topics-showcase__asset-motion {
@@ -2393,8 +2894,8 @@ body.is-loading .hero-scroll-cue,
 }
 
 .topics-showcase__asset--triangle {
-    --asset-x: 50%;
-    --asset-y: 66%;
+    --asset-x: calc(var(--topics-asset-left) - 2%);
+    --asset-y: -6%;
     --asset-size: 33%;
     --asset-max: 230px;
     --asset-rotation: 10deg;
@@ -2402,8 +2903,8 @@ body.is-loading .hero-scroll-cue,
 }
 
 .topics-showcase__asset--bitcoin {
-    --asset-x: 23%;
-    --asset-y: 42%;
+    --asset-x: calc(var(--topics-asset-left) + 3%);
+    --asset-y: 48%;
     --asset-size: 29%;
     --asset-max: 205px;
     --asset-rotation: -10deg;
@@ -2411,8 +2912,8 @@ body.is-loading .hero-scroll-cue,
 }
 
 .topics-showcase__asset--gold {
-    --asset-x: 77%;
-    --asset-y: 41%;
+    --asset-x: calc(var(--topics-asset-right) + 1%);
+    --asset-y: 6%;
     --asset-size: 15%;
     --asset-max: 108px;
     --asset-rotation: 12deg;
@@ -2420,8 +2921,8 @@ body.is-loading .hero-scroll-cue,
 }
 
 .topics-showcase__asset--stock {
-    --asset-x: 23%;
-    --asset-y: 82%;
+    --asset-x: var(--topics-asset-left);
+    --asset-y: 94%;
     --asset-size: 9%;
     --asset-max: 64px;
     --asset-rotation: -12deg;
@@ -2429,8 +2930,8 @@ body.is-loading .hero-scroll-cue,
 }
 
 .topics-showcase__asset--card {
-    --asset-x: 77%;
-    --asset-y: 80%;
+    --asset-x: calc(var(--topics-asset-right) - 3%);
+    --asset-y: 46%;
     --asset-size: 26%;
     --asset-max: 184px;
     --asset-rotation: 16deg;
@@ -2438,25 +2939,45 @@ body.is-loading .hero-scroll-cue,
 }
 
 .topics-showcase__asset--heart {
-    --asset-x: 50%;
-    --asset-y: 15%;
+    --asset-x: calc(var(--topics-asset-right) + 2%);
+    --asset-y: 80%;
     --asset-size: 37%;
     --asset-max: 258px;
     --asset-rotation: -4deg;
     --asset-z: 3;
 }
 
-.topics-showcase.is-reveal-ready .concept__topics p {
+@media (max-width: 1499px) {
+    .topics-showcase__asset {
+        scale: 0.6;
+    }
+
+    .topics-showcase__asset--bitcoin {
+        --asset-x: calc(var(--topics-asset-left) + 2%);
+    }
+}
+
+@media (max-width: 1399px) {
+    .topics-showcase__asset {
+        scale: 0.54;
+    }
+
+    .topics-showcase .concept__topics {
+        width: min(calc(100% - 320px), 1200px);
+    }
+}
+
+.topics-showcase.is-reveal-ready .concept__topic {
     opacity: 0;
     transform: translateX(calc(var(--space-8) * -1));
 }
 
-.topics-showcase.is-reveal-ready .concept__topics p::after {
+.topics-showcase.is-reveal-ready .concept__topic::after {
     opacity: 0;
     transform: translateX(calc(var(--space-8) * -1)) scaleX(0);
 }
 
-.topics-showcase.is-reveal-ready .concept__topics p.is-topic-visible {
+.topics-showcase.is-reveal-ready .concept__topic.is-topic-visible {
     opacity: 1;
     transform: translateX(0);
     transition:
@@ -2464,7 +2985,7 @@ body.is-loading .hero-scroll-cue,
         transform 700ms var(--ease-standard) var(--topic-delay);
 }
 
-.topics-showcase.is-reveal-ready .concept__topics p.is-topic-visible::after {
+.topics-showcase.is-reveal-ready .concept__topic.is-topic-visible::after {
     opacity: 1;
     transform: translateX(0) scaleX(1);
     transition:
@@ -2484,8 +3005,8 @@ body.is-loading .hero-scroll-cue,
     }
 
     .topics-showcase__content {
-        --topics-asset-left: 10%;
-        --topics-asset-right: 90%;
+        --topics-asset-left: 12%;
+        --topics-asset-right: 88%;
 
         position: relative;
         margin-top: var(--bt-topics-content-margin-top-md);
@@ -2493,75 +3014,59 @@ body.is-loading .hero-scroll-cue,
     }
 
     .topics-showcase .concept__topics {
-        position: relative;
-        z-index: 2;
         width: min(calc(100% - 180px), 560px);
-        margin-inline: auto;
     }
 
-    .topics-showcase .concept__topics p::after {
-        width: 100%;
+    .topics-showcase .concept__topic {
+        flex-basis: 100%;
     }
 
     .topics-showcase__assets {
-        position: absolute;
-        inset-block: 0;
-        left: calc(50% - 50vw);
-        right: calc(50% - 50vw);
-        z-index: 1;
-        width: auto;
-        min-height: 0;
-        pointer-events: none;
+        isolation: isolate;
     }
 
-    .topics-showcase__assets::before {
-        display: none;
+    .topics-showcase__asset {
+        /* scale: 1; */
     }
 
     .topics-showcase__asset--triangle {
-        --asset-x: var(--topics-asset-left);
         --asset-y: 6%;
-        --asset-size: clamp(72px, 15vw, 142px);
+        /* --asset-size: clamp(72px, 15vw, 142px); */
         --asset-rotation: -10deg;
         --asset-z: 3;
     }
 
     .topics-showcase__asset--bitcoin {
-        --asset-x: var(--topics-asset-left);
         --asset-y: 64%;
-        --asset-size: clamp(58px, 10vw, 104px);
+        /* --asset-size: clamp(58px, 10vw, 104px); */
         --asset-rotation: -8deg;
         --asset-z: 2;
     }
 
     .topics-showcase__asset--gold {
-        --asset-x: var(--topics-asset-right);
         --asset-y: 18%;
-        --asset-size: clamp(36px, 6vw, 58px);
+        /* --asset-size: clamp(36px, 6vw, 58px); */
         --asset-rotation: 8deg;
         --asset-z: 1;
     }
 
     .topics-showcase__asset--stock {
-        --asset-x: var(--topics-asset-left);
         --asset-y: 94%;
-        --asset-size: clamp(32px, 5vw, 48px);
+        /* --asset-size: clamp(32px, 5vw, 48px); */
         --asset-rotation: -14deg;
         --asset-z: 1;
     }
 
     .topics-showcase__asset--card {
-        --asset-x: var(--topics-asset-right);
         --asset-y: 42%;
-        --asset-size: clamp(54px, 9vw, 88px);
+        /* --asset-size: clamp(54px, 9vw, 88px); */
         --asset-rotation: 12deg;
         --asset-z: 2;
     }
 
     .topics-showcase__asset--heart {
-        --asset-x: var(--topics-asset-right);
         --asset-y: 79%;
-        --asset-size: clamp(82px, 16vw, 156px);
+        /* --asset-size: clamp(82px, 16vw, 156px); */
         --asset-rotation: -5deg;
         --asset-z: 3;
     }
@@ -2587,14 +3092,22 @@ body.is-loading .hero-scroll-cue,
         width: min(calc(100% - 72px), 480px);
     } */
 
-    .topics-showcase .concept__topics p {
+    .topics-showcase .concept__topic {
         --topic-star-size: var(--bt-topics-star-size-sm);
 
-        min-height: calc(var(--section-topic-line-height) + var(--space-5));
-        padding: var(--space-3) 0;
-        font-size: var(--section-topic-size-sm);
-        line-height: var(--section-topic-line-height-sm);
+        min-height: calc(var(--space-16) + var(--space-2));
+        padding: var(--space-4) var(--space-0);
+        padding-left: calc(var(--topic-star-size) + var(--space-3));
     }
+
+    .topics-showcase .concept__topic-title {
+        font-size: var(--font-size-20);
+        line-height: var(--line-height-normal);
+    }
+
+    /* .topics-showcase .concept__topic-description {
+        font-size: var(--font-size-14);
+    } */
 
     .topics-showcase__assets {
         min-height: 0;
@@ -2609,12 +3122,60 @@ body.is-loading .hero-scroll-cue,
     }
 
     .topics-showcase__content {
-        --topics-asset-left: 5%;
-        --topics-asset-right: 95%;
+        --topics-asset-left: 14%;
+        --topics-asset-right: 86%;
     }
 
     .topics-showcase .concept__topics {
         width: calc(100% - 80px);
+    }
+
+    .topics-showcase__asset {
+        scale: 0.72;
+    }
+
+    .topics-showcase__asset--triangle {
+        --asset-x: 6%;
+        --asset-y: -2%;
+    }
+
+    .topics-showcase__asset--card {
+        --asset-x: 92%;
+        --asset-y: 42%;
+    }
+
+    .topics-showcase__asset--bitcoin {
+        --asset-x: 6%;
+        --asset-y: 64%;
+    }
+
+    .topics-showcase__asset--heart {
+        --asset-x: 94%;
+        --asset-y: 82%;
+    }
+
+    .topics-showcase__asset--stock {
+        --asset-x: 10%;
+        --asset-y: 98%;
+    }
+
+    .topics-showcase__asset-motion,
+    .topics-showcase__asset-float {
+        transform: none !important;
+        animation: none !important;
+    }
+
+    .topics-showcase .concept__topic-label {
+        font-size: var(--font-size-12);
+    }
+
+    .topics-showcase .concept__topic-title {
+        font-size: var(--font-size-18);
+    }
+
+    .topics-showcase .concept__topic-description {
+        font-size: var(--font-size-14);
+        line-height: var(--section-small-line-height);
     }
 }
 
@@ -2623,19 +3184,56 @@ body.is-loading .hero-scroll-cue,
         padding: var(--section-padding-y-sm) 0;
     } */
 
-    .topics-showcase__content {
-        margin-top: var(--bt-topics-content-margin-top-md);
-        grid-template-columns: minmax(0, 1.05fr) minmax(340px, 0.95fr);
-        gap: var(--bt-topics-content-gap-md);
+    .topics-showcase__assets {
+        width: 100%;
+        left: 50%;
+        right: unset;
+        transform: translateX(-50%);
     }
 
-    .topics-showcase .concept__topics p {
+    .topics-showcase__asset {
+        scale: 0.52;
+    }
+
+    .topics-showcase__content {
+        --topics-asset-left: 3%;
+        --topics-asset-right: 97%;
+
+        margin-top: var(--bt-topics-content-margin-top-md);
+    }
+
+    .topics-showcase .concept__topics {
+        width: min(calc(100% - 120px), 1000px);
+    }
+
+    .topics-showcase__asset--triangle {
+        --asset-y: -4%;
+    }
+
+    .topics-showcase__asset--bitcoin {
+        --asset-y: 46%;
+    }
+
+    .topics-showcase__asset--gold {
+        --asset-y: 8%;
+    }
+
+    .topics-showcase__asset--stock {
+        --asset-y: 91%;
+    }
+
+    .topics-showcase__asset--card {
+        --asset-y: 43%;
+    }
+
+    .topics-showcase__asset--heart {
+        --asset-y: 82%;
+    }
+
+    .topics-showcase .concept__topic {
         --topic-star-size: var(--bt-topics-star-size-md);
     }
 
-    .topics-showcase__assets {
-        min-height: var(--bt-topics-assets-min-height-md);
-    }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2647,6 +3245,10 @@ body.is-loading .hero-scroll-cue,
 }
 
 /* ---------- Speaker overview ---------- */
+.speaker-overview[hidden] {
+    display: none;
+}
+
 .speaker-overview {
     --speaker-overview-rows: 3;
     --speaker-overview-columns: 6;
@@ -2665,13 +3267,15 @@ body.is-loading .hero-scroll-cue,
     font-family: var(--font-family-base);
 
     &::before {
+        --speaker-overview-glow-height: clamp(20rem, 42vw, 38rem);
+
         content: '';
         position: fixed;
         z-index: 0;
-        top: calc(clamp(15rem, 34vw, 30rem) * -0.58);
+        top: calc(var(--speaker-overview-glow-height) * -0.48);
         left: 50%;
-        width: min(112vw, 100rem);
-        height: clamp(15rem, 34vw, 30rem);
+        width: min(150vw, 136rem);
+        height: var(--speaker-overview-glow-height);
         border-radius: 50%;
         pointer-events: none;
         opacity: 0;
@@ -2682,7 +3286,7 @@ body.is-loading .hero-scroll-cue,
                 rgba(24, 28, 52, .12) 53%,
                 rgba(10, 11, 17, 0) 76%);
         filter: blur(2rem);
-        transition: opacity .65s ease, transform .9s cubic-bezier(.2, .7, .2, 1);
+        transition: opacity .9s ease, transform 1.05s cubic-bezier(.2, .7, .2, 1);
         will-change: opacity, transform;
     }
 
@@ -3373,6 +3977,7 @@ body.is-loading .hero-scroll-cue,
     --bt-ticket-price-line-height: var(--section-heading-line-height);
     --bt-ticket-backdrop-height: 600px;
     --bt-ticket-backdrop-parallax-bleed: calc(var(--bt-ticket-backdrop-height) * 0.15);
+    --bt-ticket-plans-width: 1400px;
 
     position: relative;
     padding: var(--section-padding-y) 0;
@@ -3430,6 +4035,9 @@ body.is-loading .hero-scroll-cue,
     .ticket__plans {
         position: relative;
         z-index: 1;
+        width: min(calc(100% - var(--space-12)), var(--bt-ticket-plans-width));
+        margin-right: auto;
+        margin-left: auto;
     }
 
     .ticket__heading h2 {
@@ -3474,12 +4082,13 @@ body.is-loading .hero-scroll-cue,
         letter-spacing: 0;
     }
 
-    /* เว้นระยะระหว่างการ์ด 24px แทนเส้นคาดที่ติดกันแบบเดิม (gap เดียวใช้ได้ทั้งเรียงแถว
+    /* เว้นระยะระหว่างการ์ดแทนเส้นคาดที่ติดกันแบบเดิม (gap เดียวใช้ได้ทั้งเรียงแถว
        บน desktop และซ้อนเป็นคอลัมน์บนจอเล็ก เพราะ .ticket__plans เป็น flex row ของ
        bootstrap ที่ wrap ได้) */
     .ticket__plans {
         gap: var(--space-4);
-        padding: var(--space-6) 0;
+        padding: var(--space-6) 0 0;
+        align-items: flex-start;
         justify-content: center;
         border-radius: var(--bt-ticket-benefit-radius);
     }
@@ -3673,7 +4282,7 @@ body.is-loading .hero-scroll-cue,
     }
 
     .ticket__plan-header {
-        margin-bottom: var(--space-8);
+        margin-bottom: calc(var(--space-6) + var(--space-1));
     }
 
     /* ไอคอนประจำแพ็กเกจ: รูปมงกุฎ/เพชร/เข็มทิศ (ultimate/master/explorer)
@@ -3702,9 +4311,9 @@ body.is-loading .hero-scroll-cue,
     }
 
     .ticket__plan-note {
-        margin: var(--space-4) 0 0;
+        margin: var(--space-3) var(--space-0) var(--space-0);
         color: var(--color-text-muted);
-        font-size: var(--section-small-size);
+        font-size: var(--section-topic-size-xs);
         font-weight: var(--font-weight-regular);
         line-height: var(--section-body-line-height);
         letter-spacing: 0;
@@ -3713,110 +4322,98 @@ body.is-loading .hero-scroll-cue,
     .ticket__prices {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-auto-rows: var(--bt-ticket-price-equal-height, auto);
         border-top: var(--rule-width-subtle) solid var(--color-border-editorial);
         border-bottom: var(--rule-width-subtle) solid var(--color-border-editorial);
     }
 
-    .ticket__prices--coming-soon {
-        position: relative;
-        align-items: center;
-        text-align: center;
-    }
-
-    .ticket__price--placeholder {
-        visibility: hidden;
-        pointer-events: none;
-        user-select: none;
-    }
-
-    .ticket__coming-soon {
-        margin: 0;
-        min-width: 0;
-        position: absolute;
-        inset: 0;
-        z-index: 1;
-        display: grid;
-        place-content: center;
-        gap: var(--space-1);
-        color: var(--color-text-muted);
-
-        strong {
-            color: var(--color-text-primary);
-            font-size: var(--font-size-28);
-            font-weight: var(--font-weight-regular);
-            line-height: var(--section-subheading-line-height);
-            letter-spacing: 0;
-        }
-
-        span {
-            color: var(--color-text-muted);
-            font-size: var(--font-size-14);
-            font-weight: var(--font-weight-regular);
-            line-height: var(--section-small-line-height);
-            letter-spacing: 0;
-            text-align: center;
-        }
-    }
-
     .ticket__price {
+        appearance: none;
+        width: 100%;
+        min-height: var(--bt-ticket-price-equal-height, auto);
         min-width: 0;
-        padding: var(--space-5) var(--space-3) var(--space-6) 0;
+        padding: 20px;
         display: flex;
         flex-direction: column;
-        align-content: start;
+        align-items: flex-start;
+        justify-content: flex-start;
+        border: 0;
+        border-radius: 0;
+        color: inherit;
+        background: transparent;
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+        transition:
+            background-color var(--duration-standard) var(--ease-standard),
+            box-shadow var(--duration-standard) var(--ease-standard);
 
-        &:not(:first-child) {
-            padding-left: var(--space-5);
-            padding-right: var(--space-0);
-            border-left: var(--rule-width-subtle) solid var(--color-border-editorial);
+        &:hover {
+            background: color-mix(in srgb, var(--color-blue-100) 55%, transparent);
+        }
+
+        &:disabled {
+            cursor: not-allowed;
 
             strong {
+                color: var(--color-text-muted);
+            }
+        }
+
+        &:disabled:hover {
+            background: transparent;
+        }
+
+        &:focus-visible {
+            position: relative;
+            z-index: 1;
+            outline: var(--border-width-2) solid var(--color-focus-ring);
+            outline-offset: calc(var(--border-width-2) * -1);
+        }
+
+        &.is-active {
+            position: relative;
+            z-index: 1;
+            background: color-mix(in srgb, var(--color-blue-100) 72%, transparent);
+            box-shadow: inset 0 0 0 var(--border-width-1) var(--color-blue-300);
+
+            strong {
+                color: var(--color-blue-600);
                 font-weight: var(--font-weight-medium);
             }
         }
 
-        span,
-        small {
-            height: 100%;
+        &:not(:first-child) {
+            border-left: var(--rule-width-subtle) solid var(--color-border-editorial);
+        }
+
+        .ticket__price-day {
             display: inline-flex;
             align-items: center;
             gap: var(--space-2);
             color: var(--color-text-muted);
             font-size: var(--font-size-14);
-            font-weight: var(--font-weight-regular);
+            font-weight: var(--font-weight-medium);
             line-height: var(--section-small-line-height);
         }
 
-        /* ป้ายเล็ก ๆ ต่อท้ายราคา 2 วัน สีเดียวกับ tag Full ของ Playbook ให้ดูเป็นชุดสัญลักษณ์
-           "ตัวเลือกที่คุ้ม/เต็ม" เดียวกันในหน้านี้ (ย้ายเอฟเฟกต์แสงวิ่งจาก tag Full มาไว้ตรงนี้แทน) */
-        .ticket__price-badge {
-            position: relative;
-            overflow: hidden;
+        small {
             display: inline-flex;
             align-items: center;
-            padding: 4px var(--space-2);
-            border-radius: var(--radius-1);
-            background: var(--color-blue-600);
-            color: var(--color-neutral-0);
-            font-size: var(--font-size-12);
-            font-weight: var(--font-weight-regular);
-            line-height: 1.4;
-            white-space: nowrap;
-            vertical-align: middle;
+            gap: var(--space-2);
+            color: var(--color-text-muted);
+            font-size: var(--font-size-14);
+            font-weight: var(--font-weight-medium);
+            line-height: var(--section-small-line-height);
+        }
 
-            /* แสงวิ่งพาดทแยงซ้ำไปเรื่อย ๆ overflow:hidden ของ badge เองครอบตัดให้แสงไม่ล้น
-               ออกไปนอกขอบมน */
-            &::after {
-                content: '';
-                position: absolute;
-                inset: 0;
-                background: linear-gradient(115deg,
-                        transparent 30%,
-                        rgba(255, 255, 255, 0.2) 50%,
-                        transparent 70%);
-                transform: translateX(-100%);
-                animation: ticket-badge-shimmer 2.6s ease-in-out infinite;
-            }
+        .ticket__price-original {
+            margin-top: var(--space-2);
+            color: var(--color-text-inverse-muted);
+            font-size: var(--font-size-14);
+            font-weight: var(--font-weight-regular);
+            line-height: var(--section-small-line-height);
+            text-decoration-thickness: var(--border-width-1);
         }
 
         strong {
@@ -3827,34 +4424,39 @@ body.is-loading .hero-scroll-cue,
             letter-spacing: 0;
             white-space: nowrap;
         }
+
+        .ticket__price-original+strong {
+            margin-top: var(--space-0);
+        }
+
+        .ticket__price-note {
+            min-height: calc(var(--section-small-line-height) * 1em);
+            margin-top: var(--space-2);
+            text-align: left;
+            font-weight: var(--font-weight-regular);
+        }
+
+        &.ticket__price--unavailable strong {
+            font-size: var(--font-size-28);
+        }
     }
 
     .ticket__access {
         margin: var(--space-6) 0 0;
 
         >div {
-            min-height: var(--space-12);
+            min-height: var(--space-16);
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: var(--space-4);
-            padding: 0 var(--space-3);
+            padding: var(--space-3) var(--space-0);
             border-top: var(--rule-width-subtle) solid var(--color-border-editorial);
 
             &:first-child {
                 border-top: 0;
             }
 
-            /* Playbook เป็นสิทธิ์เด่นเฉพาะของ Better Trade (ปุ่ม Investor DNA ก็พาไปหา
-               section นี้โดยตรง) เลยแยกแถวนี้ด้วยพื้นหลังโทนอ่อนของสีหมวดตัวเอง แค่พอ
-               สังเกตออกว่าต่างจากแถวอื่น ไม่ใช้สีเข้มจนกลายเป็นจุดเด่นเกินจริง
-               ชี้เป้าด้วย :has(...--playbook) ตรง ๆ แทน :last-child เพราะการ์ดที่ไม่มีแถว
-               Playbook (Explorer, Master Class) จะมี Master Class เป็นแถวสุดท้ายแทน ทำให้
-               ได้พื้นหลังนี้ไปผิด ๆ */
-            &:has(.ticket__access-label--playbook) {
-                border-top: 0;
-                background: color-mix(in srgb, var(--bt-ticket-playbook) 10%, transparent);
-            }
         }
 
         dt,
@@ -3869,8 +4471,9 @@ body.is-loading .hero-scroll-cue,
     /* ไอคอนขนาดเล็กช่วยเชื่อมชื่อในตารางกับรายละเอียดแต่ละรูปแบบด้านล่าง */
     .ticket__access-label {
         min-width: 0;
-        display: inline-flex;
-        align-items: center;
+        flex: 1 1 auto;
+        display: flex;
+        align-items: flex-start;
         gap: var(--space-2);
 
         >.bt-icon {
@@ -3887,8 +4490,29 @@ body.is-loading .hero-scroll-cue,
             stroke-width: 1.75;
         }
 
-        >span:last-child {
+        .ticket__access-copy {
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-1);
+        }
+
+        .ticket__access-title {
             color: var(--color-text-primary);
+            font-weight: var(--font-weight-medium);
+
+            small {
+                color: var(--color-text-muted);
+                font-size: inherit;
+                font-weight: var(--font-weight-medium);
+            }
+        }
+
+        .ticket__access-description {
+            color: var(--color-text-muted);
+            font-size: var(--font-size-12);
+            font-weight: var(--font-weight-regular);
+            line-height: var(--section-small-line-height);
         }
     }
 
@@ -3899,40 +4523,25 @@ body.is-loading .hero-scroll-cue,
         justify-content: flex-end;
         gap: var(--space-1);
         color: var(--color-text-muted);
+        text-align: right;
 
         .bt-icon {
             font-size: var(--bt-icon-size);
             stroke-width: 2.25;
         }
 
-        &.ticket__status--included {
-            color: var(--color-text-primary);
-            /* color: var(--color-accent-primary); */
-        }
-
-        &.ticket__status--soon {
-            color: var(--color-text-primary);
-            /* text-transform: uppercase; */
-        }
-
-        /* Full/Lite เป็น tag หน้าตาเดียวกันทั้งคู่ ต่างกันแค่สี: Full (Ultimate) พื้นน้ำเงิน
-           ตัวหนังสือขาว เด่นสุด ส่วน Lite (Master Class, Explorer) พื้นขาวตัวหนังสือดำ
-           ให้เห็นชัดว่าเป็นระดับที่ลดลงมาจาก Full โดยไม่ต้องมีคำอธิบายเพิ่ม */
-        &.ticket__status--full,
-        &.ticket__status--lite {
-            padding: 2px var(--space-3);
+        &.ticket__status--badge {
+            flex: 0 0 auto;
+            min-width: var(--space-12);
+            min-height: var(--space-5);
+            padding: var(--space-0) var(--space-2);
             border-radius: var(--pill-radius);
+            border: var(--rule-width-subtle) solid var(--color-blue-200);
+            background: var(--color-blue-100);
+            color: var(--color-blue-400);
+            font-size: var(--section-tag-size-sm);
             font-weight: var(--font-weight-regular);
-        }
-
-        &.ticket__status--full {
-            background: var(--color-neutral-900);
-            color: var(--color-neutral-0);
-        }
-
-        &.ticket__status--lite {
-            background: var(--color-neutral-0);
-            color: var(--color-neutral-900);
+            line-height: var(--section-body-line-height);
         }
     }
 
@@ -3944,6 +4553,18 @@ body.is-loading .hero-scroll-cue,
         &.bt-action-button--primary {
             border-color: var(--bt-action-fill);
             background: var(--bt-action-fill);
+        }
+    }
+
+    .ticket__action-lock {
+        display: block;
+        margin: var(--space-6) 0 0;
+        cursor: not-allowed;
+
+        .ticket__action {
+            margin: 0;
+            pointer-events: none;
+            cursor: not-allowed;
         }
     }
 
@@ -4023,69 +4644,6 @@ body.is-loading .hero-scroll-cue,
         }
     }
 
-    .ticket__formats {
-        padding-top: var(--space-12);
-    }
-
-    .ticket__formats-grid {
-        display: flex;
-        flex-direction: column;
-        gap: var(--space-3);
-    }
-
-    .ticket__format {
-        min-width: 0;
-        display: flex;
-        align-items: center;
-        gap: var(--space-2);
-
-        >.bt-icon {
-            display: grid;
-            place-items: center;
-            flex: 0 0 auto;
-            width: var(--bt-ticket-format-icon-size);
-            height: var(--bt-ticket-format-icon-size);
-            padding: var(--space-1);
-            color: var(--color-blue-600);
-            border-radius: var(--radius-1);
-            /* background: var(--color-blue-100);
-            border: 1px solid var(--color-blue-200); */
-            stroke-width: 1.75;
-        }
-
-        .ticket__format-copy {
-            min-width: 0;
-            font-size: var(--font-size-14);
-            line-height: var(--section-body-line-height);
-
-            h4,
-            p {
-                display: inline;
-                margin: 0;
-                letter-spacing: 0;
-            }
-
-            h4 {
-                color: var(--color-text-primary);
-                font-size: inherit;
-                font-weight: var(--font-weight-medium);
-                line-height: inherit;
-
-                &::after {
-                    content: ' ';
-                }
-            }
-
-            p {
-                color: var(--color-text-muted);
-                font-size: inherit;
-                font-weight: var(--font-weight-regular);
-                line-height: inherit;
-            }
-        }
-
-    }
-
     @media (max-width:1399px) {
         --bt-ticket-plan-title-size: var(--font-size-28);
         --bt-ticket-price-size: var(--font-size-32);
@@ -4099,12 +4657,6 @@ body.is-loading .hero-scroll-cue,
         }
 
         .ticket__price {
-
-            &:not(:first-child) {
-                padding-left: var(--space-3);
-                padding-right: var(--space-0);
-            }
-
             strong {
                 margin-top: var(--space-1);
             }
@@ -4126,13 +4678,9 @@ body.is-loading .hero-scroll-cue,
         }
 
         .ticket__price {
-            padding-left: var(--space-3);
-            height: 100%;
-            justify-content: space-between;
+            /* justify-content: space-between; */
 
             &:not(:first-child) {
-                padding-left: var(--space-3);
-                padding-right: var(--space-0);
                 border-left: none;
                 border-top: var(--rule-width-subtle) solid var(--color-border-editorial);
             }
@@ -4140,6 +4688,20 @@ body.is-loading .hero-scroll-cue,
             span,
             small {
                 font-size: var(--font-size-16);
+            }
+        }
+
+        .ticket__access {
+            >div {
+                gap: var(--space-3);
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        .ticket__status {
+            &.ticket__status--badge {
+                margin-left: 32px;
             }
         }
 
@@ -4224,7 +4786,6 @@ body.is-loading .hero-scroll-cue,
 
         .ticket__price {
             &:not(:first-child) {
-                padding-left: var(--space-6);
                 border-left: var(--rule-width-subtle) solid var(--color-border-editorial);
                 border-top: none;
             }
@@ -4243,11 +4804,24 @@ body.is-loading .hero-scroll-cue,
             }
         }
 
-        /* จอนี้ลงไปการ์ดเรียงเป็นคอลัมน์เดียว เอา gap ออกแล้วต่อกันสนิท
-           Explorer และ Master Class ใช้เส้นบนเป็นตัวคั่น ส่วน Ultimate ยังคงกรอบ
-           spectrum ครบทั้ง 4 ด้าน */
+        .ticket__access {
+            >div {
+                gap: var(--space-4);
+                flex-direction: row;
+                align-items: center;
+            }
+        }
+
+        .ticket__status {
+            &.ticket__status--badge {
+                margin-left: 0;
+            }
+        }
+
+        /* จอนี้ลงไปการ์ดเรียงเป็นคอลัมน์เดียว ใช้ gap แนวตั้งคั่นให้อ่านง่าย
+           ส่วน Ultimate ยังคงกรอบ spectrum ครบทั้ง 4 ด้าน */
         .ticket__plans {
-            gap: var(--space-0);
+            gap: var(--space-6);
             padding: var(--space-0);
         }
 
@@ -4268,7 +4842,7 @@ body.is-loading .hero-scroll-cue,
         }
 
         .ticket__plan--explorer {
-            margin-top: var(--space-12);
+            margin-top: var(--space-0);
         }
 
 
@@ -4314,14 +4888,6 @@ body.is-loading .hero-scroll-cue,
             }
         }
 
-        .ticket__format {
-            align-items: flex-start;
-
-            /* >.bt-icon {
-                margin-top: var(--space-1);
-            } */
-        }
-
     }
 
     @media (max-width:575px) {
@@ -4331,6 +4897,10 @@ body.is-loading .hero-scroll-cue,
         --bt-ticket-plan-title-line-height: var(--section-topic-line-height);
         --bt-ticket-price-size: var(--font-size-32);
         --bt-ticket-benefit-text-size: var(--font-size-14);
+
+        .ticket__plans {
+            width: min(calc(100% - var(--space-6)), var(--bt-ticket-plans-width));
+        }
 
         .ticket__plan-header {
             margin-bottom: var(--space-4);
@@ -4350,6 +4920,21 @@ body.is-loading .hero-scroll-cue,
             font-size: var(--bt-ticket-price-size);
         }
 
+        .ticket__plan--master .ticket__prices {
+            grid-auto-rows: auto;
+        }
+
+        .ticket__plan--master .ticket__price--unavailable {
+            min-height: auto;
+            padding: var(--space-4);
+
+            strong {
+                margin-top: var(--space-3);
+                font-size: var(--font-size-24);
+                line-height: 1.15;
+            }
+        }
+
         .ticket__plan {
             padding: var(--space-8) var(--space-6);
         }
@@ -4359,11 +4944,6 @@ body.is-loading .hero-scroll-cue,
         } */
 
         .ticket__price {
-            padding: var(--space-3) var(--space-3) var(--space-3) var(--space-0);
-
-            &:not(:first-child) {
-                padding-left: var(--space-3);
-            }
 
             span,
             small {
@@ -4435,18 +5015,6 @@ body.is-loading .hero-scroll-cue,
     }
 }
 
-@keyframes ticket-badge-shimmer {
-    to {
-        transform: translateX(100%);
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .ticket__price-badge::after {
-        animation: none;
-    }
-}
-
 /* ---------- Agenda ----------
    ตารางกำหนดการแบบ editorial เน้นลำดับเวลา พื้นที่ว่าง และเส้นบาง */
 .agenda {
@@ -4475,7 +5043,13 @@ body.is-loading .hero-scroll-cue,
     --agenda-day-switch-details-gap: var(--space-3);
     --agenda-sticky-gap: var(--space-6);
     --agenda-sticky-top: calc(var(--header-height) + var(--agenda-sticky-gap));
+    --agenda-stage-tabs-height: var(--touch-target-md);
+    --agenda-day-sticky-header-height: var(--agenda-day-panel-header-height);
     --agenda-day-panel-header-height: calc(var(--space-12) + var(--space-6));
+
+    &.ticket::before {
+        content: none;
+    }
 
     /* margin-bottom ต้องไม่แคบกว่าฉากขาว ::before ของ .agenda__tabs (บรรทัดล่าง)
        ที่ยื่นขึ้นมาปิดพื้นที่เหนือแถบ sticky สูง calc(header-height + space-6)
@@ -4552,7 +5126,7 @@ body.is-loading .hero-scroll-cue,
     /* Day 1 กับ Day 2 อยู่ในตารางต่อกันตรง ๆ ไม่งั้นดูเหมือนตารางเดียวยาวต่อเนื่อง
        เว้นระยะ + ขีดคั่นเข้าไปให้เห็นชัดว่าขึ้นวันใหม่แล้ว (ตัวสลับวันด้านข้างบอก
        อยู่แล้วว่าเป็นวันไหน แต่คนละองค์ประกอบกัน ตรงนี้ต้องอ่านออกในตัวมันเองด้วย)
-       :not([hidden]) ทั้งสองฝั่งกันไว้ไม่ให้กระทบจอ ≤767px ที่โชว์ทีละวัน — วันที่
+       :not([hidden]) ทั้งสองฝั่งกันไว้ไม่ให้กระทบจอ ≤991px ที่โชว์ทีละวัน — วันที่
        ถูกซ่อนอยู่ตัดคู่ sibling ที่ตรงเงื่อนไขไปเลย วันที่เหลือโชว์อยู่คนเดียวเลย
        ไม่มีระยะ/ขีดคั่นเผื่อไว้ด้านบนแบบผิดที่ */
     .agenda__day-panel:not([hidden])+.agenda__day-panel:not([hidden]) {
@@ -4795,6 +5369,14 @@ body.is-loading .hero-scroll-cue,
             color var(--duration-fast) var(--ease-standard),
             background-color var(--duration-fast) var(--ease-standard);
 
+        /* วงเล็บไทยแพตเทิร์นเดียวกับ .ticket__access-title small: ขนาดเท่าป้าย (ทับ .875em ของ Bootstrap)
+           ยังไม่เลือกใช้สีรอง */
+        small {
+            color: var(--color-text-muted);
+            font-size: inherit;
+            font-weight: inherit;
+        }
+
         &:hover {
             color: var(--color-text-primary);
             /* background: var(--color-surface-paper); */
@@ -4808,6 +5390,11 @@ body.is-loading .hero-scroll-cue,
         &[aria-selected="true"] {
             color: var(--color-text-primary);
             font-weight: var(--font-weight-medium);
+
+            /* แท็บที่เลือกแล้ว วงเล็บไทยใช้สีเดียวกับป้าย */
+            small {
+                color: inherit;
+            }
         }
     }
 
@@ -4934,6 +5521,11 @@ body.is-loading .hero-scroll-cue,
         height: 100%;
     }
 
+    /* Session ที่มีเพียงชื่อ เช่น Lucky Draw ให้อยู่กึ่งกลางความสูงของแถว */
+    .agenda__table td:has(> .agenda__session-title--simple) {
+        vertical-align: middle;
+    }
+
     /* กรอบรูปวิทยากรอยู่ขวาสุดของแต่ละ Session แถวละไม่เกิน 2 คน */
     .agenda__table td.agenda__speakers {
         padding-top: var(--space-0);
@@ -4943,65 +5535,9 @@ body.is-loading .hero-scroll-cue,
         vertical-align: middle;
     }
 
-    /* จอปกติ (≥992px) เท่านั้น: agenda__tags ขึ้นแถวบนกว้างเต็ม (คร่อมทั้ง td เนื้อหา
-       และ td รูปวิทยากร) แล้ว td เนื้อหา/รูปวิทยากรค่อยลงมาอยู่แถวล่างคู่กันเหมือนเดิม
-       ใช้ :first-of-type เลือก td tags (ตัวแรกใน td ของแถว ไม่นับ th) แทนการเติม class
-       ในทุกแถวของ HTML — scope ไว้เฉพาะ ≥992px ไม่ให้ไปชนกับ grid ของจอเล็กที่มีอยู่แล้ว */
-    @media (min-width: 992px) {
-
-        /* ต้องปลด .agenda__table/tbody ออกจาก display:table ก่อน ไม่งั้น grid บน tr
-           ยังถูกอัลกอริทึมของตาราง (colgroup/table-layout:fixed) บังคับความกว้างทับอยู่
-           แพตเทิร์นเดียวกับ breakpoint จอเล็กที่มีอยู่แล้วด้านล่าง */
-        .agenda__table,
-        .agenda__table tbody {
-            display: block;
-        }
-
-        .agenda__table colgroup {
-            display: none;
-        }
-
-        .agenda__table tr {
-            display: grid;
-            grid-template-columns: var(--bt-agenda-time-width) minmax(0, 1fr) var(--bt-agenda-speaker-column-width);
-            column-gap: var(--space-4);
-            align-items: start;
-        }
-
-        .agenda__table th[scope="row"] {
-            grid-column: 1;
-            grid-row: 1 / span 2;
-        }
-
-        .agenda__table td:first-of-type {
-            grid-column: 2 / span 2;
-            grid-row: 1;
-            padding-bottom: var(--space-0);
-
-            /* แถวที่ไม่มี tags (Registration, Lunch Break ฯลฯ) td นี้จะว่างเปล่า —
-               ตัด padding/border ทิ้งไม่งั้นเหลือช่องว่างเปล่า ๆ ค้างอยู่เหนือหัวข้อ */
-            /* &:empty {
-                border-left: 0;
-            } */
-        }
-
-        .agenda__table td:first-of-type+td {
-            grid-column: 2;
-            grid-row: 2;
-            padding-top: var(--space-0);
-        }
-
-        .agenda__table td.agenda__speakers {
-            grid-column: 3;
-            grid-row: 2;
-            align-self: center;
-            height: 100%;
-        }
-    }
-
     .agenda__speakers {
         display: grid;
-        grid-template-columns: repeat(2, var(--bt-agenda-speaker-size));
+        grid-template-columns: repeat(2, var(--bt-agenda-speaker-width));
         justify-content: end;
         gap: var(--space-2);
         font-size: 0;
@@ -5022,8 +5558,8 @@ body.is-loading .hero-scroll-cue,
         --agenda-glow-b-direction: reverse;
 
         position: relative;
-        width: var(--bt-agenda-speaker-size);
-        height: var(--bt-agenda-speaker-size);
+        width: var(--bt-agenda-speaker-width);
+        height: var(--bt-agenda-speaker-height);
         display: inline-grid;
         place-items: center;
         isolation: isolate;
@@ -5203,43 +5739,6 @@ body.is-loading .hero-scroll-cue,
         --agenda-glow-b-delay: -16.1s;
     }
 
-    .agenda__tags {
-        margin-bottom: var(--space-3);
-        display: flex;
-        flex-wrap: wrap;
-        gap: var(--space-2);
-    }
-
-    .agenda__tag {
-        --agenda-tag-color: var(--color-blue-400);
-        --agenda-tag-border-color: var(--color-blue-200);
-        --agenda-tag-background: var(--color-blue-100);
-
-        min-width: var(--space-12);
-        min-height: var(--space-6);
-        padding: 2px var(--space-3);
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: var(--pill-radius);
-        border: var(--rule-width-subtle) solid var(--agenda-tag-border-color);
-        font-size: var(--section-tag-size);
-        font-weight: var(--font-weight-regular);
-        line-height: var(--section-body-line-height);
-        letter-spacing: 0.03em;
-        text-transform: capitalize;
-        color: var(--agenda-tag-color);
-        background: var(--agenda-tag-background);
-
-        &.agenda__tag--capital,
-        &.agenda__tag--commodity,
-        &.agenda__tag--crypto,
-        &.agenda__tag--alternative {
-            color: var(--agenda-tag-color);
-            background: var(--agenda-tag-background);
-        }
-    }
-
     .agenda__session-title,
     .agenda__session-summary {
         display: inline;
@@ -5248,13 +5747,16 @@ body.is-loading .hero-scroll-cue,
     }
 
     .agenda__session-title {
-        color: var(--color-text-primary);
-        font-size: var(--section-body-size);
+        color: var(--color-blue-600);
+        font-size: var(--section-small-size);
         font-weight: var(--font-weight-medium);
-        line-height: var(--section-body-line-height);
+        line-height: var(--section-small-line-height);
+        text-transform: uppercase;
+        margin-bottom: var(--space-1);
 
         &.agenda__session-title--simple {
-            font-weight: var(--font-weight-regular);
+            color: var(--color-text-primary);
+            margin-bottom: 0;
         }
 
         &:has(+ .agenda__session-summary)::after {
@@ -5269,7 +5771,7 @@ body.is-loading .hero-scroll-cue,
     }
 
     .agenda__session-speaker {
-        margin: var(--space-1) var(--space-0) var(--space-0);
+        margin: var(--space-2) var(--space-0) var(--space-0);
         color: var(--color-text-muted);
         font-size: var(--section-small-size);
         font-weight: var(--font-weight-regular);
@@ -5344,21 +5846,143 @@ body.is-loading .hero-scroll-cue,
         }
     }
 
-    @media (min-width:768px) and (max-width:991px) {
+    /* แถบ Stage รวมใช้เฉพาะจอ ≥992px ค่าตั้งต้นจึงซ่อนทั้งกล่อง แถบแท็บข้างในเลยไม่โดนกฎ .agenda__tabs ของมือถือ */
+    .agenda__stage-tabs {
+        display: none;
+    }
 
-        /* ป้ายแท็บ 4 อัน (Conference Stage/Exprerience Stage/Workshop/Master Class)
-           รวมกันกว้างเกินคอลัมน์เนื้อหาที่เหลือหลังหักแถบ day-switcher ด้านซ้าย ทำให้
-           ล้นออกนอกกรอบ (overflow: visible จากค่าฐาน) — เปลี่ยนเป็นเลื่อนแนวนอนได้แทน
-           เหมือนที่ ≤767px ใช้อยู่แล้ว ต้องปิด ::before (ฉากกันเนื้อหาโผล่ใต้ header ตอน
-           sticky) ไปด้วย เพราะตั้ง overflow-x แล้ว browser จะเซ็ต overflow-y เป็น auto
-           ให้อัตโนมัติ ไปครอบตัด ::before ที่ยื่นขึ้นเหนือกล่อง (bottom: 100%) ทิ้ง */
-        .agenda__tabs {
-            overflow-x: auto;
-            overflow-y: hidden;
+    /* ---------- จอ ≥992px: Day 1 | Day 2 วางคู่กันสองคอลัมน์ ----------
+       เห็นทั้งสองวันทันทีไม่ต้องเลื่อนหรือกดสลับวัน ตัวสลับวันกับแถบ Stage รายวันจึงซ่อน
+       ใช้แถบ Stage รวมแถบเดียวคุมทั้งสองคอลัมน์แทน
+       ทุกกฎอยู่ใน min-width:992px เท่านั้น เพราะจอ ≤991px ใช้ระบบเลือกวันทีละวัน */
+    @media (min-width:992px) {
+        /* การ์ดครึ่งจอแคบกว่าตารางเดิม ใช้กรอบรูปขนาดเดียวกับมือถือ เหลือที่ให้ข้อความ */
+        --bt-agenda-speaker-width: var(--bt-agenda-speaker-width-mobile);
+        --bt-agenda-speaker-height: var(--bt-agenda-speaker-height-mobile);
+
+        .agenda__section-header {
+            margin-bottom: var(--space-12);
+        }
+
+        /* ค้างใต้ Header ตอนเลื่อนดูการ์ด สลับ Stage ได้ตลอดไม่ต้องเลื่อนกลับขึ้นไป
+           ฉากทึบ ::before ปิดเนื้อหาตารางที่เลื่อนผ่านช่องว่างเหนือแถบ ความสูงต้องไม่เกินช่องว่างนั้น
+           (space-6 เท่าระยะ sticky) ไม่งั้นตอนแถบยังไม่ติดขอบบน ฉากจะยื่นขึ้นไปทับหัวข้อ section */
+        .agenda__stage-tabs {
+            position: sticky;
+            top: calc(var(--header-height) + var(--space-6));
+            z-index: 4;
+            display: block;
+            /* ระยะเดียวกับ top: keepStageTabsInView() ใน js/agenda-tabs.js เรียก scrollIntoView ตัวนี้
+               ตอนแผงที่สั้นลงดันแถบหลุดขึ้นไปเหนือจอ จะได้กลับมาจอดตรงตำแหน่งที่ค้างไว้พอดี */
+            scroll-margin-top: calc(var(--header-height) + var(--space-6));
+            margin-bottom: var(--agenda-day-sticky-header-height);
 
             &::before {
-                display: none;
+                content: '';
+                position: absolute;
+                right: 0;
+                bottom: 100%;
+                left: 0;
+                height: var(--space-6);
+                background: var(--color-surface-page);
+                pointer-events: none;
             }
+        }
+
+        /* แถบรวมอยู่ในหัว section ไม่ได้อยู่ใต้หัวการ์ด จึงไม่ sticky และตัดฉากทึบ ::before ที่ยื่นขึ้นไปทับหัวข้อ section
+           ยังต้อง position: relative เป็นกรอบให้เส้นสีรุ้ง (.agenda__tab-indicator) */
+        .agenda__stage-tabs .agenda__tabs {
+            position: relative;
+            top: auto;
+
+            &::before {
+                content: none;
+            }
+        }
+
+        /* Windows High Contrast ตัด gradient เส้นสีรุ้งและบังคับสีข้อความทุกแท็บเท่ากัน จึงวาดเส้นแท็บที่เลือกด้วยสีระบบ Highlight */
+        @media (forced-colors: active) {
+            .agenda__stage-tabs .agenda__tab-indicator {
+                forced-color-adjust: none;
+                background: Highlight;
+            }
+
+            .agenda__stage-tabs .agenda__tab[aria-selected="true"] {
+                border-bottom-color: Highlight;
+            }
+        }
+
+        .agenda__day-switcher,
+        .agenda__tabs-viewport {
+            display: none;
+        }
+
+        /* ระยะมองเห็นระหว่างแถบ Stage กับหัววันยังคง 32px เหมือนเดิม แต่ใช้
+           margin ของ Stage เท่าความสูงหัววัน เพื่อให้ทั้งสองชั้นปล่อย sticky
+           พร้อมกันที่ท้าย Agenda โดยไม่เลื่อนทับกัน */
+        .agenda__layout {
+            margin-top: calc(var(--space-8) - var(--agenda-day-sticky-header-height));
+            scroll-margin-top: calc(var(--header-height) + var(--space-6) + var(--agenda-stage-tabs-height));
+            overflow-anchor: none;
+        }
+
+        /* width ทับ col-md-9/col-xl-10 ของ Bootstrap (0,1,0) — คง class ไว้ใน HTML เพราะไม่มีผลกับจอ ≤991px */
+        .agenda__days {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            column-gap: var(--space-6);
+        }
+
+        /* subgrid ให้หัวการ์ดสองวันสูงเท่ากันเสมอ แม้หัวของวันหนึ่งตัดบรรทัด แถวแรกของตารางจึงเริ่มระดับเดียวกัน
+           พื้นเทาไม่ใส่ที่ตัว panel ไม่งั้นการ์ด Day 2 (สั้นกว่า) จะถูกยืดเท่า Day 1 เหลือพื้นเทาว่างยาวใต้หมายเหตุ */
+        .agenda__day-panel {
+            display: grid;
+            grid-row: span 2;
+            grid-template-columns: minmax(0, 1fr);
+            grid-template-rows: subgrid;
+            padding-left: var(--space-0);
+            /* เผื่อความสูงแถบ Stage ที่ค้างอยู่ (สูงสุด ~66px ตอนป้ายสองบรรทัดที่ 768–991px) ไม่งั้นลิงก์ #agenda-day-two จะไปจอดใต้แถบ */
+            scroll-margin-top: calc(var(--header-height) + var(--space-6) + var(--space-16) + var(--space-2));
+        }
+
+        .agenda__day-panel:not([hidden])+.agenda__day-panel:not([hidden]) {
+            margin-top: var(--space-0);
+        }
+
+        .agenda__day-panel-header {
+            position: sticky;
+            top: calc(var(--header-height) + var(--space-6) + var(--agenda-stage-tabs-height));
+            z-index: 3;
+            align-self: start;
+            height: auto;
+            justify-content: space-between;
+            gap: var(--space-1) var(--space-3);
+            padding: var(--space-4) var(--space-6);
+            border-bottom: var(--rule-width-emphasis) solid var(--color-border-faint);
+            border-radius: var(--radius-1) var(--radius-1) 0 0;
+            background: var(--color-neutral-50);
+
+            &::before {
+                content: none;
+            }
+        }
+
+        .agenda__day-panel-date {
+            font-size: var(--font-size-18);
+            text-transform: uppercase;
+        }
+
+        .agenda__day-panel-time {
+            /* color: var(--color-text-muted); */
+            font-size: var(--section-body-size);
+            font-weight: var(--font-weight-medium);
+        }
+
+        /* การ์ดจบตามเนื้อหาของวันนั้นเอง (พื้นเทามาจากค่าฐานของ .agenda__content อยู่แล้ว) */
+        .agenda__content {
+            align-self: start;
+            border-radius: 0 0 var(--radius-1) var(--radius-1);
         }
 
         .agenda__table,
@@ -5370,61 +5994,117 @@ body.is-loading .hero-scroll-cue,
             display: none;
         }
 
+        /* เวลาใน layout สองคอลัมน์: เวลาเริ่ม ขีดคั่น และเวลาจบแยกเป็น 3 บรรทัดคงที่ */
+        .agenda__table th time {
+            display: block;
+            width: 4.6ch;
+            font-variant-numeric: tabular-nums;
+            text-align: center;
+            white-space: normal;
+        }
+
         .agenda__table tr {
             display: grid;
-            grid-template-columns: var(--bt-agenda-time-width) minmax(0, 1fr);
+            grid-template-columns: var(--space-20) minmax(0, 1fr);
         }
 
-        .agenda__table th,
-        .agenda__table td {
-            display: block;
-        }
-
-        .agenda__table th {
+        .agenda__table th[scope="row"] {
             grid-column: 1;
-            grid-row: 1 / span 3;
-            padding-right: var(--space-6);
+            grid-row: 1;
+            white-space: normal;
         }
 
+        /* td แรก (ช่องหมวดหมู่เดิม) ว่างทุกแถวแล้ว ซ่อนไม่ให้กินช่องกริด แต่ต้องคง td ไว้ใน HTML
+           เพราะกฎจอ ≤991px เลือกช่องตามลำดับด้วย :first-of-type */
         .agenda__table td:first-of-type {
-            grid-column: 2;
-            grid-row: 1;
-            padding-bottom: var(--space-0);
+            display: none;
         }
 
         .agenda__table td:first-of-type+td {
             grid-column: 2;
-            grid-row: 2;
-            padding-top: var(--space-0);
+            grid-row: 1;
         }
 
+        /* การ์ดสองคอลัมน์ช่วง 992–1199px ยังแคบ รูปวิทยากรลงไปอยู่ใต้ข้อความก่อน
+           แล้วกฎ ≥992px ด้านล่างจะจัดตำแหน่งรูปตามพื้นที่ของ layout ใหม่ */
         .agenda__table td.agenda__speakers {
             grid-column: 2;
-            grid-row: 3;
-            padding: var(--space-2) var(--space-0) var(--space-4) var(--space-4);
-            display: grid;
+            grid-row: 2;
             justify-content: start;
+            padding: var(--space-0) var(--space-0) var(--space-4) var(--space-4);
             border-left: var(--rule-width-subtle) solid var(--color-border-faint);
-            text-align: left;
-            white-space: normal;
 
             &:empty {
                 display: none;
             }
         }
 
-        .agenda__table td.agenda__speakers .agenda__speakers {
-            text-align: left;
-            white-space: normal;
+        .agenda__speakers>.agenda__speaker-frame:last-child:nth-child(odd) {
+            grid-column: 1;
+        }
+
+        .agenda__session-title,
+        .agenda__session-summary {
+            display: block;
+        }
+    }
+
+    /* ≥992px รูปวิทยากรอยู่ขวาข้อความตามแบบ คอลัมน์ auto กว้างเท่ากริดรูป
+       แถวที่ไม่มีรูป (ช่องถูกซ่อน) คอลัมน์นี้เป็น 0 ข้อความได้ความกว้างเต็ม */
+    @media (min-width:992px) {
+        .agenda__table tr {
+            grid-template-columns: var(--space-20) minmax(0, 1fr) auto;
+        }
+
+        .agenda__table td.agenda__speakers {
+            grid-column: 3;
+            grid-row: 1;
+            align-self: center;
+            height: auto;
+            justify-content: end;
+            padding: var(--space-4) var(--space-0) var(--space-4) var(--space-4);
+            border-left: 0;
+        }
+
+        /* ใน layout สองคอลัมน์ td ถูกเปลี่ยนเป็น grid item และสูงเต็มแถว
+           จึงต้องจัดข้อความภายในเซลล์ด้วย flex แทน vertical-align */
+        .agenda__table td:has(> .agenda__session-title--simple) {
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    /* 992–1199px การ์ดกว้าง ~416px ถ้ารูปวางคู่กัน (136px) ข้อความเหลือแค่ ~127px
+       จึงเรียงรูปซ้อนเป็นคอลัมน์เดียวแบบจอ ≤575px ข้อความได้ ~195px */
+    @media (min-width:992px) and (max-width:1199px) {
+
+        /* 4 ป้ายของแถบรวมกับ padding ปกติ 24px กว้าง ~883px เกินคอนเทนเนอร์ 856px ที่จอ 992px */
+        .agenda__stage-tabs .agenda__tab {
+            padding: var(--space-0) var(--space-4);
+        }
+
+        .agenda__table td.agenda__speakers {
+            grid-template-columns: var(--bt-agenda-speaker-width);
+        }
+    }
+
+    /* ≥1200px การ์ดกว้างพอวางรูปคู่กันแบบกริด 2 ช่องของค่าฐาน รูปเดียวชิดขวา */
+    @media (min-width:1200px) {
+        .agenda__day-panel-date {
+            font-size: var(--font-size-20);
+        }
+
+        .agenda__speakers>.agenda__speaker-frame:last-child:nth-child(odd) {
+            grid-column: 2;
         }
     }
 
     /* Mobile agenda: ย้ายข้อมูลวิทยากรลงใต้ชื่อ Session เพื่อให้อ่านเป็นลำดับเดียว */
-    @media (max-width:767px) {
-        --agenda-day-label-size: var(--font-size-24);
+    @media (max-width:991px) {
+        --agenda-day-label-size: var(--font-size-32);
         --agenda-day-label-line-height: var(--section-topic-line-height);
         --agenda-day-label-weight: var(--font-weight-regular);
-        --agenda-day-label-active-size: var(--font-size-24);
+        --agenda-day-label-active-size: var(--font-size-32);
         --agenda-day-label-active-line-height: var(--agenda-day-label-line-height);
         --agenda-day-label-active-weight: var(--font-weight-bold);
 
@@ -5450,6 +6130,9 @@ body.is-loading .hero-scroll-cue,
 
         .agenda__day-switcher,
         .agenda__days {
+            flex: 0 0 100%;
+            width: 100%;
+            max-width: 100%;
             padding-right: 0;
             padding-left: 0;
         }
@@ -5696,7 +6379,7 @@ body.is-loading .hero-scroll-cue,
     @media (max-width:575px) {
         --agenda-day-label-size: var(--font-size-20);
         --agenda-day-label-active-size: var(--font-size-20);
-        --bt-agenda-speaker-column-width-mobile: var(--bt-agenda-speaker-size-mobile);
+        --bt-agenda-speaker-column-width-mobile: var(--bt-agenda-speaker-width-mobile);
 
         .agenda__day-panel-date,
         .agenda__day-panel-time {
@@ -5753,7 +6436,7 @@ body.is-loading .hero-scroll-cue,
             grid-column: 1 / -1;
             grid-row: 1;
             padding-right: var(--space-0);
-            padding-bottom: var(--space-2);
+            padding-bottom: var(--space-3);
             white-space: normal;
         }
 
@@ -5802,7 +6485,7 @@ body.is-loading .hero-scroll-cue,
             grid-row: 3;
             width: var(--bt-agenda-speaker-column-width-mobile);
             display: grid;
-            grid-template-columns: var(--bt-agenda-speaker-size-mobile);
+            grid-template-columns: var(--bt-agenda-speaker-width-mobile);
             align-content: flex-end;
             justify-content: end;
             gap: var(--space-2);
@@ -5816,8 +6499,8 @@ body.is-loading .hero-scroll-cue,
         }
 
         .agenda__speaker-frame {
-            width: var(--bt-agenda-speaker-size-mobile);
-            height: var(--bt-agenda-speaker-size-mobile);
+            width: var(--bt-agenda-speaker-width-mobile);
+            height: var(--bt-agenda-speaker-height-mobile);
 
             &+.agenda__speaker-frame {
                 margin-left: 0;
@@ -5829,23 +6512,12 @@ body.is-loading .hero-scroll-cue,
             font-size: var(--bt-icon-size);
         }
 
-        .agenda__tags {
-            margin-top: var(--space-2);
-            margin-bottom: var(--space-3);
-            gap: var(--space-1);
-        }
-
-        .agenda__tag {
-            min-height: var(--space-5);
-            padding: 1px var(--space-3);
-            font-size: var(--font-size-12);
-        }
-
         .agenda__session-title {
             font-size: var(--font-size-14);
         }
 
         .agenda__session-summary {
+            display: block;
             font-size: var(--section-small-size);
         }
 
@@ -5977,7 +6649,7 @@ body.is-loading .hero-scroll-cue,
     }
 
     /* Day 1 กับ Day 2 ต่อกันในพื้นที่เลื่อนเดียว เว้นระยะ + ขีดคั่นให้เห็นว่าขึ้นวันใหม่
-       :not([hidden]) ทั้งสองฝั่งกันไว้ไม่ให้กระทบจอ ≤767px ที่โชว์ทีละวัน — วันที่ถูกซ่อน
+       :not([hidden]) ทั้งสองฝั่งกันไว้ไม่ให้กระทบจอ ≤991px ที่โชว์ทีละวัน — วันที่ถูกซ่อน
        ตัดคู่ sibling ที่ตรงเงื่อนไขไปเลย วันที่เหลือจึงไม่มีระยะ/ขีดคั่นค้างไว้ด้านบน */
     .speaker__day-panel:not([hidden])+.speaker__day-panel:not([hidden]) {
         margin-top: var(--space-32);
@@ -6171,11 +6843,11 @@ body.is-loading .hero-scroll-cue,
         }
     }
 
-    @media (max-width: 767px) {
-        --speaker-day-label-size: var(--font-size-24);
+    @media (max-width: 991px) {
+        --speaker-day-label-size: var(--font-size-32);
         --speaker-day-label-line-height: var(--section-topic-line-height);
         --speaker-day-label-weight: var(--font-weight-regular);
-        --speaker-day-label-active-size: var(--font-size-24);
+        --speaker-day-label-active-size: var(--font-size-32);
         --speaker-day-label-active-line-height: var(--speaker-day-label-line-height);
         --speaker-day-label-active-weight: var(--font-weight-bold);
 
@@ -6201,6 +6873,9 @@ body.is-loading .hero-scroll-cue,
 
         .speaker__day-switcher,
         .speaker__days {
+            flex: 0 0 100%;
+            width: 100%;
+            max-width: 100%;
             padding-right: 0;
             padding-left: 0;
         }
@@ -6372,6 +7047,232 @@ body.is-loading .hero-scroll-cue,
     display: none;
 }
 
+/* ขยายรูปแบบตัวเลือกวันของ Agenda และ Speaker จากมือถือให้ครอบคลุม tablet ถึง 991px */
+@media (min-width: 768px) and (max-width: 991px) {
+    #agenda .agenda__day-switcher {
+        background: transparent;
+    }
+
+    #agenda .agenda__day-switcher-inner {
+        position: relative;
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, 96px);
+        align-items: center;
+        justify-content: center;
+        justify-items: center;
+        column-gap: var(--space-8);
+        overflow: hidden;
+        padding: var(--space-6) var(--space-6) var(--space-16);
+        background: var(--color-surface-paper);
+    }
+
+    #agenda .agenda__day-switcher-inner::before {
+        content: "/";
+        position: absolute;
+        top: calc(var(--space-6) + (var(--section-topic-line-height) / 2));
+        left: 50%;
+        z-index: 1;
+        color: var(--color-text-inverse-muted);
+        font-size: var(--font-size-24);
+        font-weight: var(--font-weight-light);
+        line-height: 1;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+    }
+
+    #agenda .agenda__day-switch {
+        position: static;
+        width: 100%;
+        min-height: auto;
+        padding: var(--space-0);
+        display: grid;
+        justify-items: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    #agenda .agenda__day-switch-label {
+        white-space: nowrap;
+    }
+
+    #agenda .agenda__day-switch:first-of-type {
+        grid-column: 1;
+    }
+
+    #agenda .agenda__day-switch:last-of-type {
+        grid-column: 2;
+        justify-content: center;
+        text-align: center;
+    }
+
+    #agenda .agenda__day-switch-details {
+        position: absolute;
+        top: unset;
+        right: 0;
+        bottom: 28px;
+        left: 0;
+        width: 100%;
+        display: block;
+        margin-top: var(--space-0);
+        opacity: 0;
+        visibility: hidden;
+        transform: none;
+        text-align: center;
+        pointer-events: none;
+    }
+
+    #agenda .agenda__day-switch:not([aria-current='true']) .agenda__day-switch-details {
+        color: var(--agenda-day-label-color);
+        opacity: 1;
+        visibility: visible;
+    }
+
+    #agenda .agenda__day-switch-details-inner {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-2);
+        min-height: fit-content;
+        overflow: visible;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    #agenda .agenda__day-switch-date-full {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
+    #agenda .agenda__day-switch-date-short {
+        display: inline;
+    }
+
+    #agenda .agenda__day-switch-prompt,
+    #agenda .agenda__day-switch-rail {
+        display: none;
+    }
+
+    #speaker .speaker__day-switcher {
+        background: transparent;
+    }
+
+    #speaker .speaker__day-switcher-inner {
+        position: relative;
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, 96px);
+        align-items: center;
+        justify-content: center;
+        justify-items: center;
+        column-gap: var(--space-8);
+        overflow: hidden;
+        padding: var(--space-6) var(--space-6) var(--space-16);
+        background: var(--color-surface-paper);
+    }
+
+    #speaker .speaker__day-switcher-inner::before {
+        content: "/";
+        position: absolute;
+        top: calc(var(--space-6) + (var(--section-topic-line-height) / 2));
+        left: 50%;
+        z-index: 1;
+        color: var(--color-text-inverse-muted);
+        font-size: var(--font-size-24);
+        font-weight: var(--font-weight-light);
+        line-height: 1;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+    }
+
+    #speaker .speaker__day-switch {
+        position: static;
+        width: 100%;
+        min-height: auto;
+        padding: var(--space-0);
+        display: grid;
+        justify-items: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    #speaker .speaker__day-switch-label {
+        white-space: nowrap;
+    }
+
+    #speaker .speaker__day-switch:first-of-type {
+        grid-column: 1;
+    }
+
+    #speaker .speaker__day-switch:last-of-type {
+        grid-column: 2;
+        justify-content: center;
+        text-align: center;
+    }
+
+    #speaker .speaker__day-switch-details {
+        position: absolute;
+        top: unset;
+        right: 0;
+        bottom: 28px;
+        left: 0;
+        width: 100%;
+        display: block;
+        margin-top: var(--space-0);
+        opacity: 0;
+        visibility: hidden;
+        transform: none;
+        text-align: center;
+        pointer-events: none;
+    }
+
+    #speaker .speaker__day-switch[aria-current='true'] .speaker__day-switch-details {
+        color: var(--speaker-day-label-active-color);
+        opacity: 1;
+        visibility: visible;
+    }
+
+    #speaker .speaker__day-switch-details-inner {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-2);
+        min-height: fit-content;
+        overflow: visible;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    #speaker .speaker__day-switch-date-full {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
+    #speaker .speaker__day-switch-date-short {
+        display: inline;
+    }
+
+    #speaker .speaker__day-switch-prompt,
+    #speaker .speaker__day-switch-rail {
+        display: none;
+    }
+
+    #speaker .speaker__panel {
+        margin-top: var(--space-8);
+        padding: var(--space-8) var(--space-8) var(--space-12);
+    }
+}
+
 @media (max-width: 767px) {
 
     #agenda .agenda__day-switcher,
@@ -6388,7 +7289,7 @@ body.is-loading .hero-scroll-cue,
         align-items: center;
         justify-content: center;
         justify-items: center;
-        column-gap: var(--space-3);
+        column-gap: var(--space-8);
         overflow: hidden;
         padding: var(--space-6) var(--space-6) var(--space-16);
         background: var(--color-surface-paper);
@@ -6402,7 +7303,7 @@ body.is-loading .hero-scroll-cue,
         left: 50%;
         z-index: 1;
         color: var(--color-text-inverse-muted);
-        font-size: var(--font-size-18);
+        font-size: var(--font-size-24);
         font-weight: var(--font-weight-light);
         line-height: 1;
         transform: translate(-50%, -50%);
@@ -6456,7 +7357,7 @@ body.is-loading .hero-scroll-cue,
     }
 
     #agenda .agenda__day-switch:not([aria-current='true']) .agenda__day-switch-details {
-        color: var(--agenda-day-label-color);
+        color: var(--agenda-day-details-color);
         opacity: 1;
         visibility: visible;
     }
@@ -6509,6 +7410,7 @@ body.is-loading .hero-scroll-cue,
     #speaker .speaker__day-switcher-inner {
         grid-template-columns: repeat(2, 72px);
         padding: var(--space-3) var(--space-3) var(--space-10);
+        column-gap: var(--space-6);
     }
 
     #agenda .agenda__day-switcher-inner::before,
@@ -6577,19 +7479,6 @@ body.is-loading .hero-scroll-cue,
     .moderator__grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: var(--space-12) var(--space-6);
-    }
-}
-
-/* 768–991px เท่านั้น: .speaker__days ยังเป็น col-md-9 (75%) แต่ .moderator__grid
-   อยู่ใน col-12 เต็มแถว (100%) ถ้าปล่อยไว้การ์ด 2 ใบของ moderator จะกว้างกว่าของ
-   speaker กีบพื้นที่ container ต่างกัน — บีบ .moderator__grid ให้เหลือ 75% เท่ากับ
-   .speaker__days พอดี การ์ดสองฝั่งเลยกลับมาเท่ากัน (ต่ำกว่า 768px ทั้งคู่เป็น col-12
-   100% อยู่แล้วโดยไม่ต้องบีบ) */
-@media (min-width: 768px) and (max-width: 991px) {
-
-    .moderator__grid {
-        width: 75%;
-        margin-inline: auto;
     }
 }
 
@@ -7460,6 +8349,216 @@ body.is-loading .hero-scroll-cue,
     }
 }
 
+/* ---------- CTA ---------- */
+.cta {
+    position: relative;
+    padding: var(--section-padding-y-sm) var(--space-0) var(--space-0);
+    color: var(--color-text-primary);
+    background: var(--color-surface-page);
+    font-family: var(--font-family-base);
+}
+
+.cta__inner {
+    position: relative;
+}
+
+.cta__panel {
+    position: relative;
+    overflow: hidden;
+    padding: var(--space-16) var(--space-12) var(--space-20);
+    border-radius: var(--card-radius);
+    background:
+        radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--color-blue-100) 72%, transparent) 0%, transparent 34%),
+        radial-gradient(circle at 92% 100%, color-mix(in srgb, var(--color-kv-spectrum-4) 12%, transparent) 0%, transparent 34%),
+        var(--color-neutral-50);
+    text-align: center;
+}
+
+/* .cta__panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: var(--rule-width-subtle) solid var(--color-border-faint);
+    pointer-events: none;
+} */
+
+/* ---------- ของประกอบฉากในแผง CTA ----------
+   ใช้ภาพ ขนาด ฟิลเตอร์ และการลอยขยับชุดเดียวกับ .playbook__asset
+   ตำแหน่งกำหนดเป็น % ของแผงจึงเลื่อนตามขนาดจอเอง และถูกตัดขอบด้วย overflow ของ .cta__panel */
+.cta__assets {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* เนื้อหาต้องอยู่เหนือของประกอบฉากเสมอ เพราะเลเยอร์ด้านบนเป็น element ที่ positioned */
+.cta__panel> :not(.cta__assets) {
+    position: relative;
+    z-index: 1;
+}
+
+.cta__asset {
+    position: absolute;
+    top: var(--bt-cta-asset-y);
+    left: var(--bt-cta-asset-x);
+    width: var(--bt-cta-asset-size);
+    display: block;
+    transform: translate(-50%, -50%);
+    filter: saturate(1.3);
+}
+
+.cta__asset-float {
+    display: block;
+    will-change: transform;
+}
+
+/* saturate เท่ากับของ playbook แต่ไม่ใส่เงา (พื้นแผง CTA สว่าง เงาจะเด่นเกินไป) */
+.cta__asset img {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: saturate(1.3);
+    transform: rotate(var(--bt-cta-asset-rotation));
+}
+
+/* องศาเดียวกับ --bt-playbook-stock-rotation */
+.cta__asset--stock {
+    --bt-cta-asset-x: 16%;
+    --bt-cta-asset-y: 56%;
+    --bt-cta-asset-size: calc(var(--space-16) + var(--space-1));
+    --bt-cta-asset-rotation: -34deg;
+}
+
+.cta__asset--triangle {
+    --bt-cta-asset-x: 83%;
+    --bt-cta-asset-y: 27%;
+    --bt-cta-asset-size: var(--space-28);
+    --bt-cta-asset-rotation: -8deg;
+}
+
+.cta__title {
+    max-width: 900px;
+    margin: 0 auto;
+    font-size: var(--section-title-size);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--section-title-line-height);
+    letter-spacing: var(--section-title-tracking);
+    text-wrap-style: balance;
+}
+
+.cta__meta,
+.cta__offer {
+    margin: var(--space-6) auto var(--space-0);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-18);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--section-body-line-height);
+    letter-spacing: 0;
+    text-wrap-style: balance;
+}
+
+.cta__offer {
+    margin-top: var(--space-2);
+    color: var(--color-text-muted);
+    font-weight: var(--font-weight-regular);
+}
+
+.cta__action {
+    margin-top: var(--space-8);
+    display: grid;
+    place-items: center;
+}
+
+/* ---------- CTA responsive ----------
+   ขนาด title ไม่ต้องกำหนดที่นี่ เพราะ h2 ใส่คลาส .bt-section-title แล้ว
+   จึงย่อตามบันไดกลางของทุก section (48 → 40 → 32 → 28)
+   ของประกอบฉากย่อลงและถอยเข้ามุมทุกขั้น เพื่อไม่ให้ทับคอลัมน์ข้อความที่จัดกลาง */
+@media (max-width: 1199px) {
+    .cta__panel {
+        padding: var(--space-12) var(--space-10) var(--space-16);
+    }
+
+    .cta__asset--stock {
+        --bt-cta-asset-x: 12%;
+        --bt-cta-asset-y: 72%;
+    }
+
+    .cta__asset--triangle {
+        --bt-cta-asset-x: 88%;
+        --bt-cta-asset-y: 22%;
+    }
+}
+
+@media (max-width: 991px) {
+    .cta__panel {
+        padding: var(--space-12) var(--space-8);
+    }
+
+    .cta__asset--stock {
+        --bt-cta-asset-size: calc(var(--space-16) - var(--space-2));
+    }
+
+    .cta__asset--triangle {
+        --bt-cta-asset-size: var(--space-24);
+    }
+}
+
+@media (max-width: 767px) {
+    .cta__panel {
+        padding: var(--space-10) var(--space-6);
+    }
+
+    .cta__meta,
+    .cta__offer {
+        font-size: var(--section-body-size);
+    }
+
+    .cta__asset--stock {
+        --bt-cta-asset-size: calc(var(--space-16) - var(--space-3));
+    }
+
+    .cta__asset--triangle {
+        --bt-cta-asset-x: 90%;
+        --bt-cta-asset-y: 20%;
+        --bt-cta-asset-size: calc(var(--space-24) - var(--space-2));
+    }
+}
+
+@media (max-width: 575px) {
+    .cta {
+        padding: var(--space-0);
+    }
+
+    .cta__panel {
+        padding: var(--space-16) var(--space-5);
+        text-align: center;
+    }
+
+    .cta__meta,
+    .cta__offer {
+        font-size: var(--section-small-size);
+        line-height: var(--section-small-line-height);
+    }
+
+    .cta__action {
+        justify-items: center;
+    }
+
+    .cta__asset--stock {
+        --bt-cta-asset-x: 20%;
+        --bt-cta-asset-y: 76%;
+        --bt-cta-asset-size: var(--space-10);
+    }
+
+    .cta__asset--triangle {
+        --bt-cta-asset-x: 90%;
+        --bt-cta-asset-y: 58%;
+        --bt-cta-asset-size: var(--space-20);
+    }
+}
+
 /* หมุนรอบจุดกึ่งกลางพร้อมเลื่อน/ย่อขยายเล็กน้อยไปด้วย ทำให้ blob ลอยเป็นวงอิสระ
    ไม่ตรงตามแกนใดแกนหนึ่ง — สองชุดหมุนคนละทิศและคนละความเร็ว เพื่อไม่ให้จับจังหวะซ้ำได้ */
 @keyframes speaker-aurora-a {
@@ -7585,11 +8684,23 @@ body.is-loading .hero-scroll-cue,
 
         span {
             color: var(--color-text-muted);
-            margin-top: var(--space-1);
+            margin-top: var(--space-3);
             font-size: var(--section-body-size);
             font-weight: var(--font-weight-light);
-            line-height: var(--section-topic-line-height);
+            line-height: var(--section-body-line-height);
             letter-spacing: 0;
+        }
+
+        /* ลำดับการอ่านในแต่ละช่อง: ตัวเลข → ป้ายไทย → ป้ายอังกฤษ
+           ป้ายไทยเป็นบรรทัดหลักจึงใช้สีหมึกเต็มและน้ำหนักปกติ ส่วนอังกฤษยังเป็นบรรทัดรอง
+           (สีจาง น้ำหนักบาง) ตามค่าเดิม — ขนาดตัวอักษรใช้สเกลเดิมทุกเบรกพอยต์ ไม่แตะดีไซน์ */
+        span.expectation__stat-label-th {
+            color: var(--color-text-primary);
+            font-weight: var(--font-weight-regular);
+        }
+
+        span.expectation__stat-label-th+span {
+            margin-top: 2px;
         }
     }
 
@@ -7981,22 +9092,22 @@ body.is-loading .hero-scroll-cue,
 /* ---------- Footer ----------
    ส่วนปิดท้ายแบบ contact module สำหรับงาน event แสดงเฉพาะช่องทางติดต่อและผู้สนับสนุน */
 .site-footer {
-    padding: var(--section-padding-y-sm) 0 var(--space-12);
+    padding: var(--section-padding-y-sm) 0 0;
     color: var(--bt-footer-ink);
     background: var(--color-surface-page);
     font-family: var(--font-family-base);
 
-    .site-footer__container {
-        max-width: none;
-        padding-right: var(--space-12);
-        padding-left: var(--space-12);
+    .site-footer__inner {
+        padding-right: calc(var(--bs-gutter-x) * 0.5 + var(--space-10));
+        padding-left: calc(var(--bs-gutter-x) * 0.5 + var(--space-10));
     }
 
     .site-footer__panel {
         position: relative;
         isolation: isolate;
         overflow: hidden;
-        padding: var(--space-16) var(--space-10);
+        /* ด้านล่างแคบกว่าด้านบน เพื่อให้บรรทัดสรุปงานอยู่ชิดขอบล่างของแผง */
+        padding: var(--space-16) 0 var(--space-4);
         border-radius: var(--radius-1);
         background:
             radial-gradient(35% 80% at 30% 0%, rgba(115, 130, 170, 0.28), transparent),
@@ -8079,6 +9190,21 @@ body.is-loading .hero-scroll-cue,
         line-height: var(--section-body-line-height);
         letter-spacing: 0;
         text-transform: uppercase;
+    }
+
+    /* บรรทัดสรุปงานปิดท้าย footer อยู่ล่างสุดและจัดกึ่งกลาง
+       ต้องมี z-index เพราะฉากเรืองแสงของแผง (::before/::after) เป็น element ที่ positioned */
+    .site-footer__summary {
+        position: relative;
+        z-index: 1;
+        margin: var(--space-12) var(--space-0) var(--space-0);
+        padding-top: var(--space-4);
+        border-top: var(--rule-width-subtle) solid var(--bt-footer-line);
+        color: var(--bt-footer-muted);
+        font-size: var(--section-small-size);
+        font-weight: var(--font-weight-light);
+        line-height: var(--section-small-line-height);
+        text-align: center;
     }
 
     h3 {
@@ -8243,15 +9369,15 @@ body.is-loading .hero-scroll-cue,
 
     @media (max-width: 991px) {
         .site-footer__panel {
-            padding: var(--space-6) var(--space-8);
+            padding: var(--space-6) 0;
             background:
                 radial-gradient(circle at 30% 0%, rgba(115, 130, 170, 0.28), transparent 48%),
                 linear-gradient(180deg, #19274A 0%, #020B1E 100%);
         }
 
-        .site-footer__container {
-            padding-right: var(--space-6);
-            padding-left: var(--space-6);
+        .site-footer__inner {
+            padding-right: calc(var(--bs-gutter-x) * 0.5 + var(--space-8));
+            padding-left: calc(var(--bs-gutter-x) * 0.5 + var(--space-8));
         }
 
         .site-footer__column {
@@ -8303,8 +9429,17 @@ body.is-loading .hero-scroll-cue,
     }
 
     @media (max-width: 575px) {
-        & {
-            padding-bottom: calc(var(--space-16) + var(--space-4));
+        .site-footer__inner {
+            padding-right: calc(var(--bs-gutter-x) * 0.5 + var(--space-3));
+            padding-left: calc(var(--bs-gutter-x) * 0.5 + var(--space-3));
+        }
+
+        .site-footer__summary {
+            margin: var(--space-0);
+        }
+
+        .site-footer__panel {
+            padding-bottom: calc(var(--space-20) + max(var(--space-3), env(safe-area-inset-bottom)));
         }
 
         .site-footer__contact-list {
@@ -8391,7 +9526,7 @@ body.is-loading .hero-scroll-cue,
     body.is-mobile-static #ui {
         z-index: 120;
         width: min(calc(100vw - var(--space-8)), 720px);
-        /* gap: var(--space-6); */
+        gap: var(--space-6);
         color: #fff;
     }
 
@@ -8406,6 +9541,7 @@ body.is-loading .hero-scroll-cue,
 
     body.is-mobile-static #ui .venue {
         padding-top: var(--space-2);
+        font-size: 18px;
     }
 
     #ui .date,

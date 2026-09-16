@@ -16,39 +16,6 @@
 
         gsap.registerPlugin(ScrollTrigger);
 
-        const idleTweens = floats.map((float, index) => {
-            const driftY = gsap.utils.random(8, 14);
-            const driftRotation = gsap.utils.random(2, 5) * (index % 2 ? -1 : 1);
-
-            return gsap.fromTo(float, {
-                y: -driftY / 2,
-                rotation: -driftRotation / 2,
-            }, {
-                y: driftY / 2,
-                rotation: driftRotation / 2,
-                duration: gsap.utils.random(3.2, 4.8),
-                delay: index * 0.08,
-                ease: 'sine.inOut',
-                yoyo: true,
-                repeat: -1,
-                paused: true,
-            });
-        });
-
-        let sectionIsVisible = false;
-        const syncIdleMotion = () => {
-            const shouldPlay = sectionIsVisible && !document.hidden;
-            idleTweens.forEach(tween => shouldPlay ? tween.play() : tween.pause());
-        };
-
-        const sectionObserver = new IntersectionObserver(([entry]) => {
-            sectionIsVisible = entry.isIntersecting;
-            syncIdleMotion();
-        }, { threshold: 0.04 });
-
-        sectionObserver.observe(section);
-        document.addEventListener('visibilitychange', syncIdleMotion);
-
         const getFallDistance = (frame, isMobile) => {
             const sectionPaddingBottom = parseFloat(getComputedStyle(section).paddingBottom) || 0;
             const viewportFall = window.innerHeight * (isMobile ? 0.75 : 1.35);
@@ -57,7 +24,51 @@
 
         const media = gsap.matchMedia();
 
-        media.add('(max-width: 767px)', () => {
+        media.add('(min-width: 576px)', () => {
+            const idleTweens = floats.map((float, index) => {
+                const driftY = gsap.utils.random(8, 14);
+                const driftRotation = gsap.utils.random(2, 5) * (index % 2 ? -1 : 1);
+
+                return gsap.fromTo(float, {
+                    y: -driftY / 2,
+                    rotation: -driftRotation / 2,
+                }, {
+                    y: driftY / 2,
+                    rotation: driftRotation / 2,
+                    duration: gsap.utils.random(3.2, 4.8),
+                    delay: index * 0.08,
+                    ease: 'sine.inOut',
+                    yoyo: true,
+                    repeat: -1,
+                    paused: true,
+                });
+            });
+
+            let sectionIsVisible = false;
+            const syncIdleMotion = () => {
+                const shouldPlay = sectionIsVisible && !document.hidden;
+                idleTweens.forEach(tween => shouldPlay ? tween.play() : tween.pause());
+            };
+
+            const sectionObserver = new IntersectionObserver(([entry]) => {
+                sectionIsVisible = entry.isIntersecting;
+                syncIdleMotion();
+            }, { threshold: 0.04 });
+
+            sectionObserver.observe(section);
+            document.addEventListener('visibilitychange', syncIdleMotion);
+
+            return () => {
+                sectionObserver.disconnect();
+                document.removeEventListener('visibilitychange', syncIdleMotion);
+                idleTweens.forEach(tween => tween.kill());
+                floats.forEach(float => {
+                    float.style.removeProperty('transform');
+                });
+            };
+        });
+
+        media.add('(min-width: 576px) and (max-width: 767px)', () => {
             const entryTimeline = gsap.timeline({
                 defaults: { ease: 'none' },
                 scrollTrigger: {
@@ -113,6 +124,26 @@
                 entryTimeline.kill();
                 exitTimeline.scrollTrigger?.kill();
                 exitTimeline.kill();
+            };
+        });
+
+        media.add('(max-width: 575px)', () => {
+            assets.forEach(asset => {
+                asset.style.opacity = '1';
+                asset.style.transform = 'none';
+            });
+            floats.forEach(float => {
+                float.style.transform = 'none';
+            });
+
+            return () => {
+                assets.forEach(asset => {
+                    asset.style.removeProperty('opacity');
+                    asset.style.removeProperty('transform');
+                });
+                floats.forEach(float => {
+                    float.style.removeProperty('transform');
+                });
             };
         });
 

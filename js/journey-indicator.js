@@ -16,7 +16,7 @@
         { id: 'past-event', label: 'Past Event' },
         { id: 'faq', label: 'FAQ' },
     ].map(stop => ({ ...stop, element: document.getElementById(stop.id) }))
-        .filter(stop => stop.element);
+        .filter(stop => stop.element && !stop.element.hidden);
 
     if (route.length < 2) return;
 

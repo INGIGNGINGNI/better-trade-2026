@@ -290,6 +290,7 @@
     --section-small-size: var(--font-size-14);
     --section-subtext-size: var(--font-size-18);
     --section-tag-size: var(--font-size-14);
+    --section-tag-size-sm: var(--font-size-12);
     --section-display-line-height: var(--line-height-display);
     --section-title-line-height: 140%;
     --section-heading-line-height: var(--line-height-heading);
@@ -437,10 +438,12 @@
     --bt-agenda-time-width: var(--space-28);
     --bt-agenda-tags-column-width: var(--space-32);
     --bt-agenda-time-size: var(--font-size-16);
-    --bt-agenda-speaker-size: calc(var(--space-16) + var(--space-2));
-    --bt-agenda-speaker-size-mobile: calc(var(--space-12) + var(--space-3));
-    --bt-agenda-speaker-column-width: calc((var(--bt-agenda-speaker-size) * 2) + var(--space-2));
-    --bt-agenda-speaker-column-width-mobile: calc((var(--bt-agenda-speaker-size-mobile) * 2) + var(--space-2));
+    --bt-agenda-speaker-width: 80px;
+    --bt-agenda-speaker-height: 100px;
+    --bt-agenda-speaker-width-mobile: 80px;
+    --bt-agenda-speaker-height-mobile: 100px;
+    --bt-agenda-speaker-column-width: calc((var(--bt-agenda-speaker-width) * 2) + var(--space-2));
+    --bt-agenda-speaker-column-width-mobile: calc((var(--bt-agenda-speaker-width-mobile) * 2) + var(--space-2));
 
     @media (max-width: 575px) {
         --bt-agenda-time-size: var(--font-size-14);

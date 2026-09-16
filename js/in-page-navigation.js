@@ -27,12 +27,13 @@
             }));
         };
 
-        const isHeaderNavigation = Boolean(link.closest('.site-header, .site-header__mobile'));
-        if (isHeaderNavigation) {
-            const detail = { target, navigate, handled: false };
-            window.dispatchEvent(new CustomEvent(HERO_SKIP_NAVIGATION_EVENT, { detail }));
-            if (detail.handled) return;
-        }
+        /* Any in-page jump taken while the Hero is still pinned has to collapse the
+           Hero timeline first, otherwise its pin distance keeps moving the destination
+           while the scroll is in flight and the landing position ends up short. The
+           Hero owns that decision and reports back through detail.handled. */
+        const detail = { target, navigate, handled: false };
+        window.dispatchEvent(new CustomEvent(HERO_SKIP_NAVIGATION_EVENT, { detail }));
+        if (detail.handled) return;
 
         navigate();
     });

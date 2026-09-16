@@ -40,12 +40,12 @@
             {
                 name: 'คุณศุภวิชญ์ พูลเพิ่มทรัพย์',
                 role: 'Investment Analyst, BINANCE TH Academy',
-                image: 'profile-empty.webp',
+                image: 'day-1/D1-ศุภวิชญ์-พูลเพิ่มทรัพย์.webp',
                 overviewClass: 'supawit',
             },
             {
                 name: 'คุณนภดนัย พัฒนาภิวัฒน์',
-                role: 'Co-Owner & Second-Generation Successo',
+                role: 'Co-Owner & Second-Generation Successor บริษัท เซลลักซ์ เวนเจอร์ส จำกัด',
                 image: 'day-1/D1-นภดนัย-พัฒนาภิวัฒน์.webp',
                 overviewClass: 'noppadanai',
             },
@@ -190,7 +190,7 @@
     const overviewViewButtons = Array.from(document.querySelectorAll('[data-speaker-overview-view]'));
     const overviewCompactCount = document.querySelector('[data-speaker-overview-compact-count]');
 
-    if (overviewGrid && overviewSection) {
+    if (overviewGrid && overviewSection && !overviewSection.hidden) {
         const overviewSpeakers = Object.values(speakerDays)
             .flat()
             .filter(({ overview = true }) => overview);
@@ -469,15 +469,15 @@
     /* ---- ตัวสลับวัน: พฤติกรรมเดียวกับ agenda-tabs.js ----
        แยกไฟล์กันเพราะคนละ block ของ BEM แต่ logic ตรงกันทุกขั้น
 
-       จอ >767px: Day 1 กับ Day 2 อยู่ในพื้นที่เลื่อนเดียวกันตลอด ตัวสลับวันเป็นแค่
+       จอ ≥992px: Day 1 กับ Day 2 อยู่ในพื้นที่เลื่อนเดียวกันตลอด ตัวสลับวันเป็นแค่
        ลิงก์เลื่อนไปหาหัวข้อ + ตัวบอกตำแหน่งปัจจุบัน (scrollspy)
-       จอ ≤767px: กลับไปพฤติกรรมแท็บแบบเดิม โชว์ทีละวัน คลิกแล้วซ่อนอีกวันไปเลย */
+       จอ ≤991px: ใช้พฤติกรรมแท็บแบบเดิม โชว์ทีละวัน คลิกแล้วซ่อนอีกวันไปเลย */
     const daySwitcher = document.querySelector('.speaker__day-switcher-inner');
     const dayLinks = daySwitcher
         ? Array.from(daySwitcher.querySelectorAll('.speaker__day-switch'))
         : [];
     const dayPanels = Array.from(document.querySelectorAll('[data-speaker-day-panel]'));
-    const mobileDaySwitcher = window.matchMedia('(max-width: 767px)');
+    const mobileDaySwitcher = window.matchMedia('(max-width: 991px)');
 
     if (!dayLinks.length || !dayPanels.length) return;
 
@@ -532,7 +532,7 @@
 
     const revealPanelTop = (panel) => revealTargetTop(panel, panel);
 
-    /* ซ่อนวันที่ไม่ได้เลือกเฉพาะจอ ≤767px เท่านั้น จอใหญ่กว่านั้นโชว์ทั้งสองวันต่อกัน */
+    /* ซ่อนวันที่ไม่ได้เลือกเฉพาะจอ ≤991px เท่านั้น จอใหญ่กว่านั้นโชว์ทั้งสองวันต่อกัน */
     const applyDayVisibility = (activeLink) => {
         dayPanels.forEach((panel) => {
             const shouldHide = mobileDaySwitcher.matches && panel !== panelForLink(activeLink);
@@ -566,7 +566,7 @@
             event.preventDefault();
             updateDaySwitch(link);
 
-            /* ≤767px สลับวันแล้วเนื้อหาถูกสลับทั้งแผง พากลับไปหัวตัวสลับวันเหมือนเดิม
+            /* ≤991px สลับวันแล้วเนื้อหาถูกสลับทั้งแผง พากลับไปหัวตัวสลับวันเหมือนเดิม
                จอใหญ่เลื่อนไปหาหัวข้อของวันนั้นในพื้นที่เลื่อนเดียวกัน */
             if (mobileDaySwitcher.matches) {
                 const switcher = daySwitcher.closest('.speaker__day-switcher');
@@ -582,7 +582,7 @@
     /* หาว่าแผงไหนควร active โดยวัดตำแหน่งสด ๆ ทุกครั้ง (ไม่แคช) — หน้านี้มี hero ที่
        คำนวณความสูงตัวเองแบบ async และการ์ด speaker เป็นรูป lazy-load ตำแหน่งจริงของ
        Day 2 จึงขยับหลังวัดครั้งแรก ค่าที่แคชไว้จะเพี้ยนจนสลับ active ก่อนเวลา
-       แผงที่ถูกซ่อน (จอ ≤767px ที่โชว์ทีละวัน) มี offsetParent เป็น null ตัดออกไปเลย
+       แผงที่ถูกซ่อน (จอ ≤991px ที่โชว์ทีละวัน) มี offsetParent เป็น null ตัดออกไปเลย
        ไม่มีแผงให้วัดก็แค่ไม่ทำอะไร คงค่าล่าสุดไว้ */
     let scrollSpyRAF = null;
 
@@ -620,7 +620,7 @@
     window.addEventListener('load', updateScrollSpy);
     document.fonts?.ready.then(updateScrollSpy);
 
-    /* ข้ามเกณฑ์ 767px แล้วต้องจัดการ visibility ให้ตรงโหมดใหม่ก่อน แล้วค่อยวัด
+    /* ข้ามเกณฑ์ 991px แล้วต้องจัดการ visibility ให้ตรงโหมดใหม่ก่อน แล้วค่อยวัด
        ไม่งั้นแผงที่ยังซ่อนจากโหมดเดิมจะไม่ถูกนับ (offsetParent เป็น null อยู่) */
     mobileDaySwitcher.addEventListener('change', () => {
         const activeLink = dayLinks.find((link) => link.getAttribute('aria-current') === 'true') || dayLinks[0];
@@ -640,7 +640,7 @@
     refreshSpeakerMotion(panelForLink(initialLink));
 
     /* เปิดหน้าด้วย #speaker-day-two ตรง ๆ: ตอน browser เลื่อนหา target แผงอาจยังซ่อน
-       (จอ ≤767px) จึงไม่ได้เลื่อนจริง สั่งซ้ำตอน load เผื่อ preloader ล็อกสกอลล์อยู่ */
+       (จอ ≤991px) จึงไม่ได้เลื่อนจริง สั่งซ้ำตอน load เผื่อ preloader ล็อกสกอลล์อยู่ */
     if (hashLink) {
         const panel = panelForLink(hashLink);
 
