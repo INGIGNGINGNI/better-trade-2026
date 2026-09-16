@@ -1,11 +1,11 @@
-import { createLiquidMetalButton } from './liquid-metal-button.js';
+import { createLiquidMetalButton } from './liquid-metal-button.js?v=2';
 
 const TICKET_SECTION_HREF = '#ticket';
 const BUY_TICKET_URL = 'https://www.efin.finance/events/better-trade/better-trade2026/buy-ticket';
 const INVESTOR_DNA_URL = 'https://egames.efin.finance/games/investor-dna-quest';
 
 const sharedRegisterOptions = {
-    label: 'ซื้อบัตร Early Bird',
+    label: 'ซื้อบัตร',
     href: TICKET_SECTION_HREF,
     height: 56,
     fontSize: 20,
@@ -18,6 +18,8 @@ const sharedRegisterOptions = {
     metalShiftRed: 0.2,
     metalShiftBlue: 0.2,
 };
+
+const HERO_CTA_PADDING_REDUCTION = 12;
 
 const tabletRegisterOptions = {
     height: 46,
@@ -63,6 +65,26 @@ function resolveCssLength(tokenName, fallback) {
     return Number.isFinite(value) && value > 0 ? value : fallback;
 }
 
+function measureTextWidth(text, fontSize, fontWeight, fontFamily) {
+    const probe = document.createElement('span');
+
+    probe.textContent = text;
+    probe.style.cssText = [
+        'position:absolute',
+        'visibility:hidden',
+        'white-space:nowrap',
+        'font-size:' + fontSize + 'px',
+        'font-weight:' + fontWeight,
+        'font-family:' + fontFamily,
+    ].join(';');
+
+    document.body.appendChild(probe);
+    const value = probe.getBoundingClientRect().width;
+    probe.remove();
+
+    return value;
+}
+
 // รอ FC Minimal เพื่อให้ความกว้าง pill คำนวณจาก glyph จริง
 const ready = document.fonts ? document.fonts.ready : Promise.resolve();
 ready.then(() => {
@@ -90,8 +112,15 @@ ready.then(() => {
         heroCtaButton?.destroy?.();
         playbookCtaButton?.destroy?.();
         ctaTicketButton?.destroy?.();
+        const basePaddingX = responsiveOptions.paddingX ?? sharedRegisterOptions.paddingX;
+
         heroCtaButton = mountRegisterButton(heroCtaSlot, {
             ...responsiveOptions,
+            // ป้ายส่วนลดทำให้ปุ่มยาวขึ้น จึงลด padding ซ้าย-ขวาเฉพาะปุ่ม Hero (ปุ่ม Playbook/CTA ยังใช้ค่าเดิม)
+            paddingX: basePaddingX - HERO_CTA_PADDING_REDUCTION,
+            // ป้ายส่วนลดชุดเดียวกับกล่อง Early Bird และการ์ด Ticket (สไตล์อยู่ใน css/style.css)
+            badge: 'SAVE 30%',
+            badgeClass: 'hero-cta__save',
             textColor: '#111318',
             pillBackground: 'linear-gradient(180deg, #ffffff 0%, #f3f4f8 55%, #e4e7ee 100%)',
         });
@@ -123,11 +152,18 @@ ready.then(() => {
         // แถบ header ต้องแชร์แถวเดียวกับโลโก้และ nav จึงย่อตัวอักษรลงหนึ่งขั้น
         // ส่วนแถบ CTA ล่างจอมือถือมีที่พอ คงขนาดให้เท่าปุ่ม --xl ที่อยู่ข้างกัน
         const isHeaderRow = Boolean(target.closest('.site-header'));
+        const fontSize = isHeaderRow ? 14 : 16;
+        const paddingX = isHeaderRow ? 14 : 16;
+        // ป้ายย่อเหลือ "ซื้อบัตร" แต่ปุ่มใน header คงความกว้างเดิมของป้าย "ซื้อบัตร Early Bird" (ตัวอักษรอยู่กึ่งกลาง)
+        const headerRowWidth = isHeaderRow
+            ? Math.round(measureTextWidth('ซื้อบัตร Early Bird', fontSize, sharedRegisterOptions.fontWeight, sharedRegisterOptions.fontFamily) + paddingX * 2)
+            : undefined;
 
         mountRegisterButton(target, {
             height: headerActionHeight,
-            fontSize: isHeaderRow ? 14 : 16,
-            paddingX: isHeaderRow ? 14 : 16,
+            width: headerRowWidth,
+            fontSize,
+            paddingX,
             rim: headerActionRim,
             textColor: '#ffffff',
             pillBackground: 'linear-gradient(180deg, #20242a 0%, #111318 55%, #050607 100%)',

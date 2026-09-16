@@ -343,9 +343,13 @@ body.menu-closing .back-to-top {
     line-height: var(--section-small-line-height);
 }
 
-.early-bird-float__discount {
+/* ป้ายส่วนลดชุดเดียวกันใช้ซ้ำหลังราคาเดิมในการ์ด Ticket และท้ายป้ายปุ่มซื้อบัตรบน Hero (js/hero-v2-cta.js)
+   (selector ของ Ticket ต้องเจาะจงพอชนะ .ticket__price span ที่ย่อ/ขยายฟอนต์ตาม breakpoint) */
+.early-bird-float__discount,
+.ticket .ticket__price .ticket__price-save,
+.hero-cta__save {
     display: inline-block;
-    padding: var(--space-1) var(--space-2);
+    padding: 6px var(--space-2);
     border-radius: var(--pill-radius);
     color: var(--color-neutral-0);
     background: var(--color-danger-600);
@@ -417,7 +421,7 @@ body.menu-closing .back-to-top {
 
 /* ชื่อบัตร (ซ้าย) กับราคา (ขวา) วางคู่กันในแถวเดียว ส่วนที่เหลือกินความกว้างเต็ม
    วางตำแหน่งทุกชิ้นชัดเจน ไม่พึ่ง auto-placement เพื่อไม่ให้ลำดับใน HTML ทำให้ช่องเพี้ยน */
-/* คอลัมน์ซ้ายกว้างเท่าข้อความที่ยาวที่สุดในบล็อกชื่อบัตร (ULTIMATE) พอดี
+/* คอลัมน์ซ้ายกว้างเท่าข้อความที่ยาวที่สุดในบล็อกชื่อบัตร (บัตร ULTIMATE) พอดี
    พื้นที่ที่เหลือไปอยู่ในคอลัมน์ราคา ซึ่งจัดราคาชิดขวาไว้ ตำแหน่งที่เห็นจึงเหมือนเดิม */
 .early-bird-float__body-inner {
     display: grid;
@@ -425,17 +429,13 @@ body.menu-closing .back-to-top {
     column-gap: var(--space-3);
 }
 
-.early-bird-float__plan-index {
+.early-bird-float__plan-name {
     grid-area: 1 / 1;
 }
 
-.early-bird-float__plan-name {
-    grid-area: 2 / 1;
-}
-
-/* คร่อมสองแถวของบล็อกชื่อบัตร แล้วชิดขวา-ชิดล่างให้ราคาอยู่ระดับเดียวกับบรรทัดล่างสุดของชื่อบัตร */
+/* ราคาอยู่แถวเดียวกับบล็อกชื่อบัตร ชิดขวา */
 .early-bird-float__price {
-    grid-area: 1 / 2 / 3 / 3;
+    grid-area: 1 / 2;
     justify-self: end;
     align-self: self-start;
     align-items: flex-end;
@@ -452,10 +452,14 @@ body.menu-closing .back-to-top {
     border-top: var(--rule-width-subtle) solid var(--color-border-faint);
 }
 
-/* ชื่อแพ็กเกจใช้ค่าเดียวกับหัวการ์ด Ticket: .ticket__plan-index (บรรทัดบน) และ .ticket__plan-header h3 (บรรทัดล่าง) */
+/* ชื่อแพ็กเกจใช้ค่าเดียวกับหัวการ์ด Ticket: .ticket__plan-index (คำว่า "บัตร") และ .ticket__plan-header h3 (ULTIMATE)
+   "บัตร" เป็น span ใน <p> ชื่อบัตร แต่แสดงเป็นบรรทัดของตัวเองด้านบน ULTIMATE
+   จึงต้องคืนฟอนต์/ระยะตัวอักษรของตัวเอง ไม่รับ Baskervville กับ tracking ของชื่อบัตร */
 .early-bird-float__plan-index {
-    margin: 0 0 var(--space-2);
-    font-size: 10px;
+    margin: var(--space-0) var(--space-0) var(--space-1);
+    display: block;
+    font-family: var(--font);
+    font-size: var(--font-size-12);
     font-weight: var(--font-weight-regular);
     line-height: var(--section-small-line-height);
     letter-spacing: 0;
@@ -473,14 +477,13 @@ body.menu-closing .back-to-top {
     text-transform: uppercase;
 }
 
-/* จำนวนวันต่อท้ายชื่อแพ็กเกจ ตัวเล็กกว่าเพื่อไม่แย่งน้ำหนักกับชื่อบัตร */
-/* จำนวนวันลงมาอยู่บรรทัดใต้ชื่อบัตร ชิดแนวเดียวกัน */
+/* จำนวนวันต่อท้าย ULTIMATE ในบรรทัดเดียวกัน ตัวเล็กกว่าเพื่อไม่แย่งน้ำหนักกับชื่อบัตร */
 .early-bird-float__plan-name small {
-    margin-top: var(--space-2);
-    display: block;
     font-family: var(--font);
-    font-size: var(--font-size-12);
+    letter-spacing: 0;
+    font-size: var(--font-size-14);
     font-weight: var(--font-weight-regular);
+    padding-left: var(--space-1);
 }
 
 /* จำนวนวัน ราคาเดิม และราคา Early Bird อยู่บรรทัดเดียวกัน เรียงตามเส้นฐานตัวอักษร
@@ -504,7 +507,7 @@ body.menu-closing .back-to-top {
     font-weight: var(--font-weight-regular);
     line-height: var(--section-small-line-height);
     text-decoration-thickness: var(--border-width-1);
-    margin-bottom: var(--space-1);
+    margin-bottom: 2px;
 }
 
 /* = .ticket__price strong ที่สถานะ is-active (ราคาเดิมอยู่ก่อนหน้า จึงไม่มี margin-top เหมือนกฎ .ticket__price-original+strong) */
@@ -520,7 +523,7 @@ body.menu-closing .back-to-top {
 /* = หน่วยเงินใน .ticket__price strong small */
 .early-bird-float__price strong small {
     color: var(--color-text-muted);
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-12);
     font-weight: var(--font-weight-medium);
 }
 
@@ -2705,7 +2708,7 @@ body.is-loading .hero-scroll-cue,
 
     position: relative;
     z-index: 1;
-    min-height: 100vh;
+    /* min-height: 100vh; */
     padding: var(--section-padding-y) 0;
     overflow: hidden;
     color: var(--bt-topics-ink);
@@ -4427,9 +4430,25 @@ body.is-loading .hero-scroll-cue,
             line-height: var(--section-small-line-height);
         }
 
+        /* ราคาเดิม + ป้าย SAVE วางแถวเดียวกัน ระยะด้านบนย้ายมาอยู่ที่แถวนี้แทนราคาเดิม
+           ช่องราคาแคบ (เช่นมือถือที่วางสองช่องคู่กัน) ให้ป้ายตกลงบรรทัดถัดไป แทนการบีบราคาเดิมให้หักบรรทัด */
+        /* แถวกว้างเต็มช่อง แล้วดันป้ายไปชิดขวา ตรงแนวเดียวกับปุ่มเลือก (วงกลม) ของ .ticket__price-day */
+        .ticket__price-compare {
+            width: 100%;
+            margin-top: var(--space-3);
+            display: inline-flex;
+            flex-wrap: nowrap;
+            align-items: center;
+            gap: var(--space-1);
+        }
+
+        .ticket__price-save {
+            margin-left: auto;
+        }
+
         .ticket__price-original {
-            margin-top: var(--space-2);
             color: var(--color-text-inverse-muted);
+            white-space: nowrap;
             font-size: var(--font-size-14);
             font-weight: var(--font-weight-regular);
             line-height: var(--section-small-line-height);
@@ -4445,7 +4464,7 @@ body.is-loading .hero-scroll-cue,
             white-space: nowrap;
         }
 
-        .ticket__price-original+strong {
+        .ticket__price-compare+strong {
             margin-top: var(--space-0);
         }
 
@@ -4679,6 +4698,16 @@ body.is-loading .hero-scroll-cue,
         .ticket__price {
             strong {
                 margin-top: var(--space-1);
+            }
+
+            /* ช่องราคาแคบลง ให้ป้าย SAVE ลงบรรทัดใต้ราคาเดิม ชิดซ้ายแนวเดียวกัน */
+            .ticket__price-compare {
+                flex-wrap: wrap;
+                gap: var(--space-2);
+            }
+
+            .ticket__price-save {
+                margin-left: 0;
             }
         }
     }
@@ -8490,9 +8519,9 @@ body.is-loading .hero-scroll-cue,
 .cta__offer {
     margin: var(--space-6) auto var(--space-0);
     color: var(--color-text-muted);
-    font-size: var(--font-size-18);
+    font-size: var(--font-size-20);
     font-weight: var(--font-weight-regular);
-    line-height: var(--section-body-line-height);
+    line-height: var(--line-height-relaxed);
     letter-spacing: 0;
     text-wrap-style: balance;
 }
@@ -8576,8 +8605,7 @@ body.is-loading .hero-scroll-cue,
 
     .cta__meta,
     .cta__offer {
-        font-size: var(--section-small-size);
-        line-height: var(--section-small-line-height);
+        line-height: var(--section-body-line-height);
     }
 
     .cta__action {
@@ -8592,7 +8620,7 @@ body.is-loading .hero-scroll-cue,
 
     .cta__asset--triangle {
         --bt-cta-asset-x: 90%;
-        --bt-cta-asset-y: 58%;
+        --bt-cta-asset-y: 42%;
         --bt-cta-asset-size: var(--space-20);
     }
 }
@@ -10434,7 +10462,7 @@ body.is-loading .hero-scroll-cue,
     @media (max-width: 1499px) {
         --bt-playbook-content-top-space: var(--space-24);
         --bt-playbook-content-bottom-space: var(--space-24);
-        --bt-playbook-steps-container: 890px;
+        --bt-playbook-steps-container: 920px;
         /* --bt-playbook-content-scale: 0.7; */
         --bt-playbook-bitcoin-size: calc(var(--space-28) + var(--space-2));
         --bt-playbook-gold-size: var(--space-24);
