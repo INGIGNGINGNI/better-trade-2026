@@ -4377,6 +4377,23 @@ body.is-loading .hero-scroll-cue,
             background: color-mix(in srgb, var(--color-blue-100) 72%, transparent);
             box-shadow: inset 0 0 0 var(--border-width-1) var(--color-blue-300);
 
+            .ticket__price-day {
+                width: 100%;
+            }
+
+            .ticket__price-day::after {
+                content: "เลือกอยู่";
+                margin-left: auto;
+                padding: var(--space-1) var(--space-2);
+                border: var(--border-width-1) solid var(--color-blue-600);
+                border-radius: var(--pill-radius);
+                color: var(--color-neutral-0);
+                background: var(--color-blue-600);
+                font-size: var(--font-size-12);
+                font-weight: var(--font-weight-medium);
+                line-height: 1;
+            }
+
             strong {
                 color: var(--color-blue-600);
                 font-weight: var(--font-weight-medium);
