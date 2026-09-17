@@ -888,7 +888,7 @@ body.menu-closing .hero-motion-picker {
     pointer-events: none;
 }
 
-#cta-slot .hero-cta__save::after {
+/* #cta-slot .hero-cta__save::after {
     content: "";
     position: absolute;
     top: calc(100% - 1px);
@@ -896,7 +896,7 @@ body.menu-closing .hero-motion-picker {
     border-width: 6px 5px 0;
     border-style: solid;
     border-color: var(--color-danger-600) transparent transparent;
-}
+} */
 
 /* ---------- แถบปุ่มลอยชิดขอบล่าง (จอ <=575px เท่านั้น) ---------- */
 .mobile-cta-bar {
