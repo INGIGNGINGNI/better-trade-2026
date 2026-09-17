@@ -1,4 +1,4 @@
-import { createLiquidMetalButton } from './liquid-metal-button.js?v=2';
+import { createLiquidMetalButton } from './liquid-metal-button.js?v=3';
 
 const TICKET_SECTION_HREF = '#ticket';
 const BUY_TICKET_URL = 'https://www.efin.finance/events/better-trade/better-trade2026/buy-ticket';
@@ -19,8 +19,6 @@ const sharedRegisterOptions = {
     metalShiftBlue: 0.2,
 };
 
-const HERO_CTA_PADDING_REDUCTION = 12;
-
 const tabletRegisterOptions = {
     height: 46,
     fontSize: 16,
@@ -32,6 +30,15 @@ const mobileRegisterOptions = {
     fontSize: 16,
     paddingX: 24,
 };
+
+function createSaveBadge(className) {
+    const badge = document.createElement('span');
+
+    badge.className = className;
+    badge.textContent = 'SAVE 30%';
+
+    return badge;
+}
 
 function mountRegisterButton(target, appearance) {
     if (!target) return;
@@ -112,18 +119,14 @@ ready.then(() => {
         heroCtaButton?.destroy?.();
         playbookCtaButton?.destroy?.();
         ctaTicketButton?.destroy?.();
-        const basePaddingX = responsiveOptions.paddingX ?? sharedRegisterOptions.paddingX;
-
         heroCtaButton = mountRegisterButton(heroCtaSlot, {
             ...responsiveOptions,
-            // ป้ายส่วนลดทำให้ปุ่มยาวขึ้น จึงลด padding ซ้าย-ขวาเฉพาะปุ่ม Hero (ปุ่ม Playbook/CTA ยังใช้ค่าเดิม)
-            paddingX: basePaddingX - HERO_CTA_PADDING_REDUCTION,
-            // ป้ายส่วนลดชุดเดียวกับกล่อง Early Bird และการ์ด Ticket (สไตล์อยู่ใน css/style.css)
-            badge: 'SAVE 30%',
-            badgeClass: 'hero-cta__save',
             textColor: '#111318',
             pillBackground: 'linear-gradient(180deg, #ffffff 0%, #f3f4f8 55%, #e4e7ee 100%)',
         });
+        // ป้ายส่วนลดเกาะมุมบนขวาของปุ่ม ชุดเดียวกับกล่อง Early Bird และการ์ด Ticket (สไตล์อยู่ใน css/style.css)
+        // ใส่ไว้ใน .lmb (position: relative) เพื่อให้วางตำแหน่งอิงกล่องของปุ่ม
+        heroCtaButton?.el.append(createSaveBadge('hero-cta__save'));
         playbookCtaButton = mountRegisterButton(playbookCtaSlot, {
             ...responsiveOptions,
             label: 'ค้นหา INVESTOR DNA',

@@ -350,7 +350,7 @@ body.menu-closing .back-to-top {
 .hero-cta__save {
     display: inline-block;
     padding: 6px var(--space-2);
-    border-radius: var(--pill-radius);
+    border-radius: var(--radius-1);
     color: var(--color-neutral-0);
     background: var(--color-danger-600);
     font-size: var(--font-size-12);
@@ -875,6 +875,27 @@ body.menu-closing .hero-motion-picker {
     .hero-motion-picker__option {
         transition: none;
     }
+}
+
+/* ป้าย SAVE 30% เกาะมุมบนขวาของปุ่มซื้อบัตรบน Hero แบบกล่องคำพูด หางชี้ลงหาปุ่ม
+   ไม่รับการคลิก เพื่อให้พื้นที่กดของปุ่มใต้ป้ายยังใช้ได้ */
+#cta-slot .hero-cta__save {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+    transform: translate(var(--space-3), -50%);
+    pointer-events: none;
+}
+
+#cta-slot .hero-cta__save::after {
+    content: "";
+    position: absolute;
+    top: calc(100% - 1px);
+    left: 40%;
+    border-width: 6px 5px 0;
+    border-style: solid;
+    border-color: var(--color-danger-600) transparent transparent;
 }
 
 /* ---------- แถบปุ่มลอยชิดขอบล่าง (จอ <=575px เท่านั้น) ---------- */
@@ -4375,7 +4396,7 @@ body.is-loading .hero-scroll-cue,
             position: relative;
             z-index: 1;
             background: color-mix(in srgb, var(--color-blue-100) 72%, transparent);
-            box-shadow: inset 0 0 0 var(--border-width-1) var(--color-blue-300);
+            box-shadow: inset 0 0 0 var(--border-width-1) var(--color-blue-400);
 
             strong {
                 color: var(--color-blue-600);
@@ -8767,6 +8788,14 @@ body.is-loading .hero-scroll-cue,
 
         span.expectation__stat-label-th+span {
             margin-top: 2px;
+        }
+
+        /* เครื่องหมาย + ท้ายตัวเลข: รับขนาด/น้ำหนักจากตัวเลข ไม่รับค่าของป้ายข้อความ (span) ด้านบน เปลี่ยนแค่สี */
+        strong .expectation__stat-suffix {
+            margin-top: 0;
+            color: var(--color-blue-600);
+            font: inherit;
+            letter-spacing: inherit;
         }
     }
 

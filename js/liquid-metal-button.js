@@ -98,9 +98,6 @@ function measureLabel(text, fontSize, fontWeight, fontFamily) {
  * @param {number}   [opts.metalShiftRed]  Red-channel dispersion in the metal
  *                                    shader; lower reads as less "chrome".
  * @param {number}   [opts.metalShiftBlue] Same, blue channel.
- * @param {string}   [opts.badge]    Optional badge text shown after the label.
- * @param {string}   [opts.badgeClass] Class that styles the badge (sizing comes
- *                                    from page CSS, so it is measured in the DOM).
  * @param {string}   [opts.href]     Optional link destination. When omitted,
  *                                   the action renders as a button.
  * @param {string}   [opts.target]   Optional browsing context for links.
@@ -126,8 +123,6 @@ export function createLiquidMetalButton(opts = {}) {
         rim = 8,
         metalShiftRed = 0.3,
         metalShiftBlue = 0.3,
-        badge = '',
-        badgeClass = '',
         href,
         target,
         rel,
@@ -137,24 +132,9 @@ export function createLiquidMetalButton(opts = {}) {
     injectStyleOnce();
 
     const isIcon = viewMode === 'icon';
-    const LABEL_GAP = 6;
-    let badgeEl = null;
-    let badgeWidth = 0;
-
-    if (!isIcon && badge) {
-        badgeEl = document.createElement('span');
-        badgeEl.className = badgeClass;
-        badgeEl.textContent = badge;
-        badgeEl.style.cssText = 'position:absolute;visibility:hidden;left:-9999px;top:-9999px;';
-        document.body.appendChild(badgeEl);
-        badgeWidth = badgeEl.getBoundingClientRect().width + LABEL_GAP;
-        badgeEl.remove();
-        badgeEl.style.cssText = 'flex:0 0 auto;';
-    }
-
     const W = isIcon
         ? height
-        : (fixedWidth ?? Math.round(measureLabel(label, fontSize, fontWeight, fontFamily) + badgeWidth + paddingX * 2));
+        : (fixedWidth ?? Math.round(measureLabel(label, fontSize, fontWeight, fontFamily) + paddingX * 2));
     const H = height;
 
     let isHovered = false;
@@ -182,7 +162,7 @@ export function createLiquidMetalButton(opts = {}) {
     const labelLayer = document.createElement('div');
     labelLayer.style.cssText =
         layerBase(30, 20) +
-        `display:flex;align-items:center;justify-content:center;gap:${LABEL_GAP}px;pointer-events:none;`;
+        'display:flex;align-items:center;justify-content:center;gap:6px;pointer-events:none;';
     if (isIcon) {
         labelLayer.innerHTML = SPARKLES_SVG;
         const svg = labelLayer.querySelector('svg');
@@ -195,7 +175,6 @@ export function createLiquidMetalButton(opts = {}) {
             `font-size:${fontSize}px;font-family:${fontFamily};font-weight:${fontWeight};color:${textColor};` +
             `text-shadow:${textShadow};white-space:nowrap;transition:all 0.8s ${EASE};`;
         labelLayer.appendChild(span);
-        if (badgeEl) labelLayer.appendChild(badgeEl);
     }
 
     // --- z20: fill pill (inset by `rim`, so the shader shows as the edge) -------
@@ -243,7 +222,7 @@ export function createLiquidMetalButton(opts = {}) {
         btn.type = 'button';
     }
 
-    btn.setAttribute('aria-label', badge ? `${label} ${badge}` : label);
+    btn.setAttribute('aria-label', label);
     btn.style.cssText =
         layerBase(40, 25) +
         'background:transparent;border:none;cursor:pointer;outline:none;overflow:hidden;border-radius:100px;';
