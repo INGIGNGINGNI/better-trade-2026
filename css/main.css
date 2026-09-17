@@ -578,19 +578,19 @@
     --color-kv-spectrum-6: #f79319;
     --gradient-table-active-spectrum: linear-gradient(90deg, var(--color-border-faint), var(--color-kv-spectrum-1), var(--color-kv-spectrum-2), var(--color-kv-spectrum-3), var(--color-kv-spectrum-4), var(--color-kv-spectrum-5), var(--color-kv-spectrum-6), var(--color-border-faint));
     --gradient-kv-spectrum: linear-gradient(90deg,
-            var(--color-kv-spectrum-1),
-            var(--color-kv-spectrum-2),
-            var(--color-kv-spectrum-3),
-            var(--color-kv-spectrum-4),
-            var(--color-kv-spectrum-5),
-            var(--color-kv-spectrum-6));
+        var(--color-kv-spectrum-1),
+        var(--color-kv-spectrum-2),
+        var(--color-kv-spectrum-3),
+        var(--color-kv-spectrum-4),
+        var(--color-kv-spectrum-5),
+        var(--color-kv-spectrum-6));
     --gradient-kv-spectrum-vertical: linear-gradient(180deg,
-            var(--color-kv-spectrum-1),
-            var(--color-kv-spectrum-2),
-            var(--color-kv-spectrum-3),
-            var(--color-kv-spectrum-4),
-            var(--color-kv-spectrum-5),
-            var(--color-kv-spectrum-6));
+        var(--color-kv-spectrum-1),
+        var(--color-kv-spectrum-2),
+        var(--color-kv-spectrum-3),
+        var(--color-kv-spectrum-4),
+        var(--color-kv-spectrum-5),
+        var(--color-kv-spectrum-6));
 
     /* ทดลอง: ทุกจุดที่ใช้ --spectrum / --spectrum-vertical อยู่แล้วจะได้สีชุดใหม่ทันที
        โดยไม่ต้องแก้ที่จุดใช้งาน — ถ้าอยากย้อนกลับ สลับกลับไปเป็น var(--spectrum-legacy)
@@ -1054,5 +1054,17 @@ body.reveal-on-scroll-ready [data-reveal].is-revealed {
 
         margin: var(--space-4) 0 0;
         font-size: var(--bt-section-subtext-size);
+    }
+}
+
+
+
+br.d-425-block {
+    display: none;
+}
+
+@media (max-width:425px) {
+    br.d-425-block {
+        display: block;
     }
 }

@@ -5010,7 +5010,7 @@ body.is-loading .hero-scroll-cue,
         }
 
         .ticket__plan {
-            padding: var(--space-8) var(--space-6);
+            padding: var(--space-8) var(--space-5);
         }
 
         /* .ticket__plan--master {
@@ -5085,10 +5085,11 @@ body.is-loading .hero-scroll-cue,
             small {
                 font-size: var(--font-size-14);
             }
-        }
 
-        .ticket__plan {
-            padding: var(--space-8) var(--space-5);
+            /* ช่องราคาแคบลง ให้ป้าย SAVE ลงบรรทัดใต้ราคาเดิม ชิดซ้ายแนวเดียวกัน */
+            .ticket__price-compare {
+                margin-bottom: var(--space-1);
+            }
         }
     }
 
