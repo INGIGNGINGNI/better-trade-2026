@@ -10099,7 +10099,7 @@ body.is-loading .hero-scroll-cue,
     --bt-playbook-step-title-base-size: var(--font-size-24);
     --bt-playbook-step-copy-base-size: var(--font-size-16);
     --bt-playbook-footer-gap: max(var(--space-6), calc(var(--bt-playbook-footer-gap-base) * var(--bt-playbook-steps-scale)));
-    --bt-playbook-steps-container: 1080px;
+    --bt-playbook-steps-container: 1140px;
     --bt-playbook-steps-width: auto;
     --bt-playbook-step-padding-inline: max(var(--space-3), calc(var(--bt-playbook-step-padding-inline-base) * var(--bt-playbook-steps-scale)));
     --bt-playbook-step-padding-bottom: calc(var(--bt-playbook-step-padding-bottom-base) * var(--bt-playbook-steps-scale));
