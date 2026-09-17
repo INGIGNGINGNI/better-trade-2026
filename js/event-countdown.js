@@ -2,8 +2,9 @@
     const countdown = document.getElementById('event-countdown');
     if (!countdown) return;
 
-    const startsAt = Date.parse('2026-10-31T09:00:00+07:00');
-    const endsAt = Date.parse('2026-11-01T18:30:00+07:00');
+    /* นับถึงหมดเขตราคา Early Bird สิ้นวันที่ 30 กันยายน 2569 (ค.ศ. 2026) ตรงกับข้อความบนกล่อง
+       ไม่ใช่วันเริ่มงาน เพราะตัวนับนี้อยู่ในกล่องข้อเสนอ Early Bird เท่านั้น */
+    const endsAt = Date.parse('2026-10-01T00:00:00+07:00');
     const values = countdown.querySelector('.event-countdown__values');
     const status = countdown.querySelector('.event-countdown__status');
     const fields = Object.fromEntries(
@@ -23,20 +24,15 @@
         const now = Date.now();
 
         if (now >= endsAt) {
-            showStatus('ขอบคุณที่มาร่วมงาน Better Trade 2026');
+            showStatus('หมดเขตราคา Early Bird แล้ว');
             return false;
-        }
-
-        if (now >= startsAt) {
-            showStatus('งานกำลังดำเนินอยู่');
-            return true;
         }
 
         countdown.classList.remove('is-status');
         status.textContent = '';
         values.removeAttribute('aria-hidden');
 
-        let remaining = startsAt - now;
+        let remaining = endsAt - now;
         const days = Math.floor(remaining / 86400000);
         remaining %= 86400000;
         const hours = Math.floor(remaining / 3600000);
@@ -44,14 +40,13 @@
         const minutes = Math.floor(remaining / 60000);
         const seconds = Math.floor((remaining % 60000) / 1000);
 
-        fields.days.textContent = pad(days);
-        fields.hours.textContent = pad(hours);
-        fields.minutes.textContent = pad(minutes);
-        fields.seconds.textContent = pad(seconds);
-        countdown.setAttribute(
-            'aria-label',
-            `เริ่มงานใน ${days} วัน ${hours} ชั่วโมง ${minutes} นาที ${seconds} วินาที`
-        );
+        if (fields.days) fields.days.textContent = pad(days);
+        if (fields.hours) fields.hours.textContent = pad(hours);
+        if (fields.minutes) fields.minutes.textContent = pad(minutes);
+        if (fields.seconds) fields.seconds.textContent = pad(seconds);
+        countdown.setAttribute('aria-label', fields.seconds
+            ? `เหลือเวลาซื้อบัตรราคา Early Bird อีก ${days} วัน ${hours} ชั่วโมง ${minutes} นาที ${seconds} วินาที`
+            : `เหลือเวลาซื้อบัตรราคา Early Bird อีก ${days} วัน ${hours} ชั่วโมง ${minutes} นาที`);
         return true;
     };
 

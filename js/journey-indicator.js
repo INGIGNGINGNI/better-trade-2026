@@ -6,6 +6,7 @@
     const route = [
         { id: 'concept', label: 'Concept' },
         { id: 'featured-topics', label: 'Topics' },
+        { id: 'speaker-overview', label: 'Speaker Overview' },
         { id: 'ticket', label: 'Ticket Price' },
         { id: 'playbook', label: 'Playbook' },
         { id: 'agenda', label: 'Agenda' },
@@ -15,7 +16,7 @@
         { id: 'past-event', label: 'Past Event' },
         { id: 'faq', label: 'FAQ' },
     ].map(stop => ({ ...stop, element: document.getElementById(stop.id) }))
-        .filter(stop => stop.element);
+        .filter(stop => stop.element && !stop.element.hidden);
 
     if (route.length < 2) return;
 

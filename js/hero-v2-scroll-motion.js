@@ -661,6 +661,11 @@
             }
             layout();
             buildScroll();
+
+            // This hero trigger is recreated after downstream triggers (including the
+            // Topic -> Speaker pin) already exist. Refresh it first so its new pin spacing
+            // is present before those sections measure their start/end positions.
+            scrollTL?.scrollTrigger?.refresh();
             ScrollTrigger.refresh();
 
             // Keep the layout swap and its destination in the same animation frame.
@@ -1066,6 +1071,10 @@
                     scrub: 0.8,
                     pin: '#stagewrap',
                     anticipatePin: 1,
+                    // The hero can be rebuilt after its video completes. Give it first
+                    // refresh priority so every downstream trigger measures after the
+                    // hero pin spacer has reached its final height.
+                    refreshPriority: 100,
                     invalidateOnRefresh: true,
                 }
             });

@@ -2,7 +2,7 @@
     const section = document.querySelector('.topics-showcase');
     if (!section) return;
 
-    const topics = [...section.querySelectorAll('.concept__topics p')];
+    const topics = [...section.querySelectorAll('.concept__topic')];
     if (!topics.length) return;
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
