@@ -2796,23 +2796,26 @@ body.is-loading .hero-scroll-cue,
     --topic-delay: 0ms;
     --topic-line-delay: calc(var(--topic-delay) + 80ms);
     --topic-star-size: var(--bt-topics-star-size);
+    --topic-star-gap: var(--space-6);
 
     position: relative;
     flex: 0 0 calc(50% - var(--space-4));
     min-height: calc(var(--space-16) + var(--space-2));
     margin: var(--space-0);
-    padding: var(--space-6) var(--space-0) var(--space-6) calc(var(--topic-star-size) + var(--space-6));
+    padding: var(--space-6) var(--space-0) var(--space-6) calc(var(--topic-star-size) + var(--topic-star-gap));
     display: grid;
     align-content: center;
     color: var(--bt-topics-ink);
     letter-spacing: 0;
 }
 
-.topics-showcase .concept__topic::before {
+/* ดาวผูกกับหัวข้อ (title) ไม่ใช่กึ่งกลางทั้งรายการ ไม่งั้นคำอธิบายที่ยาว 2 บรรทัดจะดันดาวให้ต่ำกว่าหัวข้อ
+   เลื่อนออกไปทางซ้ายเท่ากับช่องที่ padding-left ของ .concept__topic เว้นไว้ (ขนาดดาว + ระยะห่าง) */
+.topics-showcase .concept__topic-title::before {
     content: "";
     position: absolute;
     top: 50%;
-    left: var(--space-0);
+    left: calc((var(--topic-star-size) + var(--topic-star-gap)) * -1);
     width: var(--topic-star-size);
     height: var(--topic-star-size);
     background: url("../images/star.webp") center / contain no-repeat;
@@ -2847,6 +2850,7 @@ body.is-loading .hero-scroll-cue,
 }
 
 .topics-showcase .concept__topic-title {
+    position: relative;
     margin-top: var(--space-1);
     color: var(--bt-topics-ink);
     font-size: var(--font-size-24);
@@ -3110,10 +3114,11 @@ body.is-loading .hero-scroll-cue,
 
     .topics-showcase .concept__topic {
         --topic-star-size: var(--bt-topics-star-size-sm);
+        --topic-star-gap: var(--space-3);
 
         min-height: calc(var(--space-16) + var(--space-2));
         padding: var(--space-4) var(--space-0);
-        padding-left: calc(var(--topic-star-size) + var(--space-3));
+        padding-left: calc(var(--topic-star-size) + var(--topic-star-gap));
     }
 
     .topics-showcase .concept__topic-title {
@@ -4996,6 +5001,18 @@ body.is-loading .hero-scroll-cue,
 
         .ticket__plan--master .ticket__prices {
             grid-auto-rows: auto;
+        }
+
+        /* บัตร Ultimate/Explorer ไม่ต้องสูงเท่ากันข้ามการ์ดแล้ว (ค่า --bt-ticket-price-equal-height จาก js/ticket-price-selector.js)
+           แต่ละการ์ดสูงตามเนื้อหาของตัวเอง ส่วน Master Class (รอประกาศ) ใช้กฎของตัวเองด้านบน */
+        .ticket__plan--ultimate .ticket__prices,
+        .ticket__plan--explorer .ticket__prices {
+            grid-auto-rows: auto;
+        }
+
+        .ticket__plan--ultimate .ticket__price,
+        .ticket__plan--explorer .ticket__price {
+            min-height: auto;
         }
 
         .ticket__plan--master .ticket__price--unavailable {
