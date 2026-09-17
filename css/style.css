@@ -5018,9 +5018,10 @@ body.is-loading .hero-scroll-cue,
         } */
 
         .ticket__price {
-
+            
             span,
             small {
+                font-size: var(--font-size-14);
                 flex-wrap: wrap;
                 gap: var(--space-2);
             }
@@ -5080,11 +5081,6 @@ body.is-loading .hero-scroll-cue,
 
     @media (max-width:425px) {
         .ticket__price {
-
-            span,
-            small {
-                font-size: var(--font-size-14);
-            }
 
             /* ช่องราคาแคบลง ให้ป้าย SAVE ลงบรรทัดใต้ราคาเดิม ชิดซ้ายแนวเดียวกัน */
             .ticket__price-compare {
