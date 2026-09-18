@@ -1055,6 +1055,7 @@ body.menu-closing .site-header.is-sticky.site-header--on-dark {
     transition: none;
 }
 
+/* ความกว้างเดียวกันทั้งตอนปกติและตอน sticky (ไม่ใช้ .container ตอน sticky อีกแล้ว) */
 .site-header__inner {
     width: min(calc(100% - var(--space-12)), 1460px);
     min-height: var(--header-height);
@@ -1074,10 +1075,6 @@ body.menu-closing .site-header.is-sticky.site-header--on-dark {
    แถบขาวคาดทับ ตัวอักษร/โลโก้สลับเป็นเวอร์ชันพื้นมืดอยู่แล้วผ่าน .site-header--on-dark */
 .site-header.is-sticky.site-header--on-dark {
     background: var(--bt-header-bg-on-dark);
-}
-
-.site-header.is-sticky .site-header__inner {
-    width: 100%;
 }
 
 .site-header__logo {
@@ -1150,6 +1147,7 @@ body.menu-closing .site-header.is-sticky.site-header--on-dark {
     text-decoration: none;
     font-size: var(--font-size-16);
     text-transform: uppercase;
+    /* ทุกเมนูต้องอยู่บรรทัดเดียวเสมอ ห้ามตัดสองบรรทัด ถ้าแถบไม่พอให้บีบฟอนต์/ช่องไฟแทน */
     white-space: nowrap;
     transition:
         color 180ms ease,
@@ -1582,39 +1580,50 @@ body.menu-open .site-header__backdrop {
     pointer-events: auto;
 }
 
-@media (min-width:992px) and (max-width: 1199px) {
-    .site-header.is-sticky {
-        .site-header__logo {
-            width: 100px;
-        }
-
-        .site-header__inner {
-            grid-template-columns: minmax(104px, 0.7fr) auto minmax(288px, 0.7fr);
-
-            .site-header__nav {
-                gap: var(--space-4);
-            }
-        }
-    }
-
-    /* ช่วงนี้แถบแคบที่สุดที่ยังโชว์ nav เต็ม คอลัมน์โลโก้จึงลดเหลือเท่าความกว้างโลโก้จริง
-       และ nav บีบ gap ลงเท่าตอน sticky เพื่อให้เหลือที่พอสำหรับปุ่มสองตัวทางขวา */
+@media (max-width:1399px) {
     .site-header__inner {
-        grid-template-columns: minmax(120px, 0.7fr) auto minmax(288px, 0.7fr);
+        grid-template-columns: minmax(120px, 0.6fr) auto minmax(max-content, 0.6fr);
     }
 
     .site-header__nav {
-        gap: var(--space-4);
+        gap: var(--space-8);
     }
 
+    /* เมนูต้องอยู่บรรทัดเดียวเสมอ (ห้ามตัดสองบรรทัด) ชื่อ "Personalized Playbook" ยาว
+       จึงย่อฟอนต์เมนูลงหนึ่งขั้นตั้งแต่ช่วงนี้ ไม่งั้นตอน sticky เมนูจะชิดปุ่มเหลือไม่กี่ px */
     .site-header__nav a {
         font-size: var(--font-size-14);
     }
 }
 
-@media (max-width:991px) {
+@media (min-width:992px) and (max-width: 1199px) {
+    .site-header__logo {
+        width: 100px;
+    }
+
+    /* ช่วงนี้แถบแคบที่สุดที่ยังโชว์ nav เต็ม คอลัมน์โลโก้จึงลดเหลือเท่าความกว้างโลโก้จริง
+       คอลัมน์ปุ่มกว้างเท่าปุ่มจริง (ปุ่มซื้อบัตรย่อเหลือ 80% ในช่วงนี้) แทนขั้นต่ำ 288px
+       และบีบช่องไฟของกริดกับเมนูลง เพื่อให้เมนู "Personalized Playbook" อยู่บรรทัดเดียวได้ */
     .site-header__inner {
-        width: calc(100% - var(--space-8));
+        grid-template-columns: minmax(100px, 0.35fr) auto minmax(max-content, 0.5fr);
+        gap: var(--space-6);
+    }
+
+    .site-header__nav {
+        justify-content: space-between;
+        gap: var(--space-4);
+    }
+}
+
+@media (max-width:991px) {
+    /* ตั้งแต่ 991px ลงไป แถบ header กว้างเท่า .container ของ Bootstrap (รวมค่าที่ main.css ปรับไว้)
+       ขอบโลโก้/ปุ่มเมนูจึงตรงกับขอบเนื้อหาของ section ด้านล่าง ช่วง ≤767px ใช้ gutter 32px ตาม main.css */
+    .site-header__inner {
+        --bs-gutter-x: 1.5rem;
+
+        width: 100%;
+        max-width: 720px;
+        padding-inline: calc(var(--bs-gutter-x) * 0.5);
         min-height: var(--header-height);
         display: flex;
         justify-content: space-between;
@@ -1668,6 +1677,18 @@ body.menu-open .site-header__backdrop {
     body.menu-closing .site-header__backdrop {
         visibility: visible;
         transition-delay: var(--bt-menu-closing-delay), 0s;
+    }
+}
+
+@media (max-width:767px) {
+    .site-header__inner {
+        --bs-gutter-x: 32px;
+    }
+}
+
+@media (max-width:575px) {
+    .site-header__inner {
+        max-width: none;
     }
 }
 
@@ -5035,7 +5056,7 @@ body.is-loading .hero-scroll-cue,
         } */
 
         .ticket__price {
-            
+
             span,
             small {
                 font-size: var(--font-size-14);
@@ -7702,12 +7723,29 @@ body.is-loading .hero-scroll-cue,
    overflow: visible ไว้ให้ออร่าสเปกตรัมด้านบนฟุ้งออกนอกกรอบได้ตามที่ต้องการ
    ถ้าใส่ overflow: hidden ไว้ที่ portrait เหมือนเดิม ออร่าจะโดนตัดไปด้วย */
 .speaker-card__frame {
+    position: relative;
     width: 100%;
     height: 100%;
     overflow: hidden;
 }
 
+/* ลายคริสตัล (speaker-bg-overlay.webp) เป็นพื้นหลังหลังรูปคน ใช้ทั้งการ์ด Speaker และ Moderators & MC
+   รูปคนเป็น WebP พื้นโปร่งจึงเห็นลายรอบตัว ภาพต้นฉบับเป็นขาวดำ ใช้ multiply ทับพื้นสีหน้าเว็บ
+   ให้กลืนกับโทนการ์ด และจางลงด้านล่างตาม gradient ของ .speaker-card__portrait ให้ต่อกับชื่อได้เนียน */
+/* .speaker-card__frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('../images/speaker-bg-overlay2.webp') center / cover no-repeat;
+    opacity: var(--speaker-card-overlay-opacity, 0.5);
+    mix-blend-mode: multiply;
+    -webkit-mask-image: linear-gradient(0deg, transparent 10%, #000 80%);
+    mask-image: linear-gradient(0deg, transparent 10%, #000 80%);
+    pointer-events: none;
+} */
+
 .speaker-card__portrait img {
+    position: relative;
     display: block;
     width: 100%;
     height: 100%;
