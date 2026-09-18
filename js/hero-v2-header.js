@@ -1,6 +1,5 @@
         const siteHeaderToggle = document.querySelector('.site-header__toggle');
         const siteHeader = document.querySelector('.site-header');
-        const siteHeaderInner = siteHeader?.querySelector('.site-header__inner');
         const siteHeaderBackdrop = document.querySelector('.site-header__backdrop');
         const siteHeaderMobile = document.getElementById('site-mobile-menu');
         const siteHeaderMobileLinks = document.querySelectorAll('.site-header__mobile a');
@@ -32,7 +31,6 @@
 
         function setHeaderSticky(sticky) {
             siteHeader.classList.toggle('is-sticky', sticky);
-            siteHeaderInner?.classList.toggle('container', sticky);
         }
 
         function updateSiteHeader() {

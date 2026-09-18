@@ -9,7 +9,7 @@
         { id: 'speaker-overview', label: 'Speaker Overview' },
         { id: 'ticket', label: 'Ticket Price' },
         { id: 'agenda', label: 'Agenda' },
-        { id: 'playbook', label: 'Playbook' },
+        { id: 'playbook', label: 'Personalized Playbook' },
         { id: 'speaker', label: 'Speaker' },
         { id: 'expectation', label: 'Expectation' },
         { id: 'floor-plan', label: 'Floor Plan' },

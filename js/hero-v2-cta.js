@@ -151,26 +151,38 @@ ready.then(() => {
     tabletHeroCta.addEventListener('change', mountHeroCta);
     mobileHeroCta.addEventListener('change', mountHeroCta);
 
-    document.querySelectorAll('[data-header-register-cta]').forEach((target) => {
-        // แถบ header ต้องแชร์แถวเดียวกับโลโก้และ nav จึงย่อตัวอักษรลงหนึ่งขั้น
-        // ส่วนแถบ CTA ล่างจอมือถือมีที่พอ คงขนาดให้เท่าปุ่ม --xl ที่อยู่ข้างกัน
-        const isHeaderRow = Boolean(target.closest('.site-header'));
-        const fontSize = isHeaderRow ? 14 : 16;
-        const paddingX = isHeaderRow ? 14 : 16;
-        // ป้ายย่อเหลือ "ซื้อบัตร" แต่ปุ่มใน header คงความกว้างเดิมของป้าย "ซื้อบัตร Early Bird" (ตัวอักษรอยู่กึ่งกลาง)
-        const headerRowWidth = isHeaderRow
-            ? Math.round(measureTextWidth('ซื้อบัตร Early Bird', fontSize, sharedRegisterOptions.fontWeight, sharedRegisterOptions.fontFamily) + paddingX * 2)
-            : undefined;
+    // จอ ≤1199px แถบ header แคบลง ปุ่มซื้อบัตรใน header จึงแคบลง 20% จากความกว้างเดิม
+    const compactHeaderCta = window.matchMedia('(max-width: 1199px)');
+    const HEADER_CTA_COMPACT_RATIO = 0.8;
+    const headerCtaButtons = new Map();
 
-        mountRegisterButton(target, {
-            height: headerActionHeight,
-            width: headerRowWidth,
-            fontSize,
-            paddingX,
-            rim: headerActionRim,
-            textColor: '#ffffff',
-            pillBackground: 'linear-gradient(180deg, #20242a 0%, #111318 55%, #050607 100%)',
+    const mountHeaderCtas = () => {
+        document.querySelectorAll('[data-header-register-cta]').forEach((target) => {
+            // แถบ header ต้องแชร์แถวเดียวกับโลโก้และ nav จึงย่อตัวอักษรลงหนึ่งขั้น
+            // ส่วนแถบ CTA ล่างจอมือถือมีที่พอ คงขนาดให้เท่าปุ่ม --xl ที่อยู่ข้างกัน
+            const isHeaderRow = Boolean(target.closest('.site-header'));
+            const fontSize = isHeaderRow ? 14 : 16;
+            const paddingX = isHeaderRow ? 14 : 16;
+            // ป้ายย่อเหลือ "ซื้อบัตร" แต่ปุ่มใน header คงความกว้างเดิมของป้าย "ซื้อบัตร Early Bird" (ตัวอักษรอยู่กึ่งกลาง)
+            const headerRowBaseWidth = measureTextWidth('ซื้อบัตร Early Bird', fontSize, sharedRegisterOptions.fontWeight, sharedRegisterOptions.fontFamily) + paddingX * 2;
+            const headerRowWidth = isHeaderRow
+                ? Math.round(headerRowBaseWidth * (compactHeaderCta.matches ? HEADER_CTA_COMPACT_RATIO : 1))
+                : undefined;
+
+            headerCtaButtons.get(target)?.destroy?.();
+            headerCtaButtons.set(target, mountRegisterButton(target, {
+                height: headerActionHeight,
+                width: headerRowWidth,
+                fontSize,
+                paddingX,
+                rim: headerActionRim,
+                textColor: '#ffffff',
+                pillBackground: 'linear-gradient(180deg, #20242a 0%, #111318 55%, #050607 100%)',
+            }));
         });
-    });
+    };
+
+    mountHeaderCtas();
+    compactHeaderCta.addEventListener('change', mountHeaderCtas);
 });
     
