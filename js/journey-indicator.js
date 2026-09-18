@@ -8,11 +8,12 @@
         { id: 'featured-topics', label: 'Topics' },
         { id: 'speaker-overview', label: 'Speaker Overview' },
         { id: 'ticket', label: 'Ticket Price' },
-        { id: 'playbook', label: 'Playbook' },
         { id: 'agenda', label: 'Agenda' },
+        { id: 'playbook', label: 'Playbook' },
         { id: 'speaker', label: 'Speaker' },
         { id: 'expectation', label: 'Expectation' },
         { id: 'floor-plan', label: 'Floor Plan' },
+        { id: 'sponsor', label: 'Sponsors' },
         { id: 'past-event', label: 'Past Event' },
         { id: 'faq', label: 'FAQ' },
     ].map(stop => ({ ...stop, element: document.getElementById(stop.id) }))
