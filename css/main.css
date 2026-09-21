@@ -559,7 +559,7 @@
     --space-20: 80px;
     --space-24: 96px;
     --space-32: 128px;
-    --header-height: var(--space-20);
+    --header-height: 72px;
     --header-line: rgba(17, 19, 24, 0.12);
 
     /* เดิม — คงไว้เผื่อย้อนกลับ ไม่มีจุดไหนอ้างอิงตัวนี้โดยตรงแล้ว
@@ -644,11 +644,8 @@ h6 {
     margin: 0;
 }
 
-/* ปรับความสูง header ให้ตรงกับ breakpoint static ของ hero-v2 */
-@media (max-width:1199px) {
-    :root {
-        --header-height: 72px;
-    }
+ol {
+    padding: 0;
 }
 
 @media (min-width: 576px) and (max-width: 767px) {

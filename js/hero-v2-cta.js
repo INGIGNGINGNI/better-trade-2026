@@ -3,6 +3,7 @@ import { createLiquidMetalButton } from './liquid-metal-button.js?v=3';
 const TICKET_SECTION_HREF = '#ticket';
 const BUY_TICKET_URL = 'https://www.efin.finance/events/better-trade/better-trade2026/buy-ticket';
 const INVESTOR_DNA_URL = 'https://egames.efin.finance/games/investor-dna-quest';
+const PLAYBOOK_HERO_CTA_LABEL = 'ซื้อบัตรพร้อมรับ PERSONALIZED PLAYBOOK';
 
 const sharedRegisterOptions = {
     label: 'ซื้อบัตร',
@@ -92,6 +93,28 @@ function measureTextWidth(text, fontSize, fontWeight, fontFamily) {
     return value;
 }
 
+/* ป้ายยาว ๆ บนจอแคบ: pill คำนวณความกว้างจากตัวอักษร ถ้ายาวเกินคอลัมน์จะล้นขอบจอ
+   จึงวัดพื้นที่จริงของคอลัมน์ที่ slot อยู่ แล้วย่อขนาดตัวอักษรลงตามสัดส่วนที่เกิน */
+function fitLabelToColumn(slot, label, options) {
+    const fontSize = options.fontSize ?? sharedRegisterOptions.fontSize;
+    const paddingX = options.paddingX ?? sharedRegisterOptions.paddingX;
+    const column = slot?.closest('[class*="col-"]');
+
+    if (!column) return options;
+
+    const columnStyle = getComputedStyle(column);
+    const available = column.clientWidth
+        - parseFloat(columnStyle.paddingLeft)
+        - parseFloat(columnStyle.paddingRight);
+    const textWidth = measureTextWidth(label, fontSize, sharedRegisterOptions.fontWeight, sharedRegisterOptions.fontFamily);
+
+    if (!available || textWidth + paddingX * 2 <= available) return options;
+
+    const ratio = (available - paddingX * 2) / textWidth;
+
+    return { ...options, fontSize: Math.max(12, Math.floor(fontSize * ratio)) };
+}
+
 // รอ FC Minimal เพื่อให้ความกว้าง pill คำนวณจาก glyph จริง
 const ready = document.fonts ? document.fonts.ready : Promise.resolve();
 ready.then(() => {
@@ -100,11 +123,17 @@ ready.then(() => {
     const heroCtaSlot = document.getElementById('cta-slot');
     const playbookCtaSlot = document.getElementById('playbook-cta-slot');
     const ctaTicketSlot = document.getElementById('cta-ticket-slot');
+    // Hero และ section What you get ของหน้า personalized-playbook.html
+    // (หน้าอื่นไม่มี slot เหล่านี้ จึงข้ามไปเอง)
+    const playbookHeroCtaSlot = document.getElementById('playbook-hero-cta-slot');
+    const playbookUltimateCtaSlot = document.getElementById('playbook-ultimate-cta-slot');
     const tabletHeroCta = window.matchMedia('(max-width: 767px)');
     const mobileHeroCta = window.matchMedia('(max-width: 575px), (max-width: 1199px) and (max-height: 575px) and (orientation: landscape)');
     let heroCtaButton = null;
     let playbookCtaButton = null;
     let ctaTicketButton = null;
+    let playbookHeroCtaButton = null;
+    let playbookUltimateCtaButton = null;
     let heroCtaSize = null;
 
     const mountHeroCta = () => {
@@ -119,6 +148,8 @@ ready.then(() => {
         heroCtaButton?.destroy?.();
         playbookCtaButton?.destroy?.();
         ctaTicketButton?.destroy?.();
+        playbookHeroCtaButton?.destroy?.();
+        playbookUltimateCtaButton?.destroy?.();
         heroCtaButton = mountRegisterButton(heroCtaSlot, {
             ...responsiveOptions,
             textColor: '#111318',
@@ -140,6 +171,22 @@ ready.then(() => {
             ...responsiveOptions,
             label: 'ซื้อบัตร Ultimate 2 วัน 1,750 บาท',
             href: BUY_TICKET_URL,
+            target: '_blank',
+            rel: 'noopener noreferrer',
+            textColor: '#111318',
+            pillBackground: 'linear-gradient(180deg, #ffffff 0%, #f3f4f8 55%, #e4e7ee 100%)',
+        });
+        playbookHeroCtaButton = mountRegisterButton(playbookHeroCtaSlot, {
+            ...fitLabelToColumn(playbookHeroCtaSlot, PLAYBOOK_HERO_CTA_LABEL, responsiveOptions),
+            label: PLAYBOOK_HERO_CTA_LABEL,
+            href: playbookHeroCtaSlot?.dataset.ctaHref || TICKET_SECTION_HREF,
+            textColor: '#111318',
+            pillBackground: 'linear-gradient(180deg, #ffffff 0%, #f3f4f8 55%, #e4e7ee 100%)',
+        });
+        playbookUltimateCtaButton = mountRegisterButton(playbookUltimateCtaSlot, {
+            ...responsiveOptions,
+            label: 'ซื้อบัตร Ultimate',
+            href: playbookUltimateCtaSlot?.dataset.ctaHref || BUY_TICKET_URL,
             target: '_blank',
             rel: 'noopener noreferrer',
             textColor: '#111318',
@@ -171,6 +218,8 @@ ready.then(() => {
 
             headerCtaButtons.get(target)?.destroy?.();
             headerCtaButtons.set(target, mountRegisterButton(target, {
+                // หน้าที่ไม่มี section ticket อยู่ในหน้าเดียวกัน ส่งปลายทางเต็มมาทาง data attribute
+                href: target.dataset.headerRegisterHref || TICKET_SECTION_HREF,
                 height: headerActionHeight,
                 width: headerRowWidth,
                 fontSize,
