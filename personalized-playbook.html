@@ -40,7 +40,7 @@
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="css/main.css?v=56">
-    <link rel="stylesheet" href="css/style.css?v=791">
+    <link rel="stylesheet" href="css/style.css?v=799">
 </head>
 
 <body class="playbook-page">
@@ -58,7 +58,7 @@
                 <a href="index.html#agenda"><span class="site-header__nav-label">Agenda</span></a>
                 <a href="personalized-playbook.html" aria-current="page"><span class="site-header__nav-label">Personalized Playbook</span></a>
                 <a href="index.html#speaker"><span class="site-header__nav-label">Speaker</span></a>
-                <a href="#contact"><span class="site-header__nav-label">Contact</span></a>
+                <a href="index.html#contact"><span class="site-header__nav-label">Contact</span></a>
                 <div class="site-header__nav-sky-sensor" data-header-theme="dark" aria-hidden="true"></div>
             </nav>
 
@@ -85,7 +85,7 @@
                 <a href="index.html#agenda"><span>Agenda</span><span class="site-header__mobile-nav-index">03</span></a>
                 <a href="personalized-playbook.html" aria-current="page"><span>Personalized Playbook</span><span class="site-header__mobile-nav-index">04</span></a>
                 <a href="index.html#speaker"><span>Speaker</span><span class="site-header__mobile-nav-index">05</span></a>
-                <a href="#contact"><span>Contact</span><span class="site-header__mobile-nav-index">06</span></a>
+                <a href="index.html#contact"><span>Contact</span><span class="site-header__mobile-nav-index">06</span></a>
             </nav>
 
             <footer class="site-header__mobile-footer">
@@ -162,9 +162,11 @@
                                 <div id="playbook-hero-cta-slot" class="playbook-hero__action" data-cta-href="index.html#ticket"></div>
                             </div>
 
-                            <!-- ลิงก์ Investor DNA ต่อท้ายประโยคในย่อหน้านี้เลย
+                            <p class="playbook-hero__copy" data-reveal data-reveal-delay="320">ไม่มี PLAYBOOK การลงทุนเล่มไหนที่จะเหมาะกับคุณ<br>ได้มากไปกว่าเล่มที่คุณสร้างขึ้นด้วยตัวเอง</p>
+
+                            <!-- ลิงก์ Investor DNA แยกบรรทัดของตัวเองใต้ย่อหน้า
                                  ใช้ component ปุ่มชุดเดิมทั้งหมด ไม่เขียนทับ style ใด ๆ -->
-                            <p class="playbook-hero__copy" data-reveal data-reveal-delay="320">ไม่มี Playbook การลงทุนเล่มไหนที่จะเหมาะกับคุณ<br>ได้มากกว่าการที่คุณสร้างด้วยตัวคุณเอง <a class="bt-action-button bt-action-button--text playbook-hero__action playbook-hero__action--ghost"
+                            <div class="playbook-hero__copy-action" data-reveal data-reveal-delay="400"><a class="bt-action-button bt-action-button--text playbook-hero__action playbook-hero__action--ghost"
                                     href="https://egames.efin.finance/games/investor-dna-quest" target="_blank" rel="noopener noreferrer">ค้นหา Investor DNA ในตัวคุณ<svg class="bt-icon playbook-hero__action-arrow" viewBox="0 0 24 24" aria-hidden="true">
                                     <defs>
                                         <linearGradient id="playbook-hero-arrow-spectrum" x1="0%" y1="50%" x2="100%" y2="50%">
@@ -178,7 +180,7 @@
                                     </defs>
                                     <path d="M7 7h10v10" />
                                     <path d="M7 17 17 7" />
-                                </svg></a></p>
+                                </svg></a></div>
                         </div>
 
                         <!-- ภาพประกอบ hero: การ์ดเรียงบนเกลียว 3 มิติ หมุนเองช้า ๆ
@@ -797,43 +799,41 @@
         <section class="playbook-cta" id="playbook-cta" aria-labelledby="playbook-cta-title">
             <div class="playbook-cta__inner container">
                 <div class="playbook-cta__panel">
-                    <!-- ของประกอบฉาก: ภาพ ขนาด ตำแหน่ง และบันได responsive ชุดเดียวกับ .cta ของหน้าแรก
-                         ส่วนการลอยใช้ CSS keyframes ของหน้านี้ เพราะหน้านี้ไม่ได้โหลด gsap เหมือนหน้าแรก -->
-                    <div class="playbook-cta__assets" aria-hidden="true">
-                        <span class="playbook-cta__asset playbook-cta__asset--stock">
-                            <img src="images/stock.webp" width="178" height="800" alt="" loading="lazy" decoding="async">
-                        </span>
-                        <span class="playbook-cta__asset playbook-cta__asset--triangle">
-                            <img src="images/triangle.webp" width="800" height="769" alt="" loading="lazy" decoding="async">
-                        </span>
+                    <div class="row align-items-center">
+                        <div class="playbook-cta__media col-12 col-lg-4" data-reveal data-reveal-delay="0">
+                            <img class="playbook-cta__kv" src="images/KV-BT-2026-Final.webp" width="778" height="972"
+                                loading="lazy" decoding="async" alt="คีย์วิชวลงาน BetterTrade 2026 New World New Playbook">
+                        </div>
+
+                        <div class="playbook-cta__body col-12 col-lg-8">
+                            <h2 id="playbook-cta-title" class="playbook-cta__title bt-section-title" data-reveal-delay="0">แล้วพบกันที่ <span class="bt-title-highlight has-ps">BetterTrade 2026</span><br>NEW WORLD NEW PLAYBOOK</h2>
+
+                            <dl class="playbook-cta__facts row justify-content-center" data-reveal data-reveal-delay="120">
+                                <div class="playbook-cta__fact col-12 col-sm-6">
+                                    <dt class="playbook-cta__fact-label">
+                                        <svg class="bt-icon playbook-cta__fact-icon" aria-hidden="true"><use href="images/icons.svg?v=9#icon-calendar"></use></svg>
+                                        วันจัดงาน
+                                    </dt>
+                                    <dd class="playbook-cta__fact-value">
+                                        <strong>31 ตุลาคม – 1 พฤศจิกายน 2569</strong>
+                                        <span>09.00 น. เป็นต้นไป</span>
+                                    </dd>
+                                </div>
+                                <div class="playbook-cta__fact col-12 col-sm-6">
+                                    <dt class="playbook-cta__fact-label">
+                                        <svg class="bt-icon playbook-cta__fact-icon" aria-hidden="true"><use href="images/icons.svg?v=9#icon-map-pin"></use></svg>
+                                        สถานที่
+                                    </dt>
+                                    <dd class="playbook-cta__fact-value">
+                                        <strong>สามย่านมิตรทาวน์ ฮอลล์ ชั้น 5</strong>
+                                        <span>MRT สามย่าน ทางออก 2</span>
+                                    </dd>
+                                </div>
+                            </dl>
+
+                            <p class="playbook-cta__note" data-reveal data-reveal-delay="240">จัดโดย efin.finance แพลตฟอร์มข้อมูลการลงทุนที่นักลงทุนไทยใช้มากว่า 20 ปี</p>
+                        </div>
                     </div>
-
-                    <h2 id="playbook-cta-title" class="playbook-cta__title bt-section-title" data-reveal-delay="0">แล้วพบกันที่ <span class="bt-title-highlight has-ps">BetterTrade 2026</span><br>NEW WORLD NEW PLAYBOOK</h2>
-
-                    <dl class="playbook-cta__facts row justify-content-center" data-reveal data-reveal-delay="120">
-                        <div class="playbook-cta__fact col-12 col-sm-6 col-md-5">
-                            <dt class="playbook-cta__fact-label">
-                                <svg class="bt-icon playbook-cta__fact-icon" aria-hidden="true"><use href="images/icons.svg?v=9#icon-calendar"></use></svg>
-                                วันจัดงาน
-                            </dt>
-                            <dd class="playbook-cta__fact-value">
-                                <strong>31 ตุลาคม – 1 พฤศจิกายน 2569</strong>
-                                <span>09.00 น. เป็นต้นไป</span>
-                            </dd>
-                        </div>
-                        <div class="playbook-cta__fact col-12 col-sm-6 col-md-5">
-                            <dt class="playbook-cta__fact-label">
-                                <svg class="bt-icon playbook-cta__fact-icon" aria-hidden="true"><use href="images/icons.svg?v=9#icon-map-pin"></use></svg>
-                                สถานที่
-                            </dt>
-                            <dd class="playbook-cta__fact-value">
-                                <strong>สามย่านมิตรทาวน์ ฮอลล์ ชั้น 5</strong>
-                                <span>MRT สามย่าน ทางออก 2</span>
-                            </dd>
-                        </div>
-                    </dl>
-
-                    <p class="playbook-cta__note" data-reveal data-reveal-delay="240">จัดโดย efin.finance<br>แพลตฟอร์มข้อมูลการลงทุนที่นักลงทุนไทยใช้มากว่า 20 ปี</p>
                 </div>
             </div>
         </section>

@@ -11131,6 +11131,7 @@ body.is-loading .hero-scroll-cue,
        ถ้าแบ่ง padding เท่ากันเป๊ะ ตาจะเห็นด้านบนโล่งกว่า จึงหักช่องไฟส่วนนั้นออกจากระยะบน
        เพื่อให้ "ขอบตัวอักษรจริง" ห่างจากขอบ section เท่ากันทั้งสองด้าน */
     --bt-playbook-hero-optical-shift: 6px;
+    --bt-playbook-hero-copy-action-space: var(--space-3);
     --bt-playbook-hero-padding-top: calc(var(--space-20) - var(--bt-playbook-hero-optical-shift));
     --bt-playbook-hero-padding-bottom: var(--space-12);
     --bt-playbook-hero-row-gap: var(--space-12);
@@ -11308,12 +11309,17 @@ body.is-loading .hero-scroll-cue,
 
     /* ลิงก์อยู่ท้ายประโยค จึงใช้ขนาดเดียวกับย่อหน้าที่มันอยู่ (18px บน desktop)
        ผูกกับ token ของย่อหน้าไว้ พอจอเล็กแล้วข้อความย่อ ลิงก์จะย่อตามไปในบรรทัดเดียวกัน */
-    .playbook-hero__copy .playbook-hero__action--ghost {
-        font-size: var(--bt-playbook-hero-copy-size);
+    /* ลิงก์อยู่บรรทัดของตัวเองใต้ย่อหน้า จึงต้องเว้นระยะเอง
+       ดึงกลับทางซ้ายเท่ากับระยะในของ component ตัวอักษรจะได้เริ่มตรงกับย่อหน้าด้านบนพอดี */
+    .playbook-hero__copy-action {
+        margin-top: var(--bt-playbook-hero-copy-action-space);
+        margin-left: calc(var(--space-1) * -1);
     }
 
     .playbook-hero__action--ghost {
         gap: var(--space-2);
+        /* ขนาดเท่าย่อหน้าที่มันอยู่ใต้ ไม่ใช่ 16px ของ component ตั้งต้น */
+        font-size: var(--bt-playbook-hero-copy-size);
         color: var(--bt-playbook-hero-ink);
 
         &:hover .playbook-hero__action-arrow,
@@ -13324,7 +13330,9 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
     /* ระยะเท่ากับ section CTA ของหน้าแรกทุกขั้น: ตัว section เว้นเฉพาะด้านบน
        ปล่อยด้านล่างชิด footer ส่วนระยะในแผงไล่ลงตาม breakpoint เดียวกัน */
     --bt-playbook-cta-padding-top: var(--section-padding-y-sm);
-    --bt-playbook-cta-panel-padding: var(--space-16) var(--space-12) var(--space-20);
+    --bt-playbook-cta-panel-padding: var(--space-8);
+    --bt-playbook-cta-media-gap: var(--space-10);
+    --bt-playbook-cta-kv-radius: var(--radius-2);
     --bt-playbook-cta-facts-space: var(--space-16);
     --bt-playbook-cta-facts-row-gap: var(--space-10);
     --bt-playbook-cta-fact-label-size: var(--font-size-16);
@@ -13355,77 +13363,16 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         text-align: center;
     }
 
-    /* ---------- ของประกอบฉากในแผง CTA ----------
-       ภาพ ขนาด ตำแหน่ง ฟิลเตอร์ และบันได responsive ยกค่ามาจาก .cta ของหน้าแรกทั้งชุด
-       ต่างกันแค่การลอย หน้าแรกใช้ gsap แต่หน้านี้ไม่ได้โหลด gsap จึงใช้ keyframes
-       แบบเดียวกับไอคอนใน playbook-hero ของหน้าเดียวกันนี้
-       ตำแหน่งเป็น % ของแผง จึงเลื่อนตามขนาดจอเอง และถูกตัดขอบด้วย overflow ของแผง */
-    .playbook-cta__assets {
-        position: absolute;
-        inset: var(--space-0);
-        z-index: 0;
-        pointer-events: none;
+    .playbook-cta__body {
+        padding-right: var(--bt-playbook-cta-media-gap);
     }
 
-    /* เนื้อหาต้องอยู่เหนือของประกอบฉากเสมอ เพราะชั้นล่างเป็น element ที่ positioned */
-    .playbook-cta__panel> :not(.playbook-cta__assets) {
-        position: relative;
-        z-index: 1;
-    }
-
-    .playbook-cta__asset {
-        position: absolute;
-        top: var(--bt-playbook-cta-asset-y);
-        left: var(--bt-playbook-cta-asset-x);
-        width: var(--bt-playbook-cta-asset-size);
+    /* ภาพเต็มความกว้างคอลัมน์ สัดส่วนคงตามไฟล์จริง (778x972) ไม่ครอป */
+    .playbook-cta__kv {
+        width: 100%;
+        height: auto;
         display: block;
-        transform: translate(-50%, -50%);
-        filter: saturate(1.3);
-
-        /* กล่องนอกดูแลตำแหน่ง ส่วนการลอยกับมุมเอียงอยู่ที่ภาพด้านใน แยกชั้นกันไว้
-           ไม่งั้น transform ของสองเรื่องจะทับกันเอง */
-        img {
-            width: 100%;
-            height: auto;
-            display: block;
-            filter: saturate(1.3);
-            animation: playbook-cta-asset-drift var(--bt-playbook-cta-asset-cycle) var(--ease-ambient) infinite alternate;
-            animation-delay: var(--bt-playbook-cta-asset-offset, 0ms);
-        }
-    }
-
-    /* ขนาด มุมเอียง และฟิลเตอร์ยกมาจากหน้าแรกทั้งหมด แต่ "ตำแหน่ง" ใช้ของหน้าแรกไม่ได้
-       เพราะแผงของหน้านี้มีแถว facts 2 คอลัมน์กินความกว้างเกือบเต็ม ต่างจากหน้าแรกที่มี
-       แค่หัวข้อ+บรรทัดเดียว+ปุ่ม มุมจึงว่างกว่ามาก ค่าที่ใช้ที่นี่หาโดยวัดกรอบตัวอักษรจริง
-       (Range.getClientRects ไม่ใช่กรอบ block) แล้วสแกนหาจุดที่ไม่ชนข้อความเลยโดยเผื่อ
-       ระยะ 14px และยังใกล้ค่าของหน้าแรกที่สุด ตรวจหลายความกว้างในทุกช่วง breakpoint */
-    .playbook-cta__asset--stock {
-        --bt-playbook-cta-asset-x: 12%;
-        --bt-playbook-cta-asset-y: 64%;
-        --bt-playbook-cta-asset-size: calc(var(--space-16) + var(--space-1));
-        --bt-playbook-cta-asset-rotation: -34deg;
-        --bt-playbook-cta-asset-drift: 14px;
-        --bt-playbook-cta-asset-swing: -3.4deg;
-        --bt-playbook-cta-asset-cycle: 4s;
-        --bt-playbook-cta-asset-offset: -1200ms;
-    }
-
-    .playbook-cta__asset--triangle {
-        --bt-playbook-cta-asset-x: 90%;
-        --bt-playbook-cta-asset-y: 24%;
-        --bt-playbook-cta-asset-size: var(--space-28);
-        --bt-playbook-cta-asset-rotation: -8deg;
-        --bt-playbook-cta-asset-drift: 11px;
-        --bt-playbook-cta-asset-swing: 5deg;
-        --bt-playbook-cta-asset-cycle: 3.6s;
-        --bt-playbook-cta-asset-offset: 0ms;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-        .playbook-cta__asset img {
-            animation: none;
-            transform: rotate(var(--bt-playbook-cta-asset-rotation));
-        }
+        border-radius: var(--bt-playbook-cta-kv-radius);
     }
 
     .playbook-cta__title {
@@ -13502,6 +13449,7 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
 
     .playbook-cta__note {
         margin: var(--bt-playbook-cta-note-space) auto var(--space-0);
+        padding-bottom: var(--space-3);
         color: var(--color-text-muted);
         font-size: var(--bt-playbook-cta-note-size);
         font-weight: var(--font-weight-light);
@@ -13509,72 +13457,49 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
     }
 }
 
-/* ลอยขึ้น-ลงพร้อมแกว่งรอบมุมเอียงตั้งต้นของตัวเอง คนละจังหวะกันทั้งสองชิ้น
-   ชุดเดียวกับ playbook-hero-asset-drift ของหน้านี้ แยก keyframes ไว้เพราะใช้คนละ token */
-@keyframes playbook-cta-asset-drift {
-    from {
-        transform: translate3d(0, var(--space-0), 0) rotate(var(--bt-playbook-cta-asset-rotation));
-    }
-
-    to {
-        transform: translate3d(0, var(--bt-playbook-cta-asset-drift), 0) rotate(calc(var(--bt-playbook-cta-asset-rotation) + var(--bt-playbook-cta-asset-swing)));
-    }
-}
-
-/* บันได responsive ของของประกอบฉาก ยกค่ามาจาก .cta ของหน้าแรกทุกขั้น
-   (ย่อลงและถอยเข้ามุมทุกขั้น ไม่ให้ทับคอลัมน์ข้อความที่จัดกลาง) */
-@media (max-width: 1199px) {
+/* จอที่แบ่งสองฝั่ง คอลัมน์ขวาเหลือ 7/12 ของแผง ตัวอักษรชุดเดิมที่ออกแบบมาตอนเนื้อหา
+   กินเต็มความกว้างจึงอึดอัด ลดลงหนึ่งขั้นของสเกลทุกตัว
+   (48→40, 64→56, 24→20, 18→16, 16→14)
+   ครอบด้วย min-width เพราะจอที่เล็กกว่านี้คอลัมน์ซ้อนกันแล้ว ความกว้างกลับมาเต็มแผง
+   ขนาดเดิมจึงยังพอดีอยู่ ไม่ต้องลดตาม */
+@media (min-width: 992px) {
     .playbook-cta {
-        --bt-playbook-cta-panel-padding: var(--space-12) var(--space-10) var(--space-16);
+        --bt-playbook-cta-fact-label-size: var(--font-size-14);
+        --bt-playbook-cta-fact-icon-size: var(--font-size-20);
+        --bt-playbook-cta-fact-value-size: var(--font-size-20);
+        --bt-playbook-cta-fact-sub-size: var(--font-size-16);
+        --bt-playbook-cta-note-size: var(--font-size-16);
 
-        .playbook-cta__asset--stock {
-            --bt-playbook-cta-asset-x: 2%;
-            --bt-playbook-cta-asset-y: 56%;
+        /* ใช้ token ที่ component เปิดไว้ให้ ไม่เขียนทับ font-size ตรง ๆ
+           line-height ของ .bt-section-title เป็น 140% จึงย่อตามเองอยู่แล้ว */
+        .playbook-cta__title {
+            --bt-section-title-size: var(--font-size-32);
         }
 
-        .playbook-cta__asset--triangle {
-            --bt-playbook-cta-asset-x: 93%;
-            --bt-playbook-cta-asset-y: 27%;
+        /* .bt-title-highlight ไม่มี token ของตัวเอง ต้องเขียนทับขนาดโดยจำกัดขอบเขต
+           ไว้ที่หัวข้อของ section นี้ ไม่ให้ไปโดน highlight ของ section อื่น */
+        .playbook-cta__title .bt-title-highlight {
+            font-size: var(--font-size-48);
         }
     }
 }
 
 @media (max-width: 991px) {
     .playbook-cta {
-        --bt-playbook-cta-panel-padding: var(--space-12) var(--space-8);
         --bt-playbook-cta-facts-space: var(--space-12);
         --bt-playbook-cta-fact-value-size: var(--font-size-20);
         --bt-playbook-cta-fact-sub-size: var(--section-body-size);
         --bt-playbook-cta-note-space: var(--space-12);
 
-        .playbook-cta__asset--stock {
-            --bt-playbook-cta-asset-x: 4%;
-            --bt-playbook-cta-asset-y: 40%;
-            --bt-playbook-cta-asset-size: calc(var(--space-16) - var(--space-2));
+        /* จอนี้คอลัมน์ซ้อนกันแล้ว ช่องไฟต้องย้ายจากด้านขวามาอยู่ด้านล่างภาพแทน */
+        .playbook-cta__media {
+            margin-bottom: var(--bt-playbook-cta-media-gap);
         }
 
-        .playbook-cta__asset--triangle {
-            --bt-playbook-cta-asset-x: 95%;
-            --bt-playbook-cta-asset-y: 27%;
-            --bt-playbook-cta-asset-size: var(--space-24);
-        }
-    }
-}
-
-@media (max-width: 767px) {
-    .playbook-cta {
-        --bt-playbook-cta-panel-padding: var(--space-10) var(--space-6);
-
-        .playbook-cta__asset--stock {
-            --bt-playbook-cta-asset-x: 2%;
-            --bt-playbook-cta-asset-y: 93%;
-            --bt-playbook-cta-asset-size: calc(var(--space-16) - var(--space-3));
-        }
-
-        .playbook-cta__asset--triangle {
-            --bt-playbook-cta-asset-x: 99%;
-            --bt-playbook-cta-asset-y: 46%;
-            --bt-playbook-cta-asset-size: calc(var(--space-24) - var(--space-2));
+        /* ไม่มีคอลัมน์ข้าง ๆ ให้เว้นระยะแล้ว ถ้าคงไว้ข้างเดียวข้อความที่จัดกึ่งกลาง
+           จะเยื้องซ้ายไปครึ่งหนึ่งของระยะนั้น */
+        .playbook-cta__body {
+            padding-right: var(--space-0);
         }
     }
 }
@@ -13584,23 +13509,10 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
 @media (max-width: 575px) {
     .playbook-cta {
         --bt-playbook-cta-padding-top: var(--space-0);
-        --bt-playbook-cta-panel-padding: var(--space-16) var(--space-5);
         --bt-playbook-cta-note-size: var(--section-small-size);
 
         .playbook-cta__fact::before {
             display: none;
-        }
-
-        .playbook-cta__asset--stock {
-            --bt-playbook-cta-asset-x: 2%;
-            --bt-playbook-cta-asset-y: 77%;
-            --bt-playbook-cta-asset-size: var(--space-10);
-        }
-
-        .playbook-cta__asset--triangle {
-            --bt-playbook-cta-asset-x: 98%;
-            --bt-playbook-cta-asset-y: 42%;
-            --bt-playbook-cta-asset-size: var(--space-20);
         }
     }
 }
@@ -13631,7 +13543,7 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
     --bt-playbook-ticket-plan-width: calc(var(--space-32) + var(--space-16));
     --bt-playbook-ticket-card-space: var(--space-20);
     --bt-playbook-ticket-plan-size: var(--section-topic-size-sm);
-    --bt-playbook-ticket-feature-size: var(--section-body-size);
+    --bt-playbook-ticket-feature-size: var(--section-small-size);
     --bt-playbook-ticket-mark-size: var(--font-size-24);
     --bt-playbook-ticket-features-space: var(--space-3);
     --bt-playbook-ticket-features-gap: var(--space-2);
