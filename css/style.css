@@ -11905,7 +11905,17 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
     --bt-playbook-benefit-list-space: var(--space-16);
     --bt-playbook-benefit-list-row-gap: var(--space-12);
     --bt-playbook-benefit-list-gutter: var(--space-12);
-    --bt-playbook-benefit-media-min-height: 440px;
+    --bt-playbook-benefit-media-height: 340px;
+    /* ---------- พื้นหลังจุดไข่ปลา (พอร์ตจาก DotPattern ของ React) ----------
+       ต้นฉบับตั้งไว้ตาราง 16px สี neutral-400 ที่ 80% ซึ่งบนพื้นกระดาษอ่อนของการ์ดนี้
+       จุดจะเด่นเกินจนแย่งสายตาจากเนื้อหา และห่างจนเห็นเป็นจุด ๆ ไม่ใช่เนื้อกระดาษ
+       จึงถี่ขึ้นเป็น 10px และลดความเข้มเหลือ 38% ให้อ่านเป็นผิวสัมผัสจาง ๆ แทน
+       -at คือจุดศูนย์กลางของ mask ค่าตั้งต้นอยู่กึ่งกลางขอบล่าง ทับรายใบได้ด้วย modifier */
+    --bt-playbook-benefit-dots-gap: 10px;
+    --bt-playbook-benefit-dots-radius: 1px;
+    --bt-playbook-benefit-dots-ink: color-mix(in srgb, var(--color-neutral-400) 38%, transparent);
+    --bt-playbook-benefit-dots-fade: 300px;
+    --bt-playbook-benefit-dots-at: 50% 100%;
     --bt-playbook-benefit-media-padding: var(--space-8);
     --bt-playbook-benefit-media-gap: var(--bt-playbook-benefit-media-item-gap);
     /* ขนาด/น้ำหนัก/สีของการ์ดตัวอย่างยึดตามต้นฉบับใน dna-quiz-flow
@@ -11920,10 +11930,7 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
     --bt-playbook-benefit-warn-ink: #8a5a00;
     --bt-playbook-benefit-media-ink: #111318;
     --bt-playbook-benefit-media-line: rgba(17, 19, 24, 0.08);
-    /* สีพื้นของกล่องถอดมาจากพื้นหลังภาพการ์ดจริง สุ่มจากมุมทั้งสี่ของไฟล์ใน images/card/normally
-       ทุกใบให้ค่าใกล้กันมาก (rgb 243-245, 244-245, 241-242) เฉลี่ยได้ #f4f4f1
-       กล่องบนการ์ดจึงเป็นกระดาษผืนเดียวกับตัวการ์ด ไม่ใช่ขาวคนละโทน */
-    --bt-playbook-benefit-media-paper: #f4f4f1;
+    --bt-playbook-benefit-media-paper: #FFF;
     --bt-playbook-benefit-serif: 'Baskervville', var(--font-family-base);
     --bt-playbook-benefit-motion-lead: 200ms;
     --bt-playbook-benefit-motion-chip: 520ms;
@@ -11981,7 +11988,8 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
        ค่านี้สูงพอให้ช่องที่เนื้อหาเยอะที่สุดพอดีทุกขนาดจอ สามช่องจึงสูงเท่ากันเสมอ
        เนื้อหาข้างในวางกึ่งกลางแนวตั้ง */
     .playbook-benefit__media {
-        min-height: var(--bt-playbook-benefit-media-min-height);
+        position: relative;
+        height: var(--bt-playbook-benefit-media-height);
         padding: var(--bt-playbook-benefit-media-padding);
         display: flex;
         flex-direction: column;
@@ -11992,16 +12000,57 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         overflow: hidden;
     }
 
-    /* ---------- 01 การ์ดตัวตน: เลื่อนเทียบก่อนงาน/หลังงาน ---------- */
-    /* ซ้อนการ์ดสองใบทับกันแล้วตัดใบหน้าด้วย clip-path ตามตำแหน่งที่ลาก
-       สัดส่วนล็อกตามไฟล์การ์ดจริง (520:728 = 5:7) ความกว้างจึงคำนวณจากความสูงของกรอบ */
+    /* ต้นฉบับเป็น <svg> ที่วาดวงกลมใน <pattern> แล้วเจาะด้วย mask
+       ที่นี่ใช้ radial-gradient ซ้ำเป็นตารางแทน ได้ภาพเดียวกันโดยไม่ต้องเพิ่ม element
+       และไม่ต้องมี id ไม่ซ้ำแบบที่ useId() ของ React ทำให้ */
+    .playbook-benefit__media::before {
+        content: '';
+        position: absolute;
+        inset: var(--space-0);
+        z-index: 0;
+        pointer-events: none;
+        background-image: radial-gradient(circle at var(--bt-playbook-benefit-dots-radius) var(--bt-playbook-benefit-dots-radius),
+                var(--bt-playbook-benefit-dots-ink) var(--bt-playbook-benefit-dots-radius),
+                transparent 0);
+        background-size: var(--bt-playbook-benefit-dots-gap) var(--bt-playbook-benefit-dots-gap);
+        -webkit-mask-image: radial-gradient(var(--bt-playbook-benefit-dots-fade) circle at var(--bt-playbook-benefit-dots-at), #000, transparent);
+        mask-image: radial-gradient(var(--bt-playbook-benefit-dots-fade) circle at var(--bt-playbook-benefit-dots-at), #000, transparent);
+    }
+
+    /* สองใบนี้ใช้ภาพสำเร็จแทน component ภาพมีขอบในตัวแล้วจึงไม่ต้องเว้นระยะในกรอบ
+       ลายจุดของ CSS ยังเปิดไว้ ภาพที่พื้นหลังโปร่งจะเห็นลายทะลุขึ้นมาเป็นพื้นเดียวกับใบแรก */
+    /* ใบที่เป็น component เนื้อหาอยู่กลางกรอบ ลายจุดจึงตามไปอยู่กลางด้วย
+       ส่วนใบที่เป็นภาพใช้ค่าตั้งต้น (ขอบล่าง) */
+    .playbook-benefit__media--dots-center {
+        --bt-playbook-benefit-dots-at: 50% 50%;
+    }
+
+    .playbook-benefit__media--figure {
+        padding: var(--space-0);
+    }
+
+    /* ต้องยกภาพขึ้นมาเหนือชั้นลายจุดเอง ปล่อยไว้เฉย ๆ ไม่ได้
+       เพราะ ::before เป็น element ที่ positioned มันจะวาดทับ <img> ที่เป็นเนื้อหาในสายปกติ
+       ลายจุดจึงต้องอยู่หลังภาพ เห็นเฉพาะส่วนที่ภาพโปร่งเท่านั้น */
+    .playbook-benefit__figure {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+    }
+
     .playbook-benefit__compare {
         position: relative;
-        /* การ์ดสูงเท่าตัวเอง ไม่ยืดเต็มเฟรม: กำหนดความกว้างแล้วให้ความสูงมาจากสัดส่วน
-           การ์ดจริง (5:7) กรอบแม่จัดกึ่งกลางทั้งแนวตั้งและแนวนอนให้เอง */
+        /* กรอบสูงตายตัวแล้ว จึงให้ "ความสูง" เป็นตัวตั้งแทนความกว้าง
+           ความกว้างไหลตามสัดส่วนการ์ดจริง (5:7) เอง การ์ดจึงพอดีความสูงเสมอ
+           โดยสัดส่วนไม่เพี้ยน และไม่ต้องย่อด้วย transform ให้ภาพเบลอ
+           max-width กันไว้เผื่อกรอบแคบกว่าความกว้างที่สัดส่วนต้องการ */
         align-self: center;
-        width: 100%;
-        max-width: var(--bt-playbook-benefit-compare-width);
+        height: 100%;
+        width: auto;
+        max-width: min(100%, var(--bt-playbook-benefit-compare-width));
         aspect-ratio: var(--bt-playbook-benefit-compare-ratio);
         border-radius: var(--bt-playbook-benefit-compare-radius);
         overflow: hidden;
@@ -12428,7 +12477,7 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
    ตัดบรรทัดมากขึ้น ยกความสูงขั้นต่ำขึ้นตามเพื่อให้ทั้งสามช่องสูงเท่ากันและไม่มีเนื้อหาล้น */
 @media (max-width: 1199px) {
     .playbook-benefit {
-        --bt-playbook-benefit-media-min-height: 520px;
+        --bt-playbook-benefit-media-height: 340px;
     }
 }
 
@@ -12439,7 +12488,7 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         --bt-playbook-benefit-item-title-size: var(--section-topic-size-sm);
         --bt-playbook-benefit-lead-size: var(--section-body-size);
         /* ต่ำกว่า lg เหลือแถวละช่อง คอลัมน์กว้างเต็ม เนื้อหาจึงกลับมาสั้นเท่าจอใหญ่ */
-        --bt-playbook-benefit-media-min-height: 440px;
+        --bt-playbook-benefit-media-height: 340px;
     }
 }
 
