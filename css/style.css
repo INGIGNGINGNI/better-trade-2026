@@ -10991,6 +10991,135 @@ body.is-loading .hero-scroll-cue,
 }
 
 /* ==========================================================================
+   Playbook Scene — ฉากห้องที่เป็นพื้นหลังร่วมของ hero + intro (personalized-playbook.html)
+   สอง section วางซ้อนอยู่บนภาพผืนเดียวกัน ไม่ได้มีพื้นหลังเป็นของตัวเอง
+   เหตุผล: ถ้าแยกกรอบกัน ม่านไล่สีของแต่ละฝั่งจะมาชนกันที่รอยต่อจนเห็นเป็นเส้นตรงพาดขวางจอ
+   ภาพตรึงกับ viewport (fixed) ฉากจึงอยู่นิ่งสนิทตลอดการเลื่อนผ่านทั้งสอง section
+   ========================================================================== */
+.playbook-scene {
+    --bt-playbook-scene-image: url('../images/playbook-bg.webp');
+    --bt-playbook-scene-veil: linear-gradient(90deg,
+            color-mix(in srgb, var(--color-neutral-950) 92%, transparent) 0%,
+            color-mix(in srgb, var(--color-neutral-950) 78%, transparent) 42%,
+            color-mix(in srgb, var(--color-neutral-950) 34%, transparent) 78%,
+            transparent 100%);
+    /* ม่านชุดของ intro: ทึบเท่ากันทั้งผืนและทึบกว่าของ hero (ที่จางสุดถึง 34% ทางขวา)
+       เขียนเป็น linear-gradient สองสต็อปสีเดียวกัน เพื่อให้เป็นชั้นภาพซ้อนกับม่านขอบล่างได้
+       (background shorthand วางสีทึบร่วมกับ gradient หลายชั้นไม่ได้) */
+    --bt-playbook-scene-veil-intro-strength: 88%;
+    --bt-playbook-scene-veil-intro: linear-gradient(
+            color-mix(in srgb, var(--color-neutral-950) var(--bt-playbook-scene-veil-intro-strength), transparent),
+            color-mix(in srgb, var(--color-neutral-950) var(--bt-playbook-scene-veil-intro-strength), transparent));
+    /* ไล่เข้มเฉพาะปลายล่างสุดของฉาก ส่งต่อไปยัง section พื้นขาวที่อยู่ถัดไป */
+    --bt-playbook-scene-veil-edge: linear-gradient(180deg,
+            transparent 88%,
+            color-mix(in srgb, var(--color-neutral-950) 72%, transparent) 100%);
+    --bt-playbook-scene-veil-fade: 1600ms;
+    /* ระยะที่ลำแสงเลื่อนตลอดช่วงที่ฉากวิ่งผ่านจอ (JS อ่านค่านี้ไปใช้) */
+    --bt-playbook-scene-light-travel: 56;
+    --bt-playbook-scene-light: radial-gradient(ellipse 46% 58% at 50% 6%,
+            color-mix(in srgb, var(--color-neutral-0) 12%, transparent) 0%,
+            color-mix(in srgb, var(--color-neutral-0) 4%, transparent) 46%,
+            transparent 72%);
+
+    position: relative;
+    isolation: isolate;
+    background: var(--color-neutral-950);
+}
+
+.playbook-scene__backdrop {
+    position: absolute;
+    inset: var(--space-0);
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    background: var(--bt-playbook-scene-image) center / cover no-repeat fixed;
+
+    /* ม่านสองผืนซ้อนกัน แล้วไขว้ opacity ตอนเข้า intro
+       เปลี่ยน background-image ตรง ๆ ไม่ได้ เพราะ gradient ไม่ไล่ค่าให้ เปลี่ยนแล้วจะกระตุกเป็นขั้น */
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        inset: var(--space-0);
+        transition: opacity var(--bt-playbook-scene-veil-fade) var(--ease-standard);
+    }
+
+    &::after {
+        background: var(--bt-playbook-scene-veil), var(--bt-playbook-scene-veil-edge);
+    }
+
+    &::before {
+        background: var(--bt-playbook-scene-veil-intro), var(--bt-playbook-scene-veil-edge);
+        opacity: 0;
+    }
+}
+
+.playbook-scene.is-intro .playbook-scene__backdrop::after {
+    opacity: 0;
+}
+
+.playbook-scene.is-intro .playbook-scene__backdrop::before {
+    opacity: 1;
+}
+
+/* เนื้อหาของ hero จางหายด้วยคลาสและจังหวะเดียวกับม่าน จึงหายไปพร้อมกันเสมอ
+   ผูกกับคลาสไม่ใช่ตำแหน่ง scroll เพราะถ้าคำนวณจากระยะ ค่าจะแตะ "เกือบศูนย์"
+   ตั้งแต่ม่านยังไม่มา ตาคนอ่านว่าหายไปแล้วทั้งที่เลขยังไม่ถึง 0
+   กฎอยู่ที่ฝั่ง scene เพราะ scene เป็นผู้ส่งไม้ระหว่าง hero กับ intro */
+.playbook-scene.is-intro .playbook-hero__inner {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ลำแสงแยกชั้นเพื่อให้เลื่อนได้เอง ฉากหลักยังตรึงนิ่งอยู่ข้างหลัง
+   สูงเกินกรอบไว้ทั้งบนและล่าง จะได้ไม่เห็นขอบชั้นตอนมันเลื่อน */
+.playbook-scene__light {
+    position: absolute;
+    inset: -6% var(--space-0);
+    z-index: 0;
+    pointer-events: none;
+    background: var(--bt-playbook-scene-light);
+    will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .playbook-scene__backdrop::before,
+    .playbook-scene__backdrop::after {
+        transition: none;
+    }
+}
+
+/* สอง section ต้องลอยอยู่เหนือชั้นฉาก ไม่งั้นเนื้อหาจะถูกภาพทับ */
+.playbook-scene > section {
+    position: relative;
+    z-index: 1;
+}
+
+@media (max-width: 991px) {
+    .playbook-scene {
+        /* จอแคบภาพแคบลงมาก ม่านแนวนอนจะเหลือแต่ด้านมืด เลยสลับเป็นไล่แนวตั้งแทน */
+        --bt-playbook-scene-veil: linear-gradient(180deg,
+                color-mix(in srgb, var(--color-neutral-950) 88%, transparent) 0%,
+                color-mix(in srgb, var(--color-neutral-950) 68%, transparent) 55%,
+                color-mix(in srgb, var(--color-neutral-950) 82%, transparent) 100%);
+    }
+
+    /* iOS Safari ไม่รองรับ fixed จริง ภาพจะกระตุกหรือยืดผิดสัดส่วน จึงกลับไปเลื่อนตามหน้า */
+    .playbook-scene__backdrop {
+        background-attachment: scroll;
+    }
+}
+
+@media (max-width: 575px) {
+    .playbook-scene {
+        --bt-playbook-scene-image: url('../images/playbook-bg-mobile.webp');
+    }
+}
+
+
+/* ==========================================================================
    Section: Playbook Hero (personalized-playbook.html)
    ใช้ฉากเดียวกับ section playbook ของหน้าแรก (ประตูตัวตนนักลงทุน + หนังสือ + แสง)
    เพื่อให้คนที่กดปุ่มมาจากหน้าแรกเห็นของชิ้นเดิมต่อเนื่องกัน ไม่รู้สึกว่าหลุดไปอีกเว็บ
@@ -11007,13 +11136,13 @@ body.is-loading .hero-scroll-cue,
     --bt-playbook-hero-row-gap: var(--space-12);
     --bt-playbook-hero-content-gap: var(--space-8);
     --bt-playbook-hero-eyebrow-size: var(--font-size-16);
-    --bt-playbook-hero-title-size: var(--font-size-48);
-    --bt-playbook-hero-title-art-size: var(--font-size-56);
+    --bt-playbook-hero-title-size: var(--font-size-56);
+    --bt-playbook-hero-title-art-size: var(--font-size-64);
     --bt-playbook-hero-title-line-height: var(--line-height-1);
     --bt-playbook-hero-title-space: var(--space-8);
     --bt-playbook-hero-lead-size: var(--section-subheading-size);
     --bt-playbook-hero-lead-line-height: var(--line-height-normal);
-    --bt-playbook-hero-copy-size: var(--section-body-size);
+    --bt-playbook-hero-copy-size: var(--font-size-18);
     --bt-playbook-hero-copy-line-height: var(--line-height-relaxed);
     --bt-playbook-hero-copy-max-width: var(--layout-copy-max);
     --bt-playbook-hero-actions-gap: var(--space-4);
@@ -11061,14 +11190,6 @@ body.is-loading .hero-scroll-cue,
     --bt-playbook-hero-ink: var(--color-neutral-0);
     --bt-playbook-hero-ink-soft: color-mix(in srgb, var(--color-neutral-0) 88%, transparent);
     --bt-playbook-hero-ink-dim: color-mix(in srgb, var(--color-neutral-0) 72%, transparent);
-    --bt-playbook-hero-veil: linear-gradient(90deg,
-            color-mix(in srgb, var(--color-neutral-950) 92%, transparent) 0%,
-            color-mix(in srgb, var(--color-neutral-950) 78%, transparent) 42%,
-            color-mix(in srgb, var(--color-neutral-950) 34%, transparent) 78%,
-            transparent 100%);
-    --bt-playbook-hero-veil-bottom: linear-gradient(180deg,
-            transparent 62%,
-            color-mix(in srgb, var(--color-neutral-950) 72%, transparent) 100%);
 
     /* svh คือความสูงจอตอนแถบเบราว์เซอร์กางอยู่ ใช้แทน vh เพื่อไม่ให้ hero
        กระโดดตอนแถบที่อยู่เว็บบนมือถือย่อ-ขยาย (เบราว์เซอร์เก่าตกมาใช้ vh)
@@ -11082,45 +11203,24 @@ body.is-loading .hero-scroll-cue,
     isolation: isolate;
     padding: var(--bt-playbook-hero-padding-top) var(--space-0) var(--bt-playbook-hero-padding-bottom);
     color: var(--bt-playbook-hero-ink);
-    background: var(--color-neutral-950);
+    /* พื้นหลังเป็นของ .playbook-scene ที่ครอบอยู่ ตรงนี้ต้องโปร่งเพื่อให้ฉากทะลุขึ้นมา */
+    background: transparent;
     font-family: var(--font-family-base);
 
     @supports (height: 100svh) {
         --bt-playbook-hero-min-height: 100svh;
     }
 
-    .playbook-hero__backdrop {
-        position: absolute;
-        inset: var(--space-0);
-        z-index: 0;
-        overflow: hidden;
-        pointer-events: none;
-
-        &::after {
-            content: '';
-            position: absolute;
-            inset: var(--space-0);
-            background: var(--bt-playbook-hero-veil), var(--bt-playbook-hero-veil-bottom);
-        }
-    }
-
-    .playbook-hero__backdrop picture {
-        display: block;
-        width: 100%;
-        height: 100%;
-    }
-
-    .playbook-hero__backdrop-image {
-        width: 100%;
-        height: 100%;
-        display: block;
-        object-fit: cover;
-        object-position: center;
-    }
-
+    /* เนื้อหาทั้งก้อนจางลงตามระยะที่เลื่อนเข้าหา intro (ค่า opacity เขียนจาก JS)
+       จางที่ตัวเนื้อหาเอง ไม่เอาแผ่นทึบมาทับ ฉากหลังจึงไม่มีขอบของแผ่นให้เห็นเป็นรอยต่อ
+       เขียน opacity ที่ element ตรง ๆ ไม่ผ่าน custom property เพราะถ้าใช้ตัวแปร
+       เบราว์เซอร์จะคำนวณสไตล์ลูกทั้งกิ่งใหม่ทุกเฟรมที่เลื่อน */
     .playbook-hero__inner {
         position: relative;
         z-index: 1;
+        /* จังหวะเดียวกับม่านของ .playbook-scene เป๊ะ ๆ (ดู .playbook-scene__backdrop::before/::after)
+           เนื้อหาจึงจางหายพร้อมกับตอนที่ม่านทึบของ intro เข้ามาแทน ไม่ใช่หายไปก่อน */
+        transition: opacity var(--bt-playbook-scene-veil-fade) var(--ease-standard);
     }
 
     .playbook-hero__inner .row {
@@ -11177,9 +11277,10 @@ body.is-loading .hero-scroll-cue,
         line-height: var(--bt-playbook-hero-lead-line-height);
     }
 
+    /* ย่อหน้านี้ย้ายมาอยู่ใต้ปุ่มแล้ว ระยะจึงเว้นเท่าระยะเหนือปุ่ม ไม่ใช่ระยะบรรทัดชิด ๆ แบบเดิม */
     .playbook-hero__copy {
         max-width: var(--bt-playbook-hero-copy-max-width);
-        margin-top: var(--space-4);
+        margin-top: var(--bt-playbook-hero-actions-space);
         color: var(--bt-playbook-hero-ink-dim);
         font-size: var(--bt-playbook-hero-copy-size);
         font-weight: var(--font-weight-light);
@@ -11197,8 +11298,30 @@ body.is-loading .hero-scroll-cue,
     /* ปุ่มรองบนพื้นมืด: ใช้ variant --text เดิม แล้วกลับสีตัวอักษรเป็นขาว
        ส่วนเส้นใต้ใช้ --spectrum ชุด KV เดียวกับเส้นใต้เมนูใน header ไม่ใช่ชุด
        --gradient-accent-spectrum (โทนพาสเทลชุดเก่า) ที่เป็นค่าเริ่มต้นของ variant */
+    /* ลูกศรท้ายลิงก์ ชุดเดียวกับปุ่มสถานที่บน hero หน้าแรก: ปกติเป็นสีเดียวกับตัวอักษร
+       แล้วไล่เป็นสเปกตรัมตอน hover ด้วย gradient ที่ประกาศไว้ใน svg ของตัวเอง */
+    .playbook-hero__action-arrow {
+        width: var(--bt-icon-size);
+        height: var(--bt-icon-size);
+        stroke-width: 2;
+    }
+
+    /* ลิงก์อยู่ท้ายประโยค จึงใช้ขนาดเดียวกับย่อหน้าที่มันอยู่ (18px บน desktop)
+       ผูกกับ token ของย่อหน้าไว้ พอจอเล็กแล้วข้อความย่อ ลิงก์จะย่อตามไปในบรรทัดเดียวกัน */
+    .playbook-hero__copy .playbook-hero__action--ghost {
+        font-size: var(--bt-playbook-hero-copy-size);
+    }
+
     .playbook-hero__action--ghost {
+        gap: var(--space-2);
         color: var(--bt-playbook-hero-ink);
+
+        &:hover .playbook-hero__action-arrow,
+        &:focus-visible .playbook-hero__action-arrow {
+            stroke: #00d4fe;
+            stroke: url('#playbook-hero-arrow-spectrum');
+        }
+
 
         &::after {
             background: var(--spectrum);
@@ -11406,10 +11529,6 @@ body.is-loading .hero-scroll-cue,
         --bt-playbook-hero-visual-ratio: 16 / 10;
         /* ต่ำกว่า lg ภาพลงไปอยู่ใต้ข้อความ บรรทัดแรกขึ้นบนสุด จึงต้องเผื่อความสูง header ไว้ */
         --bt-playbook-hero-padding-top: calc(var(--header-height) + var(--space-10));
-        --bt-playbook-hero-veil: linear-gradient(180deg,
-                color-mix(in srgb, var(--color-neutral-950) 88%, transparent) 0%,
-                color-mix(in srgb, var(--color-neutral-950) 68%, transparent) 55%,
-                color-mix(in srgb, var(--color-neutral-950) 82%, transparent) 100%);
     }
 }
 
@@ -11464,11 +11583,13 @@ body.is-loading .hero-scroll-cue,
 .playbook-intro {
     --bt-playbook-intro-padding-y: var(--section-padding-y);
     --bt-playbook-intro-lead-space: var(--space-12);
-    --bt-playbook-intro-lead-size: var(--section-topic-size-sm);
-    --bt-playbook-intro-lead-line-height: var(--line-height-relaxed);
+    --bt-playbook-intro-lead-size: var(--font-size-24);
+    /* ตัวโตขึ้นแล้วระยะบรรทัดต้องแน่นลง ไม่งั้นย่อหน้ากลางจอจะอ่านเป็นบรรทัดลอย ๆ
+       ไม่ลงไปต่ำกว่านี้เพราะสระบน-ล่างของไทยต้องการที่ว่างระหว่างบรรทัด */
+    --bt-playbook-intro-lead-line-height: 1.5;
     --bt-playbook-intro-lead-max-width: var(--layout-narrow-max);
     --bt-playbook-intro-note-space: var(--space-8);
-    --bt-playbook-intro-note-size: var(--section-body-size);
+    --bt-playbook-intro-note-size: var(--font-size-18);
     --bt-playbook-intro-note-line-height: var(--line-height-relaxed);
     --bt-playbook-intro-note-max-width: var(--layout-narrow-max);
     /* การ์ดลอย: size คือความกว้างฐาน แต่ละใบคูณสเกลของตัวเองอีกที
@@ -11483,6 +11604,12 @@ body.is-loading .hero-scroll-cue,
        เลขรอบไม่หารลงตัวกัน สี่ใบจึงไม่มีวันกลับมาพลิกพร้อมกัน */
     --bt-playbook-intro-float-flip-duration: 900ms;
     --bt-playbook-intro-float-flip-perspective: 900px;
+    /* ภาพฉากไหลต่อจาก hero: ใช้ชุดค่าการแสดงผลเดียวกับพื้นหลัง hero ทุกอย่าง
+       (ม่านไล่สีแนวนอนจางไปทางขวา + ไล่เข้มที่ขอบล่าง) เพื่อให้สองส่วนอ่านเป็นฉากเดียวกัน
+       ประกาศเป็น token ของ section นี้เอง ไม่ได้อ้าง token ของ hero ข้ามมา
+       ภาพตรึงกับจอ ไม่เลื่อนตามหน้า ฉากจึงต่อเนื่องจาก hero โดยไม่มีรอยต่อ */
+    --bt-playbook-intro-ornament-length: var(--space-32);
+    --bt-playbook-intro-ornament-space: var(--space-10);
     --bt-playbook-intro-ink: var(--color-neutral-0);
     --bt-playbook-intro-ink-soft: color-mix(in srgb, var(--color-neutral-0) 88%, transparent);
     --bt-playbook-intro-ink-dim: color-mix(in srgb, var(--color-neutral-0) 72%, transparent);
@@ -11498,7 +11625,8 @@ body.is-loading .hero-scroll-cue,
     isolation: isolate;
     padding: var(--bt-playbook-intro-padding-y) var(--space-0);
     color: var(--bt-playbook-intro-ink);
-    background: var(--color-neutral-950);
+    /* พื้นหลังเป็นของ .playbook-scene ที่ครอบอยู่ ตรงนี้ต้องโปร่งเพื่อให้ฉากทะลุขึ้นมา */
+    background: transparent;
     font-family: var(--font-family-base);
 
     @supports (height: 100svh) {
@@ -11581,13 +11709,8 @@ body.is-loading .hero-scroll-cue,
     /* วางแบบสมมาตร: สี่ใบมุม ใช้ top/bottom + left/right คู่กัน ระยะขอบจึงเท่ากันเป๊ะ
        ไม่ว่าการ์ดจะกว้างเท่าไร (ถ้าใช้ left อย่างเดียว ฝั่งขวาจะเยื้องตามความกว้างการ์ด)
        อีกสองใบเกาะขอบซ้าย-ขวาที่ระดับกึ่งกลางแนวตั้งพอดี
-       คู่ที่สมมาตรกันใช้ขนาด ความลึก และจังหวะโผล่ชุดเดียวกัน เพื่อให้ขึ้นมาพร้อมกันเป็นคู่ */
-    .playbook-intro__float-item:nth-child(1),
-    .playbook-intro__float-item:nth-child(2),
-    .playbook-intro__float-item:nth-child(5),
-    .playbook-intro__float-item:nth-child(6) {
-        --bt-playbook-intro-float-item-scale: 0.74;
-    }
+       สี่ใบมุมตั้งขนาดต่างกันรายใบ (ดูที่ nth-child ด้านล่าง) ให้ไล่ใหญ่-เล็กสลับทแยงกัน
+       ตำแหน่งยังสมมาตรเหมือนเดิมเพราะยึดจากระยะขอบ ไม่ได้ยึดจากขนาดการ์ด */
 
     .playbook-intro__float-item:nth-child(3),
     .playbook-intro__float-item:nth-child(4) {
@@ -11599,23 +11722,25 @@ body.is-loading .hero-scroll-cue,
     }
 
     .playbook-intro__float-item:nth-child(1) {
+        --bt-playbook-intro-float-item-scale: 1.08;
         --bt-playbook-intro-float-flip-delay: 1600ms;
         --bt-playbook-intro-float-flip-period: 6400ms;
-        --bt-playbook-intro-float-item-from: translate(calc(38cqw - 50%), calc(40cqh - 50%));
+        --bt-playbook-intro-float-item-from: translate(calc(34cqw - 50%), calc(40cqh - 50%));
         --bt-playbook-intro-float-item-delay: 0ms;
 
-        top: 10%;
-        left: 12%;
+        top: 8%;
+        left: 16%;
     }
 
     .playbook-intro__float-item:nth-child(2) {
+        --bt-playbook-intro-float-item-scale: 0.8;
         --bt-playbook-intro-float-flip-delay: 3000ms;
         --bt-playbook-intro-float-flip-period: 7100ms;
         --bt-playbook-intro-float-item-from: translate(calc(50% - 38cqw), calc(40cqh - 50%));
         --bt-playbook-intro-float-item-delay: 0ms;
 
-        top: 10%;
-        right: 12%;
+        top: 14%;
+        right: 16%;
     }
 
     .playbook-intro__float-item:nth-child(3) {
@@ -11633,19 +11758,21 @@ body.is-loading .hero-scroll-cue,
     }
 
     .playbook-intro__float-item:nth-child(5) {
+        --bt-playbook-intro-float-item-scale: 0.88;
         --bt-playbook-intro-float-flip-delay: 4400ms;
         --bt-playbook-intro-float-flip-period: 5900ms;
         --bt-playbook-intro-float-item-from: translate(calc(38cqw - 50%), calc(50% - 40cqh));
         --bt-playbook-intro-float-item-delay: calc(var(--bt-playbook-intro-float-stagger) * 2);
 
-        bottom: 10%;
+        bottom: 14%;
         left: 12%;
     }
 
     .playbook-intro__float-item:nth-child(6) {
+        --bt-playbook-intro-float-item-scale: 1;
         --bt-playbook-intro-float-flip-delay: 5800ms;
         --bt-playbook-intro-float-flip-period: 6700ms;
-        --bt-playbook-intro-float-item-from: translate(calc(50% - 38cqw), calc(50% - 40cqh));
+        --bt-playbook-intro-float-item-from: translate(calc(50% - 34cqw), calc(50% - 40cqh));
         --bt-playbook-intro-float-item-delay: calc(var(--bt-playbook-intro-float-stagger) * 2);
 
         bottom: 10%;
@@ -11664,13 +11791,32 @@ body.is-loading .hero-scroll-cue,
         text-align: center;
     }
 
-    /* component เดิมเป็นแถวชิดซ้ายและมีเส้น-ดาวต่อท้าย พอจัดกึ่งกลางเส้นจะทำให้
-       ข้อความดูเยื้องซ้าย จึงตัดเส้นออกแบบเดียวกับ section Expectation ในหน้าแรก */
+    /* component เดิมวางเส้น-ดาวต่อท้ายข้อความในแถวเดียวกัน พอ section นี้จัดกึ่งกลาง
+       เส้นจะดันให้ข้อความดูเยื้องซ้าย จึงให้ ::after ขึ้นบรรทัดใหม่ด้วย flex-basis เต็มแถวแทน
+       แล้วเปลี่ยนเป็น line-star.webp ที่ดาวอยู่กึ่งกลางเส้น (คนละภาพกับ line-star-trail
+       ของ component ซึ่งดาวอยู่ปลายข้างเดียว เหมาะกับ section ที่ชิดซ้าย)
+       กล่องกว้างเต็มแถวเพื่อให้จัดกึ่งกลางเอง ความยาวเส้นจึงคุมที่ background-size ไม่ใช่ width */
     .playbook-intro__eyebrow {
         justify-content: center;
+        flex-wrap: wrap;
         color: var(--bt-playbook-intro-ink-dim);
 
         &::after {
+            flex-basis: 100%;
+            width: auto;
+            /* อัตราส่วนภาพ 360:39 ใช้ตัวหารชุดเดียวกับเส้นคั่น line-star ที่อื่นในเว็บ */
+            height: calc(var(--bt-playbook-intro-ornament-length) / 9.13);
+            margin: var(--bt-playbook-intro-ornament-space) var(--space-0) var(--space-0);
+            background:
+                url('../images/line-star.webp') center /
+                var(--bt-playbook-intro-ornament-length) auto no-repeat;
+        }
+    }
+
+    /* ตั้งแต่ 1500px ขึ้นไปพื้นที่พอให้หัวข้ออยู่บรรทัดเดียว จึงซ่อนตัวขึ้นบรรทัดทิ้ง
+       (เว้นวรรคก่อน <br> ไว้ใน markup แล้ว พอซ่อนสองคำจึงยังมีช่องไฟคั่น ไม่ติดกัน) */
+    @media (min-width: 1500px) {
+        .playbook-intro__title-break {
             display: none;
         }
     }
@@ -11712,6 +11858,11 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
 
 @media (max-width: 991px) {
     .playbook-intro {
+        /* จอแคบภาพแคบลงมาก ม่านแนวนอนจะเหลือแต่ด้านมืด เลยสลับเป็นแนวตั้งชุดเดียวกับ hero */
+        --bt-playbook-intro-backdrop-veil: linear-gradient(180deg,
+                color-mix(in srgb, var(--color-neutral-950) 88%, transparent) 0%,
+                color-mix(in srgb, var(--color-neutral-950) 68%, transparent) 55%,
+                color-mix(in srgb, var(--color-neutral-950) 82%, transparent) 100%);
         --bt-playbook-intro-padding-y: var(--section-padding-y-sm);
         --bt-playbook-intro-lead-size: var(--section-body-size);
         --bt-playbook-intro-note-space: var(--space-6);
@@ -11763,7 +11914,10 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
     --bt-playbook-benefit-warn-ink: #8a5a00;
     --bt-playbook-benefit-media-ink: #111318;
     --bt-playbook-benefit-media-line: rgba(17, 19, 24, 0.08);
-    --bt-playbook-benefit-media-paper: #f7f8f7;
+    /* สีพื้นของกล่องถอดมาจากพื้นหลังภาพการ์ดจริง สุ่มจากมุมทั้งสี่ของไฟล์ใน images/card/normally
+       ทุกใบให้ค่าใกล้กันมาก (rgb 243-245, 244-245, 241-242) เฉลี่ยได้ #f4f4f1
+       กล่องบนการ์ดจึงเป็นกระดาษผืนเดียวกับตัวการ์ด ไม่ใช่ขาวคนละโทน */
+    --bt-playbook-benefit-media-paper: #f4f4f1;
     --bt-playbook-benefit-serif: 'Baskervville', var(--font-family-base);
     --bt-playbook-benefit-motion-lead: 200ms;
     --bt-playbook-benefit-motion-chip: 520ms;
@@ -12060,9 +12214,10 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         align-items: center;
         gap: var(--space-2);
         color: var(--bt-playbook-benefit-ok-ink);
-        font-size: var(--bt-playbook-benefit-media-copy-size);
+        font-size: var(--bt-playbook-benefit-media-label-size);
         font-weight: var(--font-weight-bold);
         line-height: var(--line-height-1);
+        letter-spacing: 0.04em;
     }
 
     .playbook-benefit__trait--warn .playbook-benefit__trait-head {
@@ -12109,6 +12264,7 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         font-size: var(--bt-playbook-benefit-media-label-size);
         font-weight: var(--font-weight-bold);
         line-height: var(--line-height-1);
+        letter-spacing: 0.04em;
     }
 
     .playbook-benefit__skill-bars {
@@ -12334,12 +12490,17 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
 
         position: relative;
         padding-inline: var(--bt-playbook-benefit-extra-item-inset);
+        padding-left: calc(var(--bt-playbook-benefit-extra-item-inset) * 2);
 
+        /* เส้นคั่นวางที่ขอบซ้ายของคอลัมน์พอดี (left: 0 + translateX(-50%))
+           ขอบนั้นคือกึ่งกลางของช่องว่างระหว่างสองคอลัมน์จริง ๆ เพราะทั้งสองฝั่งกัน
+           ระยะในเท่ากันข้างละ inset เส้นกลางของ 4 คอลัมน์จึงตรงกึ่งกลางจอพอดี
+           (ถ้าถอย -inset แบบเดิม เส้นจะเลยออกไปทางซ้ายเท่ากับ inset ทุกเส้น) */
         &::before {
             content: '';
             position: absolute;
             top: 50%;
-            left: calc(var(--bt-playbook-benefit-extra-item-inset) * -1);
+            left: var(--space-0);
             width: var(--bt-playbook-benefit-extra-rule-length);
             height: calc(var(--bt-playbook-benefit-extra-rule-length) / 9.13);
             background: url('../images/line-star.webp') center / contain no-repeat;
@@ -12441,12 +12602,8 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
     --bt-identity-lead-space: var(--space-12);
     --bt-identity-lead-size: var(--section-topic-size-sm);
     --bt-identity-lead-max-width: var(--layout-narrow-max);
-    --bt-identity-highlight-space: var(--space-4);
-    --bt-identity-highlight-size: var(--section-subtext-size);
-    --bt-identity-highlight-padding: var(--space-1) var(--space-3);
-    --bt-identity-highlight-ink: var(--color-accent-primary);
-    --bt-identity-highlight-surface: var(--color-blue-100);
-    --bt-identity-highlight-border: var(--color-blue-200);
+    --bt-identity-highlight-space: var(--space-3);
+    --bt-identity-highlight-size: var(--section-topic-size-sm);
     /* กรอบการ์ดยึดขนาดของไฟล์ภาพนิ่ง (520x728) เป็นหลัก เพราะเป็นไฟล์ที่มีขอบมนและ
        พื้นหลังโปร่งมาแล้ว ภาพนิ่งจึงเต็มกรอบพอดีเป๊ะ ส่วนวิดีโอ (554x740) สัดส่วนกว้างกว่า
        เล็กน้อย อยู่ชั้นหลังและถูกกรอบการ์ดตัดส่วนเกินทิ้ง จึงไม่มีส่วนไหนโผล่พ้นภาพนิ่ง */
@@ -12461,7 +12618,8 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
     --bt-identity-stage-space: var(--space-16);
     --bt-identity-stage-padding-y: var(--space-10);
     --bt-identity-controls-space: var(--space-6);
-    --bt-identity-caption-name-size: var(--section-topic-size);
+    --bt-identity-caption-name-size: var(--font-size-28);
+    --bt-identity-caption-name-ink: #000;
     --bt-identity-caption-count-size: var(--section-small-size);
     --bt-identity-ink: var(--color-text-primary);
     --bt-identity-ink-dim: var(--color-text-muted);
@@ -12538,19 +12696,22 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         line-height: var(--line-height-relaxed);
     }
 
-    /* บรรทัดเน้นเป็น badge สีน้ำเงิน: fit-content + margin auto เพื่อให้กรอบกว้างเท่าข้อความ
-       และยังอยู่กึ่งกลางตามหัวข้อด้านบน (หัวข้อของ section นี้จัดกึ่งกลางด้วย text-align) */
+    /* ข้อความธรรมดา ไม่มีกรอบ/พื้นหลัง สีรับมาจาก --bt-identity-ink ของ section
+       ไม่ต้อง fit-content + margin auto เหมือนตอนเป็น badge แล้ว เพราะ header
+       ของ section จัดกึ่งกลางด้วย text-align อยู่แล้ว */
     .identity-cards__highlight {
-        width: fit-content;
         margin: var(--bt-identity-highlight-space) auto var(--space-0);
-        padding: var(--bt-identity-highlight-padding);
-        border-radius: var(--pill-radius);
-        border: var(--rule-width-subtle) solid var(--bt-identity-highlight-border);
-        background: var(--bt-identity-highlight-surface);
-        color: var(--bt-identity-highlight-ink);
+        color: var(--color-accent-primary);
         font-size: var(--bt-identity-highlight-size);
-        font-weight: var(--font-weight-medium);
+        font-weight: var(--font-weight-regular);
         line-height: var(--line-height-relaxed);
+    }
+
+    /* ชื่อบัตรใน badge ใช้ serif ชุดเดียวกับที่เว็บใช้เรียกชื่อบัตรทุกที่
+       (Baskervville โหลดมาแค่น้ำหนัก 400 ต้องคืนเป็น regular ไม่งั้นเบราว์เซอร์ปลอมตัวหนาให้) */
+    .identity-cards__highlight-plan {
+        font-family: 'Baskervville', var(--font-family-base);
+        font-weight: var(--font-weight-regular);
     }
 
     .identity-cards__carousel {
@@ -12657,6 +12818,7 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
     }
 
     .identity-cards__caption-name {
+        color: var(--bt-identity-caption-name-ink);
         font-family: 'Baskervville', var(--font-family-base);
         font-size: var(--bt-identity-caption-name-size);
         line-height: var(--line-height-normal);
@@ -12708,12 +12870,13 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
     --bt-playbook-steps-list-space: var(--space-16);
     --bt-playbook-steps-list-gap: var(--space-6);
     --bt-playbook-steps-card-padding: var(--space-10);
-    --bt-playbook-steps-number-size: var(--space-10);
+    --bt-playbook-steps-number-size: var(--space-8);
     /* วงกลมลำดับขั้นใช้สีน้ำเงินชุดเดียวกับตัวเน้นอื่นใน section นี้ (ห้ามพลาด / ไอคอนธง) */
     --bt-playbook-steps-number-bg: var(--color-accent-primary);
     --bt-playbook-steps-index-size: var(--section-small-size);
     --bt-playbook-steps-item-title-size: var(--section-topic-size);
-    --bt-playbook-steps-item-title-space: var(--space-4);
+    --bt-playbook-steps-item-title-accent-gap: var(--space-1);
+    --bt-playbook-steps-item-title-space: var(--space-6);
     --bt-playbook-steps-copy-size: var(--section-body-size);
     --bt-playbook-steps-copy-space: var(--space-3);
     --bt-playbook-steps-points-space: var(--space-6);
@@ -12731,10 +12894,8 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
     --bt-playbook-steps-compare-width: 180px;
     --bt-playbook-steps-compare-side-width: clamp(150px, 45cqi, 210px);
     --bt-playbook-steps-compare-radius: var(--space-4);
-    --bt-playbook-steps-compare-handle-size: var(--space-10);
     --bt-playbook-steps-compare-chip-bg: rgba(17, 19, 24, 0.62);
     --bt-playbook-steps-compare-shadow: 0 10px 30px rgba(17, 19, 24, 0.15), 0 2px 6px rgba(17, 19, 24, 0.09);
-    --bt-playbook-steps-compare-handle-shadow: 0 4px 14px rgba(17, 19, 24, 0.28);
     --bt-playbook-steps-caption-max-width: 280px;
     --bt-playbook-steps-persona-fade: 220ms;
 
@@ -12775,20 +12936,21 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         width: fit-content;
         min-height: var(--space-5);
         margin: var(--space-0) auto var(--space-4);
-        padding: var(--space-0) var(--space-2);
+        padding: var(--space-1) var(--space-3);
         display: flex;
         align-items: center;
         border-radius: var(--pill-radius);
         border: var(--rule-width-subtle) solid var(--color-blue-200);
         background: var(--color-blue-100);
         color: var(--color-blue-400);
-        font-size: var(--section-tag-size-sm);
+        font-size: var(--section-tag-size);
         font-weight: var(--font-weight-regular);
         line-height: var(--section-body-line-height);
         white-space: nowrap;
     }
 
     .playbook-steps__index {
+        margin-bottom: var(--space-0);
         display: flex;
         align-items: center;
         gap: var(--space-3);
@@ -12806,7 +12968,7 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         border-radius: var(--radius-round);
         color: var(--color-surface-page);
         background: var(--bt-playbook-steps-number-bg);
-        font-size: var(--section-body-size);
+        font-size: var(--section-small-size);
         font-weight: var(--font-weight-medium);
         letter-spacing: var(--letter-spacing-0);
     }
@@ -12816,6 +12978,44 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         font-size: var(--bt-playbook-steps-item-title-size);
         font-weight: var(--font-weight-medium);
         line-height: var(--section-topic-line-height-sm);
+    }
+
+    /* คำเน้นในหัวข้อย่อย ใช้ไล่สีสเปกตรัมกับ animation ชุดเดียวกับ .bt-title-highlight
+       ของหัวข้อ h2 (background-size 200% เพื่อให้มีระยะให้ไล่ + keyframes ตัวเดียวกัน)
+       แต่ไม่แตะขนาดกับน้ำหนัก ทุกอย่างรับมาจาก .playbook-steps__item-title ตามเดิม
+       จงใจไม่ใช้ class .bt-title-highlight ตรง ๆ เพราะตัวนั้นบังคับขนาด 64px มาด้วย */
+    .playbook-steps__item-title-accent {
+        background-image: var(--spectrum);
+        background-size: 200% 100%;
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+        animation: bt-title-spectrum-flow 3s ease-in-out infinite alternate;
+
+        /* ชุด has-ps / has-pe / has-px ความหมายเดียวกับของ .bt-title-highlight
+           คือเว้นช่องว่างด้านที่ติดกับข้อความธรรมดา
+           ค่าคนละตัวกับหัวข้อ h2 เพราะ h2 ใช้ --space-2 กับตัวอักษร 64px (ราว 12% ของขนาด)
+           คำเน้นตรงนี้เป็น 24px (20px ที่ ≤991px) ถ้าใช้ 8px ตามจะเว้นเกินไปจนคำหลุดออกจากประโยค
+           --space-1 คิดเป็นสัดส่วนใกล้เคียงกับที่ h2 ใช้ตอนย่อเหลือ 36px */
+        &.has-ps {
+            padding-left: var(--bt-playbook-steps-item-title-accent-gap);
+        }
+
+        &.has-pe {
+            padding-right: var(--bt-playbook-steps-item-title-accent-gap);
+        }
+
+        &.has-px {
+            padding-left: var(--bt-playbook-steps-item-title-accent-gap);
+            padding-right: var(--bt-playbook-steps-item-title-accent-gap);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .playbook-steps__item-title-accent {
+            animation: none;
+        }
     }
 
     .playbook-steps__copy {
@@ -12860,7 +13060,7 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         margin-bottom: var(--space-0);
         display: grid;
         grid-template-columns: auto 1fr;
-        gap: var(--space-3);
+        gap: var(--space-2);
         align-items: start;
         color: var(--color-text-secondary);
         font-size: var(--bt-playbook-steps-highlight-size);
@@ -12869,6 +13069,13 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
     }
 
     .playbook-steps__highlight strong {
+        color: var(--color-accent-primary);
+        font-weight: var(--font-weight-medium);
+    }
+
+    /* ชุดเดียวกับ __highlight แต่เน้นทั้งบรรทัด สีกับน้ำหนักจึงเสมอกันหมด
+       ไม่มี strong คั่นให้คำไหนเด่นกว่าคำไหน (ไอคอนกับกริดยังเป็นของ __highlight เดิม) */
+    .playbook-steps__highlight--accent {
         color: var(--color-accent-primary);
         font-weight: var(--font-weight-medium);
     }
@@ -12921,7 +13128,7 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         container-type: inline-size;
         padding: var(--bt-playbook-steps-preview-padding);
         border-radius: var(--card-radius);
-        background: var(--color-surface-page);
+        /* background: var(--color-surface-page); */
     }
 
     .playbook-steps__preview-info {
@@ -12929,8 +13136,7 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         text-align: center;
     }
 
-    /* การ์ดเลื่อนเทียบ: ซ้อนการ์ดสองใบแล้วตัดใบหน้าด้วย clip-path ตามตำแหน่งที่ลาก
-       ความสูงมาจากสัดส่วนการ์ดจริง (520:728 = 5:7) */
+    /* กรอบการ์ดตัวอย่าง ความสูงมาจากสัดส่วนการ์ดจริง (520:728 = 5:7) */
     .playbook-steps__compare {
         position: relative;
         width: 100%;
@@ -12942,9 +13148,6 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         isolation: isolate;
         background: var(--color-surface-soft);
         box-shadow: var(--bt-playbook-steps-compare-shadow);
-        cursor: ew-resize;
-        touch-action: pan-y;
-        user-select: none;
     }
 
     .playbook-steps__compare-side {
@@ -12952,12 +13155,6 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         inset: var(--space-0);
         overflow: hidden;
         pointer-events: none;
-    }
-
-    .playbook-steps__compare-side--before {
-        z-index: 2;
-        clip-path: inset(0 0 0 0);
-        will-change: clip-path;
     }
 
     .playbook-steps__compare-card {
@@ -12988,57 +13185,6 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
 
     .playbook-steps__compare-chip--before {
         left: var(--space-3);
-    }
-
-    .playbook-steps__compare-chip--after {
-        right: var(--space-3);
-    }
-
-    .playbook-steps__compare-divider {
-        position: absolute;
-        top: var(--space-0);
-        bottom: var(--space-0);
-        left: 100%;
-        z-index: 10;
-        width: var(--border-width-2);
-        margin-left: calc(var(--border-width-2) / -2);
-        background: var(--color-neutral-0);
-        box-shadow: 0 0 0 var(--border-width-1) rgba(17, 19, 24, 0.18);
-        pointer-events: none;
-    }
-
-    .playbook-steps__compare-handle {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: var(--bt-playbook-steps-compare-handle-size);
-        height: var(--bt-playbook-steps-compare-handle-size);
-        padding: var(--space-0);
-        display: grid;
-        place-items: center;
-        border: var(--border-width-2) solid var(--color-neutral-0);
-        border-radius: var(--radius-round);
-        color: var(--color-text-primary);
-        background: var(--color-neutral-0);
-        box-shadow: var(--bt-playbook-steps-compare-handle-shadow);
-        cursor: ew-resize;
-        pointer-events: auto;
-        transform: translate(-50%, -50%);
-        transition: transform 120ms var(--ease-standard);
-    }
-
-    .playbook-steps__compare-handle .bt-icon {
-        font-size: var(--font-size-16);
-    }
-
-    @media (hover: hover) and (pointer: fine) {
-        .playbook-steps__compare-handle:hover {
-            transform: translate(-50%, -50%) scale(1.05);
-        }
-    }
-
-    .playbook-steps__compare-handle:active {
-        transform: translate(-50%, -50%) scale(0.96);
     }
 
     /* คำอธิบายใต้การ์ด */
@@ -13181,7 +13327,11 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
     --bt-playbook-cta-panel-padding: var(--space-16) var(--space-12) var(--space-20);
     --bt-playbook-cta-facts-space: var(--space-16);
     --bt-playbook-cta-facts-row-gap: var(--space-10);
-    --bt-playbook-cta-fact-label-size: var(--section-small-size);
+    --bt-playbook-cta-fact-label-size: var(--font-size-16);
+    --bt-playbook-cta-fact-icon-size: var(--font-size-24);
+    --bt-playbook-cta-fact-icon-gap: var(--space-2);
+    --bt-playbook-cta-fact-icon-ink: var(--color-accent-primary);
+    --bt-playbook-cta-fact-icon-stroke: 1.75;
     --bt-playbook-cta-fact-value-size: var(--font-size-24);
     --bt-playbook-cta-fact-sub-size: var(--section-subtext-size);
     --bt-playbook-cta-rule-length: var(--space-20);
@@ -13203,6 +13353,79 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
             radial-gradient(circle at 92% 100%, color-mix(in srgb, var(--color-kv-spectrum-4) 12%, transparent) 0%, transparent 34%),
             var(--color-neutral-50);
         text-align: center;
+    }
+
+    /* ---------- ของประกอบฉากในแผง CTA ----------
+       ภาพ ขนาด ตำแหน่ง ฟิลเตอร์ และบันได responsive ยกค่ามาจาก .cta ของหน้าแรกทั้งชุด
+       ต่างกันแค่การลอย หน้าแรกใช้ gsap แต่หน้านี้ไม่ได้โหลด gsap จึงใช้ keyframes
+       แบบเดียวกับไอคอนใน playbook-hero ของหน้าเดียวกันนี้
+       ตำแหน่งเป็น % ของแผง จึงเลื่อนตามขนาดจอเอง และถูกตัดขอบด้วย overflow ของแผง */
+    .playbook-cta__assets {
+        position: absolute;
+        inset: var(--space-0);
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    /* เนื้อหาต้องอยู่เหนือของประกอบฉากเสมอ เพราะชั้นล่างเป็น element ที่ positioned */
+    .playbook-cta__panel> :not(.playbook-cta__assets) {
+        position: relative;
+        z-index: 1;
+    }
+
+    .playbook-cta__asset {
+        position: absolute;
+        top: var(--bt-playbook-cta-asset-y);
+        left: var(--bt-playbook-cta-asset-x);
+        width: var(--bt-playbook-cta-asset-size);
+        display: block;
+        transform: translate(-50%, -50%);
+        filter: saturate(1.3);
+
+        /* กล่องนอกดูแลตำแหน่ง ส่วนการลอยกับมุมเอียงอยู่ที่ภาพด้านใน แยกชั้นกันไว้
+           ไม่งั้น transform ของสองเรื่องจะทับกันเอง */
+        img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: saturate(1.3);
+            animation: playbook-cta-asset-drift var(--bt-playbook-cta-asset-cycle) var(--ease-ambient) infinite alternate;
+            animation-delay: var(--bt-playbook-cta-asset-offset, 0ms);
+        }
+    }
+
+    /* ขนาด มุมเอียง และฟิลเตอร์ยกมาจากหน้าแรกทั้งหมด แต่ "ตำแหน่ง" ใช้ของหน้าแรกไม่ได้
+       เพราะแผงของหน้านี้มีแถว facts 2 คอลัมน์กินความกว้างเกือบเต็ม ต่างจากหน้าแรกที่มี
+       แค่หัวข้อ+บรรทัดเดียว+ปุ่ม มุมจึงว่างกว่ามาก ค่าที่ใช้ที่นี่หาโดยวัดกรอบตัวอักษรจริง
+       (Range.getClientRects ไม่ใช่กรอบ block) แล้วสแกนหาจุดที่ไม่ชนข้อความเลยโดยเผื่อ
+       ระยะ 14px และยังใกล้ค่าของหน้าแรกที่สุด ตรวจหลายความกว้างในทุกช่วง breakpoint */
+    .playbook-cta__asset--stock {
+        --bt-playbook-cta-asset-x: 12%;
+        --bt-playbook-cta-asset-y: 64%;
+        --bt-playbook-cta-asset-size: calc(var(--space-16) + var(--space-1));
+        --bt-playbook-cta-asset-rotation: -34deg;
+        --bt-playbook-cta-asset-drift: 14px;
+        --bt-playbook-cta-asset-swing: -3.4deg;
+        --bt-playbook-cta-asset-cycle: 4s;
+        --bt-playbook-cta-asset-offset: -1200ms;
+    }
+
+    .playbook-cta__asset--triangle {
+        --bt-playbook-cta-asset-x: 90%;
+        --bt-playbook-cta-asset-y: 24%;
+        --bt-playbook-cta-asset-size: var(--space-28);
+        --bt-playbook-cta-asset-rotation: -8deg;
+        --bt-playbook-cta-asset-drift: 11px;
+        --bt-playbook-cta-asset-swing: 5deg;
+        --bt-playbook-cta-asset-cycle: 3.6s;
+        --bt-playbook-cta-asset-offset: 0ms;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .playbook-cta__asset img {
+            animation: none;
+            transform: rotate(var(--bt-playbook-cta-asset-rotation));
+        }
     }
 
     .playbook-cta__title {
@@ -13238,7 +13461,13 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         }
     }
 
+    /* ไอคอนนำหน้าป้ายกำกับ บอกว่าช่องนี้เป็นวันหรือสถานที่ตั้งแต่ยังไม่อ่านข้อความ
+       วางเป็น inline flex เพื่อให้ไอคอนกับตัวอักษรยังอยู่กึ่งกลางร่วมกับแผงที่จัดกลาง */
     .playbook-cta__fact-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--bt-playbook-cta-fact-icon-gap);
         color: var(--color-text-muted);
         font-size: var(--bt-playbook-cta-fact-label-size);
         font-weight: var(--font-weight-regular);
@@ -13246,8 +13475,14 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         letter-spacing: var(--letter-spacing-index);
     }
 
+    .playbook-cta__fact-icon {
+        font-size: var(--bt-playbook-cta-fact-icon-size);
+        color: var(--bt-playbook-cta-fact-icon-ink);
+        stroke-width: var(--bt-playbook-cta-fact-icon-stroke);
+    }
+
     .playbook-cta__fact-value {
-        margin-top: var(--space-3);
+        margin-top: var(--space-6);
         display: grid;
         gap: var(--space-2);
 
@@ -13258,7 +13493,7 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         }
 
         span {
-            color: var(--color-text-muted);
+            /* color: var(--color-text-muted); */
             font-size: var(--bt-playbook-cta-fact-sub-size);
             font-weight: var(--font-weight-light);
             line-height: var(--section-body-line-height);
@@ -13274,9 +13509,33 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
     }
 }
 
+/* ลอยขึ้น-ลงพร้อมแกว่งรอบมุมเอียงตั้งต้นของตัวเอง คนละจังหวะกันทั้งสองชิ้น
+   ชุดเดียวกับ playbook-hero-asset-drift ของหน้านี้ แยก keyframes ไว้เพราะใช้คนละ token */
+@keyframes playbook-cta-asset-drift {
+    from {
+        transform: translate3d(0, var(--space-0), 0) rotate(var(--bt-playbook-cta-asset-rotation));
+    }
+
+    to {
+        transform: translate3d(0, var(--bt-playbook-cta-asset-drift), 0) rotate(calc(var(--bt-playbook-cta-asset-rotation) + var(--bt-playbook-cta-asset-swing)));
+    }
+}
+
+/* บันได responsive ของของประกอบฉาก ยกค่ามาจาก .cta ของหน้าแรกทุกขั้น
+   (ย่อลงและถอยเข้ามุมทุกขั้น ไม่ให้ทับคอลัมน์ข้อความที่จัดกลาง) */
 @media (max-width: 1199px) {
     .playbook-cta {
         --bt-playbook-cta-panel-padding: var(--space-12) var(--space-10) var(--space-16);
+
+        .playbook-cta__asset--stock {
+            --bt-playbook-cta-asset-x: 2%;
+            --bt-playbook-cta-asset-y: 56%;
+        }
+
+        .playbook-cta__asset--triangle {
+            --bt-playbook-cta-asset-x: 93%;
+            --bt-playbook-cta-asset-y: 27%;
+        }
     }
 }
 
@@ -13287,12 +13546,36 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         --bt-playbook-cta-fact-value-size: var(--font-size-20);
         --bt-playbook-cta-fact-sub-size: var(--section-body-size);
         --bt-playbook-cta-note-space: var(--space-12);
+
+        .playbook-cta__asset--stock {
+            --bt-playbook-cta-asset-x: 4%;
+            --bt-playbook-cta-asset-y: 40%;
+            --bt-playbook-cta-asset-size: calc(var(--space-16) - var(--space-2));
+        }
+
+        .playbook-cta__asset--triangle {
+            --bt-playbook-cta-asset-x: 95%;
+            --bt-playbook-cta-asset-y: 27%;
+            --bt-playbook-cta-asset-size: var(--space-24);
+        }
     }
 }
 
 @media (max-width: 767px) {
     .playbook-cta {
         --bt-playbook-cta-panel-padding: var(--space-10) var(--space-6);
+
+        .playbook-cta__asset--stock {
+            --bt-playbook-cta-asset-x: 2%;
+            --bt-playbook-cta-asset-y: 93%;
+            --bt-playbook-cta-asset-size: calc(var(--space-16) - var(--space-3));
+        }
+
+        .playbook-cta__asset--triangle {
+            --bt-playbook-cta-asset-x: 99%;
+            --bt-playbook-cta-asset-y: 46%;
+            --bt-playbook-cta-asset-size: calc(var(--space-24) - var(--space-2));
+        }
     }
 }
 
@@ -13307,6 +13590,18 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         .playbook-cta__fact::before {
             display: none;
         }
+
+        .playbook-cta__asset--stock {
+            --bt-playbook-cta-asset-x: 2%;
+            --bt-playbook-cta-asset-y: 77%;
+            --bt-playbook-cta-asset-size: var(--space-10);
+        }
+
+        .playbook-cta__asset--triangle {
+            --bt-playbook-cta-asset-x: 98%;
+            --bt-playbook-cta-asset-y: 42%;
+            --bt-playbook-cta-asset-size: var(--space-20);
+        }
     }
 }
 
@@ -13316,14 +13611,9 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
     .playbook-steps {
 
         .playbook-steps__compare-chip,
-        .playbook-steps__compare-handle,
         .playbook-steps__persona,
         .playbook-steps__persona.is-active {
             transition: none;
-        }
-
-        .playbook-steps__compare-handle:active {
-            transform: translate(-50%, -50%);
         }
     }
 }
@@ -13365,6 +13655,24 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         }
     }
 
+    /* ชื่อบัตรในหัวข้อใช้ serif ชุดเดียวกับหัวตารางและการ์ดราคา ชื่อ Ultimate ทั้งสาม
+       ที่จึงเป็นตัวเดียวกัน ผูกไว้กับหัวข้อของ section นี้เท่านั้น ไม่แตะ .bt-title-highlight
+       ตัวกลางที่ section อื่นกับหน้าแรกใช้ร่วมกัน
+       (Baskervville โหลดมาแค่น้ำหนัก 400 ต้องคืนเป็น regular ไม่งั้นเบราว์เซอร์ปลอมตัวหนาให้) */
+    .playbook-ticket__title .bt-title-highlight {
+        font-family: 'Baskervville', var(--font-family-base);
+        font-weight: var(--font-weight-regular);
+    }
+
+    /* ลดเฉพาะจอ desktop ที่ตัวกลางเป็น 64px จอ ≤991px ไม่แตะ ปล่อยไล่ตามชุดเดิม 56/40/36
+       (ต้องครอบด้วย min-width ไม่งั้นกฎนี้ชนะ media query ของ .bt-title-highlight ทุกช่วงจอ
+       เพราะ specificity สูงกว่า แล้วจอเล็กจะค้างที่ 56px) */
+    @media (min-width: 992px) {
+        .playbook-ticket__title .bt-title-highlight {
+            font-size: var(--font-size-56);
+        }
+    }
+
     /* ---------- การ์ดราคา (เป็นของ section นี้ล้วน ไม่อ้างอิง class ของ section อื่น) ---------- */
     .playbook-ticket__plan {
         --bt-playbook-ticket-plan-padding: var(--space-8);
@@ -13373,6 +13681,8 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         --bt-playbook-ticket-price-padding: var(--space-6);
         --bt-playbook-ticket-ribbon-clearance: var(--space-8);
         --bt-playbook-ticket-price-size: var(--section-heading-size);
+        --bt-playbook-ticket-plan-bg-size: auto 1580px;
+        --bt-playbook-ticket-plan-bg-position: 46% 74%;
 
         position: relative;
         overflow: hidden;
@@ -13383,7 +13693,7 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         background:
             linear-gradient(color-mix(in srgb, var(--color-neutral-0) 72%, transparent),
                 color-mix(in srgb, var(--color-surface-page) 64%, transparent)),
-            url('../images/ultimate-bg.webp') center / cover no-repeat;
+            url('../images/ultimate-bg.webp') var(--bt-playbook-ticket-plan-bg-position) / var(--bt-playbook-ticket-plan-bg-size) no-repeat;
     }
 
     /* ริบบอนส่วนลดเกาะมุมบนขวา มุมบนขวาไม่ต้องลบเอง เพราะการ์ดตัดขอบตัวเองด้วย
@@ -13394,7 +13704,7 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         right: var(--space-0);
         z-index: 2;
         padding: var(--space-2) var(--space-4);
-        border-radius: var(--space-0) var(--space-0) var(--space-0) var(--card-radius);
+        border-radius: var(--radius-0) var(--radius-0) var(--radius-0) var(--radius-1);
         color: var(--color-neutral-0);
         background: var(--color-danger-600);
         font-size: var(--section-small-size);
@@ -13613,7 +13923,7 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         right: var(--space-0);
         z-index: 2;
         padding: var(--space-2) var(--space-4);
-        border-radius: var(--space-0) var(--space-0) var(--space-0) var(--card-radius);
+        border-radius: var(--radius-0) var(--radius-0) var(--radius-0) var(--radius-1);
         color: var(--color-neutral-0);
         background: var(--color-danger-600);
         font-size: var(--section-small-size);
@@ -13693,11 +14003,15 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
     }
 
     /* หัวคอลัมน์ของตารางเปรียบเทียบ (คนละตัวกับการ์ดราคาด้านล่าง) */
+    /* ชื่อบัตรบนหัวตารางใช้ serif ชุดเดียวกับ .playbook-ticket__plan-title ของการ์ดด้านล่าง
+       ชื่อบัตรจึงอ่านเป็นของสิ่งเดียวกันทั้งสองที่ (Baskervville โหลดมาแค่น้ำหนัก 400
+       ถ้าใส่ medium เบราว์เซอร์จะปลอมตัวหนาให้เอง เส้นจะเละ) */
     .playbook-ticket__col {
         width: var(--bt-playbook-ticket-plan-width);
         padding: var(--bt-playbook-ticket-cell-padding-y) var(--bt-playbook-ticket-cell-padding-x);
+        font-family: 'Baskervville', var(--font-family-base);
         font-size: var(--bt-playbook-ticket-plan-size);
-        font-weight: var(--font-weight-medium);
+        font-weight: var(--font-weight-regular);
         line-height: var(--line-height-1);
         text-align: center;
     }

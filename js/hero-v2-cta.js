@@ -9,7 +9,7 @@ const sharedRegisterOptions = {
     label: 'ซื้อบัตร',
     href: TICKET_SECTION_HREF,
     height: 56,
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 400,
     fontFamily: "'FC Minimal'",
     textShadow: 'none',
@@ -176,8 +176,14 @@ ready.then(() => {
             textColor: '#111318',
             pillBackground: 'linear-gradient(180deg, #ffffff 0%, #f3f4f8 55%, #e4e7ee 100%)',
         });
+        /* ป้ายของปุ่มนี้ยาวที่สุดในเว็บ ปุ่มจึงยืดจนอัตราส่วนเกิน 8:1 แล้วลายโลหะบนขอบ
+           จะเห็นรอยต่อกลางปุ่ม (ลายถูกวาดในกล่องทรงจัตุรัส ยิ่งปุ่มยาวยิ่งถูกยืด)
+           บีบระยะในของปุ่มนี้ตัวเดียว ปุ่มอื่นทั้งเว็บยังใช้ 48 ตามเดิม
+           ส่งค่าเข้า fitLabelToColumn ด้วย การคำนวณย่อฟอนต์จะได้อิงระยะในชุดเดียวกัน */
+        const playbookHeroOptions = { ...responsiveOptions, paddingX: 36 };
+
         playbookHeroCtaButton = mountRegisterButton(playbookHeroCtaSlot, {
-            ...fitLabelToColumn(playbookHeroCtaSlot, PLAYBOOK_HERO_CTA_LABEL, responsiveOptions),
+            ...fitLabelToColumn(playbookHeroCtaSlot, PLAYBOOK_HERO_CTA_LABEL, playbookHeroOptions),
             label: PLAYBOOK_HERO_CTA_LABEL,
             href: playbookHeroCtaSlot?.dataset.ctaHref || TICKET_SECTION_HREF,
             textColor: '#111318',
@@ -189,8 +195,9 @@ ready.then(() => {
             href: playbookUltimateCtaSlot?.dataset.ctaHref || BUY_TICKET_URL,
             target: '_blank',
             rel: 'noopener noreferrer',
-            textColor: '#111318',
-            pillBackground: 'linear-gradient(180deg, #ffffff 0%, #f3f4f8 55%, #e4e7ee 100%)',
+            /* ใช้สีดำชุดเดียวกับปุ่มซื้อบัตรใน header (ขนาดยังเป็นชุด CTA เหมือนเดิม) */
+            textColor: '#ffffff',
+            pillBackground: 'linear-gradient(180deg, #20242a 0%, #111318 55%, #050607 100%)',
         });
     };
 

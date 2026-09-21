@@ -86,11 +86,19 @@
             return Number.isFinite(value) ? value : 26;
         }
 
+        /* การกระจายการ์ดทำครั้งเดียวตลอดอายุหน้า ส่วนการพลิกต้องเริ่ม-หยุดได้ทุกครั้งที่
+           เลื่อนเข้า-ออก section จึงต้องแยกกันคนละฟังก์ชัน ถ้ารวมไว้ใน reveal() เหมือนเดิม
+           รอบสองจะถูก guard 'is-revealed' ตีตกไปพร้อมกัน แล้วการ์ดจะค้างไม่พลิกอีกเลย */
+        const startFlips = () => {
+            if (!released || !visible) return;
+
+            flippers.forEach((flipper) => flipper.start());
+        };
+
         const reveal = () => {
             if (!released || !visible || root.classList.contains('is-revealed')) return;
 
             root.classList.add('is-revealed');
-            flippers.forEach((flipper) => flipper.start());
         };
 
         const release = () => {
@@ -98,6 +106,7 @@
 
             released = true;
             reveal();
+            startFlips();
         };
 
         // ทุกก้อนที่รอต้องจบครบ การ์ดจึงจะเริ่มกระจาย ก้อนที่ไม่มี transition นับว่าจบทันที
@@ -229,6 +238,8 @@
                     // กรอบเพิ่งเลื่อนเข้ามา ตำแหน่งบนจอเปลี่ยนไปแล้ว ต้องวัดใหม่ก่อนคิดระยะเคอร์เซอร์
                     bounds = root.getBoundingClientRect();
                     reveal();
+                    // เลื่อนกลับเข้ามาใหม่ก็ต้องนับรอบพลิกต่อ ไม่ใช่เริ่มเฉพาะครั้งแรก
+                    startFlips();
                     start();
                 } else {
                     stop();
@@ -240,6 +251,7 @@
             visible = true;
             released = true;
             reveal();
+            startFlips();
         }
 
         /* จับการเคลื่อนไหวที่ระดับ section ไม่ใช่ที่การ์ด เพราะชั้นการ์ดปิด pointer-events ไว้
