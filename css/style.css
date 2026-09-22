@@ -10538,12 +10538,43 @@ body.is-loading .hero-scroll-cue,
         }
     }
 
+    /* ปุ่ม liquid metal (mount โดย js/hero-v2-cta.js) กับปุ่มดำวางคู่กันในแถวเดียว
+       จอแคบตกลงมาเรียงกันเองด้วย flex-wrap */
     .playbook__action {
-        display: grid;
-        place-items: center;
+        /* ความสูงปุ่ม liquid metal ตั้งไว้ใน js/hero-v2-cta.js (height: 56 ปกติ, 46 ที่จอ ≤767px
+           และจอนอนเตี้ย) ปุ่มดำข้าง ๆ จึงอ้างค่าเดียวกันไว้ที่นี่ เพื่อให้สูงเท่ากันทั้งสองปุ่ม */
+        --bt-playbook-cta-height: 56px;
+
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-4);
+
+        /* ช่องของปุ่ม liquid metal เป็น block ที่มี .lmb แบบ inline-block อยู่ข้างใน
+           ถ้าไม่ทำเป็น flex จะมีที่ว่างใต้บรรทัดติดมา ทำให้สองปุ่มไม่อยู่กึ่งกลางแนวเดียวกัน */
+        >#playbook-cta-slot {
+            display: flex;
+            align-items: center;
+        }
 
         .lmb button:focus-visible {
             outline-color: var(--color-neutral-0);
+        }
+
+        /* ปุ่มดำล้วน ไม่มีขอบ spectrum ชุดค่าเดียวกับปุ่มซื้อบัตรใน section Ticket (.ticket__action) */
+        .playbook__action-link.bt-action-button--primary {
+            border-color: var(--bt-action-fill);
+            background: var(--bt-action-fill);
+        }
+
+        .playbook__action-link {
+            min-height: var(--bt-playbook-cta-height);
+        }
+
+        @media (max-width: 767px),
+        (max-width: 1199px) and (max-height: 575px) and (orientation: landscape) {
+            --bt-playbook-cta-height: 46px;
         }
     }
 
@@ -11903,8 +11934,8 @@ body.is-loading .hero-scroll-cue,
        -at คือจุดศูนย์กลางของ mask ค่าตั้งต้นอยู่กึ่งกลางขอบล่าง ทับรายใบได้ด้วย modifier */
     /* หลังการ์ดที่สอดอยู่หลังแผงคะแนนของใบ Skill โผล่ออกมาที่มุมขวาล่าง
        ค่าติดลบคือระยะที่การ์ดเลยขอบกรอบออกไป ส่วนนั้นถูก overflow ตัดทิ้ง */
-    --bt-playbook-benefit-skill-card-width: 260px;
-    --bt-playbook-benefit-skill-card-bottom: -140px;
+    --bt-playbook-benefit-skill-card-width: 262px;
+    --bt-playbook-benefit-skill-card-bottom: -74px;
     --bt-playbook-benefit-dots-gap: 10px;
     --bt-playbook-benefit-dots-radius: 1px;
     --bt-playbook-benefit-dots-ink: color-mix(in srgb, var(--color-neutral-400) 38%, transparent);
@@ -12314,30 +12345,49 @@ body.is-loading .hero-scroll-cue,
     /* ของที่เพิ่มเข้ามาในใบ 1 และ 3 ใช้กลไกเดียวกับชิป/จุดแข็งที่มีอยู่เดิมทุกอย่าง:
        เริ่มจาง+เลื่อนเล็กน้อย รอ .is-revealed จาก js/playbook-benefit-media.js แล้วค่อยเข้าที่
        หน่วงไล่กันทีละ 70ms ต่อจาก --motion-lead เท่ากับจังหวะของชิป */
+    /* ไอคอนสินทรัพย์เริ่มซ้อนรวมกันอยู่กลางกรอบ แล้วค่อยกระจายออกไปตำแหน่งของตัวเอง
+
+       ระยะกระจาย --fin-x / --fin-y (เวกเตอร์จากตำแหน่งจริงย้อนกลับมาที่กึ่งกลาง)
+       วัดจากของจริงแล้วเขียนลงมาโดย js/playbook-benefit-media.js ไม่ได้ฮาร์ดโค้ดไว้ที่นี่
+       เพราะเปอร์เซ็นต์ใน translate อ้างขนาดของตัว element เอง ไม่ใช่ของกรอบ
+       ย้ายตำแหน่งไอคอนเมื่อไหร่ จุดรวมกลางจึงตามไปเองโดยไม่ต้องแก้ตัวเลขที่นี่ด้วย
+       ถ้า JS ไม่ทำงาน ค่าตั้งต้นเป็น 0 ไอคอนก็แค่อยู่ที่เดิมแล้ว fade เข้ามา ไม่พัง
+
+       ใช้ property translate แยกจาก transform เพื่อให้ transform ว่างไว้ทำ scale
+       ไอคอนจึงโตขึ้นระหว่างที่กระจายออก ไม่ใช่แค่เลื่อนเฉย ๆ */
     .playbook-benefit__finance-icon,
     .playbook-benefit__finance-mark {
+        /* --fin-home-x คือ offset ที่ต้องติดตัวตลอดเวลา ไม่ใช่ระยะกระจาย
+           ใบกลางใช้จัดกึ่งกลางด้วย -50% ถ้าไม่แยกออกมา มันจะหายไปตอนกระจายเสร็จ */
+        --fin-home-x: 0px;
+        --fin-x: 0px;
+        --fin-y: 0px;
+
         opacity: 0;
-        transform: translateY(8px) scale(0.94);
+        translate: calc(var(--fin-home-x) + var(--fin-x)) var(--fin-y);
+        transform: scale(0.72);
         transition:
             opacity var(--bt-playbook-benefit-motion-chip) var(--ease-standard) var(--playbook-benefit-motion-delay, 0ms),
-            transform var(--bt-playbook-benefit-motion-chip) var(--ease-standard) var(--playbook-benefit-motion-delay, 0ms);
+            translate var(--bt-playbook-benefit-motion-card) var(--ease-standard) var(--playbook-benefit-motion-delay, 0ms),
+            rotate var(--bt-playbook-benefit-motion-card) var(--ease-standard) var(--playbook-benefit-motion-delay, 0ms),
+            transform var(--bt-playbook-benefit-motion-card) var(--ease-standard) var(--playbook-benefit-motion-delay, 0ms);
+    }
+
+    /* ตอนกองรวมกลางยังไม่เอียง ค่อยบิดเข้าที่พร้อมกับที่กระจายออก
+       ต้องใช้ :not(.is-revealed) เพราะ rotate ของแต่ละใบอยู่ที่ตัวปรับแต่ง
+       ถ้าเขียน rotate: 0 ไว้ในกฎกลาง จะโดนตัวปรับแต่งที่ specificity เท่ากันแต่มาทีหลังทับ */
+    .playbook-benefit__media:not(.is-revealed) .playbook-benefit__finance-icon,
+    .playbook-benefit__media:not(.is-revealed) .playbook-benefit__finance-mark {
+        rotate: 0deg;
     }
 
     .playbook-benefit__media.is-revealed .playbook-benefit__finance-icon,
     .playbook-benefit__media.is-revealed .playbook-benefit__finance-mark {
         opacity: 1;
-        transform: translateY(0) scale(1);
+        translate: var(--fin-home-x) 0;
+        transform: scale(1);
     }
 
-    /* ใบกลางจัดกึ่งกลางด้วย translateX(-50%) อยู่แล้ว ต้องพาค่านั้นไปด้วยทั้งสองสถานะ
-       ไม่งั้นมันจะกระโดดไปทางขวาตอนเริ่มเล่น */
-    .playbook-benefit__finance-icon--money {
-        transform: translateX(-50%) translateY(8px) scale(0.94);
-    }
-
-    .playbook-benefit__media.is-revealed .playbook-benefit__finance-icon--money {
-        transform: translateX(-50%) translateY(0) scale(1);
-    }
 
     .playbook-benefit__finance-icon--card {
         --playbook-benefit-motion-delay: var(--bt-playbook-benefit-motion-lead);
@@ -12550,6 +12600,11 @@ body.is-loading .hero-scroll-cue,
    คง layout หลักของ section เดิมไว้ แล้วปรับเฉพาะลำดับชั้นของ UI ภายใน visual */
 .playbook-benefit {
     --bt-playbook-benefit-panel-shadow: 0 10px 22px rgba(17, 19, 24, 0.06), 0 2px 6px rgba(17, 19, 24, 0.04);
+    /* ไอคอนสินทรัพย์ spectrum: ขนาด ความอิ่มสี และเงา คุมจากสามค่านี้ที่เดียว
+       เงาตั้งไว้จาง ๆ พอให้ภาพไม่ลอยแบนติดพื้น ไม่ได้ต้องการให้เห็นเป็นเงาชัด ๆ */
+    --bt-playbook-benefit-finance-art-size: 56px;
+    --bt-playbook-benefit-finance-art-size-lg: var(--space-16);
+    --bt-playbook-benefit-finance-mark-size: var(--space-10);
 
     /* wrapper ใช้ระบุชนิดการ์ดเท่านั้น ต้องไม่เพิ่ม spacing หรือเปลี่ยน layout เดิม */
     .playbook-benefit__card {
@@ -12584,59 +12639,59 @@ body.is-loading .hero-scroll-cue,
         top: 32%;
     }
 
+    /* ไอคอนสินทรัพย์เป็นภาพ spectrum ลอยเปล่า ๆ ไม่มีเฟรม พื้นหลัง หรือเส้นขอบ
+       เงาใช้ drop-shadow ไม่ใช่ box-shadow เพราะภาพเป็น PNG โปร่ง
+       box-shadow จะวาดเป็นกรอบสี่เหลี่ยมรอบกล่อง ส่วน drop-shadow เดินตามรูปทรงจริงของภาพ
+       ความสูงไม่ได้ล็อกไว้ ปล่อยให้ไปตามสัดส่วนของไฟล์ (arrow-up ไม่ได้จัตุรัสเป๊ะ) */
     .playbook-benefit__finance-icon {
         position: absolute;
         z-index: 3;
-        width: 56px;
-        aspect-ratio: 1;
-        display: grid;
-        place-items: center;
-        border: var(--border-width-2) solid #FFF;
-        border-radius: var(--radius-2);
-        background: var(--color-neutral-0);
-        box-shadow: var(--bt-playbook-benefit-panel-shadow);
+        width: var(--bt-playbook-benefit-finance-art-size);
+        height: auto;
+        display: block;
+        filter: saturate(1.2);
         pointer-events: none;
     }
 
-    .playbook-benefit__finance-icon .bt-icon {
-        font-size: var(--font-size-24);
-    }
+    /* ตัวปรับแต่งเหลือแค่ตำแหน่ง ลำดับชั้น และองศาเอียง
+       สีกับพื้นหลังเดิมเป็นของเฟรมที่ถอดออกไปแล้ว
 
+       เอียงด้วย property rotate ไม่ใช่ transform เพราะ transform ถูก animation ตอน reveal
+       ใช้อยู่ (translateY + scale) ถ้าเอา rotate ไปใส่รวมในนั้น ต้องเขียนซ้ำทั้งสองสถานะ
+       ของทุกใบ และพลาดที่เดียวไอคอนจะหมุนกลับตอนเล่นจบ
+       property rotate แยกชั้นกับ transform จึงอยู่ร่วมกันได้โดยไม่ต้องแตะ motion เดิม
+       องศาสลับบวก-ลบไม่ให้เอียงทางเดียวกันหมด ทุกตัวอยู่ในช่วง ±10 องศา */
     .playbook-benefit__finance-icon--card {
         top: 6%;
         left: 6%;
         z-index: 1;
-        color: var(--color-blue-600);
-        background: var(--color-blue-100);
+        rotate: 8deg;
     }
 
     .playbook-benefit__finance-icon--receipt {
         top: 76%;
-        left: 10%;
-        color: var(--color-pink-500);
-        background: var(--color-pink-100);
+        left: 8%;
+        rotate: -6deg;
     }
 
     .playbook-benefit__finance-icon--banknote {
         top: 54%;
         right: 6%;
         z-index: 1;
-        color: var(--color-green-600);
-        background: var(--color-green-100);
+        rotate: -5deg;
     }
 
+    /* ย้ายการจัดกึ่งกลางจาก transform มาไว้ที่ property translate
+       ถ้าคงไว้ใน transform ค่า translateX(-50%) จะถูกคิดในแกนที่หมุนไปแล้ว ตำแหน่งจะเพี้ยนตามองศา
+       ผลพลอยได้คือไม่ต้องมี motion rule เฉพาะของใบนี้อีก ใช้ชุดกลางร่วมกับตัวอื่นได้เลย */
     .playbook-benefit__finance-icon--money {
         top: 12%;
         left: 50%;
         z-index: 4;
-        width: var(--space-16);
-        color: #8f949c;
-        background: #f7f7f7;
-        transform: translateX(-50%);
-    }
+        width: var(--bt-playbook-benefit-finance-art-size-lg);
+        rotate: 4deg;
 
-    .playbook-benefit__finance-icon--money .bt-icon {
-        font-size: var(--font-size-32);
+        --fin-home-x: -50%;
     }
 
     .playbook-benefit__finance-mark {
@@ -12644,11 +12699,10 @@ body.is-loading .hero-scroll-cue,
         top: 5%;
         right: 12%;
         z-index: 1;
-        color: #d2d5db;
-        font-size: var(--font-size-32);
-        font-weight: var(--font-weight-medium);
-        line-height: 1;
-        pointer-events: none;
+        width: var(--bt-playbook-benefit-finance-mark-size);
+        height: auto;
+        filter: saturate(1.5);
+        rotate: -10deg;
     }
 
     /* Card 2: วางเป็นสามแผงซ้อนเหลื่อมแบบรายการใน reference
@@ -12720,7 +12774,7 @@ body.is-loading .hero-scroll-cue,
        bar หนาขึ้นเพื่อสร้างลำดับ คะแนนยังใช้ animation เดิม */
     .playbook-benefit__card--skill .playbook-benefit__media {
         padding: var(--space-6);
-        justify-content: start;
+        justify-content: center;
     }
 
     .playbook-benefit__card--skill .playbook-benefit__skill {
@@ -13088,21 +13142,17 @@ body.is-loading .hero-scroll-cue,
         line-height: var(--line-height-relaxed);
     }
 
-    /* ชื่อบัตรเป็น badge พื้นน้ำเงิน หน้าตาชุดเดียวกับป้าย "คุ้มกว่า" ใน section ticket
-       (มุมโค้ง สีพื้น สีตัวอักษร ยกค่ามาตรง ๆ) ต่างกันแค่ไม่ล็อกขนาดตัวอักษรไว้ที่ 12px
-       ปล่อยให้รับขนาดจากบรรทัดที่มันอยู่ จะได้ไม่เล็กลงกลางประโยค
-       ส่วน serif ยังเป็นชุดเดียวกับที่เว็บใช้เรียกชื่อบัตรทุกที่
-       (Baskervville โหลดมาแค่น้ำหนัก 400 ต้องคืนเป็น regular ไม่งั้นเบราว์เซอร์ปลอมตัวหนาให้) */
+    /* ชื่อบัตรใช้ไล่สี spectrum ชุดเดียวกับหัวข้อ โดยติด .bt-title-highlight ใน markup
+       ไม่ได้ก๊อปค่าไล่สีมาเขียนซ้ำ จึงได้ทั้งสีและ animation ชุดเดียวกับที่อื่นของเว็บ
+       เหลือสองอย่างที่ต้องกลบ เพราะ component นั้นออกแบบมาสำหรับหัวข้อ:
+       ขนาด (ล็อกไว้ 64px แล้วไล่ลงตาม breakpoint) เปลี่ยนเป็นรับจากบรรทัดที่มันอยู่
+       และน้ำหนัก medium ที่ Baskervville ไม่มี (โหลดมาแค่ 400) ถ้าไม่คืนเป็น regular
+       เบราว์เซอร์จะปลอมตัวหนาให้จนตัวอักษรบวมผิดรูป
+       ห้ามใส่ color หรือ background ตรงนี้ ไล่สีทำงานด้วย background-clip: text อยู่ */
     .identity-cards__highlight-plan {
-        display: inline-block;
-        padding: var(--space-2) var(--space-3);
-        border-radius: var(--radius-1);
-        color: var(--color-neutral-0);
-        background: var(--color-accent-primary);
         font-family: 'Baskervville', var(--font-family-base);
+        font-size: inherit;
         font-weight: var(--font-weight-regular);
-        line-height: var(--line-height-1);
-        white-space: nowrap;
     }
 
     .identity-cards__carousel {

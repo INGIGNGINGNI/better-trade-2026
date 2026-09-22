@@ -201,7 +201,44 @@
         });
     };
 
+    /* ไอคอนสินทรัพย์เริ่มกองรวมกันกลางกรอบแล้วค่อยกระจายออกไปตำแหน่งของตัวเอง
+       ตำแหน่งปลายทางกำหนดไว้ใน CSS ด้วย top/left/right เป็นเปอร์เซ็นต์ของกรอบ
+       ส่วน "ระยะย้อนกลับมาที่กึ่งกลาง" เขียนเป็นค่าตายตัวใน CSS ไม่ได้
+       เพราะเปอร์เซ็นต์ใน translate อ้างขนาดของตัว element เอง ไม่ใช่ของกรอบ
+       จึงวัดจากของจริงตรงนี้แทน ย้ายไอคอนใน CSS เมื่อไหร่ จุดรวมก็ตามไปเอง
+       ไม่ต้องมาแก้ตัวเลขสองที่ให้ตรงกัน
+
+       วัดได้ทั้งที่ยังไม่เล่น เพราะ scale กับ rotate หมุน/ย่อรอบจุดกึ่งกลางของตัวเอง
+       ไม่ทำให้จุดกึ่งกลางขยับ มีแต่ translate เท่านั้นที่ขยับ จึงล้างเฉพาะสองค่านั้นก่อนวัด */
+    const measureFinanceSpread = () => {
+        document.querySelectorAll('.playbook-benefit__media').forEach((media) => {
+            const parts = [...media.querySelectorAll('.playbook-benefit__finance-icon, .playbook-benefit__finance-mark')];
+
+            if (!parts.length) return;
+
+            parts.forEach((part) => {
+                part.style.setProperty('--fin-x', '0px');
+                part.style.setProperty('--fin-y', '0px');
+            });
+
+            const frame = media.getBoundingClientRect();
+            const centreX = frame.left + frame.width / 2;
+            const centreY = frame.top + frame.height / 2;
+
+            parts.forEach((part) => {
+                const box = part.getBoundingClientRect();
+
+                part.style.setProperty('--fin-x', Math.round(centreX - (box.left + box.width / 2)) + 'px');
+                part.style.setProperty('--fin-y', Math.round(centreY - (box.top + box.height / 2)) + 'px');
+            });
+        });
+    };
+
     fitMediaToHeight();
-    window.addEventListener('resize', fitMediaToHeight);
+    measureFinanceSpread();
+    window.addEventListener('resize', () => {
+        fitMediaToHeight();
+        measureFinanceSpread();
+    });
     document.fonts?.ready.then(fitMediaToHeight);
 })();
