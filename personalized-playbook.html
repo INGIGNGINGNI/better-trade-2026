@@ -40,7 +40,7 @@
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="css/main.css?v=57">
-    <link rel="stylesheet" href="css/style.css?v=872">
+    <link rel="stylesheet" href="css/style.css?v=877">
 </head>
 
 <body class="playbook-page">
@@ -412,9 +412,13 @@
                         <div class="playbook-benefit__card playbook-benefit__card--skill">
                         <div class="playbook-benefit__media playbook-benefit__media--dots-center" data-benefit-reveal>
                             <!-- หลังการ์ดสอดอยู่หลังแผงคะแนน โผล่ขึ้นมาจากขอบล่างกึ่งกลาง
-                                 เป็นของตกแต่งล้วน จึง aria-hidden และปิด pointer-events -->
-                            <img class="playbook-benefit__skill-card playbook-benefit__skill-card--back" src="images/card/normally/11-The Contrarian.webp"
-                                width="520" height="728" loading="lazy" decoding="async" alt="" aria-hidden="true">
+                                 เป็นของตกแต่งล้วน จึง aria-hidden และปิด pointer-events
+                                 ต้องมีกล่องครอบ เพราะเงากับ mask อยู่บน element เดียวกันไม่ได้
+                                 (ดูเหตุผลเต็มใน .playbook-benefit__skill-card ของ style.css) -->
+                            <span class="playbook-benefit__skill-card playbook-benefit__skill-card--back" aria-hidden="true">
+                                <img class="playbook-benefit__skill-card-art" src="images/card/normally/11-The Contrarian.webp"
+                                    width="520" height="728" loading="lazy" decoding="async" alt="">
+                            </span>
 
                             <div class="playbook-benefit__fit" data-benefit-fit>
                             <div class="playbook-benefit__skill">

@@ -11934,8 +11934,11 @@ body.is-loading .hero-scroll-cue,
        -at คือจุดศูนย์กลางของ mask ค่าตั้งต้นอยู่กึ่งกลางขอบล่าง ทับรายใบได้ด้วย modifier */
     /* หลังการ์ดที่สอดอยู่หลังแผงคะแนนของใบ Skill โผล่ออกมาที่มุมขวาล่าง
        ค่าติดลบคือระยะที่การ์ดเลยขอบกรอบออกไป ส่วนนั้นถูก overflow ตัดทิ้ง */
-    --bt-playbook-benefit-skill-card-width: 262px;
+    --bt-playbook-benefit-skill-card-width: 67%;
     --bt-playbook-benefit-skill-card-bottom: -74px;
+    /* ความสูงของแถบที่ไล่จางตรงขอบล่าง เหนือแถบนี้การ์ดทึบเต็มตามปกติ
+       เป็น px ไม่ใช่ % แถบจึงสูงเท่าเดิมเสมอ ไม่ยืดตามขนาดการ์ด */
+    --bt-playbook-benefit-skill-card-fade: 112px;
     --bt-playbook-benefit-dots-gap: 10px;
     --bt-playbook-benefit-dots-radius: 1px;
     --bt-playbook-benefit-dots-ink: color-mix(in srgb, var(--color-neutral-400) 38%, transparent);
@@ -12409,14 +12412,44 @@ body.is-loading .hero-scroll-cue,
         --playbook-benefit-motion-delay: calc(var(--bt-playbook-benefit-motion-lead) + 280ms);
     }
 
+    /* ไล่จางจากด้านล่างให้กลืนไปกับพื้นกรอบ แทนที่จะถูก overflow: hidden ตัดเป็นเส้นตรง
+       ใช้ mask ไม่ใช่การเอาสีพื้นมาทับ เพราะการ์ดจะค่อย ๆ โปร่งจริง
+       ลายจุดที่อยู่ข้างหลังจึงทะลุขึ้นมาแทนที่ ไม่ใช่ถูกกลบไปด้วย
+
+       เงากับ mask อยู่บน element เดียวกันไม่ได้: เงาของ drop-shadow ตกอยู่นอกกล่อง
+       แต่ mask ครอบแค่ในกล่อง (mask-repeat: no-repeat) อะไรที่อยู่นอกนั้นถูกตัดทิ้งหมด
+       เงาจึงหายไปทั้งดวง และเงานี่แหละคือสิ่งเดียวที่แยกกระดาษขาวของการ์ด
+       ออกจากพื้นกรอบที่ขาวพอกัน พอหายไปขอบบนของการ์ดเลยกลืนหายตามไปด้วย
+
+       แยกเป็นสองชั้นแทน: กล่องนอกถือเงา ภาพข้างในถือ mask
+       เงาจึงคิดจากภาพที่ผ่าน mask มาแล้ว ได้เงาที่จางหายพร้อมกับขอบล่างของการ์ดพอดี */
     .playbook-benefit__skill-card {
         position: absolute;
         z-index: 0;
         width: var(--bt-playbook-benefit-skill-card-width);
-        height: auto;
         display: block;
         filter: drop-shadow(0 12px 28px rgba(17, 19, 24, 0.14));
         pointer-events: none;
+    }
+
+    /* จุดที่จางสนิทไม่ใช่ 100% แต่เป็น 100% + --skill-card-bottom (ค่าติดลบ)
+       เพราะการ์ดยื่นพ้นขอบกรอบลงไปเท่านั้นพอดี ถ้าไล่ถึง 100% จุดจางสุดจะตกอยู่นอกกรอบ
+       ขอบที่คนเห็นจริงจึงยังทึบอยู่ครึ่งหนึ่งแล้วถูก overflow ตัดเป็นเส้นตรงเหมือนเดิม
+       ส่วนจุดเริ่มไล่นับถอยขึ้นมาจากตรงนั้นเท่ากับ --skill-card-fade การไล่จึงกินแค่แถบล่าง
+       ไม่ลามขึ้นไปทำให้ส่วนบนของการ์ดซีด
+       ทั้งสองจุดผูกกับ token ชุดเดียวกัน ขยับระยะที่ยื่นพ้นกรอบเมื่อไหร่ แถบก็เลื่อนตามเอง
+
+       mask-repeat ต้องเป็น no-repeat ค่าเริ่มต้นคือ repeat ซึ่งจะเอาไล่สีไปปูซ้ำใต้กล่องต่อ
+       กลายเป็นทึบสลับจางเป็นแถบ ๆ */
+    .playbook-benefit__skill-card-art {
+        width: 100%;
+        height: auto;
+        display: block;
+        mask-image: linear-gradient(to bottom,
+                #000 calc(100% + var(--bt-playbook-benefit-skill-card-bottom) - var(--bt-playbook-benefit-skill-card-fade)),
+                transparent calc(100% + var(--bt-playbook-benefit-skill-card-bottom)));
+        mask-repeat: no-repeat;
+        mask-size: 100% 100%;
     }
 
     /* กึ่งกลางแนวนอนด้วย left 50% + translateX(-50%) จึงอยู่กลางเสมอไม่ว่ากรอบกว้างเท่าไหร่ */
