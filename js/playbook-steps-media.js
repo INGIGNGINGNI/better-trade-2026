@@ -170,4 +170,31 @@
     }
 
     document.querySelectorAll('[data-steps-compare]').forEach(initCompare);
+
+    /* ไดอะแกรมการ์ด + ป้ายกระจายในขั้นตอนที่ 1
+       ต้นฉบับ (React) เล่นตอน hover ด้วย useState ที่นี่เล่นตอนเลื่อนถึงครั้งแรกแทน
+       เพราะเป็นภาพประกอบบนหน้า landing ไม่ใช่ของที่ผู้ใช้ต้องเอาเมาส์ไปชี้
+       (และบนมือถือไม่มี hover ให้ใช้ตั้งแต่แรก)
+       JS ทำแค่ติดคลาว จังหวะทั้งหมดอยู่ใน CSS ฝั่งเดียว */
+    function initDiagram(root) {
+        const play = () => root.classList.add('is-revealed');
+
+        if (!('IntersectionObserver' in window)) {
+            play();
+            return;
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+
+                observer.unobserve(entry.target);
+                play();
+            });
+        }, { threshold: 0.35 });
+
+        observer.observe(root);
+    }
+
+    document.querySelectorAll('[data-steps-diagram]').forEach(initDiagram);
 })();

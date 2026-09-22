@@ -11838,7 +11838,7 @@ body.is-loading .hero-scroll-cue,
         margin: var(--bt-playbook-intro-lead-space) auto var(--space-0);
         color: var(--bt-playbook-intro-ink-soft);
         font-size: var(--bt-playbook-intro-lead-size);
-        font-weight: var(--font-weight-light);
+        font-weight: var(--font-weight-regular);
         line-height: var(--bt-playbook-intro-lead-line-height);
     }
 
@@ -11850,16 +11850,6 @@ body.is-loading .hero-scroll-cue,
         font-weight: var(--font-weight-light);
         line-height: var(--bt-playbook-intro-note-line-height);
     }
-}
-
-/* หัวข้อของ section นี้ไม่มี motion ใด ๆ ตั้งใจให้นิ่งสนิท
-   เกลียวการ์ดที่ยุบลงเป็นจุดท้าย hero ทำหน้าที่พาสายตามาถึงตรงนี้อยู่แล้ว
-   ต้องเขียนทับเพราะ reveal-on-scroll จับ .bt-section-title ทุกตัวในหน้าโดยอัตโนมัติ */
-body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] {
-    opacity: 1;
-    transform: none;
-    transition: none;
-    will-change: auto;
 }
 
 @media (max-width: 991px) {
@@ -11894,8 +11884,8 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
 
 /* ==========================================================================
    Section: Playbook Benefit — What you get (personalized-playbook.html)
-   พื้นขาวสลับกับสองส่วนบนที่เป็นฉากมืด ใช้ component หัวข้อและ grid ของ Bootstrap
-   ชุดเดียวกับ section อื่นในเว็บ ตอนนี้การ์ดยังเป็นกรอบเปล่ารอภาพจริง
+   ใช้ component หัวข้อและ grid ของ Bootstrap ชุดเดียวกับ section อื่นในเว็บ
+   ภายในการ์ดเป็น UI ที่สร้างจาก HTML/CSS และ interaction เดิม ไม่ใช้ภาพ mockup สำเร็จ
    ========================================================================== */
 .playbook-benefit {
     --bt-playbook-benefit-padding-y: var(--section-padding-y);
@@ -11905,12 +11895,16 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
     --bt-playbook-benefit-list-space: var(--space-16);
     --bt-playbook-benefit-list-row-gap: var(--space-12);
     --bt-playbook-benefit-list-gutter: var(--space-12);
-    --bt-playbook-benefit-media-height: 340px;
+    --bt-playbook-benefit-media-height: 320px;
     /* ---------- พื้นหลังจุดไข่ปลา (พอร์ตจาก DotPattern ของ React) ----------
        ต้นฉบับตั้งไว้ตาราง 16px สี neutral-400 ที่ 80% ซึ่งบนพื้นกระดาษอ่อนของการ์ดนี้
        จุดจะเด่นเกินจนแย่งสายตาจากเนื้อหา และห่างจนเห็นเป็นจุด ๆ ไม่ใช่เนื้อกระดาษ
        จึงถี่ขึ้นเป็น 10px และลดความเข้มเหลือ 38% ให้อ่านเป็นผิวสัมผัสจาง ๆ แทน
        -at คือจุดศูนย์กลางของ mask ค่าตั้งต้นอยู่กึ่งกลางขอบล่าง ทับรายใบได้ด้วย modifier */
+    /* หลังการ์ดที่สอดอยู่หลังแผงคะแนนของใบ Skill โผล่ออกมาที่มุมขวาล่าง
+       ค่าติดลบคือระยะที่การ์ดเลยขอบกรอบออกไป ส่วนนั้นถูก overflow ตัดทิ้ง */
+    --bt-playbook-benefit-skill-card-width: 260px;
+    --bt-playbook-benefit-skill-card-bottom: -140px;
     --bt-playbook-benefit-dots-gap: 10px;
     --bt-playbook-benefit-dots-radius: 1px;
     --bt-playbook-benefit-dots-ink: color-mix(in srgb, var(--color-neutral-400) 38%, transparent);
@@ -11920,15 +11914,15 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
     --bt-playbook-benefit-media-gap: var(--bt-playbook-benefit-media-item-gap);
     /* ขนาด/น้ำหนัก/สีของการ์ดตัวอย่างยึดตามต้นฉบับใน dna-quiz-flow
        (สีม่วง-ชมพู-เหลืองเป็นชุดสีของหน้านั้นโดยเฉพาะ ไม่มีใน token กลางของเว็บ) */
-    --bt-playbook-benefit-media-label-size: var(--font-size-14);
-    --bt-playbook-benefit-media-copy-size: var(--font-size-12);
+    --bt-playbook-benefit-media-label-size: var(--font-size-16);
+    --bt-playbook-benefit-media-copy-size: 13px;
     --bt-playbook-benefit-card-padding: var(--space-4);
     --bt-playbook-benefit-violet: #9c91ff;
     --bt-playbook-benefit-pink: #f178d8;
     --bt-playbook-benefit-yellow: #f2ea83;
     --bt-playbook-benefit-ok-ink: #15803d;
     --bt-playbook-benefit-warn-ink: #8a5a00;
-    --bt-playbook-benefit-media-ink: #111318;
+    --bt-playbook-benefit-media-ink: var(--color-text-muted);
     --bt-playbook-benefit-media-line: rgba(17, 19, 24, 0.08);
     --bt-playbook-benefit-media-paper: #FFF;
     --bt-playbook-benefit-serif: 'Baskervville', var(--font-family-base);
@@ -11970,7 +11964,7 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         margin: var(--bt-playbook-benefit-lead-space) var(--space-0) var(--space-0);
         color: var(--color-text-muted);
         font-size: var(--bt-playbook-benefit-lead-size);
-        font-weight: var(--font-weight-light);
+        font-weight: var(--font-weight-regular);
         line-height: var(--line-height-relaxed);
     }
 
@@ -12025,20 +12019,27 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         --bt-playbook-benefit-dots-at: 50% 50%;
     }
 
-    .playbook-benefit__media--figure {
-        padding: var(--space-0);
+    /* ใบ Skill: ลายจุดเป็นวงจำกัดอยู่กลางกรอบ ไม่ลามจนเต็มการ์ด
+       กรอบกว้าง 396 สูง 320 ครึ่งเส้นทแยงคือ 254px ค่าเดิม 300px จึงเลยทุกมุมไปหมด
+       140px ทำให้วงจบก่อนถึงขอบทุกด้าน (เหลือขอบว่างข้างละ ~58px บน-ล่าง ~20px) */
+    .playbook-benefit__card--skill .playbook-benefit__media {
+        --bt-playbook-benefit-dots-fade: 200px;
     }
 
-    /* ต้องยกภาพขึ้นมาเหนือชั้นลายจุดเอง ปล่อยไว้เฉย ๆ ไม่ได้
-       เพราะ ::before เป็น element ที่ positioned มันจะวาดทับ <img> ที่เป็นเนื้อหาในสายปกติ
-       ลายจุดจึงต้องอยู่หลังภาพ เห็นเฉพาะส่วนที่ภาพโปร่งเท่านั้น */
-    .playbook-benefit__figure {
+    /* กล่องที่ย่อได้ทั้งก้อนเมื่อเนื้อหาสูงเกินกรอบ (ค่าตัวคูณมาจาก js/playbook-benefit-media.js)
+       ย่อด้วย transform ไม่ใช่การบีบ gap/font ทีละค่า สัดส่วนภายในจึงเหมือนเดิมเป๊ะ
+       และเพราะ transform ไม่กระทบ layout การตัดบรรทัดของข้อความก็ไม่เปลี่ยนตาม
+       z-index ยกให้อยู่เหนือชั้นลายจุด เพราะ ::before เป็น element ที่ positioned */
+    .playbook-benefit__fit {
         position: relative;
         z-index: 1;
+        flex: 0 0 auto;
         width: 100%;
-        height: 100%;
-        display: block;
-        object-fit: cover;
+        display: flex;
+        flex-direction: column;
+        gap: var(--bt-playbook-benefit-media-gap);
+        transform: scale(var(--bt-playbook-benefit-fit, 1));
+        transform-origin: center center;
     }
 
     .playbook-benefit__compare {
@@ -12162,7 +12163,6 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
     .playbook-benefit__trait,
     .playbook-benefit__skill {
         padding: var(--bt-playbook-benefit-card-padding);
-        border: var(--border-width-1) solid var(--bt-playbook-benefit-media-line);
         border-radius: var(--card-radius);
         background: var(--bt-playbook-benefit-media-paper);
     }
@@ -12235,6 +12235,10 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         --playbook-benefit-motion-delay: calc(var(--bt-playbook-benefit-motion-lead) + 210ms);
     }
 
+    .playbook-benefit__chip:nth-child(5) {
+        --playbook-benefit-motion-delay: calc(var(--bt-playbook-benefit-motion-lead) + 280ms);
+    }
+
     /* การ์ดสองใบสูงตามเนื้อหาของตัวเอง ไม่บังคับให้เท่ากัน จะได้ไม่เหลือที่ว่างในใบที่สั้นกว่า */
     .playbook-benefit__traits {
         display: grid;
@@ -12300,18 +12304,87 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         overflow: hidden;
     }
 
-    .playbook-benefit__skill-glow {
+    .playbook-benefit__skill> * {
+        position: relative;
+    }
+
+    /* อยู่หลังแผงคะแนน (z-index ต่ำกว่า __fit ที่เป็น 1) แต่เหนือชั้นลายจุด
+       สูงกว่าแผงจึงโผล่พ้นขอบบน-ล่าง อ่านเป็นการ์ดที่สอดอยู่ข้างหลัง
+       ส่วนที่เลยกรอบถูก overflow: hidden ของ media ตัดให้เอง */
+    /* ของที่เพิ่มเข้ามาในใบ 1 และ 3 ใช้กลไกเดียวกับชิป/จุดแข็งที่มีอยู่เดิมทุกอย่าง:
+       เริ่มจาง+เลื่อนเล็กน้อย รอ .is-revealed จาก js/playbook-benefit-media.js แล้วค่อยเข้าที่
+       หน่วงไล่กันทีละ 70ms ต่อจาก --motion-lead เท่ากับจังหวะของชิป */
+    .playbook-benefit__finance-icon,
+    .playbook-benefit__finance-mark {
+        opacity: 0;
+        transform: translateY(8px) scale(0.94);
+        transition:
+            opacity var(--bt-playbook-benefit-motion-chip) var(--ease-standard) var(--playbook-benefit-motion-delay, 0ms),
+            transform var(--bt-playbook-benefit-motion-chip) var(--ease-standard) var(--playbook-benefit-motion-delay, 0ms);
+    }
+
+    .playbook-benefit__media.is-revealed .playbook-benefit__finance-icon,
+    .playbook-benefit__media.is-revealed .playbook-benefit__finance-mark {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    /* ใบกลางจัดกึ่งกลางด้วย translateX(-50%) อยู่แล้ว ต้องพาค่านั้นไปด้วยทั้งสองสถานะ
+       ไม่งั้นมันจะกระโดดไปทางขวาตอนเริ่มเล่น */
+    .playbook-benefit__finance-icon--money {
+        transform: translateX(-50%) translateY(8px) scale(0.94);
+    }
+
+    .playbook-benefit__media.is-revealed .playbook-benefit__finance-icon--money {
+        transform: translateX(-50%) translateY(0) scale(1);
+    }
+
+    .playbook-benefit__finance-icon--card {
+        --playbook-benefit-motion-delay: var(--bt-playbook-benefit-motion-lead);
+    }
+
+    .playbook-benefit__finance-icon--receipt {
+        --playbook-benefit-motion-delay: calc(var(--bt-playbook-benefit-motion-lead) + 70ms);
+    }
+
+    .playbook-benefit__finance-icon--banknote {
+        --playbook-benefit-motion-delay: calc(var(--bt-playbook-benefit-motion-lead) + 140ms);
+    }
+
+    .playbook-benefit__finance-icon--money {
+        --playbook-benefit-motion-delay: calc(var(--bt-playbook-benefit-motion-lead) + 210ms);
+    }
+
+    .playbook-benefit__finance-mark {
+        --playbook-benefit-motion-delay: calc(var(--bt-playbook-benefit-motion-lead) + 280ms);
+    }
+
+    .playbook-benefit__skill-card {
         position: absolute;
-        top: -45%;
-        right: -15%;
-        width: 60%;
-        height: 150%;
-        background: radial-gradient(closest-side, rgba(101, 152, 255, 0.18), rgba(101, 152, 255, 0) 70%);
+        z-index: 0;
+        width: var(--bt-playbook-benefit-skill-card-width);
+        height: auto;
+        display: block;
+        filter: drop-shadow(0 12px 28px rgba(17, 19, 24, 0.14));
         pointer-events: none;
     }
 
-    .playbook-benefit__skill> :not(.playbook-benefit__skill-glow) {
-        position: relative;
+    /* กึ่งกลางแนวนอนด้วย left 50% + translateX(-50%) จึงอยู่กลางเสมอไม่ว่ากรอบกว้างเท่าไหร่ */
+    .playbook-benefit__skill-card--back {
+        left: 50%;
+        bottom: var(--bt-playbook-benefit-skill-card-bottom);
+        /* ชิ้นใหญ่กว่าชิป จึงใช้ duration ชุด card และเลื่อนขึ้นจากขอบล่างไกลกว่าเล็กน้อย
+           translateX(-50%) ต้องติดไปด้วยทุกสถานะ เพราะเป็นตัวจัดกึ่งกลาง */
+        opacity: 0;
+        transform: translateX(-50%) translateY(18px);
+        transition:
+            opacity var(--bt-playbook-benefit-motion-card) var(--ease-standard) var(--bt-playbook-benefit-motion-lead),
+            transform var(--bt-playbook-benefit-motion-card) var(--ease-standard) var(--bt-playbook-benefit-motion-lead);
+    }
+
+    .playbook-benefit__media.is-revealed .playbook-benefit__skill-card--back {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
     }
 
     .playbook-benefit__skill-title {
@@ -12338,7 +12411,7 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
     .playbook-benefit__skill-label {
         color: var(--bt-playbook-benefit-media-ink);
         font-size: var(--bt-playbook-benefit-media-copy-size);
-        font-weight: var(--font-weight-medium);
+        font-weight: var(--font-weight-regular);
         line-height: var(--line-height-normal);
         white-space: nowrap;
     }
@@ -12473,11 +12546,228 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
     }
 }
 
+/* ---------- Card 1–3 composition ----------
+   คง layout หลักของ section เดิมไว้ แล้วปรับเฉพาะลำดับชั้นของ UI ภายใน visual */
+.playbook-benefit {
+    --bt-playbook-benefit-panel-shadow: 0 10px 22px rgba(17, 19, 24, 0.06), 0 2px 6px rgba(17, 19, 24, 0.04);
+
+    /* wrapper ใช้ระบุชนิดการ์ดเท่านั้น ต้องไม่เพิ่ม spacing หรือเปลี่ยน layout เดิม */
+    .playbook-benefit__card {
+        width: 100%;
+        min-width: 0;
+        padding: var(--space-0);
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    /* Card 1: ดันการ์ดเทียบขึ้นจากขอบบน 20% และใช้ finance icons
+       เป็นจุดนำสายตารอบการ์ดตาม reference */
+    .playbook-benefit__card--compare .playbook-benefit__media {
+        padding: var(--space-0);
+        overflow: clip;
+    }
+
+    .playbook-benefit__card--compare .playbook-benefit__compare {
+        position: absolute;
+        top: 26%;
+        left: 50%;
+        z-index: 2;
+        width: 280px;
+        max-width: 80%;
+        height: auto;
+        transform: translateX(-50%);
+    }
+
+    /* วาง handle ตรงกึ่งกลางของพื้นที่การ์ดที่ถูก clip แสดงจริง */
+    .playbook-benefit__card--compare .playbook-benefit__compare-handle {
+        top: 32%;
+    }
+
+    .playbook-benefit__finance-icon {
+        position: absolute;
+        z-index: 3;
+        width: 56px;
+        aspect-ratio: 1;
+        display: grid;
+        place-items: center;
+        border: var(--border-width-2) solid #FFF;
+        border-radius: var(--radius-2);
+        background: var(--color-neutral-0);
+        box-shadow: var(--bt-playbook-benefit-panel-shadow);
+        pointer-events: none;
+    }
+
+    .playbook-benefit__finance-icon .bt-icon {
+        font-size: var(--font-size-24);
+    }
+
+    .playbook-benefit__finance-icon--card {
+        top: 6%;
+        left: 6%;
+        z-index: 1;
+        color: var(--color-blue-600);
+        background: var(--color-blue-100);
+    }
+
+    .playbook-benefit__finance-icon--receipt {
+        top: 76%;
+        left: 10%;
+        color: var(--color-pink-500);
+        background: var(--color-pink-100);
+    }
+
+    .playbook-benefit__finance-icon--banknote {
+        top: 54%;
+        right: 6%;
+        z-index: 1;
+        color: var(--color-green-600);
+        background: var(--color-green-100);
+    }
+
+    .playbook-benefit__finance-icon--money {
+        top: 12%;
+        left: 50%;
+        z-index: 4;
+        width: var(--space-16);
+        color: #8f949c;
+        background: #f7f7f7;
+        transform: translateX(-50%);
+    }
+
+    .playbook-benefit__finance-icon--money .bt-icon {
+        font-size: var(--font-size-32);
+    }
+
+    .playbook-benefit__finance-mark {
+        position: absolute;
+        top: 5%;
+        right: 12%;
+        z-index: 1;
+        color: #d2d5db;
+        font-size: var(--font-size-32);
+        font-weight: var(--font-weight-medium);
+        line-height: 1;
+        pointer-events: none;
+    }
+
+    /* Card 2: วางเป็นสามแผงซ้อนเหลื่อมแบบรายการใน reference
+       ใช้ rotate property แยกจาก transform เพื่อไม่ชน motion เดิมของแต่ละแผง */
+    .playbook-benefit__card--traits .playbook-benefit__media {
+        --bt-playbook-benefit-media-gap: var(--space-4);
+
+        padding: var(--bt-playbook-benefit-media-padding);
+    }
+
+    .playbook-benefit__card--skill .playbook-benefit__fit {
+        max-width: 480px;
+        margin-inline: auto;
+        margin-top: var(--space-6);
+    }
+
+    .playbook-benefit__card--traits .playbook-benefit__assets,
+    .playbook-benefit__card--traits .playbook-benefit__trait {
+        border-color: var(--color-border-subtle);
+        background: color-mix(in srgb, var(--color-neutral-0) 96%, var(--color-surface-paper));
+        box-shadow: var(--bt-playbook-benefit-panel-shadow);
+    }
+
+    .playbook-benefit__card--traits .playbook-benefit__assets {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        padding: var(--space-4);
+        rotate: 1.2deg;
+        margin-left: var(--space-3);
+    }
+
+    .playbook-benefit__card--traits .playbook-benefit__traits {
+        width: 100%;
+        gap: var(--space-4);
+    }
+
+    .playbook-benefit__card--traits .playbook-benefit__trait {
+        position: relative;
+        width: 100%;
+        padding: var(--space-4);
+    }
+
+    .playbook-benefit__card--traits .playbook-benefit__trait:first-child {
+        z-index: 2;
+        width: 92%;
+        justify-self: center;
+        rotate: -1.2deg;
+        margin-right: var(--space-16);
+    }
+
+    .playbook-benefit__card--traits .playbook-benefit__trait:last-child {
+        z-index: 1;
+        width: 82%;
+        justify-self: center;
+        rotate: 2.2deg;
+        margin-left: var(--space-8);
+    }
+
+    .playbook-benefit__card--traits .playbook-benefit__trait-head {
+        margin-bottom: var(--space-3);
+    }
+
+    .playbook-benefit__card--traits .playbook-benefit__trait-item {
+        margin-bottom: 2px;
+    }
+
+    /* Card 3: ให้ Skill เป็น dashboard หลักเพียงใบเดียว มีเงาและพื้นที่หายใจมากขึ้น
+       bar หนาขึ้นเพื่อสร้างลำดับ คะแนนยังใช้ animation เดิม */
+    .playbook-benefit__card--skill .playbook-benefit__media {
+        padding: var(--space-6);
+        justify-content: start;
+    }
+
+    .playbook-benefit__card--skill .playbook-benefit__skill {
+        width: 100%;
+        margin-inline: auto;
+        padding: var(--space-4);
+        border-color: var(--color-border-subtle);
+        background: color-mix(in srgb, var(--color-neutral-0) 97%, var(--color-surface-paper));
+        box-shadow: var(--bt-playbook-benefit-panel-shadow);
+    }
+
+    .playbook-benefit__card--skill .playbook-benefit__skill-title {
+        font-size: var(--font-size-16);
+    }
+
+    .playbook-benefit__card--skill .playbook-benefit__skill-bars {
+        margin-top: var(--space-6);
+        gap: var(--space-4);
+    }
+
+    .playbook-benefit__card--skill .playbook-benefit__skill-row {
+        grid-template-columns: minmax(88px, auto) 1fr auto;
+        gap: var(--space-4);
+    }
+
+    .playbook-benefit__card--skill .playbook-benefit__skill-label {
+        font-size: 13px;
+    }
+
+    .playbook-benefit__card--skill .playbook-benefit__skill-track {
+        height: var(--space-2);
+    }
+
+    .playbook-benefit__card--skill .playbook-benefit__skill-value {
+        min-width: var(--space-10);
+        font-size: var(--font-size-20);
+        text-align: center;
+        color: var(--bt-playbook-steps-preview-ink);
+    }
+
+}
+
 /* ยังเรียงสามช่องแต่ container ตรึงความกว้าง คอลัมน์จึงแคบลงและข้อความในกรอบตัวอย่าง
    ตัดบรรทัดมากขึ้น ยกความสูงขั้นต่ำขึ้นตามเพื่อให้ทั้งสามช่องสูงเท่ากันและไม่มีเนื้อหาล้น */
 @media (max-width: 1199px) {
     .playbook-benefit {
-        --bt-playbook-benefit-media-height: 340px;
+        --bt-playbook-benefit-media-height: 320px;
     }
 }
 
@@ -12488,7 +12778,7 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         --bt-playbook-benefit-item-title-size: var(--section-topic-size-sm);
         --bt-playbook-benefit-lead-size: var(--section-body-size);
         /* ต่ำกว่า lg เหลือแถวละช่อง คอลัมน์กว้างเต็ม เนื้อหาจึงกลับมาสั้นเท่าจอใหญ่ */
-        --bt-playbook-benefit-media-height: 340px;
+        --bt-playbook-benefit-media-height: 320px;
     }
 }
 
@@ -12496,6 +12786,42 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
     .playbook-benefit {
         --bt-playbook-benefit-list-row-gap: var(--space-10);
         --bt-playbook-benefit-media-space: var(--space-4);
+    }
+}
+
+@media (max-width: 575px) {
+    .playbook-benefit {
+        .playbook-benefit__card--skill .playbook-benefit__media {
+            padding: var(--space-4);
+        }
+
+        .playbook-benefit__card--skill .playbook-benefit__skill {
+            padding: var(--space-3);
+        }
+
+        .playbook-benefit__card--skill .playbook-benefit__skill {
+            width: 100%;
+        }
+
+        .playbook-benefit__card--skill .playbook-benefit__skill-row {
+            grid-template-columns: 1fr auto;
+            row-gap: var(--space-2);
+        }
+
+        .playbook-benefit__card--skill .playbook-benefit__skill-label {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        .playbook-benefit__card--skill .playbook-benefit__skill-track {
+            grid-column: 1 / -1;
+            grid-row: 2;
+        }
+
+        .playbook-benefit__card--skill .playbook-benefit__skill-value {
+            grid-column: 2;
+            grid-row: 1;
+        }
     }
 }
 
@@ -12747,7 +13073,7 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         margin: var(--bt-identity-lead-space) auto var(--space-0);
         color: var(--bt-identity-ink-dim);
         font-size: var(--bt-identity-lead-size);
-        font-weight: var(--font-weight-light);
+        font-weight: var(--font-weight-regular);
         line-height: var(--line-height-relaxed);
     }
 
@@ -12756,17 +13082,27 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
        ของ section จัดกึ่งกลางด้วย text-align อยู่แล้ว */
     .identity-cards__highlight {
         margin: var(--bt-identity-highlight-space) auto var(--space-0);
-        color: var(--color-accent-primary);
+        color: var(--bt-identity-ink-dim);
         font-size: var(--bt-identity-highlight-size);
         font-weight: var(--font-weight-regular);
         line-height: var(--line-height-relaxed);
     }
 
-    /* ชื่อบัตรใน badge ใช้ serif ชุดเดียวกับที่เว็บใช้เรียกชื่อบัตรทุกที่
+    /* ชื่อบัตรเป็น badge พื้นน้ำเงิน หน้าตาชุดเดียวกับป้าย "คุ้มกว่า" ใน section ticket
+       (มุมโค้ง สีพื้น สีตัวอักษร ยกค่ามาตรง ๆ) ต่างกันแค่ไม่ล็อกขนาดตัวอักษรไว้ที่ 12px
+       ปล่อยให้รับขนาดจากบรรทัดที่มันอยู่ จะได้ไม่เล็กลงกลางประโยค
+       ส่วน serif ยังเป็นชุดเดียวกับที่เว็บใช้เรียกชื่อบัตรทุกที่
        (Baskervville โหลดมาแค่น้ำหนัก 400 ต้องคืนเป็น regular ไม่งั้นเบราว์เซอร์ปลอมตัวหนาให้) */
     .identity-cards__highlight-plan {
+        display: inline-block;
+        padding: var(--space-2) var(--space-3);
+        border-radius: var(--radius-1);
+        color: var(--color-neutral-0);
+        background: var(--color-accent-primary);
         font-family: 'Baskervville', var(--font-family-base);
         font-weight: var(--font-weight-regular);
+        line-height: var(--line-height-1);
+        white-space: nowrap;
     }
 
     .identity-cards__carousel {
@@ -12946,8 +13282,45 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
     --bt-playbook-steps-preview-ink: #111318;
     --bt-playbook-steps-preview-muted: #687078;
     --bt-playbook-steps-compare-ratio: 5 / 7;
-    --bt-playbook-steps-compare-width: 180px;
-    --bt-playbook-steps-compare-side-width: clamp(150px, 45cqi, 210px);
+    /* การ์ดกินสัดส่วนคงที่ของกรอบ เหลือที่ว่างสองข้างให้ป้ายเท่ากันทุกความกว้าง */
+    --bt-playbook-steps-compare-width: clamp(140px, 40cqi, 210px);
+    /* ---------- ไดอะแกรมการ์ด + ป้ายกระจาย (ปรับจาก AnimatedCard/Visual2 ของ React) ----------
+       ต้นฉบับใช้ Tailwind + state ของ React ที่นี่เป็น CSS ล้วน สั่งด้วยคลาสเดียวจาก IntersectionObserver
+       ease-back ทำให้การ์ด "เด้ง" เกินปลายทางนิดหนึ่งก่อนเข้าที่ ซึ่งเป็นความรู้สึกที่ขอมา */
+    --bt-playbook-steps-diagram-card-duration: 620ms;
+    --bt-playbook-steps-diagram-tag-duration: 560ms;
+    --bt-playbook-steps-diagram-tag-lead: 320ms;
+    --bt-playbook-steps-diagram-tag-step: 80ms;
+    --bt-playbook-steps-diagram-ease-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+    /* ระยะที่ป้ายวิ่งออกมาจากหลังการ์ด คิดเป็นสัดส่วนของกรอบ (cqi) ไม่ใช่พิกเซลตายตัว
+       ป้ายจึงออกมาไกลเท่ากันเสมอไม่ว่ากรอบจะกว้างแค่ไหน */
+    --bt-playbook-steps-diagram-tag-travel: 30cqi;
+    --bt-playbook-steps-diagram-tag-gap: var(--space-4);
+    /* ระยะจากขอบการ์ดถึงป้าย วัดจากขอบคอลัมน์ ไม่ใช่จากขอบป้ายแต่ละใบ ทุกใบจึงห่างเท่ากัน */
+    --bt-playbook-steps-diagram-tag-card-gap: var(--space-6);
+    /* ระยะที่ป้ายแถวกลางดันออกห่างจากการ์ด ทำให้สามใบเรียงเป็นเส้นโค้งแทนที่จะตรงเป็นไม้บรรทัด
+       ใส่ไว้ใน transform ไม่ใช่ margin กล่องป้ายจึงยังกว้างเท่าเดิม ข้อความไม่ถูกบีบจนตัดบรรทัด */
+    --bt-playbook-steps-diagram-tag-stagger: var(--space-5);
+    --bt-playbook-steps-diagram-tag-size: var(--font-size-12);
+    --bt-playbook-steps-diagram-tag-icon-size: var(--font-size-14);
+    --bt-playbook-steps-diagram-tag-icon-gap: var(--space-2);
+    /* ไอคอนนั่งอยู่ในวงกลมพื้นเทาอ่อน ไม่ได้ลอยติดตัวอักษรเฉย ๆ */
+    --bt-playbook-steps-diagram-tag-icon-chip: var(--space-6);
+    --bt-playbook-steps-diagram-tag-icon-chip-bg: var(--color-neutral-100);
+    /* เส้นขอบไล่สีชุดเดียวกับปุ่มซื้อบัตรบน header (--gradient-accent-spectrum)
+       ไล่สีที่ border ตรง ๆ ไม่ได้ จึงซ้อนพื้นสองชั้น: ชั้นในทึบครอบแค่ padding-box
+       ชั้นนอกเป็นไล่สีครอบถึง border-box ส่วนที่โผล่พ้นชั้นในออกมาคือเส้นขอบ
+       (วิธีเดียวกับ .site-header .bt-action-button--primary) */
+    --bt-playbook-steps-diagram-tag-fill: var(--color-neutral-0);
+    --bt-playbook-steps-diagram-tag-border: var(--gradient-accent-spectrum);
+    --bt-playbook-steps-diagram-tag-icon-ink: var(--color-neutral-900);
+    /* ตารางเส้นบาง ๆ หลังการ์ด (GridLayer ของต้นฉบับ) เป็นระนาบอ้างอิงให้ป้ายที่กระจายออก
+       ไม่ลอยอยู่บนพื้นขาวเปล่า ๆ เส้นจางมากและจางหายก่อนถึงขอบกรอบ จึงอ่านเป็นพื้นผิว ไม่ใช่ตาราง */
+    --bt-playbook-steps-diagram-grid-size: 28px;
+    --bt-playbook-steps-diagram-grid-width: 1px;
+    --bt-playbook-steps-diagram-grid-ink: color-mix(in srgb, var(--color-neutral-400) 20%, transparent);
+    --bt-playbook-steps-diagram-grid-fade: 40% 46%;
+    --bt-playbook-steps-diagram-grid-fade-hold: 40%;
     --bt-playbook-steps-compare-radius: var(--space-4);
     --bt-playbook-steps-compare-chip-bg: rgba(17, 19, 24, 0.62);
     --bt-playbook-steps-compare-shadow: 0 10px 30px rgba(17, 19, 24, 0.15), 0 2px 6px rgba(17, 19, 24, 0.09);
@@ -12964,7 +13337,7 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         margin: var(--bt-playbook-steps-lead-space) var(--space-0) var(--space-0);
         color: var(--color-text-muted);
         font-size: var(--bt-playbook-steps-lead-size);
-        font-weight: var(--font-weight-light);
+        font-weight: var(--font-weight-regular);
         line-height: var(--line-height-relaxed);
     }
 
@@ -13192,6 +13565,255 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
     }
 
     /* กรอบการ์ดตัวอย่าง ความสูงมาจากสัดส่วนการ์ดจริง (520:728 = 5:7) */
+    .playbook-steps__diagram {
+        position: relative;
+        /* ต้องกว้างเต็มกรอบ ไม่งั้นกล่องจะหดเท่าการ์ด แล้วจุดกึ่งกลางที่ป้ายใช้อ้างอิง
+           จะไม่ตรงกับกึ่งกลางของกรอบ ป้ายก็จะเทไปข้างเดียว */
+        width: 100%;
+        display: grid;
+        place-items: center;
+        isolation: isolate;
+    }
+
+    /* ตารางเส้นบาง วาดด้วย repeating-linear-gradient สองชั้น (แนวตั้ง+แนวนอน)
+       แล้วเจาะด้วย mask รูปวงรี ให้เส้นเข้มที่กลางแล้วจางหายก่อนถึงขอบ
+       อยู่ใน ::before ที่ position: absolute จึงไม่กลายเป็นช่องของ grid ด้านนอก */
+    .playbook-steps__diagram::before {
+        content: '';
+        position: absolute;
+        z-index: 0;
+        inset: var(--space-0);
+        background-image:
+            repeating-linear-gradient(to right,
+                var(--bt-playbook-steps-diagram-grid-ink) var(--space-0) var(--bt-playbook-steps-diagram-grid-width),
+                transparent var(--bt-playbook-steps-diagram-grid-width) var(--bt-playbook-steps-diagram-grid-size)),
+            repeating-linear-gradient(to bottom,
+                var(--bt-playbook-steps-diagram-grid-ink) var(--space-0) var(--bt-playbook-steps-diagram-grid-width),
+                transparent var(--bt-playbook-steps-diagram-grid-width) var(--bt-playbook-steps-diagram-grid-size));
+        /* รัศมีวงรีสั้นกว่าครึ่งกรอบทั้งสองแกน (246 จาก 308 และ 133 จาก 145) เส้นจึงหายสนิท
+           ก่อนถึงขอบ ไม่ถูกตัดเป็นกรอบสี่เหลี่ยม ส่วน hold ที่ 40% ทำให้ยังเต็มความเข้ม
+           ถึงแถบรอบ ๆ การ์ดพอดี แล้วไล่จางลงเรื่อย ๆ ความชัดเลยกระจุกอยู่กลางกรอบเท่านั้น */
+        mask-image: radial-gradient(ellipse var(--bt-playbook-steps-diagram-grid-fade) at 50% 50%,
+                #000 var(--bt-playbook-steps-diagram-grid-fade-hold), transparent);
+        opacity: 0;
+        transition: opacity var(--bt-playbook-steps-diagram-card-duration) var(--ease-standard);
+        pointer-events: none;
+    }
+
+    .playbook-steps__diagram.is-revealed::before {
+        opacity: 1;
+    }
+
+    /* แสงนวลหลังการ์ด ทำหน้าที่เดียวกับ EllipseGradient ของต้นฉบับ
+       คือให้ป้ายที่กระจายออกไปมีพื้นรอง ไม่ลอยอยู่บนความว่าง */
+    .playbook-steps__diagram-glow {
+        position: absolute;
+        z-index: 0;
+        width: 116%;
+        aspect-ratio: 16 / 10;
+        border-radius: var(--radius-round);
+        background: radial-gradient(closest-side,
+                color-mix(in srgb, var(--color-accent-primary) 12%, transparent),
+                transparent 72%);
+        opacity: 0;
+        transition: opacity var(--bt-playbook-steps-diagram-card-duration) var(--ease-standard);
+        pointer-events: none;
+    }
+
+    .playbook-steps__diagram.is-revealed .playbook-steps__diagram-glow {
+        opacity: 1;
+    }
+
+    /* การ์ดเด้งขึ้น: ขึ้นมาจากด้านล่างพร้อมขยายจากเล็ก แล้วเลยปลายทางนิดหนึ่งด้วย ease-back */
+    .playbook-steps__diagram .playbook-steps__compare {
+        z-index: 2;
+        opacity: 0;
+        transform: translateY(26px) scale(0.86);
+        transition:
+            opacity var(--bt-playbook-steps-diagram-card-duration) var(--ease-standard),
+            transform var(--bt-playbook-steps-diagram-card-duration) var(--bt-playbook-steps-diagram-ease-back);
+    }
+
+    .playbook-steps__diagram.is-revealed .playbook-steps__compare {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    /* ป้ายเริ่มซ้อนอยู่หลังการ์ดตรงกลาง แล้ววิ่งออกไปเกาะขอบซ้าย-ขวาของกรอบ
+       แบ่งเป็นสองคอลัมน์ที่เรียงตัวเอง ไม่ได้กำหนดพิกัดทีละใบ เพราะกรอบนี้กว้างไม่เท่ากัน
+       ในแต่ละจอ (เป็นคอลัมน์ขวาของการ์ดขั้นแรก) และข้อความในป้ายก็ยาวไม่เท่ากัน
+       ถ้าวัดเป็นพิกเซลจากจุดกึ่งกลาง ป้ายจะล้นออกนอกการ์ดขาวตอนกรอบแคบ
+       และชนกันเองทันทีที่ข้อความยาวจนต้องตัดบรรทัด */
+    .playbook-steps__tags {
+        position: absolute;
+        inset: var(--space-0);
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        pointer-events: none;
+    }
+
+    /* กว้างได้เท่าที่ยังไม่ถูกการ์ดบัง (ครึ่งกรอบ ลบครึ่งการ์ด ลบระยะห่าง)
+       ข้อความที่ยาวกว่านั้นตัดบรรทัดแทนการมุดหายไปหลังการ์ด */
+    /* เรียงชิดด้านที่ติดการ์ด ไม่ใช่ชิดขอบกรอบ เพราะข้อความแต่ละใบยาวไม่เท่ากัน
+       ถ้าเกาะขอบกรอบ ด้านที่หันเข้าการ์ดจะกระดิกตามความยาวข้อความ ซ้าย-ขวาเหลื่อมไม่เท่ากัน
+       ชิดด้านในแทน ทุกใบจึงห่างจากขอบการ์ดเท่ากันหมด แล้วปล่อยให้ด้านนอกเป็นฝั่งที่ไม่เสมอ */
+    .playbook-steps__tag-col {
+        /* กำหนด width ไม่ใช่ max-width: flex item จะกว้างเท่าใบที่ยาวสุดของตัวเองถ้าไม่บังคับ
+           สองคอลัมน์มีใบยาวสุดไม่เท่ากัน ขอบด้านในจึงไม่ตรงกัน ซ้าย-ขวาเหลื่อมไม่เท่า */
+        width: calc(50% - var(--bt-playbook-steps-compare-width) / 2 - var(--bt-playbook-steps-diagram-tag-card-gap));
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: var(--bt-playbook-steps-diagram-tag-gap);
+    }
+
+    .playbook-steps__tag-col--end {
+        align-items: flex-start;
+    }
+
+    .playbook-steps__tag {
+        /* ซ้ายแคบกว่าขวา เพราะวงกลมของไอคอนเป็นรูปทรงของตัวเองอยู่แล้ว
+           ถ้าเว้นเท่ากันสองข้างวงจะดูลอยห่างขอบซ้ายเกินไป */
+        padding: var(--space-1) var(--space-4) var(--space-1) var(--space-1);
+        display: flex;
+        align-items: center;
+        gap: var(--bt-playbook-steps-diagram-tag-icon-gap);
+        border: var(--rule-width-subtle) solid transparent;
+        border-radius: var(--pill-radius);
+        color: var(--color-text-primary);
+        /* ชั้นในต้องทึบ ไม่งั้นไล่สีของขอบจะทะลุขึ้นมาย้อมทั้งใบ
+           (พื้นเดิมโปร่ง 22% ไว้ให้ลายตารางทะลุ แต่ป้ายไม่ได้ทับการ์ดแล้ว จึงไม่เสียอะไร) */
+        background:
+            linear-gradient(var(--bt-playbook-steps-diagram-tag-fill), var(--bt-playbook-steps-diagram-tag-fill)) padding-box,
+            var(--bt-playbook-steps-diagram-tag-border) border-box;
+        font-size: var(--bt-playbook-steps-diagram-tag-size);
+        font-weight: var(--font-weight-medium);
+        line-height: var(--line-height-relaxed);
+        /* ไม่ตัดบรรทัดเด็ดขาด ป้ายเรียงชิดด้านที่ติดการ์ด ใบที่กว้างเกินคอลัมน์จึงล้น
+           ออกไปทางด้านนอก ไม่ใช่เบียดเข้าหาการ์ด ระยะห่างจากการ์ดเลยคงที่เสมอ
+           ไม่ว่าจะแก้ข้อความ ขนาดฟอนต์ หรือ padding ให้กว้างขึ้นแค่ไหน */
+        white-space: nowrap;
+        opacity: 0;
+        /* ทั้งระยะวิ่งออกและระยะถอยเข้า วัดจาก "เข้าหาการ์ด" เหมือนกัน ต่างกันแค่ทิศของคอลัมน์
+           คูณด้วย --steps-tag-dir ครั้งเดียว จึงไม่ต้องเขียน transform แยกซ้าย-ขวา */
+        --steps-tag-dir: 1;
+        --steps-tag-inset: var(--space-0);
+        transform: translateX(calc((var(--bt-playbook-steps-diagram-tag-travel) + var(--steps-tag-inset)) * var(--steps-tag-dir))) scale(0.9);
+        transition:
+            opacity var(--bt-playbook-steps-diagram-tag-duration) var(--ease-standard) var(--steps-tag-delay, 0ms),
+            transform var(--bt-playbook-steps-diagram-tag-duration) var(--bt-playbook-steps-diagram-ease-back) var(--steps-tag-delay, 0ms);
+    }
+
+    /* แถวกลางดันออกห่างจากการ์ด แถวบน-ล่างชิดการ์ดไว้ สามใบจึงเรียงเป็นเส้นโค้ง */
+    .playbook-steps__tag:nth-child(2) {
+        --steps-tag-inset: calc(var(--bt-playbook-steps-diagram-tag-stagger) * -1);
+    }
+
+    /* ไอคอนบอกหัวข้อของคำถามตั้งแต่ยังไม่อ่านข้อความ วางในวงกลมพื้นเทาอ่อน
+       ทำวงกลมที่กล่องครอบอีกชั้น ไม่ได้ทำที่ตัว svg เพราะ .bt-icon ตั้ง width/height
+       ไว้เป็น 1em ถ้าใส่พื้นกับ padding ทับ ขนาดวงจะผูกติดกับขนาดไอคอน
+       ปรับสัดส่วนวงกับไอคอนแยกกันไม่ได้ */
+    .playbook-steps__tag-chip {
+        flex: none;
+        width: var(--bt-playbook-steps-diagram-tag-icon-chip);
+        height: var(--bt-playbook-steps-diagram-tag-icon-chip);
+        display: grid;
+        place-items: center;
+        border-radius: var(--radius-round);
+        background: var(--bt-playbook-steps-diagram-tag-icon-chip-bg);
+    }
+
+    .playbook-steps__tag-icon {
+        font-size: var(--bt-playbook-steps-diagram-tag-icon-size);
+        color: var(--bt-playbook-steps-diagram-tag-icon-ink);
+    }
+
+    .playbook-steps__diagram.is-revealed .playbook-steps__tag {
+        opacity: 1;
+        transform: translateX(calc(var(--steps-tag-inset) * var(--steps-tag-dir))) scale(1);
+    }
+
+    /* ไล่ออกทีละแถว ซ้าย-ขวาออกพร้อมกันเป็นคู่ เริ่มหลังการ์ดลงจอดแล้ว (lead) */
+    .playbook-steps__tag:nth-child(1) { --steps-tag-delay: var(--bt-playbook-steps-diagram-tag-lead); }
+    .playbook-steps__tag:nth-child(2) { --steps-tag-delay: calc(var(--bt-playbook-steps-diagram-tag-lead) + var(--bt-playbook-steps-diagram-tag-step)); }
+    .playbook-steps__tag:nth-child(3) { --steps-tag-delay: calc(var(--bt-playbook-steps-diagram-tag-lead) + var(--bt-playbook-steps-diagram-tag-step) * 2); }
+
+    /* ชุดขวาของกรอบกลับทิศทั้งหมด ต่างกันแค่บรรทัดเดียว หน้าตาเหมือนชุดซ้ายทุกอย่าง */
+    .playbook-steps__tag--alt {
+        --steps-tag-dir: -1;
+    }
+
+    /* ช่วง 602-613px ยังวางขนาบข้างการ์ดได้ แต่ที่ว่างเหลือน้อยกว่า ถ้าดันออก 20px
+       ป้ายแถวกลางจะพ้นขอบกรอบออกไป จึงลดระยะเหลื่อมลงให้พอดีกับที่ว่างที่มี */
+    @container (max-width: 613px) {
+        .playbook-steps__tags {
+            --bt-playbook-steps-diagram-tag-stagger: var(--space-2);
+        }
+    }
+
+    /* เกณฑ์นี้มาจากความกว้างจริงของป้าย: ใบที่ยาวสุด 172px + ระยะห่างจากการ์ด 24px สองข้าง
+       บวกความกว้างการ์ด 210px = 602px คือกรอบที่แคบที่สุดที่ยังวางป้ายขนาบข้างการ์ด
+       ได้โดยข้อความอยู่บรรทัดเดียว แคบกว่านี้ป้ายจะถูกบีบจนตัดบรรทัดเป็นแถบสูง
+       จึงย้ายลงมาเรียงใต้การ์ดแทน แล้วเปลี่ยนทิศที่วิ่งออกเป็นลอยขึ้น
+       (ถ้าแก้ข้อความ ขนาดฟอนต์ หรือ padding ของป้าย ต้องขยับตัวเลขนี้ตามด้วย) */
+    @container (max-width: 601px) {
+
+        .playbook-steps__tags {
+            position: static;
+            margin-top: var(--space-4);
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: var(--bt-playbook-steps-diagram-tag-gap);
+        }
+
+        .playbook-steps__tag-col {
+            width: auto;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* เรียงใต้การ์ดแล้วป้ายกว้างได้เท่ากรอบเท่านั้น ล้นออกข้างไม่ได้ จึงให้ตัดบรรทัดแทน */
+        .playbook-steps__tag {
+            white-space: normal;
+        }
+
+        /* ไม่มีขอบซ้าย-ขวาให้เหลื่อมแล้ว ทุกใบจัดกึ่งกลางเท่ากัน */
+        .playbook-steps__tag,
+        .playbook-steps__tag--alt {
+            --steps-tag-inset: var(--space-0);
+            transform: translateY(var(--space-3)) scale(0.9);
+        }
+
+        .playbook-steps__diagram.is-revealed .playbook-steps__tag {
+            transform: translateY(var(--space-0)) scale(1);
+        }
+    }
+
+    /* เครื่องที่ตั้งค่าลด motion: ให้ทุกอย่างอยู่ปลายทางตั้งแต่แรก ไม่ต้องวิ่ง */
+    @media (prefers-reduced-motion: reduce) {
+
+        .playbook-steps__diagram::before,
+        .playbook-steps__diagram-glow,
+        .playbook-steps__diagram .playbook-steps__compare,
+        .playbook-steps__tag {
+            opacity: 1;
+            transition: none;
+        }
+
+        .playbook-steps__diagram .playbook-steps__compare {
+            transform: none;
+        }
+
+        .playbook-steps__tag,
+        .playbook-steps__tag--alt {
+            transform: translateX(calc(var(--steps-tag-inset) * var(--steps-tag-dir)));
+        }
+    }
+
     .playbook-steps__compare {
         position: relative;
         width: 100%;
@@ -13306,47 +13928,22 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
         line-height: 1.55;
     }
 
-    /* กรอบกว้างพอ: การ์ดอยู่ซ้าย ข้อความอยู่ขวา กรอบจะเตี้ยลงไม่ดันการ์ดขั้นแรกให้สูงเกิน */
+    /* กรอบกว้างพอ: ป้ายกำกับขึ้นไปอยู่มุมบนขวา ไดอะแกรมกินเต็มความกว้างของแถวล่าง
+       ผังเดิมของกรอบนี้เป็นสองคอลัมน์ (การ์ดซ้าย-ข้อความ persona ขวา) แบ่งเป็นสามแถว
+       1fr auto 1fr เพื่อให้ข้อความอยู่กึ่งกลางการ์ด พอ persona ถูกถอดออกไป
+       แถวล่างที่เป็น 1fr ก็ยังกินความสูงเท่าแถวบนทั้งที่ไม่มีอะไรอยู่ กลายเป็นที่ว่าง
+       เปล่า ๆ ครึ่งกรอบ และการ์ดก็ถูกบีบอยู่ในคอลัมน์ซ้ายจนกึ่งกลางไม่ตรงกับกรอบ */
     @container (min-width: 340px) {
 
-        /* การ์ดกินเต็มความสูงทางซ้าย ฝั่งขวาแบ่งสามแถว บน-ล่างยืดเท่ากัน
-           ข้อความ persona จึงอยู่กึ่งกลางการ์ดพอดี ส่วนป้าย "ฟรี" อยู่มุมบนขวาในแถวแรก */
         .playbook-steps__preview-body {
             display: grid;
-            grid-template-columns: var(--bt-playbook-steps-compare-side-width) 1fr;
-            grid-template-rows: 1fr auto 1fr;
-            align-items: center;
-            column-gap: var(--space-6);
-        }
-
-        .playbook-steps__compare {
-            grid-column: 1;
-            grid-row: 1 / -1;
-            max-width: none;
+            grid-template-rows: auto 1fr;
+            row-gap: var(--space-4);
         }
 
         .playbook-steps__badge {
-            grid-column: 2;
-            grid-row: 1;
-            align-self: start;
             justify-self: end;
             margin: var(--space-0);
-        }
-
-        .playbook-steps__preview-info {
-            grid-column: 2;
-            grid-row: 2;
-            margin-top: var(--space-0);
-            text-align: left;
-        }
-
-        .playbook-steps__caption,
-        .playbook-steps__signature {
-            margin-inline: var(--space-0);
-        }
-
-        .playbook-steps__family {
-            margin-inline: var(--space-0);
         }
     }
 }
@@ -13379,7 +13976,7 @@ body.reveal-on-scroll-ready .playbook-intro .playbook-intro__title[data-reveal] 
     /* ระยะเท่ากับ section CTA ของหน้าแรกทุกขั้น: ตัว section เว้นเฉพาะด้านบน
        ปล่อยด้านล่างชิด footer ส่วนระยะในแผงไล่ลงตาม breakpoint เดียวกัน */
     --bt-playbook-cta-padding-top: var(--section-padding-y-sm);
-    --bt-playbook-cta-panel-padding: var(--space-8);
+    --bt-playbook-cta-panel-padding: var(--space-6);
     --bt-playbook-cta-media-gap: var(--space-10);
     --bt-playbook-cta-kv-radius: var(--radius-2);
     --bt-playbook-cta-facts-space: var(--space-16);

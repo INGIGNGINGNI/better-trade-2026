@@ -887,15 +887,20 @@ ol {
     letter-spacing: var(--section-title-tracking);
 }
 
+/* จังหวะ fade-up ของทั้งเว็บ แยกเวลาของ opacity กับ transform ออกจากกัน
+   ให้ตัวอักษรทึบครบก่อนการเลื่อนจะหยุด ช่วงท้ายจึงเป็นการไหลเข้าที่เฉย ๆ ไม่มีการจางแล้ว
+   ซึ่งเป็นตัวที่ทำให้อ่านว่านุ่ม ไม่ใช่ความยาวของเวลา ย่นเวลาลงจึงยังคงความรู้สึกเดิมไว้ได้
+   (เดิม 920/760ms ซึ่งยาวเกินไปสำหรับระยะเลื่อนแค่ 80px) */
 body.reveal-on-scroll-ready [data-reveal] {
     --reveal-y: var(--space-20);
-    --reveal-duration: 920ms;
+    --reveal-duration: 560ms;
+    --reveal-fade-duration: 440ms;
     --reveal-delay: 0ms;
 
     opacity: 0;
     transform: translate3d(0, var(--reveal-y), 0);
     transition:
-        opacity 760ms ease var(--reveal-delay),
+        opacity var(--reveal-fade-duration) ease var(--reveal-delay),
         transform var(--reveal-duration) var(--ease-standard) var(--reveal-delay);
     will-change: opacity, transform;
 }

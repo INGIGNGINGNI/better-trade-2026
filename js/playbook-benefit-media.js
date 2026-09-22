@@ -13,6 +13,7 @@
        ความยาวแต่ละช่วงคิดตามระยะทาง ความเร็วจึงสม่ำเสมอตลอดเส้นทาง */
     const SWEEP_PATH = [50, 85, 15, 50];
     const SWEEP_DURATION = 2400;
+    const MIN_FIT_SCALE = 0.82;
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     // ออกตัวนุ่มและหยุดนุ่มทั้งสองด้าน (ease-in-out) ให้การกวาดไม่กระชากหัวท้าย
@@ -171,4 +172,36 @@
         [...document.querySelectorAll('[data-benefit-reveal]')],
         (element) => element.classList.add('is-revealed'),
     );
+
+    /* กรอบภาพประกอบสูงตายตัว (--bt-playbook-benefit-media-height) ส่วนเนื้อในเป็นข้อความ
+       ที่ความสูงขึ้นกับการตัดบรรทัด ถ้าเกินกรอบก็ย่อทั้งก้อนด้วย scale ตัวเดียว
+       สัดส่วนภายในจึงคงเดิมทุกอย่าง ไม่ต้องไปไล่บีบ gap/padding ทีละค่าจนดีไซน์เสียทรง
+       ย่อเฉพาะตัวที่เกินจริง ตัวที่พอดีอยู่แล้วคงคมชัดที่ 1.0 และจำกัดไม่ให้เล็กกว่า 0.8
+       (การ์ดเทียบก่อน-หลังไม่ต้องพึ่งตรงนี้ เพราะ CSS ให้มันอิงความสูงอยู่แล้ว) */
+    const fitMediaToHeight = () => {
+        document.querySelectorAll('.playbook-benefit__media').forEach((media) => {
+            const box = media.querySelector('[data-benefit-fit]');
+
+            if (!box) return;
+
+            const styles = getComputedStyle(media);
+            const available = media.clientHeight
+                - parseFloat(styles.paddingTop)
+                - parseFloat(styles.paddingBottom);
+
+            box.style.removeProperty('--bt-playbook-benefit-fit');
+
+            const needed = box.scrollHeight;
+
+            if (!available || !needed) return;
+
+            const scale = Math.max(MIN_FIT_SCALE, Math.min(1, available / needed));
+
+            box.style.setProperty('--bt-playbook-benefit-fit', scale.toFixed(4));
+        });
+    };
+
+    fitMediaToHeight();
+    window.addEventListener('resize', fitMediaToHeight);
+    document.fonts?.ready.then(fitMediaToHeight);
 })();
