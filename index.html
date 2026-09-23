@@ -69,7 +69,7 @@
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="css/main.css?v=57">
-    <link rel="stylesheet" href="css/style.css?v=640">
+    <link rel="stylesheet" href="css/style.css?v=643">
 </head>
 
 <body class="is-loading">
@@ -603,7 +603,7 @@
         <div class="ticket__plans row g-0">
             <article class="ticket__plan ticket__plan--master col-12 col-lg-4" aria-labelledby="ticket-master-title">
                 <header class="ticket__plan-header">
-                    <img class="ticket__plan-icon" src="images/master.png" alt="" aria-hidden="true">
+                    <img class="ticket__plan-icon" src="images/master.webp" alt="" aria-hidden="true">
                     <p class="ticket__plan-index">บัตร</p>
                     <h3 id="ticket-master-title">Master Class</h3>
                     <p class="ticket__plan-note">เจาะลึกเฉพาะทางกับตัวจริง กลุ่มเล็ก</p>
@@ -672,7 +672,7 @@
 
             <article class="ticket__plan ticket__plan--explorer col-12 col-lg-4" aria-labelledby="ticket-explorer-title">
                 <header class="ticket__plan-header">
-                    <img class="ticket__plan-icon" src="images/explorer.png" alt="" aria-hidden="true">
+                    <img class="ticket__plan-icon" src="images/explorer.webp" alt="" aria-hidden="true">
                     <p class="ticket__plan-index">บัตร</p>
                     <h3 id="ticket-explorer-title">Explorer</h3>
                     <p class="ticket__plan-note">เดินชมงาน สัมผัสทุกประสบการณ์</p>
@@ -1660,9 +1660,9 @@
                 <div class="faq__tabs-viewport">
                     <div class="faq__tabs" role="tablist" aria-label="เลือกหัวข้อที่อยากรู้เกี่ยวกับ BetterTrade 2026">
                         <button id="faq-tab-tickets" class="faq__tab" type="button" role="tab" aria-selected="true" aria-controls="faq-panel-tickets">บัตรและราคา</button>
-                        <button id="faq-tab-schedule" class="faq__tab" type="button" role="tab" aria-selected="false" aria-controls="faq-panel-schedule" tabindex="-1">วัน เวลา และสถานที่</button>
-                        <button id="faq-tab-content" class="faq__tab" type="button" role="tab" aria-selected="false" aria-controls="faq-panel-content" tabindex="-1">เนื้อหาและประสบการณ์ภายในงาน</button>
-                        <button id="faq-tab-preparation" class="faq__tab" type="button" role="tab" aria-selected="false" aria-controls="faq-panel-preparation" tabindex="-1">การเตรียมตัวก่อนเข้างาน</button>
+                        <button id="faq-tab-schedule" class="faq__tab" type="button" role="tab" aria-selected="false" aria-controls="faq-panel-schedule" tabindex="-1">เวลาและสถานที่</button>
+                        <button id="faq-tab-content" class="faq__tab" type="button" role="tab" aria-selected="false" aria-controls="faq-panel-content" tabindex="-1">ประสบการณ์ภายในงาน</button>
+                        <button id="faq-tab-playbook" class="faq__tab" type="button" role="tab" aria-selected="false" aria-controls="faq-panel-playbook" tabindex="-1">PERSONALIZED PLAYBOOK</button>
                         <span class="faq__tab-indicator" aria-hidden="true"></span>
                     </div>
                 </div>
@@ -1801,6 +1801,25 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="faq__item accordion-item">
+                            <h3 id="faq-heading-schedule-4" class="faq__question-heading accordion-header">
+                                <button class="faq__question accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapse-schedule-4" aria-expanded="false" aria-controls="faq-collapse-schedule-4">
+                                    <span>ต้องเตรียมอะไรไปสำหรับการเข้าร่วมงาน ?</span>
+                                    <span class="faq__icon" aria-hidden="true"></span>
+                                </button>
+                            </h3>
+                            <div id="faq-collapse-schedule-4" class="faq__answer accordion-collapse collapse" aria-labelledby="faq-heading-schedule-4" data-bs-parent="#faq-accordion-schedule">
+                                <div class="faq__answer-body accordion-body">
+                                    <p>แนะนำให้เตรียมตัวดังนี้</p>
+                                    <ul>
+                                        <li>นำ QR Code จากอีเมลยืนยันการซื้อบัตร มาแสดงที่จุดลงทะเบียนหน้างาน</li>
+                                        <li>ทำ Investor DNA ล่วงหน้า เพื่อให้ได้ Playbook ที่ตรงกับคุณมากที่สุด</li>
+                                        <li>เผื่อเวลาสำหรับการลงทะเบียนหน้างาน โดยเฉพาะผู้ที่ต้องการเข้าร่วม Workshop เนื่องจากแต่ละรอบมีจำนวนที่นั่งจำกัด</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -1855,24 +1874,111 @@
                         </div>
                     </div>
                 </div>
-
-                <div id="faq-panel-preparation" class="faq__panel" role="tabpanel" aria-labelledby="faq-tab-preparation" hidden>
-                    <div id="faq-accordion-preparation" class="faq__accordion accordion">
+                <div id="faq-panel-playbook" class="faq__panel" role="tabpanel" aria-labelledby="faq-tab-playbook" hidden>
+                    <div id="faq-accordion-playbook" class="faq__accordion accordion">
                         <div class="faq__item accordion-item">
-                            <h3 id="faq-heading-preparation-1" class="faq__question-heading accordion-header">
-                                <button class="faq__question accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapse-preparation-1" aria-expanded="true" aria-controls="faq-collapse-preparation-1">
-                                    <span>ต้องเตรียมอะไรไปสำหรับการเข้าร่วมงาน ?</span>
+                            <h3 id="faq-heading-playbook-1" class="faq__question-heading accordion-header">
+                                <button class="faq__question accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapse-playbook-1" aria-expanded="true" aria-controls="faq-collapse-playbook-1">
+                                    <span>PERSONALIZED PLAYBOOK สร้างอย่างไร ?</span>
                                     <span class="faq__icon" aria-hidden="true"></span>
                                 </button>
                             </h3>
-                            <div id="faq-collapse-preparation-1" class="faq__answer accordion-collapse collapse show" aria-labelledby="faq-heading-preparation-1" data-bs-parent="#faq-accordion-preparation">
+                            <div id="faq-collapse-playbook-1" class="faq__answer accordion-collapse collapse show" aria-labelledby="faq-heading-playbook-1" data-bs-parent="#faq-accordion-playbook">
                                 <div class="faq__answer-body accordion-body">
-                                    <p>แนะนำให้เตรียมตัวดังนี้</p>
+                                    <p>มี 3 ขั้นตอน</p>
+                                    <ol>
+                                        <li>ก่อนงาน: <a href="https://egames.efin.finance/games/investor-dna-quiz" target="_blank" rel="noopener">ทำแบบทดสอบ Investor DNA</a> 11 ข้อ ใช้เวลาประมาณ 2–3 นาที หลังจบแบบทดสอบ จะปรากฏการ์ดตัวตนของคุณขึ้นมา</li>
+                                        <li>ระหว่างงาน: เช็กอินบูธและเล่นกิจกรรมประจำโซน 5 โซน รวมถึงเล่นเกมหลัก 6 เกมผ่าน Dashboard เพื่อเติมข้อมูลให้ครบ 6 ด้าน</li>
+                                        <li>หลังงาน: ดาวน์โหลด PERSONALIZED PLAYBOOK ในรูปแบบ PDF ผ่าน Dashboard</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="faq__item accordion-item">
+                            <h3 id="faq-heading-playbook-2" class="faq__question-heading accordion-header">
+                                <button class="faq__question accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapse-playbook-2" aria-expanded="false" aria-controls="faq-collapse-playbook-2">
+                                    <span>ไม่มีความรู้เรื่องหุ้นหรือการลงทุนมาก่อน ทำได้ไหม ?</span>
+                                    <span class="faq__icon" aria-hidden="true"></span>
+                                </button>
+                            </h3>
+                            <div id="faq-collapse-playbook-2" class="faq__answer accordion-collapse collapse" aria-labelledby="faq-heading-playbook-2" data-bs-parent="#faq-accordion-playbook">
+                                <div class="faq__answer-body accordion-body">
+                                    <p>ทำได้ แบบทดสอบถามเรื่องนิสัยและการตัดสินใจในชีวิตประจำวัน ไม่ได้วัดความรู้ ไม่มีคำตอบถูกหรือผิด ตอบตามความรู้สึกจริงได้เลย</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="faq__item accordion-item">
+                            <h3 id="faq-heading-playbook-3" class="faq__question-heading accordion-header">
+                                <button class="faq__question accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapse-playbook-3" aria-expanded="false" aria-controls="faq-collapse-playbook-3">
+                                    <span>ต้องสมัครสมาชิกหรือเข้าสู่ระบบก่อนไหม ?</span>
+                                    <span class="faq__icon" aria-hidden="true"></span>
+                                </button>
+                            </h3>
+                            <div id="faq-collapse-playbook-3" class="faq__answer accordion-collapse collapse" aria-labelledby="faq-heading-playbook-3" data-bs-parent="#faq-accordion-playbook">
+                                <div class="faq__answer-body accordion-body">
+                                    <p>เริ่มทำแบบทดสอบ Investor DNA ได้ทันทีโดยไม่ต้องสมัครสมาชิก จากนั้นตอนดูผลลัพธ์ เพียงสมัครสมาชิกหรือเข้าสู่ระบบ efin.finance ก็จะแสดง Hero Card ของคุณ และผลจะถูกบันทึกไว้เพื่อนำไปใช้ต่อได้ในวันงาน</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="faq__item accordion-item">
+                            <h3 id="faq-heading-playbook-4" class="faq__question-heading accordion-header">
+                                <button class="faq__question accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapse-playbook-4" aria-expanded="false" aria-controls="faq-collapse-playbook-4">
+                                    <span>แบบทดสอบ Investor DNA มีค่าใช้จ่ายไหม ?</span>
+                                    <span class="faq__icon" aria-hidden="true"></span>
+                                </button>
+                            </h3>
+                            <div id="faq-collapse-playbook-4" class="faq__answer accordion-collapse collapse" aria-labelledby="faq-heading-playbook-4" data-bs-parent="#faq-accordion-playbook">
+                                <div class="faq__answer-body accordion-body">
+                                    <p>ไม่มีค่าใช้จ่าย ทุกคนทำได้ฟรี ยังไม่ต้องซื้อบัตรเข้างาน</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="faq__item accordion-item">
+                            <h3 id="faq-heading-playbook-5" class="faq__question-heading accordion-header">
+                                <button class="faq__question accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapse-playbook-5" aria-expanded="false" aria-controls="faq-collapse-playbook-5">
+                                    <span>ในงานต้องทำอะไรบ้างเพื่อให้ PERSONALIZED PLAYBOOK สมบูรณ์ ?</span>
+                                    <span class="faq__icon" aria-hidden="true"></span>
+                                </button>
+                            </h3>
+                            <div id="faq-collapse-playbook-5" class="faq__answer accordion-collapse collapse" aria-labelledby="faq-heading-playbook-5" data-bs-parent="#faq-accordion-playbook">
+                                <div class="faq__answer-body accordion-body">
                                     <ul>
-                                        <li>นำ QR Code จากอีเมลยืนยันการซื้อบัตร มาแสดงที่จุดลงทะเบียนหน้างาน</li>
-                                        <li>ทำ Investor DNA ล่วงหน้า เพื่อให้ได้ Playbook ที่ตรงกับคุณมากที่สุด</li>
-                                        <li>เผื่อเวลาสำหรับการลงทะเบียนหน้างาน โดยเฉพาะผู้ที่ต้องการเข้าร่วม Workshop เนื่องจากแต่ละรอบมีจำนวนที่นั่งจำกัด</li>
+                                        <li>เช็กอินบูธตามโซนที่สนใจ แล้วเล่นกิจกรรมประจำบูธ</li>
+                                        <li>แวะบูธ efin.finance เพื่อปลดล็อกเกมหลัก 6 เกม</li>
                                     </ul>
+                                    <p>ยิ่งเล่นครบ ข้อมูลยิ่งสะท้อน PERSONALIZED PLAYBOOK ได้สมบูรณ์แบบยิ่งขึ้น หากเล่นไม่ครบ 6 เกม PLAYBOOK อาจจะแสดงข้อมูลไม่สมบูรณ์</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="faq__item accordion-item">
+                            <h3 id="faq-heading-playbook-6" class="faq__question-heading accordion-header">
+                                <button class="faq__question accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapse-playbook-6" aria-expanded="false" aria-controls="faq-collapse-playbook-6">
+                                    <span>ใครได้รับ PERSONALIZED PLAYBOOK ฉบับ PDF และการ์ดตัวจริง ?</span>
+                                    <span class="faq__icon" aria-hidden="true"></span>
+                                </button>
+                            </h3>
+                            <div id="faq-collapse-playbook-6" class="faq__answer accordion-collapse collapse" aria-labelledby="faq-heading-playbook-6" data-bs-parent="#faq-accordion-playbook">
+                                <div class="faq__answer-body accordion-body">
+                                    <p>เฉพาะบัตร Ultimate เท่านั้น สามารถดาวน์โหลด PDF ผ่าน Dashboard PLAYBOOK หลังจบงาน และแลกรับการ์ดตัวจริงได้ที่จุดแลกรับในงาน 1 ท่าน 1 ใบ จำนวนจำกัด</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="faq__item accordion-item">
+                            <h3 id="faq-heading-playbook-7" class="faq__question-heading accordion-header">
+                                <button class="faq__question accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapse-playbook-7" aria-expanded="false" aria-controls="faq-collapse-playbook-7">
+                                    <span>PERSONALIZED PLAYBOOK เป็นคำแนะนำการลงทุนไหม ?</span>
+                                    <span class="faq__icon" aria-hidden="true"></span>
+                                </button>
+                            </h3>
+                            <div id="faq-collapse-playbook-7" class="faq__answer accordion-collapse collapse" aria-labelledby="faq-heading-playbook-7" data-bs-parent="#faq-accordion-playbook">
+                                <div class="faq__answer-body accordion-body">
+                                    <p>PERSONALIZED PLAYBOOK ไม่ใช่คำแนะนำการลงทุน แต่เป็นเครื่องมือทำความเข้าใจตัวเอง บอกสไตล์ จุดแข็ง และสิ่งที่ควรระวัง ไม่มีการระบุหลักทรัพย์รายตัว การลงทุนมีความเสี่ยง ผู้ลงทุนควรศึกษาข้อมูลก่อนตัดสินใจ</p>
                                 </div>
                             </div>
                         </div>
@@ -2034,7 +2140,7 @@
 
     <!-- Liquid metal CTAs (WebGL). Module scripts are deferred, so this runs after
      the markup exists but before window 'load' fires the hero intro. -->
-    <script type="module" src="js/hero-v2-cta.js?v=19"></script>
+    <script type="module" src="js/hero-v2-cta.js?v=20"></script>
     <script src="js/event-countdown.js?v=3"></script>
     <script src="js/loader-mist.js?v=3"></script>
     <script src="vendor/gsap/gsap.min.js"></script>

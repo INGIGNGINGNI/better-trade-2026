@@ -257,7 +257,13 @@
 
         const now = performance.now();
         const previous = pos;
-        const shift = event.clientX - drag.x;
+        /* section ถูก scale อยู่ระหว่าง scroll-driven expand (ดู js/scroll-expand.js)
+           ระยะที่นิ้วลากมาเป็นพิกเซลบนจอ ส่วน pitch คิดจาก offsetWidth ซึ่งเป็นพิกเซล layout
+           ถ้าเอามาหารกันตรง ๆ ตอนที่ scale ยังไม่ถึง 1 การ์ดจะเลื่อนช้ากว่านิ้ว
+           หารด้วยอัตราส่วนจริง (rect / layout) ก่อน ทั้งสองค่าจึงอยู่หน่วยเดียวกันเสมอ
+           ตอน scale เป็น 1 ค่านี้เท่ากับ 1 พอดี ไม่มีผลอะไร */
+        const scale = frame.getBoundingClientRect().width / (frame.offsetWidth || 1);
+        const shift = (event.clientX - drag.x) / (scale || 1);
 
         drag.moved = Math.max(drag.moved, Math.abs(shift));
         pos = drag.pos - shift / pitch;

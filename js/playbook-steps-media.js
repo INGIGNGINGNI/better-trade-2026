@@ -197,4 +197,39 @@
     }
 
     document.querySelectorAll('[data-steps-diagram]').forEach(initDiagram);
+
+    /* โหมด artboard (≤767): กรอบตัวอย่างจัดวางที่ความกว้างคงที่แล้วย่อทั้งแผ่นด้วย transform: scale
+       ความกว้าง artboard มาจาก CSS (--bt-playbook-steps-artboard-width) ซึ่งประกาศไว้เฉพาะช่วงนั้น
+       นอกช่วงค่าจะว่าง ตรงนี้ก็ถอดคลาสกับค่าที่ตั้งไว้ออกเอง กรอบกลับไปกว้างเต็มคอลัมน์ตามปกติ
+       ความกว้างที่มีให้ใช้คือเนื้อในของคอลัมน์ ต้องหัก padding ซ้าย-ขวาออกก่อน
+       เพราะ .playbook-steps__media เป็นตัวคอลัมน์ของ .row เอง มี gutter เป็น padding อยู่ในตัว
+
+       transform ไม่คืนพื้นที่ใน layout จึงต้องส่งความสูงก่อนย่อให้ CSS ไปคิด margin-bottom ติดลบ
+       วัดหลังติดคลาสแล้วเท่านั้น (ตอนนั้นกรอบกว้างเท่า artboard ความสูงจึงเป็นของจริง)
+       offsetHeight ไม่นับ transform และ margin จึงได้ความสูงก่อนย่อเสมอ ไม่วนผลกันเอง */
+    function applyArtboard() {
+        document.querySelectorAll('.playbook-steps__preview').forEach((preview) => {
+            const artboard = parseFloat(getComputedStyle(preview).getPropertyValue('--bt-playbook-steps-artboard-width'));
+            const column = preview.parentElement;
+
+            if (!Number.isFinite(artboard) || artboard <= 0 || !column) {
+                preview.classList.remove('is-artboard');
+                preview.style.removeProperty('--bt-playbook-steps-artboard-scale');
+                preview.style.removeProperty('--bt-playbook-steps-artboard-height');
+                return;
+            }
+
+            const columnStyle = getComputedStyle(column);
+            const available = column.clientWidth - parseFloat(columnStyle.paddingLeft) - parseFloat(columnStyle.paddingRight);
+
+            preview.style.setProperty('--bt-playbook-steps-artboard-scale', (available / artboard).toFixed(4));
+            preview.classList.add('is-artboard');
+            preview.style.setProperty('--bt-playbook-steps-artboard-height', preview.offsetHeight + 'px');
+        });
+    }
+
+    applyArtboard();
+    window.addEventListener('resize', applyArtboard);
+    /* ความสูงของกรอบมาจากสัดส่วนการ์ด ไม่ขึ้นกับฟอนต์ แต่วัดซ้ำตอนฟอนต์พร้อมไว้กันพลาดราคาถูก ๆ */
+    document.fonts?.ready.then(applyArtboard);
 })();

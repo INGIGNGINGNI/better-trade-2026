@@ -102,10 +102,17 @@ function fitLabelToColumn(slot, label, options) {
 
     if (!column) return options;
 
+    /* ซ่อนปุ่มเดิมระหว่างวัด: ตอนย่อจอ ปุ่มที่ยังกว้างเท่าจอก่อนหน้าดันคอลัมน์ให้กว้างตามตัวเอง
+       ถ้าวัดตอนนั้นจะได้ความกว้างที่ถูกปุ่มถ่างไว้ ไม่ใช่ความกว้างจริงของคอลัมน์ */
+    const previousDisplay = slot.style.display;
+
+    slot.style.display = 'none';
     const columnStyle = getComputedStyle(column);
     const available = column.clientWidth
         - parseFloat(columnStyle.paddingLeft)
         - parseFloat(columnStyle.paddingRight);
+
+    slot.style.display = previousDisplay;
     const textWidth = measureTextWidth(label, fontSize, sharedRegisterOptions.fontWeight, sharedRegisterOptions.fontFamily);
 
     if (!available || textWidth + paddingX * 2 <= available) return options;
@@ -135,6 +142,30 @@ ready.then(() => {
     let playbookHeroCtaButton = null;
     let playbookUltimateCtaButton = null;
     let heroCtaSize = null;
+    let heroResponsiveOptions = {};
+    let playbookHeroFontSize = null;
+
+    /* ป้ายของปุ่มนี้ยาวที่สุดในเว็บ ปุ่มจึงยืดจนอัตราส่วนเกิน 8:1 แล้วลายโลหะบนขอบ
+       จะเห็นรอยต่อกลางปุ่ม (ลายถูกวาดในกล่องทรงจัตุรัส ยิ่งปุ่มยาวยิ่งถูกยืด)
+       บีบระยะในของปุ่มนี้ตัวเดียว ปุ่มอื่นทั้งเว็บยังใช้ 48 ตามเดิม
+       ส่งค่าเข้า fitLabelToColumn ด้วย การคำนวณย่อฟอนต์จะได้อิงระยะในชุดเดียวกัน */
+    const fitPlaybookHeroOptions = () => fitLabelToColumn(
+        playbookHeroCtaSlot,
+        PLAYBOOK_HERO_CTA_LABEL,
+        { ...heroResponsiveOptions, paddingX: 36 },
+    );
+
+    const mountPlaybookHeroCta = (fitted = fitPlaybookHeroOptions()) => {
+        playbookHeroFontSize = fitted.fontSize ?? sharedRegisterOptions.fontSize;
+        playbookHeroCtaButton?.destroy?.();
+        playbookHeroCtaButton = mountRegisterButton(playbookHeroCtaSlot, {
+            ...fitted,
+            label: PLAYBOOK_HERO_CTA_LABEL,
+            href: playbookHeroCtaSlot?.dataset.ctaHref || TICKET_SECTION_HREF,
+            textColor: '#111318',
+            pillBackground: 'linear-gradient(180deg, #ffffff 0%, #f3f4f8 55%, #e4e7ee 100%)',
+        });
+    };
 
     const mountHeroCta = () => {
         const nextSize = mobileHeroCta.matches ? 'mobile' : (tabletHeroCta.matches ? 'tablet' : 'default');
@@ -145,10 +176,11 @@ ready.then(() => {
         const responsiveOptions = nextSize === 'mobile'
             ? mobileRegisterOptions
             : (nextSize === 'tablet' ? tabletRegisterOptions : {});
+
+        heroResponsiveOptions = responsiveOptions;
         heroCtaButton?.destroy?.();
         playbookCtaButton?.destroy?.();
         ctaTicketButton?.destroy?.();
-        playbookHeroCtaButton?.destroy?.();
         playbookUltimateCtaButton?.destroy?.();
         heroCtaButton = mountRegisterButton(heroCtaSlot, {
             ...responsiveOptions,
@@ -176,19 +208,7 @@ ready.then(() => {
             textColor: '#111318',
             pillBackground: 'linear-gradient(180deg, #ffffff 0%, #f3f4f8 55%, #e4e7ee 100%)',
         });
-        /* ป้ายของปุ่มนี้ยาวที่สุดในเว็บ ปุ่มจึงยืดจนอัตราส่วนเกิน 8:1 แล้วลายโลหะบนขอบ
-           จะเห็นรอยต่อกลางปุ่ม (ลายถูกวาดในกล่องทรงจัตุรัส ยิ่งปุ่มยาวยิ่งถูกยืด)
-           บีบระยะในของปุ่มนี้ตัวเดียว ปุ่มอื่นทั้งเว็บยังใช้ 48 ตามเดิม
-           ส่งค่าเข้า fitLabelToColumn ด้วย การคำนวณย่อฟอนต์จะได้อิงระยะในชุดเดียวกัน */
-        const playbookHeroOptions = { ...responsiveOptions, paddingX: 36 };
-
-        playbookHeroCtaButton = mountRegisterButton(playbookHeroCtaSlot, {
-            ...fitLabelToColumn(playbookHeroCtaSlot, PLAYBOOK_HERO_CTA_LABEL, playbookHeroOptions),
-            label: PLAYBOOK_HERO_CTA_LABEL,
-            href: playbookHeroCtaSlot?.dataset.ctaHref || TICKET_SECTION_HREF,
-            textColor: '#111318',
-            pillBackground: 'linear-gradient(180deg, #ffffff 0%, #f3f4f8 55%, #e4e7ee 100%)',
-        });
+        mountPlaybookHeroCta();
         playbookUltimateCtaButton = mountRegisterButton(playbookUltimateCtaSlot, {
             ...responsiveOptions,
             label: 'ซื้อบัตร Ultimate',
@@ -205,6 +225,25 @@ ready.then(() => {
     tabletHeroCta.addEventListener('change', mountHeroCta);
     mobileHeroCta.addEventListener('change', mountHeroCta);
 
+    /* ปุ่มสร้างใหม่ตามข้างบนเฉพาะตอนข้ามช่วงจอ แต่ขนาดตัวอักษรของปุ่ม hero ถูกย่อให้พอดีคอลัมน์
+       ณ ตอนสร้าง ย่อจอภายในช่วงเดียวกัน (เช่น 575 -> 375 หรือเปิด inspect) ปุ่มจึงยังกว้างเท่าเดิม
+       แล้วดันคอลัมน์ข้อความจน hero ล้นออกขวาจอ วัดใหม่หลังหยุดย่อ-ขยาย ถ้าขนาดที่พอดีเปลี่ยน
+       ค่อยสร้างปุ่มนี้ใหม่ปุ่มเดียว (หน่วงไว้ ไม่สร้างซ้ำทุก event ระหว่างลากขอบหน้าต่าง) */
+    if (playbookHeroCtaSlot) {
+        let refitTimer = 0;
+
+        window.addEventListener('resize', () => {
+            clearTimeout(refitTimer);
+            refitTimer = setTimeout(() => {
+                const fitted = fitPlaybookHeroOptions();
+
+                if ((fitted.fontSize ?? sharedRegisterOptions.fontSize) !== playbookHeroFontSize) {
+                    mountPlaybookHeroCta(fitted);
+                }
+            }, 150);
+        });
+    }
+
     // จอ ≤1199px แถบ header แคบลง ปุ่มซื้อบัตรใน header จึงแคบลง 20% จากความกว้างเดิม
     const compactHeaderCta = window.matchMedia('(max-width: 1199px)');
     const HEADER_CTA_COMPACT_RATIO = 0.8;
@@ -213,10 +252,11 @@ ready.then(() => {
     const mountHeaderCtas = () => {
         document.querySelectorAll('[data-header-register-cta]').forEach((target) => {
             // แถบ header ต้องแชร์แถวเดียวกับโลโก้และ nav จึงย่อตัวอักษรลงหนึ่งขั้น
-            // ส่วนแถบ CTA ล่างจอมือถือมีที่พอ คงขนาดให้เท่าปุ่ม --xl ที่อยู่ข้างกัน
+            // ส่วนแถบ CTA ล่างจอ (≤575px) มีที่เหลือในแถบอีกมาก และป้าย "ซื้อบัตร" สั้นกว่า
+            // ปุ่ม INVESTOR DNA ที่อยู่ข้างกันมาก จึงเพิ่มระยะในของปุ่มนี้ให้ดูไม่เล็กเกินไป
             const isHeaderRow = Boolean(target.closest('.site-header'));
             const fontSize = isHeaderRow ? 14 : 16;
-            const paddingX = isHeaderRow ? 14 : 16;
+            const paddingX = isHeaderRow ? 14 : 28;
             // ป้ายย่อเหลือ "ซื้อบัตร" แต่ปุ่มใน header คงความกว้างเดิมของป้าย "ซื้อบัตร Early Bird" (ตัวอักษรอยู่กึ่งกลาง)
             const headerRowBaseWidth = measureTextWidth('ซื้อบัตร Early Bird', fontSize, sharedRegisterOptions.fontWeight, sharedRegisterOptions.fontFamily) + paddingX * 2;
             const headerRowWidth = isHeaderRow

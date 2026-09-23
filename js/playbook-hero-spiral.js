@@ -83,6 +83,9 @@
             return {
                 speed: read('--bt-playbook-hero-spiral-speed', 0.55),
                 radius: read('--bt-playbook-hero-spiral-radius', 170),
+                /* เพดานรัศมี คิดเป็นสัดส่วนของความกว้างกรอบ ใช้ค่าที่เล็กกว่าระหว่างนี้กับ radius
+                   จอเล็กตั้งค่านี้ให้วงแหวนหดตามความกว้างจอพอดี (CSS ใส่ vw ให้ JS อ่านตรง ๆ ไม่ได้) */
+                radiusCap: read('--bt-playbook-hero-spiral-radius-cap', 0.36),
                 spacing: read('--bt-playbook-hero-spiral-spacing', 62),
                 perspective: read('--bt-playbook-hero-spiral-perspective', 1000),
                 cardsPerTurn: Math.max(read('--bt-playbook-hero-spiral-cards-per-turn', 7), 1),
@@ -92,6 +95,10 @@
                 edgeFade: read('--bt-playbook-hero-spiral-edge-fade', 0.3),
                 edgeBlur: read('--bt-playbook-hero-spiral-edge-blur', 6),
                 unwrapAt: read('--bt-playbook-hero-spiral-unwrap-at', 0.8),
+                /* 0 = ไม่เร่งตามสกรอลล์ (ต่ำกว่า lg ใช้ค่านี้) ค่าอื่นคูณเข้ากับระยะที่เลื่อน */
+                scrollDrive: read('--bt-playbook-hero-spiral-scroll-drive', 1),
+                /* กี่เท่าของความสูงการ์ดที่กรอบต้องมี ก่อนจะเริ่มย่อทั้งชุด (2.35 = เกลียวตั้ง, ~1.5 = วงแหวน) */
+                fitRows: Math.max(read('--bt-playbook-hero-spiral-fit-rows', 2.35), 1),
                 cardWidth: Math.max(cards[0].offsetWidth, 1),
                 cardHeight: Math.max(cards[0].offsetHeight, 1),
             };
@@ -117,8 +124,8 @@
             const width = Math.max(bounds.width, 1);
             const height = Math.max(bounds.height, 1);
             /* ย่อทั้งเกลียวลงถ้ากรอบแคบกว่าที่การ์ดชุดนี้ต้องการ สัดส่วนภายในจึงคงเดิมทุกจอ */
-            const fit = Math.min(1, width / (geometry.cardWidth * 2.8), height / (geometry.cardHeight * 2.35));
-            const spiralRadius = Math.min(geometry.radius, Math.max(72, width * 0.36)) * fit;
+            const fit = Math.min(1, width / (geometry.cardWidth * 2.8), height / (geometry.cardHeight * geometry.fitRows));
+            const spiralRadius = Math.min(geometry.radius, Math.max(72, width * geometry.radiusCap)) * fit;
             const fadeStart = clamp(1 - geometry.edgeFade, 0, 0.98);
 
             if (heroHeight) {
@@ -220,10 +227,17 @@
                 const scrollDelta = nextScrollY - lastScrollY;
 
                 lastScrollY = nextScrollY;
-                if (!visible || !scrollDelta) return;
+                if (!visible || !scrollDelta || !geometry.scrollDrive) return;
+
+                /* ตัวหารคือ "ระยะสกรอลล์ต่อหนึ่งใบ" ปกติผูกกับระยะไต่แนวตั้งของเกลียว (spacing x 2)
+                   แต่ผังวงแหวนแนวนอนตั้ง spacing เป็น 0 ถ้าปล่อยให้ตัวหารเหลือ 1
+                   การเลื่อน 1px จะเท่ากับหมุนไป 1 ใบ เกลียวจึงหมุนติ้วทันทีที่แตะสกรอลล์
+                   กรณีนั้นใช้ความสูงการ์ดแทน ให้ยังได้ความรู้สึก "เลื่อนหนึ่งใบต่อหนึ่งช่วงการ์ด"
+                   (ค่าปกติที่ spacing > 0 ไม่เปลี่ยน desktop จึงเหมือนเดิมทุกประการ) */
+                const perCard = geometry.spacing > 0 ? geometry.spacing * 2 : geometry.cardHeight;
 
                 targetProgress += clamp(
-                    (scrollDelta * (Math.max(geometry.speed, 0) / 0.55)) / Math.max(geometry.spacing * 2, 1),
+                    (scrollDelta * geometry.scrollDrive * (Math.max(geometry.speed, 0) / 0.55)) / Math.max(perCard, 1),
                     -1.5,
                     1.5,
                 );

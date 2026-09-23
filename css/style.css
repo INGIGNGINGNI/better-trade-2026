@@ -4931,10 +4931,15 @@ body.is-loading .hero-scroll-cue,
         }
 
         /* จอนี้ลงไปการ์ดเรียงเป็นคอลัมน์เดียว ใช้ gap แนวตั้งคั่นให้อ่านง่าย
-           ส่วน Ultimate ยังคงกรอบ spectrum ครบทั้ง 4 ด้าน */
+           ส่วน Ultimate ยังคงกรอบ spectrum ครบทั้ง 4 ด้าน
+           ความกว้างเลิกกินเกือบเต็มจอ ใช้เท่าเนื้อหาใน .container ของ Bootstrap (รวม gutter ที่ main.css ปรับ)
+           การ์ดจึงตรงแนวกับหัว section (.ticket__inner.container) */
         .ticket__plans {
+            --bs-gutter-x: 1.5rem;
+
             gap: var(--space-6);
             padding: var(--space-0);
+            width: min(calc(100% - var(--bs-gutter-x)), calc(720px - var(--bs-gutter-x)));
         }
 
         .ticket__plan {
@@ -5002,6 +5007,13 @@ body.is-loading .hero-scroll-cue,
 
     }
 
+    /* main.css ตั้ง gutter ของ .container เป็น 32px ตั้งแต่ 767px ลงมา ตามให้ตรงกัน */
+    @media (max-width:767px) {
+        .ticket__plans {
+            --bs-gutter-x: 32px;
+        }
+    }
+
     @media (max-width:575px) {
         --bt-ticket-backdrop-height: 360px;
         --bt-ticket-title-size: var(--section-topic-size);
@@ -5010,9 +5022,7 @@ body.is-loading .hero-scroll-cue,
         --bt-ticket-price-size: var(--font-size-32);
         --bt-ticket-benefit-text-size: var(--font-size-14);
 
-        .ticket__plans {
-            width: min(calc(100% - var(--space-6)), var(--bt-ticket-plans-width));
-        }
+
 
         .ticket__plan-header {
             margin-bottom: var(--space-6);
@@ -8129,6 +8139,9 @@ body.is-loading .hero-scroll-cue,
 
 /* ---------- FAQ ---------- */
 .faq {
+    /* สีลิงก์ในคำตอบ FAQ (ทอง) ตามสเปกเนื้อหา FAQ ฉบับ 23 ก.ย. 2569 */
+    --bt-faq-link-ink: #f2c15a;
+
     --faq-question-font-size: var(--font-size-16);
     --faq-question-font-weight: var(--font-weight-medium);
     --faq-answer-font-size: var(--font-size-16);
@@ -8420,8 +8433,34 @@ body.is-loading .hero-scroll-cue,
     margin-top: var(--space-1);
 }
 
+/* คำตอบที่เป็นขั้นตอน (เช่น 3 ขั้นตอนของ PERSONALIZED PLAYBOOK) ใช้ตัวเลขกำกับลำดับ
+   จึงต้องคืน display: list-item และปิดจุดดาวที่กฎรวมของ li ใส่ไว้ให้ ul */
+.faq__answer-body ol {
+    margin-bottom: 0;
+    padding-left: var(--space-5);
+    list-style: decimal;
+}
+
+.faq__answer-body p+ol,
+.faq__answer-body ol+p {
+    margin-top: var(--space-2);
+}
+
+.faq__answer-body ol li {
+    display: list-item;
+    gap: var(--space-0);
+}
+
+.faq__answer-body ol li::before {
+    content: none;
+}
+
+.faq__answer-body ol li+li {
+    margin-top: var(--space-1);
+}
+
 .faq__answer-body a {
-    color: var(--color-text-primary);
+    color: var(--bt-faq-link-ink);
     font-weight: var(--font-weight-medium);
     text-decoration-line: underline;
     text-decoration-thickness: 1px;
@@ -10546,6 +10585,9 @@ body.is-loading .hero-scroll-cue,
         --bt-playbook-cta-height: 56px;
 
         display: flex;
+        /* row-reverse: ปุ่มขาว (liquid metal) ซึ่งอยู่ก่อนใน HTML จึงไปอยู่ขวาของปุ่มดำ
+           และตอนจอแคบจนตกบรรทัด ปุ่มขาวยังได้อยู่บรรทัดบน ปุ่มดำอยู่ล่าง */
+        flex-direction: row-reverse;
         flex-wrap: wrap;
         align-items: center;
         justify-content: center;
@@ -11038,8 +11080,7 @@ body.is-loading .hero-scroll-cue,
        เขียนเป็น linear-gradient สองสต็อปสีเดียวกัน เพื่อให้เป็นชั้นภาพซ้อนกับม่านขอบล่างได้
        (background shorthand วางสีทึบร่วมกับ gradient หลายชั้นไม่ได้) */
     --bt-playbook-scene-veil-intro-strength: 88%;
-    --bt-playbook-scene-veil-intro: linear-gradient(
-            color-mix(in srgb, var(--color-neutral-950) var(--bt-playbook-scene-veil-intro-strength), transparent),
+    --bt-playbook-scene-veil-intro: linear-gradient(color-mix(in srgb, var(--color-neutral-950) var(--bt-playbook-scene-veil-intro-strength), transparent),
             color-mix(in srgb, var(--color-neutral-950) var(--bt-playbook-scene-veil-intro-strength), transparent));
     /* ไล่เข้มเฉพาะปลายล่างสุดของฉาก ส่งต่อไปยัง section พื้นขาวที่อยู่ถัดไป */
     --bt-playbook-scene-veil-edge: linear-gradient(180deg,
@@ -11123,7 +11164,7 @@ body.is-loading .hero-scroll-cue,
 }
 
 /* สอง section ต้องลอยอยู่เหนือชั้นฉาก ไม่งั้นเนื้อหาจะถูกภาพทับ */
-.playbook-scene > section {
+.playbook-scene>section {
     position: relative;
     z-index: 1;
 }
@@ -11140,6 +11181,42 @@ body.is-loading .hero-scroll-cue,
     /* iOS Safari ไม่รองรับ fixed จริง ภาพจะกระตุกหรือยืดผิดสัดส่วน จึงกลับไปเลื่อนตามหน้า */
     .playbook-scene__backdrop {
         background-attachment: scroll;
+    }
+}
+
+/* ชั้นภาพติดจอ ใช้เฉพาะ ≤991 จอที่กว้างกว่าซ่อนไว้ ภาพยังวาดที่ตัว backdrop ด้วย fixed ตามเดิม */
+.playbook-scene__image {
+    display: none;
+}
+
+/* ---------- ≤991: ภาพฉากเต็มจอและอยู่นิ่งเหมือน desktop ----------
+   ช่วงนี้ปิด background-attachment: fixed ไว้ (บล็อก ≤991 ด้านบน เพราะ iOS Safari ไม่รองรับ)
+   ภาพที่เลื่อนตามหน้าต้อง cover ทั้งฉาก hero + intro ซึ่งสูงราว 2 เท่าของจอ
+   ภาพ 2490x1720 จึงถูกขยายตามความสูงฉากจนเหลือแค่กลางห้อง ประตูสองข้างหลุดกรอบไปหมด
+   หน้าตาไม่เหมือน desktop ที่ภาพ cover แค่หนึ่งจอ
+
+   แทนที่ด้วยชั้นภาพที่สูงหนึ่งจอแล้วติดขอบบนจอไว้ด้วย sticky
+   ภาพจึงเต็มจอพอดีและนิ่งอยู่กับที่ตลอดช่วงที่ฉากวิ่งผ่าน ได้ผลเท่า fixed ของ desktop
+   และ sticky ทำงานบน iOS Safari ปกติ
+   - backdrop ต้องเปลี่ยน overflow จาก hidden เป็น clip: hidden ทำให้กล่องกลายเป็น
+     scroll container แล้ว sticky จะไปติดกับกล่องที่ไม่เคยเลื่อนแทนหน้าจอ
+   - z-index: -1 ให้ภาพอยู่ใต้ม่านไล่สีทั้งสองผืน (::before / ::after ของ backdrop)
+   - 100lvh = ความสูงจอตอนแถบเบราว์เซอร์มือถือหุบ ภาพจึงไม่ขาดตอนแถบหุบ (เบราว์เซอร์เก่าใช้ 100vh)
+   - จอ ≤575 ใช้ชั้นเดียวกัน แค่สลับไฟล์เป็นภาพแนวตั้ง (token ในบล็อก ≤575 ถัดไป) */
+@media (max-width: 991px) {
+    .playbook-scene__backdrop {
+        overflow: clip;
+        background: none;
+    }
+
+    .playbook-scene__image {
+        position: sticky;
+        top: var(--space-0);
+        z-index: -1;
+        height: 100vh;
+        height: 100lvh;
+        display: block;
+        background: var(--bt-playbook-scene-image) center / cover no-repeat;
     }
 }
 
@@ -11178,7 +11255,8 @@ body.is-loading .hero-scroll-cue,
     --bt-playbook-hero-copy-line-height: var(--line-height-relaxed);
     --bt-playbook-hero-copy-max-width: var(--layout-copy-max);
     --bt-playbook-hero-actions-gap: var(--space-4);
-    --bt-playbook-hero-actions-space: var(--space-10);
+    --bt-playbook-hero-actions-space-top: var(--space-10);
+    --bt-playbook-hero-actions-space-bottom: var(--space-3);
     --bt-playbook-hero-visual-ratio: 1 / 1;
     --bt-playbook-hero-visual-max-width: none;
     /* เกลียวการ์ดตัวตน: ค่ารูปทรงทั้งชุดอยู่ที่นี่ที่เดียว JS อ่านไปคำนวณตำแหน่งการ์ดทุกเฟรม
@@ -11186,6 +11264,8 @@ body.is-loading .hero-scroll-cue,
        ขนาดต่อ breakpoint จึงแก้ที่ token ชุดนี้ ไม่ต้องแตะ JS */
     --bt-playbook-hero-spiral-card-width: 132px;
     --bt-playbook-hero-spiral-radius: 210px;
+    /* เพดานรัศมีเป็นสัดส่วนของความกว้างกรอบ (ไม่มีหน่วย) JS ใช้ค่าที่เล็กกว่าระหว่างสองตัวนี้ */
+    --bt-playbook-hero-spiral-radius-cap: 0.36;
     --bt-playbook-hero-spiral-spacing: 84px;
     --bt-playbook-hero-spiral-perspective: 1000px;
     --bt-playbook-hero-spiral-speed: 0.44;
@@ -11195,6 +11275,14 @@ body.is-loading .hero-scroll-cue,
     --bt-playbook-hero-spiral-center-scale: 1.2;
     --bt-playbook-hero-spiral-edge-fade: 0.3;
     --bt-playbook-hero-spiral-edge-blur: 6;
+    /* 1 = สกรอลล์แล้วเกลียวหมุนเร็วขึ้นตามระยะที่เลื่อน 0 = หมุนเองอย่างเดียว
+       (ต่ำกว่า lg ปิดไว้ ดูเหตุผลที่บล็อก ≤991) */
+    --bt-playbook-hero-spiral-scroll-drive: 1;
+    /* ความสูงที่เกลียวต้องการ คิดเป็น "กี่เท่าของความสูงการ์ด" JS ใช้ตัดสินว่ากรอบเตี้ยเกิน
+       ต้องย่อทั้งชุดหรือไม่ เกลียวตั้ง (desktop) ไต่ขึ้นลงหลายใบจึงต้องการ 2.35 เท่า
+       ส่วนวงแหวนแนวนอน (≤991) สูงแค่ใบหน้าสุดใบเดียว x1.25 x ระยะมอง = ราว 1.5 เท่า
+       ถ้าปล่อยค่า desktop ไว้ วงแหวนจะถูกย่อทั้งที่กรอบมีที่พอ (ที่ 991x775 เคยเหลือ 69%) */
+    --bt-playbook-hero-spiral-fit-rows: 2.35;
     /* จุดที่เลิกวนลูป: ค่า 0.8 = ขอบล่างของ section ขึ้นมาถึงระดับ 80% ของความสูงจอ
        จากจังหวะนั้นการ์ดจะไหลขึ้นไปตามเกลียวแล้วหมดไปเลย ไม่วนกลับมาโผล่ใหม่ */
     --bt-playbook-hero-spiral-unwrap-at: 0.8;
@@ -11312,7 +11400,8 @@ body.is-loading .hero-scroll-cue,
     /* ย่อหน้านี้ย้ายมาอยู่ใต้ปุ่มแล้ว ระยะจึงเว้นเท่าระยะเหนือปุ่ม ไม่ใช่ระยะบรรทัดชิด ๆ แบบเดิม */
     .playbook-hero__copy {
         max-width: var(--bt-playbook-hero-copy-max-width);
-        margin-top: var(--bt-playbook-hero-actions-space);
+        margin-top: var(--bt-playbook-hero-actions-space-top);
+        margin-bottom: var(--bt-playbook-hero-actions-space-bottom);
         color: var(--bt-playbook-hero-ink-dim);
         font-size: var(--bt-playbook-hero-copy-size);
         font-weight: var(--font-weight-light);
@@ -11320,7 +11409,7 @@ body.is-loading .hero-scroll-cue,
     }
 
     .playbook-hero__actions {
-        margin-top: var(--bt-playbook-hero-actions-space);
+        margin-top: var(--bt-playbook-hero-actions-space-top);
         display: flex;
         flex-wrap: wrap;
         align-items: center;
@@ -11546,66 +11635,415 @@ body.is-loading .hero-scroll-cue,
         --bt-playbook-hero-title-size: var(--font-size-48);
         --bt-playbook-hero-title-art-size: var(--font-size-56);
         --bt-playbook-hero-lead-size: var(--font-size-20);
-        --bt-playbook-hero-spiral-card-width: 120px;
-        --bt-playbook-hero-spiral-radius: 180px;
-        --bt-playbook-hero-spiral-spacing: 76px;
+        /* ลดขนาดตัวรองกับระยะในคอลัมน์ข้อความลงหนึ่งขั้น ไม่แตะหัวเรื่อง
+           หัวเรื่องถูกย่อไปแล้วในชุดข้างบน (56->48 / 64->56) ถ้าย่ออีกจะไปเท่ากับของจอ ≤991
+           แล้ว breakpoint นี้จะกลายเป็นขั้นซ้ำที่ไม่มีความหมาย */
+        --bt-playbook-hero-eyebrow-size: var(--font-size-14);
+        --bt-playbook-hero-copy-size: var(--font-size-16);
+        --bt-playbook-hero-title-space: var(--space-6);
+        --bt-playbook-hero-content-gap: var(--space-6);
+        --bt-playbook-hero-actions-space-top: var(--space-5);
+        --bt-playbook-hero-actions-space-bottom: var(--space-1);
+        --bt-playbook-hero-actions-gap: var(--space-3);
+        /* ย่อทั้งชุดลงพร้อมกัน 13% (การ์ด/รัศมี/ระยะห่าง) สัดส่วนเกลียวจึงคงรูปเดิม
+           ถ้าย่อแค่การ์ดอย่างเดียว วงจะโล่งขึ้นแต่กินที่เท่าเดิม
+           ไม่ลงไปถึงค่าของจอเล็ก (100/140/56) เพราะตรงนี้ยังเป็นจอ desktop */
+        --bt-playbook-hero-spiral-card-width: 104px;
+        --bt-playbook-hero-spiral-radius: 156px;
+        --bt-playbook-hero-spiral-spacing: 66px;
         --bt-playbook-hero-asset-coin-size: calc(var(--space-28) + var(--space-2));
         --bt-playbook-hero-asset-bar-size: var(--space-24);
         --bt-playbook-hero-asset-chart-size: calc(var(--space-16) + var(--space-2));
         --bt-playbook-hero-asset-arrow-size: var(--space-28);
         --bt-playbook-hero-padding-top: calc(var(--space-10) - var(--bt-playbook-hero-optical-shift));
         --bt-playbook-hero-padding-bottom: var(--space-10);
+
+        /* กรอบภาพแคบลงมาก ไอคอนสองมุมนี้เลยไปกองอยู่ในวงโคจรของการ์ด
+           ดันออกนอกกรอบเล็กน้อยให้พ้นทาง (ทุกชั้นเหนือขึ้นไปเป็น overflow: visible
+           จึงโผล่ออกได้โดยไม่โดนตัด และไม่ทำให้เกิด scrollbar แนวนอน)
+           อยู่ใน media query นี้เท่านั้น จอใหญ่กว่านี้ยังใช้ตำแหน่งเดิม */
+        .playbook-hero__asset--coin {
+            top: -4%;
+        }
+
+        .playbook-hero__asset--arrow {
+            bottom: 1%;
+            right: -2%;
+        }
     }
 }
 
+/* ---------- ต่ำกว่า lg: ผังกึ่งกลางแนวตั้ง ----------
+   บน lg ขึ้นไปเป็นสองคอลัมน์ ข้อความชิดซ้าย เกลียวการ์ดเป็น "เกลียวแนวตั้ง" อยู่คอลัมน์ขวา
+   พอคอลัมน์ซ้อนกัน เกลียวแนวตั้งที่ย้ายลงมาอยู่ใต้ข้อความในกล่องกว้าง-เตี้ยจะกลายเป็น
+   การ์ดกองซ้อนกันกลางกล่อง ทั้งกินความสูง (hero 1107px เกินจอ) และไม่มีแกนสมมาตรให้อ่าน
+
+   จึงเปลี่ยนสองอย่างพร้อมกันให้ผังทั้งหมดมีแกนกลางร่วมกัน
+   1) ข้อความจัดกึ่งกลางทั้งบล็อก (eyebrow หัวข้อ ปุ่ม ย่อหน้า ลิงก์)
+   2) เกลียวกลายเป็น "วงแหวนแนวนอน": ระยะแนวตั้งต่อใบ (spacing) เป็น 0 การ์ดจึงเรียงอยู่
+      ระดับเดียวกันบนวงกลมที่มองจากด้านหน้า ใบหน้าสุดใหญ่และชัด ใบด้านหลังเล็ก จาง และเบลอ
+      ตาม depth เดิมของ JS ไม่ต้องแตะ JS เลย รัศมีขยายให้วงกว้างเกือบเต็มกล่อง
+      วงกลมที่หมุนรอบแกนกลางของกล่องคือรูปทรงที่สมมาตรในตัวเองทุกเฟรม */
 @media (max-width: 991px) {
     .playbook-hero {
-        --bt-playbook-hero-title-size: var(--font-size-40);
-        --bt-playbook-hero-title-art-size: var(--font-size-48);
-        --bt-playbook-hero-row-gap: var(--space-10);
-        --bt-playbook-hero-visual-ratio: 16 / 10;
-        /* ต่ำกว่า lg ภาพลงไปอยู่ใต้ข้อความ บรรทัดแรกขึ้นบนสุด จึงต้องเผื่อความสูง header ไว้ */
-        --bt-playbook-hero-padding-top: calc(var(--header-height) + var(--space-10));
+        /* หัวข้อกลับไปเท่าตอน desktop (56/64) ผังกึ่งกลางมีที่ให้เต็มความกว้าง 720px
+           "PERSONALIZED" ที่ 56px กว้างราว 400px และ wordmark 450px ยังเหลือข้างละ ~150px
+           ให้ไอคอนสินทรัพย์ลอยขนาบได้ (ดูบล็อก 576-991 ด้านล่าง) */
+        --bt-playbook-hero-title-size: var(--font-size-56);
+        --bt-playbook-hero-title-art-size: var(--font-size-64);
+        /* ร่องระหว่างข้อความกับวงแหวน 64px ให้สองก้อนหายใจแยกกันชัด */
+        --bt-playbook-hero-row-gap: var(--space-16);
+        /* วงแหวนหมุนเองอย่างเดียว ไม่เร่งตามสกรอลล์
+           สูตรใน JS หารระยะสกรอลล์ด้วย spacing x 2 พอ spacing เป็น 0 (วงแหวนแนวนอน)
+           ตัวหารเหลือ 1 การ์ดจึงหมุนเร็วผิดปกติทันทีที่เลื่อนหน้า ปิดทางนี้ไปเลย
+           บนจอสัมผัสการหมุนตามสกรอลล์ก็ไม่ได้ช่วยอะไร (นิ้วปัดคือเลื่อนหน้า ไม่ใช่เล่นกับเกลียว) */
+        --bt-playbook-hero-spiral-scroll-drive: 0;
+        /* กล่องภาพเตี้ยลงจาก 16:10 เพราะวงแหวนแนวนอนสูงแค่ราวการ์ดใบเดียว (x1.2 ตอนอยู่หน้าสุด)
+           ไม่ต้องกันที่แนวตั้งไว้ให้เกลียวไต่อีก hero ทั้งชิ้นจึงกลับมาใกล้ความสูงจอ */
+        /* 2.6:1 ไม่ใช่ 2.4:1 เพื่อชดเชยร่อง 64 กับระยะใต้ header ที่เพิ่มขึ้น
+           ให้ 768x1024 ยังพอดีจอ (295px ยังสูงกว่า 277px ที่ใบหน้าสุดของการ์ด 132 ต้องการ) */
+        --bt-playbook-hero-visual-ratio: 2.6 / 1;
+        /* การ์ดเท่าตอน desktop (132px) วงแหวนกว้างขึ้นเป็น 330px
+           JS ยังตัดรัศมีไม่ให้เกิน 36% ของความกว้างกรอบ กรอบที่ 768px จึงได้วง 276px เอง */
+        --bt-playbook-hero-spiral-card-width: 132px;
+        --bt-playbook-hero-spiral-radius: 330px;
+        --bt-playbook-hero-spiral-spacing: 0px;
+        --bt-playbook-hero-spiral-center-scale: 1.25;
+        --bt-playbook-hero-spiral-fit-rows: 1.5;
+        /* ไอคอนย่อลงอีกขั้น กล่องเตี้ยลงแล้ว ขนาดเดิมจะไปทับวงแหวน */
+        --bt-playbook-hero-asset-fit: 0.6;
+        /* ต่ำกว่า lg ภาพลงไปอยู่ใต้ข้อความ บรรทัดแรกขึ้นบนสุด จึงต้องเผื่อความสูง header ไว้
+           แล้วเว้นอีก 48px ให้หัวข้อไม่จ่อแถบเมนู */
+        --bt-playbook-hero-padding-top: calc(var(--header-height) + var(--space-12));
+
+        /* กล่องภาพหลุดออกจาก .container (720px) ไปกว้างเท่าจอ แต่ไม่เกิน 960px
+           วงแหวนจึงกางได้กว้างกว่าคอลัมน์ข้อความ ใบด้านหลังที่จางแล้วเลยออกไปถึงขอบจอ
+           อ่านเป็นวงที่ "ลอยอยู่หน้าเวที" ไม่ใช่ถูกขังอยู่ในคอลัมน์
+           50% ในสูตร margin คือครึ่งหนึ่งของแถว ลบครึ่งหนึ่งของความกว้างที่ต้องการ กล่องจึงอยู่กลางเสมอ
+           100vw นับรวม scrollbar ด้วย จึงต้องกันด้วย overflow-x: clip ที่ section
+           (clip ไม่ใช่ hidden เพื่อไม่ให้ section กลายเป็น scroll container) */
+        overflow-x: clip;
+
+        .playbook-hero__visual {
+            width: min(100vw, 960px);
+            max-width: none;
+            margin-inline: calc(50% - min(50vw, 480px));
+        }
+
+        .playbook-hero__content {
+            align-items: center;
+            text-align: center;
+        }
+
+        .playbook-hero__actions {
+            justify-content: center;
+        }
+
+        /* ลิงก์เคยดึงกลับซ้ายให้ตรงกับย่อหน้าตอนชิดซ้าย พอกึ่งกลางแล้วไม่มีขอบให้ตรง
+           คืนค่าเป็นศูนย์ ไม่งั้นจะเยื้องซ้าย 4px จากแกนกลาง */
+        .playbook-hero__copy-action {
+            margin-left: var(--space-0);
+        }
+
+        /* ภาพ wordmark "Playbook" ต้องอยู่กลางเช่นกัน (เป็น block จึงไม่ตาม text-align) */
+        .playbook-hero__title-art {
+            margin-inline: auto;
+        }
+
+        /* ไอคอนสี่ชิ้นวางเป็นคู่กระจกซ้าย-ขวา ห่างจากแกนกลางเท่ากันเป็นคู่ ๆ
+           เหรียญ/ลูกศร (ทรงกลม-จัตุรัส) อยู่บน แท่งทอง/แท่งกราฟ (ทรงสูง) อยู่ล่าง
+           ให้น้ำหนักภาพสมดุลกันทั้งสี่มุมของวงแหวน */
+        .playbook-hero__asset--coin {
+            top: 0%;
+            left: 4%;
+        }
+
+        .playbook-hero__asset--arrow {
+            top: 0%;
+            right: 4%;
+            bottom: auto;
+        }
+
+        .playbook-hero__asset--bar {
+            top: auto;
+            bottom: 0%;
+            right: 6%;
+        }
+
+        .playbook-hero__asset--chart {
+            bottom: -4%;
+            left: 6%;
+        }
+
+        .playbook-hero__eyebrow {
+            &::after {
+                display: none;
+            }
+        }
     }
 }
 
 @media (max-width: 767px) {
     .playbook-hero {
-        --bt-playbook-hero-title-size: var(--font-size-36);
-        --bt-playbook-hero-title-art-size: var(--font-size-40);
+        /* ลงจาก 56/64 ของ ≤991 หนึ่งขั้น คอลัมน์แคบกว่า 720 แล้ว (540px ที่ 576-767) */
+        --bt-playbook-hero-title-size: var(--font-size-48);
+        --bt-playbook-hero-title-art-size: var(--font-size-56);
         --bt-playbook-hero-padding-top: calc(var(--header-height) + var(--space-8));
         --bt-playbook-hero-padding-bottom: var(--space-8);
-        --bt-playbook-hero-actions-space: var(--space-8);
-        --bt-playbook-hero-visual-ratio: 4 / 3;
+        --bt-playbook-hero-actions-space-top: var(--space-8);
+        /* กล่องกว้างเท่าจอ (576-767) รัศมีถูก JS ตัดตามความกว้างเอง (36% ของกล่อง)
+           การ์ดลดหนึ่งขั้นจาก 132 ให้ใบหน้าสุด (x1.25) ยังอยู่ในกรอบ 2.4:1 ที่กว้าง 600px */
+        --bt-playbook-hero-spiral-card-width: 120px;
+        --bt-playbook-hero-visual-ratio: 2.6 / 1;
     }
 }
 
 @media (max-width: 575px) {
     .playbook-hero {
-        --bt-playbook-hero-title-size: var(--font-size-32);
-        --bt-playbook-hero-title-art-size: var(--font-size-36);
+        /* มือถือ: "PERSONALIZED" ที่ 40px กว้างราว 300px ยังพอดีคอลัมน์ 343px ของจอ 375
+           ใหญ่กว่านี้บรรทัดจะตัด ส่วน wordmark ถูก max-width: 100% ครอบไว้อยู่แล้ว */
+        --bt-playbook-hero-title-size: var(--font-size-40);
+        --bt-playbook-hero-title-art-size: var(--font-size-48);
         --bt-playbook-hero-lead-size: var(--font-size-18);
-        --bt-playbook-hero-copy-size: var(--font-size-14);
-        --bt-playbook-hero-spiral-card-width: 100px;
-        --bt-playbook-hero-spiral-radius: 140px;
-        --bt-playbook-hero-spiral-spacing: 56px;
-        --bt-playbook-hero-asset-fit: 0.6;
+        --bt-playbook-hero-copy-size: var(--font-size-16);
+        /* วงแหวนการ์ดย่อตามความกว้างจอทั้งวง ภาพที่จอ 575 จึงเป็นต้นแบบของทุกจอในช่วงนี้
+           เดิมการ์ดคงที่ 104px ขณะที่จอแคบลง พอถึง 375 การ์ดกินที่เกือบเท่าเดิมในจอที่แคบกว่ามาก
+           ภาพเลยแน่นอึดอัด ตอนนี้การ์ด 18vw (104px ที่ 575, 68px ที่ 375) เล็กสุด 64px
+           รัศมีใช้เพดาน 31% ของความกว้างกรอบ (กรอบกว้างเท่าจอ) ได้ 178px ที่ 575 และ 116px ที่ 375
+           ห่างกว่าวง 150px เดิม ใบข้าง ๆ ซ้อนใบหน้าสุดแค่ราว 9px ที่ 575 และแทบไม่ซ้อนที่ 375
+           (perspective คงที่ 1000px ใบหน้าสุดของวงเล็กจึงขยายน้อยกว่า ระยะซ้อนเลยลดลงตามจอ)
+           ใบด้านหลังที่เลยขอบจอเป็นใบที่จางแล้ว และ section ตัดด้วย overflow-x: clip */
+        --bt-playbook-hero-spiral-card-width: clamp(64px, 18vw, 104px);
+        --bt-playbook-hero-spiral-radius: 180px;
+        --bt-playbook-hero-spiral-radius-cap: 0.31;
+        --bt-playbook-hero-visual-ratio: 16 / 9;
+        /* ร่องกับขอบล่างลดลงขั้นเดียว: การ์ด 104 กับกล่อง 16:9 ทำให้ hero บนจอ 375x812
+           เกินไป 17px ถ้าคง 24/32 ไว้ ลดเหลือ 16/16 แล้วพอดี (805px) ส่วน 440x900 มีที่เผื่อ */
+        --bt-playbook-hero-row-gap: var(--space-4);
+        /* คง 0 ไว้ตามผังวงแหวนของ ≤991 (ค่า 56px เดิมเป็นของเกลียวตั้งสมัยยังเป็นสองคอลัมน์)
+           ถ้าปล่อยไว้ บล็อกนี้มาทีหลังจะชนะแล้ววงแหวนกลับกลายเป็นเกลียวตั้งเฉพาะบนมือถือ */
+        --bt-playbook-hero-spiral-spacing: 0px;
+        /* ขนาดกับตำแหน่งไอคอนสินทรัพย์ของช่วงนี้อยู่ในบล็อก ≤575 ท้ายส่วน hero */
         --bt-playbook-hero-spiral-edge-blur: 4;
         --bt-playbook-hero-padding-top: calc(var(--header-height) + var(--space-8));
-        --bt-playbook-hero-padding-bottom: var(--space-8);
+        --bt-playbook-hero-padding-bottom: var(--space-4);
         --bt-playbook-hero-actions-gap: var(--space-4);
-
-        /* แท่งกราฟเอียง -34 องศา กรอบจริงแคบแต่ภาพที่หมุนแล้วกินที่กว้างกว่าเกือบเท่าตัว
-           จอแคบจึงต้องขยับเข้ามา ไม่งั้นมุมซ้ายของภาพจะโผล่พ้นขอบจอ */
-        .playbook-hero__asset--chart {
-            left: 15%;
-        }
+        --bt-playbook-hero-actions-space-top: var(--space-6);
+        --bt-playbook-hero-copy-action-space: var(--space-2);
 
         /* ปุ่มหลักเป็น liquid metal ที่คำนวณความกว้างจากตัวอักษรของตัวเอง
            จอแคบจึงเรียงลงล่างและชิดซ้ายให้ตรงแนวกับข้อความด้านบน */
         .playbook-hero__actions {
             flex-direction: column;
             align-items: flex-start;
+        }
+    }
+}
+
+/* ---------- ≤991: ไอคอนสินทรัพย์ลอยทั่วทั้ง hero ไม่ใช่แค่รอบกล่องภาพ ----------
+   บน lg ขึ้นไปไอคอนอยู่ในคอลัมน์ภาพ (กล่อง .playbook-hero__assets เป็น absolute
+   ในกรอบ .playbook-hero__visual) พอผังกึ่งกลางเรียงลงล่าง กล่องภาพเหลือแค่แถบเตี้ย ๆ
+   ท้าย hero ไอคอนสี่ชิ้นเลยกองอยู่รอบวงแหวน ส่วนข้อความด้านบนโล่งทั้งสองข้าง
+
+   ย้าย "กรอบอ้างอิง" ของไอคอนจากกล่องภาพไปเป็นทั้งแถว (.row = ข้อความ + ภาพ)
+   โดยไม่แตะ markup: ให้ .row เป็น positioned แล้วปลด position ออกจากกล่องภาพ
+   ไอคอนที่เป็น absolute จึงไปยึดกับแถวแทน วางขนาบหัวข้อได้
+   แต่เกลียวการ์ดต้องยังยึดกับกล่องภาพเหมือนเดิม จึงเปลี่ยนเกลียวจาก absolute
+   เป็นกล่องในสายน้ำที่เต็มกล่องภาพ (relative 100%) เวทีข้างในยังเป็น absolute ของเกลียว
+   JS วัดขนาดจากกล่องเกลียวโดยตรง จึงได้ค่าเท่าเดิมทุกประการ
+
+   มือถือ (≤575) ใช้ผังเดียวกันเพื่อให้ไอคอนอยู่ตำแหน่งเดียวกับจอ 767
+   แต่ที่ว่างข้างข้อความแคบกว่ามาก ขนาดกับตำแหน่งจึงมีชุดของตัวเอง (ดูบล็อก ≤575 ท้ายสุด) */
+@media (max-width: 991px) {
+    .playbook-hero {
+        /* 85% ของชุด ≤1199 (เหรียญ 102 ลูกศร 95 แท่งทอง 82 แท่งกราฟ 61)
+           ใกล้เคียงขนาด desktop ผังกึ่งกลางเหลือที่ว่างข้างหัวข้อพอ ไม่ต้องย่อเท่าผังสองคอลัมน์
+           ช่วง 576-767 หัวข้อกินความกว้างคอลัมน์มากกว่า ขนาดจึงไหลตามจอ (ดูบล็อกท้ายสุด) */
+        --bt-playbook-hero-asset-fit: 0.85;
+
+        .playbook-hero__inner .row {
+            position: relative;
+        }
+
+        .playbook-hero__visual {
+            position: static;
+        }
+
+        .playbook-hero__spiral {
+            position: relative;
+            inset: auto;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ข้อความต้องอยู่เหนือไอคอนเสมอ (ไอคอนเป็น positioned จะทับของที่ static)
+           ส่วนการ์ดในเกลียวอยู่หลังไอคอนใน DOM จึงวาดทับไอคอนได้เอง */
+        .playbook-hero__content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .playbook-hero__assets {
+            z-index: 0;
+        }
+
+        /* คู่บน ขนาบหัวข้อ: เหรียญซ้าย ลูกศรขวา ระดับเดียวกับบรรทัด PERSONALIZED
+           คู่ล่าง ขนาบวงแหวน: แท่งกราฟซ้าย แท่งทองขวา ยึดจากขอบล่างของแถว
+           ระยะจากขอบซ้าย-ขวาเท่ากันเป็นคู่ ให้แกนกลางเดียวกับข้อความและวงแหวน */
+        /* ดันออกนอกขอบแถว 24px ไปอยู่ในระยะขอบจอ ไอคอนที่ใหญ่ขึ้นจึงยังห่างจาก wordmark
+           (ตัวที่กว้างที่สุดในหัวข้อ) ราว 40px ทั้งที่ 991 และ 768
+           ถ้าคงไว้ที่ขอบแถวพอดี ช่องว่างจะเหลือแค่ ~10px ดูเบียด
+           ที่ 768 ขอบนอกของไอคอนชนขอบจอพอดี ส่วนที่แกว่งเลยออกไปโดน overflow-x: clip ตัด */
+        .playbook-hero__asset--coin {
+            top: -12px;
+            left: 4px;
+        }
+
+        .playbook-hero__asset--arrow {
+            top: 12px;
+            right: 12px;
+            bottom: auto;
+        }
+
+        .playbook-hero__asset--chart {
+            bottom: 180px;
+            left: 32px;
+        }
+
+        .playbook-hero__asset--bar {
+            top: auto;
+            bottom: 260px;
+            right: 8px;
+        }
+    }
+}
+
+/* ---------- จอแนวนอนเตี้ย (กว้าง ≤991 แต่สูงไม่ถึง 1024 เช่น 991x775 ใน DevTools) ----------
+   ผังกึ่งกลางของ ≤991 ต้องการความสูงราว 1010px คิดจากแท็บเล็ตแนวตั้ง (768x1024) ที่พอดีจอ
+   จอที่เตี้ยกว่านั้น hero จะล้นจอ วงแหวนการ์ดหล่นไปอยู่ใต้พับ (ที่ 991x775 ล้นราว 230px)
+   เกณฑ์ 1023 จึงหมายถึง "ต่ำกว่าความสูงที่ผังปกติพอดี" ไม่ใช่ตัวเลขลอย ๆ
+   จำกัดความกว้างขั้นต่ำ 576 ด้วย เพราะมือถือแนวตั้งก็ "เตี้ยกว่า 1024" เหมือนกัน
+   แต่ไม่ใช่เคสจอแนวนอน ถ้าปล่อยให้เข้าเงื่อนไข กล่องภาพ 4.5:1 บนจอกว้าง 375
+   จะเหลือสูงแค่ 83px วงแหวนถูกย่อจนการ์ดเหลือ 52px (เคยหลุดไปแล้วครั้งหนึ่ง)
+   มือถือใช้ค่าของบล็อก ≤575 ตามปกติ ส่วนมือถือแนวนอน (กว้าง 576+ เตี้ย) ยังเข้าบล็อกนี้
+   ตรงนี้เลยบีบแนวตั้งทั้งชุดในคราวเดียว โดยคงลำดับและสัดส่วนเดิม:
+   ช่องไฟระหว่างบล็อกลดลงหนึ่งขั้น การ์ดในวงแหวนย่อลง (108 -> 88px) และกล่องภาพ
+   เปลี่ยนจาก 2:1 เป็น 3:1 เพราะวงแหวนที่การ์ดเล็กลงต้องการความสูงน้อยลงตามส่วน
+   ใช้ max-height ไม่ใช่แค่ max-width เพราะแท็บเล็ตแนวตั้ง (768x1024) พอดีจออยู่แล้ว
+   ไม่ควรถูกบีบตาม */
+@media (min-width: 576px) and (max-width: 991px) and (max-height: 1023px) {
+    .playbook-hero {
+        /* วัดที่ 991x775 แล้วยังเกิน 18px จึงไล่เก็บจากขอบนอกก่อนแตะเนื้อหา:
+           ระยะใต้ header 16 -> 8, ขอบล่าง 24 -> 16, ร่องระหว่างข้อความกับภาพ 16 -> 12
+           และกล่องภาพ 3:1 -> 3.2:1 (225px ยังสูงกว่าวงแหวนที่การ์ด 88px ต้องการ ~155px)
+           รวมแล้วเหลือ 758px ในจอ 775 มีที่เผื่อ 17px */
+        /* ร่อง 64 กับระยะใต้ header 32 คงไว้ตามที่ต้องการ แม้จะทำให้ 991x775 เกินจอราว 75px
+           (วงแหวนล้นใต้พับเล็กน้อย) ยอมแลกกับที่ว่างระหว่างก้อนที่อ่านง่ายกว่า
+           ที่ 991x900 ยังพอดีจอ */
+        --bt-playbook-hero-padding-top: calc(var(--header-height) + var(--space-8));
+        --bt-playbook-hero-padding-bottom: var(--space-4);
+        --bt-playbook-hero-title-space: var(--space-4);
+        --bt-playbook-hero-content-gap: var(--space-8);
+        --bt-playbook-hero-actions-space-top: var(--space-4);
+        --bt-playbook-hero-copy-action-space: var(--space-2);
+        /* กล่องกว้าง 960 (ที่ 991) จึงเตี้ยลงเป็น 4.5:1 = 213px พอดีกับใบหน้าสุดของการ์ด 100px
+           (100 x 1.4 x 1.25 x ระยะมอง ≈ 210) hero รวมยังอยู่ใน 775px */
+        --bt-playbook-hero-visual-ratio: 4.5 / 1;
+        --bt-playbook-hero-spiral-card-width: 100px;
+        --bt-playbook-hero-spiral-radius: 330px;
+        /* ไม่ย่อไอคอนในบล็อกนี้ ไอคอนเป็น absolute ไม่ได้กินความสูงของ hero
+           ย่อไปก็ไม่ได้ช่วยให้พอดีจอ ได้แค่ไอคอนเล็กลงเปล่า ๆ (เคยตั้งไว้ 0.5) */
+
+        /* ระยะระหว่าง PERSONALIZED กับ wordmark ลดตามส่วนกับที่อื่น (24 -> 8) */
+        .playbook-hero__title-art {
+            margin-top: var(--space-2);
+        }
+    }
+}
+
+/* 576-767: แถวกว้างเกือบเต็มจอ (ขอบจอแค่ ~6px) แต่ wordmark ยังกว้าง 394px เท่าเดิม
+   ที่ว่างข้างหัวข้อจึงแปรตามความกว้างจอมาก: ที่ 576 เหลือราว 85px ที่ 700 เหลือราว 150px
+   ตัวเลขเดียวใช้ไม่ได้ทั้งช่วง (0.8 เดิมชน wordmark ที่ 576-600 ส่วน 0.6 ก็เล็กเกินที่ 700+)
+   จึงให้ขนาดไหลตามความกว้างจอ: 1 หน่วย = 1px ที่ขนาดเต็ม (ราว 675px ขึ้นไป)
+   ต่ำกว่านั้นลดลงเป็นเส้นตรงจนเหลือ 0.6 ที่ 576 ไอคอนทั้งสี่ย่อพร้อมกันตามสัดส่วนเดิม
+   สูตรมาจาก "ครึ่งจอ - ครึ่ง wordmark (197) - ระยะเว้น (16)" = ที่ว่างที่เหรียญวางได้
+   หาร 124 (เหรียญ 120 + ส่วนที่มุมเอียงเกินกล่องออกมา) ได้เป็นสัดส่วนของขนาดเต็ม
+
+   ช่วงนี้ขอบแถวชนขอบจออยู่แล้ว จึงคืนตำแหน่งคู่บนกลับไปที่ขอบแถวพอดี
+   ถ้าดันออก -24px แบบช่วง 768-991 ไอคอนจะหลุดจอไปเกือบครึ่งใบ */
+@media (min-width: 576px) and (max-width: 767px) {
+    .playbook-hero {
+        /* ลดลงเท่ากับช่วง 768-991 (85%) สูตรไหลตามจอด้านล่างยังคุมไม่ให้ชนหัวข้อ
+           ย่อแล้วยิ่งห่างหัวข้อขึ้น จึงไม่ต้องแก้สูตร */
+        --bt-playbook-hero-asset-fit: 0.85;
+        --bt-playbook-hero-asset-unit: clamp(0.6px, calc((50vw - 213px) / 124), 1px);
+        --bt-playbook-hero-asset-coin-size: calc(var(--bt-playbook-hero-asset-unit) * 120);
+        --bt-playbook-hero-asset-arrow-size: calc(var(--bt-playbook-hero-asset-unit) * 112);
+        --bt-playbook-hero-asset-bar-size: calc(var(--bt-playbook-hero-asset-unit) * 96);
+        --bt-playbook-hero-asset-chart-size: calc(var(--bt-playbook-hero-asset-unit) * 72);
+
+        .playbook-hero__asset--coin {
+            left: var(--space-0);
+        }
+
+        .playbook-hero__asset--arrow {
+            right: var(--space-0);
+        }
+    }
+}
+
+/* ≤575: ไอคอนอยู่ตำแหน่งเดียวกับจอ 767 (ผังจากบล็อก ≤991 ด้านบน ไอคอนยึดกับทั้งแถว)
+   เหรียญ-ลูกศรขนาบหัวข้อ แท่งทองขนาบย่อหน้าบน แท่งกราฟขนาบย่อหน้าล่าง
+   ต่างกันที่ข้อความกินเกือบเต็มจอ ที่จอ 375 เหลือที่ข้างละราว 45-65px
+   (ข้างหัวข้อเล็ก 65, ข้างย่อหน้าบน 51, ข้างย่อหน้าล่าง 46) และแถวปุ่มกว้างเกือบเต็มจอ
+
+   ขนาด: หน่วยไหลตามจอต่อจากช่วง 576-767 (ซึ่งเริ่มที่ 0.6) ลงไปเหลือ 0.46 ที่ 375
+   เหรียญจึงกว้าง 61px ที่ 575 และ 47px ที่ 375 พอดีช่องข้างหัวข้อเล็ก
+   ตำแหน่งนับจากขอบบนของแถว เพราะความสูงของก้อนข้อความเท่ากันทุกจอในช่วงนี้
+   (ส่วนกล่องวงแหวนด้านล่างสูงตามความกว้างจอ ถ้านับจากขอบล่างตำแหน่งจะเลื่อนตามจอ)
+   - ลูกศรไม่เหลื่อมลงมาเหมือน 767 ไม่งั้นมุมจะเข้าไปทับท้าย "PERSONALIZED"
+   - แท่งทองอยู่ระดับย่อหน้าบน (บรรทัด 183-234px) จบก่อนถึงแถวปุ่ม (266px)
+   - แท่งกราฟอยู่ระดับย่อหน้าล่างกับลิงก์ นับจากขอบล่างของแถวแทน ให้ปลายล่างจบเหนือวงแหวน 4px
+     ทุกจอ (กล่องวงแหวนสูง = ความกว้างจอ / สัดส่วนกล่อง) ถ้านับจากบนเหมือนชิ้นอื่น
+     แท่งที่ยาวขึ้นตามจอจะยื่นลงไปทับวงแหวน 33px ที่ 575
+   - ชิดขอบแถวทั้งสี่ชิ้น ระยะ 32/8px แบบ 767 จะดันแท่งกราฟเข้าไปทับตัวหนังสือ */
+@media (max-width: 575px) {
+    .playbook-hero {
+        --bt-playbook-hero-asset-fit: 0.85;
+        --bt-playbook-hero-asset-unit: clamp(0.45px, calc(0.2px + 0.07vw), 0.6px);
+        --bt-playbook-hero-asset-coin-size: calc(var(--bt-playbook-hero-asset-unit) * 120);
+        --bt-playbook-hero-asset-arrow-size: calc(var(--bt-playbook-hero-asset-unit) * 112);
+        --bt-playbook-hero-asset-bar-size: calc(var(--bt-playbook-hero-asset-unit) * 96);
+        /* 64 ไม่ใช่ 72: แท่งกราฟสูงราว 4.5 เท่าของความกว้าง ช่องระหว่างปุ่มกับวงแหวนมีแค่ ~132px
+           ที่ 72 แท่งยาว 138px ที่จอ 430 ปลายบนจึงชนมุมซ้ายล่างของปุ่ม */
+        --bt-playbook-hero-asset-chart-size: calc(var(--bt-playbook-hero-asset-unit) * 64);
+
+        .playbook-hero__asset--coin {
+            top: -12px;
+            right: auto;
+            bottom: auto;
+            left: var(--space-0);
+        }
+
+        .playbook-hero__asset--arrow {
+            top: var(--space-0);
+            right: var(--space-0);
+            bottom: auto;
+            left: auto;
+        }
+
+        .playbook-hero__asset--bar {
+            top: 167px;
+            right: var(--space-0);
+            bottom: auto;
+            left: auto;
+        }
+
+        .playbook-hero__asset--chart {
+            top: auto;
+            right: auto;
+            bottom: calc(100vw / (var(--bt-playbook-hero-visual-ratio)) + var(--space-1));
+            left: var(--space-0);
         }
     }
 }
@@ -11631,7 +12069,12 @@ body.is-loading .hero-scroll-cue,
     --bt-playbook-intro-note-max-width: var(--layout-narrow-max);
     /* การ์ดลอย: size คือความกว้างฐาน แต่ละใบคูณสเกลของตัวเองอีกที
        amplitude คือระยะขยับสูงสุดของใบที่ depth = 1 (JS อ่านค่านี้ไปคูณกับ depth) */
-    --bt-playbook-intro-float-size: 150px;
+    /* ย่อตามจอทั้งสองแกน ไม่ใช่แค่ความกว้าง เพราะการ์ดชุดนี้ลอยรอบบล็อกข้อความ
+       พอหน้าต่างเตี้ยลง (เช่นจอ laptop 13 นิ้วที่เปิด dock หรือหน้าต่างครึ่งจอ)
+       ที่ว่างบน-ล่างหายไปก่อนที่ความกว้างจะเปลี่ยน การ์ดจะเริ่มเบียดข้อความ
+       vmin = ด้านที่สั้นกว่าของจอ จึงตอบทั้งจอแคบลงและจอเตี้ยลงด้วยค่าเดียว
+       ปลายบนคงไว้ที่ 150px เท่าเดิม จอปกติจึงไม่เปลี่ยนจากของเดิมเลย */
+    --bt-playbook-intro-float-size: clamp(96px, 18vmin, 150px);
     --bt-playbook-intro-float-amplitude: 26px;
     --bt-playbook-intro-float-radius: var(--radius-2);
     --bt-playbook-intro-float-shadow: 0 18px 44px color-mix(in srgb, var(--color-neutral-950) 60%, transparent);
@@ -11845,14 +12288,13 @@ body.is-loading .hero-scroll-cue,
             height: calc(var(--bt-playbook-intro-ornament-length) / 9.13);
             margin: var(--bt-playbook-intro-ornament-space) var(--space-0) var(--space-0);
             background:
-                url('../images/line-star.webp') center /
-                var(--bt-playbook-intro-ornament-length) auto no-repeat;
+                url('../images/line-star.webp') center / var(--bt-playbook-intro-ornament-length) auto no-repeat;
         }
     }
 
     /* ตั้งแต่ 1500px ขึ้นไปพื้นที่พอให้หัวข้ออยู่บรรทัดเดียว จึงซ่อนตัวขึ้นบรรทัดทิ้ง
        (เว้นวรรคก่อน <br> ไว้ใน markup แล้ว พอซ่อนสองคำจึงยังมีช่องไฟคั่น ไม่ติดกัน) */
-    @media (min-width: 1500px) {
+    @media (min-width: 1600px) {
         .playbook-intro__title-break {
             display: none;
         }
@@ -11883,6 +12325,48 @@ body.is-loading .hero-scroll-cue,
     }
 }
 
+/* คอลัมน์ข้อความกว้างเท่าเดิม (856px) แต่จอแคบลง ขอบข้างเหลือข้างละ 172px
+   การ์ดลอยที่เคยอยู่นอกแนวข้อความจึงเลื่อนเข้ามาทับตัวหนังสือ
+   แก้สองทางพร้อมกัน: ย่อการ์ดให้พอดีช่องว่างที่เหลือ และดันออกไปชิดขอบมากขึ้น
+   (ย่ออย่างเดียวไม่พอ เพราะใบใหญ่สุดยังกว้างเกินครึ่งของช่องว่าง
+   ส่วนดันออกอย่างเดียวก็ไม่พอ ใบ 162px ต้องไปอยู่ที่ left: 0 ถึงจะพ้นข้อความ) */
+@media (max-width: 1199px) {
+    .playbook-intro {
+        --bt-playbook-intro-float-size: clamp(88px, 14vmin, 112px);
+        --bt-playbook-intro-lead-space: var(--space-8);
+        --bt-playbook-intro-note-space: var(--space-6);
+        /* ระยะที่การ์ดเลื่อนตามเคอร์เซอร์ คูณกับ depth ของแต่ละใบ (สูงสุด 2.2 ในใบกลาง)
+           ที่ 26px ใบมุมจะแกว่งได้ถึง 42px ซึ่งกินระยะกันชนที่เผื่อไว้จนทับข้อความอีก
+           ลดเหลือ 10px เพราะใบ 1 ถูกขยับเข้าหาข้อความ ระยะเผื่อเหลือ 15px
+           ถ้าคงไว้ที่ 16px ใบนั้นจะแกว่งได้ 19px ซึ่งเกินระยะเผื่อไปแล้ว */
+        --bt-playbook-intro-float-amplitude: 10px;
+
+        .playbook-intro__float-item:nth-child(1) {
+            left: 6%;
+        }
+
+        .playbook-intro__float-item:nth-child(2) {
+            right: 7%;
+        }
+
+        .playbook-intro__float-item:nth-child(3) {
+            right: 12%;
+        }
+
+        .playbook-intro__float-item:nth-child(4) {
+            left: 12%;
+        }
+
+        .playbook-intro__float-item:nth-child(5) {
+            left: 2%;
+        }
+
+        .playbook-intro__float-item:nth-child(6) {
+            right: 2%;
+        }
+    }
+}
+
 @media (max-width: 991px) {
     .playbook-intro {
         /* จอแคบภาพแคบลงมาก ม่านแนวนอนจะเหลือแต่ด้านมืด เลยสลับเป็นแนวตั้งชุดเดียวกับ hero */
@@ -11891,17 +12375,44 @@ body.is-loading .hero-scroll-cue,
                 color-mix(in srgb, var(--color-neutral-950) 68%, transparent) 55%,
                 color-mix(in srgb, var(--color-neutral-950) 82%, transparent) 100%);
         --bt-playbook-intro-padding-y: var(--section-padding-y-sm);
-        --bt-playbook-intro-lead-size: var(--section-body-size);
+        --bt-playbook-intro-lead-size: var(--font-size-20);
+        --bt-playbook-intro-note-size: var(--font-size-16);
         --bt-playbook-intro-note-space: var(--space-6);
-        --bt-playbook-intro-float-size: 112px;
+        --bt-playbook-intro-float-size: clamp(80px, 15vmin, 112px);
         --bt-playbook-intro-float-amplitude: 18px;
+    }
+}
+
+@media (max-width: 767px) {
+    .playbook-intro {
+        .playbook-intro__float-item:nth-child(3) {
+            top: 40%;
+            right: 12%;
+        }
+
+        .playbook-intro__float-item:nth-child(4) {
+            top: 40%;
+            left: 12%;
+        }
+
+        .playbook-intro__float-item:nth-child(5) {
+            bottom: 10%;
+            left: 2%;
+        }
+
+        .playbook-intro__float-item:nth-child(6) {
+            bottom: 6%;
+            right: 2%;
+        }
     }
 }
 
 @media (max-width: 575px) {
     .playbook-intro {
         --bt-playbook-intro-note-size: var(--font-size-14);
-        --bt-playbook-intro-float-size: 84px;
+        --bt-playbook-intro-float-size: clamp(64px, 22vmin, 84px);
+        --bt-playbook-intro-float-radius: var(--radius-1);
+        --bt-playbook-intro-lead-size: var(--font-size-18);
 
         /* จอแคบข้อความกินเต็มความกว้าง สองใบที่เกาะขอบระดับกึ่งกลางจะไปทับพอดี
            จึงเหลือเฉพาะสี่ใบมุมที่อยู่เหนือ-ใต้บล็อกข้อความ ความสมมาตรยังอยู่ครบ */
@@ -11909,6 +12420,26 @@ body.is-loading .hero-scroll-cue,
         .playbook-intro__float-item:nth-child(4) {
             display: none;
         }
+
+        .playbook-intro__float-item:nth-child(1) {
+            top: 2%;
+        }
+
+        .playbook-intro__float-item:nth-child(2) {
+            top: 8%;
+        }
+
+        .playbook-intro__float-item:nth-child(5) {
+            bottom: 8%;
+        }
+
+        .playbook-intro__float-item:nth-child(6) {
+            bottom: 4%;
+        }
+    }
+
+    .playbook-intro__title-break {
+        display: none;
     }
 }
 
@@ -11927,6 +12458,9 @@ body.is-loading .hero-scroll-cue,
     --bt-playbook-benefit-list-row-gap: var(--space-12);
     --bt-playbook-benefit-list-gutter: var(--space-12);
     --bt-playbook-benefit-media-height: 320px;
+    /* เพดานการย่อของทั้งก้อนเนื้อหาในกรอบ (js/playbook-benefit-media.js อ่านไปใช้)
+       1 = ไม่บังคับ ปล่อยให้ย่อเท่าที่จำเป็นเพื่อให้พอดีกรอบ */
+    --bt-playbook-benefit-fit-max: 1;
     /* ---------- พื้นหลังจุดไข่ปลา (พอร์ตจาก DotPattern ของ React) ----------
        ต้นฉบับตั้งไว้ตาราง 16px สี neutral-400 ที่ 80% ซึ่งบนพื้นกระดาษอ่อนของการ์ดนี้
        จุดจะเด่นเกินจนแย่งสายตาจากเนื้อหา และห่างจนเห็นเป็นจุด ๆ ไม่ใช่เนื้อกระดาษ
@@ -11973,6 +12507,7 @@ body.is-loading .hero-scroll-cue,
     --bt-playbook-benefit-chip-gap: 6px;
     --bt-playbook-benefit-chip-padding-y: 2px;
     --bt-playbook-benefit-media-item-gap: var(--space-3);
+    --bt-playbook-benefit-traits-gap: var(--space-4);
     --bt-playbook-benefit-media-copy-line-height: 1.35;
     --bt-playbook-benefit-skill-bar-height: var(--border-width-2);
     --bt-playbook-benefit-compare-handle-size: var(--space-10);
@@ -12338,7 +12873,7 @@ body.is-loading .hero-scroll-cue,
         overflow: hidden;
     }
 
-    .playbook-benefit__skill> * {
+    .playbook-benefit__skill>* {
         position: relative;
     }
 
@@ -12641,6 +13176,14 @@ body.is-loading .hero-scroll-cue,
 
     /* wrapper ใช้ระบุชนิดการ์ดเท่านั้น ต้องไม่เพิ่ม spacing หรือเปลี่ยน layout เดิม */
     .playbook-benefit__card {
+        /* ความหนาแน่นของเนื้อหาในกรอบผูกกับความกว้าง "คอลัมน์" ไม่ใช่ความกว้างจอ
+           คอลัมน์แคบ 343px เกิดขึ้นทั้งช่วง 992-1399 (สามช่อง) และต่ำกว่า 576 (ช่องเดียว)
+           ส่วนช่วง 768-991 กลับมากว้าง 516-696px ถ้าไล่เขียนเป็น media query
+           จะต้องลดแล้วคืนแล้วลดอีก สามรอบและพลาดง่าย
+           ประกาศ container ที่นี่ แล้วให้กรอบข้างในถามความกว้างของตัวเองแทน จบในกฎเดียว
+           (query ตัวเองไม่ได้ ต้องถามจากกล่องนอก จึงมาอยู่ที่ __card ไม่ใช่ __media) */
+        container-type: inline-size;
+
         width: 100%;
         min-width: 0;
         padding: var(--space-0);
@@ -12741,7 +13284,7 @@ body.is-loading .hero-scroll-cue,
     /* Card 2: วางเป็นสามแผงซ้อนเหลื่อมแบบรายการใน reference
        ใช้ rotate property แยกจาก transform เพื่อไม่ชน motion เดิมของแต่ละแผง */
     .playbook-benefit__card--traits .playbook-benefit__media {
-        --bt-playbook-benefit-media-gap: var(--space-4);
+        --bt-playbook-benefit-media-gap: var(--bt-playbook-benefit-traits-gap);
 
         padding: var(--bt-playbook-benefit-media-padding);
     }
@@ -12850,11 +13393,99 @@ body.is-loading .hero-scroll-cue,
 
 }
 
-/* ยังเรียงสามช่องแต่ container ตรึงความกว้าง คอลัมน์จึงแคบลงและข้อความในกรอบตัวอย่าง
-   ตัดบรรทัดมากขึ้น ยกความสูงขั้นต่ำขึ้นตามเพื่อให้ทั้งสามช่องสูงเท่ากันและไม่มีเนื้อหาล้น */
+/* คอลัมน์แคบกว่า 380px เนื้อหาในกรอบตัวอย่างตัดบรรทัดเพิ่มจนล้น
+   ใบ "จุดแข็ง" ต้องการความสูง 425px ในกรอบที่ให้ได้ 256px
+   ย่อด้วย scale ไม่ไหว เพราะต้องย่อถึง 0.60 ตัวอักษร 13px จะเหลือ 7.8px อ่านไม่ออก
+   จึงลดความหนาแน่นภายในลงหนึ่งขั้นแทน (ระยะขอบ ช่องไฟ ขนาดตัวอักษร)
+   เนื้อหาเหลือ 341px ในกรอบที่ขยายเป็น 280px ย่อแค่ 0.82 ซึ่งเป็นเพดานเดิมของ fit ก็เข้าพอดี
+   เกณฑ์ 380px มาจากความกว้างคอลัมน์จริง: กว้างสุด 396px (สามช่องที่ 1400 ขึ้นไป) ต้องไม่เข้าเงื่อนไข
+   ส่วน 343px (ทั้งช่วง 992-1399 และต่ำกว่า 576) ต้องเข้า */
+@container (max-width: 379px) {
+    .playbook-benefit__media {
+        --bt-playbook-benefit-media-padding: var(--space-5);
+        --bt-playbook-benefit-media-item-gap: var(--space-2);
+        --bt-playbook-benefit-traits-gap: var(--space-2);
+        --bt-playbook-benefit-media-label-size: var(--font-size-14);
+        --bt-playbook-benefit-media-copy-size: 12px;
+        --bt-playbook-benefit-card-padding: var(--space-3);
+    }
+}
+
+
 @media (max-width: 1199px) {
     .playbook-benefit {
         --bt-playbook-benefit-media-height: 320px;
+        /* ย่อทั้งก้อนลงเท่ากันหมด แทนการไล่ลดขนาดทีละ element
+           สัดส่วนภายในจึงคงเดิมทุกอย่าง */
+        --bt-playbook-benefit-fit-max: 0.72;
+
+        /* 100vw รวมความกว้าง scrollbar ด้วย ถ้าไม่กันไว้จะดันจนเกิด scroll แนวนอน
+           ใช้ clip ไม่ใช่ hidden เพราะ hidden จะทำให้ section กลายเป็น scroll container
+           (ซึ่งจะไปตัด sticky/fixed ที่อยู่ข้างในด้วย) */
+        overflow-x: clip;
+
+
+        .playbook-benefit__card--skill .playbook-benefit__media {
+            --bt-playbook-benefit-skill-card-width: 76%;
+            --bt-playbook-benefit-skill-card-bottom: calc(189px - 76.86cqi);
+
+            padding: var(--space-4);
+        }
+
+        .playbook-benefit__card--skill .playbook-benefit__skill-bars {
+            margin-top: var(--space-4);
+            gap: var(--space-2);
+        }
+    }
+
+}
+
+/* หลุดออกจาก .container มาเต็มความกว้างจอ เฉพาะช่วงสามคอลัมน์ (992-1199)
+   ช่วงนี้ .container ตรึงที่ 960px คอลัมน์หดจาก 396 เหลือ 269px ซึ่งแคบเกินกว่า
+   เนื้อหาในกรอบตัวอย่างจะอยู่ได้ การคืนความกว้างให้จึงตรงปัญหากว่าไปไล่ย่อเนื้อหา
+   ต่ำกว่า 992 เหลือแถวละช่อง คอลัมน์กว้างเต็มอยู่แล้ว ไม่ต้องหลุดออกมา
+   ระยะ 32px วัดจากขอบจอถึงขอบการ์ด จึงต้องหักครึ่ง gutter ของ .row ออกก่อน
+   เพราะคอลัมน์มี padding ของตัวเองอยู่แล้ว ไม่งั้นจะกลายเป็น 44px */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .playbook-benefit__list {
+        margin-inline: calc(50% - 50vw);
+        padding-inline: calc(var(--space-8) - 0.5 * var(--bs-gutter-x));
+    }
+}
+
+/* ---------- ใบ Skill ช่วงสามคอลัมน์ (992-1199) ----------
+   ใบนี้ไม่เข้าพวกกับการย่อทั้งก้อน เพราะของสองชิ้นที่ต้องเข้าคู่กันอยู่คนละชั้น
+   แผงคะแนน (.playbook-benefit__skill) อยู่ใน .playbook-benefit__fit ซึ่งโดนย่อ
+   ส่วนการ์ด The Contrarian (.playbook-benefit__skill-card-art) เป็น absolute
+   อยู่นอกกล่องนั้น จึงไม่โดนย่อ
+
+   ซ้ำร้าย กล่อง fit เป็น element ในสายน้ำปกติ ความกว้างมันหดตามคอลัมน์อยู่แล้ว
+   ย่อซ้ำด้วย scale อีกชั้นจึงเป็นการหดสองรอบ แผงเหลือ 79% ของกรอบ
+   ทั้งที่ตอน desktop กิน 88% นั่นคือสาเหตุที่แผงดูลีบผิดส่วนไปจากการ์ด
+
+   จึงปลดเพดานคืนให้แผงขึ้นขนาดจริงของมัน แล้วไปย่อการ์ดตามกรอบแทน
+   ผลที่ได้ที่ 1199: แผงกว้าง 86.8% ของกรอบ (desktop 87.9%)
+   การ์ดกว้าง 67.0% (desktop 66.9%) และโผล่เหนือแผง 61px (desktop 67px)
+   ทั้งสามค่าอยู่ในสเกลเดียวกับ desktop
+
+   จำกัดช่วงไว้ที่ 992 ขึ้นไป ต่ำกว่านั้นเหลือคอลัมน์เดียว กรอบกว้าง 704px+
+   แต่กล่อง fit ติด max-width: 480px ไว้ สัดส่วนจึงคนละเรื่องกัน ปล่อยใช้ค่าเดิม */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .playbook-benefit__card--skill .playbook-benefit__media {
+        --bt-playbook-benefit-fit-max: 1;
+
+        /* เป็น % ของกรอบ ไม่ใช่ px ตายตัว การ์ดจึงหดตามคอลัมน์เองตลอดช่วงนี้
+           (คอลัมน์ไล่จาก 362px ที่ 1199 ลงไป 293px ที่ 992 ไม่ได้หยุดที่ค่าเดียว
+           ตั้งเป็น px ค่าใดค่าหนึ่งจะถูกแค่ปลายเดียว อีกปลายพลาดไป 50px)
+           67% ให้ผลเท่า 265px ของ desktop พอดีตอนคอลัมน์กว้าง 396px */
+        --bt-playbook-benefit-skill-card-width: 67%;
+
+        /* ระยะที่การ์ดยื่นพ้นขอบล่างของกรอบ ต้องลดตามความสูงการ์ดที่เตี้ยลงด้วย
+           ไม่งั้นการ์ดจะจมลงไปใต้กรอบเท่าเดิม เหลือโผล่เหนือแผงไม่พอให้เห็นชื่อการ์ด
+           76.86cqi คือส่วนที่แปรตามความกว้างคอลัมน์ (cqi = 1% ของความกว้าง .playbook-benefit__card)
+           หักจาก 230px คงที่ สูตรนี้ให้ -74px เท่าค่า desktop พอดีเมื่อคอลัมน์กว้าง 396px
+           จึงต่อเนื่องกับ breakpoint บนโดยไม่มีรอยสะดุด */
+        --bt-playbook-benefit-skill-card-bottom: calc(230px - 76.86cqi);
     }
 }
 
@@ -12866,51 +13497,77 @@ body.is-loading .hero-scroll-cue,
         --bt-playbook-benefit-lead-size: var(--section-body-size);
         /* ต่ำกว่า lg เหลือแถวละช่อง คอลัมน์กว้างเต็ม เนื้อหาจึงกลับมาสั้นเท่าจอใหญ่ */
         --bt-playbook-benefit-media-height: 320px;
+
+        .playbook-benefit__card--skill .playbook-benefit__media {
+            --bt-playbook-benefit-skill-card-width: 64%;
+            /* หน่วย 1% ของความกว้างคอลัมน์ ปกติคือ 1cqi ช่วง 576-767 จะถูกแทนด้วย 1% ของ artboard
+               (ดูบล็อก artboard ด้านล่าง) สูตรจึงยังเป็นชุดเดียว ไม่ต้องเขียนซ้ำ */
+            --bt-playbook-benefit-skill-card-bottom: calc(200px - 76.86 * var(--bt-playbook-benefit-col-unit, 1cqi));
+        }
     }
 }
 
 @media (max-width: 767px) {
     .playbook-benefit {
         --bt-playbook-benefit-list-row-gap: var(--space-10);
-        --bt-playbook-benefit-media-space: var(--space-4);
+        --bt-playbook-benefit-media-height: 260px;
+
+        .playbook-benefit__copy {
+            text-wrap: balance;
+        }
     }
 }
 
 @media (max-width: 575px) {
     .playbook-benefit {
-        .playbook-benefit__card--skill .playbook-benefit__media {
-            padding: var(--space-4);
-        }
+        --bt-playbook-benefit-list-space: var(--space-8);
 
-        .playbook-benefit__card--skill .playbook-benefit__skill {
-            padding: var(--space-3);
-        }
-
-        .playbook-benefit__card--skill .playbook-benefit__skill {
-            width: 100%;
-        }
-
-        .playbook-benefit__card--skill .playbook-benefit__skill-row {
-            grid-template-columns: 1fr auto;
-            row-gap: var(--space-2);
-        }
-
-        .playbook-benefit__card--skill .playbook-benefit__skill-label {
-            grid-column: 1;
-            grid-row: 1;
-        }
-
-        .playbook-benefit__card--skill .playbook-benefit__skill-track {
-            grid-column: 1 / -1;
-            grid-row: 2;
-        }
-
-        .playbook-benefit__card--skill .playbook-benefit__skill-value {
-            grid-column: 2;
-            grid-row: 1;
+        .playbook-benefit__copy {
+            text-wrap: auto;
         }
     }
 }
+
+/* ---------- 576-767: กรอบตัวอย่างเป็น "artboard" ย่อทั้งแผ่นตามความกว้างคอลัมน์ ----------
+   ช่วงนี้ยังเป็นสองคอลัมน์ (col-sm-6) คอลัมน์หดจาก 332px ที่ 767 เหลือ 260px ที่ 576
+   ตัวหนังสือในกรอบขนาดคงที่ พอกรอบแคบลง บรรทัดก็ตัดเพิ่ม เนื้อหาสูงขึ้นจนล้นกรอบ
+   (ใบ "จุดแข็ง" ต้องการ 461px ที่ 576 เทียบกับ 340px ที่ 767) และของตกแต่งที่เป็น px
+   ก็ไม่หดตาม หน้าตาแต่ละความกว้างจึงไม่เหมือนกันเลย
+
+   แทนที่จะไล่ลดทีละค่า ให้กรอบจัดวางที่ความกว้างเดียวตลอดช่วง คือ 332px (เท่าตอน 767
+   ที่แสดงพอดีอยู่แล้ว) แล้วย่อทั้งกรอบด้วย zoom = ความกว้างคอลัมน์จริง / 332
+   ทุกอย่างข้างใน ทั้งตัวหนังสือ ระยะ ไอคอน การ์ดพื้นหลัง ย่อพร้อมกันในอัตราเดียว
+   การตัดบรรทัดจึงเหมือน 767 ทุกประการ
+
+   ใช้ zoom ไม่ใช่ transform: scale เพราะ zoom ย่อ "พื้นที่ที่กินใน layout" ไปด้วย
+   กรอบที่ย่อแล้วจึงกินที่เท่าคอลัมน์จริง ข้อความใต้กรอบเลื่อนขึ้นมาชิดพอดี
+   ถ้าเป็น transform กรอบจะยังจองที่ 332x260 เดิม ล้นคอลัมน์และทิ้งช่องว่างไว้ข้างล่าง
+
+   ตัวคูณ zoom คำนวณโดย js/playbook-benefit-media.js (CSS หารความยาวสองค่าตรง ๆ ไม่ได้)
+   JS จะติดคลาส is-artboard เมื่อเห็น token นี้เท่านั้น ถ้า JS ไม่ทำงาน กรอบก็แสดงแบบปกติ */
+@media (min-width: 576px) and (max-width: 767px) {
+    .playbook-benefit {
+        --bt-playbook-benefit-artboard-width: 332px;
+
+        .playbook-benefit__media.is-artboard {
+            /* 1% ของ artboard แทน 1cqi สูตรที่อิงความกว้างคอลัมน์ (เช่นตำแหน่งการ์ดพื้นหลังใบ Skill)
+               จึงได้ค่าเท่าตอน 767 ด้วย ถ้าปล่อยเป็น cqi จะไปอิงคอลัมน์จริงที่แคบกว่า
+               แล้วถูก zoom ย่อซ้ำอีกรอบ ตำแหน่งจะไม่ตรง 767 */
+            --bt-playbook-benefit-col-unit: calc(var(--bt-playbook-benefit-artboard-width) / 100);
+
+            width: var(--bt-playbook-benefit-artboard-width);
+            zoom: var(--bt-playbook-benefit-zoom, 1);
+        }
+    }
+}
+
+/* เคยมีชุดกฎจูนใบ Skill ทีละ element ที่ ≤575 อยู่ตรงนี้ (ระยะขอบ ระยะใน และจัด grid ใหม่
+   เป็นสองคอลัมน์) ถอดออกแล้วเพราะซ้อนกับ --bt-playbook-benefit-fit-max ที่ย่อทั้งก้อน
+   อยู่แล้ว กลายเป็นย่อสองชั้น แผงเหลือ 201px ในกรอบที่มีที่ว่าง 279px
+   และแถวคะแนนถูกบังคับตัดบรรทัดทั้งที่ยังไม่จำเป็น
+   วัดที่ 375px แล้ว grid สามคอลัมน์ของ desktop ยังอยู่ได้ (91/68/40px) ป้ายไม่ตัดบรรทัด
+   ถ้าวันหลังอยากให้แท่งคะแนนลงไปอยู่คนละบรรทัดจริง ๆ ค่อยเขียน breakpoint กลับมาใหม่
+   นั่นเป็นการเปลี่ยน layout ซึ่งปุ่มย่อสเกลทำแทนไม่ได้ */
 
 /* ท้าย section เดียวกัน: อีก 4 อย่างในเล่ม + ปุ่มปิดท้าย
    การ์ดชุดนี้เป็นกล่องข้อความล้วน จึงมีพื้นและขอบของตัวเอง ต่างจากการ์ด 3 ใบด้านบน
@@ -13000,8 +13657,35 @@ body.is-loading .hero-scroll-cue,
     }
 }
 
-/* ต่ำกว่า xl เหลือแถวละ 2 ช่อง ช่องที่ 3 จึงขึ้นต้นแถวใหม่และไม่มีเส้นคั่น */
-@media (max-width: 1199px) {
+/* ---------- ช่วง 992-1199: คง 4 ช่องแถวเดียวเหมือน desktop ----------
+   เดิมต่ำกว่า xl ตกไปใช้ col-sm-6 กลายเป็น 2x2 ซึ่งกินความสูงเป็นเท่าตัว
+   ทั้งที่ความกว้างยังพอ เพียงแต่ .container บีบไว้เหลือ 960px
+   markup จึงเติม col-lg-3 ให้ 4 ช่องเริ่มตั้งแต่ lg แล้วปลดแถวนี้ออกจาก container
+   มาใช้ความกว้างจอเต็ม ๆ แทน ช่องละ ~292px กว้างกว่าตอน desktop (243px) ด้วยซ้ำ */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .playbook-benefit__extra-list {
+        /* เทคนิคเดียวกับ .playbook-benefit__list ด้านบน: ถอยออกจาก .container
+           ไปจนสุดขอบ viewport (section มี overflow-x: clip กันไม่ให้เกิด scroll แนวนอน) */
+        margin-inline: calc(50% - 50vw);
+        /* ระยะ 32px นับจากขอบจอถึง "ตัวหนังสือ" ไม่ใช่ขอบกล่องแถว
+           ตัวหนังสือถูก padding-left ของช่องดันเข้ามาอีก inset x 2 = 24px อยู่แล้ว
+           แถวจึงเหลือระยะของตัวเองแค่ 8px ผลรวมจึงเป็น 32px พอดี */
+        padding-inline: var(--space-2);
+    }
+
+    /* ลดระยะในของแต่ละช่องลงครึ่งหนึ่งจาก desktop (48/24 -> 24/12)
+       ช่องแคบกว่า desktop แต่ไม่ได้แคบมาก ถ้าคงระยะเดิมไว้จะกินพื้นที่ตัวหนังสือไปเปล่า ๆ
+       ลดผ่าน inset ค่าเดียว ซ้าย-ขวายังคงอัตราส่วน 2:1 เท่าเดิม เส้นคั่นจึงอยู่ในจังหวะเดิม
+
+       ต้องเขียนคู่กับ .playbook-benefit ด้วย เพราะกฎตั้งต้นอยู่ในบล็อก nest ของ section
+       ซึ่งคอมไพล์ออกมาเป็นสองคลาส media query ไม่ได้เพิ่ม specificity ให้ ถ้าเขียนคลาสเดียวจะแพ้ */
+    .playbook-benefit .playbook-benefit__extra-item {
+        --bt-playbook-benefit-extra-item-inset: var(--space-3);
+    }
+}
+
+/* ต่ำกว่า lg เหลือแถวละ 2 ช่อง ช่องที่ 3 จึงขึ้นต้นแถวใหม่และไม่มีเส้นคั่น */
+@media (max-width: 991px) {
     .playbook-benefit {
         .playbook-benefit__extra-item:nth-child(3)::before {
             display: none;
@@ -13013,8 +13697,21 @@ body.is-loading .hero-scroll-cue,
     .playbook-benefit {
         --bt-playbook-benefit-extra-rule-length: 72px;
         --bt-playbook-benefit-extra-space: var(--space-16);
-        --bt-playbook-benefit-extra-title-size: var(--section-topic-size);
         --bt-playbook-benefit-action-space: var(--space-10);
+        /* เหลือแถวละ 2 ช่อง (หรือ 1 ช่องต่ำกว่า 576) แถวเรียงลงล่างเยอะขึ้น
+           ระยะ 48px ของจอกว้างจึงยืดเกินจำเป็น ลดเหลือ 32px ให้เกาะกลุ่มกันขึ้น */
+        --bt-playbook-benefit-extra-list-row-gap: var(--space-8);
+
+        /* จอกว้างวางเป็นแถวเดียว 4 ช่อง ระยะซ้ายเว้นเป็นสองเท่าเพื่อกันเส้นคั่นเบียดตัวหนังสือ
+           และตัวหนังสือชิดซ้ายให้ขอบซ้ายของทุกช่องตรงกันเป็นคอลัมน์
+           ต่ำกว่า 992 เหลือ 2 ช่อง (และ 1 ช่องต่ำกว่า 576) ขอบซ้ายที่ว่าไม่มีให้เรียงแล้ว
+           คืนระยะซ้าย-ขวาให้เท่ากันและจัดเนื้อหากึ่งกลาง ช่องจึงสมดุลในตัวเอง
+           ผลพลอยได้คือเส้นคั่นที่เกาะขอบซ้ายของช่องมาอยู่กลางร่องพอดี
+           (เดิมเยื้องไปทางช่องซ้ายเพราะสองฝั่งเว้นไม่เท่ากัน) */
+        .playbook-benefit__extra-item {
+            padding-left: var(--bt-playbook-benefit-extra-item-inset);
+            text-align: center;
+        }
     }
 }
 
@@ -13024,13 +13721,39 @@ body.is-loading .hero-scroll-cue,
     }
 }
 
-/* จอเดียวคอลัมน์ เส้นแนวตั้งระหว่างช่องไม่มีความหมายแล้ว */
+/* จอเล็กสุด: ตัวอักษรลงหนึ่งขั้น
+   รายการ "อีก 4 อย่าง" ยังเป็นสองคอลัมน์ (col-6) เส้นคั่นแนวตั้งกลางร่องจึงใช้กฎของช่วง ≤991 ต่อได้เลย
+   (ช่องที่ 1 กับ 3 ขึ้นต้นแถว ไม่มีเส้น) */
 @media (max-width: 575px) {
     .playbook-benefit {
-        --bt-playbook-benefit-extra-list-row-gap: var(--space-10);
+        --bt-playbook-benefit-index-size: var(--font-size-12);
+        --bt-playbook-benefit-item-title-size: var(--font-size-18);
+        --bt-playbook-benefit-copy-size: var(--font-size-14);
+        --bt-playbook-benefit-extra-title-size: var(--font-size-16);
+        --bt-playbook-benefit-extra-item-title-size: var(--font-size-16);
+        --bt-playbook-benefit-extra-list-space: var(--space-6);
+        --bt-playbook-benefit-extra-list-row-gap: var(--space-6);
 
-        .playbook-benefit__extra-item::before {
-            display: none;
+        /* สองคอลัมน์บนจอ 375 เหลือที่ให้ตัวหนังสือช่องละ 136px ข้อความตัดบรรทัดเหลือคำโดด
+           ลดระยะเผื่อเส้นคั่น 12 -> 4px ระยะข้างของช่องจึงลดจาก 24 เหลือ 16px
+           (ครึ่ง gutter ของ .row 12px + 4px) ตัวหนังสือได้ที่เพิ่มเป็น 152px
+           ระยะซ้ายขวายังเท่ากัน เส้นคั่นจึงยังอยู่กลางร่องพอดี */
+        --bt-playbook-benefit-extra-rule-space: var(--space-1);
+
+        /* ให้บรรทัดยาวใกล้เคียงกัน ไม่ทิ้งคำท้ายไว้บรรทัดเดียว เช่น "ระดับความ / เสี่ยงที่แท้จริง" */
+        .playbook-benefit__extra-item-title {
+            margin-top: var(--space-0);
+            text-wrap: balance;
+        }
+
+        /* คำอธิบายขึ้นบรรทัดใหม่ด้วย <br> ตรงรอยต่อของวลี พอช่องแคบลง ท่อนหลังตัดซ้ำอีกรอบ
+           เหลือคำโดดอย่าง "เล่น" หรือ "จำลอง" ไว้บรรทัดสุดท้าย
+           text-wrap: balance ของช่วง ≤767 ไม่ทำงานกับย่อหน้าที่มี <br> จึงใช้ pretty แทน
+           ซึ่งดึงคำจากบรรทัดก่อนหน้าลงมาเป็นเพื่อนคำท้าย เช่น "วัดจากบูธที่เดินและเกม / ที่เล่น"
+           คง <br> ไว้ จอที่กว้างพอยังตัดตรงวลีตามที่วางไว้ (ลองซ่อน <br> แล้วเบราว์เซอร์
+           ไปตัดกลางวลีแทน เช่น "วัด / จากบูธ" และ "ใช้ / ต่อกับ") */
+        .playbook-benefit__extra-item .playbook-benefit__copy {
+            text-wrap: pretty;
         }
     }
 }
@@ -13083,7 +13806,7 @@ body.is-loading .hero-scroll-cue,
     --bt-identity-card-width: clamp(calc(var(--space-32) + var(--space-10)), 22vw, calc(var(--space-32) * 2));
     --bt-identity-card-ratio: var(--bt-identity-card-natural-width) / var(--bt-identity-card-natural-height);
     --bt-identity-perspective: 3;
-    --bt-identity-stage-space: var(--space-16);
+    --bt-identity-stage-space: var(--space-12);
     --bt-identity-stage-padding-y: var(--space-10);
     --bt-identity-controls-space: var(--space-6);
     --bt-identity-caption-name-size: var(--font-size-28);
@@ -13097,13 +13820,40 @@ body.is-loading .hero-scroll-cue,
     --bt-identity-bg-position: 72%;
     --bt-identity-veil-start: 38%;
 
+    /* ---------- scroll-driven expand ----------
+       section ค่อย ๆ ขยายจากแผงขอบมนที่แคบกว่าจอ จนเต็มขอบจอและมุมคลายเป็นเหลี่ยม
+       ค่า 0-1 มาจาก js/scroll-expand.js ซึ่งผูกกับตำแหน่งของ section ในจอ ไม่ใช่เวลา
+       เลื่อนขึ้นจึงย้อนกลับเอง (scrub ไม่ใช่ trigger)
+
+       ใช้ scale ไม่ใช่ width เพราะ width บังคับ layout ใหม่ทุกเฟรม ส่วน scale อยู่บน
+       compositor ล้วน และผลพลอยได้คือเนื้อหาข้างในย่อตามไปด้วยทั้งก้อน
+       ทรงภายในจึงไม่เพี้ยนระหว่างทาง
+
+       radius ต้องคิดแยก ไม่ใช่ปล่อยให้ scale จัดการ เพราะ scale จะทำให้มุม "โค้งขึ้น"
+       ตอนขยาย ซึ่งกลับทางกับที่ต้องการ (ยิ่งเต็มจอยิ่งต้องเหลี่ยม)
+       หาร scale กลับไว้ด้วย ค่าที่เห็นจริงจึงตรงกับ px ที่เขียนไว้ ไม่ใช่ถูกขยายตาม
+
+       transform-origin ที่ขอบบน: ระหว่างย่อ ขอบล่างจะลอยขึ้นมาจากตำแหน่งจริง
+       ถ้าใช้ center center ขอบบนจะลอยลงมาด้วย เห็นเป็นช่องว่างคั่นกับ section ก่อนหน้า */
+    /* ความกว้างแผงตอนยังไม่ขยาย = 0.898 x ความกว้างจอ
+       ตั้งจากจอ 1470px (ขนาดจอจริง) ให้ได้ราว 1320px ตามที่ต้องการ
+       เป็นสัดส่วนไม่ใช่ px ตายตัว จอแคบลงแผงจึงหดตาม ระยะขอบข้างละ 5.1% เท่ากันทุกจอ */
+    --bt-identity-expand-min: 0.898;
+    --bt-identity-expand-radius: var(--space-8);
+    --bt-scroll-expand: 1;
+
+    --bt-identity-expand-scale: calc(var(--bt-identity-expand-min) + (1 - var(--bt-identity-expand-min)) * var(--bt-scroll-expand));
+
     position: relative;
     isolation: isolate;
     overflow: clip;
     padding: var(--bt-identity-padding-y) var(--space-0);
+    border-radius: calc((1 - var(--bt-scroll-expand)) * var(--bt-identity-expand-radius) / var(--bt-identity-expand-scale));
     color: var(--bt-identity-ink);
     background: var(--color-surface-page);
     font-family: var(--font-family-base);
+    scale: var(--bt-identity-expand-scale);
+    transform-origin: center top;
 
     /* ฉากห้องแสงสีเดียวกับ section concept ของหน้าแรก แต่ทึบกว่าเพราะที่นี่ไม่ต้องไล่จาง
        ทั้งผืน จางเฉพาะขอบบน-ล่างเพื่อไม่ให้เห็นรอยตัดกับ section พื้นขาวที่ประกบอยู่ */
@@ -13241,6 +13991,7 @@ body.is-loading .hero-scroll-cue,
         height: 100%;
         display: block;
         pointer-events: none;
+        filter: saturate(1.2);
     }
 
     /* ภาพนิ่งเป็นตัวกำหนดกรอบ สัดส่วนตรงกับกรอบอยู่แล้วจึงพอดีโดยไม่ถูกตัด */
@@ -13313,12 +14064,16 @@ body.is-loading .hero-scroll-cue,
         --bt-identity-lead-size: var(--section-body-size);
         --bt-identity-highlight-size: var(--section-body-size);
         --bt-identity-stage-space: var(--space-12);
+        --bt-identity-caption-name-size: var(--font-size-24);
+        --bt-identity-highlight-space: var(--space-2);
     }
 }
 
 @media (max-width: 575px) {
     .identity-cards {
         --bt-identity-card-width: clamp(calc(var(--space-32) + var(--space-8)), 54vw, calc(var(--space-32) + var(--space-24)));
+        --bt-identity-caption-name-size: var(--font-size-18);
+        --bt-identity-highlight-space: var(--space-3);
     }
 }
 
@@ -13365,8 +14120,9 @@ body.is-loading .hero-scroll-cue,
     --bt-playbook-steps-preview-ink: #111318;
     --bt-playbook-steps-preview-muted: #687078;
     --bt-playbook-steps-compare-ratio: 5 / 7;
-    /* การ์ดกินสัดส่วนคงที่ของกรอบ เหลือที่ว่างสองข้างให้ป้ายเท่ากันทุกความกว้าง */
-    --bt-playbook-steps-compare-width: clamp(140px, 40cqi, 210px);
+    /* การ์ดกินสัดส่วนคงที่ของกรอบ เหลือที่ว่างสองข้างให้ป้ายเท่ากันทุกความกว้าง
+       34% ไม่ใช่ 40% เพราะกรอบแคบลงแล้วป้ายต้องมีที่พอ ที่จอใหญ่ยังชน max 210px เท่าเดิม */
+    --bt-playbook-steps-compare-width: clamp(140px, 34cqi, 210px);
     /* ---------- ไดอะแกรมการ์ด + ป้ายกระจาย (ปรับจาก AnimatedCard/Visual2 ของ React) ----------
        ต้นฉบับใช้ Tailwind + state ของ React ที่นี่เป็น CSS ล้วน สั่งด้วยคลาสเดียวจาก IntersectionObserver
        ease-back ทำให้การ์ด "เด้ง" เกินปลายทางนิดหนึ่งก่อนเข้าที่ ซึ่งเป็นความรู้สึกที่ขอมา */
@@ -13426,6 +14182,7 @@ body.is-loading .hero-scroll-cue,
 
     .playbook-steps__list {
         margin-top: var(--bt-playbook-steps-list-space);
+        margin-bottom: var(--space-0);
         row-gap: var(--bt-playbook-steps-list-gap);
         list-style: none;
     }
@@ -13819,9 +14576,17 @@ body.is-loading .hero-scroll-cue,
     }
 
     /* ไล่ออกทีละแถว ซ้าย-ขวาออกพร้อมกันเป็นคู่ เริ่มหลังการ์ดลงจอดแล้ว (lead) */
-    .playbook-steps__tag:nth-child(1) { --steps-tag-delay: var(--bt-playbook-steps-diagram-tag-lead); }
-    .playbook-steps__tag:nth-child(2) { --steps-tag-delay: calc(var(--bt-playbook-steps-diagram-tag-lead) + var(--bt-playbook-steps-diagram-tag-step)); }
-    .playbook-steps__tag:nth-child(3) { --steps-tag-delay: calc(var(--bt-playbook-steps-diagram-tag-lead) + var(--bt-playbook-steps-diagram-tag-step) * 2); }
+    .playbook-steps__tag:nth-child(1) {
+        --steps-tag-delay: var(--bt-playbook-steps-diagram-tag-lead);
+    }
+
+    .playbook-steps__tag:nth-child(2) {
+        --steps-tag-delay: calc(var(--bt-playbook-steps-diagram-tag-lead) + var(--bt-playbook-steps-diagram-tag-step));
+    }
+
+    .playbook-steps__tag:nth-child(3) {
+        --steps-tag-delay: calc(var(--bt-playbook-steps-diagram-tag-lead) + var(--bt-playbook-steps-diagram-tag-step) * 2);
+    }
 
     /* ชุดขวาของกรอบกลับทิศทั้งหมด ต่างกันแค่บรรทัดเดียว หน้าตาเหมือนชุดซ้ายทุกอย่าง */
     .playbook-steps__tag--alt {
@@ -13836,12 +14601,14 @@ body.is-loading .hero-scroll-cue,
         }
     }
 
-    /* เกณฑ์นี้มาจากความกว้างจริงของป้าย: ใบที่ยาวสุด 172px + ระยะห่างจากการ์ด 24px สองข้าง
-       บวกความกว้างการ์ด 210px = 602px คือกรอบที่แคบที่สุดที่ยังวางป้ายขนาบข้างการ์ด
-       ได้โดยข้อความอยู่บรรทัดเดียว แคบกว่านี้ป้ายจะถูกบีบจนตัดบรรทัดเป็นแถบสูง
-       จึงย้ายลงมาเรียงใต้การ์ดแทน แล้วเปลี่ยนทิศที่วิ่งออกเป็นลอยขึ้น
-       (ถ้าแก้ข้อความ ขนาดฟอนต์ หรือ padding ของป้าย ต้องขยับตัวเลขนี้ตามด้วย) */
-    @container (max-width: 601px) {
+    /* ป้ายตั้ง white-space: nowrap ไว้ และเรียงชิดด้านที่ติดการ์ด ใบที่กว้างเกินคอลัมน์
+       จึงล้นออกทางด้านนอก ไม่ได้เบียดเข้าหาการ์ด กรอบแคบลงได้อีกมากก่อนจะมีปัญหา
+       ที่ว่างนอกกรอบมี 64px (padding ของ preview 24 + ของการ์ดขั้นตอน 40)
+       ใบที่ยาวสุด 178px เทียบกับครึ่งกรอบลบครึ่งการ์ด (34%) ลบระยะห่าง 24px
+       คิดกลับได้ว่ากรอบ 467px คือจุดที่ล้นออกไป 48px ซึ่งยังอยู่ในที่ว่างที่มี
+       แคบกว่านั้นจึงค่อยย้ายป้ายลงมาเรียงใต้การ์ด แล้วเปลี่ยนทิศที่วิ่งออกเป็นลอยขึ้น
+       (ถ้าแก้ข้อความ ขนาดฟอนต์ หรือ padding ของป้าย ต้องคิดตัวเลขนี้ใหม่) */
+    @container (max-width: 466px) {
 
         .playbook-steps__tags {
             position: static;
@@ -13851,12 +14618,10 @@ body.is-loading .hero-scroll-cue,
             gap: var(--bt-playbook-steps-diagram-tag-gap);
         }
 
+        /* ยุบกล่องคอลัมน์ทิ้ง ป้ายทั้งหกจึงไหลต่อกันในชุดเดียว
+           ถ้าคงกล่องไว้ สองคอลัมน์จะตัดแถวของใครของมัน ได้ผลเป็น 2-1-2-1 ไม่เต็มแถว */
         .playbook-steps__tag-col {
-            width: auto;
-            flex-direction: row;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
+            display: contents;
         }
 
         /* เรียงใต้การ์ดแล้วป้ายกว้างได้เท่ากรอบเท่านั้น ล้นออกข้างไม่ได้ จึงให้ตัดบรรทัดแทน */
@@ -14031,6 +14796,43 @@ body.is-loading .hero-scroll-cue,
     }
 }
 
+/* ---------- ช่วง 992-1199: คืนผังไดอะแกรมให้เหมือน desktop ----------
+   ช่วงนี้ .container ตรึงไว้ที่ 960px การ์ดขั้นแรกจึงเหลือ 856px คอลัมน์ขวา (col-7)
+   ได้กรอบตัวอย่างแค่ 443px ไดอะแกรมเหลือ 395px ต่ำกว่าเกณฑ์ 467px ของ @container
+   ป้ายทั้งหกจึงถูกสั่งให้ทิ้งตัวลงมาเรียงใต้การ์ดเป็น 2x3 การ์ดสูงขึ้นจาก 437px เป็น 490px
+   ทั้งที่จอยังกว้างพอจะวางขนาบข้างได้สบาย เพียงแต่ถูก container บีบไว้
+
+   แก้ที่ต้นเหตุคือความกว้าง ไม่ใช่ไปลดเกณฑ์ 467px ลง เพราะจอ ~632px (คอลัมน์เดียว)
+   ไดอะแกรมก็กว้าง 456px เข้าเงื่อนไขเดียวกัน แต่ตรงนั้นต้องเรียงลงล่างจริง ๆ
+   ลดเกณฑ์เมื่อไหร่จอนั้นพังตาม
+
+   สองอย่างที่ทำ
+   1) ปลดแถวออกจาก .container มาใช้ความกว้างจอเต็ม เว้นขอบ 32px (เทคนิคเดียวกับ
+      .playbook-benefit__list) การ์ดได้ 1135px คืนมา
+   2) สลับสัดส่วนคอลัมน์ใน markup เป็น col-lg-4 / col-lg-8 (xl ยังเป็น 5/7 เท่าเดิม)
+      ที่ 992px ซึ่งแคบสุดของช่วง ไดอะแกรมจึงยังได้ 509px พ้นเกณฑ์
+      คอลัมน์ข้อความเหลือ 267px ปุ่ม CTA กว้าง 251px ยังอยู่บรรทัดเดียว */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .playbook-steps {
+        /* ระยะในการ์ดลงมาเท่าช่วง ≤991 (40 -> 32) ค่า 40px เป็นของจอ xl ที่การ์ดกว้าง 1236px
+           ช่วงนี้การ์ดแคบลงเหลือ 1135px ระยะเดิมจึงกินพื้นที่เนื้อหาเกินส่วน
+           ต่ำกว่า 992 มีกฎของตัวเองอยู่แล้ว (≤991 = 32px, ≤575 = 24px) ไม่ต้องแตะ */
+        --bt-playbook-steps-card-padding: var(--space-8);
+
+        /* 100vw รวมความกว้าง scrollbar ถ้าไม่กันไว้แถวที่ full-bleed จะดันจนเกิด
+           scroll แนวนอน ใช้ clip ไม่ใช่ hidden เพราะ hidden จะทำให้ section
+           กลายเป็น scroll container แล้วไปตัดของที่ sticky/fixed ข้างใน */
+        overflow-x: clip;
+    }
+
+    /* ระยะ 32px วัดจากขอบจอถึงขอบการ์ด จึงหักครึ่ง gutter ของ .row ออกก่อน
+       เพราะ .playbook-steps__item มี padding ของตัวเองอยู่แล้ว ไม่งั้นจะกลายเป็น 44px */
+    .playbook-steps__list {
+        margin-inline: calc(50% - 50vw);
+        padding-inline: calc(var(--space-8) - 0.5 * var(--bs-gutter-x));
+    }
+}
+
 @media (max-width: 991px) {
     .playbook-steps {
         --bt-playbook-steps-padding-y: var(--section-padding-y-sm);
@@ -14038,6 +14840,52 @@ body.is-loading .hero-scroll-cue,
         --bt-playbook-steps-card-padding: var(--space-8);
         --bt-playbook-steps-item-title-size: var(--section-topic-size-sm);
         --bt-playbook-steps-lead-size: var(--section-body-size);
+        --bt-playbook-steps-highlight-space: var(--space-6);
+
+        .playbook-steps__preview {
+            margin-top: var(--space-6);
+        }
+    }
+}
+
+/* ---------- ≤767: กรอบตัวอย่างขั้นแรกเป็น "artboard" ย่อทั้งแผ่นตามความกว้างคอลัมน์ ----------
+   ปัญหาเดียวกับกรอบของ .playbook-benefit ในช่วงเดียวกัน
+   กรอบตัวอย่างหดจาก 624px ที่ 767 เหลือ 480px ที่ 576 แต่ป้ายคำถามขนาดคงที่ (12px, nowrap)
+   ขณะที่การ์ดหดตาม 34cqi ป้ายจึงล้นออกนอกกรอบมากขึ้นเรื่อย ๆ (ที่ 640 ล้นซ้าย 16px ขวา 14px)
+   พอเนื้อในกรอบต่ำกว่าเกณฑ์ 467px ของ @container (ราวจอ 610) ป้ายทั้งหกก็ทิ้งตัวลงมา
+   เรียงใต้การ์ดเป็น 2x3 หน้าตาแต่ละความกว้างจึงไม่เหมือน 767 เลย
+
+   ให้กรอบจัดวางที่ 624px ตลอดช่วง (เท่าตอน 767 ที่แสดงพอดีอยู่แล้ว) แล้วย่อทั้งกรอบด้วย
+   ตัวคูณ = ความกว้างคอลัมน์จริง / 624 การ์ด ป้าย ระยะ ตารางพื้นหลัง ย่อพร้อมกันในอัตราเดียว
+
+   ย่อด้วย transform: scale ไม่ใช่ zoom (ต่างจากกรอบของ benefit) เพราะ zoom ใน Safari (WebKit)
+   พังสองเรื่องที่กรอบนี้เจอ ทดสอบกับ WebKit ในเครื่องแล้วทั้งคู่
+   1) หน่วย cqi ถูกคิดจากขนาดหลังย่อแล้วย่อซ้ำอีกรอบ การ์ดเล็กกว่าที่ควร (ที่ 640 เล็กไป 15%)
+   2) ตัวอักษรที่ถูกย่อจนต่ำกว่า 9px ถูกดันกลับขึ้นมาเป็น 9px ขณะที่กล่องป้ายยังย่อตามปกติ
+      ช่วง ≤575 ที่ย่อเหลือ 0.55-0.6 เท่า ป้ายจึงกว้างเกินที่ออกแบบไว้แล้วล้นกรอบ
+   transform ย่อหลังจัดวางเสร็จแล้ว ทุกเบราว์เซอร์จึงเห็นกรอบเป็น 624px เหมือนกันหมด
+   ทั้ง @container, cqi และขนาดตัวอักษร แล้วค่อยย่อทั้งแผ่นเป็นภาพเดียว
+
+   transform ไม่คืนพื้นที่ใน layout กรอบยังจองความสูงเต็ม JS จึงวัดความสูงก่อนย่อ
+   (--bt-playbook-steps-artboard-height) แล้ว margin-bottom ติดลบดึงส่วนที่ย่อหายไปกลับคืน
+   ด้านกว้างไม่ต้องชดเชย ส่วนที่เกินคอลัมน์ไม่ดันอะไร และเบราว์เซอร์คิดพื้นที่เลื่อนจากกล่องหลังย่อ
+   จึงไม่เกิด scroll แนวนอน margin-top 24px ของกรอบ (จากบล็อก ≤991) ก็ไม่ถูกย่อตามด้วย
+
+   ตัวคูณกับความสูงคำนวณโดย js/playbook-steps-media.js (CSS หารความยาวสองค่าตรง ๆ ไม่ได้)
+   JS จะติดคลาส is-artboard เมื่อเห็น token ความกว้างเท่านั้น ถ้า JS ไม่ทำงาน กรอบก็แสดงแบบปกติ
+
+   กฎของโหมด artboard ครอบทั้ง ≤767 ช่วง ≤575 ใช้ชุดเดียวกัน ต่างกันแค่ขนาดกรอบกับระยะป้าย
+   (ดูบล็อก ≤575 ด้านล่าง) */
+@media (max-width: 767px) {
+    .playbook-steps {
+        --bt-playbook-steps-artboard-width: 624px;
+
+        .playbook-steps__preview.is-artboard {
+            width: var(--bt-playbook-steps-artboard-width);
+            margin-bottom: calc(var(--bt-playbook-steps-artboard-height, 0px) * (var(--bt-playbook-steps-artboard-scale, 1) - 1));
+            transform: scale(var(--bt-playbook-steps-artboard-scale, 1));
+            transform-origin: left top;
+        }
     }
 }
 
@@ -14045,6 +14893,53 @@ body.is-loading .hero-scroll-cue,
     .playbook-steps {
         --bt-playbook-steps-card-padding: var(--space-6);
         --bt-playbook-steps-number-size: var(--space-8);
+        --bt-playbook-steps-item-title-size: var(--font-size-18);
+        --bt-playbook-steps-copy-size: var(--font-size-14);
+        --bt-playbook-steps-points-space: var(--space-3);
+        --bt-playbook-steps-action-space: var(--space-6);
+
+        /* จอแคบคำสุดท้ายของย่อหน้ามักตกลงไปอยู่บรรทัดใหม่คำเดียว (เช่น "คุณ" ในขั้นที่ 1)
+           ให้เบราว์เซอร์เกลี่ยบรรทัดท้ายไม่ให้เหลือคำโดด */
+        .playbook-steps__copy {
+            text-wrap: pretty;
+        }
+
+        /* ---------- ไดอะแกรมขั้นแรก: ป้ายขนาบซ้าย-ขวาการ์ดเหมือนจออื่น (โหมด artboard) ----------
+           ถ้าใช้กรอบ 624px ชุดเดียวกับ 576-767 ที่จอ 375 จะย่อเหลือ 0.47 เท่า ตัวหนังสือในป้าย
+           เหลือราว 6px ช่วงนี้จึงเอาพื้นที่คืนมาสองทาง ให้ย่อน้อยที่สุดโดยผังยังเหมือนเดิม
+           1) กรอบแคบลงเหลือ 568px: ระยะจากขอบการ์ดถึงป้ายลดจาก 24 เหลือ 12px (ในหน่วยของกรอบ)
+              การ์ดยังกว้าง 34% ของกรอบ ป้ายใบที่ยาวสุดยังเหลือที่ก่อนถึงขอบกรอบราว 4px
+              เนื้อในกรอบ 520px ยังเกินเกณฑ์ 467px ของ @container ป้ายจึงไม่ทิ้งตัวลงใต้การ์ด
+           2) คอลัมน์ภาพกินเข้าไปใน padding ของการ์ดข้างละ 16px เหลือห่างขอบการ์ด 8px
+              (ต้องปลด max-width: 100% ของ .row > * ด้วย ไม่งั้นความกว้างที่เพิ่มจะถูกตัดทิ้ง)
+           ผลที่ได้ จอ 375 ย่อ 0.58 เท่า (ป้ายราว 7px) จอ 430 ย่อ 0.67 เท่า จอ 575 ย่อ 0.93 เท่า */
+        --bt-playbook-steps-artboard-width: 568px;
+
+        .playbook-steps__preview.is-artboard {
+            --bt-playbook-steps-diagram-tag-card-gap: var(--space-3);
+        }
+
+        .playbook-steps__media {
+            width: calc(100% + 2 * var(--space-4));
+            max-width: none;
+            margin-inline: calc(var(--space-4) * -1);
+        }
+
+        /* padding ล่างของกรอบเหลือเป็นที่ว่างซ้อนกับ padding ของการ์ดอีกชั้น และ row-gap ของ grid
+           ก็เว้นไว้ให้ป้ายกำกับที่ถูกถอดออกจาก markup ไปแล้ว ใต้ไดอะแกรมจึงห่างขอบการ์ดเกินกว่าด้านบน
+           ตัดสองส่วนนี้ออกให้บน-ล่างสมดุล (แตะแค่แนวตั้ง padding ซ้าย-ขวาคงไว้
+           เพราะเป็นส่วนหนึ่งของความกว้างที่ @container และหน่วยของ artboard ใช้คิด) */
+        .playbook-steps__preview {
+            padding-bottom: var(--space-0);
+        }
+
+        .playbook-steps__preview-body {
+            row-gap: var(--space-0);
+        }
+
+        .playbook-steps__note {
+            gap: var(--space-2);
+        }
     }
 }
 
@@ -14081,15 +14976,40 @@ body.is-loading .hero-scroll-cue,
     font-family: var(--font-family-base);
 
     .playbook-cta__panel {
+        /* ---------- scroll-driven expand ----------
+           ชุดเดียวกับ .identity-cards แต่แผงนี้อยู่ใน .container อยู่แล้ว ไม่ได้เต็มจอ
+           จึงต่างกันสองข้อ
+           1) ย่อน้อยกว่ามาก (0.94 เทียบกับ 0.898) แผงมีขอบข้างละ 117px ของตัวเองอยู่แล้ว
+              ถ้าย่อเท่ากันจะกลายเป็น 190px ดูลอยหลุดจากหน้าไปเลย
+              0.94 ขยับความกว้าง 1236 -> 1162px คือเข้ามาอีกข้างละ 37px กำลังรู้สึกได้
+           2) ไม่แตะ border-radius แผงนี้เป็นการ์ดตลอดทาง ไม่ได้จะขยายไปจนเต็มขอบจอ
+              มุมจึงต้องคงที่ ต่างจาก identity-cards ที่ต้องคลายเป็นเหลี่ยมตอนเต็มจอ */
+        --bt-playbook-cta-expand-min: 0.94;
+        --bt-scroll-expand: 1;
+
         position: relative;
         overflow: hidden;
         padding: var(--bt-playbook-cta-panel-padding);
         border-radius: var(--card-radius);
+        scale: calc(var(--bt-playbook-cta-expand-min) + (1 - var(--bt-playbook-cta-expand-min)) * var(--bt-scroll-expand));
+        transform-origin: center top;
         background:
             radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--color-blue-100) 72%, transparent) 0%, transparent 34%),
             radial-gradient(circle at 92% 100%, color-mix(in srgb, var(--color-kv-spectrum-4) 12%, transparent) 0%, transparent 34%),
             var(--color-neutral-50);
         text-align: center;
+    }
+
+    /* ของใน [data-reveal] เริ่มจากต่ำกว่าตำแหน่งจริง --reveal-y (80px) แล้วค่อยลอยขึ้น
+       แต่แผงนี้ overflow: hidden ระยะ 80px ดันบรรทัดสุดท้ายพ้นขอบแผงลงไป
+       และ IntersectionObserver คิดพื้นที่ทับซ้อนหลังถูก ancestor clip แล้ว
+       มันจึงไม่เห็น element นั้นเลย -> ไม่ติด is-revealed -> ไม่ลอยขึ้น -> ไม่มีวันถูกเห็น
+       วนกลับที่เดิมเป็นวงปิด บรรทัด "จัดโดย efin.finance" เลยหายไปทั้งบรรทัด
+       ไม่ได้ตกเฟรมเพราะ layout ตำแหน่งจริงของมันอยู่ในแผงเรียบร้อย
+       ย่อระยะลอยของทุกอย่างในแผงให้พอดีกับ padding ของแผง ก็หลุดวงจรนี้
+       (ระยะ 80px ออกแบบมาสำหรับ section เต็มหน้า ไม่ใช่กล่องที่ถูก clip อยู่แล้ว) */
+    .playbook-cta__panel [data-reveal] {
+        --reveal-y: var(--bt-playbook-cta-panel-padding);
     }
 
     .playbook-cta__body {
@@ -14213,35 +15133,132 @@ body.is-loading .hero-scroll-cue,
     }
 }
 
+/* ต่ำกว่า xl หัวข้อลงมาอยู่ที่ขั้นเล็กสุดของสเกลหัวข้อทั้งหมด
+   สเกลกลางของ .bt-section-title ไม่ได้ไล่ลงตรง ๆ ตามขนาดจอ: 992-1199 ได้ 32/48
+   แต่ 576-991 กลับขึ้นไป 40/56 (เพราะคอลัมน์ซ้อนกันแล้ว ความกว้างกลับมาเต็มแผง)
+   ซึ่งใหญ่เกินไปสำหรับแผงนี้ จึงตรึงไว้ที่ 28/36 ตลอดตั้งแต่ 1199 ลงไป
+   คู่ 28/36 เป็นคู่ที่สเกลกลางใช้อยู่แล้วที่ขั้นเล็กสุด (≤575) ค่าตรงนั้นจึงไม่ขยับ */
+@media (max-width: 1199px) {
+    .playbook-cta {
+
+        /* ต้องเขียนคู่กับ .bt-section-title และประกาศ font-size ซ้ำด้วย
+           เพราะสเกลกลางที่ไล่ขนาดตามจอใช้ selector section[aria-labelledby] h2.bt-section-title
+           ซึ่ง specificity สูงกว่าคลาสเดี่ยว และสั่ง font-size ตรง ๆ ไม่ได้ผ่าน token
+           ถ้าทับแค่ token ค่าจะถูกตั้งไว้แต่ไม่มีใครอ่าน หัวข้อยังเป็น 40px ตามสเกลกลาง */
+        .playbook-cta__title.bt-section-title {
+            --bt-section-title-size: var(--font-size-28);
+
+            font-size: var(--bt-section-title-size);
+        }
+
+        .playbook-cta__title .bt-title-highlight {
+            font-size: var(--font-size-36);
+        }
+    }
+}
+
+/* ---------- ช่วง lg (992-1199) : ย่อเนื้อหาในแผง ความกว้างแผงเท่าเดิม ----------
+   .container ตรึงที่ 960px แผงเหลือ 856px คอลัมน์ขวา (col-lg-7) ได้ 485px
+   ช่องข้อมูลจึงเหลือช่องละ 197px แต่ "31 ตุลาคม – 1 พฤศจิกายน 2569" ที่ 20px ยาวเกินนั้น
+   ค่าของทั้งสองช่องเลยตัดเป็นสองบรรทัด และตัดผิดจุดด้วย เพราะภาษาไทยไม่มีช่องว่าง
+   ระหว่างคำ เบราว์เซอร์แยก "สามย่านมิตร/ทาวน์" และ "1/พฤศจิกายน" ออกจากกัน
+   (ลอง text-wrap: balance แล้วยังตัดผิดจุดเหมือนเดิม)
+
+   ไล่ลดขนาดแล้ววัดจุดตัดจริงทีละขั้น 18/16/15 ยังสองบรรทัด ลงมาที่ 14px ทั้งสองค่า
+   จึงกลับมาอยู่บรรทัดเดียวพอดี ป้ายกับข้อความรองลดตามให้ลำดับความสำคัญไม่กลับหัว
+   (ป้าย 14→12, ค่า 20→14, ข้อความรอง 16→12, หมายเหตุ 16→14)
+   เส้นคั่นย่อจาก 80px เหลือ 64px ให้พอดีกับก้อนข้อความที่เตี้ยลงเป็น 91px
+
+   หัวข้อไม่แตะ คงขนาดของช่วง ≥992 ไว้ (32/48) ลองลดแล้วก็ยังสามบรรทัดอยู่ดี
+   ต้องลงไปถึง 24/36 ถึงจะเหลือสองบรรทัด ซึ่งเล็กเกินไปสำหรับหัวข้อปิดท้าย */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .playbook-cta {
+        /* ช่องไฟแนวตั้งลดลงหนึ่งขั้น ตัวอักษรเล็กลงแล้ว ถ้าคงไว้ 64px
+           ก้อนข้อความจะกระจัดกระจายไม่เกาะกลุ่ม */
+        --bt-playbook-cta-facts-space: var(--space-10);
+        --bt-playbook-cta-note-space: var(--space-10);
+        --bt-playbook-cta-media-gap: var(--space-8);
+
+        --bt-playbook-cta-fact-label-size: var(--font-size-12);
+        --bt-playbook-cta-fact-icon-size: var(--font-size-16);
+        --bt-playbook-cta-fact-value-size: var(--font-size-18);
+        --bt-playbook-cta-fact-sub-size: var(--font-size-14);
+        --bt-playbook-cta-rule-length: var(--space-16);
+        --bt-playbook-cta-note-size: var(--font-size-14);
+
+        .playbook-cta__fact-value {
+            margin-top: var(--space-3);
+        }
+    }
+}
+
 @media (max-width: 991px) {
     .playbook-cta {
+        --bt-playbook-cta-panel-padding: var(--space-8);
         --bt-playbook-cta-facts-space: var(--space-12);
         --bt-playbook-cta-fact-value-size: var(--font-size-20);
         --bt-playbook-cta-fact-sub-size: var(--section-body-size);
         --bt-playbook-cta-note-space: var(--space-12);
 
-        /* จอนี้คอลัมน์ซ้อนกันแล้ว ช่องไฟต้องย้ายจากด้านขวามาอยู่ด้านล่างภาพแทน */
-        .playbook-cta__media {
-            margin-bottom: var(--bt-playbook-cta-media-gap);
-        }
-
         /* ไม่มีคอลัมน์ข้าง ๆ ให้เว้นระยะแล้ว ถ้าคงไว้ข้างเดียวข้อความที่จัดกึ่งกลาง
            จะเยื้องซ้ายไปครึ่งหนึ่งของระยะนั้น */
         .playbook-cta__body {
-            padding-right: var(--space-0);
+            padding-right: calc(var(--bs-gutter-x) * .5);
+            margin-top: var(--space-10);
+        }
+
+        .playbook-cta__note {
+            padding-bottom: var(--space-0);
+        }
+
+        .playbook-cta__kv {
+            width: 50%;
+            margin-inline: auto;
         }
     }
 }
 
 /* จอเล็กสุดแผงกินเต็มความกว้าง section จึงไม่ต้องเว้นระยะอีก (เท่ากับ .cta ของหน้าแรก)
-   และจอเดียวคอลัมน์ เส้นแนวตั้งระหว่างช่องก็ไม่มีความหมายแล้ว */
+   และจอเดียวคอลัมน์ สองช่องเรียงลงล่าง เส้นคั่นจึงเปลี่ยนจากแนวตั้งเป็นแนวนอน */
 @media (max-width: 575px) {
     .playbook-cta {
         --bt-playbook-cta-padding-top: var(--space-0);
         --bt-playbook-cta-note-size: var(--section-small-size);
+        --bt-playbook-cta-panel-padding: var(--space-4) var(--space-4) var(--space-8) var(--space-4);
+        --bt-playbook-cta-fact-label-size: var(--font-size-14);
+        --bt-playbook-cta-fact-value-size: var(--font-size-18);
+        /* ร่องระหว่างสองแถวมีเส้นคั่นนั่งอยู่ตรงกลาง 40px เดิมเหลือข้างละไม่ถึง 16px
+           ขยายเป็น 48px เท่าร่องของรายการ "อีก 4 อย่าง" ใน section benefit */
+        --bt-playbook-cta-facts-row-gap: var(--space-16);
+        --bt-playbook-cta-kv-radius: var(--radius-1);
+        --bt-playbook-cta-fact-icon-size: var(--font-size-16);
 
+        .playbook-cta__fact-value {
+            margin-top: var(--space-3);
+        }
+
+        /* ขั้นถัดลงมาจากคู่ 28/36 ของ ≤1199 (เขียนคู่ selector แบบเดียวกันด้วยเหตุผลเดียวกัน) */
+        .playbook-cta__title.bt-section-title {
+            --bt-section-title-size: var(--font-size-24);
+
+            font-size: var(--bt-section-title-size);
+        }
+
+        .playbook-cta__title .bt-title-highlight {
+            font-size: var(--font-size-32);
+        }
+
+        /* แผงแคบจนภาพครึ่งความกว้างเล็กเกินไป ให้ภาพกินเต็มคอลัมน์ */
+        .playbook-cta__kv {
+            width: 100%;
+        }
+
+        /* ภาพเส้น-ดาววาดมาแนวนอนอยู่แล้ว จึงแค่ไม่หมุน แล้ววางกึ่งกลางร่องระหว่างสองแถว
+           (ร่องอยู่นอกกล่องของช่อง จึงถอยขึ้นไปครึ่งหนึ่งของ row-gap) */
         .playbook-cta__fact::before {
-            display: none;
+            top: calc(var(--bt-playbook-cta-facts-row-gap) / -2);
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
     }
 }
@@ -14366,6 +15383,7 @@ body.is-loading .hero-scroll-cue,
     }
 
     .playbook-ticket__plan-eyebrow {
+        margin-bottom: var(--space-3);
         color: var(--color-text-muted);
         font-size: var(--section-small-size);
         line-height: var(--line-height-1);
@@ -14550,6 +15568,14 @@ body.is-loading .hero-scroll-cue,
         }
     }
 
+    /* ช่วง lg คอลัมน์แคบสุดของผังสองคอลัมน์นี้ ร่องกลาง 48px กินที่ของรายการสิทธิ์
+       และบล็อกราคามากเกินไป ลดเหลือ 32px เฉพาะช่วงนี้ (ตั้งแต่ xl ขึ้นไปคงเดิม) */
+    @media (min-width: 992px) and (max-width: 1199px) {
+        .playbook-ticket__plan {
+            column-gap: var(--space-8);
+        }
+    }
+
     @media (min-width: 1500px) {
         .playbook-ticket__plan {
             column-gap: var(--space-16);
@@ -14594,6 +15620,7 @@ body.is-loading .hero-scroll-cue,
     /* รายการสิทธิ์ของบัตร ใช้ไอคอนติ๊กถูกในวงกลมชุดเดียวกับตารางเปรียบเทียบ */
     .playbook-ticket__features {
         margin-top: var(--bt-playbook-ticket-features-space);
+        margin-bottom: var(--space-0);
         padding-left: var(--space-0);
         display: grid;
         gap: var(--bt-playbook-ticket-features-gap);
@@ -14701,15 +15728,72 @@ body.is-loading .hero-scroll-cue,
         --bt-playbook-ticket-table-space: var(--space-12);
         --bt-playbook-ticket-plan-width: var(--space-32);
         --bt-playbook-ticket-plan-size: var(--section-body-size);
+        --bt-playbook-ticket-features-space: var(--space-6);
+
+        .playbook-ticket__prices {
+            margin-top: var(--space-8);
+        }
     }
 }
 
 @media (max-width: 575px) {
     .playbook-ticket {
         --bt-playbook-ticket-cell-padding-x: var(--space-2);
-        --bt-playbook-ticket-cell-padding-y: var(--space-4);
-        --bt-playbook-ticket-plan-width: var(--space-20);
+        --bt-playbook-ticket-cell-padding-y: var(--space-2);
+        --bt-playbook-ticket-plan-width: 110px;
         --bt-playbook-ticket-feature-size: var(--section-small-size);
         --bt-playbook-ticket-mark-size: var(--font-size-20);
+        /* หัวคอลัมน์ ULTIMATE / EXPLORER ที่ 16px กว้าง 89px แต่ช่องเหลือ 64px (80 หัก padding)
+           สองชื่อจึงล้นมาชนกันกลางตาราง ลดเป็น 12px (67px) และลด padding ข้างของหัวคอลัมน์
+           แทนการขยายคอลัมน์ ช่องชื่อสิทธิ์ทางซ้ายจึงกว้างเท่าเดิม ไม่ตัดบรรทัดเพิ่ม */
+        --bt-playbook-ticket-plan-size: var(--font-size-14);
+
+        .playbook-ticket__col {
+            padding-inline: var(--space-1);
+        }
+
+        /* token นี้ประกาศไว้ที่ตัวการ์ดเอง (ไม่ใช่ที่ section) จึงต้องทับที่ระดับเดียวกัน
+        แนวตั้งคงไว้ แนวนอนลดลง ให้กล่องราคาสองใบมีที่มากขึ้น
+        ระยะในกล่องราคาลด 24 -> 16px ด้วยเหตุผลเดียวกัน */
+        .playbook-ticket__plan {
+            --bt-playbook-ticket-price-size: var(--font-size-32);
+            --bt-playbook-ticket-plan-padding: var(--space-8) var(--space-5);
+            --bt-playbook-ticket-price-padding: var(--space-4);
+            --bt-playbook-ticket-plan-title-size: var(--font-size-28);
+        }
+
+        /* ราคาเดิม "2,500 บาท" + ป้าย "คุ้มกว่า" ต้องใช้ 123px แต่กล่องมีที่ 101px ที่จอ 375
+           ราคาเดิมจึงตัดเป็นสองบรรทัด ตัวเลขราคาของสองกล่องเลยไม่อยู่แนวเดียวกัน
+           ลดราคาเดิมเป็น 12px และระยะข้างของป้ายเหลือ 4px รวมเหลือ 106px
+           อยู่บรรทัดเดียวได้ถึงจอ 360 (กล่องมีที่ 110px)
+           จอที่แคบกว่านั้นให้ป้ายตกลงบรรทัดใหม่ทั้งก้อน ไม่ให้ราคากับคำว่า "บาท" แยกกัน */
+        .playbook-ticket__price-compare {
+            margin-top: var(--space-2);
+            flex-wrap: wrap;
+            font-size: var(--font-size-12);
+
+            s {
+                white-space: nowrap;
+            }
+        }
+
+        .playbook-ticket__price-badge {
+            padding-inline: var(--space-1);
+        }
+
+        .playbook-ticket__price-value {
+
+            small {
+                font-size: var(--section-small-size);
+            }
+        }
+
+        .playbook-ticket__plan-icon {
+            margin-bottom: var(--space-4);
+        }
+
+        .playbook-ticket__plan-eyebrow {
+            margin-bottom: var(--space-2);
+        }
     }
 }

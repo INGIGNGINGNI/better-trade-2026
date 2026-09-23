@@ -40,7 +40,7 @@
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="css/main.css?v=57">
-    <link rel="stylesheet" href="css/style.css?v=877">
+    <link rel="stylesheet" href="css/style.css?v=953">
 </head>
 
 <body class="playbook-page">
@@ -136,7 +136,10 @@
         <!-- ฉากห้องเป็นพื้นหลังผืนเดียวที่ครอบทั้ง hero และ intro
              ถ้าแยกกรอบเป็นของใครของมัน ม่านไล่สีของสอง section จะมาชนกันจนเห็นเป็นเส้นตรงรอยต่อ -->
         <div class="playbook-scene" data-playbook-scene>
-            <div class="playbook-scene__backdrop" aria-hidden="true"></div>
+            <div class="playbook-scene__backdrop" aria-hidden="true">
+                <!-- ชั้นภาพฉากแบบติดจอสำหรับ ≤991 (ดู .playbook-scene__image ใน style.css) -->
+                <div class="playbook-scene__image"></div>
+            </div>
             <!-- ลำแสงจากเพดานแยกเป็นอีกชั้น เลื่อนช้า ๆ สวนกับฉากที่ตรึงอยู่ ให้ได้ความลึกกลับมา -->
             <div class="playbook-scene__light" data-playbook-scene-light aria-hidden="true"></div>
 
@@ -145,7 +148,7 @@
                 aria-labelledby="playbook-hero-title">
                 <!-- เนื้อหา hero จางหายพร้อมกับม่านของ intro (ดู .playbook-scene.is-intro .playbook-hero__inner)
                      จางที่ตัวเนื้อหาเอง ไม่ใช่เอาแผ่นทึบมาทับ ฉากหลังจึงไม่มีรอยต่อให้เห็น -->
-                <div class="playbook-hero__inner container-xl">
+                <div class="playbook-hero__inner container">
                     <div class="row align-items-center">
                         <div class="playbook-hero__content col-12 col-lg-6">
                             <p class="bt-section-subtext playbook-hero__eyebrow" data-reveal-delay="0">New World New Playbook</p>
@@ -157,7 +160,7 @@
                                 <img class="playbook-hero__title-art" src="images/playbook-title.webp" width="1692" height="237"
                                     decoding="async" alt="Playbook">
                             </h1>
-                            <p class="playbook-hero__lead" data-reveal data-reveal-delay="160">คู่มือการลงทุนส่วนตัวที่คอยนำทาง<br class="d-none d-sm-block">สแกนทุกโอกาสการลงทุนในโลกยุคใหม่</p>
+                            <p class="playbook-hero__lead" data-reveal data-reveal-delay="160">คู่มือการลงทุนส่วนตัวที่คอยนำทาง<br>สแกนทุกโอกาสการลงทุนในโลกยุคใหม่</p>
                             <div class="playbook-hero__actions" data-reveal data-reveal-delay="240">
                                 <div id="playbook-hero-cta-slot" class="playbook-hero__action" data-cta-href="index.html#ticket"></div>
                             </div>
@@ -190,19 +193,25 @@
                              จึงซ่อนทั้งคอลัมน์จาก screen reader และไม่ใส่ alt ให้การ์ด -->
                         <div class="playbook-hero__visual col-12 col-lg-6" aria-hidden="true">
                             <!-- ไอคอนสินทรัพย์ลอยรอบเกลียว อยู่หลังการ์ดทั้งหมด: วางก่อนเกลียวใน DOM
-                                 และไม่กำหนด z-index การ์ดที่ JS ยก z-index ให้ตามความลึกจึงบังไอคอนได้เสมอ -->
+                                 และไม่กำหนด z-index การ์ดที่ JS ยก z-index ให้ตามความลึกจึงบังไอคอนได้เสมอ
+
+                                 loading ต้องเป็น eager ไม่ใช่ lazy ทั้งสี่ใบอยู่เหนือพับตั้งแต่เปิดหน้า
+                                 ตอนเป็น lazy เบราว์เซอร์เลื่อนคิวโหลดออกไปแล้วไม่ยอมโหลดเลยในบางจอ
+                                 (ตรวจแล้วไม่มี request ออกไปสักไฟล์ ไอคอนจึงหายทั้งชุด ไม่ใช่โดนบัง)
+                                 fetchpriority ต่ำไว้ เพราะเป็นของตกแต่ง ไม่ควรแย่งคิวกับภาพหลัก
+                                 ชุดเดียวกับที่การ์ดบนเกลียวใช้อยู่แล้ว -->
                             <div class="playbook-hero__assets">
                                 <div class="playbook-hero__asset playbook-hero__asset--coin">
-                                    <img src="images/bitcoin.webp" width="787" height="800" loading="lazy" decoding="async" alt="">
+                                    <img src="images/bitcoin.webp" width="787" height="800" loading="eager" decoding="async" fetchpriority="low" alt="">
                                 </div>
                                 <div class="playbook-hero__asset playbook-hero__asset--bar">
-                                    <img src="images/gold.webp" width="369" height="800" loading="lazy" decoding="async" alt="">
+                                    <img src="images/gold.webp" width="369" height="800" loading="eager" decoding="async" fetchpriority="low" alt="">
                                 </div>
                                 <div class="playbook-hero__asset playbook-hero__asset--chart">
-                                    <img src="images/stock.webp" width="178" height="800" loading="lazy" decoding="async" alt="">
+                                    <img src="images/stock.webp" width="178" height="800" loading="eager" decoding="async" fetchpriority="low" alt="">
                                 </div>
                                 <div class="playbook-hero__asset playbook-hero__asset--arrow">
-                                    <img src="images/arrow-up.webp" width="787" height="800" loading="lazy" decoding="async" alt="">
+                                    <img src="images/arrow-up.webp" width="787" height="800" loading="eager" decoding="async" fetchpriority="low" alt="">
                                 </div>
                             </div>
 
@@ -316,8 +325,8 @@
                     <header class="playbook-intro__header">
                         <h2 id="playbook-intro-title" class="bt-section-title playbook-intro__title"><span class="bt-title-highlight">Personalized <br class="playbook-intro__title-break">Playbook</span></h2>
                         <p class="bt-section-subtext playbook-intro__eyebrow" data-reveal-delay="80" data-intro-float-after>What's Inside</p>
-                        <p class="playbook-intro__lead" data-reveal data-reveal-delay="160">คู่มือการลงทุนที่ย่อตัวคุณลงมาไว้ในเล่มเดียว <br class="d-none d-lg-block">บอกว่าคุณเป็นนักลงทุนแบบไหน ถนัดอะไร ต้องระวังอะไร <br class="d-none d-lg-block">และควรมองหาการลงทุนด้วยเกณฑ์อะไรเป็นของตัวเอง</p>
-                        <p class="playbook-intro__note" data-reveal data-reveal-delay="240">ไม่ได้เขียนจากทฤษฎี แต่เขียนจากการกระทำของคุณเองตลอด 2 วันในงาน จึงไม่มีใครได้เล่มเหมือนกัน <br>และเป็นวิธีคิดที่ใช้ต่อกับ efin AI ได้ทุกวัน ไม่ใช่คำแนะนำการลงทุน</p>
+                        <p class="playbook-intro__lead" data-reveal data-reveal-delay="160">คู่มือการลงทุนที่ย่อตัวคุณลงมาไว้ในเล่มเดียว <br class="d-none d-md-block">บอกว่าคุณเป็นนักลงทุนแบบไหน ถนัดอะไร ต้องระวังอะไร <br class="d-none d-md-block">และควรมองหาการลงทุนด้วยเกณฑ์อะไรเป็นของตัวเอง</p>
+                        <p class="playbook-intro__note" data-reveal data-reveal-delay="240">ไม่ได้เขียนจากทฤษฎี แต่เขียนจากการกระทำของคุณเองตลอด 2 วันในงาน <br class="d-none d-sm-block d-lg-none">จึงไม่มีใครได้เล่มเหมือนกัน <br class="d-none d-lg-block">และเป็นวิธีคิดที่ใช้ต่อกับ efin AI ได้ทุกวัน <br class="d-none d-sm-block d-lg-none">ไม่ใช่คำแนะนำการลงทุน</p>
                     </header>
                 </div>
             </section>
@@ -335,18 +344,18 @@
                     <p class="playbook-benefit__lead" data-reveal data-reveal-delay="160">ไม่ใช่โน้ตที่จดแล้วลืม แต่เป็น PERSONALIZED PLAYBOOK ที่เปิดใช้ต่อได้ทุกครั้งที่ต้องตัดสินใจลงทุน</p>
                 </header>
 
-                <ol class="playbook-benefit__list row" aria-label="3 สิ่งที่ได้รับจาก PERSONALIZED PLAYBOOK">
-                    <li class="playbook-benefit__item col-12 col-lg-4" data-reveal data-reveal-delay="0">
+                <ol class="playbook-benefit__list row justify-content-md-center" aria-label="3 สิ่งที่ได้รับจาก PERSONALIZED PLAYBOOK">
+                    <li class="playbook-benefit__item col-12 col-sm-6 col-lg-4" data-reveal data-reveal-delay="0">
                         <div class="playbook-benefit__card playbook-benefit__card--compare">
                         <div class="playbook-benefit__media playbook-benefit__media--dots-center" data-benefit-reveal>
                             <img class="playbook-benefit__finance-icon playbook-benefit__finance-icon--card" src="images/arrow-up.webp"
                                 width="787" height="800" loading="lazy" decoding="async" alt="" aria-hidden="true">
-                            <img class="playbook-benefit__finance-icon playbook-benefit__finance-icon--receipt" src="images/health.png"
-                                width="1920" height="1920" loading="lazy" decoding="async" alt="" aria-hidden="true">
-                            <img class="playbook-benefit__finance-icon playbook-benefit__finance-icon--banknote" src="images/gold-bar.png"
-                                width="1920" height="1920" loading="lazy" decoding="async" alt="" aria-hidden="true">
-                            <img class="playbook-benefit__finance-icon playbook-benefit__finance-icon--money" src="images/pie-chart.png"
-                                width="1920" height="1920" loading="lazy" decoding="async" alt="" aria-hidden="true">
+                            <img class="playbook-benefit__finance-icon playbook-benefit__finance-icon--receipt" src="images/health.webp"
+                                width="512" height="512" loading="lazy" decoding="async" alt="" aria-hidden="true">
+                            <img class="playbook-benefit__finance-icon playbook-benefit__finance-icon--banknote" src="images/gold-bar.webp"
+                                width="512" height="512" loading="lazy" decoding="async" alt="" aria-hidden="true">
+                            <img class="playbook-benefit__finance-icon playbook-benefit__finance-icon--money" src="images/pie-chart.webp"
+                                width="512" height="512" loading="lazy" decoding="async" alt="" aria-hidden="true">
                             <img class="playbook-benefit__finance-mark" src="images/bitcoin.webp"
                                 width="1920" height="1920" loading="lazy" decoding="async" alt="" aria-hidden="true">
                             <div class="playbook-benefit__compare" data-benefit-compare data-start="50">
@@ -371,10 +380,10 @@
                         </div>
                         <p class="playbook-benefit__index"><img class="playbook-benefit__index-star" src="images/star.webp" width="95" height="100" loading="lazy" decoding="async" alt="" aria-hidden="true"><span>ตัวตนของคุณ</span></p>
                         <h3 class="playbook-benefit__item-title">การ์ดตัวตนของคุณ</h3>
-                        <p class="playbook-benefit__copy">เปรียบเทียบก่อนงานและหลังงาน <br>เพื่อดูว่าคุณเป็นนักลงทุนแบบไหน และมีอะไรเปลี่ยนไปบ้าง</p>
+                        <p class="playbook-benefit__copy">เปรียบเทียบก่อนงานและหลังงาน <br class="d-none d-xxl-block">เพื่อดูว่าคุณเป็นนักลงทุน<br class="d-block d-sm-none">แบบไหน และมีอะไรเปลี่ยนไปบ้าง</p>
                         </div>
                     </li>
-                    <li class="playbook-benefit__item col-12 col-lg-4" data-reveal data-reveal-delay="120">
+                    <li class="playbook-benefit__item col-12 col-sm-6 col-lg-4" data-reveal data-reveal-delay="120">
                         <div class="playbook-benefit__card playbook-benefit__card--traits">
                         <div class="playbook-benefit__media" data-benefit-reveal>
                             <div class="playbook-benefit__fit" data-benefit-fit>
@@ -405,10 +414,10 @@
                         </div>
                         <p class="playbook-benefit__index"><img class="playbook-benefit__index-star" src="images/star.webp" width="95" height="100" loading="lazy" decoding="async" alt="" aria-hidden="true"><span>วิธีที่คุณตัดสินใจ</span></p>
                         <h3 class="playbook-benefit__item-title">จุดแข็ง และสิ่งที่ต้องระวัง</h3>
-                        <p class="playbook-benefit__copy">รู้ว่าสินทรัพย์แบบไหนที่คุณสนใจ พร้อมมองเห็นพฤติกรรม<br>ที่อาจทำให้ตัดสินใจพลาด</p>
+                        <p class="playbook-benefit__copy">รู้ว่าสินทรัพย์แบบไหนที่คุณสนใจ พร้อมมองเห็นพฤติกรรม<br class="d-block d-sm-none d-xxl-block">ที่อาจทำให้ตัดสินใจพลาด</p>
                         </div>
                     </li>
-                    <li class="playbook-benefit__item col-12 col-lg-4" data-reveal data-reveal-delay="240">
+                    <li class="playbook-benefit__item col-12 col-sm-6 col-lg-4" data-reveal data-reveal-delay="240">
                         <div class="playbook-benefit__card playbook-benefit__card--skill">
                         <div class="playbook-benefit__media playbook-benefit__media--dots-center" data-benefit-reveal>
                             <!-- หลังการ์ดสอดอยู่หลังแผงคะแนน โผล่ขึ้นมาจากขอบล่างกึ่งกลาง
@@ -420,7 +429,7 @@
                                     width="520" height="728" loading="lazy" decoding="async" alt="">
                             </span>
 
-                            <div class="playbook-benefit__fit" data-benefit-fit>
+                            <div class="playbook-benefit__fit">
                             <div class="playbook-benefit__skill">
                                 <p class="playbook-benefit__skill-title">SKILL ประจำการ์ด</p>
                                 <div class="playbook-benefit__skill-bars">
@@ -445,7 +454,7 @@
                         </div>
                         <p class="playbook-benefit__index"><img class="playbook-benefit__index-star" src="images/star.webp" width="95" height="100" loading="lazy" decoding="async" alt="" aria-hidden="true"><span>สกิลและเกณฑ์ค้นหา</span></p>
                         <h3 class="playbook-benefit__item-title">Skill ประจำการ์ด และเกณฑ์ค้นหา</h3>
-                        <p class="playbook-benefit__copy">คะแนนความเสี่ยง วินัย และการกระจายการลงทุน <br>พร้อมนำไปใช้ต่อบน efin AI ได้</p>
+                        <p class="playbook-benefit__copy">คะแนนความเสี่ยง วินัย และการกระจายการลงทุน <br class="d-block d-sm-none d-xl-block">พร้อมนำไปใช้ต่อบน efin AI ได้</p>
                         </div>
                     </li>
                 </ol>
@@ -456,22 +465,22 @@
                     <h3 class="playbook-benefit__extra-title" data-reveal data-reveal-delay="0">และอีก 4 อย่างที่อยู่ในเล่มเดียวกัน</h3>
 
                     <ol class="playbook-benefit__extra-list row" aria-label="อีก 4 สิ่งที่อยู่ใน PERSONALIZED PLAYBOOK">
-                        <li class="playbook-benefit__extra-item col-12 col-sm-6 col-xl-3" data-reveal data-reveal-delay="0">
+                        <li class="playbook-benefit__extra-item col-6 col-lg-3" data-reveal data-reveal-delay="0">
                             <svg class="bt-icon playbook-benefit__extra-icon" aria-hidden="true"><use href="images/icons.svg?v=10#icon-chart-line"></use></svg>
                             <h4 class="playbook-benefit__extra-item-title">สินทรัพย์ที่ถนัด</h4>
                             <p class="playbook-benefit__copy">สัดส่วนความสนใจจริง <br>วัดจากบูธที่เดินและเกมที่เล่น</p>
                         </li>
-                        <li class="playbook-benefit__extra-item col-12 col-sm-6 col-xl-3" data-reveal data-reveal-delay="80">
+                        <li class="playbook-benefit__extra-item col-6 col-lg-3" data-reveal data-reveal-delay="80">
                             <svg class="bt-icon playbook-benefit__extra-icon" aria-hidden="true"><use href="images/icons.svg?v=10#icon-zap"></use></svg>
                             <h4 class="playbook-benefit__extra-item-title">ระดับความเสี่ยงที่แท้จริง</h4>
                             <p class="playbook-benefit__copy">เทียบที่คุณบอกไว้ <br>กับที่คุณทำจริงในเกมจำลอง</p>
                         </li>
-                        <li class="playbook-benefit__extra-item col-12 col-sm-6 col-xl-3" data-reveal data-reveal-delay="160">
+                        <li class="playbook-benefit__extra-item col-6 col-lg-3" data-reveal data-reveal-delay="160">
                             <svg class="bt-icon playbook-benefit__extra-icon" aria-hidden="true"><use href="images/icons.svg?v=10#icon-play"></use></svg>
                             <h4 class="playbook-benefit__extra-item-title">ผลจากเกมทั้ง 6 ด้าน</h4>
                             <p class="playbook-benefit__copy">วินัย การกระจาย <br>และการรับมือตลาดผันผวน</p>
                         </li>
-                        <li class="playbook-benefit__extra-item col-12 col-sm-6 col-xl-3" data-reveal data-reveal-delay="240">
+                        <li class="playbook-benefit__extra-item col-6 col-lg-3" data-reveal data-reveal-delay="240">
                             <svg class="bt-icon playbook-benefit__extra-icon" aria-hidden="true"><use href="images/icons.svg?v=10#icon-book-open"></use></svg>
                             <h4 class="playbook-benefit__extra-item-title">ก้าวถัดไปของคุณ</h4>
                             <p class="playbook-benefit__copy">กฎประจำตัวและเกณฑ์ค้นหา <br>ใช้ต่อกับ efin AI ได้ทุกวัน</p>
@@ -488,12 +497,12 @@
 
 
         <!-- Start Section : Identity Cards -->
-        <section class="identity-cards" id="identity-cards" aria-labelledby="identity-cards-title">
+        <section class="identity-cards" id="identity-cards" aria-labelledby="identity-cards-title" data-scroll-expand>
             <div class="container">
                 <header class="identity-cards__header">
                     <h2 id="identity-cards-title" class="bt-section-title identity-cards__title" data-reveal-delay="0">12 ใบ <span class="bt-title-highlight">คุณคือใบไหน</span></h2>
                     <p class="bt-section-subtext identity-cards__eyebrow" data-reveal-delay="80">Identity Cards</p>
-                    <p class="identity-cards__lead" data-reveal data-reveal-delay="160">คุณเป็นใครในโลกการลงทุน ยิ่งเดินงาน ยิ่งเห็นตัวจริงของคุณชัดขึ้น</p>
+                    <p class="identity-cards__lead" data-reveal data-reveal-delay="160">คุณเป็นใครในโลกการลงทุน <br class="d-block d-sm-none">ยิ่งเดินงาน ยิ่งเห็นตัวจริงของคุณชัดขึ้น</p>
                     <p class="identity-cards__highlight" data-reveal data-reveal-delay="240">เฉพาะบัตร <span class="bt-title-highlight identity-cards__highlight-plan">ULTIMATE</span> รับการ์ดตัวจริงได้ในวันงาน</p>
                 </header>
             </div>
@@ -647,10 +656,10 @@
                     <li class="playbook-steps__item col-12" data-reveal data-reveal-delay="0">
                         <div class="playbook-steps__card playbook-steps__card--feature">
                             <div class="row align-items-center">
-                                <div class="col-12 col-lg-6 col-xl-5">
+                                <div class="col-12 col-lg-4 col-xl-5">
                                     <p class="playbook-steps__index"><strong class="playbook-steps__number">1</strong>ก่อนเข้างาน</p>
                                     <h3 class="playbook-steps__item-title">ทำความรู้จัก<span class="playbook-steps__item-title-accent has-ps">ตัวตน</span></h3>
-                                    <p class="playbook-steps__copy">เริ่มต้นด้วยแบบทดสอบสั้น ๆ เพื่อทำความเข้าใจระดับความเสี่ยง <br>เป้าหมาย และสไตล์การลงทุนที่เหมาะกับคุณ</p>
+                                    <p class="playbook-steps__copy">เริ่มต้นด้วยแบบทดสอบสั้น ๆ เพื่อทำความเข้าใจระดับความเสี่ยง <br class="d-none d-xl-block">เป้าหมาย และสไตล์การลงทุนที่เหมาะกับคุณ</p>
 
                                     <div class="playbook-steps__action">
                                         <a class="bt-action-button bt-action-button--primary bt-action-button--xl"
@@ -661,7 +670,7 @@
                                     <p class="playbook-steps__highlight playbook-steps__highlight--accent"><svg class="bt-icon playbook-steps__highlight-icon" aria-hidden="true"><use href="images/icons.svg?v=10#icon-gift"></use></svg><span>ฟรีใบแรกของคุณ</span></p>
                                 </div>
 
-                                <div class="playbook-steps__media col-12 col-lg-6 col-xl-7">
+                                <div class="playbook-steps__media col-12 col-lg-8 col-xl-7">
                                     <div class="playbook-steps__preview">
                                         <div class="playbook-steps__preview-body">
                                             <!-- <p class="playbook-steps__badge">ตัวอย่างการ์ดตัวตนนักลงทุน</p> -->
@@ -701,7 +710,7 @@
                         </div>
                     </li>
 
-                    <li class="playbook-steps__item col-12 col-lg-6" data-reveal data-reveal-delay="120">
+                    <li class="playbook-steps__item col-12 col-md-6" data-reveal data-reveal-delay="120">
                         <div class="playbook-steps__card">
                             <p class="playbook-steps__index"><strong class="playbook-steps__number">2</strong>ระหว่างงาน</p>
                             <h3 class="playbook-steps__item-title">เก็บข้อมูล ค้นหา<span class="playbook-steps__item-title-accent has-ps">สไตล์การลงทุน</span></h3>
@@ -718,14 +727,14 @@
                         </div>
                     </li>
 
-                    <li class="playbook-steps__item col-12 col-lg-6" data-reveal data-reveal-delay="240">
+                    <li class="playbook-steps__item col-12 col-md-6" data-reveal data-reveal-delay="240">
                         <div class="playbook-steps__card">
                             <p class="playbook-steps__index"><strong class="playbook-steps__number">3</strong>หลังจบงาน</p>
                             <h3 class="playbook-steps__item-title">รับ<span class="playbook-steps__item-title-accent has-px">แผนการลงทุน</span>ในแบบของคุณ</h3>
-                            <p class="playbook-steps__copy">เราจะนำความชอบและข้อมูลของคุณมาสรุปเป็น Playbook ที่ช่วยให้เห็น <br>Investor DNA ของตัวเองได้ชัดขึ้น</p>
+                            <p class="playbook-steps__copy">เราจะนำความชอบและข้อมูลของคุณมาสรุปเป็น Playbook ที่ช่วยให้เห็น <br class="d-none d-xl-block">Investor DNA ของตัวเองได้ชัดขึ้น</p>
 
                             <ul class="playbook-steps__points">
-                                <li><img class="playbook-steps__point-star" src="images/star.webp" width="95" height="100" loading="lazy" decoding="async" alt="" aria-hidden="true"><span>ดาวน์โหลด PERSONALIZED PLAYBOOK ในรูปแบบ PDF <br>ผ่าน Dashboard หลังจบงาน</span></li>
+                                <li><img class="playbook-steps__point-star" src="images/star.webp" width="95" height="100" loading="lazy" decoding="async" alt="" aria-hidden="true"><span>ดาวน์โหลด PERSONALIZED PLAYBOOK ในรูปแบบ PDF <br class="d-none d-lg-block">ผ่าน Dashboard หลังจบงาน</span></li>
                             </ul>
                         </div>
                     </li>
@@ -744,7 +753,7 @@
                 </header>
 
                 <div class="playbook-ticket__compare-row row justify-content-center" data-reveal data-reveal-delay="160">
-                    <div class="playbook-ticket__compare col-12 col-lg-10 col-xl-9">
+                    <div class="playbook-ticket__compare col-12 col-lg-12 col-xl-9">
                         <table class="playbook-ticket__table">
                             <caption class="visually-hidden">เปรียบเทียบสิทธิ์ที่ได้รับระหว่างบัตร ULTIMATE และบัตร EXPLORER</caption>
                             <thead>
@@ -786,14 +795,14 @@
                 </div>
 
                 <div class="playbook-ticket__card-row row justify-content-center">
-                    <div class="playbook-ticket__card col-12 col-lg-10 col-xl-9" data-reveal data-reveal-delay="240">
+                    <div class="playbook-ticket__card col-12 col-lg-12 col-xl-9" data-reveal data-reveal-delay="240">
                         <article class="playbook-ticket__plan" aria-labelledby="playbook-ticket-plan-title">
                             <p class="playbook-ticket__plan-ribbon"><strong>SAVE 30%</strong> ถึง 30 ก.ย. นี้เท่านั้น</p>
 
                             <header class="playbook-ticket__plan-header">
                                 <img class="playbook-ticket__plan-icon" src="images/ultimate-2.webp" width="160" height="160"
                                     loading="lazy" decoding="async" alt="" aria-hidden="true">
-                                <p class="playbook-ticket__plan-eyebrow">New World</p>
+                                <p class="playbook-ticket__plan-eyebrow">บัตร</p>
                                 <h3 id="playbook-ticket-plan-title" class="playbook-ticket__plan-title">Ultimate</h3>
                             </header>
 
@@ -821,7 +830,7 @@
                                 <li><svg class="bt-icon playbook-ticket__feature-icon" aria-hidden="true"><use href="images/icons.svg?v=10#icon-circle-check"></use></svg><span>Hero Card 1 ใบ แลกในวันงาน</span></li>
                                 <li><svg class="bt-icon playbook-ticket__feature-icon" aria-hidden="true"><use href="images/icons.svg?v=10#icon-circle-check"></use></svg><span>เกณฑ์ค้นหาสำหรับใช้ต่อกับ efin AI</span></li>
                                 <li><svg class="bt-icon playbook-ticket__feature-icon" aria-hidden="true"><use href="images/icons.svg?v=10#icon-circle-check"></use></svg><span>เข้าทุกหัวข้อใน Conference Hall ตามวันที่กำหนดบนบัตร</span></li>
-                                <li><svg class="bt-icon playbook-ticket__feature-icon" aria-hidden="true"><use href="images/icons.svg?v=10#icon-circle-check"></use></svg><span>ฟรี Workshop บัตร 1 วันได้ 1 ห้อง บัตร 2 วันได้ 2 ห้อง</span></li>
+                                <li><svg class="bt-icon playbook-ticket__feature-icon" aria-hidden="true"><use href="images/icons.svg?v=10#icon-circle-check"></use></svg><span>สิทธิ์เข้าร่วม Workshop ฟรี บัตร 1 วันเลือกได้ 1 Session เฉพาะวันที่ระบุบนบัตร และบัตร 2 วันเลือกได้วันละ 1 Session รวม 2 Session แต่ละ Session ที่นั่งจำกัด ต้องลงทะเบียนจองล่วงหน้า</span></li>
                             </ul>
                         </article>
                     </div>
@@ -834,14 +843,14 @@
         <!-- Start Section : Playbook CTA -->
         <section class="playbook-cta" id="playbook-cta" aria-labelledby="playbook-cta-title">
             <div class="playbook-cta__inner container">
-                <div class="playbook-cta__panel">
+                <div class="playbook-cta__panel" data-scroll-expand="0.85">
                     <div class="row align-items-center">
-                        <div class="playbook-cta__media col-12 col-lg-4" data-reveal data-reveal-delay="0">
+                        <div class="playbook-cta__media col-12 col-lg-5 col-xl-4" data-reveal data-reveal-delay="0">
                             <img class="playbook-cta__kv" src="images/KV-BT-2026-Final.webp" width="778" height="972"
                                 loading="lazy" decoding="async" alt="คีย์วิชวลงาน BetterTrade 2026 New World New Playbook">
                         </div>
 
-                        <div class="playbook-cta__body col-12 col-lg-8">
+                        <div class="playbook-cta__body col-12 col-lg-7 col-xl-8">
                             <h2 id="playbook-cta-title" class="playbook-cta__title bt-section-title" data-reveal-delay="0">แล้วพบกันที่ <span class="bt-title-highlight has-ps">BetterTrade 2026</span><br>NEW WORLD NEW PLAYBOOK</h2>
 
                             <dl class="playbook-cta__facts row justify-content-center" data-reveal data-reveal-delay="120">
@@ -851,7 +860,7 @@
                                         วันจัดงาน
                                     </dt>
                                     <dd class="playbook-cta__fact-value">
-                                        <strong>31 ตุลาคม – 1 พฤศจิกายน 2569</strong>
+                                        <strong>31 ตุลาคม – <br class="d-none d-lg-block d-xl-none">1 พฤศจิกายน 2569</strong>
                                         <span>09:00 – 18:30 น.</span>
                                     </dd>
                                 </div>
@@ -861,13 +870,13 @@
                                         สถานที่
                                     </dt>
                                     <dd class="playbook-cta__fact-value">
-                                        <strong>สามย่านมิตรทาวน์ ฮอลล์ ชั้น 5</strong>
+                                        <strong>สามย่านมิตรทาวน์ <br class="d-none d-lg-block d-xl-none">ฮอลล์ ชั้น 5</strong>
                                         <span>MRT สามย่าน ทางออก 2</span>
                                     </dd>
                                 </div>
                             </dl>
 
-                            <p class="playbook-cta__note" data-reveal data-reveal-delay="240">จัดโดย efin.finance แพลตฟอร์มข้อมูลการลงทุนที่นักลงทุนไทยใช้มากว่า 20 ปี</p>
+                            <p class="playbook-cta__note" data-reveal data-reveal-delay="240">จัดโดย efin.finance <br class="d-none d-lg-block d-xl-none">แพลตฟอร์มข้อมูลการลงทุนที่นักลงทุนไทยใช้มากว่า 20 ปี</p>
                         </div>
                     </div>
                 </div>
@@ -972,19 +981,20 @@
     <!-- End Component : Cookie Banner -->
 
     <script src="js/playbook-scene.js?v=6"></script>
-    <script src="js/playbook-hero-spiral.js?v=8"></script>
+    <script src="js/playbook-hero-spiral.js?v=11"></script>
     <script src="js/playbook-intro-float.js?v=6"></script>
-    <script src="js/playbook-benefit-media.js?v=7"></script>
-    <script src="js/playbook-steps-media.js?v=3"></script>
+    <script src="js/playbook-benefit-media.js?v=9"></script>
+    <script src="js/playbook-steps-media.js?v=5"></script>
     <script src="js/playbook-price-selector.js?v=1"></script>
     <script src="js/page-header.js?v=1"></script>
     <script src="js/back-to-top.js?v=2"></script>
     <script src="js/mobile-cta-bar.js?v=4"></script>
     <script src="js/reveal-on-scroll.js?v=11"></script>
-    <script src="js/identity-cards-carousel.js?v=13"></script>
+    <script src="js/scroll-expand.js?v=5"></script>
+    <script src="js/identity-cards-carousel.js?v=14"></script>
     <script src="js/cookie-banner.js?v=2"></script>
     <!-- Liquid metal CTAs (WebGL) ชุดเดียวกับหน้าแรก mount ปุ่มใน header และ hero ของหน้านี้ -->
-    <script type="module" src="js/hero-v2-cta.js?v=23"></script>
+    <script type="module" src="js/hero-v2-cta.js?v=25"></script>
 </body>
 
 </html>

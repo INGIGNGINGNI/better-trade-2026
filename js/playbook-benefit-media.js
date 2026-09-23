@@ -195,7 +195,13 @@
 
             if (!available || !needed) return;
 
-            const scale = Math.max(MIN_FIT_SCALE, Math.min(1, available / needed));
+            /* เพดานย่อที่ CSS กำหนดมา ใช้สั่งให้ทั้งก้อนเล็กลงตาม breakpoint ได้จากที่เดียว
+               โดยไม่ต้องไล่ปรับขนาดทีละ element ค่าตั้งต้นคือ 1 (ไม่บังคับ)
+               ต้องมาอ่านที่นี่เพราะ JS เขียนค่าลง inline style ซึ่งชนะกฎใน CSS เสมอ
+               ถ้าประกาศทับใน CSS เฉย ๆ จะไม่มีผล */
+            const ceiling = parseFloat(getComputedStyle(media).getPropertyValue('--bt-playbook-benefit-fit-max'));
+            const limit = Number.isFinite(ceiling) ? ceiling : 1;
+            const scale = Math.min(limit, Math.max(MIN_FIT_SCALE, Math.min(1, available / needed)));
 
             box.style.setProperty('--bt-playbook-benefit-fit', scale.toFixed(4));
         });
@@ -224,19 +230,46 @@
             const frame = media.getBoundingClientRect();
             const centreX = frame.left + frame.width / 2;
             const centreY = frame.top + frame.height / 2;
+            /* ระยะที่วัดได้เป็นพิกเซลบนจอ แต่ translate ที่เขียนกลับไปอยู่ข้างในกรอบ
+               ซึ่งอาจถูก zoom อยู่ (โหมด artboard ช่วง 576-767) ถ้าไม่หารกลับ ไอคอนจะถูกย่อระยะซ้ำ
+               รวมตัวไม่ถึงกึ่งกลาง อัตราส่วน "กว้างบนจอ / กว้างใน layout" คือค่า zoom จริง
+               (ไม่ได้ zoom ก็ได้ 1 พอดี) */
+            const zoom = frame.width / Math.max(media.offsetWidth, 1) || 1;
 
             parts.forEach((part) => {
                 const box = part.getBoundingClientRect();
 
-                part.style.setProperty('--fin-x', Math.round(centreX - (box.left + box.width / 2)) + 'px');
-                part.style.setProperty('--fin-y', Math.round(centreY - (box.top + box.height / 2)) + 'px');
+                part.style.setProperty('--fin-x', Math.round((centreX - (box.left + box.width / 2)) / zoom) + 'px');
+                part.style.setProperty('--fin-y', Math.round((centreY - (box.top + box.height / 2)) / zoom) + 'px');
             });
         });
     };
 
+    /* โหมด artboard (576-767): กรอบจัดวางที่ความกว้างคงที่แล้วย่อทั้งแผ่นด้วย zoom
+       ความกว้าง artboard มาจาก CSS (--bt-playbook-benefit-artboard-width) ซึ่งประกาศไว้เฉพาะช่วงนั้น
+       นอกช่วงค่าจะว่าง ตรงนี้ก็ถอดคลาสกับ zoom ออกเอง กรอบกลับไปกว้างเต็มคอลัมน์ตามปกติ
+       ต้องทำก่อนวัดอย่างอื่น เพราะ fit กับจุดรวมไอคอนต้องวัดจากกรอบที่ย่อแล้ว */
+    const applyArtboard = () => {
+        document.querySelectorAll('.playbook-benefit__media').forEach((media) => {
+            const artboard = parseFloat(getComputedStyle(media).getPropertyValue('--bt-playbook-benefit-artboard-width'));
+            const column = media.parentElement;
+
+            if (!Number.isFinite(artboard) || artboard <= 0 || !column) {
+                media.classList.remove('is-artboard');
+                media.style.removeProperty('--bt-playbook-benefit-zoom');
+                return;
+            }
+
+            media.style.setProperty('--bt-playbook-benefit-zoom', (column.clientWidth / artboard).toFixed(4));
+            media.classList.add('is-artboard');
+        });
+    };
+
+    applyArtboard();
     fitMediaToHeight();
     measureFinanceSpread();
     window.addEventListener('resize', () => {
+        applyArtboard();
         fitMediaToHeight();
         measureFinanceSpread();
     });
