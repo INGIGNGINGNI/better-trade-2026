@@ -2,7 +2,7 @@ import { createLiquidMetalButton } from './liquid-metal-button.js?v=3';
 
 const TICKET_SECTION_HREF = '#ticket';
 const BUY_TICKET_URL = 'https://www.efin.finance/events/better-trade/better-trade2026/buy-ticket';
-const INVESTOR_DNA_URL = 'https://egames.efin.finance/games/investor-dna-quest';
+const INVESTOR_DNA_URL = 'https://egames.efin.finance/games/investor-dna-quiz';
 const PLAYBOOK_HERO_CTA_LABEL = 'ซื้อบัตรพร้อมรับ PERSONALIZED PLAYBOOK';
 
 const sharedRegisterOptions = {

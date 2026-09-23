@@ -8139,8 +8139,9 @@ body.is-loading .hero-scroll-cue,
 
 /* ---------- FAQ ---------- */
 .faq {
-    /* สีลิงก์ในคำตอบ FAQ (ทอง) ตามสเปกเนื้อหา FAQ ฉบับ 23 ก.ย. 2569 */
-    --bt-faq-link-ink: #f2c15a;
+    /* สีลิงก์ในคำตอบ FAQ ใช้น้ำเงินหลักของเว็บ (ชุดเดียวกับตัวเน้นสีน้ำเงินใน section อื่น)
+       เดิมเป็นทอง #f2c15a */
+    --bt-faq-link-ink: var(--color-accent-primary);
 
     --faq-question-font-size: var(--font-size-16);
     --faq-question-font-weight: var(--font-weight-medium);
@@ -12410,7 +12411,9 @@ body.is-loading .hero-scroll-cue,
 @media (max-width: 575px) {
     .playbook-intro {
         --bt-playbook-intro-note-size: var(--font-size-14);
-        --bt-playbook-intro-float-size: clamp(64px, 22vmin, 84px);
+        /* เล็กลงราว 17% จากชุดเดิม (64 / 22vmin / 84) ที่จอ 375 จึงได้ 68px แทน 82px
+           การ์ดสี่ใบมุมเบียดบล็อกข้อความน้อยลง */
+        --bt-playbook-intro-float-size: clamp(56px, 18vmin, 68px);
         --bt-playbook-intro-float-radius: var(--radius-1);
         --bt-playbook-intro-lead-size: var(--font-size-18);
 
