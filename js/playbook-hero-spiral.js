@@ -128,7 +128,12 @@
             const spiralRadius = Math.min(geometry.radius, Math.max(72, width * geometry.radiusCap)) * fit;
             const fadeStart = clamp(1 - geometry.edgeFade, 0, 0.98);
 
-            if (heroHeight) {
+            /* unwrapAt ≤ 0 = ปิดการเลิกวนลูป (≤991 ตั้งค่านี้: วงแหวนอยู่ท้าย hero ยังเห็นเต็มตอนถึงจุดนั้น
+               ถ้าปล่อยให้เลิกวนลูป การ์ดจะไหลออกข้างหนึ่งจนหมดทั้งที่คนยังดูอยู่)
+               ย่อจอจาก desktop ที่เลิกวนลูปไปแล้ว ก็คืนการวนลูปให้ทันที */
+            if (geometry.unwrapAt <= 0) {
+                unwrapped = false;
+            } else if (heroHeight) {
                 // ระยะจากขอบล่างของ section ถึงขอบบนจอ เทียบเป็นสัดส่วนของความสูงจอ
                 const sectionBottom = (heroTop + heroHeight - window.scrollY) / Math.max(window.innerHeight, 1);
 
