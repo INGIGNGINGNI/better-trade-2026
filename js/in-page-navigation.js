@@ -120,4 +120,105 @@
 
         navigate();
     });
+
+    /* เข้ามาจากหน้าอื่นด้วย #hash (เช่นเมนูบน personalized-playbook.html ที่ชี้มา index.html#ticket)
+       เบราว์เซอร์กระโดดให้ครั้งเดียวตั้งแต่ตอนอ่าน HTML เสร็จ ตอนนั้นรูปที่เป็น lazy กับฟอนต์
+       ยังไม่โหลด ความสูงของเนื้อหาด้านบนจึงยังไม่จริง พอโหลดเสร็จของด้านบนสูงขึ้น
+       ปลายทางก็ถูกดันหนีลงไป ผู้ใช้เลยค้างอยู่ที่ section ก่อนหน้า
+       ใช้ตัวเฝ้าจังหวะลงจอดชุดเดียวกับการคลิกเมนู ให้มันตามไปแก้ตำแหน่งจนกว่าหน้าจะนิ่ง
+       (ตัวเฝ้าจะถอนตัวเองทันทีที่ผู้ใช้เลื่อนจอเอง จึงไม่แย่งการควบคุม) */
+    const INITIAL_HASH_HOLD_MS = 8000;
+
+    const landOnInitialHash = () => {
+        const id = decodeURIComponent(window.location.hash.slice(1));
+        if (!id) return;
+
+        const target = document.getElementById(id);
+        if (!target) return;
+
+        const startedAt = performance.now();
+        let frame = 0;
+        let stopped = false;
+
+        /* รับเฉพาะ event ที่มาจากผู้ใช้จริง (isTrusted) สคริปต์ในหน้ายิง wheel/keydown
+           สังเคราะห์ระหว่างที่กำลังเซ็ตตัว ถ้าไม่กรองไว้ ตัวเฝ้าจะถอนตัวตั้งแต่ยังไม่ทันแก้อะไรเลย */
+        const stopOnUser = (event) => {
+            if (event.isTrusted) stop();
+        };
+
+        /* ScrollTrigger วัดตำแหน่งใหม่ทุกครั้งที่ refresh และมักเขียนตำแหน่ง scroll ทับด้วย
+           เกาะจังหวะนั้นไว้แล้วเล็งใหม่ ตรงกว่าการรอด้วยตัวจับเวลาอย่างเดียว */
+        const realign = () => {
+            if (!stopped) scrollTargetIntoView(target, 'instant');
+        };
+
+        const stop = () => {
+            if (stopped) return;
+
+            stopped = true;
+            window.cancelAnimationFrame(frame);
+            USER_SCROLL_EVENTS.forEach((type) => window.removeEventListener(type, stopOnUser, true));
+            window.ScrollTrigger?.removeEventListener?.('refresh', realign);
+        };
+
+        /* เล็งใหม่ทุกเฟรมตลอดช่วงที่หน้ากำลังเซ็ตตัว ไม่ได้นับจำนวนครั้งที่แก้
+           เพราะของที่ดันความสูงมาเป็นระลอก (รูป lazy, ฟอนต์, swiper, ScrollTrigger refresh)
+           ทยอยมาไม่จบในรอบเดียว
+           เฝ้าด้วย rAF ไม่ใช่ ResizeObserver เพราะกล่องของ <html> ไม่ได้โตตามเนื้อหา
+           observer จึงไม่ยิงเลยแม้หน้าจะยาวขึ้นหลายพันพิกเซล */
+        const tick = () => {
+            if (stopped) return;
+
+            if (performance.now() - startedAt > INITIAL_HASH_HOLD_MS) {
+                stop();
+                return;
+            }
+
+            if (!hasLanded(target)) scrollTargetIntoView(target, 'instant');
+
+            frame = window.requestAnimationFrame(tick);
+        };
+
+        // ผู้ใช้เลื่อนเองเมื่อไหร่ถือว่าเขารับช่วงต่อแล้ว ถอนตัวทันที
+        USER_SCROLL_EVENTS.forEach((type) => window.addEventListener(type, stopOnUser, { capture: true, passive: true }));
+        window.ScrollTrigger?.addEventListener?.('refresh', realign);
+        tick();
+    };
+
+    const navigateToInitialHash = () => {
+        const id = decodeURIComponent(window.location.hash.slice(1));
+        if (!id) return;
+
+        const target = document.getElementById(id);
+        if (!target) return;
+
+        const navigate = () => {
+            scrollTargetIntoView(target, 'instant');
+            landOnInitialHash();
+        };
+
+        /* ต้องผ่านทาง Hero เหมือนตอนคลิกเมนู ไม่งั้น Hero จะกาง pin ของตัวเองทีหลัง
+           แล้วดันปลายทางหนีลงไปอีกหลายพันพิกเซล (เป็นเหตุผลเดียวกับที่ตัวจัดการคลิกทำ) */
+        const detail = { target, navigate, handled: false };
+        window.dispatchEvent(new CustomEvent(HERO_SKIP_NAVIGATION_EVENT, { detail }));
+        if (detail.handled) return;
+
+        navigate();
+    };
+
+    if (window.location.hash) {
+        /* เล็งหยาบ ๆ ไว้ก่อนตั้งแต่ DOM พร้อม เพื่อไม่ให้เห็นหน้ากระโดดไกลตอนหลัง
+           แล้วค่อยเล็งจริงตอน load เสร็จ ซึ่งเป็นจังหวะที่ Hero กับ ScrollTrigger ตั้งตัวแล้ว */
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', landOnInitialHash, { once: true });
+        } else {
+            landOnInitialHash();
+        }
+
+        if (document.readyState === 'complete') {
+            navigateToInitialHash();
+        } else {
+            window.addEventListener('load', navigateToInitialHash, { once: true });
+        }
+    }
 })();
