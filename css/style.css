@@ -1104,10 +1104,6 @@ body.menu-closing .site-header.is-sticky.site-header--on-dark {
     object-position: left center;
 }
 
-.site-header:not(.is-sticky) .site-header__logo img {
-    filter: drop-shadow(0 0px 4px rgba(0, 0, 0, 0.5));
-}
-
 .site-header__logo-image--on-dark {
     position: absolute;
     inset: 0;
@@ -1115,8 +1111,8 @@ body.menu-closing .site-header.is-sticky.site-header--on-dark {
     transition: opacity 180ms ease;
 }
 
-.site-header--on-dark .site-header__logo-image--on-dark,
-.site-header--hero-sky:not(.is-sticky) .site-header__logo-image--on-dark {
+/* ท้องฟ้าชุดสว่าง: บน hero ใช้โลโก้สีปกติ (เวอร์ชันขาวเหลือไว้เฉพาะ section พื้นมืดจริง) */
+.site-header--on-dark .site-header__logo-image--on-dark {
     opacity: 1;
 }
 
@@ -1129,10 +1125,12 @@ body.menu-closing .site-header.is-sticky.site-header--on-dark {
     min-width: 0;
 }
 
-/* Marks the nav's own footprint as "dark" only while the hero's sky is the
-   visible backdrop (toggled in hero-v2-header.js). Tagged data-header-theme="dark"
-   so setupHeaderThemeObserver's IntersectionObserver counts the hero-sky phase
-   toward .site-header--on-dark, same as any real dark section. */
+/* Marks the nav's own footprint as "dark" while the hero's sky is the visible
+   backdrop (toggled in hero-v2-header.js). Tagged data-header-theme="dark" so
+   setupHeaderThemeObserver's IntersectionObserver counts the hero-sky phase toward
+   .site-header--on-dark. The light sky set (images/light, video/light) is a light
+   backdrop, so the sensor stays hidden and the header keeps its normal dark ink there;
+   re-enable the .site-header--hero-sky rule below if the dark sky ever comes back. */
 .site-header__nav-sky-sensor {
     display: none;
     position: absolute;
@@ -1140,13 +1138,14 @@ body.menu-closing .site-header.is-sticky.site-header--on-dark {
     pointer-events: none;
 }
 
-.site-header--hero-sky .site-header__nav-sky-sensor {
+/* .site-header--hero-sky .site-header__nav-sky-sensor {
     display: block;
-}
+} */
 
+/* ท้องฟ้าชุดสว่าง: เมนูบน hero ใช้ตัวดำไม่มีเงา (ชุดมืดเดิมเป็นตัวขาวมีเงา) */
 .site-header--hero-sky:not(.is-sticky) .site-header__nav a {
-    color: rgba(255, 255, 255, 0.86);
-    text-shadow: 0 1px 3px rgba(4, 12, 24, 0.42);
+    color: var(--color-text-primary);
+    text-shadow: none;
 }
 
 .site-header__nav a {
@@ -1664,10 +1663,6 @@ body.menu-open .site-header__backdrop {
         display: grid;
     }
 
-    .site-header--hero-sky:not(.is-sticky) .site-header__toggle {
-        color: var(--bt-menu-toggle-ink-on-dark);
-    }
-
     .site-header__backdrop {
         display: block;
         z-index: 195;
@@ -1775,7 +1770,8 @@ body.menu-open .site-header__backdrop {
     width: 100%;
     height: 100%;
     display: block;
-    background: #080b12;
+    /* โทนสว่าง (ค่าเดียวกับ loader ของ heor-light) — เป็นสีรองรับก่อน WebGL วาดหมอกทับ */
+    background: #f3f4f6;
     will-change: opacity;
 }
 
@@ -1800,7 +1796,7 @@ body.menu-open .site-header__backdrop {
     bottom: 64px;
     width: min(320px, calc(100% - 48px));
     transform: translateX(-50%);
-    color: rgba(255, 255, 255, 0.88);
+    color: #111318;
     font-family: var(--headline);
 }
 
@@ -1817,7 +1813,7 @@ body.menu-open .site-header__backdrop {
 .loader-progress__track {
     height: 2px;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(17, 19, 24, 0.16);
 }
 
 .loader-progress__fill {
@@ -1851,21 +1847,31 @@ body.menu-open .site-header__backdrop {
 
 /* ---------- background (own pan rate = depth) ---------- */
 #bg {
+    /* วิดีโอ/โปสเตอร์ท้องฟ้าชุดสว่างเป็น 16:9 แต่กล่องนี้เป็นสัดส่วน KV (แนวตั้ง 0.8) ถ้า cover
+       ทั้งกล่องจะเหลือแค่แถบกลางภาพ 45% ก้อนเมฆที่อยู่ริมซ้ายบนกับล่างขวาหายหมด จึงวางวิดีโอ
+       กว้าง 130% ของกล่อง (ตัดขอบข้างละ 15%) ชิดบน ให้เห็นก้อนเมฆในจอแรกและกินความสูงถึง
+       ~1075px ที่ 1470 ส่วนที่เหลือใต้วิดีโอ (โผล่ตอนกล้องแพน) ใช้สีขาวเดียวกับขอบล่างของก้อนเมฆ
+       (#fafafb วัดจากเฟรมแรก) ให้ต่อกันเนียน — ค่านี้ต้องตรงกับ SKY_VIDEO_WIDTH_SCALE ใน js/hero-v2-scroll-motion.js */
+    --bt-sky-video-width: 130%;
+
     position: absolute;
     overflow: hidden;
-    background-color: var(--color-neutral-950);
-    background-image: url('../images/sky-new-old2.webp');
-    background-size: contain;
+    background-color: #fafafb;
+    background-image: url('../images/light/background-light.webp?v=light-2');
+    background-size: var(--bt-sky-video-width) auto;
+    background-position: 50% top;
     background-repeat: no-repeat;
     will-change: transform;
 }
 
 #sky-video {
-    width: 100%;
+    /* กว้างกว่ากล่อง 130% แล้วเลื่อนกลับให้อยู่กึ่งกลาง (ดูเหตุผลที่ #bg) สูงตามสัดส่วนจริงของวิดีโอ */
+    width: var(--bt-sky-video-width);
     height: auto;
+    margin-left: calc((100% - var(--bt-sky-video-width)) / 2);
     display: block;
     object-fit: fill;
-    object-position: -60% top;
+    object-position: 50% top;
     opacity: 0;
     transform: translateZ(0);
     transform-origin: 50% 38%;
@@ -1878,10 +1884,14 @@ body.menu-open .site-header__backdrop {
 /* Width-driven height:auto preserves the intended crop on regular viewports. When the
    viewport is taller than that rendered video height, layout() enables this fallback so
    the moving sky continues to cover the full background instead of exposing a gap below. */
+/* จอที่สูงกว่าวิดีโอกว้าง 130% จะครอบได้ (layout() เปิดคลาสนี้ให้) กลับไป cover เต็มกล่องแทน
+   ยอมเสียก้อนเมฆดีกว่าเห็นพื้นขาวใต้วิดีโอตั้งแต่จอแรก */
 #bg.is-tall-video-cover #sky-video {
+    width: 100%;
     height: 100%;
+    margin-left: 0;
     object-fit: cover;
-    object-position: 40% top;
+    object-position: 50% top;
 }
 
 #bg.is-video-ready #sky-video {
@@ -2182,7 +2192,8 @@ body.is-loading .hero-scroll-cue,
     gap: var(--space-12);
     opacity: 0;
     text-align: center;
-    color: var(--bt-white);
+    /* ท้องฟ้าชุดสว่าง: วันที่/เวลา/สถานที่เป็นตัวดำ (ชุดมืดเดิมเป็นขาว) */
+    color: var(--color-text-primary);
     font-family: var(--headline);
 }
 
@@ -9688,6 +9699,15 @@ body.is-loading .hero-scroll-cue,
         background: #fff;
     }
 
+    /* hero แบบนิ่ง: ช่องฟ้าระหว่างกำแพงแคบกว่า desktop ถ้าขยายวิดีโอมาก ก้อนเมฆ (มุมซ้ายบน
+       กับล่างขวาของเฟรม) จะถูกดันไปอยู่หลังกำแพงหมด จึงใช้ 120% ให้ก้อนเมฆยังอยู่ในช่องฟ้า
+       (ตรวจที่ 1199, 1024, 768, 390) ใต้วิดีโอเป็นสีขาวของขอบเมฆ ซึ่งอยู่หลังเรือและไล่จาง
+       #stagewrap::after — layout() ปิดโหมด is-tall-video-cover ให้ในเคสนี้ ไม่งั้นวิดีโอถูก
+       cover ทั้งกล่องจนเหลือแค่ฟ้าเรียบ */
+    body.is-mobile-static #bg {
+        --bt-sky-video-width: 120%;
+    }
+
     body.is-mobile-static #stage {
         transform: none !important;
         will-change: auto !important;
@@ -9730,16 +9750,17 @@ body.is-loading .hero-scroll-cue,
         z-index: 120;
         width: min(calc(100vw - var(--space-8)), 720px);
         gap: var(--space-6);
-        color: #fff;
+        /* ท้องฟ้าชุดสว่าง: ตัวดำไม่มีเงา เหมือน desktop (ชุดมืดเดิมเป็นขาวและใส่เงาเข้มช่วยอ่าน) */
+        color: var(--color-text-inverse);
     }
 
     body.is-mobile-static #ui .event-details {
         /* gap: var(--space-5); */
-        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.72);
+        text-shadow: none;
     }
 
     body.is-mobile-static #ui .event-countdown {
-        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.72);
+        text-shadow: none;
     }
 
     body.is-mobile-static #ui .venue {

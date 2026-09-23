@@ -69,7 +69,7 @@
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="css/main.css?v=57">
-    <link rel="stylesheet" href="css/style.css?v=645">
+    <link rel="stylesheet" href="css/style.css?v=653">
 </head>
 
 <body class="is-loading">
@@ -256,8 +256,8 @@
         <div id="stagewrap">
             <div id="bg" aria-hidden="true">
                 <video id="sky-video" autoplay muted loop playsinline preload="auto"
-                    poster="images/sky-new-old2.webp">
-                    <source src="video/sky-video-v3.mp4?v=seamless-2" type="video/mp4">
+                    poster="images/light/background-light.webp?v=light-2">
+                    <source src="video/light/background-light.mp4?v=light-1" type="video/mp4">
                 </video>
             </div>
 
@@ -265,13 +265,13 @@
             <img id="ship" src="images/ship.webp" alt="Playbook ship" fetchpriority="high" decoding="sync">
             <div id="walls" aria-hidden="true">
                 <div id="wall-left-intro" class="wall-intro-panel">
-                    <img id="wall-left" class="wall-panel" src="images/wall-left-1280.webp?v=dark-wall-27"
-                        srcset="images/wall-left-1280.webp?v=dark-wall-27 1280w, images/wall-left-1920.webp?v=dark-wall-27 1920w, images/wall-left-2560.webp?v=dark-wall-27 2560w, images/wall-left.webp?v=dark-wall-27 3240w"
+                    <img id="wall-left" class="wall-panel" src="images/light/wall-left-1280.webp?v=light-1"
+                        srcset="images/light/wall-left-1280.webp?v=light-1 1280w, images/light/wall-left-1920.webp?v=light-1 1920w, images/light/wall-left-2560.webp?v=light-1 2560w, images/light/wall-left.webp?v=light-1 3240w"
                         sizes="100vw" alt="">
                 </div>
                 <div id="wall-right-intro" class="wall-intro-panel">
-                    <img id="wall-right" class="wall-panel" src="images/wall-right-1280.webp?v=dark-wall-27"
-                        srcset="images/wall-right-1280.webp?v=dark-wall-27 1280w, images/wall-right-1920.webp?v=dark-wall-27 1920w, images/wall-right-2560.webp?v=dark-wall-27 2560w, images/wall-right.webp?v=dark-wall-27 3240w"
+                    <img id="wall-right" class="wall-panel" src="images/light/wall-right-1280.webp?v=light-1"
+                        srcset="images/light/wall-right-1280.webp?v=light-1 1280w, images/light/wall-right-1920.webp?v=light-1 1920w, images/light/wall-right-2560.webp?v=light-1 2560w, images/light/wall-right.webp?v=light-1 3240w"
                         sizes="100vw" alt="">
                 </div>
             </div>
@@ -377,14 +377,16 @@
         </button>
 
         <div id="loader" role="status" aria-label="กำลังโหลด BetterTrade 2026">
+            <!-- โทนสว่าง: พื้น/หมอกใช้ค่าจากชุด light (heor-light ใช้ #f3f4f6 เป็นพื้น loader)
+                 brightness/contrast ต้องเป็น 1 เพราะค่าชุดมืด (1.22/1.08) จะดันสีสว่างจนขาวโพลนไม่เห็นหมอก -->
             <canvas class="loader-surface" aria-hidden="true"
                 data-mist-speed="0.82"
                 data-mist-density="1.45"
-                data-mist-brightness="1.22"
-                data-mist-contrast="1.08"
-                data-mist-base="#080b12"
-                data-mist-fog="#28323d"
-                data-mist-accent="#4f5256"></canvas>
+                data-mist-brightness="1"
+                data-mist-contrast="1"
+                data-mist-base="#f3f4f6"
+                data-mist-fog="#d9dee6"
+                data-mist-accent="#c3cad4"></canvas>
 
             <div class="loader-icons" aria-hidden="true">
                 <img class="loader-icon" data-loader-icon="stock" src="images/stock.webp" alt="">
@@ -2145,7 +2147,7 @@
     <script src="js/loader-mist.js?v=3"></script>
     <script src="vendor/gsap/gsap.min.js"></script>
     <script src="vendor/gsap/ScrollTrigger.min.js"></script>
-    <script src="js/hero-v2-scroll-motion.js?v=72"></script>
+    <script src="js/hero-v2-scroll-motion.js?v=75"></script>
     <script src="js/hero-v2-scroll-cue.js?v=4"></script>
     <script src="js/topics-reveal.js?v=6"></script>
     <script src="js/topics-assets-motion.js?v=22"></script>
