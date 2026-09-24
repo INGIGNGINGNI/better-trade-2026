@@ -105,13 +105,13 @@
                 overviewClass: 'piriya',
             },
             {
-                name: 'คุณวชิรเมษฐ์ ธเนศสถิตพงศ์',
+                name: 'คุณวชิรเมษฐ์ <br class="d-none d-lg-block d-xl-none">ธเนศสถิตพงศ์',
                 role: 'Head of Investment Analytics & Innovation, efin Group',
                 image: 'day-2/D2-วชิรเมษฐ์-ธเนศสถิตพงศ์.webp',
                 overviewClass: 'wachiramet',
             },
             {
-                name: 'คุณสุธน สิงหสิทธางกูร',
+                name: 'คุณ Jekky สุธน <br class="d-none d-lg-block d-xl-none">สิงหสิทธางกูร',
                 role: 'Co-Founder, ABCD Fund',
                 image: 'day-2/D2-สุธน-สิงหสิทธางกูร.webp',
                 overviewClass: 'suthon',
