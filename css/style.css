@@ -6222,7 +6222,7 @@ body.is-loading .hero-scroll-cue,
             align-self: center;
             height: auto;
             justify-content: end;
-            padding: var(--space-4) var(--space-0) var(--space-4) var(--space-4);
+            padding: var(--space-4) var(--space-0) var(--space-4) var(--space-3);
             border-left: 0;
         }
 
