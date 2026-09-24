@@ -440,8 +440,8 @@
     --bt-agenda-time-size: var(--font-size-16);
     --bt-agenda-speaker-width: 80px;
     --bt-agenda-speaker-height: 100px;
-    --bt-agenda-speaker-width-mobile: 80px;
-    --bt-agenda-speaker-height-mobile: 100px;
+    --bt-agenda-speaker-width-mobile: 72px;
+    --bt-agenda-speaker-height-mobile: 90px;
     --bt-agenda-speaker-column-width: calc((var(--bt-agenda-speaker-width) * 2) + var(--space-2));
     --bt-agenda-speaker-column-width-mobile: calc((var(--bt-agenda-speaker-width-mobile) * 2) + var(--space-2));
 
