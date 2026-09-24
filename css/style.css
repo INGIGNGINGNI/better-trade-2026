@@ -14966,9 +14966,10 @@ body.is-loading .hero-scroll-cue,
         /* padding ล่างของกรอบเหลือเป็นที่ว่างซ้อนกับ padding ของการ์ดอีกชั้น และ row-gap ของ grid
            ก็เว้นไว้ให้ป้ายกำกับที่ถูกถอดออกจาก markup ไปแล้ว ใต้ไดอะแกรมจึงห่างขอบการ์ดเกินกว่าด้านบน
            ตัดสองส่วนนี้ออกให้บน-ล่างสมดุล (แตะแค่แนวตั้ง padding ซ้าย-ขวาคงไว้
-           เพราะเป็นส่วนหนึ่งของความกว้างที่ @container และหน่วยของ artboard ใช้คิด) */
+           เพราะเป็นส่วนหนึ่งของความกว้างที่ @container และหน่วยของ artboard ใช้คิด)
+           ปรับตามที่ขอให้เหลือ 12px (อยู่ในกรอบที่ถูกย่อ บนจอจริงจึงเห็นเล็กกว่านี้ตามอัตราย่อ) */
         .playbook-steps__preview {
-            padding-bottom: var(--space-0);
+            padding-bottom: var(--space-3);
         }
 
         .playbook-steps__preview-body {
@@ -14977,6 +14978,56 @@ body.is-loading .hero-scroll-cue,
 
         .playbook-steps__note {
             gap: var(--space-2);
+        }
+
+        /* ---------- ขั้นที่ 1: ไดอะแกรมแทรกกลางระหว่างคำอธิบายกับปุ่ม ----------
+           ลำดับบนจอเล็ก: เลขขั้น > หัวข้อ > คำอธิบาย > ไดอะแกรม > ปุ่ม + เวลา (กึ่งกลาง) > ฟรีใบแรก
+           ข้อความกับไดอะแกรมอยู่คนละคอลัมน์ใน markup จึงสลับลำดับข้ามกันเองไม่ได้
+           ให้คอลัมน์ข้อความเป็น display: contents ลูกของมันขึ้นมาเป็นสมาชิกของแถวโดยตรง
+           แล้วเรียงแถวเป็นแนวตั้งและจัดลำดับด้วย order ไม่ต้องแตะ markup
+           คอลัมน์ที่หายไปพา padding ของ gutter ไปด้วย จึงคืนระยะนั้นให้ลูกแต่ละตัวแทน
+           ขอบซ้ายของข้อความจึงตรงแนวเดิม */
+        .playbook-steps__card--feature > .row {
+            flex-direction: column;
+        }
+
+        .playbook-steps__card--feature > .row > :not(.playbook-steps__media) {
+            display: contents;
+        }
+
+        /* align-self ไม่ใช่ align-items ที่แถว: แถวติดคลาส align-items-center ของ Bootstrap
+           ซึ่งเป็น !important ลูกทุกตัวจึงถูกจัดกึ่งกลางแล้วหดเท่าเนื้อหา */
+        .playbook-steps__card--feature > .row > :not(.playbook-steps__media) > * {
+            align-self: stretch;
+            padding-inline: calc(var(--bs-gutter-x) * .5);
+        }
+
+        .playbook-steps__card--feature .playbook-steps__media {
+            order: 1;
+        }
+
+        /* ไดอะแกรมต่อจากคำอธิบายทันที: ตัด margin-bottom 16px ของ <p> (ค่าตั้งต้นของ Bootstrap)
+           และลด margin-top 24px ของกรอบตัวอย่าง (จากบล็อก ≤991) เหลือ 8px */
+        .playbook-steps__card--feature .playbook-steps__copy {
+            margin-bottom: var(--space-0);
+        }
+
+        .playbook-steps__card--feature .playbook-steps__preview {
+            margin-top: var(--space-2);
+        }
+
+        .playbook-steps__card--feature .playbook-steps__action {
+            order: 2;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* กึ่งกลางตามแนวปุ่มกับบรรทัดเวลาด้านบน: ช่องข้อความเดิมเป็น 1fr (ยืดเต็มแถว)
+           เปลี่ยนเป็น auto แล้วจัดทั้งก้อน ไอคอน + ข้อความ ไว้กลาง grid */
+        .playbook-steps__card--feature .playbook-steps__highlight {
+            order: 3;
+            grid-template-columns: auto auto;
+            justify-content: center;
         }
     }
 }
