@@ -4,12 +4,11 @@
 
     const title = indicator.querySelector('.journey-indicator__title');
     const route = [
-        { id: 'speaker-overview', label: 'Speaker Overview' },
         { id: 'ticket', label: 'Ticket Price' },
-        { id: 'concept', label: 'Concept' },
-        { id: 'featured-topics', label: 'Topics' },
         { id: 'agenda', label: 'Agenda' },
         { id: 'playbook', label: 'Personalized Playbook' },
+        { id: 'concept', label: 'Concept' },
+        { id: 'featured-topics', label: 'Topics' },
         { id: 'speaker', label: 'Speaker' },
         { id: 'expectation', label: 'Expectation' },
         { id: 'floor-plan', label: 'Floor Plan' },

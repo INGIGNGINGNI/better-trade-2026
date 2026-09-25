@@ -6,53 +6,20 @@
         const siteHeaderDesktopLinks = [...document.querySelectorAll('.site-header__nav a[href^="#"]')];
         let menuCloseTimer = null;
 
-        // Kept for buildScroll()'s wallCloseAt (the ship-channel seal timing) in the hero
-        // script further down — unrelated to the header, just reusing the same formula.
-        function getHeroStickyThreshold(heroScrollDistance, viewportHeight) {
-            return Math.max(620, viewportHeight * 0.75, heroScrollDistance * 0.46);
-        }
-
-        function getHeroScrollDistance() {
-            const scroller = document.getElementById('scroller');
-            // document.documentElement.clientHeight ไม่ใช่ window.innerHeight เพราะหลัง
-            // resize จอ (เช่นลาก DevTools responsive mode พร้อมเปลี่ยน DPR) window.innerHeight
-            // เคยเจอค่าติดค้างจากขนาดก่อนหน้าโดยไม่อัปเดตตาม แต่ clientHeight ยังอ่านตรงกับ
-            // เลย์เอาต์จริงเสมอ ค่าติดค้างทำให้ heroScrollDistance ใกล้ 0 จนขอบ sticky กลาย
-            // เป็น 0 ไปด้วย (header เลยเป็นสีขาวค้างตั้งแต่ scroll ยังไม่เริ่ม)
-            return Math.max(1, scroller.offsetHeight - document.documentElement.clientHeight);
-        }
-
-        // Three phases over the hero's scroll-pin, by scroll position:
-        //  1. visible   — from the top until the CTA/date/venue block has faded out
-        //  2. hidden    — through the rest of the ship/wall/runner sequence
-        //  3. sticky    — visible again only once the pin has fully released into the next section
-        const HEADER_HIDE_AT_RATIO = 0.12;
-        const HEADER_STICKY_BUFFER = 4;
+        // Hero ใหม่เป็น section ธรรมดา (ไม่มี scroll-pin แล้ว) header จึงเหลือสองสถานะ
+        // ตามระยะ scroll เหมือน page-header.js: บนสุดโปร่งทับท้องฟ้า เลื่อนลงแล้วเป็น sticky
+        const HEADER_STICKY_AT = 8;
 
         function setHeaderSticky(sticky) {
             siteHeader.classList.toggle('is-sticky', sticky);
         }
 
         function updateSiteHeader() {
-            const heroScrollDistance = getHeroScrollDistance();
-            const hideAt = heroScrollDistance * HEADER_HIDE_AT_RATIO;
-            const stickyAt = Math.max(0, heroScrollDistance - HEADER_STICKY_BUFFER);
-            const y = window.scrollY;
-
-            const sticky = y >= stickyAt;
-            const hidden = y >= hideAt && y < stickyAt;
+            const sticky = window.scrollY > HEADER_STICKY_AT;
             setHeaderSticky(sticky);
-            // Sky (dark, sun/clouds) is only actually behind the header during this
-            // "visible" phase — once hidden/sticky kicks in the wall-seal, ship-run
-            // and whiteout take over and the backdrop turns light again.
-            siteHeader.classList.toggle('site-header--hero-sky', y < hideAt);
-
-            if (document.body.classList.contains('menu-open') || document.body.classList.contains('menu-closing')) {
-                siteHeader.classList.remove('is-hidden');
-                return;
-            }
-
-            siteHeader.classList.toggle('is-hidden', hidden);
+            // ท้องฟ้าชุดสว่างอยู่หลัง header เฉพาะตอนยังไม่ sticky (เมนูตัวดำไม่มีเงา ดู .site-header--hero-sky)
+            siteHeader.classList.toggle('site-header--hero-sky', !sticky);
+            siteHeader.classList.remove('is-hidden');
         }
 
         function finishSiteMenuClose() {
@@ -122,9 +89,9 @@
                 .map(link => {
                     const id = link.getAttribute('href')?.slice(1);
                     /* #home is a zero-height anchor immediately before the hero. Use
-                       the actual hero scroller as Home's observable section instead. */
+                       the hero section itself as Home's observable section instead. */
                     const section = id === 'home'
-                        ? document.getElementById('scroller')
+                        ? document.getElementById('hero')
                         : (id ? document.getElementById(id) : null);
                     return section ? { id, link, section } : null;
                 })

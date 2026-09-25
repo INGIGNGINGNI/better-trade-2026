@@ -32,15 +32,6 @@ const mobileRegisterOptions = {
     paddingX: 24,
 };
 
-function createSaveBadge(className) {
-    const badge = document.createElement('span');
-
-    badge.className = className;
-    badge.textContent = 'SAVE 30%';
-
-    return badge;
-}
-
 function mountRegisterButton(target, appearance) {
     if (!target) return;
 
@@ -187,9 +178,6 @@ ready.then(() => {
             textColor: '#111318',
             pillBackground: 'linear-gradient(180deg, #ffffff 0%, #f3f4f8 55%, #e4e7ee 100%)',
         });
-        // ป้ายส่วนลดเกาะมุมบนขวาของปุ่ม ชุดเดียวกับกล่อง Early Bird และการ์ด Ticket (สไตล์อยู่ใน css/style.css)
-        // ใส่ไว้ใน .lmb (position: relative) เพื่อให้วางตำแหน่งอิงกล่องของปุ่ม
-        heroCtaButton?.el.append(createSaveBadge('hero-cta__save'));
         playbookCtaButton = mountRegisterButton(playbookCtaSlot, {
             ...responsiveOptions,
             label: 'ค้นหา INVESTOR DNA',

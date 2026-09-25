@@ -587,18 +587,6 @@
     --spectrum: var(--gradient-kv-spectrum);
     --spectrum-vertical: var(--gradient-kv-spectrum-vertical);
 
-    /* Token เฉพาะ scroll cue ใน hero-v2 */
-    --bt-hero-scroll-cue-width: var(--space-24);
-    --bt-hero-scroll-cue-bottom: var(--space-8);
-    --bt-hero-scroll-cue-bottom-sm: var(--space-6);
-    --bt-hero-scroll-cue-gap: var(--space-2);
-    --bt-hero-scroll-cue-text-size: var(--font-size-12);
-    --bt-hero-scroll-cue-mouse-width: var(--space-5);
-    --bt-hero-scroll-cue-mouse-height: var(--space-8);
-    --bt-hero-scroll-cue-dot-width: var(--space-1);
-    --bt-hero-scroll-cue-dot-height: var(--space-1);
-    --bt-hero-scroll-cue-border-width: var(--border-width-2);
-    --bt-hero-scroll-cue-ink: var(--color-neutral-0);
     --bt-hero-countdown-divider-width: var(--space-12);
     --bt-hero-countdown-divider-width-sm: var(--space-10);
     --bt-hero-countdown-divider-ratio: 6.62;

@@ -68,8 +68,8 @@
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
-    <link rel="stylesheet" href="css/main.css?v=59">
-    <link rel="stylesheet" href="css/style.css?v=683">
+    <link rel="stylesheet" href="css/main.css?v=60">
+    <link rel="stylesheet" href="css/style.css?v=1019">
 </head>
 
 <body class="is-loading">
@@ -217,26 +217,6 @@
             </div>
         </div>
     </aside>
-    <!-- <div class="hero-motion-picker" data-hero-motion-picker>
-        <button class="hero-motion-picker__trigger" type="button" data-hero-motion-trigger
-            aria-label="เลือก Hero motion" aria-expanded="false" aria-controls="hero-motion-options">
-            <span aria-hidden="true">⇄</span>
-        </button>
-        <div class="hero-motion-picker__panel" id="hero-motion-options" data-hero-motion-panel
-            role="group" aria-label="เลือก Hero motion" aria-hidden="true">
-            <span class="hero-motion-picker__eyebrow">Hero Preview</span>
-            <button class="hero-motion-picker__option" type="button" data-hero-motion-option="full">
-                <span class="hero-motion-picker__status" aria-hidden="true"></span>
-                <span><strong>Full Motion</strong><small>มีวิดีโอต่อเนื่อง</small></span>
-                <span class="hero-motion-picker__check" aria-hidden="true">✓</span>
-            </button>
-            <button class="hero-motion-picker__option" type="button" data-hero-motion-option="basic">
-                <span class="hero-motion-picker__status" aria-hidden="true"></span>
-                <span><strong>Basic Motion</strong><small>จบหลังเรือและคน</small></span>
-                <span class="hero-motion-picker__check" aria-hidden="true">✓</span>
-            </button>
-        </div>
-    </div> -->
     <!-- จอ <=575px เท่านั้น: แถบปุ่มลอยชิดขอบล่าง แสดงตั้งแต่ section concept ลงไป
          (js/mobile-cta-bar.js คุมการโชว์/ซ่อนตาม scroll) ต้องอยู่นอก .site-header เพราะ
          .site-header มี transform:translateY(0) ตลอดเวลา ถ้าอยู่ข้างในตำแหน่ง fixed จะไป
@@ -252,177 +232,113 @@
     <h1 class="visually-hidden">BetterTrade 2026: New World New Playbook | 31 ต.ค. - 1 พ.ย. 2569</h1>
 
     <!-- Start : Hero -->
-    <div id="scroller">
-        <div id="stagewrap">
-            <div id="bg" aria-hidden="true">
-                <video id="sky-video" autoplay muted loop playsinline preload="auto"
-                    poster="images/light/background-light.webp?v=light-2">
-                    <source src="video/light/background-light.mp4?v=light-1" type="video/mp4">
-                </video>
-            </div>
-
-        <div id="stage">
-            <img id="ship" src="images/ship.webp" alt="Playbook ship" fetchpriority="high" decoding="sync">
-            <div id="walls" aria-hidden="true">
-                <div id="wall-left-intro" class="wall-intro-panel">
-                    <img id="wall-left" class="wall-panel" src="images/light/wall-left-1280.webp?v=light-1"
-                        srcset="images/light/wall-left-1280.webp?v=light-1 1280w, images/light/wall-left-1920.webp?v=light-1 1920w, images/light/wall-left-2560.webp?v=light-1 2560w, images/light/wall-left.webp?v=light-1 3240w"
-                        sizes="100vw" alt="">
-                </div>
-                <div id="wall-right-intro" class="wall-intro-panel">
-                    <img id="wall-right" class="wall-panel" src="images/light/wall-right-1280.webp?v=light-1"
-                        srcset="images/light/wall-right-1280.webp?v=light-1 1280w, images/light/wall-right-1920.webp?v=light-1 1920w, images/light/wall-right-2560.webp?v=light-1 2560w, images/light/wall-right.webp?v=light-1 3240w"
-                        sizes="100vw" alt="">
-                </div>
-            </div>
-            <img id="stairs" src="images/stairs.webp" alt="Staircase" fetchpriority="high" decoding="sync">
-            <img id="pshadow" src="images/people-shadow.webp" alt="" fetchpriority="high" decoding="sync">
-            <!-- the eight runners are appended here by script, one element each -->
-
-            <div class="asset" id="a-title">
-                <div class="floaty">
-                    <div class="inner">
-                        <img src="images/title.webp" alt="New World New Playbook — BetterTrade 2026">
-                    </div>
-                </div>
-            </div>
-
-            <div class="asset" id="a-triangle">
-                <div class="floaty">
-                    <div class="inner">
-                        <img src="images/triangle.webp" alt="">
-                    </div>
-                </div>
-            </div>
-            <div class="asset" id="a-bitcoin">
-                <div class="floaty">
-                    <div class="inner">
-                        <img src="images/bitcoin.webp" alt="">
-                    </div>
-                </div>
-            </div>
-            <div class="asset" id="a-gold">
-                <div class="floaty">
-                    <div class="inner">
-                        <img src="images/gold.webp" alt="">
-                    </div>
-                </div>
-            </div>
-            <div class="asset" id="a-heart">
-                <div class="floaty">
-                    <div class="inner">
-                        <img src="images/heart.webp" alt="">
-                    </div>
-                </div>
-            </div>
-            <div class="asset" id="a-card">
-                <div class="floaty">
-                    <div class="inner">
-                        <img src="images/card.webp" alt="">
-                    </div>
-                </div>
-            </div>
-            <div class="asset" id="a-stock">
-                <div class="floaty">
-                    <div class="inner">
-                        <img src="images/stock.webp" alt="">
-                    </div>
-                </div>
-            </div>
-
-            <div id="ui">
-                <p class="event-description">สำรวจเทรนด์ เศรษฐกิจ เทคโนโลยี <br class="d-block d-sm-none">และโอกาสลงทุน<br class="d-none d-sm-block">ที่จะกำหนดโลกใบต่อไป</p>
-                <div class="event-primary">
-                    <div id="cta-slot"></div>
-                </div>
-                <div class="event-details">
-                    <div class="event-datetime">
-                        <span class="date">31 ตุลาคม - 1 พฤศจิกายน 2569</span>
-                        <span class="time">เวลา 09:00 – 18:30 น.</span>
-                    </div>
-                    <div class="venue">
-                        <a class="venue-link bt-action-button bt-action-button--text" href="https://maps.app.goo.gl/uRrLjyD6aofCEb8K7"
-                            target="_blank" rel="noopener noreferrer">Samyan Mitrtown Hall<svg class="bt-icon venue-link__icon"
-                                viewBox="0 0 24 24" aria-hidden="true">
-                                <defs>
-                                    <linearGradient id="venue-arrow-spectrum" x1="0%" y1="50%" x2="100%" y2="50%">
-                                        <stop offset="0%" stop-color="#00d4fe" />
-                                        <stop offset="20%" stop-color="#1f87e6" />
-                                        <stop offset="40%" stop-color="#113cf3" />
-                                        <stop offset="60%" stop-color="#722df4" />
-                                        <stop offset="80%" stop-color="#e63bd8" />
-                                        <stop offset="100%" stop-color="#f79319" />
-                                    </linearGradient>
-                                </defs>
-                                <path d="M7 7h10v10" />
-                                <path d="M7 17 17 7" />
-                            </svg></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="ship-run-layer" aria-hidden="true">
-            <canvas id="ship-run-canvas" width="1920" height="1080"></canvas>
-            <video id="ship-run-video" class="ship-run-source" muted playsinline preload="auto"
-                disablepictureinpicture>
-                <source src="video/ship-new-3-packed.mp4" type="video/mp4">
+    <!-- Wireframe: ซ้ายเป็น title/คำโปรย/ปุ่ม ขวาเป็นภาพวิทยากร + ตัวเลขงาน + วันเวลาสถานที่
+         ยังไม่มี motion ภาพวิทยากรใช้ overview-speaker-tablet.webp เป็น placeholder ชั่วคราว -->
+    <section id="hero" class="hero" aria-label="BetterTrade 2026: New World New Playbook">
+        <div class="hero__sky" aria-hidden="true">
+            <video class="hero__sky-video" autoplay muted loop playsinline preload="auto"
+                poster="images/light/background-light.webp?v=light-2">
+                <source src="video/light/background-light-loop.mp4?v=light-loop-1" type="video/mp4">
             </video>
         </div>
-        <div id="ship-run-whiteout" aria-hidden="true"></div>
-        <button class="hero-scroll-cue" type="button" aria-label="เลื่อนลงเพื่อดูต่อ" data-hero-scroll-cue>
-            <span class="hero-scroll-cue__mouse" aria-hidden="true">
-                <span class="hero-scroll-cue__wheel"></span>
-            </span>
-            <span class="hero-scroll-cue__text">Scroll Down</span>
-        </button>
 
-        <div id="loader" role="status" aria-label="กำลังโหลด BetterTrade 2026">
-            <!-- โทนสว่าง: พื้น/หมอกใช้ค่าจากชุด light (heor-light ใช้ #f3f4f6 เป็นพื้น loader)
-                 brightness/contrast ต้องเป็น 1 เพราะค่าชุดมืด (1.22/1.08) จะดันสีสว่างจนขาวโพลนไม่เห็นหมอก -->
-            <canvas class="loader-surface" aria-hidden="true"
-                data-mist-speed="0.82"
-                data-mist-density="1.45"
-                data-mist-brightness="1"
-                data-mist-contrast="1"
-                data-mist-base="#f3f4f6"
-                data-mist-fog="#d9dee6"
-                data-mist-accent="#c3cad4"></canvas>
+        <!-- กำแพงซ้าย-ขวาชุดเดียวกับ KV: layer ถัดจากท้องฟ้า อยู่ใต้ไอคอนและเนื้อหาทั้งหมด (ทุกขนาดจอ)
+             js/hero-loader.js ส่งตำแหน่งกรอบภาพวิทยากรให้ CSS วางขอบในของกำแพงตรงกรอบภาพ แล้วกำแพงยาวเลยขอบจอออกไป -->
+        <picture>
+            <source media="(max-width: 991px)" srcset="images/light/wall-left-1280.webp?v=2" width="1280" height="1600">
+            <img class="hero__wall hero__wall--left" src="images/light/wall-left-new.webp?v=1" width="3840" height="2880" alt="" aria-hidden="true">
+        </picture>
+        <picture>
+            <source media="(max-width: 991px)" srcset="images/light/wall-right-1280.webp?v=2" width="1280" height="1600">
+            <img class="hero__wall hero__wall--right" src="images/light/wall-right-new.webp?v=1" width="2880" height="2880" alt="" aria-hidden="true">
+        </picture>
 
-            <div class="loader-icons" aria-hidden="true">
-                <img class="loader-icon" data-loader-icon="stock" src="images/stock.webp" alt="">
-                <img class="loader-icon" data-loader-icon="bitcoin" src="images/bitcoin.webp" alt="">
-                <img class="loader-icon" data-loader-icon="gold" src="images/gold.webp" alt="">
-                <img class="loader-icon" data-loader-icon="card" src="images/card.webp" alt="">
-                <img class="loader-icon" data-loader-icon="heart" src="images/heart.webp" alt="">
-                <img class="loader-icon" data-loader-icon="triangle" src="images/triangle.webp" alt="">
+        <!-- ไอคอนสินทรัพย์ของ hero เดิม: ตำแหน่ง/ขนาด/มุมเดิม (ชุด POSTER) ลอยขึ้นลงช้า ๆ
+             อยู่ใต้เนื้อหาและภาพวิทยากร ตอน loader จบจะกระจายออกจากกลางจอมาที่ตำแหน่งตัวเอง (js/hero-loader.js) -->
+        <div class="hero__assets" aria-hidden="true">
+            <div class="hero-asset" data-hero-asset="triangle">
+                <div class="hero-asset__float"><div class="hero-asset__inner"><img src="images/triangle.webp" alt=""></div></div>
             </div>
-
-            <div class="loader-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"
-                aria-valuenow="0">
-                <div class="loader-progress__meta"><span>LOADING</span><span class="loader-progress__value">00%</span></div>
-                <div class="loader-progress__track"><span class="loader-progress__fill"></span></div>
+            <div class="hero-asset" data-hero-asset="gold">
+                <div class="hero-asset__float"><div class="hero-asset__inner"><img src="images/gold.webp" alt=""></div></div>
+            </div>
+            <div class="hero-asset" data-hero-asset="heart">
+                <div class="hero-asset__float"><div class="hero-asset__inner"><img src="images/heart.webp" alt=""></div></div>
+            </div>
+            <div class="hero-asset" data-hero-asset="card">
+                <div class="hero-asset__float"><div class="hero-asset__inner"><img src="images/card.webp" alt=""></div></div>
+            </div>
+            <div class="hero-asset" data-hero-asset="stock">
+                <div class="hero-asset__float"><div class="hero-asset__inner"><img src="images/stock.webp" alt=""></div></div>
             </div>
         </div>
 
-        <div id="kvref"></div>
-    </div>
-    <!-- End : Hero -->
+        <div class="hero__inner container">
+            <div class="hero__row row">
+                <div class="hero__content col-12 col-lg-6 col-xl-5">
+                    <img class="hero__title" src="images/title.webp" width="1800" height="724"
+                        alt="New World New Playbook — BetterTrade 2026" fetchpriority="high">
+                    <p class="hero__headline"><span class="hero__headline-phrase">สัมมนาการลงทุนแห่งปี</span><br><span
+                            class="hero__headline-phrase">เปิดกลยุทธ์</span><span
+                            class="hero__headline-phrase">จากวิทยากรชั้นนำ</span></p>
+                    <p class="hero__description">ค้นพบสไตล์การลงทุนผ่าน INVESTOR DNA<br class="d-none d-sm-block">
+                        พร้อมรับ PLAYBOOK ที่ออกแบบจากข้อมูลของคุณ</p>
+                    <dl class="hero__stats" aria-label="สถิติของงาน">
+                        <div class="hero__stat"><dt>Speakers</dt><dd>30<span class="hero__stat-suffix">+</span></dd></div>
+                        <div class="hero__stat"><dt>Sessions</dt><dd>20<span class="hero__stat-suffix">+</span></dd></div>
+                        <div class="hero__stat"><dt>Days</dt><dd>2</dd></div>
+                    </dl>
+                    <div class="hero__actions">
+                        <!-- ปุ่ม liquid metal สีขาว js/hero-v2-cta.js สร้างแทนที่ลิงก์สำรองด้านใน -->
+                        <div id="cta-slot">
+                            <a class="bt-action-button bt-action-button--primary bt-action-button--xl" href="#ticket">ซื้อบัตร</a>
+                        </div>
+                        <p class="hero__offer"><span class="hero__offer-highlight">ราคาพิเศษ </span> <span class="hero__offer-note"><em class="hero__offer-discount">ลด 30% </em> ถึง 30 ก.ย. นี้เท่านั้น</span></p>
+                    </div>
+                </div>
 
-
-    <!-- Start Section : Speaker Overview -->
-    <!-- แบนเนอร์ภาพเดียว: desktop (≥992px) ใช้ภาพ 16:9, ≤991px ใช้ภาพแนวตั้ง 4:5
-         สัดส่วนตามไฟล์ต้นฉบับ (width/height ของแต่ละ source) เบราว์เซอร์จึงจองพื้นที่ได้ก่อนภาพโหลด -->
-    <section id="speaker-overview" class="speaker-overview" aria-label="Speaker Overview">
-        <div class="speaker-overview__inner container">
-            <picture class="speaker-overview__banner" data-reveal>
-                <source media="(min-width: 768px)" srcset="images/overview-speaker-desktop.webp" width="1920" height="1080">
-                <img src="images/overview-speaker-tablet.webp" width="1080" height="1350" loading="lazy" decoding="async"
-                    alt="พบกับวิทยากรผู้เชี่ยวชาญในงาน BetterTrade 2026">
-            </picture>
+                <div class="hero__visual col-12 col-lg-6 col-xl-7">
+                    <!-- bitcoin เกาะข้างคนริมซ้ายแถวล่างสุดในภาพ จึงอยู่ในกรอบภาพ (อยู่หลังภาพ) แทน .hero__assets -->
+                    <div class="hero-asset" data-hero-asset="bitcoin">
+                        <div class="hero-asset__float"><div class="hero-asset__inner"><img src="images/bitcoin.webp" alt=""></div></div>
+                    </div>
+                    <figure class="hero__speakers">
+                        <img src="images/hero-speaker.webp?v=2" width="1080" height="1350"
+                            alt="วิทยากรในงาน BetterTrade 2026 — 30+ Speakers, 20+ Sessions, 2 Days" fetchpriority="high">
+                    </figure>
+                </div>
+            </div>
         </div>
     </section>
-    <!-- End Section : Speaker Overview -->
+    <!-- End : Hero -->
+
+    <div id="loader" role="status" aria-label="กำลังโหลด BetterTrade 2026">
+        <!-- โทนสว่าง: พื้น/หมอกใช้ค่าจากชุด light (heor-light ใช้ #f3f4f6 เป็นพื้น loader)
+             brightness/contrast ต้องเป็น 1 เพราะค่าชุดมืด (1.22/1.08) จะดันสีสว่างจนขาวโพลนไม่เห็นหมอก -->
+        <canvas class="loader-surface" aria-hidden="true"
+            data-mist-speed="0.82"
+            data-mist-density="1.45"
+            data-mist-brightness="1"
+            data-mist-contrast="1"
+            data-mist-base="#f3f4f6"
+            data-mist-fog="#d9dee6"
+            data-mist-accent="#c3cad4"></canvas>
+
+        <div class="loader-icons" aria-hidden="true">
+            <img class="loader-icon" data-loader-icon="stock" src="images/stock.webp" alt="">
+            <img class="loader-icon" data-loader-icon="bitcoin" src="images/bitcoin.webp" alt="">
+            <img class="loader-icon" data-loader-icon="gold" src="images/gold.webp" alt="">
+            <img class="loader-icon" data-loader-icon="card" src="images/card.webp" alt="">
+            <img class="loader-icon" data-loader-icon="heart" src="images/heart.webp" alt="">
+            <img class="loader-icon" data-loader-icon="triangle" src="images/triangle.webp" alt="">
+        </div>
+
+        <div class="loader-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+            aria-valuenow="0">
+            <div class="loader-progress__meta"><span>LOADING</span><span class="loader-progress__value">00%</span></div>
+            <div class="loader-progress__track"><span class="loader-progress__fill"></span></div>
+        </div>
+    </div>
 
 
     <!-- Start Section : Ticket -->
@@ -541,128 +457,6 @@
         </div>
     </section>
     <!-- End Section : Ticket -->
-
-
-    <!-- Start Section : Concept -->
-    <section id="concept" aria-labelledby="concept-title">
-        <div class="concept__aurora" aria-hidden="true"></div>
-        <div class="concept__inner container">
-            <h2 id="concept-title" class="bt-section-title">โลกกำลังเปลี่ยนเร็วกว่าที่เคย <br>แต่<span class="bt-title-highlight has-ps">โอกาสก็เช่นกัน</span></h2>
-            <p class="concept__description">BetterTrade รวบรวมความรู้ เครื่องมือ และ Playbook ที่จะช่วยให้คุณมองเห็นโอกาส <br class="d-xl-block d-none">ตัดสินใจอย่างมั่นใจ และเติบโตไปพร้อมกับโลกยุคใหม่</p>
-        </div>
-        <div class="concept__video-scroll container">
-            <div class="concept__video-perspective">
-                <div class="concept__video-frame">
-                    <div class="concept__video-media" data-concept-video>
-                        <button class="concept__video-poster" type="button" aria-label="เล่นวิดีโอ BetterTrade 2026">
-                            <img src="images/youtube-thumbnail.webp" width="1281" height="721" loading="lazy"
-                                decoding="async" alt="">
-                            <span class="concept__video-play" aria-hidden="true">
-                                <span class="concept__video-play-surface">
-                                    <svg class="bt-icon"><use href="images/icons.svg#icon-play"></use></svg>
-                                </span>
-                            </span>
-                        </button>
-                        <iframe
-                            data-src="https://www.youtube-nocookie.com/embed/w5weGk8oAIA?rel=0&autoplay=1"
-                            title="BetterTrade 2026"
-                            loading="lazy"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin"
-                            allowfullscreen></iframe>
-                    </div>
-                    <img class="concept__video-frame-art" src="images/topic-video-frame-2.webp" alt=""
-                        loading="lazy" decoding="async" aria-hidden="true">
-                </div>
-            </div>
-        </div>
-
-    </section>
-    <!-- End Section : Concept -->
-
-
-    <!-- Start Section : Featured Topics -->
-    <section id="featured-topics" class="topics-showcase" data-header-theme="dark" hidden
-        aria-labelledby="featured-topics-title">
-        <div class="topics-showcase__inner container">
-            <header class="topics-showcase__header">
-                <h2 id="featured-topics-title" class="bt-section-title">หัวข้อที่คุณ<span class="bt-title-highlight has-ps">ไม่ควรพลาด</span><br>ใน BetterTrade 2026</h2>
-                <p>สำรวจเทรนด์ เศรษฐกิจ เทคโนโลยี และโอกาสลงทุนที่จะกำหนดโลกใบต่อไป</p>
-            </header>
-
-            <div class="topics-showcase__content">
-                <ul class="concept__topics" aria-label="หัวข้อการลงทุนที่น่าสนใจภายในงาน">
-                    <li class="concept__topic">
-                        <span class="concept__topic-label">Geopolitics Macroeconomics</span>
-                        <strong class="concept__topic-title">ภูมิรัฐศาสตร์และเศรษฐกิจโลก</strong>
-                        <span class="concept__topic-description">สงคราม กำแพงภาษี ดอกเบี้ย กระทบพอร์ตเราอย่างไร</span>
-                    </li>
-                    <li class="concept__topic">
-                        <span class="concept__topic-label">Capital Market</span>
-                        <strong class="concept__topic-title">ตลาดทุน</strong>
-                        <span class="concept__topic-description">หุ้นไทย หุ้นต่างประเทศ กองทุน และตราสารหนี้</span>
-                    </li>
-                    <li class="concept__topic">
-                        <span class="concept__topic-label">Digital Asset</span>
-                        <strong class="concept__topic-title">สินทรัพย์ดิจิทัล</strong>
-                        <span class="concept__topic-description">บิตคอยน์ คริปโต และโทเคนดิจิทัล</span>
-                    </li>
-                    <li class="concept__topic">
-                        <span class="concept__topic-label">Alternative Asset</span>
-                        <strong class="concept__topic-title">สินทรัพย์ทางเลือก</strong>
-                        <span class="concept__topic-description">ทองคำ อสังหาริมทรัพย์ และสินค้าโภคภัณฑ์</span>
-                    </li>
-                    <li class="concept__topic">
-                        <span class="concept__topic-label">AI Investments</span>
-                        <strong class="concept__topic-title">ลงทุนกับ AI</strong>
-                        <span class="concept__topic-description">ใช้ AI ช่วยตัดสินใจ และลงทุนในธุรกิจที่โตด้วย AI</span>
-                    </li>
-                    <li class="concept__topic">
-                        <span class="concept__topic-label">Personal Investments</span>
-                        <strong class="concept__topic-title">วางแผนการเงินส่วนบุคคล</strong>
-                        <span class="concept__topic-description">จัดพอร์ต วางแผนภาษี และเตรียมเกษียณ</span>
-                    </li>
-                    <li class="concept__topic">
-                        <span class="concept__topic-label">Passion Investments</span>
-                        <strong class="concept__topic-title">ลงทุนในสิ่งที่รัก</strong>
-                        <span class="concept__topic-description">การ์ดสะสม ของแบรนด์เนม นาฬิกา และงานศิลปะ</span>
-                    </li>
-                    <li class="concept__topic">
-                        <span class="concept__topic-label">Longevity &amp; Wellness Investments</span>
-                        <strong class="concept__topic-title">ลงทุนเพื่อสุขภาพและอายุยืน</strong>
-                        <span class="concept__topic-description">เตรียมเงินให้พอใช้ไปจนถึงอายุ 90 ปี</span>
-                    </li>
-                    <li class="concept__topic">
-                        <span class="concept__topic-label">Lifestyle Investments</span>
-                        <strong class="concept__topic-title">ลงทุนกับไลฟ์สไตล์</strong>
-                        <span class="concept__topic-description">ธุรกิจอาหาร ท่องเที่ยว และไลฟ์สไตล์</span>
-                    </li>
-                </ul>
-
-                <div class="topics-showcase__assets" aria-hidden="true">
-                    <figure class="topics-showcase__asset topics-showcase__asset--triangle" data-topic-asset>
-                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/triangle.webp" alt=""></div></div>
-                    </figure>
-                    <figure class="topics-showcase__asset topics-showcase__asset--bitcoin" data-topic-asset>
-                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/bitcoin.webp" alt=""></div></div>
-                    </figure>
-                    <figure class="topics-showcase__asset topics-showcase__asset--gold" data-topic-asset>
-                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/gold.webp" alt=""></div></div>
-                    </figure>
-                    <figure class="topics-showcase__asset topics-showcase__asset--stock" data-topic-asset>
-                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/stock.webp" alt=""></div></div>
-                    </figure>
-                    <figure class="topics-showcase__asset topics-showcase__asset--card" data-topic-asset>
-                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/card.webp" alt=""></div></div>
-                    </figure>
-                    <figure class="topics-showcase__asset topics-showcase__asset--heart" data-topic-asset>
-                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/heart.webp" alt=""></div></div>
-                    </figure>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- End Section : Featured Topics -->
 
 
     <!-- Start Section : Agenda -->
@@ -1266,6 +1060,128 @@
     <!-- End Section : Playbook -->
 
 
+    <!-- Start Section : Concept -->
+    <section id="concept" aria-labelledby="concept-title">
+        <div class="concept__aurora" aria-hidden="true"></div>
+        <div class="concept__inner container">
+            <h2 id="concept-title" class="bt-section-title">โลกกำลังเปลี่ยนเร็วกว่าที่เคย <br>แต่<span class="bt-title-highlight has-ps">โอกาสก็เช่นกัน</span></h2>
+            <p class="concept__description">BetterTrade รวบรวมความรู้ เครื่องมือ และ Playbook ที่จะช่วยให้คุณมองเห็นโอกาส <br class="d-xl-block d-none">ตัดสินใจอย่างมั่นใจ และเติบโตไปพร้อมกับโลกยุคใหม่</p>
+        </div>
+        <div class="concept__video-scroll container">
+            <div class="concept__video-perspective">
+                <div class="concept__video-frame">
+                    <div class="concept__video-media" data-concept-video>
+                        <button class="concept__video-poster" type="button" aria-label="เล่นวิดีโอ BetterTrade 2026">
+                            <img src="images/youtube-thumbnail.webp" width="1281" height="721" loading="lazy"
+                                decoding="async" alt="">
+                            <span class="concept__video-play" aria-hidden="true">
+                                <span class="concept__video-play-surface">
+                                    <svg class="bt-icon"><use href="images/icons.svg#icon-play"></use></svg>
+                                </span>
+                            </span>
+                        </button>
+                        <iframe
+                            data-src="https://www.youtube-nocookie.com/embed/w5weGk8oAIA?rel=0&autoplay=1"
+                            title="BetterTrade 2026"
+                            loading="lazy"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            allowfullscreen></iframe>
+                    </div>
+                    <img class="concept__video-frame-art" src="images/topic-video-frame-2.webp" alt=""
+                        loading="lazy" decoding="async" aria-hidden="true">
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <!-- End Section : Concept -->
+
+
+    <!-- Start Section : Featured Topics -->
+    <section id="featured-topics" class="topics-showcase" data-header-theme="dark" hidden
+        aria-labelledby="featured-topics-title">
+        <div class="topics-showcase__inner container">
+            <header class="topics-showcase__header">
+                <h2 id="featured-topics-title" class="bt-section-title">หัวข้อที่คุณ<span class="bt-title-highlight has-ps">ไม่ควรพลาด</span><br>ใน BetterTrade 2026</h2>
+                <p>สำรวจเทรนด์ เศรษฐกิจ เทคโนโลยี และโอกาสลงทุนที่จะกำหนดโลกใบต่อไป</p>
+            </header>
+
+            <div class="topics-showcase__content">
+                <ul class="concept__topics" aria-label="หัวข้อการลงทุนที่น่าสนใจภายในงาน">
+                    <li class="concept__topic">
+                        <span class="concept__topic-label">Geopolitics Macroeconomics</span>
+                        <strong class="concept__topic-title">ภูมิรัฐศาสตร์และเศรษฐกิจโลก</strong>
+                        <span class="concept__topic-description">สงคราม กำแพงภาษี ดอกเบี้ย กระทบพอร์ตเราอย่างไร</span>
+                    </li>
+                    <li class="concept__topic">
+                        <span class="concept__topic-label">Capital Market</span>
+                        <strong class="concept__topic-title">ตลาดทุน</strong>
+                        <span class="concept__topic-description">หุ้นไทย หุ้นต่างประเทศ กองทุน และตราสารหนี้</span>
+                    </li>
+                    <li class="concept__topic">
+                        <span class="concept__topic-label">Digital Asset</span>
+                        <strong class="concept__topic-title">สินทรัพย์ดิจิทัล</strong>
+                        <span class="concept__topic-description">บิตคอยน์ คริปโต และโทเคนดิจิทัล</span>
+                    </li>
+                    <li class="concept__topic">
+                        <span class="concept__topic-label">Alternative Asset</span>
+                        <strong class="concept__topic-title">สินทรัพย์ทางเลือก</strong>
+                        <span class="concept__topic-description">ทองคำ อสังหาริมทรัพย์ และสินค้าโภคภัณฑ์</span>
+                    </li>
+                    <li class="concept__topic">
+                        <span class="concept__topic-label">AI Investments</span>
+                        <strong class="concept__topic-title">ลงทุนกับ AI</strong>
+                        <span class="concept__topic-description">ใช้ AI ช่วยตัดสินใจ และลงทุนในธุรกิจที่โตด้วย AI</span>
+                    </li>
+                    <li class="concept__topic">
+                        <span class="concept__topic-label">Personal Investments</span>
+                        <strong class="concept__topic-title">วางแผนการเงินส่วนบุคคล</strong>
+                        <span class="concept__topic-description">จัดพอร์ต วางแผนภาษี และเตรียมเกษียณ</span>
+                    </li>
+                    <li class="concept__topic">
+                        <span class="concept__topic-label">Passion Investments</span>
+                        <strong class="concept__topic-title">ลงทุนในสิ่งที่รัก</strong>
+                        <span class="concept__topic-description">การ์ดสะสม ของแบรนด์เนม นาฬิกา และงานศิลปะ</span>
+                    </li>
+                    <li class="concept__topic">
+                        <span class="concept__topic-label">Longevity &amp; Wellness Investments</span>
+                        <strong class="concept__topic-title">ลงทุนเพื่อสุขภาพและอายุยืน</strong>
+                        <span class="concept__topic-description">เตรียมเงินให้พอใช้ไปจนถึงอายุ 90 ปี</span>
+                    </li>
+                    <li class="concept__topic">
+                        <span class="concept__topic-label">Lifestyle Investments</span>
+                        <strong class="concept__topic-title">ลงทุนกับไลฟ์สไตล์</strong>
+                        <span class="concept__topic-description">ธุรกิจอาหาร ท่องเที่ยว และไลฟ์สไตล์</span>
+                    </li>
+                </ul>
+
+                <div class="topics-showcase__assets" aria-hidden="true">
+                    <figure class="topics-showcase__asset topics-showcase__asset--triangle" data-topic-asset>
+                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/triangle.webp" alt=""></div></div>
+                    </figure>
+                    <figure class="topics-showcase__asset topics-showcase__asset--bitcoin" data-topic-asset>
+                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/bitcoin.webp" alt=""></div></div>
+                    </figure>
+                    <figure class="topics-showcase__asset topics-showcase__asset--gold" data-topic-asset>
+                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/gold.webp" alt=""></div></div>
+                    </figure>
+                    <figure class="topics-showcase__asset topics-showcase__asset--stock" data-topic-asset>
+                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/stock.webp" alt=""></div></div>
+                    </figure>
+                    <figure class="topics-showcase__asset topics-showcase__asset--card" data-topic-asset>
+                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/card.webp" alt=""></div></div>
+                    </figure>
+                    <figure class="topics-showcase__asset topics-showcase__asset--heart" data-topic-asset>
+                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/heart.webp" alt=""></div></div>
+                    </figure>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Section : Featured Topics -->
+
+
     <!-- Start Section : Speaker -->
     <section id="speaker" class="speaker" aria-labelledby="speaker-title">
         <header class="speaker__section-header container">
@@ -1408,14 +1324,7 @@
                     <h2 id="floor-plan-title" class="bt-section-title floor-plan__title"><span class="bt-title-highlight has-pe">สำรวจ</span>พื้นที่<br>และโซนต่าง ๆ ในงาน</h2>
                     <p class="bt-section-subtext">Floor Plan</p>
                     <figure class="floor-plan__figure">
-                        <div class="floor-plan__toolbar" hidden>
-                            <div class="floor-plan__views" role="group" aria-label="เลือกรูปแบบแผนผัง">
-                                <button class="floor-plan__view" type="button" data-floor-view="3d" aria-pressed="false" aria-controls="floor-plan-visual">มุมมอง 3D</button>
-                                <button class="floor-plan__view" type="button" data-floor-view="image" aria-pressed="true" aria-controls="floor-plan-visual">ภาพต้นฉบับ</button>
-                            </div>
-                            <p class="floor-plan__status" role="status" aria-live="polite">กำลังเตรียมมุมมอง 3D…</p>
-                        </div>
-                        <div id="floor-plan-visual" class="floor-plan__visual">
+                        <div class="floor-plan__visual">
                             <img class="floor-plan__image" src="images/floor-plan.webp" width="1829" height="1386"
                                 loading="lazy" decoding="async"
                                 alt="แผนผังพื้นที่ Conference, Pavilions และ Experience ภายในงาน BetterTrade 2026">
@@ -1439,22 +1348,7 @@
                                     <text class="floor-plan__callout-label" x="1566" y="878">EXPERIENCE</text>
                                 </g>
                             </svg>
-                            <div class="floor-plan__scene" hidden>
-                                <canvas class="floor-plan__canvas" tabindex="0" role="group"
-                                    aria-label="โมเดล 3D พื้นที่งาน BetterTrade 2026"
-                                    aria-describedby="floor-plan-help"></canvas>
-                                <div class="floor-plan__controls" role="group" aria-label="ควบคุมมุมมอง 3D">
-                                    <button type="button" data-floor-action="top" aria-label="มองแผนผังจากด้านบน" aria-pressed="false">มองจากด้านบน</button>
-                                    <button type="button" data-floor-action="reset" aria-label="รีเซ็ตมุมมอง 3D">รีเซ็ต</button>
-                                    <button type="button" data-floor-action="out" aria-label="ซูมออก">−</button>
-                                    <button type="button" data-floor-action="in" aria-label="ซูมเข้า">+</button>
-                                </div>
-                            </div>
                         </div>
-                        <figcaption class="floor-plan__caption" hidden>
-                            <p id="floor-plan-help">ลากซ้าย–ขวาเพื่อหมุน · กด + / − เพื่อซูม <span class="visually-hidden">หรือใช้ปุ่มลูกศรเพื่อหมุน ปุ่มบวกและลบเพื่อซูม และปุ่ม Home เพื่อรีเซ็ตมุมมอง</span></p>
-                            <p>โมเดลจำลองจากภาพอ้างอิง สัดส่วนและรายละเอียดอาจต่างจากพื้นที่จริง</p>
-                        </figcaption>
                     </figure>
                 </div>
             </div>
@@ -2120,31 +2014,28 @@
     <script src="js/moderator-directory.js?v=1"></script>
     <script src="js/expectation-counter.js?v=2"></script>
     <script src="js/floor-plan-reveal.js?v=1"></script>
-    <script type="module" src="js/floor-plan-3d.js?v=4"></script>
     <script src="js/back-to-top.js?v=2"></script>
     <script src="js/early-bird-float.js?v=1"></script>
-    <script src="js/hero-motion-mode.js?v=3"></script>
     <!-- ก่อน journey-indicator: ให้ scale ของ section อัปเดตก่อนในเฟรมเดียวกัน เส้นจึงวัดขนาดปัจจุบัน -->
     <script src="js/scroll-expand.js?v=7"></script>
-    <script src="js/journey-indicator.js?v=27"></script>
+    <script src="js/journey-indicator.js?v=28"></script>
     <script src="js/mobile-cta-bar.js?v=4"></script>
-    <script src="js/hero-v2-header.js?v=21"></script>
+    <script src="js/hero-v2-header.js?v=22"></script>
     <script src="js/in-page-navigation.js?v=13"></script>
     <script src="js/reveal-on-scroll.js?v=11"></script>
-    <script src="js/concept-video.js?v=1"></script>
+    <script src="js/concept-video.js?v=2"></script>
     <script src="js/past-event-swiper.js?v=6"></script>
     <script src="js/faq-tabs.js?v=6"></script>
     <script src="js/cookie-banner.js?v=2"></script>
 
     <!-- Liquid metal CTAs (WebGL). Module scripts are deferred, so this runs after
      the markup exists but before window 'load' fires the hero intro. -->
-    <script type="module" src="js/hero-v2-cta.js?v=21"></script>
+    <script type="module" src="js/hero-v2-cta.js?v=28"></script>
     <script src="js/event-countdown.js?v=3"></script>
     <script src="js/loader-mist.js?v=3"></script>
     <script src="vendor/gsap/gsap.min.js"></script>
     <script src="vendor/gsap/ScrollTrigger.min.js"></script>
-    <script src="js/hero-v2-scroll-motion.js?v=83"></script>
-    <script src="js/hero-v2-scroll-cue.js?v=6"></script>
+    <script src="js/hero-loader.js?v=15"></script>
     <script src="js/topics-reveal.js?v=6"></script>
     <script src="js/topics-assets-motion.js?v=22"></script>
     <script src="js/playbook-assets-motion.js?v=5"></script>

@@ -73,9 +73,6 @@ html.is-preparing-page-scroll body::-webkit-scrollbar-thumb {
     background: transparent;
 }
 
-/* Nothing in the design is dark, so this only ever shows through a gap — during a
-   resize, or as overscroll. Matching #stagewrap keeps such a gap invisible instead
-   of flashing near-black. */
 body {
     width: 100%;
     margin: 0;
@@ -343,11 +340,10 @@ body.menu-closing .back-to-top {
     line-height: var(--section-small-line-height);
 }
 
-/* ป้ายส่วนลดชุดเดียวกันใช้ซ้ำหลังราคาเดิมในการ์ด Ticket และท้ายป้ายปุ่มซื้อบัตรบน Hero (js/hero-v2-cta.js)
+/* ป้ายส่วนลดชุดเดียวกันใช้ซ้ำหลังราคาเดิมในการ์ด Ticket
    (selector ของ Ticket ต้องเจาะจงพอชนะ .ticket__price span ที่ย่อ/ขยายฟอนต์ตาม breakpoint) */
 .early-bird-float__discount,
-.ticket .ticket__price .ticket__price-save,
-.hero-cta__save {
+.ticket .ticket__price .ticket__price-save {
     display: inline-block;
     padding: 6px var(--space-2);
     border-radius: var(--radius-1);
@@ -513,7 +509,8 @@ body.menu-closing .back-to-top {
 /* = .ticket__price strong ที่สถานะ is-active (ราคาเดิมอยู่ก่อนหน้า จึงไม่มี margin-top เหมือนกฎ .ticket__price-original+strong) */
 .early-bird-float__price strong {
     color: var(--color-blue-600);
-    font-size: calc(var(--font-size-24) - 2px);;
+    font-size: calc(var(--font-size-24) - 2px);
+    ;
     font-weight: var(--font-weight-medium);
     line-height: 1.2;
     letter-spacing: 0;
@@ -687,227 +684,12 @@ body.menu-closing .early-bird-float {
 
 }
 
-/* Temporary preview control for comparing the two desktop Hero continuations. */
-.hero-motion-picker {
-    position: fixed;
-    right: max(var(--space-5), env(safe-area-inset-right));
-    bottom: calc(max(var(--space-5), env(safe-area-inset-bottom)) + var(--touch-target-md) + var(--space-3));
-    z-index: 280;
-}
-
-.hero-motion-picker__trigger {
-    width: var(--touch-target-md);
-    height: var(--touch-target-md);
-    display: inline-grid;
-    place-items: center;
-    padding: 0;
-    border: var(--border-width-1) solid var(--alpha-ink-12);
-    border-radius: 50%;
-    color: var(--color-text-primary);
-    background: color-mix(in srgb, var(--color-surface-page) 88%, #ffffff);
-    box-shadow: 0 var(--space-2) var(--space-6) var(--alpha-ink-16);
-    cursor: pointer;
-    appearance: none;
-    transition:
-        color var(--duration-fast) var(--ease-standard),
-        background-color var(--duration-fast) var(--ease-standard),
-        border-color var(--duration-fast) var(--ease-standard),
-        transform var(--duration-fast) var(--ease-standard);
-}
-
-.hero-motion-picker__trigger span {
-    font-family: var(--font);
-    font-size: var(--font-size-18);
-    line-height: 1;
-    transition: transform var(--duration-standard) var(--ease-standard);
-}
-
-.hero-motion-picker__trigger:hover,
-.hero-motion-picker.is-open .hero-motion-picker__trigger {
-    border-color: var(--color-text-primary);
-    color: var(--color-surface-page);
-    background: var(--color-text-primary);
-}
-
-.hero-motion-picker.is-open .hero-motion-picker__trigger span {
-    transform: rotate(180deg);
-}
-
-.hero-motion-picker__trigger:focus-visible,
-.hero-motion-picker__option:focus-visible {
-    outline: var(--border-width-2) solid var(--color-accent-primary);
-    outline-offset: var(--space-1);
-}
-
-.hero-motion-picker__panel {
-    position: absolute;
-    right: 0;
-    bottom: calc(100% + var(--space-3));
-    width: 236px;
-    padding: var(--space-3);
-    border: var(--border-width-1) solid rgba(255, 255, 255, 0.18);
-    border-radius: var(--radius-3);
-    color: var(--color-neutral-0);
-    background: rgba(8, 11, 18, 0.94);
-    box-shadow: 0 var(--space-3) var(--space-8) rgba(0, 0, 0, 0.28);
-    -webkit-backdrop-filter: blur(14px);
-    backdrop-filter: blur(14px);
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transform: translateY(var(--space-2)) scale(0.97);
-    transform-origin: 100% 100%;
-    transition:
-        opacity var(--duration-fast) var(--ease-standard),
-        visibility 0s linear var(--duration-fast),
-        transform var(--duration-fast) var(--ease-standard);
-}
-
-.hero-motion-picker.is-open .hero-motion-picker__panel {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    transform: translateY(0) scale(1);
-    transition-delay: 0s;
-}
-
-.hero-motion-picker__eyebrow {
-    display: block;
-    padding: var(--space-1) var(--space-2) var(--space-3);
-    color: rgba(255, 255, 255, 0.56);
-    font-family: var(--font);
-    font-size: 10px;
-    font-weight: var(--font-weight-medium);
-    line-height: 1;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-}
-
-.hero-motion-picker__option {
-    width: 100%;
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    align-items: center;
-    gap: var(--space-3);
-    padding: var(--space-3) var(--space-2);
-    border: 0;
-    border-radius: var(--radius-2);
-    color: rgba(255, 255, 255, 0.76);
-    background: transparent;
-    cursor: pointer;
-    text-align: left;
-    appearance: none;
-    transition:
-        color var(--duration-fast) var(--ease-standard),
-        background-color var(--duration-fast) var(--ease-standard);
-}
-
-.hero-motion-picker__option:hover {
-    color: var(--color-neutral-0);
-    background: rgba(255, 255, 255, 0.08);
-}
-
-.hero-motion-picker__option.is-selected {
-    color: var(--color-neutral-0);
-    background: rgba(255, 255, 255, 0.11);
-}
-
-.hero-motion-picker__option strong,
-.hero-motion-picker__option small {
-    display: block;
-    font-family: var(--font);
-}
-
-.hero-motion-picker__option strong {
-    font-size: var(--font-size-14);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.15;
-}
-
-.hero-motion-picker__option small {
-    margin-top: var(--space-1);
-    color: rgba(255, 255, 255, 0.52);
-    font-size: 10px;
-    font-weight: var(--font-weight-regular);
-    line-height: 1.2;
-}
-
-.hero-motion-picker__status {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.26);
-}
-
-.hero-motion-picker__option.is-selected .hero-motion-picker__status {
-    background: var(--color-kv-spectrum-1);
-    box-shadow: 0 0 0 3px rgba(0, 212, 254, 0.16);
-}
-
-.hero-motion-picker__check {
-    opacity: 0;
-    font-family: var(--font);
-    font-size: var(--font-size-14);
-}
-
-.hero-motion-picker__option.is-selected .hero-motion-picker__check {
-    opacity: 1;
-}
-
-body.is-loading .hero-motion-picker,
-body.menu-open .hero-motion-picker,
-body.menu-closing .hero-motion-picker {
-    opacity: 0;
-    pointer-events: none;
-}
-
-@media (max-width:1199px) {
-    .hero-motion-picker {
-        display: none;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-
-    .hero-motion-picker__trigger,
-    .hero-motion-picker__trigger span,
-    .hero-motion-picker__panel,
-    .hero-motion-picker__option {
-        transition: none;
-    }
-}
-
-/* ป้าย SAVE 30% เกาะมุมบนขวาของปุ่มซื้อบัตรบน Hero แบบกล่องคำพูด หางชี้ลงหาปุ่ม
-   ไม่รับการคลิก เพื่อให้พื้นที่กดของปุ่มใต้ป้ายยังใช้ได้ */
-#cta-slot .hero-cta__save {
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 2;
-    transform: translate(var(--space-3), -50%);
-    pointer-events: none;
-}
-
-/* #cta-slot .hero-cta__save::after {
-    content: "";
-    position: absolute;
-    top: calc(100% - 1px);
-    left: 40%;
-    border-width: 6px 5px 0;
-    border-style: solid;
-    border-color: var(--color-danger-600) transparent transparent;
-} */
-
 /* ---------- แถบปุ่มลอยชิดขอบล่าง (จอ <=575px เท่านั้น) ---------- */
 .mobile-cta-bar {
     display: none;
 }
 
 @media (max-width:575px) {
-    #cta-slot {
-        display: none;
-    }
-
     .mobile-cta-bar {
         display: flex;
         align-items: center;
@@ -1826,512 +1608,358 @@ body.menu-open .site-header__backdrop {
     will-change: transform;
 }
 
-/* ---------- scroll driver ---------- */
-#scroller {
-    height: 320vh;
-    position: relative;
+@media (max-width:575px) {
+    .loader-icon {
+        max-width: 88px;
+        max-height: 88px;
+    }
+
+    .loader-progress {
+        bottom: var(--space-8);
+    }
 }
 
-/* replaced by layout() in px.
-   min-height stays in vh so the stage keeps covering the viewport during a resize:
-   layout() rewrites the px height a frame later, and without this the stale px box
-   is shorter than the new viewport and exposes the page background underneath. */
-#stagewrap {
-    height: 100vh;
+/* ---------- Hero ----------
+   Wireframe รอบแรก (ยังไม่มี motion): ซ้าย title + คำโปรย + ปุ่ม, ขวาภาพวิทยากร
+   ที่มีตัวเลขงานวางทับมุมล่าง และวันเวลาสถานที่อยู่ใต้ภาพ
+   พื้นหลังเป็นวิดีโอท้องฟ้าชุดสว่างเดิม (js/hero-loader.js เล่น/หยุดตามการมองเห็น) */
+.hero {
+    position: relative;
     min-height: 100vh;
-    width: 100%;
-    position: relative;
+    display: flex;
+    align-items: center;
+    padding: calc(var(--header-height) + var(--space-10)) var(--space-0) var(--space-16);
     overflow: hidden;
-    background: #dfe6ee;
+    background: #fafafb;
 }
 
-/* ---------- background (own pan rate = depth) ---------- */
-#bg {
-    /* วิดีโอ/โปสเตอร์ท้องฟ้าชุดสว่างเป็น 16:9 แต่กล่องนี้เป็นสัดส่วน KV (แนวตั้ง 0.8) ถ้า cover
-       ทั้งกล่องจะเหลือแค่แถบกลางภาพ 45% ก้อนเมฆที่อยู่ริมซ้ายบนกับล่างขวาหายหมด จึงวางวิดีโอ
-       กว้าง 130% ของกล่อง (ตัดขอบข้างละ 15%) ชิดบน ให้เห็นก้อนเมฆในจอแรกและกินความสูงถึง
-       ~1075px ที่ 1470 ส่วนที่เหลือใต้วิดีโอ (โผล่ตอนกล้องแพน) ใช้สีขาวเดียวกับขอบล่างของก้อนเมฆ
-       (#fafafb วัดจากเฟรมแรก) ให้ต่อกันเนียน — ค่านี้ต้องตรงกับ SKY_VIDEO_WIDTH_SCALE ใน js/hero-v2-scroll-motion.js */
-    --bt-sky-video-width: 130%;
-
+.hero__sky {
     position: absolute;
-    overflow: hidden;
-    background-color: #fafafb;
-    background-image: url('../images/light/background-light.webp?v=light-2');
-    background-size: var(--bt-sky-video-width) auto;
-    background-position: 50% top;
-    background-repeat: no-repeat;
-    will-change: transform;
+    inset: 0;
+    background: #fafafb url('../images/light/background-light.webp?v=light-2') 50% top / cover no-repeat;
+    pointer-events: none;
 }
 
-#sky-video {
-    /* กว้างกว่ากล่อง 130% แล้วเลื่อนกลับให้อยู่กึ่งกลาง (ดูเหตุผลที่ #bg) สูงตามสัดส่วนจริงของวิดีโอ */
-    width: var(--bt-sky-video-width);
-    height: auto;
-    margin-left: calc((100% - var(--bt-sky-video-width)) / 2);
-    display: block;
-    object-fit: fill;
-    object-position: 50% top;
-    opacity: 0;
-    transform: translateZ(0);
-    transform-origin: 50% 38%;
-    backface-visibility: hidden;
-    filter: saturate(1.08) contrast(1.025) brightness(1.015);
-    transition: opacity 480ms ease;
-    will-change: opacity, transform;
-}
-
-/* Width-driven height:auto preserves the intended crop on regular viewports. When the
-   viewport is taller than that rendered video height, layout() enables this fallback so
-   the moving sky continues to cover the full background instead of exposing a gap below. */
-/* จอที่สูงกว่าวิดีโอกว้าง 130% จะครอบได้ (layout() เปิดคลาสนี้ให้) กลับไป cover เต็มกล่องแทน
-   ยอมเสียก้อนเมฆดีกว่าเห็นพื้นขาวใต้วิดีโอตั้งแต่จอแรก */
-#bg.is-tall-video-cover #sky-video {
+.hero__sky-video {
     width: 100%;
     height: 100%;
-    margin-left: 0;
+    display: block;
     object-fit: cover;
     object-position: 50% top;
+    opacity: 0;
+    filter: saturate(1.08) contrast(1.025) brightness(1.015);
+    transition: opacity 480ms ease;
 }
 
-#bg.is-video-ready #sky-video {
+.hero.is-sky-ready .hero__sky-video {
     opacity: 1;
 }
 
-/* ---------- KV stage: virtual A4 canvas the camera pans down ---------- */
-#stage {
+/* ไอคอนสินทรัพย์: ค่าจาก POSTER ใน hero-v2-scroll-motion.js เดิม (ตำแหน่ง % ของจอ, ความกว้าง % ของจอ
+   บีบด้วย min/max px, มุมเอียง) ไอคอนเลื่อนลงจาก cy อีก 9vh (≤991 = 5vh) เหมือน posterIconShiftY เดิม
+   อยู่ layer ใต้ .hero__inner (z-index 1) จึงไม่ทับข้อความ ปุ่ม และภาพวิทยากร */
+.hero__assets {
+    --bt-hero-asset-shift: 9;
+
     position: absolute;
-    z-index: auto;
+    inset: 0;
+    z-index: 0;
     pointer-events: none;
+}
+
+.hero-asset {
+    position: absolute;
+    left: calc(var(--cx) * 1vw);
+    top: calc((var(--cy) + var(--bt-hero-asset-shift)) * 1vh);
+    /* --bt-hero-asset-scale ย่อทั้งชุด (min/ค่าตามจอ/max) ด้วยอัตราเดียว สัดส่วนเล็ก-ใหญ่ระหว่างไอคอนจึงคงเดิม */
+    width: calc(clamp(var(--min), var(--w) * 1vw, var(--max)) * var(--bt-hero-asset-scale, 1) * var(--bt-hero-asset-boost, 1));
+    filter: saturate(1.3);
+    transform: translate(-50%, -50%) rotate(var(--rot));
+}
+
+.hero-asset__float {
     will-change: transform;
 }
 
-#ship,
-#stairs,
-#pshadow,
-.person {
-    position: absolute;
-    display: block;
+/* ซ่อนไว้จนกว่า loader จะกระจายไอคอนออกมา (js/hero-loader.js) */
+.hero-asset__inner {
+    opacity: 0;
     will-change: transform, opacity;
+
+    img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
 }
 
-/* The ship stays behind the physical wall layers throughout its entrance. */
-#ship {
-    z-index: 10;
-    transform-origin: 50% 50%;
-    backface-visibility: hidden;
+.hero-asset[data-hero-asset="triangle"] {
+    --cx: 5.5;
+    --cy: 10.5;
+    --w: 10;
+    --rot: -10deg;
+    --min: 58px;
+    --max: 230px;
 }
 
-/* Full-canvas wall cutouts sit above the ship, preserving real occlusion while
-    allowing each side to move independently. */
-#walls {
-    position: absolute;
-    z-index: 20;
-    pointer-events: none;
-    will-change: transform;
+.hero-asset[data-hero-asset="gold"] {
+    --cx: 91.5;
+    --cy: 12.8;
+    --w: 5.5;
+    --rot: 16deg;
+    --min: 48px;
+    --max: 130px;
 }
 
-.wall-intro-panel {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    will-change: transform;
+.hero-asset[data-hero-asset="card"] {
+    --cx: 86.5;
+    --cy: 46;
+    --w: 9.5;
+    --rot: 12deg;
+    --min: 52px;
+    --max: 180px;
 }
 
-#wall-left-intro {
-    transform-origin: 0 50%;
+.hero-asset[data-hero-asset="stock"] {
+    --cx: 4.4;
+    --cy: 71;
+    --w: 4.2;
+    --rot: -24deg;
+    --min: 22px;
+    --max: 68px;
 }
 
-#wall-right-intro {
-    transform-origin: 100% 50%;
+.hero-asset[data-hero-asset="bitcoin"] {
+    --cx: 26.8;
+    --cy: 66.5;
+    --w: 6;
+    --rot: -8deg;
+    --min: 32px;
+    --max: 120px;
 }
 
-.wall-panel {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: fill;
-    will-change: transform;
-    /* filter: sepia(0.35) hue-rotate(185deg) saturate(1.5) brightness(0.4) contrast(1.1); */
-}
-
-#wall-left {
-    width: 101.35%;
-    transform-origin: 0 50%;
-}
-
-#wall-right {
-    left: auto;
-    right: 0;
-    width: 98.7%;
-    transform-origin: 100% 50%;
-}
-
-#stairs {
-    z-index: 40;
-}
-
-#pshadow {
-    z-index: 50;
-}
-
-.person {
-    z-index: 60;
-    transform-origin: 50% 100%;
-}
-
-/* Scroll-scrubbed continuation through the ship door. */
-#ship-run-layer {
-    position: fixed;
-    inset: 0;
-    z-index: 180;
-    opacity: 0;
-    pointer-events: none;
-}
-
-#ship-run-canvas {
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-
-.ship-run-source {
-    display: none;
-}
-
-#ship-run-whiteout {
-    position: fixed;
-    inset: 0;
-    z-index: 210;
-    opacity: 0;
-    background: #fff;
-    pointer-events: none;
-}
-
-/* Scroll cue ของ hero-v2: เริ่มแสดงเมื่อผู้ใช้ scroll ลงมาเล็กน้อย */
-.hero-scroll-cue {
-    position: fixed;
-    left: 50%;
-    bottom: max(var(--bt-hero-scroll-cue-bottom), env(safe-area-inset-bottom));
-    z-index: 205;
-    width: var(--bt-hero-scroll-cue-width);
-    min-height: var(--space-14);
-    display: inline-grid;
-    justify-items: center;
-    gap: var(--bt-hero-scroll-cue-gap);
-    padding: 0;
-    border: 0;
-    color: var(--bt-hero-scroll-cue-ink);
-    background: transparent;
-    mix-blend-mode: difference;
-    opacity: 1;
-    pointer-events: auto;
-    transform: translate3d(-50%, 0, 0);
-    transition:
-        opacity 320ms ease,
-        transform 320ms ease;
-    will-change: opacity, transform;
-}
-
-body.is-loading .hero-scroll-cue,
-.hero-scroll-cue.is-hidden {
-    opacity: 0;
-    pointer-events: none;
-    transform: translate3d(-50%, var(--space-2), 0);
-}
-
-.hero-scroll-cue__mouse {
+/* bitcoin ย้ายมาอยู่ข้างคนริมซ้ายแถวล่างสุดของภาพวิทยากร ตำแหน่งเป็น % ของกรอบ .hero__visual
+   (≥992 กรอบเท่าภาพ 4:5 ทั้งแผ่น จุดนี้ = 4% / 72% ของภาพ) ขนาดและมุมเท่าเดิม
+   อยู่หลังภาพวิทยากร (z-index 0 ต่ำกว่า .hero__speakers) ส่วนที่ติดคนจึงถูกภาพบัง */
+.hero__visual {
     position: relative;
-    width: var(--bt-hero-scroll-cue-mouse-width);
-    height: var(--bt-hero-scroll-cue-mouse-height);
-    display: block;
-    border: var(--bt-hero-scroll-cue-border-width) solid currentColor;
-    border-radius: var(--space-10);
 }
 
-.hero-scroll-cue__wheel {
-    position: absolute;
-    left: 50%;
-    top: var(--space-2);
-    width: var(--bt-hero-scroll-cue-dot-width);
-    height: var(--bt-hero-scroll-cue-dot-height);
-    border-radius: var(--space-10);
-    background: currentColor;
-    transform: translateX(-50%);
-    animation: hero-scroll-cue-wheel 1800ms cubic-bezier(0.4, 0, 0.2, 1) infinite;
+.hero__visual>.hero-asset[data-hero-asset="bitcoin"] {
+    --bx: 2;
+    --by: 64;
+
+    z-index: 0;
+    left: calc(var(--bx) * 1%);
+    top: calc(var(--by) * 1%);
 }
 
-.hero-scroll-cue__text {
-    display: block;
-    font-family: var(--font);
-    font-size: var(--bt-hero-scroll-cue-text-size);
-    font-weight: var(--font-weight-regular);
-    line-height: 1;
-    letter-spacing: 0;
-    white-space: nowrap;
+.hero-asset[data-hero-asset="heart"] {
+    --cx: 93.5;
+    --cy: 74;
+    --w: 14;
+    --rot: -5deg;
+    --min: 56px;
+    --max: 240px;
 }
 
-@keyframes hero-scroll-cue-wheel {
-    0% {
-        opacity: 0;
-        transform: translate(-50%, 0);
+/* ไอคอนใหญ่สี่ตัวย่อลง 25% เท่ากันทุกตัว (heart ยังใหญ่กว่า card, triangle ยังใหญ่กว่า gold ฯลฯ) */
+.hero-asset:is([data-hero-asset="triangle"], [data-hero-asset="gold"], [data-hero-asset="heart"], [data-hero-asset="card"]) {
+    --bt-hero-asset-scale: 0.75;
+}
+
+@media (max-width:991px) {
+
+    /* กำแพง wall-*-1280 (4:5 จาก <picture>) รูปทรงเฉียงอยู่ในไฟล์แล้ว วางตามสัดส่วนจริง ไม่ยืด ไม่มี mask
+       ขอบล่างชนขอบล่างภาพวิทยากร มุมล่างด้านในของไฟล์ (36.1% / 62.4% ของความกว้างไฟล์)
+       ชนขอบในของกำแพงที่ 36% / 63% ของกรอบภาพ
+       ขนาด: สูงอย่างน้อยจากแถวตัวเลข stat ถึงขอบล่างภาพ และกว้างพอให้ขอบนอกถึงขอบจอทั้งสองฝั่ง
+       (จอ ~800–991 ที่ภาพอยู่กลางจอ กำแพงจะใหญ่ขึ้นและเริ่มสูงกว่าแถว stat เล็กน้อย) */
+    .hero__wall {
+        --bt-hero-wall-bottom: calc(var(--bt-hero-wall-top, 0px) + var(--bt-hero-wall-height, 0px));
+        --bt-hero-wall-inner-l: calc(var(--bt-hero-wall-left, 0px) + var(--bt-hero-wall-width, 0px) * 0.36);
+        --bt-hero-wall-inner-r: calc(var(--bt-hero-wall-left, 0px) + var(--bt-hero-wall-width, 0px) * 0.63);
+        --bt-hero-wall-file-width: max(
+            (var(--bt-hero-wall-bottom) - var(--bt-hero-wall-start, 0px)) * 0.8,
+            var(--bt-hero-wall-inner-l) / 0.361,
+            (var(--bt-hero-width, 100vw) - var(--bt-hero-wall-inner-r)) / 0.376);
+
+        display: block;
+        position: absolute;
+        top: calc(var(--bt-hero-wall-bottom) - var(--bt-hero-wall-file-width) * 1.25);
+        width: var(--bt-hero-wall-file-width);
+        max-width: none;
+        height: calc(var(--bt-hero-wall-file-width) * 1.25);
+        pointer-events: none;
     }
 
-    18% {
-        opacity: 1;
+    /* ขอบในช่วงล่างของกำแพงซ้ายอยู่ข้างเรือ (ภาพวิทยากรใสตรงนั้น) เห็นเป็นเส้นตัดกับท้องฟ้า
+       ไล่จางแถบแคบ ๆ ขนานกับขอบเฉียงช่วงล่าง (จาก 27%,50% ถึง 36.1%,100% ของไฟล์ เอียง ~8° จากแนวตั้ง)
+       มุม 81.7deg ตั้งฉากกับขอบนั้น ขอบอยู่ที่ 30.5% ของแนว gradient
+       ชั้นที่สอง (แนวตั้ง) ทำให้ช่วงบน 0–76% ของกำแพงทึบเต็ม แถบจางจึงมีผลเฉพาะช่วงล่างข้างเรือ */
+    .hero__wall--left {
+        left: calc(var(--bt-hero-wall-inner-l) - var(--bt-hero-wall-file-width) * 0.361);
+        mask-image:
+            linear-gradient(81.7deg, #000 0, #000 26%, transparent 30.5%),
+            linear-gradient(180deg, #000 0, #000 76%, transparent 84%);
+        mask-composite: add;
     }
 
-    72% {
-        opacity: 1;
-        transform: translate(-50%, var(--space-2));
+    .hero__wall--right {
+        left: calc(var(--bt-hero-wall-inner-r) - var(--bt-hero-wall-file-width) * 0.624);
     }
 
-    100% {
-        opacity: 0;
-        transform: translate(-50%, var(--space-2));
+    /* hero สูงกว่ากว้าง วิดีโอ 16:9 แบบ cover เหลือแค่แถบกลาง ~1/3 ของความกว้าง (ฟ้าเปล่าเป็นส่วนใหญ่)
+       เลื่อนไปทางซ้ายให้เห็นก้อนเมฆมุมซ้ายบนช่วงบน และก้อนใหญ่ด้านล่างเข้ามาในกรอบ */
+    .hero__sky,
+    .hero__sky-video {
+        background-position: 30% top;
+        object-position: 30% top;
+    }
+
+    .hero__assets {
+        --bt-hero-asset-shift: 5;
+    }
+
+    /* ≤991 ไอคอนสินทรัพย์ใหญ่ขึ้น 40% ทุกตัว (คูณทั้งชุด สัดส่วนเล็ก-ใหญ่ระหว่างไอคอนคงเดิม) */
+    .hero-asset {
+        --bt-hero-asset-boost: 1.6;
+    }
+
+    /* ≤991 ภาพเต็มแผ่นแต่ .hero__visual มี gutter ซ้าย-ขวา แปลงจุด 4% ของภาพเป็น % ของกรอบ (แนวตั้งเท่าเดิม 72%) */
+    .hero__visual>.hero-asset[data-hero-asset="bitcoin"] {
+        --bx: 7;
+        --by: 72;
     }
 }
 
-@media (max-width:575px) {
-    .hero-scroll-cue {
-        bottom: max(var(--bt-hero-scroll-cue-bottom-sm), env(safe-area-inset-bottom));
-    }
+.hero__inner {
+    position: relative;
+    z-index: 1;
 }
 
-@media (prefers-reduced-motion: reduce) {
-
-    .hero-scroll-cue,
-    .hero-scroll-cue__wheel {
-        animation: none;
-        transition: none;
-    }
-
-    .hero-scroll-cue__wheel {
-        opacity: 1;
-        transform: translate(-50%, var(--space-1));
-    }
+.hero__row {
+    align-items: center;
+    row-gap: var(--space-6);
 }
 
-/* Its first frame matches the completed stair
-    composition, then the camera follows the runners through the ship door. */
-#ship-run-video {
-    position: absolute;
-    left: 50%;
-    bottom: 0;
-    z-index: 90;
+.hero__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.hero__title {
     width: 100%;
+    max-width: 440px;
     height: auto;
     display: block;
-    opacity: 0;
-    pointer-events: none;
-    will-change: left, width, opacity;
 }
 
-/* ---------- holographic assets ---------- */
-.asset {
-    position: absolute;
-    z-index: 70;
-    will-change: transform;
-    filter: saturate(1.3);
-}
-
-.asset .floaty {
-    will-change: transform;
-}
-
-.asset .inner {
-    will-change: transform, opacity;
-    opacity: 0;
-}
-
-.asset img,
-.asset video {
-    width: 100%;
-    display: block;
-    /* filter: drop-shadow(0 12px 20px rgba(20, 40, 90, 0.30)); */
-}
-
-/* These begin above the wall plane. The timeline moves them behind the ship before
-   their bounds make contact, matching the reference motion without a visible snap. */
-#a-triangle,
-#a-bitcoin,
-#a-gold,
-#a-card {
-    z-index: 30;
-}
-
-#a-title {
-    z-index: 80;
-}
-
-#a-title img {
-    filter: unset;
-}
-
-/* ---------- frame-1 UI ---------- */
-#ui {
-    position: absolute;
-    left: 50%;
-    /* 59vh sets the gap below the title and governs on tall viewports; the px reserve
-       governs on short ones, where it keeps the block off the bottom edge. Mirrored in
-       layout() — see hero-v2-scroll-motion.js, which overwrites this with the same
-       formula in px. Deliberately vh, not %: the containing block is #stage, whose
-       height is the KV canvas (~1.4x the viewport), so % here would not mean what the
-       JS means and the pre-layout() fallback would land far too low. */
-    top: min(59vh, 100vh - 324px);
-    transform: translateX(-50%);
-    z-index: 25;
-    pointer-events: auto;
-    width: min(calc(100% - var(--space-8)), 720px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /* ตัวแปร --hero-ui-gap-cut มาจาก JS เฉพาะจอเตี้ยที่ #ui ชนกับ title (ดู layout() ใน hero-v2-scroll-motion.js) */
-    gap: max(var(--space-4), var(--space-8) - var(--hero-ui-gap-cut, 0px));
-    opacity: 0;
-    text-align: center;
-    /* ท้องฟ้าชุดสว่าง: วันที่/เวลา/สถานที่เป็นตัวดำ (ชุดมืดเดิมเป็นขาว) */
+.hero__headline {
+    margin: var(--space-8) var(--space-0) var(--space-0);
     color: var(--color-text-primary);
     font-family: var(--headline);
+    font-size: var(--section-heading-size);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.3;
 }
 
-/* คำโปรยใต้ title: ขึ้นมาพร้อม #ui และ JS วัดความสูง #ui ทั้งก้อนตอนจัดตำแหน่งใต้ title อยู่แล้ว */
-#ui .event-description {
-    margin: 0;
-    font-size: var(--font-size-20);
-    font-weight: var(--font-weight-regular);
-    line-height: 1.6;
-    text-wrap: balance;
+/* Thai has no spaces, so without this the browser breaks inside words ("ชั้น|นำ").
+   Each phrase stays whole; when the column is too narrow "จากวิทยากรชั้นนำ" drops to a third line. */
+.hero__headline-phrase {
+    display: inline-block;
 }
 
-#ui .event-primary {
-    display: grid;
-    justify-items: center;
+.hero__description {
+    margin: var(--space-4) var(--space-0) var(--space-0);
+    color: var(--color-text-secondary);
+    font-size: var(--section-subtext-size);
+    line-height: var(--line-height-normal);
 }
 
-#ui .event-countdown {
-    min-width: 288px;
-    display: grid;
-    justify-items: center;
-    gap: var(--space-3);
-    font-variant-numeric: tabular-nums;
-    opacity: 0.92;
+/* Stat styling follows #expectation (.expectation__stat), one size step smaller: ink numbers with a blue "+", a light muted
+   label underneath, and the rotated line-star image as the divider between items. */
+.hero__stats {
+    --bt-hero-stat-size: var(--section-heading-size);
+    --bt-hero-stat-rule-length: 64px;
+
+    display: flex;
+    margin: var(--space-8) var(--space-0) var(--space-0);
+
+    @media (max-width: 991px) {
+        --bt-hero-stat-size: var(--font-size-32);
+        --bt-hero-stat-rule-length: 56px;
+    }
+
+    @media (max-width: 767px) {
+        --bt-hero-stat-size: var(--font-size-28);
+        --bt-hero-stat-rule-length: 48px;
+    }
 }
 
-#ui .event-countdown__label {
-    color: currentColor;
-    font-size: var(--font-size-16);
-    font-weight: var(--font-weight-regular);
-    line-height: 1;
-}
-
-#ui .event-countdown__values {
-    display: grid;
-    grid-template-columns: repeat(4, 56px);
-    gap: var(--space-12);
-}
-
-#ui .event-countdown__unit {
+.hero__stat {
     position: relative;
-    min-width: 0;
-    display: grid;
-    justify-items: center;
-    gap: var(--space-3);
-}
-
-#ui .event-countdown__unit:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    top: calc(50% + 3px);
-    right: calc(var(--space-6) * -1);
-    width: var(--bt-hero-countdown-divider-width);
-    height: calc(var(--bt-hero-countdown-divider-width) / var(--bt-hero-countdown-divider-ratio));
-    background: url('../images/line-star-countdown.webp') center / contain no-repeat;
-    transform: translate(50%, -50%) rotate(90deg);
-    transform-origin: center;
-}
-
-#ui .event-countdown__unit strong {
-    font-size: var(--font-size-24);
-    font-weight: var(--font-weight-medium);
-    line-height: 1;
-}
-
-#ui .event-countdown__unit small {
-    font-size: var(--font-size-14);
-    font-weight: var(--font-weight-regular);
-    line-height: 1;
-}
-
-#ui .event-countdown__status {
-    display: none;
-    min-height: 40px;
+    display: flex;
+    flex-direction: column-reverse;
     align-items: center;
-    font-size: var(--font-size-20);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.2;
+    padding: var(--space-0) var(--space-8);
+    text-align: center;
+
+    &:first-child {
+        padding-left: var(--space-0);
+    }
+
+    &+&::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: var(--bt-hero-stat-rule-length);
+        height: calc(var(--bt-hero-stat-rule-length) / 9.13);
+        background: url('../images/line-star.webp') center / contain no-repeat;
+        transform: translate(-50%, -50%) rotate(90deg);
+    }
+
+    dt {
+        margin-top: var(--space-2);
+        color: var(--color-text-muted);
+        font-size: var(--section-body-size);
+        font-weight: var(--font-weight-light);
+        line-height: var(--section-body-line-height);
+        letter-spacing: 0;
+    }
+
+    dd {
+        margin: var(--space-0);
+        color: var(--color-text-primary);
+        font-size: var(--bt-hero-stat-size);
+        font-weight: var(--font-weight-medium);
+        line-height: var(--section-title-line-height);
+        letter-spacing: 0;
+    }
+
+    .hero__stat-suffix {
+        color: var(--color-blue-600);
+    }
 }
 
-#ui .event-countdown.is-status .event-countdown__values {
-    display: none;
-}
-
-#ui .event-countdown.is-status .event-countdown__status {
+.hero__actions {
     display: flex;
-}
-
-/* The CTA is built by js/liquid-metal-button.js and mounted in #cta-slot. */
-.lmb button:focus-visible {
-    outline: 2px solid #2b6cff;
-    outline-offset: 3px;
-}
-
-#ui .event-details {
-    display: grid;
-    justify-items: center;
-    gap: max(var(--space-3), var(--space-8) - var(--hero-ui-gap-cut, 0px));
-}
-
-#ui .event-datetime {
-    display: flex;
-    flex-direction: column;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: center;
-    column-gap: var(--space-3);
-    row-gap: max(var(--space-3), var(--space-6) - var(--hero-ui-gap-cut, 0px));
-    font-weight: var(--font-weight-regular);
-    line-height: 1.05;
-    letter-spacing: 0;
-    margin-bottom: var(--space-2);
+    gap: var(--space-3) var(--space-8);
+    margin-top: var(--space-8);
 }
 
-#ui .time {
-    font-size: var(--font-size-24);
-    line-height: inherit;
-}
-
-#ui .date {
-    font-size: var(--font-size-24);
-    white-space: nowrap;
-}
-
-#ui .venue {
+/* ค่าเดียวกับ #ui .venue / #ui .venue-link ของ hero เดิม (ลิงก์ Samyan Mitrtown Hall) */
+.hero__dna-link {
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--color-text-primary);
     font-size: var(--font-size-20);
     font-weight: var(--font-weight-regular);
     line-height: 1.25;
-    padding-top: 0;
-}
-
-#ui .venue-link {
-    align-items: center;
-    gap: var(--space-3);
-    color: inherit;
-    font-size: inherit;
-    font-weight: inherit;
 
     &::after {
         background: var(--spectrum);
@@ -2346,7 +1974,241 @@ body.is-loading .hero-scroll-cue,
     &:hover .bt-icon,
     &:focus-visible .bt-icon {
         stroke: #00d4fe;
-        stroke: url("#venue-arrow-spectrum");
+        stroke: url("#hero-dna-arrow-spectrum");
+    }
+}
+
+/* ข้อความราคาพิเศษข้างปุ่มซื้อบัตร เป็นข้อความธรรมดาสองบรรทัดเรียงชิดซ้าย
+   บรรทัดแรกน้ำหนักกลาง บรรทัดสองเป็นเงื่อนไขเวลาสีรองที่อ่อนกว่า */
+.hero__offer {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: var(--space-0);
+    font-size: var(--section-small-size);
+    line-height: var(--section-small-line-height);
+    text-align: left;
+}
+
+/* "ราคาพิเศษ" สีดำ เว้นหนึ่งวรรคแล้วตามด้วย "ลด 30%" สีแดงตัวเอียง */
+/* บรรทัดแรกใหญ่กว่าบรรทัดเงื่อนไขหนึ่งขั้น (16 / 14px) */
+.hero__offer-highlight {
+    color: var(--color-text-primary);
+    /* font-size: var(--section-body-size); */
+    font-weight: var(--font-weight-medium);
+    line-height: var(--section-small-line-height);
+}
+
+.hero__offer-discount {
+    color: var(--color-danger-600);
+    font-weight: var(--font-weight-bold);
+    font-style: italic;
+    padding-right: var(--space-1);
+}
+
+.hero__offer-note {
+    color: var(--color-neutral-600);
+}
+
+.hero__visual {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+/* ภาพ placeholder เป็นโปสเตอร์ 4:5 ที่มี title อยู่บนและวันที่อยู่ล่าง
+   กรอบ 6:5 เห็นความสูงภาพ 2/3 เลื่อนลง 66% ให้เหลือเฉพาะช่วงวิทยากร (~22–88% ของภาพ) */
+.hero__speakers {
+    position: relative;
+    margin: var(--space-0);
+    overflow: hidden;
+    border-radius: var(--card-radius);
+    aspect-ratio: 6 / 5;
+
+    img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+        object-position: 50% 66%;
+    }
+}
+
+/* ≥992 hero กว้างเท่าแถบใน header (.site-header__inner) ภาพวิทยากรชิดขวา ข้อความชิดซ้าย
+   ภาพต้องเห็นเต็มแผ่นเสมอ (ห้ามครอป คนริมภาพจะหาย) กรอบจึงเป็น 4:5 ตามไฟล์
+   กว้าง min(80vh, พื้นที่ที่เหลือจากคอลัมน์ข้อความขั้นต่ำ) = สูงไม่เกิน 100vh
+   จอสูงภาพกว้างขึ้นแล้วเบียดข้อความไปซ้าย จอแคบภาพเตี้ยกว่าจอและอยู่กึ่งกลางแนวตั้ง */
+@media (min-width:992px) {
+
+    /* ข้อความ + ภาพเรียงชิดกัน (ห่างกันแค่ --bt-hero-gap) แล้วทั้งกลุ่มวางกึ่งกลางจอ
+       พื้นที่ที่เหลือไปอยู่ขอบซ้าย-ขวาเท่า ๆ กัน และมีระยะจากขอบจออย่างน้อย --bt-hero-side-min เสมอ
+       ภาพสูง 100vh (กว้าง 80vh ตามสัดส่วน 4:5) คอลัมน์ข้อความกว้างตามเนื้อหา (สูงสุด 600px)
+       จอแคบลงคอลัมน์ข้อความหดเอง title ย่อตาม (.hero__title width 100%) */
+    .hero {
+        --bt-hero-gap: var(--space-6);
+        --bt-hero-side-min: var(--space-8);
+
+        padding-block: var(--space-0);
+    }
+
+    .hero__inner {
+        display: flex;
+        align-self: stretch;
+        width: 100%;
+        max-width: none;
+        padding-inline: var(--bt-hero-side-min);
+    }
+
+    .hero__row {
+        flex: 1 1 auto;
+        flex-wrap: nowrap;
+        justify-content: center;
+        gap: var(--bt-hero-gap);
+        margin: var(--space-0);
+    }
+
+    .hero__content {
+        position: relative;
+        z-index: 2;
+        flex: 0 1 auto;
+        width: auto;
+        max-width: 600px;
+        min-width: 0;
+        padding: calc(var(--header-height) + var(--space-10)) var(--space-0) var(--space-16);
+    }
+
+    .hero__visual {
+        position: relative;
+        z-index: 1;
+        flex: 0 0 auto;
+        align-self: flex-start;
+        width: 80vh;
+        height: 100vh;
+        padding: var(--space-0);
+    }
+
+    /* 992–1199: ภาพ 80vh กินพื้นที่ส่วนใหญ่ headline กับแถว stat เลยกว้างเกินคอลัมน์ ลด headline เหลือ 32px และช่องไฟ stat */
+    @media (max-width: 1199px) {
+        .hero__headline {
+            font-size: var(--font-size-32);
+        }
+
+        .hero__stat {
+            padding-inline: var(--space-5);
+        }
+    }
+
+    .hero__speakers {
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        aspect-ratio: auto;
+        border-radius: var(--space-0);
+
+        img {
+            object-position: 50% 50%;
+        }
+    }
+
+    /* กำแพงขวา: ไฟล์ 4:5 เท่ากรอบภาพวิทยากร js/hero-loader.js ใส่ตำแหน่ง/ขนาดของกรอบภาพ
+       (เทียบกับ .hero) ให้ผ่าน --bt-hero-wall-* แล้ว scaleX จากขอบในของกำแพง (~63% ของไฟล์)
+       ยื่นออกทางขวาจนถึงขอบจอ ส่วนเกินถูก .hero (overflow: hidden) ตัด
+       ไม่มี z-index และมาหลัง .hero__sky ใน DOM จึงอยู่บนท้องฟ้าแต่ใต้ .hero__assets (0) และ .hero__inner (1) */
+    .hero__wall {
+        display: block;
+        position: absolute;
+        top: var(--bt-hero-wall-top, 0px);
+        left: var(--bt-hero-wall-left, 0px);
+        width: var(--bt-hero-wall-width, 0px);
+        max-width: none;
+        height: var(--bt-hero-wall-height, 0px);
+        pointer-events: none;
+    }
+
+    /* กำแพงขวา (wall-right-new.webp 2880×2880 = 1:1) วางตามสัดส่วนจริง ไม่ยืด
+       สูงเท่ากรอบภาพวิทยากร ขอบซ้ายของไฟล์ (ขอบในของกำแพง) อยู่ที่ 63% ของกรอบภาพ ตรงกับตำแหน่งเดิม
+       กำแพงยาวต่อไปทางขวาเกินขอบจอ ส่วนเกินถูก .hero (overflow: hidden) ตัด
+       ไล่จางขอบในกว้างเท่าที่ใช้ก่อนเปลี่ยนไฟล์ (27% ของกรอบภาพ = 21.6% ของไฟล์) ให้กลืนกับเมฆ
+       (ตรงข้อความวันที่ ภาพวิทยากรใส เห็นท้องฟ้าฝั่งซ้าย กำแพงฝั่งขวา)
+       ไล่จางเฉพาะช่วงที่ขอบตั้งตรง (ต่ำกว่า ~40% ของความสูง) ช่วงบนขอบเฉียงออกไปถึง 12% ของไฟล์
+       ถ้าจางด้วยจะเห็นท้องฟ้าทะลุ ชั้นที่สอง (แนวตั้ง) ทำให้ช่วงบน 0–35% ทึบเต็ม ต่อกันแบบ add */
+    .hero__wall--right {
+        --bt-hero-wall-right-edge: 0.63;
+
+        left: calc(var(--bt-hero-wall-left, 0px) + var(--bt-hero-wall-width, 0px) * var(--bt-hero-wall-right-edge));
+        width: var(--bt-hero-wall-height, 0px);
+        mask-image:
+            linear-gradient(90deg, transparent 0, #000 21.6%),
+            linear-gradient(180deg, #000 0, #000 35%, transparent 42%);
+        mask-composite: add;
+    }
+
+    /* กำแพงซ้าย (wall-left-new.webp 3840×2880 = 4:3) วางตามสัดส่วนจริง ไม่ยืด
+       สูงเท่ากรอบภาพวิทยากร ขอบขวาของไฟล์ (ขอบในของกำแพง) อยู่ที่ 36% ของกรอบภาพ ตรงกับตำแหน่งเดิม
+       กำแพงยาวต่อไปทางซ้ายเกินขอบจอ ส่วนเกินถูก .hero (overflow: hidden) ตัด
+       ไล่จางขอบในเท่าระยะเดิม (9% ของความกว้างกรอบภาพ = ~5.4% ของไฟล์) ให้กลืนกับเมฆข้างภาพ */
+    .hero__wall--left {
+        --bt-hero-wall-left-edge: 0.36;
+        --bt-hero-wall-left-width: calc(var(--bt-hero-wall-height, 0px) * 4 / 3);
+
+        left: calc(var(--bt-hero-wall-left, 0px) + var(--bt-hero-wall-width, 0px) * var(--bt-hero-wall-left-edge) - var(--bt-hero-wall-left-width));
+        width: var(--bt-hero-wall-left-width);
+        mask-image: linear-gradient(90deg, #000 0, #000 94.6%, transparent 100%);
+    }
+}
+
+@media (max-width:991px) {
+    .hero {
+        min-height: 0;
+        padding-bottom: var(--space-0);
+    }
+
+    .hero__content {
+        align-items: center;
+        text-align: center;
+    }
+
+    .hero__actions {
+        justify-content: center;
+        flex-direction: column;
+        gap: var(--space-6);
+    }
+
+    .hero__offer {
+        flex-direction: row;
+        gap: var(--space-1);
+    }
+
+    /* .hero__visual {
+        max-width: 560px;
+        margin-inline: auto;
+    } */
+
+    /* ภาพวิทยากรสูงตามสัดส่วนไฟล์จริง (4:5) เห็นเต็มแผ่น ไม่ครอปเป็นกรอบ 6:5 */
+    .hero__speakers {
+        aspect-ratio: auto;
+
+        img {
+            height: auto;
+        }
+    }
+}
+
+@media (max-width:575px) {
+    .hero__headline {
+        font-size: var(--font-size-32);
+    }
+
+    .hero__description {
+        font-size: var(--section-body-size);
+    }
+
+    .hero__stat {
+        padding-inline: var(--space-5);
+
+        dt {
+            font-size: var(--section-small-size);
+        }
     }
 }
 
@@ -2438,15 +2300,6 @@ body.is-loading .hero-scroll-cue,
             #000 460px);
 }
 
-#concept.is-awaiting-entry::before {
-    opacity: 0;
-}
-
-#concept.is-awaiting-entry.is-revealed::before {
-    opacity: var(--bt-concept-bg-opacity);
-    transition-delay: var(--bt-concept-bg-reveal-delay);
-}
-
 .concept__aurora {
     --concept-aurora-stripes: repeating-linear-gradient(100deg,
             #fff 0%,
@@ -2498,15 +2351,6 @@ body.is-loading .hero-scroll-cue,
     }
 }
 
-#concept.is-awaiting-entry .concept__aurora {
-    opacity: 0;
-}
-
-#concept.is-awaiting-entry.is-revealed .concept__aurora {
-    opacity: 0.22;
-    transition: opacity 900ms var(--ease-standard);
-}
-
 .concept__inner {
     position: relative;
     z-index: 1;
@@ -2517,17 +2361,6 @@ body.is-loading .hero-scroll-cue,
     opacity: 1;
     transform: translateY(0);
     will-change: transform, opacity;
-}
-
-#concept.is-awaiting-entry .concept__inner {
-    opacity: 0;
-    transform: translateY(var(--space-4));
-}
-
-#concept.is-awaiting-entry.is-revealed .concept__inner {
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 560ms ease, transform 720ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .concept__description {
@@ -2547,19 +2380,6 @@ body.is-loading .hero-scroll-cue,
     opacity: 1;
     transform: translateY(0);
     will-change: transform, opacity;
-}
-
-#concept.is-awaiting-entry .concept__video-scroll {
-    opacity: 0;
-    transform: translateY(var(--space-6));
-}
-
-#concept.is-awaiting-entry.is-revealed .concept__video-scroll {
-    opacity: 1;
-    transform: translateY(0);
-    transition:
-        opacity 640ms ease 120ms,
-        transform 760ms cubic-bezier(0.22, 1, 0.36, 1) 120ms;
 }
 
 @media (max-width:1199px) {
@@ -3368,51 +3188,6 @@ body.is-loading .hero-scroll-cue,
     .topics-showcase__asset-float {
         will-change: auto;
     }
-}
-
-/* ---------- Speaker overview ----------
-   แบนเนอร์ภาพเดียวกว้างเท่า .container ความสูงตามสัดส่วนภาพต้นฉบับ (ภาพสลับตาม breakpoint ผ่าน <picture>)
-   ระยะบน-ล่างใช้ --section-padding-y ชุดเดียวกับ section อื่น (≤991 ใช้ -sm เหมือนกัน) */
-.speaker-overview {
-    position: relative;
-    padding: var(--section-padding-y) var(--space-0) var(--space-0);
-    background: var(--color-surface-page);
-}
-
-@media (max-width: 991px) {
-    .speaker-overview {
-        padding: var(--section-padding-y-sm) var(--space-0) var(--space-0);
-    }
-}
-
-.speaker-overview__banner,
-.speaker-overview__banner img {
-    display: block;
-    width: 100%;
-    height: auto;
-}
-
-/* Speaker Overview อยู่ต่อจาก hero: ตอนวิดีโอคนวิ่งจบ จอเป็นฉากขาวทั้งจอ แล้วหน้าเลื่อนลงมาที่ section นี้
-   (hero-v2-scroll-motion.js ใส่ is-awaiting-entry ตอนวิดีโอเริ่ม และ is-revealed หลังฉากขาว ~720ms)
-   พื้น section เป็นสีหน้าเว็บอยู่แล้วจึงต่อจากฉากขาวได้เนียน แบนเนอร์ค่อยเฟดขึ้นพร้อมลอยขึ้นเล็กน้อย
-   จังหวะเดียวกับเนื้อหา Concept เดิม */
-#speaker-overview.is-awaiting-entry .speaker-overview__inner {
-    opacity: 0;
-    transform: translateY(var(--space-6));
-}
-
-#speaker-overview.is-awaiting-entry.is-revealed .speaker-overview__inner {
-    opacity: 1;
-    transform: translateY(0);
-    transition:
-        opacity 640ms ease 120ms,
-        transform 760ms cubic-bezier(0.22, 1, 0.36, 1) 120ms;
-}
-
-/* มุมโค้งเท่ากรอบวิดีโอใน Concept และการ์ดใน Ticket (--card-radius) */
-.speaker-overview__banner {
-    overflow: hidden;
-    border-radius: var(--card-radius);
 }
 
 /* ---------- Ticket ---------- Comparison layout แบบ editorial ใช้พื้นที่ว่างและเส้นบางแทนกรอบ card */
@@ -8397,136 +8172,11 @@ body.is-loading .hero-scroll-cue,
         margin: var(--space-12) 0 0;
     }
 
-    .floor-plan__toolbar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: var(--space-4);
-        margin-bottom: var(--space-4);
-    }
-
-    .floor-plan__views,
-    .floor-plan__controls {
-        display: flex;
-        align-items: center;
-        gap: var(--space-1);
-        padding: var(--space-1);
-        border: var(--border-width-1) solid var(--color-border-subtle);
-        border-radius: var(--radius-pill);
-        background: var(--color-surface-page);
-
-        button {
-            min-height: var(--button-height-sm);
-            min-width: var(--button-height-sm);
-            padding: var(--space-2) var(--space-4);
-            border: 0;
-            border-radius: var(--radius-pill);
-            background: transparent;
-            color: var(--color-text-secondary);
-            font: inherit;
-            font-size: var(--font-size-16);
-            line-height: var(--line-height-tight);
-            cursor: pointer;
-            transition: background var(--duration-fast) var(--ease-standard);
-
-            &:hover {
-                background: var(--color-surface-soft);
-            }
-
-            &[aria-pressed="true"] {
-                background: var(--color-text-primary);
-                color: var(--color-surface-page);
-            }
-
-            &:disabled {
-                opacity: 0.4;
-                cursor: default;
-            }
-
-            &:focus-visible {
-                outline: var(--border-width-2) solid var(--color-blue-600);
-                outline-offset: var(--space-1);
-            }
-        }
-    }
-
-    .floor-plan__status,
-    .floor-plan__caption {
-        color: var(--color-text-muted);
-        font-size: var(--font-size-16);
-        line-height: var(--line-height-body);
-        margin: 0;
-    }
-
-    .floor-plan__scene {
-        position: absolute;
-        inset: 0;
-        overflow: hidden;
-        border: var(--border-width-1) solid var(--color-border-subtle);
-        border-radius: var(--radius-2);
-        background: radial-gradient(ellipse at center, var(--color-neutral-0), var(--color-neutral-100));
-    }
-
-    .floor-plan__canvas {
-        display: block;
-        width: 100%;
-        height: 100%;
-        cursor: grab;
-        touch-action: pan-y;
-
-        &:active {
-            cursor: grabbing;
-        }
-
-        &:focus-visible {
-            outline: var(--border-width-2) solid var(--color-blue-600);
-            outline-offset: calc(-1 * var(--space-1));
-        }
-    }
-
-    .floor-plan__controls {
-        position: absolute;
-        bottom: var(--space-4);
-        left: var(--space-4);
-        white-space: nowrap;
-        box-shadow: var(--shadow-action);
-    }
-
-    .floor-plan__caption {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        gap: var(--space-2) var(--space-6);
-        margin-top: var(--space-4);
-
-        p {
-            margin: 0;
-        }
-    }
-
-    .floor-plan__toolbar[hidden],
-    .floor-plan__scene[hidden],
-    .floor-plan__caption[hidden] {
-        display: none;
-    }
-
     /* ภาพฐานและ callout ใช้ viewBox เดียวกัน จึงย่อขยายพร้อมกันโดยตำแหน่งไม่คลาด */
     .floor-plan__visual {
         position: relative;
         width: 90%;
         margin-inline: auto;
-
-        &.is-3d {
-            width: 100%;
-            aspect-ratio: 1829 / 1386;
-            min-height: calc(var(--size-320) + var(--space-20));
-
-            .floor-plan__image,
-            .floor-plan__callouts {
-                display: none;
-            }
-        }
     }
 
     .floor-plan__image {
@@ -8646,20 +8296,6 @@ body.is-loading .hero-scroll-cue,
     @media (max-width: 767px) {
         --bt-floor-plan-title-size: var(--section-heading-size);
         --bt-floor-plan-zone-label-size: var(--font-size-48);
-
-        .floor-plan__controls {
-            gap: 0;
-            bottom: var(--space-2);
-
-            button {
-                padding-inline: var(--space-3);
-                font-size: var(--font-size-14);
-            }
-        }
-
-        .floor-plan__caption {
-            font-size: var(--font-size-14);
-        }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -9196,309 +8832,6 @@ body.is-loading .hero-scroll-cue,
                 grid-column: auto;
             }
         }
-    }
-}
-
-/* ---------- alignment debug overlay (press K) ---------- */
-#kvref {
-    position: absolute;
-    inset: 0;
-    z-index: 30;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center top;
-    opacity: 0;
-    pointer-events: none;
-    mix-blend-mode: difference;
-}
-
-@media (max-width:1199px) {
-    :root {
-        --hero-static-top-inset: 48px;
-        --hero-static-bottom-gap: 32px;
-        --hero-static-stage-max-vw: 1.8;
-    }
-
-    body.is-mobile-static #stagewrap {
-        min-height: 0;
-        background: #fff;
-    }
-
-    /* hero แบบนิ่ง: ช่องฟ้าระหว่างกำแพงแคบกว่า desktop ถ้าขยายวิดีโอมาก ก้อนเมฆ (มุมซ้ายบน
-       กับล่างขวาของเฟรม) จะถูกดันไปอยู่หลังกำแพงหมด จึงใช้ 120% ให้ก้อนเมฆยังอยู่ในช่องฟ้า
-       (ตรวจที่ 1199, 1024, 768, 390) ใต้วิดีโอเป็นสีขาวของขอบเมฆ ซึ่งอยู่หลังเรือและไล่จาง
-       #stagewrap::after — layout() ปิดโหมด is-tall-video-cover ให้ในเคสนี้ ไม่งั้นวิดีโอถูก
-       cover ทั้งกล่องจนเหลือแค่ฟ้าเรียบ */
-    body.is-mobile-static #bg {
-        --bt-sky-video-width: 120%;
-    }
-
-    body.is-mobile-static #stage {
-        transform: none !important;
-        will-change: auto !important;
-    }
-
-    body.is-mobile-static #stagewrap::after {
-        content: '';
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 110;
-        /* สูงพอให้ขอบบนของคำโปรย (.event-description) อยู่ในช่วงที่มืดแล้ว (เดิม 28%) */
-        height: 50%;
-        pointer-events: none;
-        background: linear-gradient(180deg,
-                rgba(0, 0, 0, 0) 0%,
-                rgba(0, 0, 0, 0.42) 44%,
-                rgba(0, 0, 0, 0.68) 100%);
-    }
-
-    body.is-mobile-static #ship,
-    body.is-mobile-static #stairs,
-    body.is-mobile-static #pshadow,
-    body.is-mobile-static .person {
-        transform: none !important;
-        will-change: auto;
-        backface-visibility: visible;
-    }
-
-    body.is-mobile-static #ship-run-layer,
-    body.is-mobile-static #ship-run-whiteout {
-        display: none;
-    }
-
-    /* เดิม gap ตกจาก space-10/space-8 (40/32px) ของเดสก์ท็อป ลงมาเหลือ space-2 (8px)
-       ทันทีที่ข้าม breakpoint นี้ — ชันเกินไปสำหรับจอแท็บเล็ตที่ยังมีพื้นที่เหลือเยอะ
-       ปรับให้ค่อย ๆ แคบลงเป็นขั้นแทน ดูจุดต่อที่ 991px และ 767px ด้านล่าง ส่วน 575px
-       ยังคง space-2 ไว้เท่าเดิมเพราะจอแคบระดับนั้นพื้นที่จำกัดจริง */
-    body.is-mobile-static #ui {
-        z-index: 120;
-        width: min(calc(100vw - var(--space-8)), 720px);
-        gap: var(--space-6);
-        /* ท้องฟ้าชุดสว่าง: ตัวดำไม่มีเงา เหมือน desktop (ชุดมืดเดิมเป็นขาวและใส่เงาเข้มช่วยอ่าน) */
-        color: var(--color-text-inverse);
-    }
-
-    body.is-mobile-static #ui .event-details {
-        /* gap: var(--space-5); */
-        text-shadow: none;
-    }
-
-    body.is-mobile-static #ui .event-countdown {
-        text-shadow: none;
-    }
-
-    body.is-mobile-static #ui .venue {
-        padding-top: var(--space-2);
-        font-size: var(--font-size-18);
-    }
-
-    #ui .event-description {
-        font-size: calc(var(--font-size-24) - 2px);;
-    }
-
-    #ui .date,
-    #ui .time,
-    #ui .event-countdown__unit strong {
-        font-size: var(--font-size-24);
-    }
-}
-
-@media (max-width:991px) {
-    :root {
-        --hero-static-top-inset: 44px;
-        --hero-static-bottom-gap: 28px;
-    }
-}
-
-@media (max-width:767px) {
-    :root {
-        --hero-static-top-inset: 40px;
-        --hero-static-bottom-gap: 24px;
-    }
-
-    /* ขั้นที่สามของการลดขนาด #ui แบบค่อยเป็นค่อยไป (ดูคอมเมนต์ที่ breakpoint 1199px) */
-    body.is-mobile-static #ui {
-        gap: var(--space-5);
-    }
-
-    body.is-mobile-static #ui .event-details {
-        gap: var(--space-5);
-    }
-
-    #ui .date,
-    #ui .time,
-    #ui .event-countdown__unit strong {
-        font-size: var(--font-size-20);
-    }
-
-    #ui .event-description {
-        font-size: var(--font-size-20);
-    }
-}
-
-@media (max-width:575px) {
-    :root {
-        --hero-static-top-inset: 32px;
-        --hero-static-bottom-gap: 104px;
-        --hero-static-stage-max-vw: 1.68;
-    }
-
-    .loader-icon {
-        max-width: 88px;
-        max-height: 88px;
-    }
-
-    .loader-progress {
-        bottom: var(--space-8);
-    }
-
-    body.is-mobile-static #stagewrap::after {
-        height: 60%;
-    }
-
-    body.is-mobile-static #ui .venue {
-        padding-top: var(--space-0);
-    }
-
-    #ui {
-        top: min(70%, 100% - 216px);
-        gap: var(--space-2);
-    }
-
-    #ui .event-primary {
-        gap: var(--space-2);
-    }
-
-    /* จอแคบ: ต้องจบใน 2 บรรทัดตามที่ตัดไว้ ไม่ให้ตกเป็น 3 บรรทัดทับภาพเรือ */
-    #ui .event-description {
-        font-size: var(--font-size-18);
-        white-space: nowrap;
-    }
-
-    #ui .event-datetime {
-        row-gap: var(--space-3);
-    }
-
-    #ui .event-countdown {
-        min-width: min(280px, calc(100vw - var(--space-8)));
-    }
-
-    #ui .event-countdown__values {
-        grid-template-columns: repeat(4, minmax(48px, 1fr));
-        width: 100%;
-        gap: var(--space-6);
-    }
-
-    #ui .event-countdown__unit:not(:last-child)::after {
-        right: calc(var(--space-3) * -1);
-        filter: invert();
-    }
-
-    body.is-mobile-static #ui .event-details {
-        gap: var(--space-6);
-    }
-}
-
-@media (max-width:1199px) and (max-height:575px) and (orientation:landscape) {
-    :root {
-        --hero-static-top-inset: 16px;
-        --hero-static-bottom-gap: 0px;
-        --hero-static-stage-max-vw: 1.32;
-    }
-
-    body.is-mobile-static #stagewrap {
-        min-height: 100svh;
-    }
-
-    /* แนวนอนจอเตี้ย: #ui กินพื้นที่สัดส่วนสูงกว่า คำโปรยจึงอยู่สูงขึ้นไปเกือบครึ่งจอ */
-    body.is-mobile-static #stagewrap::after {
-        height: 72%;
-    }
-
-    body.is-mobile-static #ui {
-        top: auto;
-        bottom: var(--space-8);
-        width: min(calc(100vw - var(--space-8)), 560px);
-        gap: var(--space-3);
-    }
-
-    body.is-mobile-static #ui .event-details {
-        gap: var(--space-3);
-    }
-
-    #ui .event-datetime {
-        column-gap: var(--space-2);
-        row-gap: var(--space-1);
-    }
-
-    #ui .date,
-    #ui .time {
-        font-size: var(--font-size-18);
-    }
-
-    #ui .event-countdown {
-        min-width: min(240px, calc(100vw - var(--space-8)));
-        gap: var(--space-2);
-    }
-
-    #ui .event-countdown__values {
-        grid-template-columns: repeat(4, minmax(40px, 1fr));
-        gap: var(--space-4);
-        width: 100%;
-    }
-
-    #ui .event-countdown__unit {
-        gap: var(--space-2);
-    }
-
-    #ui .event-countdown__unit:not(:last-child)::after {
-        right: calc(var(--space-2) * -1);
-        width: var(--bt-hero-countdown-divider-width-sm);
-        height: calc(var(--bt-hero-countdown-divider-width-sm) / var(--bt-hero-countdown-divider-ratio));
-    }
-
-    #ui .event-countdown__unit strong {
-        font-size: var(--font-size-20);
-    }
-
-    #ui .event-countdown__unit small {
-        font-size: var(--font-size-12);
-    }
-
-    body.is-mobile-static #ui .venue {
-        padding-top: var(--space-0);
-        font-size: var(--font-size-14);
-    }
-}
-
-@media (max-width:767px) and (max-height:390px) and (orientation:landscape) {
-    body.is-mobile-static #ui {
-        top: auto;
-        bottom: var(--space-8);
-        gap: var(--space-2);
-    }
-
-    body.is-mobile-static #ui .event-details {
-        gap: var(--space-2);
-    }
-
-    #ui .date,
-    #ui .time,
-    #ui .event-countdown__unit strong {
-        font-size: var(--font-size-16);
-    }
-
-    #ui .event-countdown__values {
-        grid-template-columns: repeat(4, minmax(36px, 1fr));
-        gap: var(--space-3);
-    }
-
-    #ui .event-countdown__unit:not(:last-child)::after {
-        right: calc(var(--space-1) * -1);
-        width: var(--space-8);
-        height: calc(var(--space-8) / var(--bt-hero-countdown-divider-ratio));
     }
 }
 
@@ -14537,25 +13870,32 @@ body.is-loading .hero-scroll-cue,
         .playbook-steps__note {
             gap: var(--space-2);
         }
+    }
+}
+
+
+/* ≤991: การ์ดขั้นที่ 1 เรียงลำดับแบบเดียวกันทั้งจอกลางและมือถือ (เดิมทำไว้เฉพาะ ≤575) */
+@media (max-width: 991px) {
+    .playbook-steps {
 
         /* ---------- ขั้นที่ 1: ไดอะแกรมแทรกกลางระหว่างคำอธิบายกับปุ่ม ----------
-           ลำดับบนจอเล็ก: เลขขั้น > หัวข้อ > คำอธิบาย > ไดอะแกรม > ปุ่ม + เวลา (กึ่งกลาง) > ฟรีใบแรก
+           ลำดับตั้งแต่ ≤991 (ผังคอลัมน์เดียว): เลขขั้น > หัวข้อ > คำอธิบาย > ไดอะแกรม > ปุ่ม + เวลา (กึ่งกลาง) > ฟรีใบแรก
            ข้อความกับไดอะแกรมอยู่คนละคอลัมน์ใน markup จึงสลับลำดับข้ามกันเองไม่ได้
            ให้คอลัมน์ข้อความเป็น display: contents ลูกของมันขึ้นมาเป็นสมาชิกของแถวโดยตรง
            แล้วเรียงแถวเป็นแนวตั้งและจัดลำดับด้วย order ไม่ต้องแตะ markup
            คอลัมน์ที่หายไปพา padding ของ gutter ไปด้วย จึงคืนระยะนั้นให้ลูกแต่ละตัวแทน
            ขอบซ้ายของข้อความจึงตรงแนวเดิม */
-        .playbook-steps__card--feature > .row {
+        .playbook-steps__card--feature>.row {
             flex-direction: column;
         }
 
-        .playbook-steps__card--feature > .row > :not(.playbook-steps__media) {
+        .playbook-steps__card--feature>.row> :not(.playbook-steps__media) {
             display: contents;
         }
 
         /* align-self ไม่ใช่ align-items ที่แถว: แถวติดคลาส align-items-center ของ Bootstrap
            ซึ่งเป็น !important ลูกทุกตัวจึงถูกจัดกึ่งกลางแล้วหดเท่าเนื้อหา */
-        .playbook-steps__card--feature > .row > :not(.playbook-steps__media) > * {
+        .playbook-steps__card--feature>.row> :not(.playbook-steps__media)>* {
             align-self: stretch;
             padding-inline: calc(var(--bs-gutter-x) * .5);
         }
