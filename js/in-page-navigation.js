@@ -101,9 +101,14 @@
 
         event.preventDefault();
 
+        /* data-scroll-to: ลงจอดที่ element ข้างใน section แทนขอบบนของ section
+           (เช่นเมนู Ticket ข้ามหัว section ไปที่การ์ดบัตรเลย) href ยังชี้ section เดิม
+           เส้นใต้เมนูที่ active จึงทำงานเหมือนเดิม ระยะเผื่อใช้ scroll-margin-top ของ element นั้น */
+        const landing = (link.dataset.scrollTo && target.querySelector(link.dataset.scrollTo)) || target;
+
         const navigate = () => {
-            target.scrollIntoView({ block: 'start' });
-            watchLanding(target);
+            landing.scrollIntoView({ block: 'start' });
+            watchLanding(landing);
             history.replaceState(null, '', window.location.pathname + window.location.search);
             window.dispatchEvent(new CustomEvent(SECTION_NAVIGATION_EVENT, {
                 detail: { targetId: target.id },

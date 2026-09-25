@@ -25,7 +25,7 @@
         // Three phases over the hero's scroll-pin, by scroll position:
         //  1. visible   — from the top until the CTA/date/venue block has faded out
         //  2. hidden    — through the rest of the ship/wall/runner sequence
-        //  3. sticky    — visible again only once the pin has fully released into #concept
+        //  3. sticky    — visible again only once the pin has fully released into the next section
         const HEADER_HIDE_AT_RATIO = 0.12;
         const HEADER_STICKY_BUFFER = 4;
 

@@ -70,6 +70,9 @@
         const sceneBox = section.querySelector('.playbook__scene')?.getBoundingClientRect() || layerBox;
         const clusterX = sceneBox.left + sceneBox.width / 2;
         const clusterY = sceneBox.top + sceneBox.height * CLUSTER_Y_RATIO;
+        /* section ถูก scale อยู่ระหว่าง scroll-driven expand (js/scroll-expand.js)
+           ระยะที่วัดได้เป็น px บนจอ ต้องหารกลับเป็น px ภายใน section ก่อนเอาไปใช้เป็น translate */
+        const sectionScale = (section.getBoundingClientRect().width / section.offsetWidth) || 1;
 
         assets.forEach((asset, index) => {
             const assetBox = asset.getBoundingClientRect();
@@ -77,8 +80,8 @@
             const assetCenterY = assetBox.top + assetBox.height / 2;
 
             gsapApi.set(motionLayers[index], {
-                x: clusterX - assetCenterX,
-                y: clusterY - assetCenterY,
+                x: (clusterX - assetCenterX) / sectionScale,
+                y: (clusterY - assetCenterY) / sectionScale,
                 scale: CLUSTER_SCALE,
                 rotate: INITIAL_ROTATIONS[index] || 0,
                 opacity: 1,

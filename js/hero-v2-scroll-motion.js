@@ -37,6 +37,9 @@
         const TITLE_UI_GAP = { min: 24, preferredVh: 0.04, max: 44 };
         const UI_BOTTOM_RESERVE = 32;
         const mobileHeaderClearanceShift = viewportWidth => viewportWidth <= 575 ? 9 : 0;
+        // ยก title ขึ้นจาก POSTER.title.cy (หน่วย vh) เฉพาะ desktop — ย้ายแค่ตำแหน่ง
+        // เพดานความสูง title (titleMaxHeightByUi) ยังคิดจาก cy เดิม ขนาดจึงไม่เปลี่ยน
+        const POSTER_TITLE_LIFT_VH = 2;
         const mobileUiStaticTopRatio = viewportWidth => viewportWidth <= 575 ? 0.76 : 0.70;
         /* The eight runners, split out of the PSD's คน+เงา group. Listed far -> near so
            the reveal stagger reads as a crowd arriving from the distance. revealAngle
@@ -151,7 +154,7 @@
 
             if (isMobileStatic() || reduced) {
                 publishHeroScrollCueState(false);
-                const revealAt = Math.max(0, el.concept.offsetTop - document.documentElement.clientHeight * 0.5);
+                const revealAt = Math.max(0, el.heroExit.offsetTop - document.documentElement.clientHeight * 0.5);
                 publishHeroRunProgress(window.scrollY >= revealAt ? 'ready' : 'hidden');
                 return;
             }
@@ -164,7 +167,7 @@
                     && timelineTime < SHIP_RUN.startAt - 0.002
                 );
                 publishHeroRunProgress(
-                    progress >= 0.998 || window.scrollY >= el.concept.offsetTop - 2
+                    progress >= 0.998 || window.scrollY >= el.heroExit.offsetTop - 2
                         ? 'ready'
                         : timelineTime >= HERO_SCROLL_CUE_REVEAL_AT ? 'progress' : 'hidden',
                     progress
@@ -272,7 +275,13 @@
             shipRunCanvas: document.getElementById('ship-run-canvas'),
             shipRunVideo: document.getElementById('ship-run-video'),
             shipRunWhiteout: document.getElementById('ship-run-whiteout'),
-            concept: document.getElementById('concept'),
+            // The first section after the hero (currently #speaker-overview). The runner video hands off
+            // to it: scroll target, whiteout reveal (is-awaiting-entry / is-revealed) and the
+            // "hero finished" thresholds. Read from the DOM so reordering sections keeps working.
+            // index.html is missing #stagewrap's closing </div>, so the parser nests every
+            // section inside #scroller; match both that and the intended sibling structure.
+            heroExit: document.querySelector('#scroller > section, #scroller ~ section')
+                || document.getElementById('concept'),
             conceptIntro: document.querySelector('.concept__inner'),
             conceptVideoScroll: document.querySelector('.concept__video-scroll'),
             conceptVideoFrame: document.querySelector('.concept__video-frame'),
@@ -673,8 +682,8 @@
 
             // Keep the layout swap and its destination in the same animation frame.
             // Deferring this scroll by another rAF lets the shortened Hero paint once at
-            // the old scroll position, exposing its tail above Concept as a visible jump.
-            window.scrollTo(0, el.concept.offsetTop);
+            // the old scroll position, exposing its tail above the next section as a visible jump.
+            window.scrollTo(0, el.heroExit.offsetTop);
             ScrollTrigger.update();
             requestHeroScrollProgressUpdate();
         }
@@ -696,7 +705,7 @@
             if (el.shipRunVideo.readyState >= 1) el.shipRunVideo.currentTime = 0;
             gsap.killTweensOf(el.shipRunWhiteout);
             gsap.set([el.shipRunLayer, el.shipRunWhiteout], { opacity: 0 });
-            el.concept.classList.add('is-revealed');
+            el.heroExit.classList.add('is-revealed');
 
             // Rebuild without the running-video range before measuring the destination.
             // This prevents the old pin distance and scroll lock from pulling navigation
@@ -739,7 +748,7 @@
             setShipRunPlaybackRate();
             if (el.shipRunVideo.readyState >= 1) el.shipRunVideo.currentTime = 0;
             gsap.killTweensOf(el.shipRunWhiteout);
-            el.concept.classList.add('is-revealed');
+            el.heroExit.classList.add('is-revealed');
             maintainCompletedHeroScene();
             requestShipRunRender();
             updateHeroRunProgress();
@@ -763,7 +772,7 @@
             gsap.set(el.shipRunWhiteout, { opacity: 0 });
             gsap.set(el.shipRunLayer, { opacity: 0 });
             gsap.set(shipRunStaticScene, { opacity: 1 });
-            el.concept.classList.remove('is-awaiting-entry', 'is-revealed');
+            el.heroExit.classList.remove('is-awaiting-entry', 'is-revealed');
             requestShipRunRender();
             updateHeroRunProgress();
         }
@@ -783,7 +792,7 @@
                 activateCompletedHeroTimeline();
                 shipRunConceptRevealTimer = setTimeout(() => {
                     shipRunConceptRevealTimer = null;
-                    el.concept.classList.add('is-revealed');
+                    el.heroExit.classList.add('is-revealed');
                 }, SHIP_RUN.conceptRevealDelay);
             });
         }
@@ -804,8 +813,8 @@
             lockShipRunScroll();
             shipRunState.time = 0;
             shipRunTargetTime = 0;
-            el.concept.classList.add('is-awaiting-entry');
-            el.concept.classList.remove('is-revealed');
+            el.heroExit.classList.add('is-awaiting-entry');
+            el.heroExit.classList.remove('is-revealed');
             gsap.set(el.shipRunWhiteout, { opacity: 0 });
             gsap.set(el.shipRunLayer, { opacity: 1 });
             gsap.set(shipRunStaticScene, { opacity: 0 });
@@ -822,7 +831,7 @@
             keepShipRunScrollLocked();
             if (shipRunHasCompleted
                 && !shipRunHeroRestored
-                && window.scrollY < el.concept.offsetTop - 2) {
+                && window.scrollY < el.heroExit.offsetTop - 2) {
                 restoreCompletedHeroScene();
             }
         }, { passive: true });
@@ -915,19 +924,28 @@
             document.getElementById('scroller').style.height = STATIC_FRAME ? vh + 'px' : scrollerHeight + 'px';
             el.stagewrap.style.height = mobileStatic ? `${scrollerHeight}px` : `${vh}px`;
             const ui = document.getElementById('ui');
+            // วัดความสูง #ui ด้วยระยะห่างปกติก่อนเสมอ ค่าบีบจากรอบก่อนจะถูกคิดใหม่ด้านล่าง
+            ui?.style.removeProperty('--hero-ui-gap-cut');
             const titleUiGap = clamp(vh * TITLE_UI_GAP.preferredVh, TITLE_UI_GAP.min, TITLE_UI_GAP.max);
             const uiBottomReserve = mobileStatic ? staticBottomGap : UI_BOTTOM_RESERVE;
             const uiHeight = ui?.offsetHeight || 0;
             const uiMaxTop = Math.max(0, vh - uiHeight - uiBottomReserve);
+            // ขนาด title ห้ามเล็กลงเพราะคำโปรย (.event-description) — คิดเพดานความสูง title
+            // จาก #ui เหมือนตอนที่ยังไม่มีคำโปรย แล้วให้คำโปรยไปหาที่ของตัวเองแทน
+            const uiDescription = ui?.querySelector('.event-description');
+            const uiDescriptionSpace = uiDescription
+                ? uiDescription.offsetHeight + (parseFloat(getComputedStyle(ui).rowGap) || 0)
+                : 0;
+            const uiMaxTopForTitle = Math.max(0, vh - (uiHeight - uiDescriptionSpace) - uiBottomReserve);
             const titleMaxHeightByUi = Math.max(
                 0,
-                2 * (uiMaxTop - titleUiGap - (vh * POSTER.title.cy / 100))
+                2 * (uiMaxTopForTitle - titleUiGap - (vh * POSTER.title.cy / 100))
             );
             if (!mobileStatic) {
                 ui.style.zIndex = '25';
             }
             if (STATIC_FRAME) {
-                document.getElementById('concept').style.display = 'none';
+                el.heroExit.style.display = 'none';
                 document.documentElement.style.overflow = 'hidden';
             }
 
@@ -976,7 +994,8 @@
                 }
                 const posterCy = po.cy
                     + (isAssetIcon ? posterIconShiftY(vw) : 0)
-                    + (!isAssetIcon && mobileStatic ? mobileHeaderClearanceShift(vw) : 0);
+                    + (!isAssetIcon && mobileStatic ? mobileHeaderClearanceShift(vw) : 0)
+                    - (!isAssetIcon && !mobileStatic ? POSTER_TITLE_LIFT_VH : 0);
                 assets[k] = {
                     dx: (vw * po.cx / 100) - (stageLeft + xB),
                     dy: (vh * posterCy / 100) - yB,
@@ -990,12 +1009,18 @@
                 const titleAsset = assets.title;
                 const titleNode = el.title;
                 const titleHeight = titleNode.offsetHeight * titleAsset.scale;
-                const titleBottom = (vh * POSTER.title.cy / 100) + titleHeight / 2;
+                const titleBottom = (vh * (POSTER.title.cy - POSTER_TITLE_LIFT_VH) / 100) + titleHeight / 2;
                 const uiMinTop = titleBottom + titleUiGap;
-                const uiPreferredTop = Math.min(vh * 0.55, vh - 368);
-                const uiTop = uiMaxTop >= uiMinTop
-                    ? clamp(uiPreferredTop, uiMinTop, uiMaxTop)
-                    : uiMaxTop;
+                // จอเตี้ย: title ขนาดเต็มบวกคำโปรยไม่พอที่ ให้บีบระยะห่างภายใน #ui แทน
+                // (title ห้ามเล็กลง) ส่วนที่ขาดถูกแบ่งเท่า ๆ กันให้ 4 ช่องว่างใน style.css
+                let uiFitMaxTop = uiMaxTop;
+                if (uiMaxTop < uiMinTop) {
+                    ui.style.setProperty('--hero-ui-gap-cut', `${(uiMinTop - uiMaxTop) / 4}px`);
+                    uiFitMaxTop = Math.max(0, vh - ui.offsetHeight - uiBottomReserve);
+                }
+                // คำโปรยชิด title ที่ระยะ titleUiGap เสมอ: ทั้งก้อน #ui อยู่ติดใต้ title
+                // (ปุ่ม/วันที่/สถานที่ยกขึ้นตาม) ถ้าที่ไม่พอก็ดันลงได้แค่ถึง uiFitMaxTop
+                const uiTop = uiFitMaxTop >= uiMinTop ? uiMinTop : uiFitMaxTop;
                 ui.style.top = `${uiTop}px`;
             }
 
@@ -1296,7 +1321,7 @@
             } else if (!HAS_SHIP_RUN) {
                 gsap.set([el.shipRunLayer, el.shipRunWhiteout], { opacity: 0 });
                 gsap.set(shipRunStaticScene, { opacity: 1 });
-                el.concept.classList.remove('is-awaiting-entry', 'is-revealed');
+                el.heroExit.classList.remove('is-awaiting-entry', 'is-revealed');
             }
 
             syncWalls();
@@ -1313,12 +1338,12 @@
                     const hasResizeProgress = Number.isFinite(restoreProgress);
                     if (!hasResizeProgress
                         && HAS_SHIP_RUN
-                        && window.scrollY >= el.concept.offsetTop - M.vh * 0.5) {
+                        && window.scrollY >= el.heroExit.offsetTop - M.vh * 0.5) {
                         shipRunHasCompleted = true;
                         shipRunScrubState = 'complete';
                         shipRunHeroRestored = false;
                         gsap.set([el.shipRunLayer, el.shipRunWhiteout], { opacity: 0 });
-                        el.concept.classList.add('is-awaiting-entry', 'is-revealed');
+                        el.heroExit.classList.add('is-awaiting-entry', 'is-revealed');
                         requestAnimationFrame(activateCompletedHeroTimeline);
                         updateHeroRunProgress();
                         return;
@@ -1414,7 +1439,7 @@
                 const minTop = Math.min(maxTop, M.SH * 0.48);
                 ui.style.top = `${clamp(M.SH * mobileUiStaticTopRatio(M.vw), minTop, maxTop)}px`;
             }
-            el.concept.classList.remove('is-awaiting-entry', 'is-revealed');
+            el.heroExit.classList.remove('is-awaiting-entry', 'is-revealed');
             updateHeroRunProgress();
         }
 

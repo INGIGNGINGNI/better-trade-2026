@@ -4,7 +4,10 @@
 
     const progressEvent = 'bettertrade:hero-run-progress';
     const cueEvent = 'bettertrade:hero-scroll-cue';
-    const concept = document.getElementById('concept');
+    // First section after the hero (the page's next stop once the runner video is done).
+    // (sections sit inside #scroller today because of a missing </div>; match either nesting)
+    const concept = document.querySelector('#scroller > section, #scroller ~ section')
+        || document.getElementById('concept');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let raf = 0;
     let heroRunMode = 'hidden';

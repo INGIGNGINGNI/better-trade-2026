@@ -68,8 +68,8 @@
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
-    <link rel="stylesheet" href="css/main.css?v=58">
-    <link rel="stylesheet" href="css/style.css?v=654">
+    <link rel="stylesheet" href="css/main.css?v=59">
+    <link rel="stylesheet" href="css/style.css?v=683">
 </head>
 
 <body class="is-loading">
@@ -94,7 +94,7 @@
 
             <nav class="site-header__nav" aria-label="เมนูหลัก">
                 <a href="#home" aria-current="page"><span class="site-header__nav-label">Home</span></a>
-                <a href="#ticket"><span class="site-header__nav-label">Ticket</span></a>
+                <a href="#ticket" data-scroll-to=".ticket__plans"><span class="site-header__nav-label">Ticket</span></a>
                 <a href="#agenda"><span class="site-header__nav-label">Agenda</span></a>
                 <a href="personalized-playbook.html"><span class="site-header__nav-label">Personalized Playbook</span></a>
                 <a href="#speaker"><span class="site-header__nav-label">Speaker</span></a>
@@ -123,7 +123,7 @@
 
             <nav class="site-header__mobile-nav" aria-label="เมนูหลักสำหรับมือถือ">
                 <a href="#home"><span>Home</span><span class="site-header__mobile-nav-index">01</span></a>
-                <a href="#ticket"><span>Ticket</span><span class="site-header__mobile-nav-index">02</span></a>
+                <a href="#ticket" data-scroll-to=".ticket__plans"><span>Ticket</span><span class="site-header__mobile-nav-index">02</span></a>
                 <a href="#agenda"><span>Agenda</span><span class="site-header__mobile-nav-index">03</span></a>
                 <a href="personalized-playbook.html"><span>Personalized Playbook</span><span class="site-header__mobile-nav-index">04</span></a>
                 <a href="#speaker"><span>Speaker</span><span class="site-header__mobile-nav-index">05</span></a>
@@ -331,6 +331,7 @@
             </div>
 
             <div id="ui">
+                <p class="event-description">สำรวจเทรนด์ เศรษฐกิจ เทคโนโลยี <br class="d-block d-sm-none">และโอกาสลงทุน<br class="d-none d-sm-block">ที่จะกำหนดโลกใบต่อไป</p>
                 <div class="event-primary">
                     <div id="cta-slot"></div>
                 </div>
@@ -409,180 +410,16 @@
     <!-- End : Hero -->
 
 
-    <!-- Start Section : Concept -->
-    <section id="concept" aria-labelledby="concept-title">
-        <div class="concept__aurora" aria-hidden="true"></div>
-        <div class="concept__inner container">
-            <h2 id="concept-title" class="bt-section-title">โลกกำลังเปลี่ยนเร็วกว่าที่เคย <br>แต่<span class="bt-title-highlight has-ps">โอกาสก็เช่นกัน</span></h2>
-            <p class="concept__description">BetterTrade รวบรวมความรู้ เครื่องมือ และ Playbook ที่จะช่วยให้คุณมองเห็นโอกาส <br class="d-xl-block d-none">ตัดสินใจอย่างมั่นใจ และเติบโตไปพร้อมกับโลกยุคใหม่</p>
-        </div>
-        <div class="concept__video-scroll container">
-            <div class="concept__video-perspective">
-                <div class="concept__video-frame">
-                    <div class="concept__video-media" data-concept-video>
-                        <button class="concept__video-poster" type="button" aria-label="เล่นวิดีโอ BetterTrade 2026">
-                            <img src="images/youtube-thumbnail.webp" width="1281" height="721" loading="lazy"
-                                decoding="async" alt="">
-                            <span class="concept__video-play" aria-hidden="true">
-                                <span class="concept__video-play-surface">
-                                    <svg class="bt-icon"><use href="images/icons.svg#icon-play"></use></svg>
-                                </span>
-                            </span>
-                        </button>
-                        <iframe
-                            data-src="https://www.youtube-nocookie.com/embed/w5weGk8oAIA?rel=0&autoplay=1"
-                            title="BetterTrade 2026"
-                            loading="lazy"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin"
-                            allowfullscreen></iframe>
-                    </div>
-                    <img class="concept__video-frame-art" src="images/topic-video-frame-2.webp" alt=""
-                        loading="lazy" decoding="async" aria-hidden="true">
-                </div>
-            </div>
-        </div>
-
-    </section>
-    <!-- End Section : Concept -->
-
-
-    <!-- Start Section : Featured Topics -->
-    <section id="featured-topics" class="topics-showcase" data-header-theme="dark"
-        aria-labelledby="featured-topics-title">
-        <div class="topics-showcase__inner container">
-            <header class="topics-showcase__header">
-                <h2 id="featured-topics-title" class="bt-section-title">หัวข้อที่คุณ<span class="bt-title-highlight has-ps">ไม่ควรพลาด</span><br>ใน BetterTrade 2026</h2>
-                <p>สำรวจเทรนด์ เศรษฐกิจ เทคโนโลยี และโอกาสลงทุนที่จะกำหนดโลกใบต่อไป</p>
-            </header>
-
-            <div class="topics-showcase__content">
-                <ul class="concept__topics" aria-label="หัวข้อการลงทุนที่น่าสนใจภายในงาน">
-                    <li class="concept__topic">
-                        <span class="concept__topic-label">Geopolitics Macroeconomics</span>
-                        <strong class="concept__topic-title">ภูมิรัฐศาสตร์และเศรษฐกิจโลก</strong>
-                        <span class="concept__topic-description">สงคราม กำแพงภาษี ดอกเบี้ย กระทบพอร์ตเราอย่างไร</span>
-                    </li>
-                    <li class="concept__topic">
-                        <span class="concept__topic-label">Capital Market</span>
-                        <strong class="concept__topic-title">ตลาดทุน</strong>
-                        <span class="concept__topic-description">หุ้นไทย หุ้นต่างประเทศ กองทุน และตราสารหนี้</span>
-                    </li>
-                    <li class="concept__topic">
-                        <span class="concept__topic-label">Digital Asset</span>
-                        <strong class="concept__topic-title">สินทรัพย์ดิจิทัล</strong>
-                        <span class="concept__topic-description">บิตคอยน์ คริปโต และโทเคนดิจิทัล</span>
-                    </li>
-                    <li class="concept__topic">
-                        <span class="concept__topic-label">Alternative Asset</span>
-                        <strong class="concept__topic-title">สินทรัพย์ทางเลือก</strong>
-                        <span class="concept__topic-description">ทองคำ อสังหาริมทรัพย์ และสินค้าโภคภัณฑ์</span>
-                    </li>
-                    <li class="concept__topic">
-                        <span class="concept__topic-label">AI Investments</span>
-                        <strong class="concept__topic-title">ลงทุนกับ AI</strong>
-                        <span class="concept__topic-description">ใช้ AI ช่วยตัดสินใจ และลงทุนในธุรกิจที่โตด้วย AI</span>
-                    </li>
-                    <li class="concept__topic">
-                        <span class="concept__topic-label">Personal Investments</span>
-                        <strong class="concept__topic-title">วางแผนการเงินส่วนบุคคล</strong>
-                        <span class="concept__topic-description">จัดพอร์ต วางแผนภาษี และเตรียมเกษียณ</span>
-                    </li>
-                    <li class="concept__topic">
-                        <span class="concept__topic-label">Passion Investments</span>
-                        <strong class="concept__topic-title">ลงทุนในสิ่งที่รัก</strong>
-                        <span class="concept__topic-description">การ์ดสะสม ของแบรนด์เนม นาฬิกา และงานศิลปะ</span>
-                    </li>
-                    <li class="concept__topic">
-                        <span class="concept__topic-label">Longevity &amp; Wellness Investments</span>
-                        <strong class="concept__topic-title">ลงทุนเพื่อสุขภาพและอายุยืน</strong>
-                        <span class="concept__topic-description">เตรียมเงินให้พอใช้ไปจนถึงอายุ 90 ปี</span>
-                    </li>
-                    <li class="concept__topic">
-                        <span class="concept__topic-label">Lifestyle Investments</span>
-                        <strong class="concept__topic-title">ลงทุนกับไลฟ์สไตล์</strong>
-                        <span class="concept__topic-description">ธุรกิจอาหาร ท่องเที่ยว และไลฟ์สไตล์</span>
-                    </li>
-                </ul>
-
-                <div class="topics-showcase__assets" aria-hidden="true">
-                    <figure class="topics-showcase__asset topics-showcase__asset--triangle" data-topic-asset>
-                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/triangle.webp" alt=""></div></div>
-                    </figure>
-                    <figure class="topics-showcase__asset topics-showcase__asset--bitcoin" data-topic-asset>
-                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/bitcoin.webp" alt=""></div></div>
-                    </figure>
-                    <figure class="topics-showcase__asset topics-showcase__asset--gold" data-topic-asset>
-                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/gold.webp" alt=""></div></div>
-                    </figure>
-                    <figure class="topics-showcase__asset topics-showcase__asset--stock" data-topic-asset>
-                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/stock.webp" alt=""></div></div>
-                    </figure>
-                    <figure class="topics-showcase__asset topics-showcase__asset--card" data-topic-asset>
-                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/card.webp" alt=""></div></div>
-                    </figure>
-                    <figure class="topics-showcase__asset topics-showcase__asset--heart" data-topic-asset>
-                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/heart.webp" alt=""></div></div>
-                    </figure>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- End Section : Featured Topics -->
-
-
     <!-- Start Section : Speaker Overview -->
-    <section id="speaker-overview" class="speaker-overview" data-header-theme="dark" hidden
-        data-speaker-overview-layout="compact"
-        aria-labelledby="speaker-overview-title">
+    <!-- แบนเนอร์ภาพเดียว: desktop (≥992px) ใช้ภาพ 16:9, ≤991px ใช้ภาพแนวตั้ง 4:5
+         สัดส่วนตามไฟล์ต้นฉบับ (width/height ของแต่ละ source) เบราว์เซอร์จึงจองพื้นที่ได้ก่อนภาพโหลด -->
+    <section id="speaker-overview" class="speaker-overview" aria-label="Speaker Overview">
         <div class="speaker-overview__inner container">
-            <div class="speaker-overview__layout row align-items-stretch">
-                <header class="speaker-overview__intro col-12 col-lg-5 col-xl-4">
-                    <p class="speaker-overview__eyebrow">Journey into the new world</p>
-                    <img class="speaker-overview__event-mark" src="images/title.webp" width="1800" height="724"
-                        loading="lazy" decoding="async" alt="New World, New Playbook — BetterTrade 2026">
-                    <h2 id="speaker-overview-title">พบกับเหล่าผู้เชี่ยวชาญ <br class="d-none d-lg-block">ที่จะมาเปิดมุมมอง<br class="d-block d-md-none">สู่<br class="d-none d-md-block"><span class="bt-title-highlight has-pe">โลกการลงทุน</span>ใบใหม่</h2>
-
-                    <div class="speaker-overview__event-info" aria-label="รายละเอียดการจัดงาน">
-                        <p><time datetime="2026-10-31">31 ตุลาคม</time> – <time datetime="2026-11-01">1 พฤศจิกายน 2569</time></p>
-                        <p>SAMYAN MITRTOWN HALL</p>
-                    </div>
-                </header>
-
-                <div class="speaker-overview__gallery col-12 col-lg-7 col-xl-8">
-                    <div class="speaker-overview__scroller" aria-label="รายชื่อ Speaker">
-                        <div class="speaker-overview__grid" data-speaker-overview role="list"></div>
-                    </div>
-                    <div class="speaker-overview__scroll-overlay" data-speaker-overview-scroll-overlay
-                        aria-hidden="true">
-                        <div class="speaker-overview__scroll-gesture" data-speaker-overview-scroll-lottie></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="speaker-overview__view-switch" data-speaker-overview-picker>
-            <button class="speaker-overview__view-trigger" type="button" data-speaker-overview-trigger
-                aria-label="เลือกรูปแบบ Speaker ขณะนี้แสดง 18 Speakers" aria-expanded="false"
-                aria-controls="speaker-overview-view-options">
-                <span aria-hidden="true">⇄</span>
-            </button>
-            <div class="speaker-overview__view-panel" id="speaker-overview-view-options"
-                data-speaker-overview-panel role="group" aria-label="เลือกรูปแบบการแสดง Speaker"
-                aria-hidden="true">
-                <span class="speaker-overview__view-eyebrow">Speaker Layout</span>
-                <button class="speaker-overview__view-button is-active" type="button"
-                    data-speaker-overview-view="compact" aria-pressed="true">
-                    <span class="speaker-overview__view-status" aria-hidden="true"></span>
-                    <span><strong><span data-speaker-overview-compact-count>18</span> Speakers</strong><small>3 rows</small></span>
-                    <span class="speaker-overview__view-check" aria-hidden="true">✓</span>
-                </button>
-                <button class="speaker-overview__view-button" type="button"
-                    data-speaker-overview-view="expanded" aria-pressed="false">
-                    <span class="speaker-overview__view-status" aria-hidden="true"></span>
-                    <span><strong>36 Speakers</strong><small>4 rows</small></span>
-                    <span class="speaker-overview__view-check" aria-hidden="true">✓</span>
-                </button>
-            </div>
+            <picture class="speaker-overview__banner" data-reveal>
+                <source media="(min-width: 768px)" srcset="images/overview-speaker-desktop.webp" width="1920" height="1080">
+                <img src="images/overview-speaker-tablet.webp" width="1080" height="1350" loading="lazy" decoding="async"
+                    alt="พบกับวิทยากรผู้เชี่ยวชาญในงาน BetterTrade 2026">
+            </picture>
         </div>
     </section>
     <!-- End Section : Speaker Overview -->
@@ -590,9 +427,6 @@
 
     <!-- Start Section : Ticket -->
     <section id="ticket" class="ticket" aria-labelledby="ticket-title">
-        <div class="ticket__backdrop-clip" data-journey-theme="dark" aria-hidden="true">
-            <img class="ticket__backdrop" src="images/ticket-bg-12.webp" width="1670" height="942" loading="lazy" decoding="async" alt="">
-        </div>
         <div class="ticket__inner container">
             <header class="ticket__header row">
                 <div class="ticket__heading col-12 col-xl-7">
@@ -707,6 +541,128 @@
         </div>
     </section>
     <!-- End Section : Ticket -->
+
+
+    <!-- Start Section : Concept -->
+    <section id="concept" aria-labelledby="concept-title">
+        <div class="concept__aurora" aria-hidden="true"></div>
+        <div class="concept__inner container">
+            <h2 id="concept-title" class="bt-section-title">โลกกำลังเปลี่ยนเร็วกว่าที่เคย <br>แต่<span class="bt-title-highlight has-ps">โอกาสก็เช่นกัน</span></h2>
+            <p class="concept__description">BetterTrade รวบรวมความรู้ เครื่องมือ และ Playbook ที่จะช่วยให้คุณมองเห็นโอกาส <br class="d-xl-block d-none">ตัดสินใจอย่างมั่นใจ และเติบโตไปพร้อมกับโลกยุคใหม่</p>
+        </div>
+        <div class="concept__video-scroll container">
+            <div class="concept__video-perspective">
+                <div class="concept__video-frame">
+                    <div class="concept__video-media" data-concept-video>
+                        <button class="concept__video-poster" type="button" aria-label="เล่นวิดีโอ BetterTrade 2026">
+                            <img src="images/youtube-thumbnail.webp" width="1281" height="721" loading="lazy"
+                                decoding="async" alt="">
+                            <span class="concept__video-play" aria-hidden="true">
+                                <span class="concept__video-play-surface">
+                                    <svg class="bt-icon"><use href="images/icons.svg#icon-play"></use></svg>
+                                </span>
+                            </span>
+                        </button>
+                        <iframe
+                            data-src="https://www.youtube-nocookie.com/embed/w5weGk8oAIA?rel=0&autoplay=1"
+                            title="BetterTrade 2026"
+                            loading="lazy"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            allowfullscreen></iframe>
+                    </div>
+                    <img class="concept__video-frame-art" src="images/topic-video-frame-2.webp" alt=""
+                        loading="lazy" decoding="async" aria-hidden="true">
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <!-- End Section : Concept -->
+
+
+    <!-- Start Section : Featured Topics -->
+    <section id="featured-topics" class="topics-showcase" data-header-theme="dark" hidden
+        aria-labelledby="featured-topics-title">
+        <div class="topics-showcase__inner container">
+            <header class="topics-showcase__header">
+                <h2 id="featured-topics-title" class="bt-section-title">หัวข้อที่คุณ<span class="bt-title-highlight has-ps">ไม่ควรพลาด</span><br>ใน BetterTrade 2026</h2>
+                <p>สำรวจเทรนด์ เศรษฐกิจ เทคโนโลยี และโอกาสลงทุนที่จะกำหนดโลกใบต่อไป</p>
+            </header>
+
+            <div class="topics-showcase__content">
+                <ul class="concept__topics" aria-label="หัวข้อการลงทุนที่น่าสนใจภายในงาน">
+                    <li class="concept__topic">
+                        <span class="concept__topic-label">Geopolitics Macroeconomics</span>
+                        <strong class="concept__topic-title">ภูมิรัฐศาสตร์และเศรษฐกิจโลก</strong>
+                        <span class="concept__topic-description">สงคราม กำแพงภาษี ดอกเบี้ย กระทบพอร์ตเราอย่างไร</span>
+                    </li>
+                    <li class="concept__topic">
+                        <span class="concept__topic-label">Capital Market</span>
+                        <strong class="concept__topic-title">ตลาดทุน</strong>
+                        <span class="concept__topic-description">หุ้นไทย หุ้นต่างประเทศ กองทุน และตราสารหนี้</span>
+                    </li>
+                    <li class="concept__topic">
+                        <span class="concept__topic-label">Digital Asset</span>
+                        <strong class="concept__topic-title">สินทรัพย์ดิจิทัล</strong>
+                        <span class="concept__topic-description">บิตคอยน์ คริปโต และโทเคนดิจิทัล</span>
+                    </li>
+                    <li class="concept__topic">
+                        <span class="concept__topic-label">Alternative Asset</span>
+                        <strong class="concept__topic-title">สินทรัพย์ทางเลือก</strong>
+                        <span class="concept__topic-description">ทองคำ อสังหาริมทรัพย์ และสินค้าโภคภัณฑ์</span>
+                    </li>
+                    <li class="concept__topic">
+                        <span class="concept__topic-label">AI Investments</span>
+                        <strong class="concept__topic-title">ลงทุนกับ AI</strong>
+                        <span class="concept__topic-description">ใช้ AI ช่วยตัดสินใจ และลงทุนในธุรกิจที่โตด้วย AI</span>
+                    </li>
+                    <li class="concept__topic">
+                        <span class="concept__topic-label">Personal Investments</span>
+                        <strong class="concept__topic-title">วางแผนการเงินส่วนบุคคล</strong>
+                        <span class="concept__topic-description">จัดพอร์ต วางแผนภาษี และเตรียมเกษียณ</span>
+                    </li>
+                    <li class="concept__topic">
+                        <span class="concept__topic-label">Passion Investments</span>
+                        <strong class="concept__topic-title">ลงทุนในสิ่งที่รัก</strong>
+                        <span class="concept__topic-description">การ์ดสะสม ของแบรนด์เนม นาฬิกา และงานศิลปะ</span>
+                    </li>
+                    <li class="concept__topic">
+                        <span class="concept__topic-label">Longevity &amp; Wellness Investments</span>
+                        <strong class="concept__topic-title">ลงทุนเพื่อสุขภาพและอายุยืน</strong>
+                        <span class="concept__topic-description">เตรียมเงินให้พอใช้ไปจนถึงอายุ 90 ปี</span>
+                    </li>
+                    <li class="concept__topic">
+                        <span class="concept__topic-label">Lifestyle Investments</span>
+                        <strong class="concept__topic-title">ลงทุนกับไลฟ์สไตล์</strong>
+                        <span class="concept__topic-description">ธุรกิจอาหาร ท่องเที่ยว และไลฟ์สไตล์</span>
+                    </li>
+                </ul>
+
+                <div class="topics-showcase__assets" aria-hidden="true">
+                    <figure class="topics-showcase__asset topics-showcase__asset--triangle" data-topic-asset>
+                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/triangle.webp" alt=""></div></div>
+                    </figure>
+                    <figure class="topics-showcase__asset topics-showcase__asset--bitcoin" data-topic-asset>
+                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/bitcoin.webp" alt=""></div></div>
+                    </figure>
+                    <figure class="topics-showcase__asset topics-showcase__asset--gold" data-topic-asset>
+                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/gold.webp" alt=""></div></div>
+                    </figure>
+                    <figure class="topics-showcase__asset topics-showcase__asset--stock" data-topic-asset>
+                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/stock.webp" alt=""></div></div>
+                    </figure>
+                    <figure class="topics-showcase__asset topics-showcase__asset--card" data-topic-asset>
+                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/card.webp" alt=""></div></div>
+                    </figure>
+                    <figure class="topics-showcase__asset topics-showcase__asset--heart" data-topic-asset>
+                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/heart.webp" alt=""></div></div>
+                    </figure>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Section : Featured Topics -->
 
 
     <!-- Start Section : Agenda -->
@@ -1204,7 +1160,7 @@
 
 
     <!-- Start Section : Playbook -->
-    <section id="playbook" class="playbook" data-header-theme="dark" aria-labelledby="playbook-title">
+    <section id="playbook" class="playbook" data-header-theme="dark" aria-labelledby="playbook-title" data-scroll-expand>
         <div class="playbook__background" aria-hidden="true">
             <picture>
                 <source srcset="images/playbook-bg-mobile.webp" media="(max-width: 575px)" width="2490" height="2100">
@@ -1391,7 +1347,7 @@
 
 
     <!-- Start Section : Expectation -->
-    <section id="expectation" class="expectation" aria-labelledby="expectation-title">
+    <section id="expectation" class="expectation" aria-labelledby="expectation-title" data-scroll-expand data-scroll-expand-exit="only">
         <div class="expectation__inner container">
             <div class="row">
                 <div class="col-12">
@@ -1452,7 +1408,14 @@
                     <h2 id="floor-plan-title" class="bt-section-title floor-plan__title"><span class="bt-title-highlight has-pe">สำรวจ</span>พื้นที่<br>และโซนต่าง ๆ ในงาน</h2>
                     <p class="bt-section-subtext">Floor Plan</p>
                     <figure class="floor-plan__figure">
-                        <div class="floor-plan__visual">
+                        <div class="floor-plan__toolbar" hidden>
+                            <div class="floor-plan__views" role="group" aria-label="เลือกรูปแบบแผนผัง">
+                                <button class="floor-plan__view" type="button" data-floor-view="3d" aria-pressed="false" aria-controls="floor-plan-visual">มุมมอง 3D</button>
+                                <button class="floor-plan__view" type="button" data-floor-view="image" aria-pressed="true" aria-controls="floor-plan-visual">ภาพต้นฉบับ</button>
+                            </div>
+                            <p class="floor-plan__status" role="status" aria-live="polite">กำลังเตรียมมุมมอง 3D…</p>
+                        </div>
+                        <div id="floor-plan-visual" class="floor-plan__visual">
                             <img class="floor-plan__image" src="images/floor-plan.webp" width="1829" height="1386"
                                 loading="lazy" decoding="async"
                                 alt="แผนผังพื้นที่ Conference, Pavilions และ Experience ภายในงาน BetterTrade 2026">
@@ -1476,7 +1439,22 @@
                                     <text class="floor-plan__callout-label" x="1566" y="878">EXPERIENCE</text>
                                 </g>
                             </svg>
+                            <div class="floor-plan__scene" hidden>
+                                <canvas class="floor-plan__canvas" tabindex="0" role="group"
+                                    aria-label="โมเดล 3D พื้นที่งาน BetterTrade 2026"
+                                    aria-describedby="floor-plan-help"></canvas>
+                                <div class="floor-plan__controls" role="group" aria-label="ควบคุมมุมมอง 3D">
+                                    <button type="button" data-floor-action="top" aria-label="มองแผนผังจากด้านบน" aria-pressed="false">มองจากด้านบน</button>
+                                    <button type="button" data-floor-action="reset" aria-label="รีเซ็ตมุมมอง 3D">รีเซ็ต</button>
+                                    <button type="button" data-floor-action="out" aria-label="ซูมออก">−</button>
+                                    <button type="button" data-floor-action="in" aria-label="ซูมเข้า">+</button>
+                                </div>
+                            </div>
                         </div>
+                        <figcaption class="floor-plan__caption" hidden>
+                            <p id="floor-plan-help">ลากซ้าย–ขวาเพื่อหมุน · กด + / − เพื่อซูม <span class="visually-hidden">หรือใช้ปุ่มลูกศรเพื่อหมุน ปุ่มบวกและลบเพื่อซูม และปุ่ม Home เพื่อรีเซ็ตมุมมอง</span></p>
+                            <p>โมเดลจำลองจากภาพอ้างอิง สัดส่วนและรายละเอียดอาจต่างจากพื้นที่จริง</p>
+                        </figcaption>
                     </figure>
                 </div>
             </div>
@@ -2013,7 +1991,7 @@
     <!-- Start Section : CTA -->
     <section id="cta" class="cta" aria-labelledby="cta-title">
         <div class="cta__inner container">
-            <div class="cta__panel">
+            <div class="cta__panel" data-scroll-expand="0.85">
                 <!-- ของประกอบฉากชุดเดียวกับ section Playbook (ภาพเดียวกัน ขนาด/ฟิลเตอร์เดียวกัน) ลอยขยับด้วย js/cta-assets-motion.js -->
                 <div class="cta__assets" aria-hidden="true">
                     <span class="cta__asset cta__asset--stock" data-cta-asset>
@@ -2138,18 +2116,20 @@
     <script src="js/action-button.js"></script>
     <script src="js/ticket-price-selector.js?v=3"></script>
     <script src="js/agenda-tabs.js?v=30"></script>
-    <script src="vendor/lottie/lottie_svg.min.js?v=5.13.0"></script>
     <script src="js/speaker-directory.js?v=35"></script>
     <script src="js/moderator-directory.js?v=1"></script>
     <script src="js/expectation-counter.js?v=2"></script>
     <script src="js/floor-plan-reveal.js?v=1"></script>
+    <script type="module" src="js/floor-plan-3d.js?v=4"></script>
     <script src="js/back-to-top.js?v=2"></script>
     <script src="js/early-bird-float.js?v=1"></script>
     <script src="js/hero-motion-mode.js?v=3"></script>
-    <script src="js/journey-indicator.js?v=24"></script>
+    <!-- ก่อน journey-indicator: ให้ scale ของ section อัปเดตก่อนในเฟรมเดียวกัน เส้นจึงวัดขนาดปัจจุบัน -->
+    <script src="js/scroll-expand.js?v=7"></script>
+    <script src="js/journey-indicator.js?v=27"></script>
     <script src="js/mobile-cta-bar.js?v=4"></script>
     <script src="js/hero-v2-header.js?v=21"></script>
-    <script src="js/in-page-navigation.js?v=12"></script>
+    <script src="js/in-page-navigation.js?v=13"></script>
     <script src="js/reveal-on-scroll.js?v=11"></script>
     <script src="js/concept-video.js?v=1"></script>
     <script src="js/past-event-swiper.js?v=6"></script>
@@ -2163,13 +2143,11 @@
     <script src="js/loader-mist.js?v=3"></script>
     <script src="vendor/gsap/gsap.min.js"></script>
     <script src="vendor/gsap/ScrollTrigger.min.js"></script>
-    <script src="js/hero-v2-scroll-motion.js?v=75"></script>
-    <script src="js/hero-v2-scroll-cue.js?v=4"></script>
+    <script src="js/hero-v2-scroll-motion.js?v=83"></script>
+    <script src="js/hero-v2-scroll-cue.js?v=6"></script>
     <script src="js/topics-reveal.js?v=6"></script>
     <script src="js/topics-assets-motion.js?v=22"></script>
-    <script src="js/topic-speaker-transition.js?v=9"></script>
-    <script src="js/ticket-backdrop-parallax.js?v=4"></script>
-    <script src="js/playbook-assets-motion.js?v=4"></script>
+    <script src="js/playbook-assets-motion.js?v=5"></script>
     <script src="js/cta-assets-motion.js?v=1"></script>
     <script src="js/playbook-glow-motion.js?v=1"></script>
     <!-- หลัง hero เพราะ ScrollTrigger refresh ตามลำดับที่สร้าง และ speaker อยู่ใต้ hero ในหน้า -->

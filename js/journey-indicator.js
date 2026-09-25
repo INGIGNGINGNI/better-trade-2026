@@ -4,10 +4,10 @@
 
     const title = indicator.querySelector('.journey-indicator__title');
     const route = [
-        { id: 'concept', label: 'Concept' },
-        { id: 'featured-topics', label: 'Topics' },
         { id: 'speaker-overview', label: 'Speaker Overview' },
         { id: 'ticket', label: 'Ticket Price' },
+        { id: 'concept', label: 'Concept' },
+        { id: 'featured-topics', label: 'Topics' },
         { id: 'agenda', label: 'Agenda' },
         { id: 'playbook', label: 'Personalized Playbook' },
         { id: 'speaker', label: 'Speaker' },
@@ -112,6 +112,9 @@
         const stops = [{ position: 0, color: lightColor }];
 
         darkRects
+            /* เฉพาะ section มืดที่อยู่ใต้เส้นจริง ๆ ในแนวนอนด้วย เช่น #playbook ตอนย่อเป็นแผง
+               (scroll-expand) ขอบซ้ายหดเข้ามาจากขอบจอ เส้นจึงอยู่บนพื้นขาวแม้แนวตั้งจะทับกัน */
+            .filter(rect => railX >= rect.left && railX <= rect.right)
             .map(rect => ({
                 start: Math.max(0, Math.min(1, (rect.top - railRect.top) / railRect.height)),
                 end: Math.max(0, Math.min(1, (rect.bottom - railRect.top) / railRect.height)),
