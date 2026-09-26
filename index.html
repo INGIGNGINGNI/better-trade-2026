@@ -69,7 +69,7 @@
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="css/main.css?v=60">
-    <link rel="stylesheet" href="css/style.css?v=1019">
+    <link rel="stylesheet" href="css/style.css?v=1045">
 </head>
 
 <body class="is-loading">
@@ -245,11 +245,11 @@
         <!-- กำแพงซ้าย-ขวาชุดเดียวกับ KV: layer ถัดจากท้องฟ้า อยู่ใต้ไอคอนและเนื้อหาทั้งหมด (ทุกขนาดจอ)
              js/hero-loader.js ส่งตำแหน่งกรอบภาพวิทยากรให้ CSS วางขอบในของกำแพงตรงกรอบภาพ แล้วกำแพงยาวเลยขอบจอออกไป -->
         <picture>
-            <source media="(max-width: 991px)" srcset="images/light/wall-left-1280.webp?v=2" width="1280" height="1600">
+            <source media="(max-width: 991px), (max-aspect-ratio: 1199/1000)" srcset="images/light/wall-left-1280.webp?v=3" width="1280" height="1600">
             <img class="hero__wall hero__wall--left" src="images/light/wall-left-new.webp?v=1" width="3840" height="2880" alt="" aria-hidden="true">
         </picture>
         <picture>
-            <source media="(max-width: 991px)" srcset="images/light/wall-right-1280.webp?v=2" width="1280" height="1600">
+            <source media="(max-width: 991px), (max-aspect-ratio: 1199/1000)" srcset="images/light/wall-right-1280.webp?v=3" width="1280" height="1600">
             <img class="hero__wall hero__wall--right" src="images/light/wall-right-new.webp?v=1" width="2880" height="2880" alt="" aria-hidden="true">
         </picture>
 
@@ -2027,6 +2027,7 @@
     <script src="js/past-event-swiper.js?v=6"></script>
     <script src="js/faq-tabs.js?v=6"></script>
     <script src="js/cookie-banner.js?v=2"></script>
+    <script src="js/cursor-dot.js?v=5"></script>
 
     <!-- Liquid metal CTAs (WebGL). Module scripts are deferred, so this runs after
      the markup exists but before window 'load' fires the hero intro. -->
@@ -2035,7 +2036,8 @@
     <script src="js/loader-mist.js?v=3"></script>
     <script src="vendor/gsap/gsap.min.js"></script>
     <script src="vendor/gsap/ScrollTrigger.min.js"></script>
-    <script src="js/hero-loader.js?v=15"></script>
+    <script src="js/hero-loader.js?v=20"></script>
+    <script src="js/hero-scroll-motion.js?v=17"></script>
     <script src="js/topics-reveal.js?v=6"></script>
     <script src="js/topics-assets-motion.js?v=22"></script>
     <script src="js/playbook-assets-motion.js?v=5"></script>

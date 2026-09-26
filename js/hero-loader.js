@@ -63,9 +63,22 @@
     }
 
     function syncIdle() {
-        const active = heroVisible && !document.hidden;
+        const active = heroVisible && !document.hidden && !iconsFlying;
         idleTweens.forEach(tween => tween.paused(!active));
     }
+
+    /* js/hero-scroll-motion.js บินไอคอนลงไปหาการ์ดบัตรโดยขยับ .hero-asset__inner ในกรอบของ .hero-asset__float
+       ถ้าลอย/หมุน idle ต่อ เส้นทางบินจะเอียงตามมุมที่ float หมุนอยู่ จึงหยุด idle แล้วพา float กลับตำแหน่งตั้งต้นก่อน */
+    let iconsFlying = false;
+    window.addEventListener('bettertrade:hero-icons-flying', event => {
+        iconsFlying = Boolean(event.detail?.flying);
+        // กลับขึ้นบนสุด: float อยู่ที่ตั้งต้นแล้ว เริ่ม idle ใหม่จากตั้งต้นเช่นกัน ไม่กระตุก
+        if (!iconsFlying) idleTweens.forEach(tween => tween.progress(0));
+        syncIdle();
+        if (iconsFlying && typeof gsap !== 'undefined') {
+            gsap.to(Object.values(assets).map(a => a.float), { y: 0, rotate: 0, duration: 0.3, ease: 'power2.out', overwrite: 'auto' });
+        }
+    });
 
     function finishLoader() {
         if (loaderDone) return;
@@ -313,20 +326,51 @@
         const visual = hero?.querySelector('.hero__speakers');
         if (!walls.length || !visual) return;
 
+        const content = hero.querySelector('.hero__content');
+        const stats = hero.querySelector('.hero__stats');
+        const cta = hero.querySelector('#cta-slot');
+
         const sync = () => {
-            if (getComputedStyle(walls[0]).display === 'none') return;
             const heroBox = hero.getBoundingClientRect();
             const rect = visual.getBoundingClientRect();
             // ระหว่าง loader .hero__inner ถูกเลื่อนลง (translateY) ชั่วคราว วัดตำแหน่งจริงโดยหักค่านั้นออก
             // ไม่งั้นกำแพงจะเลื่อนลงตามจนเห็นช่องฟ้าเหนือกำแพง
             const innerShift = heroInner ? new DOMMatrixReadOnly(getComputedStyle(heroInner).transform).m42 : 0;
             const box = { top: rect.top - innerShift, left: rect.left, width: rect.width, height: rect.height };
+
+            // จุดอ้างอิงของเนื้อหา (px เทียบกับ hero) ให้ CSS วางไอคอนสินทรัพย์ในช่องว่างข้างเนื้อหา ไม่ทับข้อความ
+            const local = el => {
+                const r = el.getBoundingClientRect();
+                return { l: r.left - heroBox.left, r: r.right - heroBox.left, y: r.top + r.height / 2 - innerShift - heroBox.top };
+            };
+            const setVar = (name, value) => hero.style.setProperty(name, `${Math.round(value)}px`);
+            if (content) setVar('--bt-hero-content-l', local(content).l);
+            if (stats) {
+                const st = local(stats);
+                setVar('--bt-hero-stats-l', st.l);
+                setVar('--bt-hero-stats-r', st.r);
+                setVar('--bt-hero-stats-y', st.y);
+            }
+            // ปุ่มซื้อบัตรถูกซ่อน (≤575) ใช้แถว stat เป็นจุดอ้างอิงของ triangle / card แทน
+            const ctaShown = cta && cta.getClientRects().length > 0 && cta.offsetWidth > 0;
+            const anchor = ctaShown ? cta : stats;
+            if (anchor) {
+                const c = local(anchor);
+                setVar('--bt-hero-cta-l', c.l);
+                setVar('--bt-hero-cta-r', c.r);
+                setVar('--bt-hero-cta-y', c.y);
+            }
+            setVar('--bt-hero-img-top', box.top - heroBox.top);
+            setVar('--bt-hero-img-h', box.height);
+
+            if (getComputedStyle(walls[0]).display === 'none') return;
             // ≤991 ขอบเฉียงของกำแพงเริ่มที่ขอบจอระดับแถวตัวเลข stat (CSS ใช้เฉพาะช่วงนั้น)
-            const stats = hero.querySelector('.hero__stats');
-            const start = stats ? stats.getBoundingClientRect().top - heroBox.top : 0;
+            // (≤575 แถว stat ย้ายไปอยู่ใต้ภาพ ใช้ขอบบนของภาพแทน ถ้าภาพอยู่สูงกว่า)
+            const start = stats ? Math.min(stats.getBoundingClientRect().top, rect.top) - innerShift - heroBox.top : 0;
             walls.forEach(wall => {
                 wall.style.setProperty('--bt-hero-wall-start', `${start}px`);
                 wall.style.setProperty('--bt-hero-width', `${heroBox.width}px`);
+                wall.style.setProperty('--bt-hero-height', `${heroBox.height}px`);
                 wall.style.setProperty('--bt-hero-wall-top', `${box.top - heroBox.top}px`);
                 wall.style.setProperty('--bt-hero-wall-left', `${box.left - heroBox.left}px`);
                 wall.style.setProperty('--bt-hero-wall-width', `${box.width}px`);
@@ -335,7 +379,10 @@
         };
 
         sync();
-        new ResizeObserver(sync).observe(visual);
+        const resizeObserver = new ResizeObserver(sync);
+        resizeObserver.observe(visual);
+        if (content) resizeObserver.observe(content);
+        document.fonts?.ready.then(sync);
         window.addEventListener('resize', sync);
         // ระหว่าง loader เนื้อหาถูกเลื่อนลง 16px (transform ไม่ทำให้ ResizeObserver ทำงาน) วัดใหม่ตอนจบ
         window.addEventListener(LOADER_COMPLETE_EVENT, sync);

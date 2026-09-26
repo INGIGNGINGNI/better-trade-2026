@@ -1672,8 +1672,9 @@ body.menu-open .site-header__backdrop {
     left: calc(var(--cx) * 1vw);
     top: calc((var(--cy) + var(--bt-hero-asset-shift)) * 1vh);
     /* --bt-hero-asset-scale ย่อทั้งชุด (min/ค่าตามจอ/max) ด้วยอัตราเดียว สัดส่วนเล็ก-ใหญ่ระหว่างไอคอนจึงคงเดิม */
-    width: calc(clamp(var(--min), var(--w) * 1vw, var(--max)) * var(--bt-hero-asset-scale, 1) * var(--bt-hero-asset-boost, 1));
-    filter: saturate(1.3);
+    --bt-hero-asset-width: calc(clamp(var(--min), var(--w) * 1vw, var(--max)) * var(--bt-hero-asset-scale, 1) * var(--bt-hero-asset-boost, 1));
+
+    width: var(--bt-hero-asset-width);
     transform: translate(-50%, -50%) rotate(var(--rot));
 }
 
@@ -1686,15 +1687,17 @@ body.menu-open .site-header__backdrop {
     opacity: 0;
     will-change: transform, opacity;
 
+    /* filter อยู่ที่ภาพข้างในเลเยอร์ที่เคลื่อนที่ (เดิมอยู่ที่ .hero-asset ตัวนอก ทำให้ต้องวาดใหม่ทุกเฟรมตอนไอคอนขยับ) */
     img {
         width: 100%;
         height: auto;
         display: block;
+        filter: saturate(1.3);
     }
 }
 
 .hero-asset[data-hero-asset="triangle"] {
-    --cx: 5.5;
+    --cx: 8.5;
     --cy: 10.5;
     --w: 10;
     --rot: -10deg;
@@ -1738,22 +1741,6 @@ body.menu-open .site-header__backdrop {
     --max: 120px;
 }
 
-/* bitcoin ย้ายมาอยู่ข้างคนริมซ้ายแถวล่างสุดของภาพวิทยากร ตำแหน่งเป็น % ของกรอบ .hero__visual
-   (≥992 กรอบเท่าภาพ 4:5 ทั้งแผ่น จุดนี้ = 4% / 72% ของภาพ) ขนาดและมุมเท่าเดิม
-   อยู่หลังภาพวิทยากร (z-index 0 ต่ำกว่า .hero__speakers) ส่วนที่ติดคนจึงถูกภาพบัง */
-.hero__visual {
-    position: relative;
-}
-
-.hero__visual>.hero-asset[data-hero-asset="bitcoin"] {
-    --bx: 2;
-    --by: 64;
-
-    z-index: 0;
-    left: calc(var(--bx) * 1%);
-    top: calc(var(--by) * 1%);
-}
-
 .hero-asset[data-hero-asset="heart"] {
     --cx: 93.5;
     --cy: 74;
@@ -1763,26 +1750,41 @@ body.menu-open .site-header__backdrop {
     --max: 240px;
 }
 
+/* bitcoin ย้ายมาอยู่ข้างคนริมซ้ายแถวล่างสุดของภาพวิทยากร ตำแหน่งเป็น % ของกรอบ .hero__visual
+   (≥992 กรอบเท่าภาพ 4:5 ทั้งแผ่น จุดนี้ = 4% / 72% ของภาพ) ขนาดและมุมเท่าเดิม
+   อยู่หลังภาพวิทยากร (z-index 0 ต่ำกว่า .hero__speakers) ส่วนที่ติดคนจึงถูกภาพบัง */
+.hero__visual {
+    position: relative;
+}
+
+.hero__visual>.hero-asset[data-hero-asset="bitcoin"] {
+    --bx: 4;
+    --by: 68;
+    --w: 4;
+
+    z-index: 0;
+    left: calc(var(--bx) * 1%);
+    top: calc(var(--by) * 1%);
+}
+
 /* ไอคอนใหญ่สี่ตัวย่อลง 25% เท่ากันทุกตัว (heart ยังใหญ่กว่า card, triangle ยังใหญ่กว่า gold ฯลฯ) */
 .hero-asset:is([data-hero-asset="triangle"], [data-hero-asset="gold"], [data-hero-asset="heart"], [data-hero-asset="card"]) {
     --bt-hero-asset-scale: 0.75;
 }
 
-@media (max-width:991px) {
+@media (max-width:991px), (max-aspect-ratio: 1199/1000) {
 
-    /* กำแพง wall-*-1280 (4:5 จาก <picture>) รูปทรงเฉียงอยู่ในไฟล์แล้ว วางตามสัดส่วนจริง ไม่ยืด ไม่มี mask
-       ขอบล่างชนขอบล่างภาพวิทยากร มุมล่างด้านในของไฟล์ (36.1% / 62.4% ของความกว้างไฟล์)
+    /* กำแพง wall-*-1280 (4:5 จาก <picture>) รูปทรงเฉียงอยู่ในไฟล์แล้ว วางตามสัดส่วนจริง ไม่ยืด
+       ขอบล่างชนขอบล่างภาพวิทยากร มุมล่างด้านในของไฟล์ (36.3% / 62.2% ของความกว้างไฟล์)
        ชนขอบในของกำแพงที่ 36% / 63% ของกรอบภาพ
-       ขนาด: สูงอย่างน้อยจากแถวตัวเลข stat ถึงขอบล่างภาพ และกว้างพอให้ขอบนอกถึงขอบจอทั้งสองฝั่ง
-       (จอ ~800–991 ที่ภาพอยู่กลางจอ กำแพงจะใหญ่ขึ้นและเริ่มสูงกว่าแถว stat เล็กน้อย) */
+       ขนาด: สูงตั้งแต่ขอบบนของ hero (ขอบบนจอ) ถึงขอบล่างภาพ และกว้างพอให้ขอบนอกถึงขอบจอทั้งสองฝั่ง */
     .hero__wall {
         --bt-hero-wall-bottom: calc(var(--bt-hero-wall-top, 0px) + var(--bt-hero-wall-height, 0px));
         --bt-hero-wall-inner-l: calc(var(--bt-hero-wall-left, 0px) + var(--bt-hero-wall-width, 0px) * 0.36);
         --bt-hero-wall-inner-r: calc(var(--bt-hero-wall-left, 0px) + var(--bt-hero-wall-width, 0px) * 0.63);
-        --bt-hero-wall-file-width: max(
-            (var(--bt-hero-wall-bottom) - var(--bt-hero-wall-start, 0px)) * 0.8,
-            var(--bt-hero-wall-inner-l) / 0.361,
-            (var(--bt-hero-width, 100vw) - var(--bt-hero-wall-inner-r)) / 0.376);
+        --bt-hero-wall-file-width: max(var(--bt-hero-wall-bottom) * 0.8,
+                var(--bt-hero-wall-inner-l) / 0.363,
+                (var(--bt-hero-width, 100vw) - var(--bt-hero-wall-inner-r)) / 0.378);
 
         display: block;
         position: absolute;
@@ -1793,20 +1795,38 @@ body.menu-open .site-header__backdrop {
         pointer-events: none;
     }
 
-    /* ขอบในช่วงล่างของกำแพงซ้ายอยู่ข้างเรือ (ภาพวิทยากรใสตรงนั้น) เห็นเป็นเส้นตัดกับท้องฟ้า
-       ไล่จางแถบแคบ ๆ ขนานกับขอบเฉียงช่วงล่าง (จาก 27%,50% ถึง 36.1%,100% ของไฟล์ เอียง ~8° จากแนวตั้ง)
-       มุม 81.7deg ตั้งฉากกับขอบนั้น ขอบอยู่ที่ 30.5% ของแนว gradient
+    /* ขอบในช่วงล่างของกำแพงซ้าย (ตั้งตรงที่ 36.3% ของไฟล์) อยู่ข้างเรือ ภาพวิทยากรใสตรงนั้น
+       เห็นเป็นเส้นตัดกับท้องฟ้า จึงไล่จางแถบแคบ ๆ 31% → 36.3% ของไฟล์
        ชั้นที่สอง (แนวตั้ง) ทำให้ช่วงบน 0–76% ของกำแพงทึบเต็ม แถบจางจึงมีผลเฉพาะช่วงล่างข้างเรือ */
     .hero__wall--left {
-        left: calc(var(--bt-hero-wall-inner-l) - var(--bt-hero-wall-file-width) * 0.361);
+        left: calc(var(--bt-hero-wall-inner-l) - var(--bt-hero-wall-file-width) * 0.363);
         mask-image:
-            linear-gradient(81.7deg, #000 0, #000 26%, transparent 30.5%),
+            linear-gradient(90deg, #000 0, #000 31%, transparent 36.3%),
             linear-gradient(180deg, #000 0, #000 76%, transparent 84%);
         mask-composite: add;
     }
 
     .hero__wall--right {
-        left: calc(var(--bt-hero-wall-inner-r) - var(--bt-hero-wall-file-width) * 0.624);
+        left: calc(var(--bt-hero-wall-inner-r) - var(--bt-hero-wall-file-width) * 0.622);
+    }
+
+    /* ไล่สีพื้นหน้า (--color-surface-page) จากขอบล่าง hero ขึ้นไป กลบสีฟ้าที่ติดมากับกำแพงช่วงล่าง
+       z-index 0 และเป็น ::after (มาหลังสุดใน DOM) จึงอยู่บนกำแพง แต่อยู่ใต้ .hero__inner (1) ที่มีภาพวิทยากร */
+    /* ไอคอนอยู่เหนือแถบไล่สีขาวด้านล่าง (::after z-index 0) แต่ยังอยู่หลังเนื้อหา (.hero__inner z 1 มาทีหลังใน DOM) */
+    .hero__assets {
+        z-index: 1;
+    }
+
+    .hero::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 0;
+        height: 35%;
+        background: linear-gradient(to top, var(--color-surface-page) 25%, transparent);
+        pointer-events: none;
     }
 
     /* hero สูงกว่ากว้าง วิดีโอ 16:9 แบบ cover เหลือแค่แถบกลาง ~1/3 ของความกว้าง (ฟ้าเปล่าเป็นส่วนใหญ่)
@@ -1826,10 +1846,98 @@ body.menu-open .site-header__backdrop {
         --bt-hero-asset-boost: 1.6;
     }
 
-    /* ≤991 ภาพเต็มแผ่นแต่ .hero__visual มี gutter ซ้าย-ขวา แปลงจุด 4% ของภาพเป็น % ของกรอบ (แนวตั้งเท่าเดิม 72%) */
+    /* ≤991 ยึด "ขอบขวา" ของ bitcoin (ด้านที่ชิดคนริมซ้าย) ไว้ที่จุดคงที่บนภาพ แทนจุดกึ่งกลาง
+       เปลี่ยน --w แล้วไอคอนจึงโตออกไปทางซ้าย ไม่ขยับเข้าไปทับคน
+       --bx / --by เป็น % ของความกว้าง / ความสูงภาพ (100cqw = กว้างภาพ, สูงภาพ = 125cqw)
+       บวก gutter ซ้ายของ .hero__visual และหักระยะที่ภาพถูกดึงขึ้น (--bt-hero-speakers-pull 13cqw) */
     .hero__visual>.hero-asset[data-hero-asset="bitcoin"] {
-        --bx: 7;
+        --bx: 11;
         --by: 72;
+
+        left: calc(var(--bs-gutter-x) * 0.5 + var(--bx) * 1cqw);
+        top: calc(var(--by) * 1.25cqw - 13cqw);
+        transform: translate(-100%, -50%) rotate(var(--rot));
+    }
+
+    .hero-asset:is([data-hero-asset="triangle"], [data-hero-asset="gold"], [data-hero-asset="heart"], [data-hero-asset="card"]),
+    .hero__visual>.hero-asset[data-hero-asset="bitcoin"] {
+        --bt-hero-asset-scale: 1;
+    }
+
+    .hero-asset[data-hero-asset="bitcoin"] {
+        --w: 8;
+    }
+
+    /* ผังบน-ล่าง: ไอคอนวางในช่องว่างข้างเนื้อหา แทนตำแหน่งตาม vw/vh (จอสูงต่างกันไอคอนจะตกไปทับข้อความ)
+       จุดอ้างอิง (px เทียบกับ hero) มาจาก js/hero-loader.js
+       stock / gold: ซ้าย / ขวาของแถว stat · triangle / card: ซ้าย / ขวาของปุ่มซื้อบัตร
+       heart: มุมขวาบนของภาพวิทยากร (ข้างข้อความราคาพิเศษ)
+       ไอคอนอยู่กึ่งกลางช่องว่างข้างนั้น กว้างไม่เกิน 120px และกรอบของภาพที่เอียงแล้ว (--bt-hero-asset-span
+       = ความกว้างหลังหมุน / ความกว้างภาพ คิดจากสัดส่วนไฟล์กับมุม --rot) ไม่เกินช่อง (เว้นขอบ 12px ต่อข้าง)
+       และสูงหลังหมุน (--bt-hero-asset-vspan) ไม่เกิน 120px ไม่ล้นขึ้นไปทับคำโปรย/ลงไปทับราคาพิเศษ */
+    .hero-asset:is([data-hero-asset="stock"], [data-hero-asset="triangle"], [data-hero-asset="gold"], [data-hero-asset="card"]) {
+        --bt-hero-asset-fit: max(0px, min(var(--bt-hero-asset-width), (var(--bt-hero-asset-gap) - var(--space-6)) / var(--bt-hero-asset-span, 1), 120px / var(--bt-hero-asset-vspan, 1), 120px));
+
+        width: var(--bt-hero-asset-fit);
+    }
+
+    .hero-asset:is([data-hero-asset="stock"], [data-hero-asset="triangle"]) {
+        --bt-hero-asset-gap: var(--bt-hero-stats-l, 0px);
+
+        left: calc(var(--bt-hero-asset-gap) / 2);
+    }
+
+    .hero-asset:is([data-hero-asset="gold"], [data-hero-asset="card"]) {
+        --bt-hero-asset-edge: var(--bt-hero-stats-r, 100vw);
+        --bt-hero-asset-gap: calc(100vw - var(--bt-hero-asset-edge));
+
+        left: calc(var(--bt-hero-asset-edge) + var(--bt-hero-asset-gap) / 2);
+    }
+
+    .hero-asset:is([data-hero-asset="stock"], [data-hero-asset="gold"]) {
+        top: var(--bt-hero-stats-y, 50vh);
+    }
+
+    /* triangle 800×769 เอียง 10° · gold 369×800 เอียง 16° · card 743×800 เอียง 12°
+       stock 178×800 (แท่งยาว) ลดมุมเหลือ 12° ไม่งั้นแท่งเอียงกินที่แนวนอนมากจนไอคอนเล็กเกินไป */
+    .hero-asset[data-hero-asset="triangle"] {
+        --bt-hero-asset-span: 1.15;
+        --bt-hero-asset-vspan: 1.12;
+    }
+
+    .hero-asset[data-hero-asset="gold"] {
+        --bt-hero-asset-span: 1.56;
+        --bt-hero-asset-vspan: 2.36;
+    }
+
+    .hero-asset[data-hero-asset="card"] {
+        --bt-hero-asset-span: 1.2;
+        --bt-hero-asset-vspan: 1.26;
+    }
+
+    .hero-asset[data-hero-asset="stock"] {
+        --rot: -12deg;
+        --bt-hero-asset-span: 1.91;
+        --bt-hero-asset-vspan: 4.6;
+    }
+
+    .hero-asset[data-hero-asset="triangle"] {
+        --bt-hero-asset-gap: var(--bt-hero-cta-l, 0px);
+
+        top: var(--bt-hero-cta-y, 60vh);
+    }
+
+    .hero-asset[data-hero-asset="card"] {
+        --bt-hero-asset-edge: var(--bt-hero-cta-r, 100vw);
+        --w: 7.5;
+
+        top: var(--bt-hero-cta-y, 60vh);
+    }
+
+    .hero-asset[data-hero-asset="heart"] {
+        --cx: 93.5;
+
+        top: calc(var(--bt-hero-img-top, 80vh) + var(--bt-hero-img-h, 0px) * 0.14);
     }
 }
 
@@ -1840,7 +1948,7 @@ body.menu-open .site-header__backdrop {
 
 .hero__row {
     align-items: center;
-    row-gap: var(--space-6);
+    row-gap: var(--space-12);
 }
 
 .hero__content {
@@ -2038,16 +2146,26 @@ body.menu-open .site-header__backdrop {
    ภาพต้องเห็นเต็มแผ่นเสมอ (ห้ามครอป คนริมภาพจะหาย) กรอบจึงเป็น 4:5 ตามไฟล์
    กว้าง min(80vh, พื้นที่ที่เหลือจากคอลัมน์ข้อความขั้นต่ำ) = สูงไม่เกิน 100vh
    จอสูงภาพกว้างขึ้นแล้วเบียดข้อความไปซ้าย จอแคบภาพเตี้ยกว่าจอและอยู่กึ่งกลางแนวตั้ง */
-@media (min-width:992px) {
+@media (min-width:992px) and (min-aspect-ratio: 6/5) {
 
     /* ข้อความ + ภาพเรียงชิดกัน (ห่างกันแค่ --bt-hero-gap) แล้วทั้งกลุ่มวางกึ่งกลางจอ
        พื้นที่ที่เหลือไปอยู่ขอบซ้าย-ขวาเท่า ๆ กัน และมีระยะจากขอบจออย่างน้อย --bt-hero-side-min เสมอ
        ภาพสูง 100vh (กว้าง 80vh ตามสัดส่วน 4:5) คอลัมน์ข้อความกว้างตามเนื้อหา (สูงสุด 600px)
        จอแคบลงคอลัมน์ข้อความหดเอง title ย่อตาม (.hero__title width 100%) */
+    /* ความกว้าง: คอลัมน์ข้อความ + ภาพ วางคู่กันกึ่งกลางจอ ห่างกัน --bt-hero-gap
+       ภาพกว้าง 80vh (= สูง 100vh ตามสัดส่วน 4:5) เว้นแต่จอแคบจนคอลัมน์ข้อความเหลือไม่ถึง --bt-hero-content-min
+       ภาพจึงหดลงแทน (ไม่ครอป ไม่ล้นจอ) และชิดขอบล่างของ hero
+       ความสูง: hero สูง 100vh เนื้อหาอยู่กึ่งกลางช่วงใต้ header เว้นบน-ล่างเท่ากัน (--bt-hero-pad-y)
+       ระยะห่าง/ขนาดตัวอักษรในคอลัมน์ข้อความย่อตามความสูงจอ จอเตี้ยเนื้อหาจึงยังอยู่ครบใน 1 หน้าจอ */
     .hero {
         --bt-hero-gap: var(--space-6);
         --bt-hero-side-min: var(--space-8);
+        --bt-hero-content-min: calc(480 * var(--bt-hero-u));
+        --bt-hero-content-max: calc(500 * var(--bt-hero-u));
+        --bt-hero-pad-y: clamp(var(--space-4), 3vh, var(--space-10));
+        --bt-hero-visual-w: min(80vh, 100vw - 2 * var(--bt-hero-side-min) - var(--bt-hero-gap) - var(--bt-hero-content-min));
 
+        min-height: 100vh;
         padding-block: var(--space-0);
     }
 
@@ -2072,30 +2190,76 @@ body.menu-open .site-header__backdrop {
         z-index: 2;
         flex: 0 1 auto;
         width: auto;
-        max-width: 600px;
+        max-width: var(--bt-hero-content-max);
         min-width: 0;
-        padding: calc(var(--header-height) + var(--space-10)) var(--space-0) var(--space-16);
+        padding: calc(var(--header-height) + var(--bt-hero-pad-y)) var(--space-0) var(--bt-hero-pad-y);
     }
 
     .hero__visual {
         position: relative;
         z-index: 1;
         flex: 0 0 auto;
-        align-self: flex-start;
-        width: 80vh;
-        height: 100vh;
+        align-self: flex-end;
+        width: var(--bt-hero-visual-w);
+        height: auto;
+        aspect-ratio: 4 / 5;
         padding: var(--space-0);
     }
 
-    /* 992–1199: ภาพ 80vh กินพื้นที่ส่วนใหญ่ headline กับแถว stat เลยกว้างเกินคอลัมน์ ลด headline เหลือ 32px และช่องไฟ stat */
-    @media (max-width: 1199px) {
-        .hero__headline {
-            font-size: var(--font-size-32);
+    /* ขนาดทั้งคอลัมน์ข้อความโตตามพื้นที่จริงด้วยตัวคูณเดียว --bt-hero-u (= k px, ค่าเดิมคือ k = 1)
+       ทุกส่วน (title, headline, คำโปรย, ตัวเลข, ระยะห่าง) คูณ k เท่ากัน สัดส่วนที่ออกแบบไว้จึงคงเดิม
+       k ถูกจำกัด 3 ทาง แล้วใช้ค่าที่น้อยที่สุด
+       - ความสูง: เนื้อหาที่ k = 1 สูง 592px (ส่วนที่คูณ k 530px + ปุ่ม 62px ที่สูงคงที่)
+         ต้องพอดี 100vh − header − ระยะบน-ล่าง (3vh × 2): 530k + 62 ≤ 0.94·100vh − 72
+         → k = 0.1774vh − 0.2528px แล้วคูณ 0.917 ให้เหลือที่ว่างบน-ล่าง ไม่แน่นจอ (หน้าต่าง 1470×765 ได้ title ~446px)
+       - ความกว้าง: เนื้อหาที่ k = 1 กว้าง 480px ต้องพอดีช่องที่เหลือจากภาพ 80vh → k = (100vw − 88px − 80vh) / 480
+         ถ้าช่องแคบกว่านั้น ภาพหดแทนได้จนข้อความเหลือ k = 0.9 (--bt-hero-content-min = 480k)
+       - เพดาน 1.2 และพื้น 0.8
+       ปุ่มซื้อบัตร (liquid metal วาดด้วย canvas) สูงคงที่ ไม่คูณ k */
+    .hero {
+        --bt-hero-u: clamp(0.8px, min(0.1627vh - 0.2318px, max(0.9px, (100vw - 88px - 80vh) / 480)), 1.2px);
+    }
+
+    .hero__title {
+        max-width: calc(440 * var(--bt-hero-u));
+    }
+
+    .hero__headline {
+        margin-top: calc(32 * var(--bt-hero-u));
+        font-size: calc(40 * var(--bt-hero-u));
+    }
+
+    .hero__description {
+        margin-top: calc(16 * var(--bt-hero-u));
+        font-size: calc(18 * var(--bt-hero-u));
+    }
+
+    .hero__stats {
+        --bt-hero-stat-size: calc(40 * var(--bt-hero-u));
+        --bt-hero-stat-rule-length: calc(64 * var(--bt-hero-u));
+
+        margin-top: calc(32 * var(--bt-hero-u));
+    }
+
+    .hero__stat {
+        padding-inline: calc(32 * var(--bt-hero-u));
+
+        &:first-child {
+            padding-left: var(--space-0);
         }
 
-        .hero__stat {
-            padding-inline: var(--space-5);
+        dt {
+            margin-top: calc(8 * var(--bt-hero-u));
+            font-size: calc(16 * var(--bt-hero-u));
         }
+    }
+
+    .hero__actions {
+        margin-top: calc(32 * var(--bt-hero-u));
+    }
+
+    .hero__offer {
+        font-size: calc(14 * var(--bt-hero-u));
     }
 
     .hero__speakers {
@@ -2110,18 +2274,42 @@ body.menu-open .site-header__backdrop {
         }
     }
 
+    /* ไอคอนฝั่งซ้าย (triangle, stock) ห้ามทับข้อความ: ขอบซ้ายของคอลัมน์ข้อความ (--bt-hero-content-l จาก
+       js/hero-loader.js) เป็นเพดานของกรอบไอคอนหลังหมุน (ความกว้างหลังหมุน = กว้าง × --bt-hero-asset-span)
+       ช่องซ้ายแคบ ไอคอนเลื่อนไปทางซ้ายจนเลยขอบจอได้ครึ่งตัว ถ้ายังไม่พอก็ย่อลงตามช่อง
+       จอกว้างที่ช่องซ้ายเหลือเฟือ ไอคอนอยู่ตำแหน่งเดิม (--cx) */
+    .hero-asset:is([data-hero-asset="triangle"], [data-hero-asset="stock"]) {
+        --bt-hero-asset-fit: min(var(--bt-hero-asset-width), max(var(--bt-hero-asset-min-fit), (var(--bt-hero-content-l, 100vw) - var(--space-2)) / (var(--bt-hero-asset-span) * 0.5)));
+
+        width: var(--bt-hero-asset-fit);
+        left: min(var(--cx) * 1vw, var(--bt-hero-content-l, 100vw) - var(--bt-hero-asset-fit) * var(--bt-hero-asset-span) * 0.5 - var(--space-2));
+    }
+
+    /* triangle 800×769 เอียง 10° → 1.15 · stock 178×800 เอียง 24° → 2.74 */
+    .hero-asset[data-hero-asset="triangle"] {
+        --bt-hero-asset-span: 1.15;
+        --bt-hero-asset-min-fit: 56px;
+    }
+
+    .hero-asset[data-hero-asset="stock"] {
+        --bt-hero-asset-span: 2.74;
+        --bt-hero-asset-min-fit: 24px;
+    }
+
     /* กำแพงขวา: ไฟล์ 4:5 เท่ากรอบภาพวิทยากร js/hero-loader.js ใส่ตำแหน่ง/ขนาดของกรอบภาพ
        (เทียบกับ .hero) ให้ผ่าน --bt-hero-wall-* แล้ว scaleX จากขอบในของกำแพง (~63% ของไฟล์)
        ยื่นออกทางขวาจนถึงขอบจอ ส่วนเกินถูก .hero (overflow: hidden) ตัด
        ไม่มี z-index และมาหลัง .hero__sky ใน DOM จึงอยู่บนท้องฟ้าแต่ใต้ .hero__assets (0) และ .hero__inner (1) */
+    /* กำแพงสูงเต็ม hero (ชิดขอบบน-ล่างเสมอ) แม้ภาพวิทยากรหดเตี้ยกว่าจอ (--bt-hero-height จาก js/hero-loader.js)
+       ตำแหน่งแนวนอนยังยึดขอบในที่ 36% / 63% ของกรอบภาพ ขนาดไฟล์ตามความสูง hero จึงไม่ยืด */
     .hero__wall {
         display: block;
         position: absolute;
-        top: var(--bt-hero-wall-top, 0px);
+        top: 0;
         left: var(--bt-hero-wall-left, 0px);
         width: var(--bt-hero-wall-width, 0px);
         max-width: none;
-        height: var(--bt-hero-wall-height, 0px);
+        height: var(--bt-hero-height, 100vh);
         pointer-events: none;
     }
 
@@ -2136,7 +2324,7 @@ body.menu-open .site-header__backdrop {
         --bt-hero-wall-right-edge: 0.63;
 
         left: calc(var(--bt-hero-wall-left, 0px) + var(--bt-hero-wall-width, 0px) * var(--bt-hero-wall-right-edge));
-        width: var(--bt-hero-wall-height, 0px);
+        width: var(--bt-hero-height, 100vh);
         mask-image:
             linear-gradient(90deg, transparent 0, #000 21.6%),
             linear-gradient(180deg, #000 0, #000 35%, transparent 42%);
@@ -2149,7 +2337,7 @@ body.menu-open .site-header__backdrop {
        ไล่จางขอบในเท่าระยะเดิม (9% ของความกว้างกรอบภาพ = ~5.4% ของไฟล์) ให้กลืนกับเมฆข้างภาพ */
     .hero__wall--left {
         --bt-hero-wall-left-edge: 0.36;
-        --bt-hero-wall-left-width: calc(var(--bt-hero-wall-height, 0px) * 4 / 3);
+        --bt-hero-wall-left-width: calc(var(--bt-hero-height, 100vh) * 4 / 3);
 
         left: calc(var(--bt-hero-wall-left, 0px) + var(--bt-hero-wall-width, 0px) * var(--bt-hero-wall-left-edge) - var(--bt-hero-wall-left-width));
         width: var(--bt-hero-wall-left-width);
@@ -2157,7 +2345,7 @@ body.menu-open .site-header__backdrop {
     }
 }
 
-@media (max-width:991px) {
+@media (max-width:991px), (max-aspect-ratio: 1199/1000) {
     .hero {
         min-height: 0;
         padding-bottom: var(--space-0);
@@ -2179,14 +2367,32 @@ body.menu-open .site-header__backdrop {
         gap: var(--space-1);
     }
 
-    /* .hero__visual {
-        max-width: 560px;
-        margin-inline: auto;
-    } */
+    /* จอ ≥992 แนวตั้ง (เช่น iPad Pro ตั้ง) ใช้ผังบน-ล่างนี้ด้วย แต่ Bootstrap ให้ col-lg-* กว้าง 50%
+       บังคับเต็มแถว และภาพกว้างไม่เกิน 720px (เท่าจอ 768–991) ไม่ให้ภาพสูงเกินจอ */
+    .hero__content,
+    .hero__visual {
+        width: 100%;
+    }
 
-    /* ภาพวิทยากรสูงตามสัดส่วนไฟล์จริง (4:5) เห็นเต็มแผ่น ไม่ครอปเป็นกรอบ 6:5 */
+    .hero__visual {
+        max-width: 720px;
+        margin-inline: auto;
+    }
+
+    /* ภาพวิทยากรสูงตามสัดส่วนไฟล์จริง (4:5) เห็นเต็มแผ่น ไม่ครอปเป็นกรอบ 6:5
+       ไฟล์มีพื้นใส 10.4% บนสุด (ก่อนถึงหัวคนแถวแรก) ดึงภาพขึ้นเท่านั้นด้วย margin ติดลบ
+       100cqw = ความกว้างภาพ (container คือ .hero__visual) สูงภาพ = 125cqw → 10.4% = 13cqw
+       ส่วนใสที่ขึ้นไปซ้อนใต้ปุ่มไม่รับการคลิก ปุ่มซื้อบัตรจึงกดได้ตามปกติ */
+    .hero__visual {
+        container-type: inline-size;
+    }
+
     .hero__speakers {
+        --bt-hero-speakers-pull: 13cqw;
+
         aspect-ratio: auto;
+        margin-top: calc(var(--bt-hero-speakers-pull) * -1);
+        pointer-events: none;
 
         img {
             height: auto;
@@ -2210,6 +2416,89 @@ body.menu-open .site-header__backdrop {
             font-size: var(--section-small-size);
         }
     }
+
+    /* ≤575: ไม่แสดงปุ่มซื้อบัตร/ราคาพิเศษใน hero (มีแถบปุ่มลอยด้านล่างจออยู่แล้ว)
+       และย้ายภาพวิทยากรขึ้นมาไว้ใต้คำโปรย ก่อนแถวตัวเลข stat
+       .hero__content เป็น display: contents ลูก ๆ จึงเรียงรวมกับ .hero__visual ในแถวเดียว แล้วจัดลำดับด้วย order */
+    .hero__actions {
+        display: none;
+    }
+
+    .hero__row {
+        flex-direction: column;
+        align-items: center;
+        row-gap: var(--space-0);
+    }
+
+    .hero__content {
+        display: contents;
+    }
+
+    .hero__title,
+    .hero__headline,
+    .hero__description {
+        order: 1;
+    }
+
+    /* ลูกของ .hero__content หลุดออกมาอยู่ใน .row โดยตรง (ไม่มี padding ของคอลัมน์) ใส่ gutter คืนให้ */
+    .hero__title,
+    .hero__headline,
+    .hero__description,
+    .hero__stats {
+        padding-inline: calc(var(--bs-gutter-x) * 0.5);
+    }
+
+    .hero__title {
+        box-sizing: content-box;
+        max-width: min(440px, 100% - var(--bs-gutter-x));
+    }
+
+    .hero__visual {
+        order: 2;
+        margin-top: var(--space-6);
+    }
+
+    .hero__stats {
+        order: 3;
+        /* ล่างเผื่อที่ให้ triangle / card ที่อยู่ใต้แถว stat ไม่ถูกขอบล่าง hero ตัด */
+        margin-block: var(--space-6) var(--space-16);
+    }
+
+    /* ไอคอนข้างเนื้อหา: ไม่มีปุ่มแล้ว triangle / card ไปอยู่ซ้าย-ขวาแถว stat คู่กับ stock / gold
+       (js/hero-loader.js ใช้ตำแหน่งแถว stat แทนปุ่ม) สองคู่แยกบน-ล่างไม่ให้ทับกัน */
+    .hero-asset:is([data-hero-asset="stock"], [data-hero-asset="gold"]) {
+        top: calc(var(--bt-hero-stats-y, 50vh) - var(--space-8));
+    }
+
+    .hero-asset:is([data-hero-asset="triangle"], [data-hero-asset="card"]) {
+        top: calc(var(--bt-hero-cta-y, 60vh) + var(--space-8));
+    }
+
+    /* ภาพขึ้นมาอยู่ใต้คำโปรย heart ที่มุมขวาบนของภาพจะชนคำโปรย เลื่อนลงไปข้างแถวคนแถวที่สอง */
+    .hero-asset[data-hero-asset="heart"] {
+        top: calc(var(--bt-hero-img-top, 80vh) + var(--bt-hero-img-h, 0px) * 0.32);
+    }
+}
+
+/* Motion เลื่อนจาก hero ไป ticket (js/hero-scroll-motion.js, desktop เท่านั้น)
+   ไอคอนบินพ้นขอบล่างของ hero ลงไปหาไอคอนบัตร: ตัดแค่แนวนอน (กำแพงยาวเลยขอบจอ) แนวตั้งปล่อยล้น
+   hero เป็น stacking context z-index 1 เท่ากับ .ticket__plans ซึ่งมาทีหลังใน DOM
+   ไอคอนจึงลอยทับพื้นของ ticket ได้ แต่มุดลงไปอยู่หลังการ์ดบัตรตอนถึงหัวบัตร Ultimate
+   ระหว่างบิน (.is-icons-flying) ไอคอนขึ้นมาอยู่หน้าเนื้อหา/ภาพ */
+.hero.is-scroll-motion {
+    z-index: 1;
+    overflow-x: clip;
+    overflow-y: visible;
+}
+
+.hero.is-icons-flying .hero__assets {
+    z-index: 2;
+}
+
+/* ทุกชิ้นที่ขยับตาม scroll แยกเป็นเลเยอร์ของตัวเอง ให้ GPU เลื่อนภาพเดิมแทนการวาดใหม่ทุกเฟรม
+   (กำแพงมี mask และไอคอนมี filter ถ้าไม่แยกเลเยอร์ เบราว์เซอร์ต้องวาดใหม่ทุกเฟรมจนไอคอนตามไม่ทัน) */
+.hero.is-scroll-motion :is(.hero__content, .hero__speakers img, .hero__wall, .hero-asset__inner) {
+    will-change: transform, opacity;
 }
 
 /* ---------- next section ---------- */
@@ -14782,5 +15071,43 @@ body.menu-open .site-header__backdrop {
         .playbook-ticket__plan-eyebrow {
             margin-bottom: var(--space-2);
         }
+    }
+}
+
+/* ---------- จุดตามเมาส์ (js/cursor-dot.js) ----------
+   จุดสีดำเล็ก ๆ ไม่มีขอบ (สีขาวบนพื้นมืด) เลื่อนตามเมาส์ด้วย transform (จาก JS) ส่วนหน้าตาอยู่ที่ ::before
+   จุดกึ่งกลางวางที่ปลายเมาส์ อยู่บนสุดของหน้าแต่ไม่รับการคลิก ขนาดคงที่ (ไม่ขยายตอนชี้ปุ่ม) */
+.cursor-dot {
+    --bt-cursor-dot-size: 10px;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--duration-standard) var(--ease-standard);
+    will-change: transform;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: calc(var(--bt-cursor-dot-size) / -2);
+        left: calc(var(--bt-cursor-dot-size) / -2);
+        width: var(--bt-cursor-dot-size);
+        height: var(--bt-cursor-dot-size);
+        border-radius: 50%;
+        background: var(--color-text-primary);
+    }
+
+    &.is-visible {
+        opacity: 1;
+    }
+
+    /* พื้นมืดใต้เมาส์ (js/cursor-dot.js ตรวจแล้วใส่คลาส) เปลี่ยนเป็นจุดสีขาว */
+    &.is-on-dark::before {
+        background: var(--color-neutral-0);
     }
 }
