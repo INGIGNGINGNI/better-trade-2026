@@ -1717,7 +1717,7 @@ body.menu-open .site-header__backdrop {
 .hero-asset[data-hero-asset="card"] {
     --cx: 86.5;
     --cy: 46;
-    --w: 9.5;
+    --w: 6.5;
     --rot: 12deg;
     --min: 52px;
     --max: 180px;
@@ -1742,9 +1742,9 @@ body.menu-open .site-header__backdrop {
 }
 
 .hero-asset[data-hero-asset="heart"] {
-    --cx: 93.5;
+    --cx: 95.5;
     --cy: 74;
-    --w: 14;
+    --w: 12;
     --rot: -5deg;
     --min: 56px;
     --max: 240px;
@@ -1837,107 +1837,67 @@ body.menu-open .site-header__backdrop {
         object-position: 30% top;
     }
 
-    .hero__assets {
-        --bt-hero-asset-shift: 5;
-    }
-
-    /* ≤991 ไอคอนสินทรัพย์ใหญ่ขึ้น 40% ทุกตัว (คูณทั้งชุด สัดส่วนเล็ก-ใหญ่ระหว่างไอคอนคงเดิม) */
+    /* ผังบน-ล่าง: ไอคอนอยู่ในช่วงเนื้อหาด้านบน (ขอบบน title ถึงขอบบนภาพวิทยากร) ริมจอซ้าย-ขวา
+       เรียงแบบเดียวกับ desktop (ฝั่ง/ลำดับบน-ล่าง/มุมเอียงเดียวกัน)
+       ซ้าย: triangle > bitcoin > stock · ขวา: gold > card > heart
+       --ix = จุดกึ่งกลางเป็น vw, --iy = % ของช่วงเนื้อหาด้านบน, --iw = กว้างเป็น % ของกว้างภาพ
+       ลำดับขนาดเท่า desktop (ที่ 1470px: heart 132 > triangle 110 > card 72 > stock 62 ≈ gold 61 ≈ bitcoin 59)
+       อยู่หลังข้อความ (.hero__assets z 1 มาก่อน .hero__inner ใน DOM) ตัวอักษรจึงไม่ถูกบัง
+       จุดอ้างอิง (px เทียบกับ hero) มาจาก js/hero-loader.js */
+    /* --bt-hero-icon-k ขยายไอคอนทั้งชุดด้วยอัตราเดียว (สัดส่วนเล็ก-ใหญ่ระหว่างไอคอนคงเดิม) */
     .hero-asset {
-        --bt-hero-asset-boost: 1.6;
+        --bt-hero-icon-k: 1.65;
+        --bt-hero-asset-y: calc(var(--bt-hero-top-y, 0px) + (var(--bt-hero-img-top, 80vh) - var(--bt-hero-top-y, 0px)) * var(--iy) / 100);
     }
 
-    /* ≤991 ยึด "ขอบขวา" ของ bitcoin (ด้านที่ชิดคนริมซ้าย) ไว้ที่จุดคงที่บนภาพ แทนจุดกึ่งกลาง
-       เปลี่ยน --w แล้วไอคอนจึงโตออกไปทางซ้าย ไม่ขยับเข้าไปทับคน
-       --bx / --by เป็น % ของความกว้าง / ความสูงภาพ (100cqw = กว้างภาพ, สูงภาพ = 125cqw)
-       บวก gutter ซ้ายของ .hero__visual และหักระยะที่ภาพถูกดึงขึ้น (--bt-hero-speakers-pull 13cqw) */
+    .hero__assets>.hero-asset {
+        left: calc(var(--ix) * 1vw);
+        top: var(--bt-hero-asset-y);
+        width: calc(var(--bt-hero-img-w, 100vw) * var(--iw) / 100 * var(--bt-hero-icon-k));
+    }
+
+    /* bitcoin อยู่ใน .hero__visual: แปลงพิกัดจาก hero เป็นพิกัดของ .hero__visual
+       (ภาพถูกดึงขึ้น 13cqw จากขอบบน .hero__visual, ขอบซ้ายภาพห่างจาก .hero__visual ครึ่ง gutter)
+       z-index -1 อยู่หลังข้อความใน .hero__inner */
     .hero__visual>.hero-asset[data-hero-asset="bitcoin"] {
-        --bx: 11;
-        --by: 72;
+        --ix: 6;
+        --iy: 45;
+        --iw: 5;
 
-        left: calc(var(--bs-gutter-x) * 0.5 + var(--bx) * 1cqw);
-        top: calc(var(--by) * 1.25cqw - 13cqw);
-        transform: translate(-100%, -50%) rotate(var(--rot));
-    }
-
-    .hero-asset:is([data-hero-asset="triangle"], [data-hero-asset="gold"], [data-hero-asset="heart"], [data-hero-asset="card"]),
-    .hero__visual>.hero-asset[data-hero-asset="bitcoin"] {
-        --bt-hero-asset-scale: 1;
-    }
-
-    .hero-asset[data-hero-asset="bitcoin"] {
-        --w: 8;
-    }
-
-    /* ผังบน-ล่าง: ไอคอนวางในช่องว่างข้างเนื้อหา แทนตำแหน่งตาม vw/vh (จอสูงต่างกันไอคอนจะตกไปทับข้อความ)
-       จุดอ้างอิง (px เทียบกับ hero) มาจาก js/hero-loader.js
-       stock / gold: ซ้าย / ขวาของแถว stat · triangle / card: ซ้าย / ขวาของปุ่มซื้อบัตร
-       heart: มุมขวาบนของภาพวิทยากร (ข้างข้อความราคาพิเศษ)
-       ไอคอนอยู่กึ่งกลางช่องว่างข้างนั้น กว้างไม่เกิน 120px และกรอบของภาพที่เอียงแล้ว (--bt-hero-asset-span
-       = ความกว้างหลังหมุน / ความกว้างภาพ คิดจากสัดส่วนไฟล์กับมุม --rot) ไม่เกินช่อง (เว้นขอบ 12px ต่อข้าง)
-       และสูงหลังหมุน (--bt-hero-asset-vspan) ไม่เกิน 120px ไม่ล้นขึ้นไปทับคำโปรย/ลงไปทับราคาพิเศษ */
-    .hero-asset:is([data-hero-asset="stock"], [data-hero-asset="triangle"], [data-hero-asset="gold"], [data-hero-asset="card"]) {
-        --bt-hero-asset-fit: max(0px, min(var(--bt-hero-asset-width), (var(--bt-hero-asset-gap) - var(--space-6)) / var(--bt-hero-asset-span, 1), 120px / var(--bt-hero-asset-vspan, 1), 120px));
-
-        width: var(--bt-hero-asset-fit);
-    }
-
-    .hero-asset:is([data-hero-asset="stock"], [data-hero-asset="triangle"]) {
-        --bt-hero-asset-gap: var(--bt-hero-stats-l, 0px);
-
-        left: calc(var(--bt-hero-asset-gap) / 2);
-    }
-
-    .hero-asset:is([data-hero-asset="gold"], [data-hero-asset="card"]) {
-        --bt-hero-asset-edge: var(--bt-hero-stats-r, 100vw);
-        --bt-hero-asset-gap: calc(100vw - var(--bt-hero-asset-edge));
-
-        left: calc(var(--bt-hero-asset-edge) + var(--bt-hero-asset-gap) / 2);
-    }
-
-    .hero-asset:is([data-hero-asset="stock"], [data-hero-asset="gold"]) {
-        top: var(--bt-hero-stats-y, 50vh);
-    }
-
-    /* triangle 800×769 เอียง 10° · gold 369×800 เอียง 16° · card 743×800 เอียง 12°
-       stock 178×800 (แท่งยาว) ลดมุมเหลือ 12° ไม่งั้นแท่งเอียงกินที่แนวนอนมากจนไอคอนเล็กเกินไป */
-    .hero-asset[data-hero-asset="triangle"] {
-        --bt-hero-asset-span: 1.15;
-        --bt-hero-asset-vspan: 1.12;
-    }
-
-    .hero-asset[data-hero-asset="gold"] {
-        --bt-hero-asset-span: 1.56;
-        --bt-hero-asset-vspan: 2.36;
-    }
-
-    .hero-asset[data-hero-asset="card"] {
-        --bt-hero-asset-span: 1.2;
-        --bt-hero-asset-vspan: 1.26;
-    }
-
-    .hero-asset[data-hero-asset="stock"] {
-        --rot: -12deg;
-        --bt-hero-asset-span: 1.91;
-        --bt-hero-asset-vspan: 4.6;
-    }
-
-    .hero-asset[data-hero-asset="triangle"] {
-        --bt-hero-asset-gap: var(--bt-hero-cta-l, 0px);
-
-        top: var(--bt-hero-cta-y, 60vh);
-    }
-
-    .hero-asset[data-hero-asset="card"] {
-        --bt-hero-asset-edge: var(--bt-hero-cta-r, 100vw);
-        --w: 7.5;
-
-        top: var(--bt-hero-cta-y, 60vh);
+        z-index: -1;
+        left: calc(var(--ix) * 1vw - var(--bt-hero-img-l, 0px) + var(--bs-gutter-x) * 0.5);
+        top: calc(var(--bt-hero-asset-y) - var(--bt-hero-img-top, 80vh) - 13cqw);
+        width: calc(var(--iw) * 1cqw * var(--bt-hero-icon-k));
     }
 
     .hero-asset[data-hero-asset="heart"] {
-        --cx: 93.5;
+        --ix: 93;
+        --iy: 90;
+        --iw: 11.3;
+    }
 
-        top: calc(var(--bt-hero-img-top, 80vh) + var(--bt-hero-img-h, 0px) * 0.14);
+    .hero-asset[data-hero-asset="stock"] {
+        --ix: 6;
+        --iy: 80;
+        --iw: 5.3;
+    }
+
+    .hero-asset[data-hero-asset="gold"] {
+        --ix: 93;
+        --iy: 8;
+        --iw: 5.2;
+    }
+
+    .hero-asset[data-hero-asset="triangle"] {
+        --ix: 7;
+        --iy: 8;
+        --iw: 9.4;
+    }
+
+    .hero-asset[data-hero-asset="card"] {
+        --ix: 92;
+        --iy: 50;
+        --iw: 6.2;
     }
 }
 
@@ -2159,7 +2119,8 @@ body.menu-open .site-header__backdrop {
        ระยะห่าง/ขนาดตัวอักษรในคอลัมน์ข้อความย่อตามความสูงจอ จอเตี้ยเนื้อหาจึงยังอยู่ครบใน 1 หน้าจอ */
     .hero {
         --bt-hero-gap: var(--space-6);
-        --bt-hero-side-min: var(--space-8);
+        /* ระยะขอบขั้นต่ำเป็นสัดส่วนความกว้างจอ จอสูง (เต็มจอ) จะไม่เบียดขอบจนเหลือแค่ 32px */
+        --bt-hero-side-min: max(var(--space-8), 5vw);
         --bt-hero-content-min: calc(480 * var(--bt-hero-u));
         --bt-hero-content-max: calc(500 * var(--bt-hero-u));
         --bt-hero-pad-y: clamp(var(--space-4), 3vh, var(--space-10));
@@ -2217,7 +2178,7 @@ body.menu-open .site-header__backdrop {
        - เพดาน 1.2 และพื้น 0.8
        ปุ่มซื้อบัตร (liquid metal วาดด้วย canvas) สูงคงที่ ไม่คูณ k */
     .hero {
-        --bt-hero-u: clamp(0.8px, min(0.1627vh - 0.2318px, max(0.9px, (100vw - 88px - 80vh) / 480)), 1.2px);
+        --bt-hero-u: clamp(0.8px, min(0.1627vh - 0.2318px, max(0.9px, (100vw - 2 * var(--bt-hero-side-min) - var(--bt-hero-gap) - 80vh) / 480)), 1.2px);
     }
 
     .hero__title {
@@ -2276,24 +2237,19 @@ body.menu-open .site-header__backdrop {
 
     /* ไอคอนฝั่งซ้าย (triangle, stock) ห้ามทับข้อความ: ขอบซ้ายของคอลัมน์ข้อความ (--bt-hero-content-l จาก
        js/hero-loader.js) เป็นเพดานของกรอบไอคอนหลังหมุน (ความกว้างหลังหมุน = กว้าง × --bt-hero-asset-span)
-       ช่องซ้ายแคบ ไอคอนเลื่อนไปทางซ้ายจนเลยขอบจอได้ครึ่งตัว ถ้ายังไม่พอก็ย่อลงตามช่อง
+       ไอคอนคงขนาดเดิมเสมอ ช่องซ้ายแคบก็เลื่อนไปทางซ้ายจนเลยขอบจอได้ (ส่วนเกินถูก .hero ตัด)
        จอกว้างที่ช่องซ้ายเหลือเฟือ ไอคอนอยู่ตำแหน่งเดิม (--cx) */
     .hero-asset:is([data-hero-asset="triangle"], [data-hero-asset="stock"]) {
-        --bt-hero-asset-fit: min(var(--bt-hero-asset-width), max(var(--bt-hero-asset-min-fit), (var(--bt-hero-content-l, 100vw) - var(--space-2)) / (var(--bt-hero-asset-span) * 0.5)));
-
-        width: var(--bt-hero-asset-fit);
-        left: min(var(--cx) * 1vw, var(--bt-hero-content-l, 100vw) - var(--bt-hero-asset-fit) * var(--bt-hero-asset-span) * 0.5 - var(--space-2));
+        left: min(var(--cx) * 1vw, var(--bt-hero-content-l, 100vw) - var(--bt-hero-asset-width) * var(--bt-hero-asset-span) * 0.5 - var(--space-2));
     }
 
     /* triangle 800×769 เอียง 10° → 1.15 · stock 178×800 เอียง 24° → 2.74 */
     .hero-asset[data-hero-asset="triangle"] {
         --bt-hero-asset-span: 1.15;
-        --bt-hero-asset-min-fit: 56px;
     }
 
     .hero-asset[data-hero-asset="stock"] {
         --bt-hero-asset-span: 2.74;
-        --bt-hero-asset-min-fit: 24px;
     }
 
     /* กำแพงขวา: ไฟล์ 4:5 เท่ากรอบภาพวิทยากร js/hero-loader.js ใส่ตำแหน่ง/ขนาดของกรอบภาพ
@@ -2367,6 +2323,18 @@ body.menu-open .site-header__backdrop {
         gap: var(--space-1);
     }
 
+    /* แถว stat: ทุกช่องกว้างเท่าช่องที่กว้างที่สุด (grid 1fr) เส้นคั่นจึงห่างเท่ากัน
+       ช่องแรกมี padding ซ้ายเท่าช่องอื่น แถวที่จัดกึ่งกลางจึงสมดุลซ้าย-ขวา */
+    .hero__stats {
+        display: grid;
+        grid-auto-columns: 1fr;
+        grid-auto-flow: column;
+    }
+
+    .hero__stat:first-child {
+        padding-left: var(--space-8);
+    }
+
     /* จอ ≥992 แนวตั้ง (เช่น iPad Pro ตั้ง) ใช้ผังบน-ล่างนี้ด้วย แต่ Bootstrap ให้ col-lg-* กว้าง 50%
        บังคับเต็มแถว และภาพกว้างไม่เกิน 720px (เท่าจอ 768–991) ไม่ให้ภาพสูงเกินจอ */
     .hero__content,
@@ -2401,8 +2369,13 @@ body.menu-open .site-header__backdrop {
 }
 
 @media (max-width:575px) {
+    .hero {
+        padding: var(--section-padding-y-sm) var(--space-0);
+    }
+    
     .hero__headline {
         font-size: var(--font-size-32);
+        line-height: 1.2;
     }
 
     .hero__description {
@@ -2411,6 +2384,10 @@ body.menu-open .site-header__backdrop {
 
     .hero__stat {
         padding-inline: var(--space-5);
+
+        &:first-child {
+            padding-left: var(--space-5);
+        }
 
         dt {
             font-size: var(--section-small-size);
@@ -2448,35 +2425,78 @@ body.menu-open .site-header__backdrop {
         padding-inline: calc(var(--bs-gutter-x) * 0.5);
     }
 
+    /* โลโก้ title ไม่กว้างเต็มจอ (กว้างสุด ~3/4 ของจอ) และเว้นระยะจาก header */
     .hero__title {
         box-sizing: content-box;
-        max-width: min(440px, 100% - var(--bs-gutter-x));
+        max-width: min(300px, 76vw);
+        margin-top: var(--space-8);
     }
 
     .hero__visual {
         order: 2;
-        margin-top: var(--space-6);
+        margin-top: var(--space-10);
     }
 
     .hero__stats {
         order: 3;
-        /* ล่างเผื่อที่ให้ triangle / card ที่อยู่ใต้แถว stat ไม่ถูกขอบล่าง hero ตัด */
-        margin-block: var(--space-6) var(--space-16);
+        margin-block: var(--space-6) var(--space-0);
     }
 
-    /* ไอคอนข้างเนื้อหา: ไม่มีปุ่มแล้ว triangle / card ไปอยู่ซ้าย-ขวาแถว stat คู่กับ stock / gold
-       (js/hero-loader.js ใช้ตำแหน่งแถว stat แทนปุ่ม) สองคู่แยกบน-ล่างไม่ให้ทับกัน */
-    .hero-asset:is([data-hero-asset="stock"], [data-hero-asset="gold"]) {
-        top: calc(var(--bt-hero-stats-y, 50vh) - var(--space-8));
+    /* แถว stat อยู่ใต้ภาพ: ไล่สีพื้นหน้าเริ่มจาก 70% ของความสูงภาพ ทึบเต็มที่ตรงขอบล่างภาพ
+       ขอบล่างภาพจึงกลืนไปกับพื้น ไม่เห็นรอยต่อกับท้องฟ้าด้านหลัง (กรอบภาพจาก js/hero-loader.js) */
+    .hero::after {
+        --bt-hero-fade-start: calc(var(--bt-hero-img-top, 0px) + var(--bt-hero-img-h, 0px) * 0.7);
+
+        top: var(--bt-hero-fade-start);
+        height: auto;
+        background: linear-gradient(to bottom, transparent 0, var(--color-surface-page) calc(var(--bt-hero-img-h, 0px) * 0.3));
     }
 
-    .hero-asset:is([data-hero-asset="triangle"], [data-hero-asset="card"]) {
-        top: calc(var(--bt-hero-cta-y, 60vh) + var(--space-8));
+    /* ไอคอนใหญ่ขึ้นทั้งชุด (ลำดับขนาดเท่า desktop คงเดิม) และกระจายลงมาถึงภาพวิทยากร:
+       ช่วงวางไอคอน = ขอบบน title ถึง 80% ของความสูงภาพ
+       ชิดขอบจอ (ล้นออกนอกจอได้บางส่วน) อยู่หลังข้อความและภาพวิทยากร */
+    .hero-asset {
+        --bt-hero-icon-k: 2.2;
+        --bt-hero-asset-end: calc(var(--bt-hero-img-top, 80vh) + var(--bt-hero-img-h, 0px) * 0.8);
+        --bt-hero-asset-y: calc(var(--bt-hero-top-y, 0px) + (var(--bt-hero-asset-end) - var(--bt-hero-top-y, 0px)) * var(--iy) / 100);
     }
 
-    /* ภาพขึ้นมาอยู่ใต้คำโปรย heart ที่มุมขวาบนของภาพจะชนคำโปรย เลื่อนลงไปข้างแถวคนแถวที่สอง */
+    .hero-asset:is([data-hero-asset="triangle"], [data-hero-asset="stock"]),
+    .hero__visual>.hero-asset[data-hero-asset="bitcoin"] {
+        --ix: 1.5;
+    }
+
+    .hero-asset:is([data-hero-asset="gold"], [data-hero-asset="card"], [data-hero-asset="heart"]) {
+        --ix: 98.5;
+    }
+
+    /* ซ้าย: triangle (ข้าง title) > bitcoin (ข้างบรรทัดหัวข้อที่สั้น) > stock (ข้างภาพ) */
+    .hero-asset[data-hero-asset="triangle"] {
+        --iy: 4;
+    }
+
+    /* bitcoin / gold ตัวเล็ก ขยับเข้ามาในจอเล็กน้อยให้เห็นมากกว่าครึ่งตัว */
+    .hero__visual>.hero-asset[data-hero-asset="bitcoin"] {
+        --ix: 8;
+        --iy: 38;
+    }
+
+    .hero-asset[data-hero-asset="stock"] {
+        --iy: 98;
+    }
+
+    /* ขวา: gold (ข้าง title) > card (ข้างแถวบนของภาพ) > heart (ข้างภาพช่วงล่าง) */
+    .hero-asset[data-hero-asset="gold"] {
+        --ix: 98;
+        --iy: 14;
+    }
+
+    .hero-asset[data-hero-asset="card"] {
+        --iy: 54;
+    }
+
     .hero-asset[data-hero-asset="heart"] {
-        top: calc(var(--bt-hero-img-top, 80vh) + var(--bt-hero-img-h, 0px) * 0.32);
+        --iy: 100;
     }
 }
 

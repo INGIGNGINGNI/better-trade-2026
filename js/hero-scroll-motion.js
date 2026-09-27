@@ -74,7 +74,7 @@
                 },
             });
 
-            tl.to(q('.hero__content'), { y: -90, opacity: 0, duration: 0.45 }, 0)
+            tl.to(q('.hero__content'), { y: -90, duration: 0.45 }, 0)
                 .to(q('.hero__speakers img'), { yPercent: 10, scale: 0.94, transformOrigin: '50% 100%', duration: 0.8 }, 0)
                 .to(q('.hero__wall--left'), { xPercent: -14, duration: 0.8 }, 0)
                 .to(q('.hero__wall--right'), { xPercent: 14, duration: 0.8 }, 0);

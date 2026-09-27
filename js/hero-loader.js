@@ -329,6 +329,7 @@
         const content = hero.querySelector('.hero__content');
         const stats = hero.querySelector('.hero__stats');
         const cta = hero.querySelector('#cta-slot');
+        const title = hero.querySelector('.hero__title');
 
         const sync = () => {
             const heroBox = hero.getBoundingClientRect();
@@ -362,6 +363,10 @@
             }
             setVar('--bt-hero-img-top', box.top - heroBox.top);
             setVar('--bt-hero-img-h', box.height);
+            setVar('--bt-hero-img-l', box.left - heroBox.left);
+            setVar('--bt-hero-img-w', box.width);
+            // ขอบบนของโลโก้ title = ต้นช่วงเนื้อหาด้านบน (≤575 .hero__content เป็น display: contents วัดกรอบไม่ได้)
+            if (title) setVar('--bt-hero-top-y', title.getBoundingClientRect().top - innerShift - heroBox.top);
 
             if (getComputedStyle(walls[0]).display === 'none') return;
             // ≤991 ขอบเฉียงของกำแพงเริ่มที่ขอบจอระดับแถวตัวเลข stat (CSS ใช้เฉพาะช่วงนั้น)
