@@ -10,9 +10,9 @@
     const LOADER_COMPLETE_EVENT = 'bettertrade:loader-complete';
     const LOADING_SPEED = 2; // >1 = แถบ progress และไอคอนสลับเร็วขึ้น ส่วนจังหวะเปิดฉากคงเดิม
     // ไอคอนที่สลับโชว์ตอนโหลด (ตัวสุดท้ายค้างไว้เป็นตัวส่งต่อให้ hero)
-    const LOADER_ORDER = ['bitcoin', 'gold', 'stock', 'triangle'];
+    const LOADER_ORDER = ['bitcoin', 'gold', 'stock', 'triangle']; // ไอคอนวนตอนโหลด (ไม่จำเป็นต้องมีใน hero)
     // ลำดับการกระจายออกจากกลางจอ
-    const ASSET_KEYS = ['stock', 'bitcoin', 'gold', 'card', 'heart', 'triangle'];
+    const ASSET_KEYS = ['stock', 'gold', 'heart', 'triangle'];
     const SEED_KEY = 'triangle';
     const WALL_OPEN_DURATION = 0.9;
 
@@ -39,7 +39,8 @@
         }];
     }).filter(([, asset]) => asset));
     const assetInners = Object.values(assets).map(asset => asset.inner);
-    const loaderIcons = Object.values(assets).map(asset => asset.loaderIcon).filter(Boolean);
+    // ไอคอนทั้งหมดใน loader (รวม bitcoin ที่มีแค่ตอนโหลด ไม่มีใน hero)
+    const loaderIcons = loader ? [...loader.querySelectorAll('.loader-icon')] : [];
 
     let loaderDone = false;
     let heroVisible = true;
@@ -130,7 +131,7 @@
         const right = hero?.querySelector('.hero__wall--right');
         const figure = hero?.querySelector('.hero__speakers');
         if (!left || !right || !figure) return null;
-        // ตัวเลือกกำแพง (js/hero-wall-switch.js) อาจซ่อนกำแพงบางฝั่ง ปิด/เปิดเฉพาะฝั่งที่แสดง
+        // ปิด/เปิดเฉพาะกำแพงที่แสดงอยู่
         const shown = wall => getComputedStyle(wall).display !== 'none';
         if (!shown(left) && !shown(right)) return null;
 
@@ -216,7 +217,7 @@
             }, 0.06 / LOADING_SPEED);
 
         LOADER_ORDER.forEach((key, i) => {
-            const icon = assets[key]?.loaderIcon;
+            const icon = loader.querySelector(`[data-loader-icon="${key}"]`);
             if (!icon) return;
             const at = (0.16 + i * iconStep) / LOADING_SPEED;
             const tilt = i % 2 === 0 ? -7 : 7;
@@ -397,8 +398,6 @@
         };
 
         syncWalls = sync;
-        // เปลี่ยนแบบกำแพงจากปุ่มมุมซ้ายล่าง: กำแพงที่เพิ่งแสดงต้องวางตำแหน่งใหม่
-        window.addEventListener('bettertrade:hero-walls-change', sync);
         sync();
         const resizeObserver = new ResizeObserver(sync);
         resizeObserver.observe(visual);

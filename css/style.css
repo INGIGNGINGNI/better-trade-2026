@@ -233,131 +233,6 @@ body.is-loading {
     pointer-events: none;
 }
 
-/* ---------- ตัวเลือกกำแพงใน hero (js/hero-wall-switch.js) ----------
-   ปุ่มวงกลมมุมซ้ายล่าง หน้าตาเดียวกับ .back-to-top (ขนาด ขอบ พื้น hover สีดำ) กดแล้วแผงตัวเลือกเปิดเหนือปุ่ม */
-.wall-switch {
-    position: fixed;
-    left: max(var(--space-5), env(safe-area-inset-left));
-    bottom: max(var(--space-5), env(safe-area-inset-bottom));
-    z-index: 240;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-2);
-    transition: opacity var(--duration-standard) var(--ease-standard);
-}
-
-.wall-switch__toggle {
-    width: var(--touch-target-md);
-    height: var(--touch-target-md);
-    display: inline-grid;
-    place-items: center;
-    padding: 0;
-    border: var(--border-width-1) solid var(--alpha-ink-12);
-    border-radius: 50%;
-    color: var(--color-text-primary);
-    background: color-mix(in srgb, var(--color-surface-page) 88%, #ffffff);
-    cursor: pointer;
-    transition:
-        color var(--duration-fast) var(--ease-standard),
-        background-color var(--duration-fast) var(--ease-standard),
-        border-color var(--duration-fast) var(--ease-standard);
-
-    .bt-icon {
-        width: var(--bt-icon-size);
-        height: var(--bt-icon-size);
-        stroke-width: 2;
-    }
-
-    &:hover,
-    .wall-switch.is-open & {
-        color: var(--color-surface-page);
-        border-color: var(--color-text-primary);
-        background: var(--color-text-primary);
-    }
-
-    &:focus-visible {
-        outline: var(--border-width-2) solid var(--color-accent-primary);
-        outline-offset: var(--space-1);
-    }
-}
-
-.wall-switch__panel {
-    display: flex;
-    flex-direction: column;
-    min-width: 188px;
-    padding: var(--space-2);
-    border: var(--border-width-1) solid var(--alpha-ink-12);
-    border-radius: var(--card-radius);
-    background: color-mix(in srgb, var(--color-surface-page) 88%, #ffffff);
-    box-shadow: 0 var(--space-2) var(--space-6) var(--alpha-ink-12);
-
-    &[hidden] {
-        display: none;
-    }
-}
-
-.wall-switch__title {
-    margin: 0;
-    padding: var(--space-1) var(--space-2) var(--space-2);
-    color: var(--color-text-muted);
-    font-size: var(--font-size-12);
-    line-height: 1.4;
-}
-
-.wall-switch__option {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-2);
-    border: 0;
-    border-radius: calc(var(--card-radius) - 2px);
-    color: var(--color-text-primary);
-    background: transparent;
-    font-size: var(--font-size-14);
-    line-height: 1.4;
-    text-align: left;
-    cursor: pointer;
-
-    /* วงกลมเล็กหน้าข้อความ ทึบเมื่อเลือกอยู่ */
-    &::before {
-        content: '';
-        flex: 0 0 auto;
-        width: 10px;
-        height: 10px;
-        border: var(--border-width-1) solid var(--color-text-primary);
-        border-radius: 50%;
-    }
-
-    &[aria-checked="true"]::before {
-        background: var(--color-text-primary);
-    }
-
-    &:hover {
-        background: var(--alpha-ink-12);
-    }
-
-    &:focus-visible {
-        outline: var(--border-width-2) solid var(--color-accent-primary);
-        outline-offset: -2px;
-    }
-}
-
-/* ≤575 มุมซ้ายล่างมีแถบปุ่มลอยกับกล่อง Early Bird ยกขึ้นระดับเดียวกับ back-to-top */
-@media (max-width:575px) {
-    .wall-switch {
-        left: max(var(--space-3), env(safe-area-inset-left));
-        bottom: calc(var(--space-10) + var(--space-6) + max(var(--space-3), env(safe-area-inset-bottom)) + var(--early-bird-float-height, 72px) + var(--space-3));
-    }
-}
-
-body.is-loading .wall-switch,
-body.menu-open .wall-switch,
-body.menu-closing .wall-switch {
-    opacity: 0;
-    pointer-events: none;
-}
-
 body.is-loading .back-to-top,
 body.menu-open .back-to-top,
 body.menu-closing .back-to-top {
@@ -1867,7 +1742,7 @@ body.menu-open .site-header__backdrop {
 }
 
 .hero-asset[data-hero-asset="heart"] {
-    --cx: 95.5;
+    --cx: 92.5;
     --cy: 74;
     --w: 12;
     --rot: -5deg;
@@ -2606,12 +2481,6 @@ body.menu-open .site-header__backdrop {
     .hero-asset[data-hero-asset="heart"] {
         --iy: 100;
     }
-}
-
-/* แบบกำแพงที่เลือกจากปุ่มมุมซ้ายล่าง (data-walls บน #hero, js/hero-wall-switch.js) */
-.hero[data-walls="right"] .hero__wall--left,
-.hero[data-walls="none"] .hero__wall {
-    display: none !important;
 }
 
 /* Motion เลื่อนจาก hero ไป ticket (js/hero-scroll-motion.js, desktop เท่านั้น)

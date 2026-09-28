@@ -69,7 +69,7 @@
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="css/main.css?v=60">
-    <link rel="stylesheet" href="css/style.css?v=1080">
+    <link rel="stylesheet" href="css/style.css?v=1081">
 </head>
 
 <body class="is-loading">
@@ -174,18 +174,6 @@
             <span class="journey-indicator__label"></span>
         </div>
     </aside>
-    <!-- ตัวเลือกการแสดงกำแพงใน hero (js/hero-wall-switch.js) ปุ่มวงกลมมุมซ้ายล่าง ดีไซน์เดียวกับ back-to-top -->
-    <div class="wall-switch" data-wall-switch>
-        <div class="wall-switch__panel" id="wall-switch-panel" role="radiogroup" aria-label="รูปแบบกำแพงใน Hero" data-wall-switch-panel hidden>
-            <p class="wall-switch__title">กำแพงใน Hero</p>
-            <button class="wall-switch__option" type="button" role="radio" aria-checked="true" data-wall-mode="both">กำแพงซ้าย-ขวา</button>
-            <button class="wall-switch__option" type="button" role="radio" aria-checked="false" data-wall-mode="right">เฉพาะกำแพงขวา</button>
-            <button class="wall-switch__option" type="button" role="radio" aria-checked="false" data-wall-mode="none">ไม่มีกำแพง</button>
-        </div>
-        <button class="wall-switch__toggle" type="button" aria-label="เลือกรูปแบบกำแพง" aria-expanded="false" aria-controls="wall-switch-panel" data-wall-switch-toggle>
-            <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg?v=4#icon-swap"></use></svg>
-        </button>
-    </div>
     <button class="back-to-top" type="button" aria-label="กลับไปด้านบน" aria-hidden="true">
         <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-arrow-up-right"></use></svg>
     </button>
@@ -277,9 +265,6 @@
             <div class="hero-asset" data-hero-asset="heart">
                 <div class="hero-asset__float"><div class="hero-asset__inner"><img src="images/heart.webp" alt=""></div></div>
             </div>
-            <div class="hero-asset" data-hero-asset="card">
-                <div class="hero-asset__float"><div class="hero-asset__inner"><img src="images/card.webp" alt=""></div></div>
-            </div>
             <div class="hero-asset" data-hero-asset="stock">
                 <div class="hero-asset__float"><div class="hero-asset__inner"><img src="images/stock.webp" alt=""></div></div>
             </div>
@@ -310,10 +295,6 @@
                 </div>
 
                 <div class="hero__visual col-12 col-lg-6 col-xl-7">
-                    <!-- bitcoin เกาะข้างคนริมซ้ายแถวล่างสุดในภาพ จึงอยู่ในกรอบภาพ (อยู่หลังภาพ) แทน .hero__assets -->
-                    <div class="hero-asset" data-hero-asset="bitcoin">
-                        <div class="hero-asset__float"><div class="hero-asset__inner"><img src="images/bitcoin.webp" alt=""></div></div>
-                    </div>
                     <figure class="hero__speakers">
                         <img src="images/hero-speaker.webp?v=2" width="1080" height="1350"
                             alt="วิทยากรในงาน BetterTrade 2026 — 30+ Speakers, 20+ Sessions, 2 Days" fetchpriority="high">
@@ -340,7 +321,6 @@
             <img class="loader-icon" data-loader-icon="stock" src="images/stock.webp" alt="">
             <img class="loader-icon" data-loader-icon="bitcoin" src="images/bitcoin.webp" alt="">
             <img class="loader-icon" data-loader-icon="gold" src="images/gold.webp" alt="">
-            <img class="loader-icon" data-loader-icon="card" src="images/card.webp" alt="">
             <img class="loader-icon" data-loader-icon="heart" src="images/heart.webp" alt="">
             <img class="loader-icon" data-loader-icon="triangle" src="images/triangle.webp" alt="">
         </div>
@@ -2048,9 +2028,8 @@
     <script src="js/loader-mist.js?v=3"></script>
     <script src="vendor/gsap/gsap.min.js"></script>
     <script src="vendor/gsap/ScrollTrigger.min.js"></script>
-    <script src="js/hero-wall-switch.js?v=1"></script>
-    <script src="js/hero-loader.js?v=28"></script>
-    <script src="js/hero-scroll-motion.js?v=18"></script>
+    <script src="js/hero-loader.js?v=31"></script>
+    <script src="js/hero-scroll-motion.js?v=20"></script>
     <script src="js/topics-reveal.js?v=6"></script>
     <script src="js/topics-assets-motion.js?v=22"></script>
     <script src="js/playbook-assets-motion.js?v=5"></script>

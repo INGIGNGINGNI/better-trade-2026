@@ -3,16 +3,15 @@
    - คอลัมน์ข้อความจางและลอยขึ้น (ออกเร็ว)
    - ภาพวิทยากรเลื่อนลงช้ากว่าหน้า + ย่อเล็กน้อย (มีความลึก)
    - กำแพงแยกออกด้านข้าง
-   - stock / bitcoin / card / gold บินลงไปรวมที่กึ่งกลาง (แนวนอน) ของการ์ดบัตร Ultimate ขนาดเท่าเดิม แล้วจางหาย
-     ไอคอนที่เหลือ (triangle, heart) จางออก
+   - ไอคอนทั้ง 4 ใน hero (stock / triangle / heart / gold) บินลงไปรวมที่กึ่งกลาง (แนวนอน) ของการ์ดบัตร Ultimate ขนาดเท่าเดิม แล้วจางหาย
    เริ่มหลัง loader จบ (ไอคอนต้องกระจายเข้าที่ก่อน) ข้ามทั้งหมดถ้าผู้ใช้ตั้งค่าลด motion
    ย้อนกลับ: ลบ <script src="js/hero-scroll-motion.js"> ใน index.html และคลาส .hero.is-scroll-motion ใน style.css */
 (() => {
     const LOADER_COMPLETE_EVENT = 'bettertrade:loader-complete';
     const DESKTOP_QUERY = '(min-width: 992px) and (min-aspect-ratio: 6/5) and (prefers-reduced-motion: no-preference)';
-    // stock / bitcoin / card / gold บินลงไปรวมที่กึ่งกลาง (แนวนอน) ของการ์ดบัตร Ultimate ขนาดเท่าเดิม แล้วจางหายหลังการ์ด
-    const FLIGHTS = ['stock', 'bitcoin', 'card', 'gold'].map(asset => ({ asset, plan: '.ticket__plan--ultimate' }));
-    const FADERS = ['triangle', 'heart'];
+    // ไอคอนทั้ง 4 ใน hero (stock / triangle / heart / gold) บินลงไปรวมที่กึ่งกลาง (แนวนอน) ของการ์ดบัตร Ultimate ขนาดเท่าเดิม แล้วจางหายหลังการ์ด
+    const FLIGHTS = ['stock', 'triangle', 'heart', 'gold'].map(asset => ({ asset, plan: '.ticket__plan--ultimate' }));
+    const FADERS = []; // ไอคอนทั้งหมดบินลงการ์ด ไม่มีตัวที่จางออกเฉย ๆ
 
     if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
     gsap.registerPlugin(ScrollTrigger);
