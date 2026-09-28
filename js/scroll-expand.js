@@ -25,7 +25,13 @@
         const start = Number.isFinite(range[0]) ? range[0] : 0.5;
         const end = Number.isFinite(range[1]) ? range[1] : 0;
 
-        return { el, start, end };
+        /* data-scroll-expand-exit: ย่อกลับตอน section เลื่อนออกทางขอบบนด้วย (กลับด้านของขาเข้า)
+           ใส่เฉพาะ section ที่ต้องการ ของเดิมที่ไม่ใส่ยังขยายค้างไว้เหมือนเดิม
+           ค่า "only" = มีแต่ขาออก ขาเข้าเต็มจออยู่แล้วตั้งแต่แรก */
+        const exit = el.hasAttribute('data-scroll-expand-exit');
+        const enterEnabled = el.getAttribute('data-scroll-expand-exit') !== 'only';
+
+        return { el, start, end, exit, enterEnabled };
     });
 
     if (!targets.length) return;
@@ -55,16 +61,26 @@
        แล้วค้างย่ออยู่อย่างนั้นตลอดกาล (แผง CTA ที่จอสูง 1200px เจอเคสนี้พอดี)
        ผูกกับความสูงของตัวมันเองแทน จึงถึงเสมอไม่ว่าหน้าต่างจะสูงแค่ไหน
        ส่วน element ที่สูงกว่าจอ (identity-cards) ค่านี้ติดลบ จุดจบจึงกลับไปเป็นค่าที่ตั้งไว้ */
-    const progressOf = ({ el, start, end }) => {
+    const clamp01 = (value) => Math.min(1, Math.max(0, value));
+
+    /* คืน { value, exiting } — exiting = กำลังย่อเพราะเลื่อนออก (CSS ใช้สลับจุดยึดไปขอบล่าง) */
+    const progressOf = ({ el, start, end, exit, enterEnabled }) => {
         const box = el.getBoundingClientRect();
         const height = window.innerHeight;
         const startPx = start * height;
         const endPx = Math.max(end * height, height - box.height);
         const span = startPx - endPx;
 
-        if (span <= 0) return 1;
+        if (span <= 0) return { value: 1, exiting: false };
 
-        return Math.min(1, Math.max(0, (startPx - box.top) / span));
+        const enter = enterEnabled ? clamp01((startPx - box.top) / span) : 1;
+        if (!exit) return { value: enter, exiting: false };
+
+        /* ขาออกคือภาพสะท้อนของขาเข้า: ใช้ระยะจากขอบล่างของ section ถึงขอบล่างจอ
+           แทนระยะจากขอบบนจอถึงขอบบนของ section ด้วยจุดเริ่ม/จุดจบชุดเดียวกัน */
+        const leave = clamp01((startPx - (height - box.bottom)) / span);
+
+        return { value: Math.min(enter, leave), exiting: leave < enter };
     };
 
     let frame = 0;
@@ -73,9 +89,10 @@
         frame = 0;
 
         targets.forEach((target) => {
-            const progress = progressOf(target);
+            const { value: progress, exiting } = progressOf(target);
 
             target.el.style.setProperty('--bt-scroll-expand', progress.toFixed(4));
+            if (target.exit) target.el.toggleAttribute('data-scroll-expand-exiting', exiting);
 
             /* ยก layer ให้เฉพาะตอนที่กำลังขยับจริง ค้างไว้ตลอดกินหน่วยความจำ compositor เปล่า ๆ
                ปลายทางทั้งสองฝั่ง (0 กับ 1) คือตอนที่ค้างนิ่ง จึงถอดออกได้ */

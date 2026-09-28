@@ -10,3 +10,7 @@ dist/
 build/
 
 images/benefit-old/
+
+# ไฟล์ต้นฉบับ Photoshop เก็บไว้ในเครื่องเท่านั้น ไม่ขึ้น git (ไฟล์ใหญ่)
+*.psd
+*.PSD

@@ -73,9 +73,6 @@ html.is-preparing-page-scroll body::-webkit-scrollbar-thumb {
     background: transparent;
 }
 
-/* Nothing in the design is dark, so this only ever shows through a gap — during a
-   resize, or as overscroll. Matching #stagewrap keeps such a gap invisible instead
-   of flashing near-black. */
 body {
     width: 100%;
     margin: 0;
@@ -343,11 +340,10 @@ body.menu-closing .back-to-top {
     line-height: var(--section-small-line-height);
 }
 
-/* ป้ายส่วนลดชุดเดียวกันใช้ซ้ำหลังราคาเดิมในการ์ด Ticket และท้ายป้ายปุ่มซื้อบัตรบน Hero (js/hero-v2-cta.js)
+/* ป้ายส่วนลดชุดเดียวกันใช้ซ้ำหลังราคาเดิมในการ์ด Ticket
    (selector ของ Ticket ต้องเจาะจงพอชนะ .ticket__price span ที่ย่อ/ขยายฟอนต์ตาม breakpoint) */
 .early-bird-float__discount,
-.ticket .ticket__price .ticket__price-save,
-.hero-cta__save {
+.ticket .ticket__price .ticket__price-save {
     display: inline-block;
     padding: 6px var(--space-2);
     border-radius: var(--radius-1);
@@ -513,7 +509,8 @@ body.menu-closing .back-to-top {
 /* = .ticket__price strong ที่สถานะ is-active (ราคาเดิมอยู่ก่อนหน้า จึงไม่มี margin-top เหมือนกฎ .ticket__price-original+strong) */
 .early-bird-float__price strong {
     color: var(--color-blue-600);
-    font-size: 22px;
+    font-size: calc(var(--font-size-24) - 2px);
+    ;
     font-weight: var(--font-weight-medium);
     line-height: 1.2;
     letter-spacing: 0;
@@ -687,227 +684,12 @@ body.menu-closing .early-bird-float {
 
 }
 
-/* Temporary preview control for comparing the two desktop Hero continuations. */
-.hero-motion-picker {
-    position: fixed;
-    right: max(var(--space-5), env(safe-area-inset-right));
-    bottom: calc(max(var(--space-5), env(safe-area-inset-bottom)) + var(--touch-target-md) + var(--space-3));
-    z-index: 280;
-}
-
-.hero-motion-picker__trigger {
-    width: var(--touch-target-md);
-    height: var(--touch-target-md);
-    display: inline-grid;
-    place-items: center;
-    padding: 0;
-    border: var(--border-width-1) solid var(--alpha-ink-12);
-    border-radius: 50%;
-    color: var(--color-text-primary);
-    background: color-mix(in srgb, var(--color-surface-page) 88%, #ffffff);
-    box-shadow: 0 var(--space-2) var(--space-6) var(--alpha-ink-16);
-    cursor: pointer;
-    appearance: none;
-    transition:
-        color var(--duration-fast) var(--ease-standard),
-        background-color var(--duration-fast) var(--ease-standard),
-        border-color var(--duration-fast) var(--ease-standard),
-        transform var(--duration-fast) var(--ease-standard);
-}
-
-.hero-motion-picker__trigger span {
-    font-family: var(--font);
-    font-size: var(--font-size-18);
-    line-height: 1;
-    transition: transform var(--duration-standard) var(--ease-standard);
-}
-
-.hero-motion-picker__trigger:hover,
-.hero-motion-picker.is-open .hero-motion-picker__trigger {
-    border-color: var(--color-text-primary);
-    color: var(--color-surface-page);
-    background: var(--color-text-primary);
-}
-
-.hero-motion-picker.is-open .hero-motion-picker__trigger span {
-    transform: rotate(180deg);
-}
-
-.hero-motion-picker__trigger:focus-visible,
-.hero-motion-picker__option:focus-visible {
-    outline: var(--border-width-2) solid var(--color-accent-primary);
-    outline-offset: var(--space-1);
-}
-
-.hero-motion-picker__panel {
-    position: absolute;
-    right: 0;
-    bottom: calc(100% + var(--space-3));
-    width: 236px;
-    padding: var(--space-3);
-    border: var(--border-width-1) solid rgba(255, 255, 255, 0.18);
-    border-radius: var(--radius-3);
-    color: var(--color-neutral-0);
-    background: rgba(8, 11, 18, 0.94);
-    box-shadow: 0 var(--space-3) var(--space-8) rgba(0, 0, 0, 0.28);
-    -webkit-backdrop-filter: blur(14px);
-    backdrop-filter: blur(14px);
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transform: translateY(var(--space-2)) scale(0.97);
-    transform-origin: 100% 100%;
-    transition:
-        opacity var(--duration-fast) var(--ease-standard),
-        visibility 0s linear var(--duration-fast),
-        transform var(--duration-fast) var(--ease-standard);
-}
-
-.hero-motion-picker.is-open .hero-motion-picker__panel {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    transform: translateY(0) scale(1);
-    transition-delay: 0s;
-}
-
-.hero-motion-picker__eyebrow {
-    display: block;
-    padding: var(--space-1) var(--space-2) var(--space-3);
-    color: rgba(255, 255, 255, 0.56);
-    font-family: var(--font);
-    font-size: 10px;
-    font-weight: 500;
-    line-height: 1;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-}
-
-.hero-motion-picker__option {
-    width: 100%;
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    align-items: center;
-    gap: var(--space-3);
-    padding: var(--space-3) var(--space-2);
-    border: 0;
-    border-radius: var(--radius-2);
-    color: rgba(255, 255, 255, 0.76);
-    background: transparent;
-    cursor: pointer;
-    text-align: left;
-    appearance: none;
-    transition:
-        color var(--duration-fast) var(--ease-standard),
-        background-color var(--duration-fast) var(--ease-standard);
-}
-
-.hero-motion-picker__option:hover {
-    color: var(--color-neutral-0);
-    background: rgba(255, 255, 255, 0.08);
-}
-
-.hero-motion-picker__option.is-selected {
-    color: var(--color-neutral-0);
-    background: rgba(255, 255, 255, 0.11);
-}
-
-.hero-motion-picker__option strong,
-.hero-motion-picker__option small {
-    display: block;
-    font-family: var(--font);
-}
-
-.hero-motion-picker__option strong {
-    font-size: var(--font-size-14);
-    font-weight: 500;
-    line-height: 1.15;
-}
-
-.hero-motion-picker__option small {
-    margin-top: var(--space-1);
-    color: rgba(255, 255, 255, 0.52);
-    font-size: 10px;
-    font-weight: 400;
-    line-height: 1.2;
-}
-
-.hero-motion-picker__status {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.26);
-}
-
-.hero-motion-picker__option.is-selected .hero-motion-picker__status {
-    background: var(--color-kv-spectrum-1);
-    box-shadow: 0 0 0 3px rgba(0, 212, 254, 0.16);
-}
-
-.hero-motion-picker__check {
-    opacity: 0;
-    font-family: var(--font);
-    font-size: var(--font-size-14);
-}
-
-.hero-motion-picker__option.is-selected .hero-motion-picker__check {
-    opacity: 1;
-}
-
-body.is-loading .hero-motion-picker,
-body.menu-open .hero-motion-picker,
-body.menu-closing .hero-motion-picker {
-    opacity: 0;
-    pointer-events: none;
-}
-
-@media (max-width:1199px) {
-    .hero-motion-picker {
-        display: none;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-
-    .hero-motion-picker__trigger,
-    .hero-motion-picker__trigger span,
-    .hero-motion-picker__panel,
-    .hero-motion-picker__option {
-        transition: none;
-    }
-}
-
-/* ป้าย SAVE 30% เกาะมุมบนขวาของปุ่มซื้อบัตรบน Hero แบบกล่องคำพูด หางชี้ลงหาปุ่ม
-   ไม่รับการคลิก เพื่อให้พื้นที่กดของปุ่มใต้ป้ายยังใช้ได้ */
-#cta-slot .hero-cta__save {
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 2;
-    transform: translate(var(--space-3), -50%);
-    pointer-events: none;
-}
-
-/* #cta-slot .hero-cta__save::after {
-    content: "";
-    position: absolute;
-    top: calc(100% - 1px);
-    left: 40%;
-    border-width: 6px 5px 0;
-    border-style: solid;
-    border-color: var(--color-danger-600) transparent transparent;
-} */
-
 /* ---------- แถบปุ่มลอยชิดขอบล่าง (จอ <=575px เท่านั้น) ---------- */
 .mobile-cta-bar {
     display: none;
 }
 
 @media (max-width:575px) {
-    #cta-slot {
-        display: none;
-    }
-
     .mobile-cta-bar {
         display: flex;
         align-items: center;
@@ -1806,7 +1588,7 @@ body.menu-open .site-header__backdrop {
     align-items: center;
     justify-content: space-between;
     margin-bottom: var(--space-2);
-    font-size: 14px;
+    font-size: var(--font-size-14);
     line-height: 1;
 }
 
@@ -1826,502 +1608,433 @@ body.menu-open .site-header__backdrop {
     will-change: transform;
 }
 
-/* ---------- scroll driver ---------- */
-#scroller {
-    height: 320vh;
-    position: relative;
+@media (max-width:575px) {
+    .loader-icon {
+        max-width: 88px;
+        max-height: 88px;
+    }
+
+    .loader-progress {
+        bottom: var(--space-8);
+    }
 }
 
-/* replaced by layout() in px.
-   min-height stays in vh so the stage keeps covering the viewport during a resize:
-   layout() rewrites the px height a frame later, and without this the stale px box
-   is shorter than the new viewport and exposes the page background underneath. */
-#stagewrap {
-    height: 100vh;
+/* ---------- Hero ----------
+   Wireframe รอบแรก (ยังไม่มี motion): ซ้าย title + คำโปรย + ปุ่ม, ขวาภาพวิทยากร
+   ที่มีตัวเลขงานวางทับมุมล่าง และวันเวลาสถานที่อยู่ใต้ภาพ
+   พื้นหลังเป็นวิดีโอท้องฟ้าชุดสว่างเดิม (js/hero-loader.js เล่น/หยุดตามการมองเห็น) */
+.hero {
+    position: relative;
     min-height: 100vh;
-    width: 100%;
-    position: relative;
+    display: flex;
+    align-items: center;
+    padding: calc(var(--header-height) + var(--space-10)) var(--space-0) var(--space-16);
     overflow: hidden;
-    background: #dfe6ee;
+    background: #fafafb;
 }
 
-/* ---------- background (own pan rate = depth) ---------- */
-#bg {
-    /* วิดีโอ/โปสเตอร์ท้องฟ้าชุดสว่างเป็น 16:9 แต่กล่องนี้เป็นสัดส่วน KV (แนวตั้ง 0.8) ถ้า cover
-       ทั้งกล่องจะเหลือแค่แถบกลางภาพ 45% ก้อนเมฆที่อยู่ริมซ้ายบนกับล่างขวาหายหมด จึงวางวิดีโอ
-       กว้าง 130% ของกล่อง (ตัดขอบข้างละ 15%) ชิดบน ให้เห็นก้อนเมฆในจอแรกและกินความสูงถึง
-       ~1075px ที่ 1470 ส่วนที่เหลือใต้วิดีโอ (โผล่ตอนกล้องแพน) ใช้สีขาวเดียวกับขอบล่างของก้อนเมฆ
-       (#fafafb วัดจากเฟรมแรก) ให้ต่อกันเนียน — ค่านี้ต้องตรงกับ SKY_VIDEO_WIDTH_SCALE ใน js/hero-v2-scroll-motion.js */
-    --bt-sky-video-width: 130%;
-
+.hero__sky {
     position: absolute;
-    overflow: hidden;
-    background-color: #fafafb;
-    background-image: url('../images/light/background-light.webp?v=light-2');
-    background-size: var(--bt-sky-video-width) auto;
-    background-position: 50% top;
-    background-repeat: no-repeat;
-    will-change: transform;
+    inset: 0;
+    background: #fafafb url('../images/light/background-light.webp?v=light-2') 50% top / cover no-repeat;
+    pointer-events: none;
 }
 
-#sky-video {
-    /* กว้างกว่ากล่อง 130% แล้วเลื่อนกลับให้อยู่กึ่งกลาง (ดูเหตุผลที่ #bg) สูงตามสัดส่วนจริงของวิดีโอ */
-    width: var(--bt-sky-video-width);
-    height: auto;
-    margin-left: calc((100% - var(--bt-sky-video-width)) / 2);
-    display: block;
-    object-fit: fill;
-    object-position: 50% top;
-    opacity: 0;
-    transform: translateZ(0);
-    transform-origin: 50% 38%;
-    backface-visibility: hidden;
-    filter: saturate(1.08) contrast(1.025) brightness(1.015);
-    transition: opacity 480ms ease;
-    will-change: opacity, transform;
-}
-
-/* Width-driven height:auto preserves the intended crop on regular viewports. When the
-   viewport is taller than that rendered video height, layout() enables this fallback so
-   the moving sky continues to cover the full background instead of exposing a gap below. */
-/* จอที่สูงกว่าวิดีโอกว้าง 130% จะครอบได้ (layout() เปิดคลาสนี้ให้) กลับไป cover เต็มกล่องแทน
-   ยอมเสียก้อนเมฆดีกว่าเห็นพื้นขาวใต้วิดีโอตั้งแต่จอแรก */
-#bg.is-tall-video-cover #sky-video {
+.hero__sky-video {
     width: 100%;
     height: 100%;
-    margin-left: 0;
+    display: block;
     object-fit: cover;
     object-position: 50% top;
+    opacity: 0;
+    filter: saturate(1.08) contrast(1.025) brightness(1.015);
+    transition: opacity 480ms ease;
 }
 
-#bg.is-video-ready #sky-video {
+.hero.is-sky-ready .hero__sky-video {
     opacity: 1;
 }
 
-/* ---------- KV stage: virtual A4 canvas the camera pans down ---------- */
-#stage {
+/* ไอคอนสินทรัพย์: ค่าจาก POSTER ใน hero-v2-scroll-motion.js เดิม (ตำแหน่ง % ของจอ, ความกว้าง % ของจอ
+   บีบด้วย min/max px, มุมเอียง) ไอคอนเลื่อนลงจาก cy อีก 9vh (≤991 = 5vh) เหมือน posterIconShiftY เดิม
+   อยู่ layer ใต้ .hero__inner (z-index 1) จึงไม่ทับข้อความ ปุ่ม และภาพวิทยากร */
+.hero__assets {
+    --bt-hero-asset-shift: 9;
+
     position: absolute;
-    z-index: auto;
+    inset: 0;
+    z-index: 0;
     pointer-events: none;
+}
+
+.hero-asset {
+    position: absolute;
+    left: calc(var(--cx) * 1vw);
+    top: calc((var(--cy) + var(--bt-hero-asset-shift)) * 1vh);
+    /* --bt-hero-asset-scale ย่อทั้งชุด (min/ค่าตามจอ/max) ด้วยอัตราเดียว สัดส่วนเล็ก-ใหญ่ระหว่างไอคอนจึงคงเดิม */
+    --bt-hero-asset-width: calc(clamp(var(--min), var(--w) * 1vw, var(--max)) * var(--bt-hero-asset-scale, 1) * var(--bt-hero-asset-boost, 1));
+
+    width: var(--bt-hero-asset-width);
+    transform: translate(-50%, -50%) rotate(var(--rot));
+}
+
+.hero-asset__float {
     will-change: transform;
 }
 
-#ship,
-#stairs,
-#pshadow,
-.person {
-    position: absolute;
-    display: block;
+/* ซ่อนไว้จนกว่า loader จะกระจายไอคอนออกมา (js/hero-loader.js) */
+.hero-asset__inner {
+    opacity: 0;
     will-change: transform, opacity;
+
+    /* filter อยู่ที่ภาพข้างในเลเยอร์ที่เคลื่อนที่ (เดิมอยู่ที่ .hero-asset ตัวนอก ทำให้ต้องวาดใหม่ทุกเฟรมตอนไอคอนขยับ) */
+    img {
+        width: 100%;
+        height: auto;
+        display: block;
+        filter: saturate(1.3);
+    }
 }
 
-/* The ship stays behind the physical wall layers throughout its entrance. */
-#ship {
-    z-index: 10;
-    transform-origin: 50% 50%;
-    backface-visibility: hidden;
+.hero-asset[data-hero-asset="triangle"] {
+    --cx: 8.5;
+    --cy: 10.5;
+    --w: 10;
+    --rot: -10deg;
+    --min: 58px;
+    --max: 230px;
 }
 
-/* Full-canvas wall cutouts sit above the ship, preserving real occlusion while
-    allowing each side to move independently. */
-#walls {
-    position: absolute;
-    z-index: 20;
-    pointer-events: none;
-    will-change: transform;
+.hero-asset[data-hero-asset="gold"] {
+    --cx: 91.5;
+    --cy: 12.8;
+    --w: 5.5;
+    --rot: 16deg;
+    --min: 48px;
+    --max: 130px;
 }
 
-.wall-intro-panel {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    will-change: transform;
+.hero-asset[data-hero-asset="card"] {
+    --cx: 86.5;
+    --cy: 46;
+    --w: 6.5;
+    --rot: 12deg;
+    --min: 52px;
+    --max: 180px;
 }
 
-#wall-left-intro {
-    transform-origin: 0 50%;
+.hero-asset[data-hero-asset="stock"] {
+    --cx: 4.4;
+    --cy: 71;
+    --w: 4.2;
+    --rot: -24deg;
+    --min: 22px;
+    --max: 68px;
 }
 
-#wall-right-intro {
-    transform-origin: 100% 50%;
+.hero-asset[data-hero-asset="bitcoin"] {
+    --cx: 26.8;
+    --cy: 66.5;
+    --w: 6;
+    --rot: -8deg;
+    --min: 32px;
+    --max: 120px;
 }
 
-.wall-panel {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: fill;
-    will-change: transform;
-    /* filter: sepia(0.35) hue-rotate(185deg) saturate(1.5) brightness(0.4) contrast(1.1); */
+.hero-asset[data-hero-asset="heart"] {
+    --cx: 92.5;
+    --cy: 74;
+    --w: 12;
+    --rot: -5deg;
+    --min: 56px;
+    --max: 240px;
 }
 
-#wall-left {
-    width: 101.35%;
-    transform-origin: 0 50%;
-}
-
-#wall-right {
-    left: auto;
-    right: 0;
-    width: 98.7%;
-    transform-origin: 100% 50%;
-}
-
-#stairs {
-    z-index: 40;
-}
-
-#pshadow {
-    z-index: 50;
-}
-
-.person {
-    z-index: 60;
-    transform-origin: 50% 100%;
-}
-
-/* Scroll-scrubbed continuation through the ship door. */
-#ship-run-layer {
-    position: fixed;
-    inset: 0;
-    z-index: 180;
-    opacity: 0;
-    pointer-events: none;
-}
-
-#ship-run-canvas {
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-
-.ship-run-source {
-    display: none;
-}
-
-#ship-run-whiteout {
-    position: fixed;
-    inset: 0;
-    z-index: 210;
-    opacity: 0;
-    background: #fff;
-    pointer-events: none;
-}
-
-/* Scroll cue ของ hero-v2: เริ่มแสดงเมื่อผู้ใช้ scroll ลงมาเล็กน้อย */
-.hero-scroll-cue {
-    position: fixed;
-    left: 50%;
-    bottom: max(var(--bt-hero-scroll-cue-bottom), env(safe-area-inset-bottom));
-    z-index: 205;
-    width: var(--bt-hero-scroll-cue-width);
-    min-height: var(--space-14);
-    display: inline-grid;
-    justify-items: center;
-    gap: var(--bt-hero-scroll-cue-gap);
-    padding: 0;
-    border: 0;
-    color: var(--bt-hero-scroll-cue-ink);
-    background: transparent;
-    mix-blend-mode: difference;
-    opacity: 1;
-    pointer-events: auto;
-    transform: translate3d(-50%, 0, 0);
-    transition:
-        opacity 320ms ease,
-        transform 320ms ease;
-    will-change: opacity, transform;
-}
-
-body.is-loading .hero-scroll-cue,
-.hero-scroll-cue.is-hidden {
-    opacity: 0;
-    pointer-events: none;
-    transform: translate3d(-50%, var(--space-2), 0);
-}
-
-.hero-scroll-cue__mouse {
+/* bitcoin ย้ายมาอยู่ข้างคนริมซ้ายแถวล่างสุดของภาพวิทยากร ตำแหน่งเป็น % ของกรอบ .hero__visual
+   (≥992 กรอบเท่าภาพ 4:5 ทั้งแผ่น จุดนี้ = 4% / 72% ของภาพ) ขนาดและมุมเท่าเดิม
+   อยู่หลังภาพวิทยากร (z-index 0 ต่ำกว่า .hero__speakers) ส่วนที่ติดคนจึงถูกภาพบัง */
+.hero__visual {
     position: relative;
-    width: var(--bt-hero-scroll-cue-mouse-width);
-    height: var(--bt-hero-scroll-cue-mouse-height);
-    display: block;
-    border: var(--bt-hero-scroll-cue-border-width) solid currentColor;
-    border-radius: var(--space-10);
 }
 
-.hero-scroll-cue__wheel {
-    position: absolute;
-    left: 50%;
-    top: var(--space-2);
-    width: var(--bt-hero-scroll-cue-dot-width);
-    height: var(--bt-hero-scroll-cue-dot-height);
-    border-radius: var(--space-10);
-    background: currentColor;
-    transform: translateX(-50%);
-    animation: hero-scroll-cue-wheel 1800ms cubic-bezier(0.4, 0, 0.2, 1) infinite;
+.hero__visual>.hero-asset[data-hero-asset="bitcoin"] {
+    --bx: 4;
+    --by: 68;
+    --w: 4;
+
+    z-index: 0;
+    left: calc(var(--bx) * 1%);
+    top: calc(var(--by) * 1%);
 }
 
-.hero-scroll-cue__text {
-    display: block;
-    font-family: var(--font);
-    font-size: var(--bt-hero-scroll-cue-text-size);
-    font-weight: 400;
-    line-height: 1;
-    letter-spacing: 0;
-    white-space: nowrap;
+/* ไอคอนใหญ่สี่ตัวย่อลง 25% เท่ากันทุกตัว (heart ยังใหญ่กว่า card, triangle ยังใหญ่กว่า gold ฯลฯ) */
+.hero-asset:is([data-hero-asset="triangle"], [data-hero-asset="gold"], [data-hero-asset="heart"], [data-hero-asset="card"]) {
+    --bt-hero-asset-scale: 0.75;
 }
 
-@keyframes hero-scroll-cue-wheel {
-    0% {
-        opacity: 0;
-        transform: translate(-50%, 0);
+@media (max-width:991px), (max-aspect-ratio: 1199/1000) {
+
+    /* กำแพง wall-*-1280 (4:5 จาก <picture>) รูปทรงเฉียงอยู่ในไฟล์แล้ว วางตามสัดส่วนจริง ไม่ยืด
+       ขอบล่างชนขอบล่างภาพวิทยากร มุมล่างด้านในของไฟล์ (36.3% / 62.2% ของความกว้างไฟล์)
+       ชนขอบในของกำแพงที่ 36% / 63% ของกรอบภาพ
+       ขนาด: สูงตั้งแต่ขอบบนของ hero (ขอบบนจอ) ถึงขอบล่างภาพ และกว้างพอให้ขอบนอกถึงขอบจอทั้งสองฝั่ง */
+    .hero__wall {
+        --bt-hero-wall-bottom: calc(var(--bt-hero-wall-top, 0px) + var(--bt-hero-wall-height, 0px));
+        --bt-hero-wall-left-edge: 0.36;
+        --bt-hero-wall-right-edge: 0.63;
+        /* ขอบในห่างจากกึ่งกลางภาพอย่างน้อยเท่านี้ ช่องฟ้าจึงกว้างกว่าข้อความเสมอ (hero-loader.js อ่านค่านี้ตอนปิดกำแพงด้วย) */
+        --bt-hero-wall-half-gap: 0px;
+        --bt-hero-wall-mid: calc(var(--bt-hero-wall-left, 0px) + var(--bt-hero-wall-width, 0px) / 2);
+        --bt-hero-wall-inner-l: min(calc(var(--bt-hero-wall-left, 0px) + var(--bt-hero-wall-width, 0px) * var(--bt-hero-wall-left-edge)),
+                calc(var(--bt-hero-wall-mid) - var(--bt-hero-wall-half-gap)));
+        --bt-hero-wall-inner-r: max(calc(var(--bt-hero-wall-left, 0px) + var(--bt-hero-wall-width, 0px) * var(--bt-hero-wall-right-edge)),
+                calc(var(--bt-hero-wall-mid) + var(--bt-hero-wall-half-gap)));
+        --bt-hero-wall-file-width: max(var(--bt-hero-wall-bottom) * 0.8,
+                var(--bt-hero-wall-inner-l) / 0.363,
+                (var(--bt-hero-width, 100vw) - var(--bt-hero-wall-inner-r)) / 0.378);
+
+        display: block;
+        position: absolute;
+        top: calc(var(--bt-hero-wall-bottom) - var(--bt-hero-wall-file-width) * 1.25);
+        width: var(--bt-hero-wall-file-width);
+        max-width: none;
+        height: calc(var(--bt-hero-wall-file-width) * 1.25);
+        pointer-events: none;
     }
 
-    18% {
-        opacity: 1;
+    .hero__wall--left {
+        left: calc(var(--bt-hero-wall-inner-l) - var(--bt-hero-wall-file-width) * 0.363);
     }
 
-    72% {
-        opacity: 1;
-        transform: translate(-50%, var(--space-2));
+    /* 576px ขึ้นไป (ข้อความอยู่เหนือภาพ ช่องฟ้าอยู่หลังข้อความ): เปิดช่องให้กว้างกว่าบรรทัดยาวสุด */
+    @media (min-width:576px) {
+        .hero__wall {
+            --bt-hero-wall-half-gap: 176px;
+        }
     }
 
-    100% {
-        opacity: 0;
-        transform: translate(-50%, var(--space-2));
+    .hero__wall--right {
+        left: calc(var(--bt-hero-wall-inner-r) - var(--bt-hero-wall-file-width) * 0.622);
+    }
+
+    /* ไล่สีพื้นหน้า (--color-surface-page) จากขอบล่าง hero ขึ้นไป กลบสีฟ้าที่ติดมากับกำแพงช่วงล่าง
+       z-index 0 และเป็น ::after (มาหลังสุดใน DOM) จึงอยู่บนกำแพง แต่อยู่ใต้ .hero__inner (1) ที่มีภาพวิทยากร */
+    /* ไอคอนอยู่เหนือแถบไล่สีขาวด้านล่าง (::after z-index 0) แต่ยังอยู่หลังเนื้อหา (.hero__inner z 1 มาทีหลังใน DOM) */
+    .hero__assets {
+        z-index: 1;
+    }
+
+    .hero::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 0;
+        height: 35%;
+        background: linear-gradient(to top, var(--color-surface-page) 25%, transparent);
+        pointer-events: none;
+    }
+
+    /* hero สูงกว่ากว้าง วิดีโอ 16:9 แบบ cover เหลือแค่แถบกลาง ~1/3 ของความกว้าง (ฟ้าเปล่าเป็นส่วนใหญ่)
+       เลื่อนไปทางซ้ายให้เห็นก้อนเมฆมุมซ้ายบนช่วงบน และก้อนใหญ่ด้านล่างเข้ามาในกรอบ */
+    .hero__sky,
+    .hero__sky-video {
+        background-position: 30% top;
+        object-position: 30% top;
+    }
+
+    /* ผังบน-ล่าง: ไอคอนอยู่ในช่วงเนื้อหาด้านบน (ขอบบน title ถึงขอบบนภาพวิทยากร) ริมจอซ้าย-ขวา
+       เรียงแบบเดียวกับ desktop (ฝั่ง/ลำดับบน-ล่าง/มุมเอียงเดียวกัน)
+       ซ้าย: triangle > bitcoin > stock · ขวา: gold > card > heart
+       --ix = จุดกึ่งกลางเป็น vw, --iy = % ของช่วงเนื้อหาด้านบน, --iw = กว้างเป็น % ของกว้างภาพ
+       ลำดับขนาดเท่า desktop (ที่ 1470px: heart 132 > triangle 110 > card 72 > stock 62 ≈ gold 61 ≈ bitcoin 59)
+       อยู่หลังข้อความ (.hero__assets z 1 มาก่อน .hero__inner ใน DOM) ตัวอักษรจึงไม่ถูกบัง
+       จุดอ้างอิง (px เทียบกับ hero) มาจาก js/hero-loader.js */
+    /* --bt-hero-icon-k ขยายไอคอนทั้งชุดด้วยอัตราเดียว (สัดส่วนเล็ก-ใหญ่ระหว่างไอคอนคงเดิม) */
+    .hero-asset {
+        --bt-hero-icon-k: 1.65;
+        --bt-hero-asset-y: calc(var(--bt-hero-top-y, 0px) + (var(--bt-hero-img-top, 80vh) - var(--bt-hero-top-y, 0px)) * var(--iy) / 100);
+    }
+
+    .hero__assets>.hero-asset {
+        left: calc(var(--ix) * 1vw);
+        top: var(--bt-hero-asset-y);
+        width: calc(var(--bt-hero-img-w, 100vw) * var(--iw) / 100 * var(--bt-hero-icon-k));
+    }
+
+    /* bitcoin อยู่ใน .hero__visual: แปลงพิกัดจาก hero เป็นพิกัดของ .hero__visual
+       (ภาพถูกดึงขึ้น 13cqw จากขอบบน .hero__visual, ขอบซ้ายภาพห่างจาก .hero__visual ครึ่ง gutter)
+       z-index -1 อยู่หลังข้อความใน .hero__inner */
+    .hero__visual>.hero-asset[data-hero-asset="bitcoin"] {
+        --ix: 6;
+        --iy: 45;
+        --iw: 5;
+
+        z-index: -1;
+        left: calc(var(--ix) * 1vw - var(--bt-hero-img-l, 0px) + var(--bs-gutter-x) * 0.5);
+        top: calc(var(--bt-hero-asset-y) - var(--bt-hero-img-top, 80vh) - 13cqw);
+        width: calc(var(--iw) * 1cqw * var(--bt-hero-icon-k));
+    }
+
+    .hero-asset[data-hero-asset="heart"] {
+        --ix: 93;
+        --iy: 90;
+        --iw: 11.3;
+    }
+
+    .hero-asset[data-hero-asset="stock"] {
+        --ix: 6;
+        --iy: 80;
+        --iw: 5.3;
+    }
+
+    .hero-asset[data-hero-asset="gold"] {
+        --ix: 93;
+        --iy: 8;
+        --iw: 5.2;
+    }
+
+    .hero-asset[data-hero-asset="triangle"] {
+        --ix: 7;
+        --iy: 8;
+        --iw: 9.4;
+    }
+
+    .hero-asset[data-hero-asset="card"] {
+        --ix: 92;
+        --iy: 50;
+        --iw: 6.2;
     }
 }
 
-@media (max-width:575px) {
-    .hero-scroll-cue {
-        bottom: max(var(--bt-hero-scroll-cue-bottom-sm), env(safe-area-inset-bottom));
-    }
+.hero__inner {
+    position: relative;
+    z-index: 1;
 }
 
-@media (prefers-reduced-motion: reduce) {
-
-    .hero-scroll-cue,
-    .hero-scroll-cue__wheel {
-        animation: none;
-        transition: none;
-    }
-
-    .hero-scroll-cue__wheel {
-        opacity: 1;
-        transform: translate(-50%, var(--space-1));
-    }
+.hero__row {
+    align-items: center;
+    row-gap: var(--space-12);
 }
 
-/* Its first frame matches the completed stair
-    composition, then the camera follows the runners through the ship door. */
-#ship-run-video {
-    position: absolute;
-    left: 50%;
-    bottom: 0;
-    z-index: 90;
+.hero__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.hero__title {
     width: 100%;
+    max-width: 352px;
     height: auto;
     display: block;
-    opacity: 0;
-    pointer-events: none;
-    will-change: left, width, opacity;
 }
 
-/* ---------- holographic assets ---------- */
-.asset {
-    position: absolute;
-    z-index: 70;
-    will-change: transform;
-    filter: saturate(1.3);
-}
-
-.asset .floaty {
-    will-change: transform;
-}
-
-.asset .inner {
-    will-change: transform, opacity;
-    opacity: 0;
-}
-
-.asset img,
-.asset video {
-    width: 100%;
-    display: block;
-    /* filter: drop-shadow(0 12px 20px rgba(20, 40, 90, 0.30)); */
-}
-
-/* These begin above the wall plane. The timeline moves them behind the ship before
-   their bounds make contact, matching the reference motion without a visible snap. */
-#a-triangle,
-#a-bitcoin,
-#a-gold,
-#a-card {
-    z-index: 30;
-}
-
-#a-title {
-    z-index: 80;
-}
-
-#a-title img {
-    filter: unset;
-}
-
-/* ---------- frame-1 UI ---------- */
-#ui {
-    position: absolute;
-    left: 50%;
-    /* 59vh sets the gap below the title and governs on tall viewports; the px reserve
-       governs on short ones, where it keeps the block off the bottom edge. Mirrored in
-       layout() — see hero-v2-scroll-motion.js, which overwrites this with the same
-       formula in px. Deliberately vh, not %: the containing block is #stage, whose
-       height is the KV canvas (~1.4x the viewport), so % here would not mean what the
-       JS means and the pre-layout() fallback would land far too low. */
-    top: min(59vh, 100vh - 324px);
-    transform: translateX(-50%);
-    z-index: 25;
-    pointer-events: auto;
-    width: min(calc(100% - var(--space-8)), 720px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-12);
-    opacity: 0;
-    text-align: center;
-    /* ท้องฟ้าชุดสว่าง: วันที่/เวลา/สถานที่เป็นตัวดำ (ชุดมืดเดิมเป็นขาว) */
+.hero__headline {
+    margin: var(--space-8) var(--space-0) var(--space-0);
     color: var(--color-text-primary);
     font-family: var(--headline);
+    font-size: var(--font-size-32);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.3;
 }
 
-#ui .event-primary {
-    display: grid;
-    justify-items: center;
+/* Thai has no spaces, so without this the browser breaks inside words ("ชั้น|นำ").
+   Each phrase stays whole; when the column is too narrow "จากวิทยากรชั้นนำ" drops to a third line. */
+.hero__headline-phrase {
+    display: inline-block;
 }
 
-#ui .event-countdown {
-    min-width: 288px;
-    display: grid;
-    justify-items: center;
-    gap: var(--space-3);
-    font-variant-numeric: tabular-nums;
-    opacity: 0.92;
+.hero__description {
+    margin: var(--space-4) var(--space-0) var(--space-0);
+    color: var(--color-text-secondary);
+    font-size: var(--section-body-size);
+    line-height: var(--line-height-normal);
 }
 
-#ui .event-countdown__label {
-    color: currentColor;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 1;
+/* Stat styling follows #expectation (.expectation__stat), one size step smaller: ink numbers with a blue "+", a light muted
+   label underneath, and the rotated line-star image as the divider between items. */
+.hero__stats {
+    --bt-hero-stat-size: var(--font-size-28);
+    --bt-hero-stat-rule-length: 64px;
+
+    display: flex;
+    margin: var(--space-8) var(--space-0) var(--space-0);
+
+    @media (max-width: 991px) {
+        --bt-hero-stat-size: var(--font-size-24);
+        --bt-hero-stat-rule-length: 56px;
+    }
+
+    @media (max-width: 767px) {
+        --bt-hero-stat-size: var(--font-size-20);
+        --bt-hero-stat-rule-length: 48px;
+    }
 }
 
-#ui .event-countdown__values {
-    display: grid;
-    grid-template-columns: repeat(4, 56px);
-    gap: var(--space-12);
-}
-
-#ui .event-countdown__unit {
+.hero__stat {
     position: relative;
-    min-width: 0;
-    display: grid;
-    justify-items: center;
-    gap: var(--space-3);
-}
-
-#ui .event-countdown__unit:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    top: calc(50% + 3px);
-    right: calc(var(--space-6) * -1);
-    width: var(--bt-hero-countdown-divider-width);
-    height: calc(var(--bt-hero-countdown-divider-width) / var(--bt-hero-countdown-divider-ratio));
-    background: url('../images/line-star-countdown.webp') center / contain no-repeat;
-    transform: translate(50%, -50%) rotate(90deg);
-    transform-origin: center;
-}
-
-#ui .event-countdown__unit strong {
-    font-size: 24px;
-    font-weight: 500;
-    line-height: 1;
-}
-
-#ui .event-countdown__unit small {
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1;
-}
-
-#ui .event-countdown__status {
-    display: none;
-    min-height: 40px;
+    display: flex;
+    flex-direction: column-reverse;
     align-items: center;
-    font-size: 20px;
-    font-weight: 500;
-    line-height: 1.2;
+    padding: var(--space-0) var(--space-8);
+    text-align: center;
+
+    &:first-child {
+        padding-left: var(--space-0);
+    }
+
+    &+&::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: var(--bt-hero-stat-rule-length);
+        height: calc(var(--bt-hero-stat-rule-length) / 9.13);
+        background: url('../images/line-star.webp') center / contain no-repeat;
+        transform: translate(-50%, -50%) rotate(90deg);
+    }
+
+    dt {
+        margin-top: var(--space-2);
+        color: var(--color-text-muted);
+        font-size: var(--section-small-size);
+        font-weight: var(--font-weight-light);
+        line-height: var(--section-body-line-height);
+        letter-spacing: 0;
+    }
+
+    dd {
+        margin: var(--space-0);
+        color: var(--color-text-primary);
+        font-size: var(--bt-hero-stat-size);
+        font-weight: var(--font-weight-medium);
+        line-height: var(--section-title-line-height);
+        letter-spacing: 0;
+    }
+
+    .hero__stat-suffix {
+        color: var(--color-blue-600);
+    }
 }
 
-#ui .event-countdown.is-status .event-countdown__values {
-    display: none;
-}
-
-#ui .event-countdown.is-status .event-countdown__status {
+.hero__actions {
     display: flex;
-}
-
-/* The CTA is built by js/liquid-metal-button.js and mounted in #cta-slot. */
-.lmb button:focus-visible {
-    outline: 2px solid #2b6cff;
-    outline-offset: 3px;
-}
-
-#ui .event-details {
-    display: grid;
-    justify-items: center;
-    gap: var(--space-8);
-}
-
-#ui .event-datetime {
-    display: flex;
-    flex-direction: column;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: center;
-    column-gap: var(--space-3);
-    row-gap: var(--space-8);
-    font-weight: 400;
-    line-height: 1.05;
-    letter-spacing: 0;
-    margin-bottom: var(--space-2);
+    gap: var(--space-3) var(--space-8);
+    margin-top: var(--space-8);
 }
 
-#ui .time {
-    font-size: 24px;
-    line-height: inherit;
-}
-
-#ui .date {
-    font-size: 28px;
-    white-space: nowrap;
-}
-
-#ui .venue {
-    font-size: 24px;
-    font-weight: 400;
-    line-height: 1.25;
-    padding-top: 0;
-}
-
-#ui .venue-link {
+/* ค่าเดียวกับ #ui .venue / #ui .venue-link ของ hero เดิม (ลิงก์ Samyan Mitrtown Hall) */
+.hero__dna-link {
     align-items: center;
     gap: var(--space-3);
-    color: inherit;
-    font-size: inherit;
-    font-weight: inherit;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-20);
+    font-weight: var(--font-weight-regular);
+    line-height: 1.25;
 
     &::after {
         background: var(--spectrum);
@@ -2336,8 +2049,491 @@ body.is-loading .hero-scroll-cue,
     &:hover .bt-icon,
     &:focus-visible .bt-icon {
         stroke: #00d4fe;
-        stroke: url("#venue-arrow-spectrum");
+        stroke: url("#hero-dna-arrow-spectrum");
     }
+}
+
+/* ข้อความราคาพิเศษข้างปุ่มซื้อบัตร เป็นข้อความธรรมดาสองบรรทัดเรียงชิดซ้าย
+   บรรทัดแรกน้ำหนักกลาง บรรทัดสองเป็นเงื่อนไขเวลาสีรองที่อ่อนกว่า */
+.hero__offer {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: var(--space-0);
+    font-size: var(--font-size-12);
+    line-height: var(--section-small-line-height);
+    text-align: left;
+}
+
+/* "ราคาพิเศษ" สีดำ เว้นหนึ่งวรรคแล้วตามด้วย "ลด 30%" สีแดงตัวเอียง */
+/* บรรทัดแรกใหญ่กว่าบรรทัดเงื่อนไขหนึ่งขั้น (16 / 14px) */
+.hero__offer-highlight {
+    color: var(--color-text-primary);
+    /* font-size: var(--section-body-size); */
+    font-weight: var(--font-weight-medium);
+    line-height: var(--section-small-line-height);
+}
+
+.hero__offer-discount {
+    color: var(--color-danger-600);
+    font-weight: var(--font-weight-bold);
+    font-style: italic;
+    padding-right: var(--space-1);
+}
+
+.hero__offer-note {
+    color: var(--color-neutral-600);
+}
+
+.hero__visual {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+/* ภาพ placeholder เป็นโปสเตอร์ 4:5 ที่มี title อยู่บนและวันที่อยู่ล่าง
+   กรอบ 6:5 เห็นความสูงภาพ 2/3 เลื่อนลง 66% ให้เหลือเฉพาะช่วงวิทยากร (~22–88% ของภาพ) */
+.hero__speakers {
+    position: relative;
+    margin: var(--space-0);
+    overflow: hidden;
+    border-radius: var(--card-radius);
+    aspect-ratio: 6 / 5;
+
+    img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+        object-position: 50% 66%;
+    }
+}
+
+/* ≥992 hero กว้างเท่าแถบใน header (.site-header__inner) ภาพวิทยากรชิดขวา ข้อความชิดซ้าย
+   ภาพต้องเห็นเต็มแผ่นเสมอ (ห้ามครอป คนริมภาพจะหาย) กรอบจึงเป็น 4:5 ตามไฟล์
+   กว้าง min(80vh, พื้นที่ที่เหลือจากคอลัมน์ข้อความขั้นต่ำ) = สูงไม่เกิน 100vh
+   จอสูงภาพกว้างขึ้นแล้วเบียดข้อความไปซ้าย จอแคบภาพเตี้ยกว่าจอและอยู่กึ่งกลางแนวตั้ง */
+@media (min-width:992px) and (min-aspect-ratio: 6/5) {
+
+    /* ข้อความ + ภาพเรียงชิดกัน (ห่างกันแค่ --bt-hero-gap) แล้วทั้งกลุ่มวางกึ่งกลางจอ
+       พื้นที่ที่เหลือไปอยู่ขอบซ้าย-ขวาเท่า ๆ กัน และมีระยะจากขอบจออย่างน้อย --bt-hero-side-min เสมอ
+       ภาพสูง 100vh (กว้าง 80vh ตามสัดส่วน 4:5) คอลัมน์ข้อความกว้างตามเนื้อหา (สูงสุด 600px)
+       จอแคบลงคอลัมน์ข้อความหดเอง title ย่อตาม (.hero__title width 100%) */
+    /* ความกว้าง: คอลัมน์ข้อความ + ภาพ วางคู่กันกึ่งกลางจอ ห่างกัน --bt-hero-gap
+       ภาพกว้าง 80vh (= สูง 100vh ตามสัดส่วน 4:5) เว้นแต่จอแคบจนคอลัมน์ข้อความเหลือไม่ถึง --bt-hero-content-min
+       ภาพจึงหดลงแทน (ไม่ครอป ไม่ล้นจอ) และชิดขอบล่างของ hero
+       ความสูง: hero สูง 100vh เนื้อหาอยู่กึ่งกลางช่วงใต้ header เว้นบน-ล่างเท่ากัน (--bt-hero-pad-y)
+       ระยะห่าง/ขนาดตัวอักษรในคอลัมน์ข้อความย่อตามความสูงจอ จอเตี้ยเนื้อหาจึงยังอยู่ครบใน 1 หน้าจอ */
+    .hero {
+        --bt-hero-gap: var(--space-6);
+        /* ระยะขอบขั้นต่ำเป็นสัดส่วนความกว้างจอ จอสูง (เต็มจอ) จะไม่เบียดขอบจนเหลือแค่ 32px */
+        --bt-hero-side-min: max(var(--space-8), 5vw);
+        --bt-hero-content-min: calc(480 * var(--bt-hero-u));
+        --bt-hero-content-max: calc(500 * var(--bt-hero-u));
+        --bt-hero-pad-y: clamp(var(--space-4), 3vh, var(--space-10));
+        --bt-hero-visual-w: min(80vh, 100vw - 2 * var(--bt-hero-side-min) - var(--bt-hero-gap) - var(--bt-hero-content-min));
+
+        min-height: 100vh;
+        padding-block: var(--space-0);
+    }
+
+    .hero__inner {
+        display: flex;
+        align-self: stretch;
+        width: 100%;
+        max-width: none;
+        padding-inline: var(--bt-hero-side-min);
+    }
+
+    .hero__row {
+        flex: 1 1 auto;
+        flex-wrap: nowrap;
+        justify-content: center;
+        gap: var(--bt-hero-gap);
+        margin: var(--space-0);
+    }
+
+    .hero__content {
+        position: relative;
+        z-index: 2;
+        flex: 0 1 auto;
+        width: auto;
+        max-width: var(--bt-hero-content-max);
+        min-width: 0;
+        padding: calc(var(--header-height) + var(--bt-hero-pad-y)) var(--space-0) var(--bt-hero-pad-y);
+    }
+
+    .hero__visual {
+        position: relative;
+        z-index: 1;
+        flex: 0 0 auto;
+        align-self: flex-end;
+        width: var(--bt-hero-visual-w);
+        height: auto;
+        aspect-ratio: 4 / 5;
+        padding: var(--space-0);
+    }
+
+    /* ขนาดทั้งคอลัมน์ข้อความโตตามพื้นที่จริงด้วยตัวคูณเดียว --bt-hero-u (= k px, ค่าเดิมคือ k = 1)
+       ทุกส่วน (title, headline, คำโปรย, ตัวเลข, ระยะห่าง) คูณ k เท่ากัน สัดส่วนที่ออกแบบไว้จึงคงเดิม
+       k ถูกจำกัด 3 ทาง แล้วใช้ค่าที่น้อยที่สุด
+       - ความสูง: เนื้อหาที่ k = 1 สูง 592px (ส่วนที่คูณ k 530px + ปุ่ม 62px ที่สูงคงที่)
+         ต้องพอดี 100vh − header − ระยะบน-ล่าง (3vh × 2): 530k + 62 ≤ 0.94·100vh − 72
+         → k = 0.1774vh − 0.2528px แล้วคูณ 0.917 ให้เหลือที่ว่างบน-ล่าง ไม่แน่นจอ (หน้าต่าง 1470×765 ได้ title ~446px)
+       - ความกว้าง: เนื้อหาที่ k = 1 กว้าง 480px ต้องพอดีช่องที่เหลือจากภาพ 80vh → k = (100vw − 88px − 80vh) / 480
+         ถ้าช่องแคบกว่านั้น ภาพหดแทนได้จนข้อความเหลือ k = 0.9 (--bt-hero-content-min = 480k)
+       - เพดาน 1.2 และพื้น 0.8
+       ปุ่มซื้อบัตร (liquid metal วาดด้วย canvas) สูงคงที่ ไม่คูณ k */
+    .hero {
+        --bt-hero-u: clamp(0.8px, min(0.1627vh - 0.2318px, max(0.9px, (100vw - 2 * var(--bt-hero-side-min) - var(--bt-hero-gap) - 80vh) / 480)), 1.2px);
+    }
+
+    .hero__title {
+        max-width: calc(352 * var(--bt-hero-u));
+    }
+
+    .hero__headline {
+        margin-top: calc(32 * var(--bt-hero-u));
+        font-size: calc(32 * var(--bt-hero-u));
+    }
+
+    .hero__description {
+        margin-top: calc(16 * var(--bt-hero-u));
+        font-size: calc(16 * var(--bt-hero-u));
+    }
+
+    .hero__stats {
+        --bt-hero-stat-size: min(28px, calc(28 * var(--bt-hero-u)));
+        --bt-hero-stat-rule-length: calc(64 * var(--bt-hero-u));
+
+        margin-top: calc(32 * var(--bt-hero-u));
+    }
+
+    .hero__stat {
+        padding-inline: calc(32 * var(--bt-hero-u));
+
+        &:first-child {
+            padding-left: var(--space-0);
+        }
+
+        dt {
+            margin-top: calc(2 * var(--bt-hero-u));
+            font-size: calc(14 * var(--bt-hero-u));
+        }
+    }
+
+    .hero__actions {
+        margin-top: calc(32 * var(--bt-hero-u));
+    }
+
+    .hero__offer {
+        font-size: calc(12 * var(--bt-hero-u));
+    }
+
+    .hero__speakers {
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        aspect-ratio: auto;
+        border-radius: var(--space-0);
+
+        img {
+            object-position: 50% 50%;
+        }
+    }
+
+    /* ไอคอนฝั่งซ้าย (triangle, stock) ห้ามทับข้อความ: ขอบซ้ายของคอลัมน์ข้อความ (--bt-hero-content-l จาก
+       js/hero-loader.js) เป็นเพดานของกรอบไอคอนหลังหมุน (ความกว้างหลังหมุน = กว้าง × --bt-hero-asset-span)
+       ไอคอนคงขนาดเดิมเสมอ ช่องซ้ายแคบก็เลื่อนไปทางซ้ายจนเลยขอบจอได้ (ส่วนเกินถูก .hero ตัด)
+       จอกว้างที่ช่องซ้ายเหลือเฟือ ไอคอนอยู่ตำแหน่งเดิม (--cx) */
+    .hero-asset:is([data-hero-asset="triangle"], [data-hero-asset="stock"]) {
+        left: min(var(--cx) * 1vw, var(--bt-hero-content-l, 100vw) - var(--bt-hero-asset-width) * var(--bt-hero-asset-span) * 0.5 - var(--space-2));
+    }
+
+    /* triangle 800×769 เอียง 10° → 1.15 · stock 178×800 เอียง 24° → 2.74 */
+    .hero-asset[data-hero-asset="triangle"] {
+        --bt-hero-asset-span: 1.15;
+    }
+
+    .hero-asset[data-hero-asset="stock"] {
+        --bt-hero-asset-span: 2.74;
+    }
+
+    /* กำแพงขวา: ไฟล์ 4:5 เท่ากรอบภาพวิทยากร js/hero-loader.js ใส่ตำแหน่ง/ขนาดของกรอบภาพ
+       (เทียบกับ .hero) ให้ผ่าน --bt-hero-wall-* แล้ว scaleX จากขอบในของกำแพง (~63% ของไฟล์)
+       ยื่นออกทางขวาจนถึงขอบจอ ส่วนเกินถูก .hero (overflow: hidden) ตัด
+       ไม่มี z-index และมาหลัง .hero__sky ใน DOM จึงอยู่บนท้องฟ้าแต่ใต้ .hero__assets (0) และ .hero__inner (1) */
+    /* กำแพงสูงเต็ม hero (ชิดขอบบน-ล่างเสมอ) แม้ภาพวิทยากรหดเตี้ยกว่าจอ (--bt-hero-height จาก js/hero-loader.js)
+       ตำแหน่งแนวนอนยังยึดขอบในที่ 36% / 63% ของกรอบภาพ ขนาดไฟล์ตามความสูง hero จึงไม่ยืด */
+    .hero__wall {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: var(--bt-hero-wall-left, 0px);
+        width: var(--bt-hero-wall-width, 0px);
+        max-width: none;
+        height: var(--bt-hero-height, 100vh);
+        pointer-events: none;
+    }
+
+    /* กำแพงขวา (wall-right-new.webp 2880×2880 = 1:1) วางตามสัดส่วนจริง ไม่ยืด
+       สูงเท่ากรอบภาพวิทยากร ขอบซ้ายของไฟล์ (ขอบในของกำแพง) อยู่ที่ 63% ของกรอบภาพ ตรงกับตำแหน่งเดิม
+       กำแพงยาวต่อไปทางขวาเกินขอบจอ ส่วนเกินถูก .hero (overflow: hidden) ตัด */
+    .hero__wall--right {
+        /* ขอบในของกำแพงเทียบกับกรอบภาพ (ซ้าย 30% / ขวา 69%) ขยับออกจาก 36 / 63 ให้ช่องกลางกว้างขึ้น */
+        --bt-hero-wall-right-edge: 0.69;
+
+        left: calc(var(--bt-hero-wall-left, 0px) + var(--bt-hero-wall-width, 0px) * var(--bt-hero-wall-right-edge));
+        width: var(--bt-hero-height, 100vh);
+    }
+
+    /* กำแพงซ้าย (wall-left-new.webp 3840×2880 = 4:3) วางตามสัดส่วนจริง ไม่ยืด
+       สูงเท่ากรอบภาพวิทยากร ขอบขวาของไฟล์ (ขอบในของกำแพง) อยู่ที่ 36% ของกรอบภาพ ตรงกับตำแหน่งเดิม
+       กำแพงยาวต่อไปทางซ้ายเกินขอบจอ ส่วนเกินถูก .hero (overflow: hidden) ตัด */
+    .hero__wall--left {
+        --bt-hero-wall-left-edge: 0.30;
+        --bt-hero-wall-left-width: calc(var(--bt-hero-height, 100vh) * 4 / 3);
+
+        left: calc(var(--bt-hero-wall-left, 0px) + var(--bt-hero-wall-width, 0px) * var(--bt-hero-wall-left-edge) - var(--bt-hero-wall-left-width));
+        width: var(--bt-hero-wall-left-width);
+    }
+
+    /* ท้องฟ้าบน desktop เห็นแค่ช่องรูปตัว V ระหว่างกำแพง (กึ่งกลางช่อง ~62–67% ของความกว้าง, ช่วงบน ~0–25%)
+       ตรงนั้นในวิดีโอเป็นฟ้าเปล่า ขยายวิดีโอเป็น 165% ของความสูง hero แล้วยกขึ้น (ชิดขอบล่าง)
+       ก้อนเมฆใหญ่ด้านล่างของวิดีโอจึงขึ้นมาอยู่ในช่องนั้น ภาพ poster ก่อนวิดีโอพร้อมใช้กรอบเดียวกัน */
+    .hero__sky {
+        overflow: hidden;
+        background-size: auto 165%;
+        background-position: 50% 100%;
+    }
+
+    .hero__sky-video {
+        position: absolute;
+        left: 0;
+        top: -65%;
+        height: 165%;
+        object-position: 50% 50%;
+    }
+}
+
+@media (max-width:991px), (max-aspect-ratio: 1199/1000) {
+    .hero {
+        min-height: 0;
+        padding-bottom: var(--space-0);
+    }
+
+    .hero__content {
+        align-items: center;
+        text-align: center;
+    }
+
+    .hero__actions {
+        justify-content: center;
+        flex-direction: column;
+        gap: var(--space-6);
+    }
+
+    .hero__offer {
+        flex-direction: row;
+        gap: var(--space-1);
+    }
+
+    /* แถว stat: ทุกช่องกว้างเท่าช่องที่กว้างที่สุด (grid 1fr) เส้นคั่นจึงห่างเท่ากัน
+       ช่องแรกมี padding ซ้ายเท่าช่องอื่น แถวที่จัดกึ่งกลางจึงสมดุลซ้าย-ขวา */
+    .hero__stats {
+        display: grid;
+        grid-auto-columns: 1fr;
+        grid-auto-flow: column;
+    }
+
+    .hero__stat:first-child {
+        padding-left: var(--space-8);
+    }
+
+    /* จอ ≥992 แนวตั้ง (เช่น iPad Pro ตั้ง) ใช้ผังบน-ล่างนี้ด้วย แต่ Bootstrap ให้ col-lg-* กว้าง 50%
+       บังคับเต็มแถว และภาพกว้างไม่เกิน 720px (เท่าจอ 768–991) ไม่ให้ภาพสูงเกินจอ */
+    .hero__content,
+    .hero__visual {
+        width: 100%;
+    }
+
+    .hero__visual {
+        max-width: 720px;
+        margin-inline: auto;
+    }
+
+    /* ภาพวิทยากรสูงตามสัดส่วนไฟล์จริง (4:5) เห็นเต็มแผ่น ไม่ครอปเป็นกรอบ 6:5
+       ไฟล์มีพื้นใส 10.4% บนสุด (ก่อนถึงหัวคนแถวแรก) ดึงภาพขึ้นเท่านั้นด้วย margin ติดลบ
+       100cqw = ความกว้างภาพ (container คือ .hero__visual) สูงภาพ = 125cqw → 10.4% = 13cqw
+       ส่วนใสที่ขึ้นไปซ้อนใต้ปุ่มไม่รับการคลิก ปุ่มซื้อบัตรจึงกดได้ตามปกติ */
+    .hero__visual {
+        container-type: inline-size;
+    }
+
+    .hero__speakers {
+        --bt-hero-speakers-pull: 13cqw;
+
+        aspect-ratio: auto;
+        margin-top: calc(var(--bt-hero-speakers-pull) * -1);
+        pointer-events: none;
+
+        img {
+            height: auto;
+        }
+    }
+}
+
+@media (max-width:575px) {
+    .hero {
+        padding: var(--section-padding-y-sm) var(--space-0);
+    }
+    
+    .hero__headline {
+        font-size: var(--font-size-28);
+        line-height: 1.2;
+    }
+
+    .hero__description {
+        font-size: var(--section-small-size);
+    }
+
+    .hero__stat {
+        padding-inline: var(--space-5);
+
+        &:first-child {
+            padding-left: var(--space-5);
+        }
+
+        dt {
+            font-size: var(--font-size-12);
+        }
+    }
+
+    /* ≤575: ไม่แสดงปุ่มซื้อบัตร/ราคาพิเศษใน hero (มีแถบปุ่มลอยด้านล่างจออยู่แล้ว)
+       และย้ายภาพวิทยากรขึ้นมาไว้ใต้คำโปรย ก่อนแถวตัวเลข stat
+       .hero__content เป็น display: contents ลูก ๆ จึงเรียงรวมกับ .hero__visual ในแถวเดียว แล้วจัดลำดับด้วย order */
+    .hero__actions {
+        display: none;
+    }
+
+    .hero__row {
+        flex-direction: column;
+        align-items: center;
+        row-gap: var(--space-0);
+    }
+
+    .hero__content {
+        display: contents;
+    }
+
+    .hero__title,
+    .hero__headline,
+    .hero__description {
+        order: 1;
+    }
+
+    /* ลูกของ .hero__content หลุดออกมาอยู่ใน .row โดยตรง (ไม่มี padding ของคอลัมน์) ใส่ gutter คืนให้ */
+    .hero__title,
+    .hero__headline,
+    .hero__description,
+    .hero__stats {
+        padding-inline: calc(var(--bs-gutter-x) * 0.5);
+    }
+
+    /* โลโก้ title ไม่กว้างเต็มจอ (กว้างสุด ~3/4 ของจอ) และเว้นระยะจาก header */
+    .hero__title {
+        box-sizing: content-box;
+        max-width: min(264px, 66vw);
+        margin-top: var(--space-8);
+    }
+
+    .hero__visual {
+        order: 2;
+        margin-top: var(--space-10);
+    }
+
+    .hero__stats {
+        order: 3;
+        margin-block: var(--space-6) var(--space-0);
+    }
+
+    /* แถว stat อยู่ใต้ภาพ: ไล่สีพื้นหน้าเริ่มจาก 70% ของความสูงภาพ ทึบเต็มที่ตรงขอบล่างภาพ
+       ขอบล่างภาพจึงกลืนไปกับพื้น ไม่เห็นรอยต่อกับท้องฟ้าด้านหลัง (กรอบภาพจาก js/hero-loader.js) */
+    .hero::after {
+        --bt-hero-fade-start: calc(var(--bt-hero-img-top, 0px) + var(--bt-hero-img-h, 0px) * 0.7);
+
+        top: var(--bt-hero-fade-start);
+        height: auto;
+        background: linear-gradient(to bottom, transparent 0, var(--color-surface-page) calc(var(--bt-hero-img-h, 0px) * 0.3));
+    }
+
+    /* ไอคอนใหญ่ขึ้นทั้งชุด (ลำดับขนาดเท่า desktop คงเดิม) และกระจายลงมาถึงภาพวิทยากร:
+       ช่วงวางไอคอน = ขอบบน title ถึง 80% ของความสูงภาพ
+       ชิดขอบจอ (ล้นออกนอกจอได้บางส่วน) อยู่หลังข้อความและภาพวิทยากร */
+    .hero-asset {
+        --bt-hero-icon-k: 2.2;
+        --bt-hero-asset-end: calc(var(--bt-hero-img-top, 80vh) + var(--bt-hero-img-h, 0px) * 0.8);
+        --bt-hero-asset-y: calc(var(--bt-hero-top-y, 0px) + (var(--bt-hero-asset-end) - var(--bt-hero-top-y, 0px)) * var(--iy) / 100);
+    }
+
+    .hero-asset:is([data-hero-asset="triangle"], [data-hero-asset="stock"]),
+    .hero__visual>.hero-asset[data-hero-asset="bitcoin"] {
+        --ix: 1.5;
+    }
+
+    .hero-asset:is([data-hero-asset="gold"], [data-hero-asset="card"], [data-hero-asset="heart"]) {
+        --ix: 98.5;
+    }
+
+    /* ซ้าย: triangle (ข้าง title) > bitcoin (ข้างบรรทัดหัวข้อที่สั้น) > stock (ข้างภาพ) */
+    .hero-asset[data-hero-asset="triangle"] {
+        --iy: 4;
+    }
+
+    /* bitcoin / gold ตัวเล็ก ขยับเข้ามาในจอเล็กน้อยให้เห็นมากกว่าครึ่งตัว */
+    .hero__visual>.hero-asset[data-hero-asset="bitcoin"] {
+        --ix: 8;
+        --iy: 38;
+    }
+
+    .hero-asset[data-hero-asset="stock"] {
+        --iy: 98;
+    }
+
+    /* ขวา: gold (ข้าง title) > card (ข้างแถวบนของภาพ) > heart (ข้างภาพช่วงล่าง) */
+    .hero-asset[data-hero-asset="gold"] {
+        --ix: 98;
+        --iy: 14;
+    }
+
+    .hero-asset[data-hero-asset="card"] {
+        --iy: 54;
+    }
+
+    .hero-asset[data-hero-asset="heart"] {
+        --iy: 100;
+    }
+}
+
+/* Motion เลื่อนจาก hero ไป ticket (js/hero-scroll-motion.js, desktop เท่านั้น)
+   ไอคอนบินพ้นขอบล่างของ hero ลงไปหาไอคอนบัตร: ตัดแค่แนวนอน (กำแพงยาวเลยขอบจอ) แนวตั้งปล่อยล้น
+   hero เป็น stacking context z-index 1 เท่ากับ .ticket__plans ซึ่งมาทีหลังใน DOM
+   ไอคอนจึงลอยทับพื้นของ ticket ได้ แต่มุดลงไปอยู่หลังการ์ดบัตรตอนถึงหัวบัตร Ultimate
+   ระหว่างบิน (.is-icons-flying) ไอคอนขึ้นมาอยู่หน้าเนื้อหา/ภาพ */
+.hero.is-scroll-motion {
+    z-index: 1;
+    overflow-x: clip;
+    overflow-y: visible;
+}
+
+.hero.is-icons-flying .hero__assets {
+    z-index: 2;
+}
+
+/* ทุกชิ้นที่ขยับตาม scroll แยกเป็นเลเยอร์ของตัวเอง ให้ GPU เลื่อนภาพเดิมแทนการวาดใหม่ทุกเฟรม
+   (กำแพงมี mask และไอคอนมี filter ถ้าไม่แยกเลเยอร์ เบราว์เซอร์ต้องวาดใหม่ทุกเฟรมจนไอคอนตามไม่ทัน) */
+.hero.is-scroll-motion :is(.hero__content, .hero__speakers img, .hero__wall, .hero-asset__inner) {
+    will-change: transform, opacity;
 }
 
 /* ---------- next section ---------- */
@@ -2358,6 +2554,48 @@ body.is-loading .hero-scroll-cue,
     padding: var(--section-padding-y) 0;
     font-family: var(--font-family-base);
     text-align: center;
+}
+
+/* ไม่มีภาพพื้นหลังแล้ว ไม่ต้องมีเงาไล่มืดทับด้านบน (#agenda ใช้คลาส .ticket ร่วมกัน จึงปิดเฉพาะ #ticket) */
+#ticket::before {
+    content: none;
+}
+
+/* การ์ด Explorer / Master Class ใช้พื้นสีเดียวกับหน้า เดิมตัดกับภาพพื้นหลังมืดจึงเห็นขอบการ์ด
+   พอไม่มีภาพแล้วขอบหายไปกับพื้น ใส่เส้นขอบบางสีเดียวกับเส้นคั่นในการ์ดแทน
+   (outline ไม่ดันขนาดการ์ด และวาดตามมุมโค้ง; Ultimate มีกรอบ spectrum ของตัวเองอยู่แล้ว) */
+/* #ticket .ticket__plan:not(.ticket__plan--ultimate) {
+    outline: var(--rule-width-subtle) solid var(--color-border-editorial);
+    outline-offset: calc(var(--rule-width-subtle) * -1);
+} */
+
+/* กรอบรวมผืนเดียวรอบแถวการ์ด (≥992 ที่การ์ดเรียงแถวเดียว): ขอบตรงกับใบ Explorer/Master Class
+   ใบ Ultimate ทับกรอบและยื่นพ้นขอบบน-ล่างออกไปเท่ากัน
+   ทั้ง 3 ใบยืดสูงเต็มแถวด้วย align-self: stretch ใบข้างเว้น margin-bottom เท่ากับ margin-top
+   ส่วนใบ Ultimate ยืดถึงขอบล่างแถว จึงยื่นพ้นกรอบลงล่างเท่าที่ยื่นขึ้นบนเสมอ ไม่ว่าใบไหนเนื้อหายาวกว่า
+   (พื้นใบข้างสีเดียวกับหน้า ส่วนที่ยืดจึงมองไม่เห็น) */
+@media (min-width: 992px) {
+    #ticket .ticket__plan {
+        align-self: stretch;
+    }
+
+    #ticket .ticket__plan--explorer,
+    #ticket .ticket__plan--master {
+        margin-bottom: calc(var(--space-16) - var(--space-2));
+    }
+
+    /* top = padding-top ของแถว + margin-top ของใบข้าง / bottom = margin-bottom ของใบข้าง
+       z-index 1 เพื่อให้อยู่เหนือพื้นใบข้าง (ขอบกรอบทับขอบการ์ดพอดี) แต่ใบ Ultimate
+       (z-index 1 เหมือนกันแต่มาทีหลังใน DOM) ยังทับกรอบอยู่ */
+    #ticket .ticket__plans::before {
+        content: '';
+        position: absolute;
+        inset: calc(var(--space-6) + var(--space-16) - var(--space-2)) 0 calc(var(--space-16) - var(--space-2));
+        z-index: 1;
+        border: var(--rule-width-subtle) solid var(--color-border-faint);
+        border-radius: var(--card-radius);
+        pointer-events: none;
+    }
 }
 
 #concept::before {
@@ -2384,15 +2622,6 @@ body.is-loading .hero-scroll-cue,
             rgba(0, 0, 0, 0.12) 220px,
             rgba(0, 0, 0, 0.45) 320px,
             #000 460px);
-}
-
-#concept.is-awaiting-entry::before {
-    opacity: 0;
-}
-
-#concept.is-awaiting-entry.is-revealed::before {
-    opacity: var(--bt-concept-bg-opacity);
-    transition-delay: var(--bt-concept-bg-reveal-delay);
 }
 
 .concept__aurora {
@@ -2446,15 +2675,6 @@ body.is-loading .hero-scroll-cue,
     }
 }
 
-#concept.is-awaiting-entry .concept__aurora {
-    opacity: 0;
-}
-
-#concept.is-awaiting-entry.is-revealed .concept__aurora {
-    opacity: 0.22;
-    transition: opacity 900ms var(--ease-standard);
-}
-
 .concept__inner {
     position: relative;
     z-index: 1;
@@ -2465,17 +2685,6 @@ body.is-loading .hero-scroll-cue,
     opacity: 1;
     transform: translateY(0);
     will-change: transform, opacity;
-}
-
-#concept.is-awaiting-entry .concept__inner {
-    opacity: 0;
-    transform: translateY(var(--space-4));
-}
-
-#concept.is-awaiting-entry.is-revealed .concept__inner {
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 560ms ease, transform 720ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .concept__description {
@@ -2495,19 +2704,6 @@ body.is-loading .hero-scroll-cue,
     opacity: 1;
     transform: translateY(0);
     will-change: transform, opacity;
-}
-
-#concept.is-awaiting-entry .concept__video-scroll {
-    opacity: 0;
-    transform: translateY(var(--space-6));
-}
-
-#concept.is-awaiting-entry.is-revealed .concept__video-scroll {
-    opacity: 1;
-    transform: translateY(0);
-    transition:
-        opacity 640ms ease 120ms,
-        transform 760ms cubic-bezier(0.22, 1, 0.36, 1) 120ms;
 }
 
 @media (max-width:1199px) {
@@ -3318,730 +3514,6 @@ body.is-loading .hero-scroll-cue,
     }
 }
 
-/* ---------- Speaker overview ---------- */
-.speaker-overview[hidden] {
-    display: none;
-}
-
-.speaker-overview {
-    --speaker-overview-rows: 3;
-    --speaker-overview-columns: 6;
-    --speaker-overview-card-min-width: var(--bt-speaker-overview-card-min-width);
-
-    position: relative;
-    z-index: 2;
-    isolation: isolate;
-    min-height: 100vh;
-    padding: var(--section-padding-y-sm) var(--space-0);
-    display: grid;
-    align-items: center;
-    overflow: hidden;
-    color: var(--bt-speaker-overview-ink);
-    background: var(--bt-speaker-overview-bg);
-    font-family: var(--font-family-base);
-
-    &::before {
-        --speaker-overview-glow-height: clamp(20rem, 42vw, 38rem);
-
-        content: '';
-        position: fixed;
-        z-index: 0;
-        top: calc(var(--speaker-overview-glow-height) * -0.48);
-        left: 50%;
-        width: min(150vw, 136rem);
-        height: var(--speaker-overview-glow-height);
-        border-radius: 50%;
-        pointer-events: none;
-        opacity: 0;
-        transform: translate3d(-50%, -1.5rem, 0) scale(.96);
-        background: radial-gradient(ellipse at 50% 72%,
-                rgba(79, 91, 158, .28) 0%,
-                rgba(46, 54, 103, .21) 34%,
-                rgba(24, 28, 52, .12) 53%,
-                rgba(10, 11, 17, 0) 76%);
-        filter: blur(2rem);
-        transition: opacity .9s ease, transform 1.05s cubic-bezier(.2, .7, .2, 1);
-        will-change: opacity, transform;
-    }
-
-    &.is-top-glow-visible::before {
-        opacity: 1;
-        transform: translate3d(-50%, 0, 0) scale(1);
-    }
-
-    &[data-speaker-overview-layout="expanded"] {
-        --speaker-overview-rows: 4;
-        --speaker-overview-columns: 9;
-        --speaker-overview-card-min-width: var(--space-20);
-    }
-
-    .speaker-overview__inner {
-        position: relative;
-        z-index: 1;
-        min-width: 0;
-        width: 100%;
-    }
-
-    /* .speaker-overview__layout {
-        --bs-gutter-x: var(--space-8);
-    } */
-
-    .speaker-overview__intro {
-        min-width: 0;
-        padding-right: var(--space-10);
-        display: flex;
-        flex-direction: column;
-    }
-
-    .speaker-overview__eyebrow {
-        min-height: var(--space-6);
-        margin: var(--space-0) var(--space-0) var(--space-10);
-        display: flex;
-        align-items: center;
-        /* color: var(--bt-speaker-overview-ink-muted); */
-        font-size: var(--font-size-18);
-        font-weight: var(--font-weight-regular);
-        line-height: var(--section-small-line-height);
-        letter-spacing: var(--section-heading-tracking);
-        text-transform: uppercase;
-    }
-
-    .speaker-overview__event-mark {
-        display: block;
-        width: 92%;
-        max-width: 100%;
-        height: auto;
-        margin-bottom: var(--space-10);
-    }
-
-    h2 {
-        margin: var(--space-0);
-        font-size: var(--font-size-32);
-        font-weight: var(--font-weight-regular);
-        line-height: 1.5;
-        letter-spacing: var(--section-heading-tracking);
-        text-wrap-style: balance;
-
-        .bt-title-highlight {
-            font-size: var(--font-size-48);
-            line-height: 1;
-        }
-    }
-
-    .speaker-overview__event-info {
-        position: relative;
-        margin-top: var(--space-10);
-        padding-left: var(--space-6);
-        display: grid;
-        gap: var(--space-1);
-
-        &::before {
-            content: '';
-            position: absolute;
-            top: var(--space-1);
-            bottom: var(--space-1);
-            left: var(--space-0);
-            width: var(--border-width-2);
-            background: var(--spectrum-vertical);
-        }
-
-        p {
-            margin: var(--space-0);
-            color: var(--bt-speaker-overview-ink);
-            font-size: var(--font-size-18);
-            font-weight: var(--font-weight-medium);
-            line-height: var(--section-small-line-height);
-        }
-
-        p:last-child {
-            color: var(--bt-speaker-overview-ink-muted);
-            font-size: var(--font-size-16);
-            font-weight: var(--font-weight-light);
-            letter-spacing: var(--section-heading-tracking);
-        }
-    }
-
-    .speaker-overview__gallery {
-        position: relative;
-        min-width: 0;
-        margin-block: auto;
-    }
-
-    .speaker-overview__scroll-overlay {
-        position: absolute;
-        z-index: 5;
-        inset: var(--space-0);
-        display: grid;
-        place-items: center;
-        overflow: hidden;
-        pointer-events: none;
-        visibility: hidden;
-        opacity: 0;
-        background:
-            radial-gradient(circle at center,
-                color-mix(in srgb, var(--color-kv-spectrum-4) 17%, transparent) 0%,
-                transparent 42%),
-            rgba(8, 10, 15, .72);
-
-        &.is-visible {
-            visibility: visible;
-            animation: speaker-overview-scroll-overlay 5s ease both;
-        }
-    }
-
-    .speaker-overview__scroll-gesture {
-        width: clamp(4.75rem, 8vw, 6.75rem);
-        aspect-ratio: 1;
-        height: auto;
-        overflow: visible;
-        filter: drop-shadow(0 0 18px rgba(255, 255, 255, .24));
-
-        svg {
-            display: block;
-            width: 100% !important;
-            height: 100% !important;
-            overflow: visible;
-        }
-    }
-
-    .speaker-overview__view-switch {
-        position: fixed;
-        z-index: 270;
-        right: var(--space-20);
-        bottom: var(--space-6);
-        opacity: 0;
-        pointer-events: none;
-        transform: translateY(var(--space-2)) scale(0.94);
-        transition:
-            opacity var(--duration-fast) var(--ease-standard),
-            transform var(--duration-fast) var(--ease-standard),
-            bottom var(--duration-slow) var(--ease-standard);
-    }
-
-    &.is-view-switch-visible .speaker-overview__view-switch {
-        opacity: 1;
-        pointer-events: auto;
-        transform: translateY(0) scale(1);
-    }
-
-    /* Keep the layout switch accessible while the cookie notice occupies the bottom
-       of the viewport. Once the notice closes, the button returns to its usual edge. */
-    body:has(.cookie-banner.is-visible) & .speaker-overview__view-switch {
-        bottom: calc(var(--space-24) + var(--space-8));
-    }
-
-    .speaker-overview__view-trigger {
-        width: var(--touch-target-md);
-        height: var(--touch-target-md);
-        display: inline-grid;
-        place-items: center;
-        padding: var(--space-0);
-        border: var(--border-width-1) solid var(--alpha-white-28);
-        border-radius: 50%;
-        color: var(--bt-speaker-overview-bg);
-        background: var(--bt-speaker-overview-ink);
-        box-shadow: var(--shadow-deep);
-        cursor: pointer;
-        appearance: none;
-        transition:
-            color var(--duration-fast) var(--ease-standard),
-            background-color var(--duration-fast) var(--ease-standard),
-            border-color var(--duration-fast) var(--ease-standard),
-            transform var(--duration-fast) var(--ease-standard);
-
-        span {
-            font-size: var(--font-size-18);
-            line-height: 1;
-            transition: transform var(--duration-standard) var(--ease-standard);
-        }
-
-        &:hover,
-        .speaker-overview__view-switch.is-open & {
-            border-color: var(--bt-speaker-overview-ink);
-            color: var(--bt-speaker-overview-ink);
-            background: var(--bt-speaker-overview-bg);
-        }
-
-        .speaker-overview__view-switch.is-open & span {
-            transform: rotate(180deg);
-        }
-
-        &:focus-visible {
-            outline: var(--border-width-2) solid var(--color-focus-ring);
-            outline-offset: var(--space-1);
-        }
-    }
-
-    .speaker-overview__view-panel {
-        position: absolute;
-        right: var(--space-0);
-        bottom: calc(100% + var(--space-3));
-        width: 224px;
-        padding: var(--space-3);
-        border: var(--border-width-1) solid var(--alpha-white-28);
-        border-radius: var(--radius-3);
-        color: var(--bt-speaker-overview-ink);
-        background: color-mix(in srgb, var(--bt-speaker-overview-bg) 88%, transparent);
-        box-shadow: var(--shadow-deep);
-        backdrop-filter: blur(var(--space-3));
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
-        transform: translateY(var(--space-2)) scale(0.97);
-        transform-origin: 100% 100%;
-        transition:
-            opacity var(--duration-fast) var(--ease-standard),
-            visibility 0s linear var(--duration-fast),
-            transform var(--duration-fast) var(--ease-standard);
-
-        .speaker-overview__view-switch.is-open & {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-            transform: translateY(0) scale(1);
-            transition-delay: 0s;
-        }
-    }
-
-    .speaker-overview__view-eyebrow {
-        display: block;
-        padding: var(--space-1) var(--space-2) var(--space-3);
-        color: var(--bt-speaker-overview-ink-muted);
-        font-size: 10px;
-        font-weight: var(--font-weight-medium);
-        line-height: 1;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-    }
-
-    .speaker-overview__view-button {
-        width: 100%;
-        display: grid;
-        grid-template-columns: auto minmax(0, 1fr) auto;
-        align-items: center;
-        gap: var(--space-3);
-        padding: var(--space-3) var(--space-2);
-        border: var(--space-0);
-        border-radius: var(--radius-2);
-        color: var(--bt-speaker-overview-ink-muted);
-        background: transparent;
-        font: inherit;
-        text-align: left;
-        cursor: pointer;
-        appearance: none;
-        transition:
-            color var(--duration-standard) var(--ease-standard),
-            background-color var(--duration-standard) var(--ease-standard);
-
-        &:hover {
-            color: var(--bt-speaker-overview-ink);
-            background: var(--alpha-white-12);
-        }
-
-        &.is-active {
-            color: var(--bt-speaker-overview-ink);
-            background: var(--alpha-white-12);
-        }
-
-        &:focus-visible {
-            outline: var(--border-width-2) solid var(--color-focus-ring);
-            outline-offset: var(--space-1);
-        }
-
-        strong,
-        small {
-            display: block;
-        }
-
-        strong {
-            font-size: var(--font-size-14);
-            font-weight: var(--font-weight-medium);
-            line-height: 1.15;
-        }
-
-        small {
-            margin-top: var(--space-1);
-            color: var(--bt-speaker-overview-ink-muted);
-            font-size: 10px;
-            font-weight: var(--font-weight-regular);
-            line-height: 1.2;
-        }
-    }
-
-    .speaker-overview__view-status {
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: var(--alpha-white-28);
-    }
-
-    .speaker-overview__view-button.is-active .speaker-overview__view-status {
-        background: var(--color-kv-spectrum-1);
-        box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-kv-spectrum-1) 16%, transparent);
-    }
-
-    .speaker-overview__view-check {
-        opacity: 0;
-        font-size: var(--font-size-14);
-    }
-
-    .speaker-overview__view-button.is-active .speaker-overview__view-check {
-        opacity: 1;
-    }
-
-    .speaker-overview__speaker-count {
-        min-height: var(--space-6);
-        margin: var(--space-0) var(--space-0) var(--space-8);
-        display: flex;
-        align-items: baseline;
-        justify-content: flex-end;
-        gap: var(--space-2);
-
-        strong {
-            color: var(--bt-speaker-overview-ink);
-            font-size: var(--font-size-24);
-            font-weight: var(--font-weight-medium);
-            line-height: var(--section-small-line-height);
-        }
-
-        span {
-            color: var(--bt-speaker-overview-ink-muted);
-            font-size: var(--font-size-16);
-            line-height: var(--section-small-line-height);
-            letter-spacing: var(--section-heading-tracking);
-            text-transform: uppercase;
-        }
-    }
-
-    .speaker-overview__scroller {
-        width: 100%;
-        height: auto;
-        overflow: visible;
-    }
-
-    .speaker-overview__grid {
-        width: 100%;
-        min-width: 0;
-        height: auto;
-        display: grid;
-        grid-template-columns: repeat(var(--speaker-overview-columns), minmax(0, 1fr));
-        grid-template-rows: repeat(var(--speaker-overview-rows), auto);
-        grid-auto-flow: column;
-        gap: var(--bt-speaker-overview-grid-gap);
-    }
-
-    .speaker-overview__card {
-        --speaker-overview-circle-color: var(--color-kv-spectrum-1);
-        --speaker-overview-portrait-x: 0%;
-
-        position: relative;
-        aspect-ratio: 4 / 5;
-        min-width: 0;
-        min-height: 0;
-        margin: var(--space-0);
-        isolation: isolate;
-        overflow: hidden;
-        background:
-            radial-gradient(ellipse 105% 82% at 50% 0%,
-                var(--speaker-overview-circle-color) 0 18%,
-                color-mix(in srgb, var(--speaker-overview-circle-color) 72%, transparent) 40%,
-                color-mix(in srgb, var(--speaker-overview-circle-color) 30%, transparent) 62%,
-                transparent 82%),
-            var(--bt-speaker-overview-card-bg);
-
-        &::before {
-            content: '';
-            position: absolute;
-            z-index: 0;
-            inset: var(--space-0);
-            background: url('../images/speaker-bg-overlay.webp') center / cover no-repeat;
-            opacity: 0.3;
-            mix-blend-mode: soft-light;
-            pointer-events: none;
-        }
-
-        &:is(:nth-child(18n + 1), :nth-child(18n + 9), :nth-child(18n + 14)) {
-            --speaker-overview-circle-color: var(--color-kv-spectrum-1);
-        }
-
-        &:is(:nth-child(18n + 4), :nth-child(18n + 17), :nth-child(18n + 18)) {
-            --speaker-overview-circle-color: var(--color-kv-spectrum-2);
-        }
-
-        &:is(:nth-child(18n + 2), :nth-child(18n + 12), :nth-child(18n + 16)) {
-            --speaker-overview-circle-color: var(--color-kv-spectrum-3);
-        }
-
-        &:is(:nth-child(18n + 5), :nth-child(18n + 10), :nth-child(18n + 15)) {
-            --speaker-overview-circle-color: var(--color-kv-spectrum-4);
-        }
-
-        &:is(:nth-child(18n + 3), :nth-child(18n + 8), :nth-child(18n + 13)) {
-            --speaker-overview-circle-color: var(--color-kv-spectrum-5);
-        }
-
-        &:is(:nth-child(18n + 6), :nth-child(18n + 7), :nth-child(18n + 11)) {
-            --speaker-overview-circle-color: var(--color-kv-spectrum-6);
-        }
-
-        img {
-            position: absolute;
-            z-index: 1;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center 8px;
-            filter: saturate(1.1);
-            transform: scale(1.2);
-            transform-origin: center;
-            transition:
-                filter var(--duration-slow) var(--ease-standard),
-                transform var(--duration-slow) var(--ease-standard);
-        }
-
-        &:hover img {
-            transform: scale(1.13);
-        }
-    }
-
-    @media (max-width: 1399px) {
-        h2 {
-            .bt-title-highlight {
-                font-size: var(--font-size-40);
-            }
-        }
-    }
-
-    @media (max-width: 1199px) {
-        .speaker-overview__scroller {
-            overflow-x: auto;
-            overflow-y: hidden;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-            overscroll-behavior-inline: contain;
-            scroll-snap-type: inline proximity;
-
-            &::-webkit-scrollbar {
-                display: none;
-                width: 0;
-                height: 0;
-            }
-
-            &:focus-visible {
-                outline: var(--border-width-2) solid var(--color-focus-ring);
-                outline-offset: var(--space-2);
-            }
-        }
-
-        .speaker-overview__grid {
-            --speaker-overview-track-width: calc((100% - (var(--bt-speaker-overview-grid-gap) * (var(--speaker-overview-columns) - 1))) / var(--speaker-overview-columns));
-
-            min-width: max-content;
-            grid-template-columns: none;
-            grid-template-rows: repeat(var(--speaker-overview-rows), max-content);
-            grid-auto-columns: max(var(--speaker-overview-card-min-width), var(--speaker-overview-track-width));
-        }
-
-        .speaker-overview__card {
-            scroll-snap-align: start;
-        }
-
-    }
-
-    @media (max-width: 991px) {
-        padding: var(--section-padding-y-sm) var(--space-0);
-
-        /* จอนี้การ์ด compact (18) เต็มความกว้างพอดี ให้ expanded (36) ใช้ขนาดการ์ดเท่ากัน
-           แต่ยังคง 4 แถวเหมือนเดิม (ไม่แตะ --speaker-overview-rows) แค่ scroll แนวนอนยาวขึ้น */
-        &[data-speaker-overview-layout="expanded"] {
-            --speaker-overview-card-min-width: var(--bt-speaker-overview-card-min-width);
-        }
-
-        .speaker-overview__intro {
-            padding-right: calc(var(--bs-gutter-x) * 0.5);
-            display: grid;
-            grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1.1fr);
-            grid-template-areas:
-                "eyebrow eyebrow"
-                "mark headline"
-                "mark event";
-            column-gap: var(--space-12);
-            align-items: start;
-        }
-
-        .speaker-overview__gallery {
-            margin-top: var(--space-12);
-        }
-
-        .speaker-overview__eyebrow {
-            grid-area: eyebrow;
-            margin-bottom: var(--space-8);
-            font-size: var(--font-size-16);
-        }
-
-        .speaker-overview__event-mark {
-            grid-area: mark;
-            width: 100%;
-            max-width: 360px;
-            margin-bottom: var(--space-0);
-        }
-
-        h2 {
-            grid-area: headline;
-            font-size: var(--font-size-28);
-
-            .bt-title-highlight {
-                font-size: var(--font-size-40);
-            }
-        }
-
-        .speaker-overview__event-info {
-            grid-area: event;
-            margin-top: var(--space-6);
-        }
-    }
-
-    @media (max-width: 767px) {
-        --speaker-overview-card-min-width: var(--bt-speaker-overview-card-min-width-sm);
-
-        /* กลับไปใช้ขนาดเดิมของ expanded บนมือถือ ไม่ให้ค่าจาก breakpoint 991px ด้านบนไหลลงมาทับ */
-        &[data-speaker-overview-layout="expanded"] {
-            --speaker-overview-card-min-width: var(--space-20);
-        }
-
-        .speaker-overview__intro {
-            display: flex;
-            align-items: center;
-            text-align: center;
-        }
-
-        .speaker-overview__view-switch {
-            right: var(--space-16);
-            bottom: var(--space-4);
-        }
-
-        body:has(.cookie-banner.is-visible) & .speaker-overview__view-switch {
-            bottom: calc(var(--space-32) + var(--space-12));
-        }
-
-        .speaker-overview__eyebrow {
-            justify-content: center;
-            margin-bottom: var(--space-6);
-            font-size: var(--font-size-14);
-        }
-
-        .speaker-overview__event-mark {
-            width: min(72%, 360px);
-            margin-bottom: var(--space-6);
-        }
-
-        h2 {
-            font-size: var(--font-size-28);
-
-            .bt-title-highlight {
-                font-size: var(--font-size-40);
-
-                &.has-pe {
-                    padding-left: var(--space-1);
-                    padding-right: var(--space-1);
-                }
-            }
-        }
-
-        .speaker-overview__event-info {
-            width: fit-content;
-            max-width: 100%;
-            margin-top: var(--space-6);
-            align-self: center;
-            text-align: left;
-
-            p {
-                font-size: var(--font-size-16);
-            }
-
-            p:last-child {
-                font-size: var(--font-size-14);
-            }
-        }
-
-        .speaker-overview__gallery {
-            margin-top: var(--space-10);
-            /* padding-right: var(--space-0); */
-        }
-
-        .speaker-overview__speaker-count {
-            margin-right: var(--space-3);
-
-            strong {
-                font-size: var(--font-size-24);
-            }
-
-            span {
-                font-size: var(--font-size-12);
-            }
-        }
-
-    }
-
-    @media (max-width: 575px) {
-        /* จอนี้บีบการ์ดลงอีกให้สูงแค่ 120px (aspect-ratio 4/5 → กว้าง 96px) ทั้ง compact และ expanded */
-        --speaker-overview-card-min-width: var(--space-24);
-
-        &[data-speaker-overview-layout="expanded"] {
-            --speaker-overview-card-min-width: var(--space-24);
-        }
-
-        /* ล็อกความกว้างการ์ดตรงตาม min-width ไปเลย ไม่ยอมให้ track-width (max()) ดันการ์ดกว้างขึ้นจนสูงเกิน 120px */
-        .speaker-overview__grid {
-            grid-auto-columns: var(--speaker-overview-card-min-width);
-        }
-
-        body:has(.mobile-cta-bar.is-visible) & .speaker-overview__view-switch {
-            bottom: calc(var(--space-10) + var(--space-3) + var(--space-5) + max(var(--space-3), env(safe-area-inset-bottom)));
-        }
-
-        body:has(.cookie-banner.is-visible) & .speaker-overview__view-switch {
-            bottom: calc(var(--space-32) + var(--space-32));
-        }
-
-        .speaker-overview__event-mark {
-            width: min(82%, 320px);
-        }
-
-        h2 {
-            font-size: var(--font-size-24);
-
-            .bt-title-highlight {
-                font-size: var(--font-size-36);
-                ;
-            }
-        }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-        .speaker-overview__card img {
-            transition-duration: var(--duration-reduced);
-        }
-
-    }
-}
-
-@keyframes speaker-overview-scroll-overlay {
-    0% {
-        opacity: 0;
-    }
-
-    12%,
-    76% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
-}
-
 /* ---------- Ticket ---------- Comparison layout แบบ editorial ใช้พื้นที่ว่างและเส้นบางแทนกรอบ card */
 .ticket {
     --bt-ticket-title-size: var(--section-title-size);
@@ -4112,14 +3584,13 @@ body.is-loading .hero-scroll-cue,
         width: min(calc(100% - var(--space-12)), var(--bt-ticket-plans-width));
         margin-right: auto;
         margin-left: auto;
+        /* จุดลงจอดของเมนู Ticket (data-scroll-to ใน index.html) การ์ดบนสุดอยู่ใต้ header พอดี */
+        scroll-margin-top: calc(var(--header-height) + var(--space-24));
     }
 
+    /* ไม่มีภาพพื้นหลังมืดด้านบนแล้ว หัว section ใช้สีหมึกปกติเหมือน section อื่น */
     .ticket__heading h2 {
-        color: var(--color-text-inverse);
-    }
-
-    .ticket__heading .bt-section-subtext {
-        color: var(--color-text-inverse-muted);
+        color: var(--color-text-primary);
     }
 
     .ticket__header {
@@ -4156,23 +3627,19 @@ body.is-loading .hero-scroll-cue,
         letter-spacing: 0;
     }
 
-    /* เว้นระยะระหว่างการ์ดแทนเส้นคาดที่ติดกันแบบเดิม (gap เดียวใช้ได้ทั้งเรียงแถว
-       บน desktop และซ้อนเป็นคอลัมน์บนจอเล็ก เพราะ .ticket__plans เป็น flex row ของ
-       bootstrap ที่ wrap ได้) */
+    /* ≥992 การ์ดเรียงชิดกันไม่มี gap (อยู่ในกรอบรวมผืนเดียว ดู #ticket .ticket__plans::before)
+       ส่วน ≤991 ที่ซ้อนเป็นคอลัมน์ ใช้ gap แนวตั้งของตัวเองใน media query ด้านล่าง */
     .ticket__plans {
-        gap: var(--space-4);
         padding: var(--space-6) 0 0;
         align-items: flex-start;
         justify-content: center;
         border-radius: var(--bt-ticket-benefit-radius);
     }
 
-    /* col-lg-4 ของ bootstrap fix width ไว้ที่ 33.3333% พอมี gap แนวนอนเพิ่มเข้ามา
-       3 คอลัมน์ + gap 2 ช่องจะกว้างรวมเกิน 100% การ์ดใบสุดท้ายเลยตกไปอยู่แถวใหม่
-       ต้องคำนวณ width หัก gap ออกเองแทนค่า 33.3333% เดิม */
+    /* 3 ใบเท่ากันพอดีแถว (ไม่มี gap แนวนอนแล้ว) */
     @media (min-width: 992px) {
         .ticket__plan {
-            width: calc((100% - var(--space-4) * 2) / 3);
+            width: calc(100% / 3);
         }
     }
 
@@ -6248,7 +5715,8 @@ body.is-loading .hero-scroll-cue,
         }
     }
 
-    /* ≥1200px การ์ดกว้างพอวางรูปคู่กันแบบกริด 2 ช่องของค่าฐาน รูปเดียวชิดขวา */
+    /* ≥1200px การ์ดกว้างพอวางรูปคู่กันแบบกริด 2 ช่องของค่าฐาน รูปเดียวชิดขวา
+       Session ที่มีวิทยากรคนเดียว ใช้กริดช่องเดียว ไม่เว้นช่องว่างไว้ซ้ายรูป ข้อความจึงได้พื้นที่เพิ่ม */
     @media (min-width:1200px) {
         .agenda__day-panel-date {
             font-size: var(--font-size-20);
@@ -6256,6 +5724,15 @@ body.is-loading .hero-scroll-cue,
 
         .agenda__speakers>.agenda__speaker-frame:last-child:nth-child(odd) {
             grid-column: 2;
+        }
+
+        /* specificity ต้องชนะ .agenda__table td.agenda__speakers และกฎ :last-child:nth-child(odd) ด้านบน */
+        .agenda__table td.agenda__speakers:has(> .agenda__speaker-frame:only-child) {
+            grid-template-columns: var(--bt-agenda-speaker-width);
+        }
+
+        .agenda__speakers>.agenda__speaker-frame:last-child:only-child {
+            grid-column: 1;
         }
     }
 
@@ -8570,10 +8047,17 @@ body.is-loading .hero-scroll-cue,
 }
 
 .cta__panel {
+    /* scroll-driven expand ขาเข้าอย่างเดียว ชุดเดียวกับ .playbook-cta__panel ในหน้า
+       personalized-playbook.html: แผงอยู่ใน .container จึงย่อแค่ 0.94 และมุมคงที่ตลอดทาง */
+    --bt-cta-expand-min: 0.94;
+    --bt-scroll-expand: 1;
+
     position: relative;
     overflow: hidden;
     padding: var(--space-16) var(--space-12) var(--space-20);
     border-radius: var(--card-radius);
+    scale: calc(var(--bt-cta-expand-min) + (1 - var(--bt-cta-expand-min)) * var(--bt-scroll-expand));
+    transform-origin: center top;
     background:
         radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--color-blue-100) 72%, transparent) 0%, transparent 34%),
         radial-gradient(circle at 92% 100%, color-mix(in srgb, var(--color-kv-spectrum-4) 12%, transparent) 0%, transparent 34%),
@@ -8825,10 +8309,21 @@ body.is-loading .hero-scroll-cue,
        ถ้าเส้นยาวกว่านั้นส่วนที่ยื่นเกินของแถวบน-ล่างจะไล่มาชนกันจนดูรก */
     --expectation-rule-length: 80px;
 
+    /* scroll-driven expand ขาออกอย่างเดียว (data-scroll-expand-exit="only", js/scroll-expand.js)
+       ปกติเต็มจอ พอขอบล่างเลื่อนขึ้นจากขอบล่างจอไปถึงกลางจอ ค่อย ๆ หดเป็นแผงขอบมน
+       ค่าชุดเดียวกับ .playbook (0.898 เท่า มุม 32px) ยึดขอบล่างไว้ให้ติดกับ section ถัดไป */
+    --bt-expectation-expand-min: 0.898;
+    --bt-expectation-expand-radius: var(--space-8);
+    --bt-scroll-expand: 1;
+    --bt-expectation-expand-scale: calc(var(--bt-expectation-expand-min) + (1 - var(--bt-expectation-expand-min)) * var(--bt-scroll-expand));
+
     padding: var(--section-padding-y) 0;
+    border-radius: calc((1 - var(--bt-scroll-expand)) * var(--bt-expectation-expand-radius) / var(--bt-expectation-expand-scale));
     color: var(--color-text-primary);
     background: var(--bt-expectation-bg);
     font-family: var(--font-family-base);
+    scale: var(--bt-expectation-expand-scale);
+    transform-origin: center bottom;
 
     .expectation__header {
         text-align: center;
@@ -9674,289 +9169,6 @@ body.is-loading .hero-scroll-cue,
     }
 }
 
-/* ---------- alignment debug overlay (press K) ---------- */
-#kvref {
-    position: absolute;
-    inset: 0;
-    z-index: 30;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center top;
-    opacity: 0;
-    pointer-events: none;
-    mix-blend-mode: difference;
-}
-
-@media (max-width:1199px) {
-    :root {
-        --hero-static-top-inset: 48px;
-        --hero-static-bottom-gap: 32px;
-        --hero-static-stage-max-vw: 1.8;
-    }
-
-    body.is-mobile-static #stagewrap {
-        min-height: 0;
-        background: #fff;
-    }
-
-    /* hero แบบนิ่ง: ช่องฟ้าระหว่างกำแพงแคบกว่า desktop ถ้าขยายวิดีโอมาก ก้อนเมฆ (มุมซ้ายบน
-       กับล่างขวาของเฟรม) จะถูกดันไปอยู่หลังกำแพงหมด จึงใช้ 120% ให้ก้อนเมฆยังอยู่ในช่องฟ้า
-       (ตรวจที่ 1199, 1024, 768, 390) ใต้วิดีโอเป็นสีขาวของขอบเมฆ ซึ่งอยู่หลังเรือและไล่จาง
-       #stagewrap::after — layout() ปิดโหมด is-tall-video-cover ให้ในเคสนี้ ไม่งั้นวิดีโอถูก
-       cover ทั้งกล่องจนเหลือแค่ฟ้าเรียบ */
-    body.is-mobile-static #bg {
-        --bt-sky-video-width: 120%;
-    }
-
-    body.is-mobile-static #stage {
-        transform: none !important;
-        will-change: auto !important;
-    }
-
-    body.is-mobile-static #stagewrap::after {
-        content: '';
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 110;
-        height: 28%;
-        pointer-events: none;
-        background: linear-gradient(180deg,
-                rgba(0, 0, 0, 0) 0%,
-                rgba(0, 0, 0, 0.42) 44%,
-                rgba(0, 0, 0, 0.68) 100%);
-    }
-
-    body.is-mobile-static #ship,
-    body.is-mobile-static #stairs,
-    body.is-mobile-static #pshadow,
-    body.is-mobile-static .person {
-        transform: none !important;
-        will-change: auto;
-        backface-visibility: visible;
-    }
-
-    body.is-mobile-static #ship-run-layer,
-    body.is-mobile-static #ship-run-whiteout {
-        display: none;
-    }
-
-    /* เดิม gap ตกจาก space-10/space-8 (40/32px) ของเดสก์ท็อป ลงมาเหลือ space-2 (8px)
-       ทันทีที่ข้าม breakpoint นี้ — ชันเกินไปสำหรับจอแท็บเล็ตที่ยังมีพื้นที่เหลือเยอะ
-       ปรับให้ค่อย ๆ แคบลงเป็นขั้นแทน ดูจุดต่อที่ 991px และ 767px ด้านล่าง ส่วน 575px
-       ยังคง space-2 ไว้เท่าเดิมเพราะจอแคบระดับนั้นพื้นที่จำกัดจริง */
-    body.is-mobile-static #ui {
-        z-index: 120;
-        width: min(calc(100vw - var(--space-8)), 720px);
-        gap: var(--space-6);
-        /* ท้องฟ้าชุดสว่าง: ตัวดำไม่มีเงา เหมือน desktop (ชุดมืดเดิมเป็นขาวและใส่เงาเข้มช่วยอ่าน) */
-        color: var(--color-text-inverse);
-    }
-
-    body.is-mobile-static #ui .event-details {
-        /* gap: var(--space-5); */
-        text-shadow: none;
-    }
-
-    body.is-mobile-static #ui .event-countdown {
-        text-shadow: none;
-    }
-
-    body.is-mobile-static #ui .venue {
-        padding-top: var(--space-2);
-        font-size: 18px;
-    }
-
-    #ui .date,
-    #ui .time,
-    #ui .event-countdown__unit strong {
-        font-size: 24px;
-    }
-}
-
-@media (max-width:991px) {
-    :root {
-        --hero-static-top-inset: 44px;
-        --hero-static-bottom-gap: 28px;
-    }
-}
-
-@media (max-width:767px) {
-    :root {
-        --hero-static-top-inset: 40px;
-        --hero-static-bottom-gap: 24px;
-    }
-
-    /* ขั้นที่สามของการลดขนาด #ui แบบค่อยเป็นค่อยไป (ดูคอมเมนต์ที่ breakpoint 1199px) */
-    body.is-mobile-static #ui {
-        gap: var(--space-5);
-    }
-
-    body.is-mobile-static #ui .event-details {
-        gap: var(--space-5);
-    }
-
-    #ui .date,
-    #ui .time,
-    #ui .event-countdown__unit strong {
-        font-size: 20px;
-    }
-}
-
-@media (max-width:575px) {
-    :root {
-        --hero-static-top-inset: 32px;
-        --hero-static-bottom-gap: 104px;
-        --hero-static-stage-max-vw: 1.68;
-    }
-
-    .loader-icon {
-        max-width: 88px;
-        max-height: 88px;
-    }
-
-    .loader-progress {
-        bottom: var(--space-8);
-    }
-
-    body.is-mobile-static #stagewrap::after {
-        height: 34%;
-    }
-
-    body.is-mobile-static #ui .venue {
-        padding-top: var(--space-0);
-    }
-
-    #ui {
-        top: min(70%, 100% - 216px);
-        gap: var(--space-2);
-    }
-
-    #ui .event-primary {
-        gap: var(--space-2);
-    }
-
-    #ui .event-datetime {
-        row-gap: var(--space-3);
-    }
-
-    #ui .event-countdown {
-        min-width: min(280px, calc(100vw - var(--space-8)));
-    }
-
-    #ui .event-countdown__values {
-        grid-template-columns: repeat(4, minmax(48px, 1fr));
-        width: 100%;
-        gap: var(--space-6);
-    }
-
-    #ui .event-countdown__unit:not(:last-child)::after {
-        right: calc(var(--space-3) * -1);
-        filter: invert();
-    }
-
-    body.is-mobile-static #ui .event-details {
-        gap: var(--space-6);
-    }
-}
-
-@media (max-width:1199px) and (max-height:575px) and (orientation:landscape) {
-    :root {
-        --hero-static-top-inset: 16px;
-        --hero-static-bottom-gap: 0px;
-        --hero-static-stage-max-vw: 1.32;
-    }
-
-    body.is-mobile-static #stagewrap {
-        min-height: 100svh;
-    }
-
-    body.is-mobile-static #ui {
-        top: auto;
-        bottom: var(--space-8);
-        width: min(calc(100vw - var(--space-8)), 560px);
-        gap: var(--space-3);
-    }
-
-    body.is-mobile-static #ui .event-details {
-        gap: var(--space-3);
-    }
-
-    #ui .event-datetime {
-        column-gap: var(--space-2);
-        row-gap: var(--space-1);
-    }
-
-    #ui .date,
-    #ui .time {
-        font-size: var(--font-size-18);
-    }
-
-    #ui .event-countdown {
-        min-width: min(240px, calc(100vw - var(--space-8)));
-        gap: var(--space-2);
-    }
-
-    #ui .event-countdown__values {
-        grid-template-columns: repeat(4, minmax(40px, 1fr));
-        gap: var(--space-4);
-        width: 100%;
-    }
-
-    #ui .event-countdown__unit {
-        gap: var(--space-2);
-    }
-
-    #ui .event-countdown__unit:not(:last-child)::after {
-        right: calc(var(--space-2) * -1);
-        width: var(--bt-hero-countdown-divider-width-sm);
-        height: calc(var(--bt-hero-countdown-divider-width-sm) / var(--bt-hero-countdown-divider-ratio));
-    }
-
-    #ui .event-countdown__unit strong {
-        font-size: var(--font-size-20);
-    }
-
-    #ui .event-countdown__unit small {
-        font-size: var(--font-size-12);
-    }
-
-    body.is-mobile-static #ui .venue {
-        padding-top: var(--space-0);
-        font-size: var(--font-size-14);
-    }
-}
-
-@media (max-width:767px) and (max-height:390px) and (orientation:landscape) {
-    body.is-mobile-static #ui {
-        top: auto;
-        bottom: var(--space-8);
-        gap: var(--space-2);
-    }
-
-    body.is-mobile-static #ui .event-details {
-        gap: var(--space-2);
-    }
-
-    #ui .date,
-    #ui .time,
-    #ui .event-countdown__unit strong {
-        font-size: var(--font-size-16);
-    }
-
-    #ui .event-countdown__values {
-        grid-template-columns: repeat(4, minmax(36px, 1fr));
-        gap: var(--space-3);
-    }
-
-    #ui .event-countdown__unit:not(:last-child)::after {
-        right: calc(var(--space-1) * -1);
-        width: var(--space-8);
-        height: calc(var(--space-8) / var(--bt-hero-countdown-divider-ratio));
-    }
-}
-
 @media (prefers-reduced-motion:reduce) {
 
     .site-header__mobile,
@@ -10275,13 +9487,26 @@ body.is-loading .hero-scroll-cue,
     --bt-playbook-glow-base-opacity-high: 1;
     --bt-playbook-glow-base-brightness-low: 1.08;
     --bt-playbook-glow-base-brightness-high: 2;
+    /* ---------- scroll-driven expand ----------
+       แบบเดียวกับ section identity-cards ในหน้า personalized-playbook.html (ดูคำอธิบายเต็มที่นั่น)
+       แผงขอบมนกว้าง 0.898 เท่าของจอ ค่อย ๆ ขยายจนเต็มจอตามระยะที่เลื่อน ค่า 0-1 มาจาก
+       js/scroll-expand.js ส่วน radius หาร scale กลับไว้ ค่าที่เห็นจริงจึงเท่ากับ px ที่เขียน */
+    --bt-playbook-expand-min: 0.898;
+    --bt-playbook-expand-radius: var(--space-8);
+    --bt-scroll-expand: 1;
+    --bt-playbook-expand-scale: calc(var(--bt-playbook-expand-min) + (1 - var(--bt-playbook-expand-min)) * var(--bt-scroll-expand));
+
     position: relative;
     display: grid;
-    overflow: visible;
+    /* clip ไม่ใช่ visible: ต้องตัดพื้นหลังและ overlay ให้โค้งตามมุมระหว่างที่ยังไม่ขยายเต็ม */
+    overflow: clip;
     isolation: isolate;
+    border-radius: calc((1 - var(--bt-scroll-expand)) * var(--bt-playbook-expand-radius) / var(--bt-playbook-expand-scale));
     color: var(--color-neutral-0);
     background: var(--color-neutral-900);
     font-family: var(--font-family-base);
+    scale: var(--bt-playbook-expand-scale);
+    transform-origin: center top;
 
     &::after {
         content: '';
@@ -14979,25 +14204,32 @@ body.is-loading .hero-scroll-cue,
         .playbook-steps__note {
             gap: var(--space-2);
         }
+    }
+}
+
+
+/* ≤991: การ์ดขั้นที่ 1 เรียงลำดับแบบเดียวกันทั้งจอกลางและมือถือ (เดิมทำไว้เฉพาะ ≤575) */
+@media (max-width: 991px) {
+    .playbook-steps {
 
         /* ---------- ขั้นที่ 1: ไดอะแกรมแทรกกลางระหว่างคำอธิบายกับปุ่ม ----------
-           ลำดับบนจอเล็ก: เลขขั้น > หัวข้อ > คำอธิบาย > ไดอะแกรม > ปุ่ม + เวลา (กึ่งกลาง) > ฟรีใบแรก
+           ลำดับตั้งแต่ ≤991 (ผังคอลัมน์เดียว): เลขขั้น > หัวข้อ > คำอธิบาย > ไดอะแกรม > ปุ่ม + เวลา (กึ่งกลาง) > ฟรีใบแรก
            ข้อความกับไดอะแกรมอยู่คนละคอลัมน์ใน markup จึงสลับลำดับข้ามกันเองไม่ได้
            ให้คอลัมน์ข้อความเป็น display: contents ลูกของมันขึ้นมาเป็นสมาชิกของแถวโดยตรง
            แล้วเรียงแถวเป็นแนวตั้งและจัดลำดับด้วย order ไม่ต้องแตะ markup
            คอลัมน์ที่หายไปพา padding ของ gutter ไปด้วย จึงคืนระยะนั้นให้ลูกแต่ละตัวแทน
            ขอบซ้ายของข้อความจึงตรงแนวเดิม */
-        .playbook-steps__card--feature > .row {
+        .playbook-steps__card--feature>.row {
             flex-direction: column;
         }
 
-        .playbook-steps__card--feature > .row > :not(.playbook-steps__media) {
+        .playbook-steps__card--feature>.row> :not(.playbook-steps__media) {
             display: contents;
         }
 
         /* align-self ไม่ใช่ align-items ที่แถว: แถวติดคลาส align-items-center ของ Bootstrap
            ซึ่งเป็น !important ลูกทุกตัวจึงถูกจัดกึ่งกลางแล้วหดเท่าเนื้อหา */
-        .playbook-steps__card--feature > .row > :not(.playbook-steps__media) > * {
+        .playbook-steps__card--feature>.row> :not(.playbook-steps__media)>* {
             align-self: stretch;
             padding-inline: calc(var(--bs-gutter-x) * .5);
         }
@@ -15884,5 +15116,43 @@ body.is-loading .hero-scroll-cue,
         .playbook-ticket__plan-eyebrow {
             margin-bottom: var(--space-2);
         }
+    }
+}
+
+/* ---------- จุดตามเมาส์ (js/cursor-dot.js) ----------
+   จุดสีดำเล็ก ๆ ไม่มีขอบ (สีขาวบนพื้นมืด) เลื่อนตามเมาส์ด้วย transform (จาก JS) ส่วนหน้าตาอยู่ที่ ::before
+   จุดกึ่งกลางวางที่ปลายเมาส์ อยู่บนสุดของหน้าแต่ไม่รับการคลิก ขนาดคงที่ (ไม่ขยายตอนชี้ปุ่ม) */
+.cursor-dot {
+    --bt-cursor-dot-size: 10px;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--duration-standard) var(--ease-standard);
+    will-change: transform;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: calc(var(--bt-cursor-dot-size) / -2);
+        left: calc(var(--bt-cursor-dot-size) / -2);
+        width: var(--bt-cursor-dot-size);
+        height: var(--bt-cursor-dot-size);
+        border-radius: 50%;
+        background: var(--color-text-primary);
+    }
+
+    &.is-visible {
+        opacity: 1;
+    }
+
+    /* พื้นมืดใต้เมาส์ (js/cursor-dot.js ตรวจแล้วใส่คลาส) เปลี่ยนเป็นจุดสีขาว */
+    &.is-on-dark::before {
+        background: var(--color-neutral-0);
     }
 }
