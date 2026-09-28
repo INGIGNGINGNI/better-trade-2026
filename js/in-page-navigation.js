@@ -104,7 +104,11 @@
         /* data-scroll-to: ลงจอดที่ element ข้างใน section แทนขอบบนของ section
            (เช่นเมนู Ticket ข้ามหัว section ไปที่การ์ดบัตรเลย) href ยังชี้ section เดิม
            เส้นใต้เมนูที่ active จึงทำงานเหมือนเดิม ระยะเผื่อใช้ scroll-margin-top ของ element นั้น */
-        const landing = (link.dataset.scrollTo && target.querySelector(link.dataset.scrollTo)) || target;
+        /* ลิงก์ที่ไม่ได้ตั้ง data-scroll-to เอง (เช่นปุ่มซื้อบัตรบน hero/header ที่ JS สร้างขึ้นใหม่)
+           ใช้จุดลงจอดเดียวกับเมนูที่ชี้ section เดียวกัน */
+        const scrollTo = link.dataset.scrollTo
+            || document.querySelector(`a[href="${hash}"][data-scroll-to]`)?.dataset.scrollTo;
+        const landing = (scrollTo && target.querySelector(scrollTo)) || target;
 
         const navigate = () => {
             landing.scrollIntoView({ block: 'start' });
