@@ -69,7 +69,7 @@
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="css/main.css?v=60">
-    <link rel="stylesheet" href="css/style.css?v=1071">
+    <link rel="stylesheet" href="css/style.css?v=1075">
 </head>
 
 <body class="is-loading">
@@ -174,6 +174,18 @@
             <span class="journey-indicator__label"></span>
         </div>
     </aside>
+    <!-- ตัวเลือกการแสดงกำแพงใน hero (js/hero-wall-switch.js) ปุ่มวงกลมมุมซ้ายล่าง ดีไซน์เดียวกับ back-to-top -->
+    <div class="wall-switch" data-wall-switch>
+        <div class="wall-switch__panel" id="wall-switch-panel" role="radiogroup" aria-label="รูปแบบกำแพงใน Hero" data-wall-switch-panel hidden>
+            <p class="wall-switch__title">กำแพงใน Hero</p>
+            <button class="wall-switch__option" type="button" role="radio" aria-checked="true" data-wall-mode="both">กำแพงซ้าย-ขวา</button>
+            <button class="wall-switch__option" type="button" role="radio" aria-checked="false" data-wall-mode="right">เฉพาะกำแพงขวา</button>
+            <button class="wall-switch__option" type="button" role="radio" aria-checked="false" data-wall-mode="none">ไม่มีกำแพง</button>
+        </div>
+        <button class="wall-switch__toggle" type="button" aria-label="เลือกรูปแบบกำแพง" aria-expanded="false" aria-controls="wall-switch-panel" data-wall-switch-toggle>
+            <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg?v=4#icon-swap"></use></svg>
+        </button>
+    </div>
     <button class="back-to-top" type="button" aria-label="กลับไปด้านบน" aria-hidden="true">
         <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-arrow-up-right"></use></svg>
     </button>
@@ -279,8 +291,7 @@
                     <img class="hero__title" src="images/title.webp" width="1800" height="724"
                         alt="New World New Playbook — BetterTrade 2026" fetchpriority="high">
                     <p class="hero__headline"><span class="hero__headline-phrase">สัมมนาการลงทุนแห่งปี</span><br>
-                        <span class="hero__headline-phrase">เปิดกลยุทธ์</span><br class="d-block d-sm-none">
-                        <span class="hero__headline-phrase">จากวิทยากรชั้นนำ</span>
+                        <span class="hero__headline-phrase">เปิดกลยุทธ์</span><br class="d-block d-sm-none"><span class="hero__headline-phrase">จากวิทยากรชั้นนำ</span>
                     </p>
                     <p class="hero__description">ค้นพบสไตล์การลงทุนผ่าน INVESTOR DNA<br>
                         พร้อมรับ PLAYBOOK ที่ออกแบบจากข้อมูลของคุณ</p>
@@ -601,8 +612,8 @@
                                             <th scope="row"><time>13:00 – 13:40</time></th>
                                             <td></td>
                                             <td>
-                                                <p class="agenda__session-title">FROM EARNING TO GROWING</p>
-                                                <p class="agenda__session-summary">เมื่อถึงวันที่เงินต้องทำงาน</p>
+                                                <p class="agenda__session-title">FROM NOW ON</p>
+                                                <p class="agenda__session-summary">เรื่องลงทุนเริ่มวันนี้ ได้เปรียบวันหน้า</p>
                                                 <p class="agenda__session-speaker">To Be Determined</p>
                                             </td>
                                             <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="agenda__speaker-photo"><img src="images/agenda/profile-empty.webp" width="928" height="1152" loading="lazy" decoding="async" alt=""></span></span></td>
@@ -642,8 +653,8 @@
                                             <th scope="row"><time>14:40 – 15:10</time></th>
                                             <td></td>
                                             <td>
-                                                <p class="agenda__session-title">DON'T JUST CHAT. INTO THE MARKET</p>
-                                                <p class="agenda__session-summary">AI เชื่อมต่อกับข้อมูลตลาดจริง มากกว่าแค่<br class="d-none d-xxl-block">ถามตอบ</p>
+                                                <p class="agenda__session-title">AI FOR INVESTING</p>
+                                                <p class="agenda__session-summary">ใช้ AI มากกว่าแค่ถามตอบกับ use case การลงทุนจริง</p>
                                                 <p class="agenda__session-speaker">คุณพสุธา ไดจิ อิเดะ</p>
                                             </td>
                                             <td class="agenda__speakers"><span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="agenda__speaker-photo"><img src="images/agenda/day-1/D1-พสุธา-ไดจิ-อิเดะ.webp" width="240" height="240" loading="lazy" decoding="async" alt="คุณพสุธา ไดจิ อิเดะ"></span></span></td>
@@ -669,7 +680,7 @@
                                             <td></td>
                                             <td>
                                                 <p class="agenda__session-title">GOLD OR PROPERTY ?</p>
-                                                <p class="agenda__session-summary">เมื่อโลกผันผวน เงิน ทอง ของจับต้องได้<br class="d-none d-xxl-block">ยังมีที่ยืนไหม ?</p>
+                                                <p class="agenda__session-summary">เมื่อโลกผันผวน เงิน ทอง ของจับต้องได้ ยังมีที่ยืนไหม ?</p>
                                                 <p class="agenda__session-speaker">คุณธนรัชต์ พสวงศ์</p>
                                             </td>
                                             <td class="agenda__speakers">
@@ -837,7 +848,7 @@
                                             <td></td>
                                             <td>
                                                 <p class="agenda__session-title">DECODING FOREIGN FLOWS</p>
-                                                <p class="agenda__session-summary">ต่างชาติซื้อขายอะไร ถอดรหัส Fund Flow<br class="d-none d-xxl-block"> เป็นใน 30 นาที</p>
+                                                <p class="agenda__session-summary">ต่างชาติซื้อขายอะไร ถอดรหัส Fund Flow เป็นใน 30 นาที</p>
                                                 <p class="agenda__session-speaker">คุณวชิรเมษฐ์ ธเนศสถิตพงศ์</p>
                                             </td>
                                             <td class="agenda__speakers">
@@ -854,8 +865,8 @@
                                             <th scope="row"><time>14:45 – 15:25</time></th>
                                             <td></td>
                                             <td>
-                                                <p class="agenda__session-title">Bitcoin in the New World</p>
-                                                <p class="agenda__session-summary">โลกใหม่ Bitcoin ยืนอยู่ตรงไหน</p>
+                                                <p class="agenda__session-title">BTC 0%</p>
+                                                <p class="agenda__session-summary">ไม่ถือ Bitcoin เลย อาจเสี่ยงกว่าที่คิด ?</p>
                                                 <p class="agenda__session-speaker">คุณพิริยะ สัมพันธารักษ์</p>
                                             </td>
                                             <td class="agenda__speakers">
@@ -2037,7 +2048,8 @@
     <script src="js/loader-mist.js?v=3"></script>
     <script src="vendor/gsap/gsap.min.js"></script>
     <script src="vendor/gsap/ScrollTrigger.min.js"></script>
-    <script src="js/hero-loader.js?v=22"></script>
+    <script src="js/hero-wall-switch.js?v=1"></script>
+    <script src="js/hero-loader.js?v=28"></script>
     <script src="js/hero-scroll-motion.js?v=18"></script>
     <script src="js/topics-reveal.js?v=6"></script>
     <script src="js/topics-assets-motion.js?v=22"></script>

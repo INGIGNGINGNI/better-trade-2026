@@ -14,7 +14,6 @@
     // ลำดับการกระจายออกจากกลางจอ
     const ASSET_KEYS = ['stock', 'bitcoin', 'gold', 'card', 'heart', 'triangle'];
     const SEED_KEY = 'triangle';
-    const WALL_OVERLAP = 0; // ปิดพอดีชนกันที่กึ่งกลาง ไม่ซ้อนทับกัน (ระยะเปิดยาวที่สุดที่ไม่ซ้อน)
     const WALL_OPEN_DURATION = 0.9;
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -123,35 +122,46 @@
         }));
     }
 
-    /* ปิดกำแพงไว้ก่อนเปิดฉาก (ซ่อนด้วย opacity 0): ยืด scaleX จากขอบจอด้านนอก จนขอบในของทั้งสองฝั่ง
+    /* ปิดกำแพงไว้ก่อนเปิดฉาก: ยืด scaleX จากขอบจอด้านนอก จนขอบในของทั้งสองฝั่ง
        มาชนกันที่กึ่งกลางช่องระหว่างกำแพง (ขอบในอยู่ที่ 36% / 63% ของกรอบภาพวิทยากร ตามที่ CSS วาง)
        คืนค่า { left, right } ไว้ให้ timeline เลื่อนเปิด หรือ null ถ้ากำแพงไม่แสดง */
     function closeHeroWalls() {
         const left = hero?.querySelector('.hero__wall--left');
         const right = hero?.querySelector('.hero__wall--right');
         const figure = hero?.querySelector('.hero__speakers');
-        if (!left || !right || !figure || getComputedStyle(left).display === 'none') return null;
+        if (!left || !right || !figure) return null;
+        // ตัวเลือกกำแพง (js/hero-wall-switch.js) อาจซ่อนกำแพงบางฝั่ง ปิด/เปิดเฉพาะฝั่งที่แสดง
+        const shown = wall => getComputedStyle(wall).display !== 'none';
+        if (!shown(left) && !shown(right)) return null;
 
+        // วัดจากขนาดจริง (ถ้าเรียกซ้ำตอนกำแพงปิดอยู่ ต้องคืน scale ก่อน)
+        gsap.set([left, right], { scaleX: 1 });
         const heroBox = hero.getBoundingClientRect();
         const fig = figure.getBoundingClientRect();
         const innerL = fig.left + fig.width * 0.36 - heroBox.left;
         const innerR = fig.left + fig.width * 0.63 - heroBox.left;
         const meet = (innerL + innerR) / 2;
         if (innerL <= 0 || innerR >= heroBox.width) return null;
-        // ขอบในของทั้งสองฝั่งชนกันที่กึ่งกลาง (+ WALL_OVERLAP ถ้าต้องการให้ซ้อน)
-        const overlap = heroBox.width * WALL_OVERLAP;
+        /* ให้ขอบในช่วงตั้งตรง (ช่วงล่าง) ของทั้งสองฝั่งชนกันที่กึ่งกลางพอดี
+           ขอบทึบจริงในไฟล์ไม่ได้อยู่ตรงขอบไฟล์เป๊ะ (wall-left-new ทึบถึง 99.75% ของความกว้าง)
+           จึงหักส่วนใสนั้นออก และเลยกันอีก 1px ต่อฝั่ง (กันเส้นขอบ anti-alias) ไม่เห็นช่องแสงลอดตรงรอยต่อ */
+        const clearEdge = wall => {
+            const mobileArt = (wall.currentSrc || wall.src).includes('-1280');
+            if (mobileArt) return 0;
+            return (wall === left ? 0.0025 : 0) * wall.getBoundingClientRect().width;
+        };
+        const edgeL = innerL - clearEdge(left) - 1;
+        const edgeR = innerR + clearEdge(right) + 1;
 
-        gsap.set(left, {
+        if (shown(left)) gsap.set(left, {
             transformOrigin: `${heroBox.left - left.getBoundingClientRect().left}px 50%`,
-            scaleX: (meet + overlap) / innerL,
-            opacity: 0,
+            scaleX: meet / Math.max(1, edgeL),
         });
-        gsap.set(right, {
+        if (shown(right)) gsap.set(right, {
             transformOrigin: `${heroBox.right - right.getBoundingClientRect().left}px 50%`,
-            scaleX: (heroBox.width - meet + overlap) / (heroBox.width - innerR),
-            opacity: 0,
+            scaleX: (heroBox.width - meet) / Math.max(1, heroBox.width - edgeR),
         });
-        return { left, right };
+        return { left: shown(left) ? left : null, right: shown(right) ? right : null };
     }
 
     function playLoader() {
@@ -252,6 +262,10 @@
         tl.call(() => {
             document.documentElement.classList.add('is-preparing-page-scroll');
             document.body.classList.remove('is-loading');
+            // scrollbar โผล่ → หน้ากว้างน้อยลง ภาพวิทยากรขยับ (resize/ResizeObserver ไม่จับ)
+            // วางกำแพงตามภาพใหม่ แล้วคำนวณตำแหน่งปิดใหม่ ไม่งั้นกำแพงจะกระโดดไปทางซ้ายตอนเปิดเสร็จ
+            syncWalls();
+            if (closeWalls) closeHeroWalls();
         }, null, sceneRevealAt - 0.16);
 
         tl.call(() => window.dispatchEvent(new Event('loader:mist-stop')), null, exitAt)
@@ -259,14 +273,12 @@
             .to(siteHeader, { opacity: 1, y: 0, duration: 0.56 }, sceneRevealAt + 0.52)
             .to(heroInner, { opacity: 1, y: 0, duration: 0.62 }, sceneRevealAt + 0.70);
 
-        // กำแพง (ปิดชนกันอยู่) จางเข้ามาพร้อมเนื้อหา hero แล้วเลื่อนเปิดออกทันทีที่จางเข้าเสร็จ
+        // กำแพงปิดชนกันอยู่ตั้งแต่ต้น (อยู่ layer เดียวกับท้องฟ้า จึงโผล่พร้อมท้องฟ้าตอนหมอก loader จางออก)
+        // แล้วเลื่อนเปิดออกจังหวะเดิม: หลังเนื้อหา hero จางเข้าเสร็จ
         if (closeWalls) {
-            const wallFadeAt = sceneRevealAt + 0.70;
-            const wallFadeDuration = 0.62;
-            const openAt = wallFadeAt + wallFadeDuration; // จางเข้าเสร็จแล้วเลื่อนเปิดทันที
-            tl.to([closeWalls.left, closeWalls.right], { opacity: 1, duration: wallFadeDuration, ease: 'power1.out' }, wallFadeAt)
-                .to(closeWalls.left, { scaleX: 1, duration: WALL_OPEN_DURATION, ease: 'power3.inOut' }, openAt)
-                .to(closeWalls.right, { scaleX: 1, duration: WALL_OPEN_DURATION, ease: 'power3.inOut' }, openAt + 0.025);
+            const openAt = sceneRevealAt + 0.70 + 0.62;
+            if (closeWalls.left) tl.to(closeWalls.left, { scaleX: 1, duration: WALL_OPEN_DURATION, ease: 'power3.inOut' }, openAt);
+            if (closeWalls.right) tl.to(closeWalls.right, { scaleX: 1, duration: WALL_OPEN_DURATION, ease: 'power3.inOut' }, openAt + 0.025);
         }
 
         tl.set(loaderSurface, { display: 'none' }, sceneRevealAt + 0.78);
@@ -320,6 +332,8 @@
 
     /* กำแพงซ้าย-ขวาอยู่ layer เดียวกับท้องฟ้า (นอก .hero__inner) จึงต้องคัดลอกตำแหน่ง/ขนาดกรอบภาพวิทยากร
        มาให้ทุกครั้งที่ layout เปลี่ยน (CSS ซ่อนกำแพงที่ ≤991 ก็ข้ามไป) */
+    let syncWalls = () => {};
+
     function setupWall() {
         const walls = hero ? [...hero.querySelectorAll('.hero__wall')] : [];
         // กรอบภาพจริง (.hero__speakers) ไม่ใช่คอลัมน์ ≤991 คอลัมน์มี gutter ซ้าย-ขวา ≥992 ทั้งสองเท่ากัน
@@ -368,7 +382,6 @@
             // ขอบบนของโลโก้ title = ต้นช่วงเนื้อหาด้านบน (≤575 .hero__content เป็น display: contents วัดกรอบไม่ได้)
             if (title) setVar('--bt-hero-top-y', title.getBoundingClientRect().top - innerShift - heroBox.top);
 
-            if (getComputedStyle(walls[0]).display === 'none') return;
             // ≤991 ขอบเฉียงของกำแพงเริ่มที่ขอบจอระดับแถวตัวเลข stat (CSS ใช้เฉพาะช่วงนั้น)
             // (≤575 แถว stat ย้ายไปอยู่ใต้ภาพ ใช้ขอบบนของภาพแทน ถ้าภาพอยู่สูงกว่า)
             const start = stats ? Math.min(stats.getBoundingClientRect().top, rect.top) - innerShift - heroBox.top : 0;
@@ -383,6 +396,9 @@
             });
         };
 
+        syncWalls = sync;
+        // เปลี่ยนแบบกำแพงจากปุ่มมุมซ้ายล่าง: กำแพงที่เพิ่งแสดงต้องวางตำแหน่งใหม่
+        window.addEventListener('bettertrade:hero-walls-change', sync);
         sync();
         const resizeObserver = new ResizeObserver(sync);
         resizeObserver.observe(visual);
