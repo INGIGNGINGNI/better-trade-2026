@@ -2037,7 +2037,7 @@ body.menu-open .site-header__backdrop {
 
 .hero__title {
     width: 100%;
-    max-width: 440px;
+    max-width: 352px;
     height: auto;
     display: block;
 }
@@ -2046,7 +2046,7 @@ body.menu-open .site-header__backdrop {
     margin: var(--space-8) var(--space-0) var(--space-0);
     color: var(--color-text-primary);
     font-family: var(--headline);
-    font-size: var(--section-heading-size);
+    font-size: var(--font-size-32);
     font-weight: var(--font-weight-medium);
     line-height: 1.3;
 }
@@ -2060,26 +2060,26 @@ body.menu-open .site-header__backdrop {
 .hero__description {
     margin: var(--space-4) var(--space-0) var(--space-0);
     color: var(--color-text-secondary);
-    font-size: var(--section-subtext-size);
+    font-size: var(--section-body-size);
     line-height: var(--line-height-normal);
 }
 
 /* Stat styling follows #expectation (.expectation__stat), one size step smaller: ink numbers with a blue "+", a light muted
    label underneath, and the rotated line-star image as the divider between items. */
 .hero__stats {
-    --bt-hero-stat-size: var(--section-heading-size);
+    --bt-hero-stat-size: var(--font-size-28);
     --bt-hero-stat-rule-length: 64px;
 
     display: flex;
     margin: var(--space-8) var(--space-0) var(--space-0);
 
     @media (max-width: 991px) {
-        --bt-hero-stat-size: var(--font-size-32);
+        --bt-hero-stat-size: var(--font-size-24);
         --bt-hero-stat-rule-length: 56px;
     }
 
     @media (max-width: 767px) {
-        --bt-hero-stat-size: var(--font-size-28);
+        --bt-hero-stat-size: var(--font-size-20);
         --bt-hero-stat-rule-length: 48px;
     }
 }
@@ -2110,7 +2110,7 @@ body.menu-open .site-header__backdrop {
     dt {
         margin-top: var(--space-2);
         color: var(--color-text-muted);
-        font-size: var(--section-body-size);
+        font-size: var(--section-small-size);
         font-weight: var(--font-weight-light);
         line-height: var(--section-body-line-height);
         letter-spacing: 0;
@@ -2171,7 +2171,7 @@ body.menu-open .site-header__backdrop {
     flex-direction: column;
     gap: 4px;
     margin: var(--space-0);
-    font-size: var(--section-small-size);
+    font-size: var(--font-size-12);
     line-height: var(--section-small-line-height);
     text-align: left;
 }
@@ -2300,21 +2300,21 @@ body.menu-open .site-header__backdrop {
     }
 
     .hero__title {
-        max-width: calc(440 * var(--bt-hero-u));
+        max-width: calc(352 * var(--bt-hero-u));
     }
 
     .hero__headline {
         margin-top: calc(32 * var(--bt-hero-u));
-        font-size: calc(40 * var(--bt-hero-u));
+        font-size: calc(32 * var(--bt-hero-u));
     }
 
     .hero__description {
         margin-top: calc(16 * var(--bt-hero-u));
-        font-size: calc(18 * var(--bt-hero-u));
+        font-size: calc(16 * var(--bt-hero-u));
     }
 
     .hero__stats {
-        --bt-hero-stat-size: calc(40 * var(--bt-hero-u));
+        --bt-hero-stat-size: min(28px, calc(28 * var(--bt-hero-u)));
         --bt-hero-stat-rule-length: calc(64 * var(--bt-hero-u));
 
         margin-top: calc(32 * var(--bt-hero-u));
@@ -2328,8 +2328,8 @@ body.menu-open .site-header__backdrop {
         }
 
         dt {
-            margin-top: calc(8 * var(--bt-hero-u));
-            font-size: calc(16 * var(--bt-hero-u));
+            margin-top: calc(2 * var(--bt-hero-u));
+            font-size: calc(14 * var(--bt-hero-u));
         }
     }
 
@@ -2338,7 +2338,7 @@ body.menu-open .site-header__backdrop {
     }
 
     .hero__offer {
-        font-size: calc(14 * var(--bt-hero-u));
+        font-size: calc(12 * var(--bt-hero-u));
     }
 
     .hero__speakers {
@@ -2482,12 +2482,12 @@ body.menu-open .site-header__backdrop {
     }
     
     .hero__headline {
-        font-size: var(--font-size-32);
+        font-size: var(--font-size-28);
         line-height: 1.2;
     }
 
     .hero__description {
-        font-size: var(--section-body-size);
+        font-size: var(--section-small-size);
     }
 
     .hero__stat {
@@ -2498,7 +2498,7 @@ body.menu-open .site-header__backdrop {
         }
 
         dt {
-            font-size: var(--section-small-size);
+            font-size: var(--font-size-12);
         }
     }
 
@@ -2536,7 +2536,7 @@ body.menu-open .site-header__backdrop {
     /* โลโก้ title ไม่กว้างเต็มจอ (กว้างสุด ~3/4 ของจอ) และเว้นระยะจาก header */
     .hero__title {
         box-sizing: content-box;
-        max-width: min(300px, 76vw);
+        max-width: min(264px, 66vw);
         margin-top: var(--space-8);
     }
 
