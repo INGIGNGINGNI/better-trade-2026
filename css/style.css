@@ -2319,7 +2319,7 @@ body.menu-open .site-header__backdrop {
 @media (max-width:991px), (max-aspect-ratio: 1199/1000) {
     .hero {
         min-height: 0;
-        padding-bottom: var(--space-0);
+        padding-bottom: var(--space-20);
     }
 
     .hero__content {
@@ -4361,7 +4361,7 @@ body.menu-open .site-header__backdrop {
         }
 
         .ticket__header {
-            margin-bottom: var(--space-16);
+            margin-bottom: var(--space-12);
         }
 
         .ticket__plan-header h3 {
@@ -4453,6 +4453,7 @@ body.menu-open .site-header__backdrop {
             order: 3;
             border-top: var(--rule-width-subtle) solid var(--color-border-faint);
             margin-top: var(--space-0);
+            padding-bottom: var(--space-0);
         }
 
         .ticket__plan--explorer {
@@ -4553,6 +4554,10 @@ body.menu-open .site-header__backdrop {
 
         .ticket__plan {
             padding: var(--space-8) var(--space-5);
+        }
+
+        .ticket__plan--master {
+            padding-bottom: var(--space-0);
         }
 
         /* .ticket__plan--master {
@@ -10017,8 +10022,9 @@ body.menu-open .site-header__backdrop {
     }
 
     @media (max-width: 575px) {
-        --bt-playbook-content-top-space: var(--space-24);
-        --bt-playbook-content-bottom-space: var(--space-24);
+        /* ระยะบน-ล่างเท่ากับ padding ของ section อื่นที่จอนี้ (--section-padding-y-sm) */
+        --bt-playbook-content-top-space: var(--section-padding-y-sm);
+        --bt-playbook-content-bottom-space: var(--section-padding-y-sm);
         --bt-playbook-content-middle-space: calc(var(--space-32) * 2 + var(--space-16));
         --bt-playbook-header-scale: 1;
         --bt-playbook-steps-scale: 1;

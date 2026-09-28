@@ -636,7 +636,7 @@ ol {
 
 @media (max-width:575px) {
     :root {
-        --section-padding-y-sm: var(--space-16);
+        --section-padding-y-sm: var(--space-12);
         --bt-menu-label-size: var(--font-size-14);
         --header-height: 64px;
     }
