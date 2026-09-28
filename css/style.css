@@ -6764,7 +6764,7 @@ body.menu-open .site-header__backdrop {
         pointer-events: none;
     }
 
-    #agenda .agenda__day-switch:not([aria-current='true']) .agenda__day-switch-details {
+    #agenda .agenda__day-switch[aria-current='true'] .agenda__day-switch-details {
         color: var(--agenda-day-label-color);
         opacity: 1;
         visibility: visible;
@@ -6998,7 +6998,7 @@ body.menu-open .site-header__backdrop {
         pointer-events: none;
     }
 
-    #agenda .agenda__day-switch:not([aria-current='true']) .agenda__day-switch-details {
+    #agenda .agenda__day-switch[aria-current='true'] .agenda__day-switch-details {
         color: var(--agenda-day-details-color);
         opacity: 1;
         visibility: visible;
