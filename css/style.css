@@ -1780,8 +1780,15 @@ body.menu-open .site-header__backdrop {
        ขนาด: สูงตั้งแต่ขอบบนของ hero (ขอบบนจอ) ถึงขอบล่างภาพ และกว้างพอให้ขอบนอกถึงขอบจอทั้งสองฝั่ง */
     .hero__wall {
         --bt-hero-wall-bottom: calc(var(--bt-hero-wall-top, 0px) + var(--bt-hero-wall-height, 0px));
-        --bt-hero-wall-inner-l: calc(var(--bt-hero-wall-left, 0px) + var(--bt-hero-wall-width, 0px) * 0.36);
-        --bt-hero-wall-inner-r: calc(var(--bt-hero-wall-left, 0px) + var(--bt-hero-wall-width, 0px) * 0.63);
+        --bt-hero-wall-left-edge: 0.36;
+        --bt-hero-wall-right-edge: 0.63;
+        /* ขอบในห่างจากกึ่งกลางภาพอย่างน้อยเท่านี้ ช่องฟ้าจึงกว้างกว่าข้อความเสมอ (hero-loader.js อ่านค่านี้ตอนปิดกำแพงด้วย) */
+        --bt-hero-wall-half-gap: 0px;
+        --bt-hero-wall-mid: calc(var(--bt-hero-wall-left, 0px) + var(--bt-hero-wall-width, 0px) / 2);
+        --bt-hero-wall-inner-l: min(calc(var(--bt-hero-wall-left, 0px) + var(--bt-hero-wall-width, 0px) * var(--bt-hero-wall-left-edge)),
+                calc(var(--bt-hero-wall-mid) - var(--bt-hero-wall-half-gap)));
+        --bt-hero-wall-inner-r: max(calc(var(--bt-hero-wall-left, 0px) + var(--bt-hero-wall-width, 0px) * var(--bt-hero-wall-right-edge)),
+                calc(var(--bt-hero-wall-mid) + var(--bt-hero-wall-half-gap)));
         --bt-hero-wall-file-width: max(var(--bt-hero-wall-bottom) * 0.8,
                 var(--bt-hero-wall-inner-l) / 0.363,
                 (var(--bt-hero-width, 100vw) - var(--bt-hero-wall-inner-r)) / 0.378);
@@ -1797,6 +1804,13 @@ body.menu-open .site-header__backdrop {
 
     .hero__wall--left {
         left: calc(var(--bt-hero-wall-inner-l) - var(--bt-hero-wall-file-width) * 0.363);
+    }
+
+    /* 576px ขึ้นไป (ข้อความอยู่เหนือภาพ ช่องฟ้าอยู่หลังข้อความ): เปิดช่องให้กว้างกว่าบรรทัดยาวสุด */
+    @media (min-width:576px) {
+        .hero__wall {
+            --bt-hero-wall-half-gap: 176px;
+        }
     }
 
     .hero__wall--right {
@@ -2266,7 +2280,8 @@ body.menu-open .site-header__backdrop {
        สูงเท่ากรอบภาพวิทยากร ขอบซ้ายของไฟล์ (ขอบในของกำแพง) อยู่ที่ 63% ของกรอบภาพ ตรงกับตำแหน่งเดิม
        กำแพงยาวต่อไปทางขวาเกินขอบจอ ส่วนเกินถูก .hero (overflow: hidden) ตัด */
     .hero__wall--right {
-        --bt-hero-wall-right-edge: 0.63;
+        /* ขอบในของกำแพงเทียบกับกรอบภาพ (ซ้าย 30% / ขวา 69%) ขยับออกจาก 36 / 63 ให้ช่องกลางกว้างขึ้น */
+        --bt-hero-wall-right-edge: 0.69;
 
         left: calc(var(--bt-hero-wall-left, 0px) + var(--bt-hero-wall-width, 0px) * var(--bt-hero-wall-right-edge));
         width: var(--bt-hero-height, 100vh);
@@ -2276,11 +2291,28 @@ body.menu-open .site-header__backdrop {
        สูงเท่ากรอบภาพวิทยากร ขอบขวาของไฟล์ (ขอบในของกำแพง) อยู่ที่ 36% ของกรอบภาพ ตรงกับตำแหน่งเดิม
        กำแพงยาวต่อไปทางซ้ายเกินขอบจอ ส่วนเกินถูก .hero (overflow: hidden) ตัด */
     .hero__wall--left {
-        --bt-hero-wall-left-edge: 0.36;
+        --bt-hero-wall-left-edge: 0.30;
         --bt-hero-wall-left-width: calc(var(--bt-hero-height, 100vh) * 4 / 3);
 
         left: calc(var(--bt-hero-wall-left, 0px) + var(--bt-hero-wall-width, 0px) * var(--bt-hero-wall-left-edge) - var(--bt-hero-wall-left-width));
         width: var(--bt-hero-wall-left-width);
+    }
+
+    /* ท้องฟ้าบน desktop เห็นแค่ช่องรูปตัว V ระหว่างกำแพง (กึ่งกลางช่อง ~62–67% ของความกว้าง, ช่วงบน ~0–25%)
+       ตรงนั้นในวิดีโอเป็นฟ้าเปล่า ขยายวิดีโอเป็น 165% ของความสูง hero แล้วยกขึ้น (ชิดขอบล่าง)
+       ก้อนเมฆใหญ่ด้านล่างของวิดีโอจึงขึ้นมาอยู่ในช่องนั้น ภาพ poster ก่อนวิดีโอพร้อมใช้กรอบเดียวกัน */
+    .hero__sky {
+        overflow: hidden;
+        background-size: auto 165%;
+        background-position: 50% 100%;
+    }
+
+    .hero__sky-video {
+        position: absolute;
+        left: 0;
+        top: -65%;
+        height: 165%;
+        object-position: 50% 50%;
     }
 }
 

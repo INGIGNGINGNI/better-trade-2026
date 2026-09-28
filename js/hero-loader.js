@@ -139,8 +139,13 @@
         gsap.set([left, right], { scaleX: 1 });
         const heroBox = hero.getBoundingClientRect();
         const fig = figure.getBoundingClientRect();
-        const innerL = fig.left + fig.width * 0.36 - heroBox.left;
-        const innerR = fig.left + fig.width * 0.63 - heroBox.left;
+        // ขอบในของกำแพงเทียบกับกรอบภาพ อ่านจาก CSS (--bt-hero-wall-left/right-edge) ไม่มีใช้ 36% / 63%
+        // และ --bt-hero-wall-half-gap (บน-ล่าง): ขอบในห่างจากกึ่งกลางภาพอย่างน้อยเท่านี้ ให้ตรงกับ CSS
+        const edgeOf = (wall, name, fallback) => Number.parseFloat(getComputedStyle(wall).getPropertyValue(name)) || fallback;
+        const halfGap = edgeOf(left, '--bt-hero-wall-half-gap', 0);
+        const figMid = fig.left + fig.width / 2;
+        const innerL = Math.min(fig.left + fig.width * edgeOf(left, '--bt-hero-wall-left-edge', 0.36), figMid - halfGap) - heroBox.left;
+        const innerR = Math.max(fig.left + fig.width * edgeOf(right, '--bt-hero-wall-right-edge', 0.63), figMid + halfGap) - heroBox.left;
         const meet = (innerL + innerR) / 2;
         if (innerL <= 0 || innerR >= heroBox.width) return null;
         /* ให้ขอบในช่วงตั้งตรง (ช่วงล่าง) ของทั้งสองฝั่งชนกันที่กึ่งกลางพอดี
