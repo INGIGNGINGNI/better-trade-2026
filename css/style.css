@@ -741,13 +741,14 @@ body.menu-closing .early-bird-float {
     }
 }
 
-body.playbook-page .back-to-top {
+/* หน้าที่ไม่มีกล่อง Early Bird (หน้า playbook หรือตอนปิดกล่องไว้) ปุ่มกลับไปอยู่มุมล่างตามปกติ */
+body:is(.playbook-page, :not(:has(.early-bird-float))) .back-to-top {
     right: max(var(--space-5), env(safe-area-inset-right));
     bottom: max(var(--space-5), env(safe-area-inset-bottom));
 }
 
 @media (max-width:575px) {
-    body.playbook-page .back-to-top {
+    body:is(.playbook-page, :not(:has(.early-bird-float))) .back-to-top {
         right: max(var(--space-3), env(safe-area-inset-right));
         bottom: calc(var(--space-10) + var(--space-6) + max(var(--space-3), env(safe-area-inset-bottom)));
     }
@@ -14663,11 +14664,18 @@ body.menu-open .site-header__backdrop {
         --bt-playbook-ticket-plan-padding: var(--space-8);
         --bt-playbook-ticket-plan-title-size: var(--font-size-32);
         --bt-playbook-ticket-plan-icon-size: var(--space-20);
-        --bt-playbook-ticket-price-padding: var(--space-6);
+        /* บน-ล่าง space-8: ไม่มีบรรทัดราคาเดิม (ขีดฆ่า) แล้ว กล่องเตี้ยลง เพิ่มคืนให้สูงใกล้เดิม */
+        --bt-playbook-ticket-price-padding: var(--space-8) var(--space-6);
         --bt-playbook-ticket-ribbon-clearance: var(--space-8);
         --bt-playbook-ticket-price-size: var(--section-heading-size);
         --bt-playbook-ticket-plan-bg-size: auto 1580px;
         --bt-playbook-ticket-plan-bg-position: 46% 74%;
+
+        /* 992–1199px กล่องราคากว้างแค่ 190px ราคา "2,500 บาท" จะตก "บาท" ลงบรรทัดใหม่
+           ขณะที่ "1,500 บาท" ยังพอดีบรรทัด ตัวเลขสองกล่องจึงไม่เสมอกัน ลด padding ข้างลงนิดให้พอ */
+        @media (min-width: 992px) and (max-width: 1199px) {
+            --bt-playbook-ticket-price-padding: var(--space-8) var(--space-5);
+        }
 
         position: relative;
         overflow: hidden;
@@ -14740,7 +14748,8 @@ body.menu-open .site-header__backdrop {
         position: relative;
         padding: var(--bt-playbook-ticket-price-padding);
         display: grid;
-        gap: var(--space-2);
+        /* ชื่อบัตรกับราคาห่างกันพอดี (ไม่มีบรรทัดราคาเดิมคั่นกลางแล้ว) */
+        gap: var(--space-4);
         justify-items: start;
         border: var(--border-width-1) solid transparent;
         border-radius: var(--space-0);
@@ -14844,9 +14853,8 @@ body.menu-open .site-header__backdrop {
             display: grid;
             grid-template-columns: minmax(var(--space-0), 1fr) minmax(var(--space-0), 1fr);
             grid-template-areas:
-                "head      prices"
-                "features  prices"
-                "features  action";
+                "head      purchase"
+                "features  purchase";
             column-gap: var(--space-12);
             row-gap: var(--space-6);
             align-content: start;
@@ -14873,19 +14881,14 @@ body.menu-open .site-header__backdrop {
             align-self: start;
         }
 
-        .playbook-ticket__prices {
-            grid-area: prices;
-            /* คร่อมสองแถวเพื่อจัดคอลัมน์ ไม่ใช่เพื่อให้ยืดเต็มความสูง
-               ถ้าปล่อยเป็น stretch ปุ่มราคาจะถูกดึงสูงขึ้นตามแถวที่คร่อมอยู่ */
+        /* ราคา + ปุ่มซื้อ คร่อมสองแถวเพื่อจัดคอลัมน์ ไม่ใช่เพื่อให้ยืดเต็มความสูง
+           ปุ่มจึงต่อใต้ราคาทันที (margin-top ของ .playbook-ticket__action) ไม่ตกไปก้นการ์ด */
+        .playbook-ticket__purchase {
+            grid-area: purchase;
             align-self: start;
             /* ริบบอนส่วนลดลอยอยู่มุมบนขวาของการ์ด พอราคาย้ายมาอยู่คอลัมน์ขวา
                ต้องเผื่อที่ให้มันด้วย ไม่งั้นปุ่มราคาใบขวาจะไปชนใต้ริบบอนพอดี */
             margin-top: var(--bt-playbook-ticket-ribbon-clearance);
-        }
-
-        .playbook-ticket__action {
-            grid-area: action;
-            margin-top: var(--space-0);
         }
 
         .playbook-ticket__features {
