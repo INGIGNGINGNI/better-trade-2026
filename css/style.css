@@ -610,6 +610,22 @@ body.menu-closing .back-to-top {
     font-size: var(--font-size-12);
 }
 
+/* ปุ่มดำล้วน (ไม่มีขอบ spectrum) ทุกปุ่มในเว็บ: สีพื้นสว่างกว่าปุ่ม primary ปกติหนึ่งระดับ (900 → 800)
+   ไม่ให้กลืนกับพื้นมืด (เช่น section playbook) และ hover ขึ้นอีกหนึ่งระดับ (700)
+   ตัวปุ่มแต่ละที่ยังตั้ง border/background = --bt-action-fill ในกฎของตัวเองเหมือนเดิม */
+:is(.early-bird-float__action,
+    .ticket__action,
+    .playbook__action-link,
+    .cookie-banner__button,
+    .playbook-steps__action .bt-action-button,
+    .playbook-ticket__action).bt-action-button--primary {
+    --bt-action-fill: var(--color-neutral-800);
+
+    &:hover {
+        --bt-action-fill: var(--color-neutral-700);
+    }
+}
+
 /* Match the solid black treatment used by the Ultimate ticket action. */
 .early-bird-float__action.bt-action-button--primary {
     border-color: var(--bt-action-fill);
