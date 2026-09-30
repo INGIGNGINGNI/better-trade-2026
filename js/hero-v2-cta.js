@@ -189,7 +189,7 @@ ready.then(() => {
         });
         ctaTicketButton = mountRegisterButton(ctaTicketSlot, {
             ...responsiveOptions,
-            label: 'ซื้อบัตร Ultimate 2 วัน 1,750 บาท',
+            label: 'ซื้อบัตร Ultimate 2 วัน 2,500 บาท',
             href: BUY_TICKET_URL,
             target: '_blank',
             rel: 'noopener noreferrer',

@@ -40,7 +40,7 @@
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="css/main.css?v=61">
-    <link rel="stylesheet" href="css/style.css?v=1091">
+    <link rel="stylesheet" href="css/style.css?v=1101">
 </head>
 
 <body class="playbook-page">
@@ -797,7 +797,8 @@
                 <div class="playbook-ticket__card-row row justify-content-center">
                     <div class="playbook-ticket__card col-12 col-lg-12 col-xl-9" data-reveal data-reveal-delay="240">
                         <article class="playbook-ticket__plan" aria-labelledby="playbook-ticket-plan-title">
-                            <p class="playbook-ticket__plan-ribbon"><strong>SAVE 30%</strong> ถึง 30 ก.ย. นี้เท่านั้น</p>
+                            <!-- ปิดป้ายโปรโมชัน (หมดเขต 30 ก.ย.)
+                            <p class="playbook-ticket__plan-ribbon"><strong>SAVE 30%</strong> ถึง 30 ก.ย. นี้เท่านั้น</p> -->
 
                             <header class="playbook-ticket__plan-header">
                                 <img class="playbook-ticket__plan-icon" src="images/ultimate-2.webp" width="160" height="160"
@@ -806,24 +807,25 @@
                                 <h3 id="playbook-ticket-plan-title" class="playbook-ticket__plan-title">Ultimate</h3>
                             </header>
 
-                            <div class="playbook-ticket__prices" role="radiogroup" aria-label="เลือกราคาบัตร Ultimate" data-playbook-price-group>
-                                <button class="playbook-ticket__price" type="button" role="radio" aria-checked="false" tabindex="-1"
-                                    data-playbook-price data-playbook-price-label="ซื้อบัตร Ultimate 1 วัน 1,050 บาท">
-                                    <span class="playbook-ticket__price-day">บัตร 1 วัน</span>
-                                    <span class="playbook-ticket__price-compare"><s>1,500 บาท</s></span>
-                                    <strong class="playbook-ticket__price-value">1,050 <small>บาท</small></strong>
-                                </button>
-                                <button class="playbook-ticket__price is-active" type="button" role="radio" aria-checked="true"
-                                    data-playbook-price data-playbook-price-label="ซื้อบัตร Ultimate 2 วัน 1,750 บาท">
-                                    <span class="playbook-ticket__price-day">บัตร 2 วัน</span>
-                                    <span class="playbook-ticket__price-compare"><s>2,500 บาท</s><span class="playbook-ticket__price-badge">คุ้มกว่า</span></span>
-                                    <strong class="playbook-ticket__price-value">1,750 <small>บาท</small></strong>
-                                </button>
-                            </div>
+                            <!-- ราคาและปุ่มอยู่กล่องเดียวกัน ปุ่มจึงต่อจากราคาเสมอ ไม่ถูกดันลงตามความยาวรายการสิทธิ์ -->
+                            <div class="playbook-ticket__purchase">
+                                <div class="playbook-ticket__prices" role="radiogroup" aria-label="เลือกราคาบัตร Ultimate" data-playbook-price-group>
+                                    <button class="playbook-ticket__price" type="button" role="radio" aria-checked="false" tabindex="-1"
+                                        data-playbook-price data-playbook-price-label="ซื้อบัตร Ultimate 1 วัน 1,500 บาท">
+                                        <span class="playbook-ticket__price-day">บัตร 1 วัน</span>
+                                        <strong class="playbook-ticket__price-value">1,500 <small>บาท</small></strong>
+                                    </button>
+                                    <button class="playbook-ticket__price is-active" type="button" role="radio" aria-checked="true"
+                                        data-playbook-price data-playbook-price-label="ซื้อบัตร Ultimate 2 วัน 2,500 บาท">
+                                        <span class="playbook-ticket__price-day">บัตร 2 วัน</span>
+                                        <strong class="playbook-ticket__price-value">2,500 <small>บาท</small></strong>
+                                    </button>
+                                </div>
 
-                            <a class="bt-action-button bt-action-button--primary bt-action-button--xl playbook-ticket__action"
-                                href="https://www.efin.finance/events/better-trade/better-trade2026/buy-ticket/ultimate/2-days"
-                                target="_blank" rel="noopener noreferrer" data-playbook-price-action>ซื้อบัตร Ultimate 2 วัน 1,750 บาท</a>
+                                <a class="bt-action-button bt-action-button--primary bt-action-button--xl playbook-ticket__action"
+                                    href="https://www.efin.finance/events/better-trade/better-trade2026/buy-ticket/ultimate/2-days"
+                                    target="_blank" rel="noopener noreferrer" data-playbook-price-action>ซื้อบัตร Ultimate 2 วัน 2,500 บาท</a>
+                            </div>
 
                             <ul class="playbook-ticket__features">
                                 <li><svg class="bt-icon playbook-ticket__feature-icon" aria-hidden="true"><use href="images/icons.svg?v=10#icon-circle-check"></use></svg><span>PERSONALIZED PLAYBOOK ฉบับ PDF ดาวน์โหลดเก็บไว้ได้</span></li>
@@ -995,7 +997,7 @@
     <script src="js/cookie-banner.js?v=2"></script>
     <script src="js/cursor-dot.js?v=5"></script>
     <!-- Liquid metal CTAs (WebGL) ชุดเดียวกับหน้าแรก mount ปุ่มใน header และ hero ของหน้านี้ -->
-    <script type="module" src="js/hero-v2-cta.js?v=28"></script>
+    <script type="module" src="js/hero-v2-cta.js?v=29"></script>
 </body>
 
 </html>

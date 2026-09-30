@@ -128,6 +128,10 @@
         const intrinsicWidth = imageWidth || (isDayOnePortrait ? 960 : 928);
         const intrinsicHeight = imageHeight || (isDayOnePortrait ? 1200 : (isDayTwoPortrait ? 1204 : 1152));
 
+        /* ชื่อบางคนมี <br class="..."> ไว้ตัดบรรทัดในหัวการ์ด ถ้าใส่ลง alt ตรง ๆ เครื่องหมาย " ของ class
+           จะปิด alt ก่อนเวลา แล้วเศษ ">นามสกุล หลุดเป็นข้อความในหน้า alt จึงใช้ชื่อแบบตัด tag ออก */
+        const plainName = name.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().replace(/"/g, '&quot;');
+
         card.className = 'speaker-card';
         card.style.setProperty('--speaker-order', String(index % 5));
         card.style.setProperty('--speaker-portrait-y', imageY);
@@ -136,7 +140,7 @@
             <div class="speaker-card__portrait">
                 <div class="speaker-card__frame">
                     <img src="images/speakers/${image}" width="${intrinsicWidth}" height="${intrinsicHeight}"
-                        loading="lazy" decoding="async" alt="${name}">
+                        loading="lazy" decoding="async" alt="${plainName}">
                 </div>
             </div>
             <div class="speaker-card__meta">
