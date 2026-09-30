@@ -51,20 +51,20 @@
                 role: 'Head of Business Development, efin Group',
                 image: 'day-1/D1-พสุธา-ไดจิ-อิเดะ.webp',
             },
+            {
+                name: 'BILLKIN',
+                role: '',
+                image: 'day-1/D1-บิวกิ้น.webp',
+            },
+            {
+                name: 'WINNE',
+                role: '',
+                image: 'day-1/D1-วินนี่.webp',
+            },
             // {
             //     name: 'คุณวิน พรหมแพทย์',
             //     role: 'ประธานกรรมการบริหาร บลจ. กสิกรไทย จำกัด',
             //     image: 'day-1/D1-วิน-พรหมแพทย์.webp',
-            // },
-            // {
-            //     name: 'BILLKIN',
-            //     role: 'Lorem ipsum dolor sit amet.',
-            //     image: 'day-1/D1-บิวกิ้น.webp',
-            // },
-            // {
-            //     name: 'Winni',
-            //     role: 'Lorem ipsum dolor sit amet.',
-            //     image: 'day-1/D1-วินนี่.webp',
             // },
         ],
         dayTwo: [
