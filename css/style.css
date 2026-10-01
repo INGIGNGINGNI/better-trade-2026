@@ -6088,6 +6088,23 @@ body.menu-open .site-header__backdrop {
 
         }
 
+        /* ปุ่มซื้อบัตรที่อยู่ใต้รูปวิทยากร (ช่องนี้มีเฉพาะจอ ≤991px, ≥992px ใช้ปุ่มในช่องข้อความ)
+           วางแถวถัดจากรูป แนวเดียวกับรูป และต่อเส้นแบ่งซ้ายให้ยาวลงมา */
+        .agenda__table tr:has(> td.agenda__session-actions) td.agenda__speakers {
+            padding-bottom: var(--space-4);
+        }
+
+        .agenda__table td.agenda__session-actions {
+            grid-column: 2;
+            grid-row: 4;
+            padding: var(--space-0) var(--space-0) var(--space-6) var(--space-6);
+            border-left: var(--rule-width-subtle) solid var(--color-border-faint);
+
+            .agenda__session-action {
+                margin-top: var(--space-0);
+            }
+        }
+
         .agenda__speaker-frame {
             vertical-align: top;
         }
@@ -6209,6 +6226,13 @@ body.menu-open .site-header__backdrop {
             padding: 0 0 var(--space-6);
             border-left: 0;
             text-align: right;
+        }
+
+        /* ≤575px รูปอยู่ขวาข้อความ ปุ่มซื้อบัตรลงมาแถวใหม่ใต้ทั้งสองช่อง เต็มความกว้าง */
+        .agenda__table td.agenda__session-actions {
+            grid-column: 1 / -1;
+            padding: var(--space-0) var(--space-0) var(--space-6);
+            border-left: 0;
         }
 
         .agenda__speakers>.agenda__speaker-frame:last-child:nth-child(odd) {
