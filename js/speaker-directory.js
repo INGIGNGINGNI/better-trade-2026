@@ -51,16 +51,16 @@
                 role: 'Head of Business Development, efin Group',
                 image: 'day-1/D1-พสุธา-ไดจิ-อิเดะ.webp',
             },
-            {
-                name: 'BILLKIN',
-                role: '',
-                image: 'day-1/D1-บิวกิ้น.webp',
-            },
-            {
-                name: 'WINNE',
-                role: '',
-                image: 'day-1/D1-วินนี่.webp',
-            },
+            // {
+            //     name: 'BILLKIN',
+            //     role: '',
+            //     image: 'day-1/D1-บิวกิ้น.webp',
+            // },
+            // {
+            //     name: 'WINNE',
+            //     role: '',
+            //     image: 'day-1/D1-วินนี่.webp',
+            // },
             // {
             //     name: 'คุณวิน พรหมแพทย์',
             //     role: 'ประธานกรรมการบริหาร บลจ. กสิกรไทย จำกัด',
