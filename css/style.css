@@ -612,14 +612,18 @@ body.menu-closing .back-to-top {
 
 /* ปุ่มดำล้วน (ไม่มีขอบ spectrum) ทุกปุ่มในเว็บ: สีพื้นสว่างกว่าปุ่ม primary ปกติหนึ่งระดับ (900 → 800)
    ไม่ให้กลืนกับพื้นมืด (เช่น section playbook) และ hover ขึ้นอีกหนึ่งระดับ (700)
-   ตัวปุ่มแต่ละที่ยังตั้ง border/background = --bt-action-fill ในกฎของตัวเองเหมือนเดิม */
+   border/background = --bt-action-fill ตั้งไว้ที่นี่ด้วย (บางปุ่มยังตั้งซ้ำในกฎของตัวเอง) */
 :is(.early-bird-float__action,
     .ticket__action,
     .playbook__action-link,
     .cookie-banner__button,
     .playbook-steps__action .bt-action-button,
-    .playbook-ticket__action).bt-action-button--primary {
+    .playbook-ticket__action,
+    .agenda__session-action).bt-action-button--primary {
     --bt-action-fill: var(--color-neutral-800);
+
+    border-color: var(--bt-action-fill);
+    background: var(--bt-action-fill);
 
     &:hover {
         --bt-action-fill: var(--color-neutral-700);
@@ -4036,6 +4040,26 @@ body.menu-open .site-header__backdrop {
         &.ticket__price--unavailable strong {
             font-size: var(--font-size-28);
         }
+
+        /* กล่องราคาที่เลือกไม่ได้ (บัตร Master Class มีราคาเดียว "เริ่มต้น") ไม่มีสถานะ hover/คลิก */
+        &.ticket__price--static {
+            cursor: default;
+
+            &:hover {
+                background: transparent;
+            }
+
+            /* ไม่มีวงกลมตัวเลือก (radio) เพราะเลือกไม่ได้ */
+            .ticket__price-day::after {
+                content: none;
+            }
+        }
+    }
+
+    /* บัตรที่มีกล่องราคาเดียว ใช้คอลัมน์เดียวเต็มความกว้างทุกขนาดจอ
+       (ชนะกฎ 2 คอลัมน์ตาม breakpoint ด้านล่างด้วย class คู่) */
+    .ticket__prices.ticket__prices--single {
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .ticket__access {
@@ -4554,7 +4578,8 @@ body.menu-open .site-header__backdrop {
         }
 
         .ticket__plan--ultimate .ticket__price,
-        .ticket__plan--explorer .ticket__price {
+        .ticket__plan--explorer .ticket__price,
+        .ticket__plan--master .ticket__price {
             min-height: auto;
         }
 
@@ -5427,6 +5452,23 @@ body.menu-open .site-header__backdrop {
         line-height: var(--section-body-line-height);
     }
 
+    /* ตำแหน่งของวิทยากร ต่อใต้ชื่อในบรรทัดใหม่ (ใช้เมื่อ session ต้องแสดงตำแหน่งด้วย เช่น Master Class) */
+    .agenda__session-speaker-role {
+        display: block;
+        color: var(--color-text-muted);
+    }
+
+    .agenda__session-speaker:has(.agenda__session-speaker-role) {
+        color: var(--color-text-primary);
+    }
+
+    /* ปุ่มซื้อบัตรท้าย session (ปุ่มดำล้วนชุดเดียวกับปุ่มซื้อบัตรใน Ticket)
+       กว้างเท่าปุ่ม "ตกลง" ของ cookie banner (ขนาด --sm เหมือนกัน + min-width 104px) */
+    .agenda__session-action {
+        min-width: 104px;
+        margin-top: var(--space-4);
+    }
+
     .agenda__note {
         margin: var(--space-6) 0 0;
         color: var(--color-text-muted);
@@ -5632,6 +5674,22 @@ body.menu-open .site-header__backdrop {
         .agenda__content {
             align-self: start;
             border-radius: 0 0 var(--radius-1) var(--radius-1);
+        }
+
+        /* วันหนึ่งมีตาราง อีกวันยังเป็น Coming Soon (เช่นแท็บ Master Class): ให้การ์ด Coming Soon
+           สูงเท่าการ์ดที่มีตาราง ไม่ใช้ความสูงขั้นต่ำ 320px ของตัวเองจนสูงกว่าอีกฝั่ง
+           ถ้าว่างทั้งสองวัน (ไม่มีตารางให้เทียบ) ยังใช้ 320px ตามเดิม */
+        .agenda__days:has(.agenda__panel:not(.agenda__panel--empty):not([hidden])) .agenda__content:has(> .agenda__panel--empty:not([hidden])) {
+            align-self: stretch;
+            display: grid;
+
+            .agenda__panel--empty:not([hidden]) {
+                display: grid;
+            }
+
+            .agenda__empty-state {
+                min-height: 0;
+            }
         }
 
         .agenda__table,
@@ -6030,6 +6088,23 @@ body.menu-open .site-header__backdrop {
 
         }
 
+        /* ปุ่มซื้อบัตรที่อยู่ใต้รูปวิทยากร (ช่องนี้มีเฉพาะจอ ≤991px, ≥992px ใช้ปุ่มในช่องข้อความ)
+           วางแถวถัดจากรูป แนวเดียวกับรูป และต่อเส้นแบ่งซ้ายให้ยาวลงมา */
+        .agenda__table tr:has(> td.agenda__session-actions) td.agenda__speakers {
+            padding-bottom: var(--space-4);
+        }
+
+        .agenda__table td.agenda__session-actions {
+            grid-column: 2;
+            grid-row: 4;
+            padding: var(--space-0) var(--space-0) var(--space-6) var(--space-6);
+            border-left: var(--rule-width-subtle) solid var(--color-border-faint);
+
+            .agenda__session-action {
+                margin-top: var(--space-0);
+            }
+        }
+
         .agenda__speaker-frame {
             vertical-align: top;
         }
@@ -6151,6 +6226,13 @@ body.menu-open .site-header__backdrop {
             padding: 0 0 var(--space-6);
             border-left: 0;
             text-align: right;
+        }
+
+        /* ≤575px รูปอยู่ขวาข้อความ ปุ่มซื้อบัตรลงมาแถวใหม่ใต้ทั้งสองช่อง เต็มความกว้าง */
+        .agenda__table td.agenda__session-actions {
+            grid-column: 1 / -1;
+            padding: var(--space-0) var(--space-0) var(--space-6);
+            border-left: 0;
         }
 
         .agenda__speakers>.agenda__speaker-frame:last-child:nth-child(odd) {
