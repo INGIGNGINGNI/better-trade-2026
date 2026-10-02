@@ -53,12 +53,12 @@
             },
             {
                 name: 'BILLKIN',
-                role: '',
+                role: 'ศิลปิน & นักแสดง',
                 image: 'day-1/D1-บิวกิ้น.webp',
             },
             {
                 name: 'WINNE',
-                role: '',
+                role: 'Former Investment Analyst',
                 image: 'day-1/D1-วินนี่.webp',
             },
             // {

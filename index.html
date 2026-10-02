@@ -69,7 +69,7 @@
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="css/main.css?v=61">
-    <link rel="stylesheet" href="css/style.css?v=1108">
+    <link rel="stylesheet" href="css/style.css?v=1127">
 </head>
 
 <body class="is-loading">
@@ -1344,33 +1344,249 @@
                 <div class="col-12">
                     <h2 id="floor-plan-title" class="bt-section-title floor-plan__title"><span class="bt-title-highlight has-pe">สำรวจ</span>พื้นที่<br>และโซนต่าง ๆ ในงาน</h2>
                     <p class="bt-section-subtext">Floor Plan</p>
-                    <figure class="floor-plan__figure">
-                        <div class="floor-plan__visual">
-                            <img class="floor-plan__image" src="images/floor-plan.webp" width="1829" height="1386"
-                                loading="lazy" decoding="async"
-                                alt="แผนผังพื้นที่ Conference, Pavilions และ Experience ภายในงาน BetterTrade 2026">
-                            <svg class="floor-plan__callouts" viewBox="0 0 1829 1386" aria-hidden="true">
-                                <g class="floor-plan__callout floor-plan__callout--conference">
-                                    <line class="floor-plan__callout-line" x1="425" y1="348" x2="425" y2="194"></line>
-                                    <image class="floor-plan__callout-mark" href="images/floor-plan-star.webp"
-                                        x="407" y="158" width="36" height="36"></image>
-                                    <text class="floor-plan__callout-label" x="318" y="148">CONFERENCE</text>
-                                </g>
-                                <g class="floor-plan__callout floor-plan__callout--pavilions">
-                                    <line class="floor-plan__callout-line" x1="175" y1="712" x2="175" y2="850"></line>
-                                    <image class="floor-plan__callout-mark" href="images/floor-plan-star.webp"
-                                        x="157" y="850" width="36" height="36"></image>
-                                    <text class="floor-plan__callout-label" x="78" y="926">PAVILIONS</text>
-                                </g>
-                                <g class="floor-plan__callout floor-plan__callout--experience">
-                                    <line class="floor-plan__callout-line" x1="1318" y1="867" x2="1506" y2="867"></line>
-                                    <image class="floor-plan__callout-mark" href="images/floor-plan-star.webp"
-                                        x="1506" y="849" width="36" height="36"></image>
-                                    <text class="floor-plan__callout-label" x="1566" y="878">EXPERIENCE</text>
-                                </g>
-                            </svg>
+                    <!-- ซ้าย: ภาพแผนผัง (สลับ 3D / แผนผังบูธ) ขวา: รายละเอียดบูธ + โลโก้ผู้สนับสนุน
+                         js/floor-plan-board.js คุมแท็บสลับภาพ magnifier (desktop) และภาพใหญ่ใน modal (≤991px) -->
+                    <div class="floor-plan__board" data-floor-plan-board>
+                        <div class="floor-plan__stage">
+                            <div class="floor-plan__toolbar">
+                                <div class="floor-plan__tabs" role="tablist" aria-label="เลือกมุมมองแผนผัง">
+                                    <button id="floor-plan-tab-overview" class="floor-plan__tab" type="button" role="tab" aria-selected="true" aria-controls="floor-plan-view-overview" data-floor-plan-tab>ภาพรวม 3D</button>
+                                    <button id="floor-plan-tab-booths" class="floor-plan__tab" type="button" role="tab" aria-selected="false" aria-controls="floor-plan-view-booths" tabindex="-1" data-floor-plan-tab>แผนผังบูธ</button>
+                                </div>
+                            </div>
+                            <figure class="floor-plan__figure">
+                                <div class="floor-plan__visual">
+                                    <img id="floor-plan-view-overview" class="floor-plan__image" src="images/floor-plan-01.webp" width="1440" height="1141"
+                                        loading="lazy" decoding="async" role="tabpanel" aria-labelledby="floor-plan-tab-overview"
+                                        alt="ภาพรวม 3D ของพื้นที่งาน BetterTrade 2026: Conference, Experience Zone และ Pavilion">
+                                    <img id="floor-plan-view-booths" class="floor-plan__image" src="images/floor-plan-02.webp" width="1440" height="870"
+                                        loading="lazy" decoding="async" role="tabpanel" aria-labelledby="floor-plan-tab-booths" hidden
+                                        alt="แผนผังบูธภายในงาน BetterTrade 2026 พร้อมหมายเลขบูธในแต่ละโซน">
+                                    <!-- desktop: magnifier (hover zoom) วงกลมลอยตามเมาส์ (js/floor-plan-board.js) -->
+                                    <div class="floor-plan__lens" aria-hidden="true" data-floor-plan-lens></div>
+                                    <!-- ≤991px: แตะที่ภาพเพื่อเปิดภาพใหญ่ (ซูมได้) -->
+                                    <button class="floor-plan__expand" type="button" aria-haspopup="dialog" aria-controls="floor-plan-lightbox" data-floor-plan-expand>
+                                        <span class="floor-plan__expand-hint">แตะเพื่อขยายภาพ</span>
+                                    </button>
+                                </div>
+                            </figure>
                         </div>
-                    </figure>
+                        <aside id="floor-plan-panel" class="floor-plan__panel" aria-labelledby="floor-plan-panel-title">
+                            <div class="floor-plan__panel-inner">
+                                <div class="floor-plan__panel-header">
+                                    <h3 id="floor-plan-panel-title" class="floor-plan__panel-title">บูธในงาน</h3>
+                                    <p class="floor-plan__panel-note">Experience Zone 6 โซน และบูธ Prospect ด้านนอก</p>
+                                </div>
+                                <div id="floor-plan-zones" class="floor-plan__zones accordion">
+                                    <div class="floor-plan__zone accordion-item" style="--floor-plan-zone-color: var(--color-warning-400);">
+                                        <h4 id="floor-plan-zone-heading-1" class="floor-plan__zone-heading accordion-header">
+                                            <button class="floor-plan__zone-toggle accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#floor-plan-zone-1" aria-expanded="true" aria-controls="floor-plan-zone-1">
+                                                <span class="floor-plan__zone-swatch" aria-hidden="true"></span>
+                                                <span class="floor-plan__zone-name">1. Capital</span>
+                                                <span class="floor-plan__zone-meta">16 บูธ</span>
+                                                <span class="floor-plan__zone-icon" aria-hidden="true"></span>
+                                            </button>
+                                        </h4>
+                                        <div id="floor-plan-zone-1" class="floor-plan__zone-body accordion-collapse collapse show" aria-labelledby="floor-plan-zone-heading-1" data-bs-parent="#floor-plan-zones">
+                                            <div class="floor-plan__zone-inner">
+                                                <ul class="floor-plan__booths">
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A1</span><span class="floor-plan__booth-name">ธนาคารไทยเครดิต จำกัด (มหาชน)</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A2</span><span class="floor-plan__booth-name">บริษัทหลักทรัพย์ พาย จำกัด (มหาชน)</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A3</span><span class="floor-plan__booth-name">เพจ NamFinance</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A4</span><span class="floor-plan__booth-name">บริษัทหลักทรัพย์ บีวายดีเอช จำกัด (มหาชน)</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A5</span><span class="floor-plan__booth-name">บริษัทเงินทุน เอเซียน จำกัด (มหาชน)</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A6</span><span class="floor-plan__booth-name">บริษัท ซุปเปอร์เทรดเดอร์ รีพับบลิค จำกัด</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A7</span><span class="floor-plan__booth-name">บริษัทหลักทรัพย์ ซีจีเอส อินเตอร์เนชั่นแนล (ประเทศไทย) จำกัด</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A8</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A9</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A10</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A11</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A12</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A13</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A14</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A15</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A16</span></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="floor-plan__zone accordion-item" style="--floor-plan-zone-color: var(--color-yellow-300);">
+                                        <h4 id="floor-plan-zone-heading-2" class="floor-plan__zone-heading accordion-header">
+                                            <button class="floor-plan__zone-toggle accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#floor-plan-zone-2" aria-expanded="false" aria-controls="floor-plan-zone-2">
+                                                <span class="floor-plan__zone-swatch" aria-hidden="true"></span>
+                                                <span class="floor-plan__zone-name">2. Crypto</span>
+                                                <span class="floor-plan__zone-meta">4 บูธ</span>
+                                                <span class="floor-plan__zone-icon" aria-hidden="true"></span>
+                                            </button>
+                                        </h4>
+                                        <div id="floor-plan-zone-2" class="floor-plan__zone-body accordion-collapse collapse" aria-labelledby="floor-plan-zone-heading-2" data-bs-parent="#floor-plan-zones">
+                                            <div class="floor-plan__zone-inner">
+                                                <ul class="floor-plan__booths">
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">B1</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">B2</span><span class="floor-plan__booth-name">บริษัท กัลฟ์ ไบแนนซ์ จำกัด</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">B3</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">B4</span></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="floor-plan__zone accordion-item" style="--floor-plan-zone-color: var(--color-danger-500);">
+                                        <h4 id="floor-plan-zone-heading-3" class="floor-plan__zone-heading accordion-header">
+                                            <button class="floor-plan__zone-toggle accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#floor-plan-zone-3" aria-expanded="false" aria-controls="floor-plan-zone-3">
+                                                <span class="floor-plan__zone-swatch" aria-hidden="true"></span>
+                                                <span class="floor-plan__zone-name">3. Commodity + Property</span>
+                                                <span class="floor-plan__zone-meta">4 บูธ</span>
+                                                <span class="floor-plan__zone-icon" aria-hidden="true"></span>
+                                            </button>
+                                        </h4>
+                                        <div id="floor-plan-zone-3" class="floor-plan__zone-body accordion-collapse collapse" aria-labelledby="floor-plan-zone-heading-3" data-bs-parent="#floor-plan-zones">
+                                            <div class="floor-plan__zone-inner">
+                                                <ul class="floor-plan__booths">
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">C1</span><span class="floor-plan__booth-name">บริษัท โอนดี จำกัด</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">C2</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">C3</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">C4</span><span class="floor-plan__booth-name">บริษัท ห้างขายทองฮั่วเซ่งเฮง จำกัด</span></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="floor-plan__zone accordion-item" style="--floor-plan-zone-color: var(--color-warning-500);">
+                                        <h4 id="floor-plan-zone-heading-4" class="floor-plan__zone-heading accordion-header">
+                                            <button class="floor-plan__zone-toggle accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#floor-plan-zone-4" aria-expanded="false" aria-controls="floor-plan-zone-4">
+                                                <span class="floor-plan__zone-swatch" aria-hidden="true"></span>
+                                                <span class="floor-plan__zone-name">4. Alternative Investment</span>
+                                                <span class="floor-plan__zone-meta">5 บูธ</span>
+                                                <span class="floor-plan__zone-icon" aria-hidden="true"></span>
+                                            </button>
+                                        </h4>
+                                        <div id="floor-plan-zone-4" class="floor-plan__zone-body accordion-collapse collapse" aria-labelledby="floor-plan-zone-heading-4" data-bs-parent="#floor-plan-zones">
+                                            <div class="floor-plan__zone-inner">
+                                                <ul class="floor-plan__booths">
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">E1</span><span class="floor-plan__booth-name">บริษัท เซลลักซ์ เวนเจอร์ส จำกัด</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">E2</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">E3</span><span class="floor-plan__booth-name">บริษัท การ์ดเวิลด์.บีเคเค จำกัด</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">E4</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">E5</span><span class="floor-plan__booth-name">บริษัท ปฐมอัคราโรจน์ เอ็นเตอร์ไพรส์ จำกัด</span></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="floor-plan__zone accordion-item" style="--floor-plan-zone-color: var(--color-purple-500);">
+                                        <h4 id="floor-plan-zone-heading-5" class="floor-plan__zone-heading accordion-header">
+                                            <button class="floor-plan__zone-toggle accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#floor-plan-zone-5" aria-expanded="false" aria-controls="floor-plan-zone-5">
+                                                <span class="floor-plan__zone-swatch" aria-hidden="true"></span>
+                                                <span class="floor-plan__zone-name">5. Health</span>
+                                                <span class="floor-plan__zone-meta">8 บูธ</span>
+                                                <span class="floor-plan__zone-icon" aria-hidden="true"></span>
+                                            </button>
+                                        </h4>
+                                        <div id="floor-plan-zone-5" class="floor-plan__zone-body accordion-collapse collapse" aria-labelledby="floor-plan-zone-heading-5" data-bs-parent="#floor-plan-zones">
+                                            <div class="floor-plan__zone-inner">
+                                                <ul class="floor-plan__booths">
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">D1</span><span class="floor-plan__booth-name">บริษัท เมืองไทยประกันชีวิต จำกัด (มหาชน)</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">D2</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">D3</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">D4</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">D5</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">D6</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">D7</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">D8</span></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="floor-plan__zone accordion-item" style="--floor-plan-zone-color: var(--color-blue-500);">
+                                        <h4 id="floor-plan-zone-heading-6" class="floor-plan__zone-heading accordion-header">
+                                            <button class="floor-plan__zone-toggle accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#floor-plan-zone-6" aria-expanded="false" aria-controls="floor-plan-zone-6">
+                                                <span class="floor-plan__zone-swatch" aria-hidden="true"></span>
+                                                <span class="floor-plan__zone-name">6. EFIN</span>
+                                                <span class="floor-plan__zone-meta">บูธผู้จัด</span>
+                                                <span class="floor-plan__zone-icon" aria-hidden="true"></span>
+                                            </button>
+                                        </h4>
+                                        <div id="floor-plan-zone-6" class="floor-plan__zone-body accordion-collapse collapse" aria-labelledby="floor-plan-zone-heading-6" data-bs-parent="#floor-plan-zones">
+                                            <div class="floor-plan__zone-inner">
+                                                <ul class="floor-plan__booths">
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">EFIN</span></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="floor-plan__zone accordion-item" style="--floor-plan-zone-color: var(--color-cyan-400);">
+                                        <h4 id="floor-plan-zone-heading-7" class="floor-plan__zone-heading accordion-header">
+                                            <button class="floor-plan__zone-toggle accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#floor-plan-zone-7" aria-expanded="false" aria-controls="floor-plan-zone-7">
+                                                <span class="floor-plan__zone-swatch" aria-hidden="true"></span>
+                                                <span class="floor-plan__zone-name">Prospect</span>
+                                                <span class="floor-plan__zone-meta">36 บูธ</span>
+                                                <span class="floor-plan__zone-icon" aria-hidden="true"></span>
+                                            </button>
+                                        </h4>
+                                        <div id="floor-plan-zone-7" class="floor-plan__zone-body accordion-collapse collapse" aria-labelledby="floor-plan-zone-heading-7" data-bs-parent="#floor-plan-zones">
+                                            <div class="floor-plan__zone-inner">
+                                                <p class="floor-plan__zone-note">บูธด้านนอก</p>
+                                                <ul class="floor-plan__booths">
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S01</span><span class="floor-plan__booth-name">The Summer Coffee Company</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S02</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S03</span><span class="floor-plan__booth-name">Arete Platform Co., Ltd.</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S04</span><span class="floor-plan__booth-name">ธนาคาร ซีไอเอ็มบี ไทย จำกัด (มหาชน)</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S05</span><span class="floor-plan__booth-name">บริษัท เคลิงค์ แอดวานซ์ เทคโนโลยี จำกัด</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S06</span><span class="floor-plan__booth-name">บริษัท เทโร ดิจิทัล จำกัด</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S07</span><span class="floor-plan__booth-name">บริษัท สมาร์ท เมดเทค จำกัด</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S08</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S09</span><span class="floor-plan__booth-name">บริษัท แอ็บโซลูท เฮลธ์ เมดิคอล เซอร์วิสเซส จำกัด</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S10</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S11</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S12</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S13</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S14</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S15</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S16</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S17</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S18</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S19</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S20</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S21</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S22</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S23</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S24</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S25</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S26</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S27</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S28</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S29</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S30</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S31</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S32</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S33</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S34</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S35</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S36</span></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </aside>
+                    </div>
+
+                    <!-- ภาพใหญ่สำหรับจอ ≤991px: modal กลางจอ + overlay ดำ เลื่อนดูได้ ซูมด้วยการถ่างนิ้ว แตะสองครั้ง หรือปุ่ม +/− -->
+                    <dialog id="floor-plan-lightbox" class="floor-plan-lightbox" aria-labelledby="floor-plan-lightbox-title" data-floor-plan-lightbox>
+                        <p id="floor-plan-lightbox-title" class="visually-hidden" data-floor-plan-lightbox-title>Floor Plan</p>
+                        <!-- ปุ่มปิดอยู่นอกกรอบภาพ (มุมขวาบน เหนือ modal) ไม่มีแถบหัวกินพื้นที่ -->
+                        <button class="floor-plan-lightbox__close" type="button" aria-label="ปิดภาพขยาย" data-floor-plan-lightbox-close>
+                            <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-x"></use></svg>
+                        </button>
+                        <div class="floor-plan-lightbox__frame">
+                            <div class="floor-plan-lightbox__viewport" data-floor-plan-lightbox-viewport>
+                                <img class="floor-plan-lightbox__image" src="" alt="" data-floor-plan-lightbox-image>
+                            </div>
+                            <div class="floor-plan-lightbox__controls" role="group" aria-label="ซูมภาพ">
+                                <button class="floor-plan-lightbox__zoom floor-plan-lightbox__zoom--out" type="button" aria-label="ซูมออก" data-floor-plan-zoom="-1"></button>
+                                <button class="floor-plan-lightbox__zoom floor-plan-lightbox__zoom--in" type="button" aria-label="ซูมเข้า" data-floor-plan-zoom="1"></button>
+                            </div>
+                        </div>
+                    </dialog>
                 </div>
             </div>
         </div>
@@ -2031,10 +2247,11 @@
     <script src="js/action-button.js"></script>
     <script src="js/ticket-price-selector.js?v=3"></script>
     <script src="js/agenda-tabs.js?v=30"></script>
-    <script src="js/speaker-directory.js?v=40"></script>
+    <script src="js/speaker-directory.js?v=41"></script>
     <script src="js/moderator-directory.js?v=1"></script>
     <script src="js/expectation-counter.js?v=2"></script>
     <script src="js/floor-plan-reveal.js?v=1"></script>
+    <script src="js/floor-plan-board.js?v=7"></script>
     <script src="js/back-to-top.js?v=2"></script>
     <script src="js/early-bird-float.js?v=1"></script>
     <!-- ก่อน journey-indicator: ให้ scale ของ section อัปเดตก่อนในเฟรมเดียวกัน เส้นจึงวัดขนาดปัจจุบัน -->
