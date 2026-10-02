@@ -27,6 +27,16 @@
                 image: 'day-1/D1-มทินา-วัชรวราทร.webp',
             },
             {
+                name: 'BILLKIN',
+                role: 'ศิลปิน & นักแสดง',
+                image: 'day-1/D1-บิวกิ้น.webp',
+            },
+            {
+                name: 'WINNIE',
+                role: 'Former Investment Analyst',
+                image: 'day-1/D1-วินนี่.webp',
+            },
+            {
                 name: 'คุณอภิชัย เอี่ยมไพศาล',
                 role: 'Research and Listing Manager, BINANCE TH Academy',
                 image: 'day-1/D1-อภิชัย-เอี่ยมไพศาล.webp',
@@ -51,21 +61,6 @@
                 role: 'Head of Business Development, efin Group',
                 image: 'day-1/D1-พสุธา-ไดจิ-อิเดะ.webp',
             },
-            // {
-            //     name: 'BILLKIN',
-            //     role: '',
-            //     image: 'day-1/D1-บิวกิ้น.webp',
-            // },
-            // {
-            //     name: 'WINNE',
-            //     role: '',
-            //     image: 'day-1/D1-วินนี่.webp',
-            // },
-            // {
-            //     name: 'คุณวิน พรหมแพทย์',
-            //     role: 'ประธานกรรมการบริหาร บลจ. กสิกรไทย จำกัด',
-            //     image: 'day-1/D1-วิน-พรหมแพทย์.webp',
-            // },
         ],
         dayTwo: [
             {
@@ -89,6 +84,16 @@
                 image: 'day-2/D2-พิริยะ-สัมพันธารักษ์.webp',
             },
             {
+                name: 'คุณจิรายุส ทรัพย์ศรีโสภา',
+                role: 'ผู้ก่อตั้งกลุ่มบริษัท บิทคับ แคปปิตอล กรุ๊ป <br class="d-none d-xxl-block">โฮลดิ้งส์ จำกัด',
+                image: 'day-2/D2-ท๊อป-จิรายุส.webp',
+            },
+            {
+                name: 'ผศ.ดร.อุดมศักดิ์ รักวงษ์วาน',
+                role: 'อาจารย์ด้านคณิตศาสตร์การเงิน มหาวิทยาลัยเกษตรศาสตร์ และผู้ก่อตั้ง Altplus Group',
+                image: 'day-2/D2-อุดมศักดิ์-รักวงษ์วาน.webp',
+            },
+            {
                 name: 'คุณวชิรเมษฐ์ <br class="d-none d-lg-block d-xl-none">ธเนศสถิตพงศ์',
                 role: 'Head of Investment Analytics & Innovation, efin Group',
                 image: 'day-2/D2-วชิรเมษฐ์-ธเนศสถิตพงศ์.webp',
@@ -108,16 +113,6 @@
                 role: 'Property Developer & Collector',
                 image: 'day-2/D2-กฤษฎิ์-ชวาลรัตน์.webp',
             },
-            // {
-            //     name: 'ผศ.ดร.อุดมศักดิ์ รักวงษ์วาน',
-            //     role: 'อาจารย์ด้านคณิตศาสตร์การเงิน มหาวิทยาลัยเกษตรศาสตร์ และผู้ก่อตั้ง Altplus Group',
-            //     image: 'day-2/D2-อุดมศักดิ์-รักวงษ์วาน.webp',
-            // },
-            // {
-            //     name: 'คุณจิรายุส ทรัพย์ศรีโสภา',
-            //     role: 'ผู้ก่อตั้งกลุ่มบริษัท บิทคับ แคปปิตอล กรุ๊ป <br class="d-none d-xxl-block">โฮลดิ้งส์ จำกัด',
-            //     image: 'day-2/D2-ท๊อป-จิรายุส.webp',
-            // },
         ],
     };
 
