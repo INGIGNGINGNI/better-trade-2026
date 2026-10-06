@@ -2613,6 +2613,12 @@ body.menu-open .site-header__backdrop {
         margin-bottom: var(--bt-ticket-side-offset);
     }
 
+    /* เนื้อหาทั้ง 3 ใบเริ่มระดับเดียวกัน (ป้าย "บัตร", ชื่อบัตร, ราคา, ปุ่ม, รายการสิทธิ์)
+       ใบข้างเลื่อนลงมากกว่าค่าเดิม 56px เท่าไร หัวใบ Ultimate ก็เลื่อนลงเท่านั้น (เดิม space-10 + 2px คู่กับ 56px) */
+    #ticket .ticket__plan--ultimate .ticket__plan-header {
+        margin-top: calc(var(--space-10) + 2px + var(--bt-ticket-side-offset) - (var(--space-16) - var(--space-2)));
+    }
+
     /* top = padding-top ของแถว + margin-top ของใบข้าง / bottom = margin-bottom ของใบข้าง
        z-index 1 เพื่อให้อยู่เหนือพื้นใบข้าง (ขอบกรอบทับขอบการ์ดพอดี) แต่ใบ Ultimate
        (z-index 1 เหมือนกันแต่มาทีหลังใน DOM) ยังทับกรอบอยู่ */
