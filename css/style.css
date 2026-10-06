@@ -9406,6 +9406,16 @@ html.has-floor-plan-lightbox {
     }
 }
 
+/* มือถือ (≤575px): กล่องสูงเกือบเต็มจอแทนความสูงตามสัดส่วนภาพ (เหลือที่ให้ปุ่มปิดด้านบน + ขอบเล็กน้อย)
+   ตอนพอดีกรอบภาพยังเต็มความกว้างอยู่กลางกล่อง ซูมแล้วภาพขยายเต็มความสูงกล่อง เห็นผังชัดขึ้น
+   height + width ระบุครบ aspect-ratio ที่ JS ใส่ไว้จึงไม่มีผล */
+@media (max-width: 575px) {
+    .floor-plan-lightbox__viewport {
+        height: calc(100dvh - var(--space-12) - var(--space-10));
+        max-height: none;
+    }
+}
+
 .floor-plan-lightbox__image {
     width: 100%;
     max-width: none;
