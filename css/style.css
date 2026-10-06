@@ -8878,17 +8878,20 @@ body.menu-open .site-header__backdrop {
 
     /* สองฝั่ง: ซ้ายภาพแผนผังวางบนพื้น section (ไม่มีกรอบ/พื้น) ขวาแผงรายละเอียดบูธพื้นเทา (กว้างคงที่) */
     .floor-plan__board {
-        --bt-floor-plan-panel-width: 360px;
+        --bt-floor-plan-panel-width: 320px;
 
         display: grid;
         grid-template-columns: minmax(0, 1fr) var(--bt-floor-plan-panel-width);
-        column-gap: var(--space-8);
+        /* ระยะระหว่างภาพกับแผงมาจาก padding ของ .floor-plan__stage แล้ว */
+        column-gap: var(--space-0);
         margin-top: var(--space-12);
-
+        border: var(--rule-width-subtle) solid var(--color-border-faint);
+        border-radius: var(--radius-1);
     }
 
     .floor-plan__stage {
         min-width: 0;
+        padding: var(--space-6);
         display: flex;
         flex-direction: column;
         gap: var(--space-6);
@@ -8984,8 +8987,8 @@ body.menu-open .site-header__backdrop {
 
         .floor-plan__expand-hint {
             position: absolute;
-            bottom: var(--space-2);
-            left: var(--space-2);
+            bottom: calc(var(--space-4) * -1);
+            left: calc(var(--space-2) * -1);
             padding: var(--space-1) var(--space-3);
             border: var(--border-width-1) solid var(--color-border-default);
             border-radius: var(--radius-pill);
@@ -8993,6 +8996,19 @@ body.menu-open .site-header__backdrop {
             background: var(--color-surface-popover);
             font-size: var(--font-size-12);
             line-height: var(--section-small-line-height);
+        }
+    }
+    
+    @media (max-width: 767px) {
+        .floor-plan__expand-hint {
+            left: var(--space-2);
+        }
+    }
+
+    @media (max-width: 575px) {
+        .floor-plan__expand-hint {
+            bottom: calc(var(--space-8) * -1);
+            left: var(--space-1);
         }
     }
 
@@ -9006,6 +9022,14 @@ body.menu-open .site-header__backdrop {
 
         &[hidden] {
             display: none;
+        }
+    }
+
+    /* วางข้างภาพ (≥1200px): ด้านซ้ายชนพื้นที่ภาพในกรอบเดียวกัน ไม่ต้องโค้ง โค้งแค่ด้านขวาตามมุมกรอบ */
+    @media (min-width: 1200px) {
+        .floor-plan__panel {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
         }
     }
 
@@ -9208,30 +9232,36 @@ body.menu-open .site-header__backdrop {
             transform var(--bt-floor-plan-image-duration) var(--ease-standard);
     }
 
-    @media (min-width: 992px) and (max-width: 1199px) {
+    /* ≤1199px: ภาพอยู่บน แผงรายละเอียดบูธลงมาใต้ภาพ สูงไม่เกิน 520px เกินแล้วเลื่อนในแผง
+       (ช่วง 992–1199 ถ้าวางข้างกัน แผงจะเบียดภาพผังจนเล็กเกินอ่าน)
+       ขอบบนชนพื้นที่ภาพในกรอบเดียวกัน ไม่ต้องโค้ง โค้งแค่ด้านล่างตามมุมกรอบ */
+    @media (max-width:1199px) {
         .floor-plan__board {
-            --bt-floor-plan-panel-width: 300px;
+            grid-template-columns: minmax(0, 1fr);
+            row-gap: var(--space-6);
+        }
+
+        .floor-plan__panel {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+
+        .floor-plan__panel-inner {
+            position: static;
+            max-height: 520px;
         }
     }
 
     @media (max-width:991px) {
         padding: var(--section-padding-y-sm) 0;
 
-        /* จอเล็ก: ภาพอยู่บน แผงรายละเอียดบูธลงมาใต้ภาพ เนื้อหาไม่ต้องเลื่อนในแผงแล้ว */
         /* จอเล็กคืนความกว้างเต็ม ย่ออีกแล้วชื่อโซนในภาพ 3D จะอ่านไม่ออก */
         .floor-plan__overview-visual {
             width: 100%;
         }
 
         .floor-plan__board {
-            grid-template-columns: minmax(0, 1fr);
-            row-gap: var(--space-6);
             margin-top: var(--space-8);
-        }
-
-        .floor-plan__panel-inner {
-            position: static;
-            overflow: visible;
         }
     }
 
@@ -9246,6 +9276,16 @@ body.menu-open .site-header__backdrop {
     @media (max-width: 767px) {
         --bt-floor-plan-title-size: var(--section-heading-size);
         --bt-floor-plan-zone-label-size: var(--font-size-48);
+
+        .floor-plan__stage {
+            padding: var(--space-3);
+        }
+    }
+
+    @media (max-width: 575px) {
+        .floor-plan__stage {
+            padding: var(--space-3) var(--space-3) var(--space-6);
+        }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -9290,7 +9330,7 @@ html.has-floor-plan-lightbox {
 .floor-plan-lightbox__frame {
     position: relative;
     overflow: hidden;
-    border-radius: var(--card-radius);
+    border-radius: var(--radius-1);
     background: var(--color-surface-page);
     box-shadow: 0 var(--space-4) var(--space-12) var(--alpha-ink-34);
 }
