@@ -13,8 +13,8 @@
 
     section.classList.add('is-reveal-ready');
 
-    const observer = new IntersectionObserver(([entry]) => {
-        if (!entry.isIntersecting) return;
+    const observer = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
 
         section.classList.add('is-visible');
         observer.disconnect();
@@ -23,5 +23,8 @@
         rootMargin: '0px 0px -8% 0px',
     });
 
-    observer.observe(section.querySelector('.floor-plan__visual') || section);
+    // เริ่มเมื่อภาพใดภาพหนึ่งโผล่ (ภาพรวม 3D หรือภาพผังบูธ) เผื่อกรณีกระโดดลงมาที่ผังบูธเลย
+    const targets = section.querySelectorAll('.floor-plan__overview-visual, .floor-plan__visual');
+    if (targets.length) targets.forEach((target) => observer.observe(target));
+    else observer.observe(section);
 })();

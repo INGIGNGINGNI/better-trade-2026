@@ -1,5 +1,4 @@
-/* Floor Plan
-   - แท็บสลับภาพ (ภาพรวม 3D / แผนผังบูธ)
+/* Floor Plan: การ์ดผังบูธ
    - desktop (≥992px + เมาส์): magnifier (hover zoom) วงกลมลอยตามเมาส์ ดูรายละเอียดบนภาพได้ชัดขึ้น
    - ≤991px / จอสัมผัส: แตะภาพเพื่อเปิดภาพใหญ่ใน modal ซูมด้วยการถ่างนิ้ว แตะสองครั้ง หรือปุ่ม +/−
    แผงรายละเอียดบูธทางขวาเป็น Bootstrap accordion (data-bs-parent เปิดทีละโซนให้เอง) ไม่ต้องมีโค้ดที่นี่ */
@@ -7,35 +6,8 @@
     const board = document.querySelector('[data-floor-plan-board]');
     if (!board) return;
 
-    const tabs = Array.from(board.querySelectorAll('[data-floor-plan-tab]'));
-    const images = tabs.map((tab) => document.getElementById(tab.getAttribute('aria-controls')));
-    const activeIndex = () => Math.max(0, tabs.findIndex((tab) => tab.getAttribute('aria-selected') === 'true'));
-    const activeImage = () => images[activeIndex()];
-
-    /* ---------- แท็บ ---------- */
-    const selectTab = (index, shouldFocus = false) => {
-        tabs.forEach((tab, i) => {
-            const isSelected = i === index;
-            tab.setAttribute('aria-selected', String(isSelected));
-            tab.tabIndex = isSelected ? 0 : -1;
-            if (images[i]) images[i].hidden = !isSelected;
-        });
-        if (shouldFocus) tabs[index].focus();
-    };
-
-    tabs.forEach((tab, index) => {
-        tab.addEventListener('click', () => selectTab(index));
-        tab.addEventListener('keydown', (event) => {
-            const keys = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 };
-            let next = null;
-            if (event.key in keys) next = (index + keys[event.key] + tabs.length) % tabs.length;
-            else if (event.key === 'Home') next = 0;
-            else if (event.key === 'End') next = tabs.length - 1;
-            if (next === null) return;
-            event.preventDefault();
-            selectTab(next, true);
-        });
-    });
+    // ภาพผังบูธในการ์ด (ภาพรวม 3D อยู่ด้านบนแยกต่างหาก ไม่มี magnifier/modal)
+    const activeImage = () => board.querySelector('.floor-plan__image');
 
     /* กรอบของ "ตัวภาพจริง" ในกล่อง img (ภาพใช้ object-fit: contain จึงอาจมีขอบว่างรอบ ๆ) */
     const contentRect = (img) => {
@@ -94,7 +66,6 @@
         });
         visual.addEventListener('pointerleave', hideLens);
         lensMedia.addEventListener('change', hideLens);
-        tabs.forEach((tab) => tab.addEventListener('click', hideLens));
     }
 
     /* ---------- ≤991px: ภาพใหญ่ใน modal + ซูม ---------- */
@@ -104,7 +75,6 @@
 
     const viewport = lightbox.querySelector('[data-floor-plan-lightbox-viewport]');
     const bigImage = lightbox.querySelector('[data-floor-plan-lightbox-image]');
-    const title = lightbox.querySelector('[data-floor-plan-lightbox-title]');
     const closeButton = lightbox.querySelector('[data-floor-plan-lightbox-close]');
     const zoomButtons = Array.from(lightbox.querySelectorAll('[data-floor-plan-zoom]'));
     const MIN_SCALE = 1;
@@ -136,7 +106,6 @@
         bigImage.alt = img.alt;
         // กรอบใน modal สูงตามสัดส่วนภาพตอนพอดีกรอบ ซูมแล้วกรอบคงขนาด เลื่อนดูภาพข้างในแทน
         viewport.style.aspectRatio = `${img.naturalWidth || img.width} / ${img.naturalHeight || img.height}`;
-        title.textContent = tabs[activeIndex()]?.textContent.trim() || 'Floor Plan';
         scale = 1;
         lightbox.showModal();
         document.documentElement.classList.add('has-floor-plan-lightbox');

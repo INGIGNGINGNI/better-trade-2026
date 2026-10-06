@@ -69,7 +69,7 @@
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="css/main.css?v=61">
-    <link rel="stylesheet" href="css/style.css?v=1127">
+    <link rel="stylesheet" href="css/style.css?v=1161">
 </head>
 
 <body class="is-loading">
@@ -299,7 +299,7 @@
 
                 <div class="hero__visual col-12 col-lg-6 col-xl-7">
                     <figure class="hero__speakers">
-                        <img src="images/hero-speaker.webp?v=3" width="1080" height="1350"
+                        <img src="images/hero-speaker.webp?v=4" width="1080" height="1350"
                             alt="วิทยากรในงาน BetterTrade 2026 — 30+ Speakers, 20+ Sessions, 2 Days" fetchpriority="high">
                     </figure>
                 </div>
@@ -409,6 +409,14 @@
                     <div><dt class="ticket__access-label ticket__access-label--private-class"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-users"></use></svg><span class="ticket__access-copy"><span class="ticket__access-title">Master Class <small>(คลาสเชิงลึก)</small></span><small class="ticket__access-description">4 Session กลุ่มเล็ก เจาะลึกแบบใกล้ชิด</small></span></dt><dd class="ticket__status ticket__status--badge">บัตร Master Class เท่านั้น</dd></div>
                     <div><dt class="ticket__access-label ticket__access-label--playbook"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-book-open"></use></svg><span class="ticket__access-copy"><span class="ticket__access-title">Playbook <small>(คู่มือเข้าใจสไตล์การลงทุน)</small></span><small class="ticket__access-description">รับ PERSONALIZED PLAYBOOK เฉพาะตัว สร้างจากพฤติกรรมจริงในงาน</small></span></dt><dd class="ticket__status ticket__status--badge">ฉบับเต็ม</dd></div>
                 </dl>
+
+                <aside class="ticket__workshop" aria-labelledby="ticket-workshop-title">
+                    <p id="ticket-workshop-title" class="ticket__workshop-title">สำรองที่นั่ง Workshop ได้แล้ววันนี้ <small class="text-nowrap">(บัตร Ultimate เท่านั้น)</small></p>
+                    <div class="ticket__workshop-body">
+                        <p class="ticket__workshop-description">8 Session เรียนทีละขั้นกับมืออาชีพ<br class="d-none d-lg-block">ตัวจริง <span class="text-nowrap">(ที่นั่งจำกัด)</span></p>
+                        <a class="bt-action-button bt-action-button--secondary bt-action-button--sm ticket__workshop-action" href="https://www.efin.finance/events/better-trade/better-trade2026/buy-ticket" target="_blank" rel="noopener noreferrer">สำรองที่นั่ง Workshop</a>
+                    </div>
+                </aside>
             </article>
 
             <article class="ticket__plan ticket__plan--explorer col-12 col-lg-4" aria-labelledby="ticket-explorer-title">
@@ -503,6 +511,8 @@
                         <div class="agenda__day-panel-header">
                             <p class="agenda__day-panel-date" role="heading" aria-level="3">31 ตุลาคม 2569</p>
                             <time class="agenda__day-panel-time">09:00 – 18:30 น.</time>
+                            <!-- แสดงเฉพาะแท็บ Workshop (แทนช่วงเวลาของวัน) -->
+                            <a class="bt-action-button bt-action-button--primary bt-action-button--sm agenda__day-panel-action" href="https://www.efin.finance/events/better-trade/better-trade2026/buy-ticket" target="_blank" rel="noopener noreferrer">สำรองที่นั่ง</a>
                         </div>
                         <div class="agenda__content">
                             <div class="agenda__tabs-viewport">
@@ -703,12 +713,101 @@
                                     <p>กำหนดการของ Experience Stage จะประกาศเพิ่มเติมเร็ว ๆ นี้</p>
                                 </div>
                             </div>
-                            <div id="agenda-day-one-workshop" class="agenda__panel agenda__panel--empty" role="tabpanel" aria-labelledby="agenda-day-one-workshop-tab" hidden>
-                                <div class="agenda__empty-state">
-                                    <p class="agenda__empty-kicker">Workshop</p>
-                                    <h3>Coming Soon</h3>
-                                    <p>รายละเอียด Workshop จะประกาศเพิ่มเติมเร็ว ๆ นี้</p>
-                                </div>
+                            <div id="agenda-day-one-workshop" class="agenda__panel" role="tabpanel" aria-labelledby="agenda-day-one-workshop-tab" hidden>
+                                <p class="agenda__room-title">Workshop room 1</p>
+                                <table class="agenda__table">
+                                    <caption class="visually-hidden">กำหนดการ Workshop room 1 วันที่ 31 ตุลาคม 2569</caption>
+                                    <colgroup>
+                                        <col class="agenda__time-column">
+                                        <col class="agenda__tags-column">
+                                        <col>
+                                        <col class="agenda__speaker-column">
+                                    </colgroup>
+                                    <thead class="visually-hidden">
+                                        <tr><th scope="col">เวลา</th><th scope="col">หมวดหมู่</th><th scope="col">รายการ</th><th scope="col">วิทยากร</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row"><time>13.00 – 15.00</time></th>
+                                            <td></td>
+                                            <td>
+                                                <p class="agenda__session-title">GO GLOBAL</p>
+                                                <p class="agenda__session-summary">หุ้นนอก กองทุนนอก เลือกยังไงให้เงินโตทั่วโลก?</p>
+                                                <p class="agenda__session-speaker">To Be Determined</p>
+                                            </td>
+                                            <td class="agenda__speakers">
+                                                <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="agenda__speaker-photo"><img src="images/agenda/profile-empty.webp" width="928" height="1152" loading="lazy" decoding="async" alt=""></span></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row"></th>
+                                            <td></td>
+                                            <td><p class="agenda__session-title agenda__session-title--simple agenda__session-title--as-written">Break</p></td>
+                                            <td class="agenda__speakers"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row"><time>16.00 – 18.00</time></th>
+                                            <td></td>
+                                            <td>
+                                                <p class="agenda__session-seats"><span class="agenda__session-badge">35 ที่นั่ง</span></p>
+                                                <p class="agenda__session-title">SMART CASH FLOW &amp; LONG-TERM PORTFOLIO WORKSHOP</p>
+                                                <p class="agenda__session-speaker">คุณสรวิศ กลั่นแก้ว (โค้ชเจ)<br>คุณปริญญา นิรนาทล้ำพงศ์ (โค้ชก้อย )<span class="agenda__session-speaker-role">Super Trader</span></p>
+                                            </td>
+                                            <td class="agenda__speakers">
+                                                <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 1"><span class="agenda__speaker-photo"><img src="images/agenda/profile-empty.webp" width="928" height="1152" loading="lazy" decoding="async" alt=""></span></span>
+                                                <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 2"><span class="agenda__speaker-photo"><img src="images/agenda/profile-empty.webp" width="928" height="1152" loading="lazy" decoding="async" alt=""></span></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <p class="agenda__room-title">Workshop room 2</p>
+                                <table class="agenda__table">
+                                    <caption class="visually-hidden">กำหนดการ Workshop room 2 วันที่ 31 ตุลาคม 2569</caption>
+                                    <colgroup>
+                                        <col class="agenda__time-column">
+                                        <col class="agenda__tags-column">
+                                        <col>
+                                        <col class="agenda__speaker-column">
+                                    </colgroup>
+                                    <thead class="visually-hidden">
+                                        <tr><th scope="col">เวลา</th><th scope="col">หมวดหมู่</th><th scope="col">รายการ</th><th scope="col">วิทยากร</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row"><time>13.00 – 15.00</time></th>
+                                            <td></td>
+                                            <td>
+                                                <p class="agenda__session-seats"><span class="agenda__session-badge">35 ที่นั่ง</span></p>
+                                                <p class="agenda__session-title">WHY IS THIS CARD WORTH ฿100,000 ?</p>
+                                                <p class="agenda__session-summary">เข้าใจตลาดการ์ดสะสม ตั้งแต่ Value, Grading, Pricing <br class="d-none d-xxl-block">ไปจนถึง Liquidity พร้อมทดลองวิเคราะห์การ์ดจริง</p>
+                                                <p class="agenda__session-speaker">คุณกฤช แก้วสุวรรณ<span class="agenda__session-speaker-role">Co-Founder Card World</span></p>
+                                            </td>
+                                            <td class="agenda__speakers">
+                                                <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="agenda__speaker-photo"><img src="images/agenda/day-1/D1-กฤช-แก้วสุวรรณ.webp" width="240" height="240" loading="lazy" decoding="async" alt="คุณกฤช แก้วสุวรรณ"></span></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row"></th>
+                                            <td></td>
+                                            <td><p class="agenda__session-title agenda__session-title--simple agenda__session-title--as-written">Break</p></td>
+                                            <td class="agenda__speakers"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row"><time>16.00 – 18.00</time></th>
+                                            <td></td>
+                                            <td>
+                                                <p class="agenda__session-seats"><span class="agenda__session-badge">35 ที่นั่ง</span></p>
+                                                <p class="agenda__session-title">BITCOIN ซื้อ ถือ หาย! ? คนส่วนใหญ่พลาดตรงไหน <br class="d-none d-xxl-block">แล้วจะป้องกันอย่างไร ?</p>
+                                                <p class="agenda__session-speaker">อาจารย์ขิง สิรภพ นิลบดี<span class="agenda__session-speaker-role">Head of Bitcoin Education บริษัท Right Shift</span></p>
+                                            </td>
+                                            <td class="agenda__speakers">
+                                                <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="agenda__speaker-photo"><img src="images/agenda/profile-empty.webp" width="928" height="1152" loading="lazy" decoding="async" alt=""></span></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <p class="agenda__note">*หมายเหตุ Session อาจมีการปรับเปลี่ยนตามความเหมาะสม</p>
                             </div>
                             <div id="agenda-day-one-private-class" class="agenda__panel" role="tabpanel" aria-labelledby="agenda-day-one-private-class-tab" hidden>
                                 <table class="agenda__table">
@@ -755,6 +854,8 @@
                         <div class="agenda__day-panel-header">
                             <p class="agenda__day-panel-date" role="heading" aria-level="3">1 พฤศจิกายน 2569</p>
                             <time class="agenda__day-panel-time">09:00 – 17:30 น.</time>
+                            <!-- แสดงเฉพาะแท็บ Workshop (แทนช่วงเวลาของวัน) -->
+                            <a class="bt-action-button bt-action-button--primary bt-action-button--sm agenda__day-panel-action" href="https://www.efin.finance/events/better-trade/better-trade2026/buy-ticket" target="_blank" rel="noopener noreferrer">สำรองที่นั่ง</a>
                         </div>
                         <div class="agenda__content">
                             <div class="agenda__tabs-viewport">
@@ -937,12 +1038,106 @@
                                     <p>กำหนดการของ Experience Stage จะประกาศเพิ่มเติมเร็ว ๆ นี้</p>
                                 </div>
                             </div>
-                            <div id="agenda-day-two-workshop" class="agenda__panel agenda__panel--empty" role="tabpanel" aria-labelledby="agenda-day-two-workshop-tab" hidden>
-                                <div class="agenda__empty-state">
-                                    <p class="agenda__empty-kicker">Workshop</p>
-                                    <h3>Coming Soon</h3>
-                                    <p>รายละเอียด Workshop จะประกาศเพิ่มเติมเร็ว ๆ นี้</p>
-                                </div>
+                            <div id="agenda-day-two-workshop" class="agenda__panel" role="tabpanel" aria-labelledby="agenda-day-two-workshop-tab" hidden>
+                                <p class="agenda__room-title">Workshop room 1</p>
+                                <table class="agenda__table">
+                                    <caption class="visually-hidden">กำหนดการ Workshop room 1 วันที่ 1 พฤศจิกายน 2569</caption>
+                                    <colgroup>
+                                        <col class="agenda__time-column">
+                                        <col class="agenda__tags-column">
+                                        <col>
+                                        <col class="agenda__speaker-column">
+                                    </colgroup>
+                                    <thead class="visually-hidden">
+                                        <tr><th scope="col">เวลา</th><th scope="col">หมวดหมู่</th><th scope="col">รายการ</th><th scope="col">วิทยากร</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row"><time>13.00 – 15.00</time></th>
+                                            <td></td>
+                                            <td>
+                                                <p class="agenda__session-seats"><span class="agenda__session-badge">25 ที่นั่ง</span></p>
+                                                <p class="agenda__session-title">AI FOR INVESTING: REAL USE CASES, REAL DATA</p>
+                                                <p class="agenda__session-summary">ลงมือทำจริง จาก Zero to Hero</p>
+                                                <p class="agenda__session-speaker">คุณพสุธา ไดจิ อิเดะ<span class="agenda__session-speaker-role">Head of Business Development, efin Group</span></p>
+                                                <p class="agenda__session-speaker">คุณณัฐดนัย หวังพระธรรม<span class="agenda__session-speaker-role">Founder QuantCorner</span></p>
+                                            </td>
+                                            <td class="agenda__speakers">
+                                                <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 1"><span class="agenda__speaker-photo"><img src="images/agenda/day-1/D1-พสุธา-ไดจิ-อิเดะ.webp" width="240" height="240" loading="lazy" decoding="async" alt="คุณพสุธา ไดจิ อิเดะ"></span></span>
+                                                <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 2"><span class="agenda__speaker-photo"><img src="images/agenda/profile-empty.webp" width="928" height="1152" loading="lazy" decoding="async" alt=""></span></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row"></th>
+                                            <td></td>
+                                            <td><p class="agenda__session-title agenda__session-title--simple agenda__session-title--as-written">Break</p></td>
+                                            <td class="agenda__speakers"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row"><time>16.00 – 18.00</time></th>
+                                            <td></td>
+                                            <td>
+                                                <p class="agenda__session-seats"><span class="agenda__session-badge">35 ที่นั่ง</span></p>
+                                                <p class="agenda__session-title">MARKET INTELLIGENCE</p>
+                                                <p class="agenda__session-summary">ถอดรหัสโวลุ่ม &amp; เชื่อมโยงข่าว คัดหุ้นทำกำไร</p>
+                                                <p class="agenda__session-speaker">คุณภัค วิทยาพันธ์ประชา (โค้ชเล็ก) <br>คุณปพนสรรค์ จิรวรรณพันธุ์ (โค้ชบอล)<span class="agenda__session-speaker-role">Super Trader</span></p>
+                                            </td>
+                                            <td class="agenda__speakers">
+                                                <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 1"><span class="agenda__speaker-photo"><img src="images/agenda/profile-empty.webp" width="928" height="1152" loading="lazy" decoding="async" alt=""></span></span>
+                                                <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากรคนที่ 2"><span class="agenda__speaker-photo"><img src="images/agenda/profile-empty.webp" width="928" height="1152" loading="lazy" decoding="async" alt=""></span></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <p class="agenda__room-title">Workshop room 2</p>
+                                <table class="agenda__table">
+                                    <caption class="visually-hidden">กำหนดการ Workshop room 2 วันที่ 1 พฤศจิกายน 2569</caption>
+                                    <colgroup>
+                                        <col class="agenda__time-column">
+                                        <col class="agenda__tags-column">
+                                        <col>
+                                        <col class="agenda__speaker-column">
+                                    </colgroup>
+                                    <thead class="visually-hidden">
+                                        <tr><th scope="col">เวลา</th><th scope="col">หมวดหมู่</th><th scope="col">รายการ</th><th scope="col">วิทยากร</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row"><time>11.00 – 13.00</time></th>
+                                            <td></td>
+                                            <td>
+                                                <p class="agenda__session-seats"><span class="agenda__session-badge">25 ที่นั่ง</span></p>
+                                                <p class="agenda__session-title">TRANSFORM TO AUTO WORKFLOW</p>
+                                                <p class="agenda__session-summary">อัปเกรด efin StockPickUp เป็นผู้ช่วยวิเคราะห์หุ้น<br class="d-none d-xxl-block">ส่วนตัว 24 ชม.</p>
+                                                <p class="agenda__session-speaker">คุณวชิรเมษฐ์ ธเนศสถิตพงศ์<span class="agenda__session-speaker-role">Head of Investment Analytics &amp; Innovation, efin Group</span></p>
+                                            </td>
+                                            <td class="agenda__speakers">
+                                                <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="agenda__speaker-photo"><img src="images/agenda/day-2/D2-วชิรเมษฐ์-ธเนศสถิตพงศ์.webp" width="240" height="240" loading="lazy" decoding="async" alt="คุณวชิรเมษฐ์ ธเนศสถิตพงศ์"></span></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row"></th>
+                                            <td></td>
+                                            <td><p class="agenda__session-title agenda__session-title--simple agenda__session-title--as-written">Break</p></td>
+                                            <td class="agenda__speakers"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row"><time>15.00 – 17.00</time></th>
+                                            <td></td>
+                                            <td>
+                                                <p class="agenda__session-seats"><span class="agenda__session-badge">35 ที่นั่ง</span></p>
+                                                <p class="agenda__session-title">THE FREEDOM PLAN</p>
+                                                <p class="agenda__session-summary">ต้องมีเงินเท่าไหร่ วางแผนยังไง ถึงหยุดทำงานได้</p>
+                                                <p class="agenda__session-speaker">ผศ.ดร.อุดมศักดิ์ รักวงษ์วาน<span class="agenda__session-speaker-role">อาจารย์ด้านคณิตศาสตร์การเงิน มหาวิทยาลัยเกษตรศาสตร์ <br class="d-none d-xxl-block">และผู้ก่อตั้ง Altplus Group</span></p>
+                                            </td>
+                                            <td class="agenda__speakers">
+                                                <span class="agenda__speaker-frame" aria-label="พื้นที่รูปโปรไฟล์วิทยากร"><span class="agenda__speaker-photo"><img src="images/agenda/day-2/D2-อุดมศักดิ์-รักวงษ์วาน.webp" width="240" height="240" loading="lazy" decoding="async" alt="ผศ.ดร.อุดมศักดิ์ รักวงษ์วาน"></span></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <p class="agenda__note">*หมายเหตุ Session อาจมีการปรับเปลี่ยนตามความเหมาะสม</p>
                             </div>
                             <div id="agenda-day-two-private-class" class="agenda__panel agenda__panel--empty" role="tabpanel" aria-labelledby="agenda-day-two-private-class-tab" hidden>
                                 <div class="agenda__empty-state">
@@ -1344,23 +1539,44 @@
                 <div class="col-12">
                     <h2 id="floor-plan-title" class="bt-section-title floor-plan__title"><span class="bt-title-highlight has-pe">สำรวจ</span>พื้นที่<br>และโซนต่าง ๆ ในงาน</h2>
                     <p class="bt-section-subtext">Floor Plan</p>
-                    <!-- ซ้าย: ภาพแผนผัง (สลับ 3D / แผนผังบูธ) ขวา: รายละเอียดบูธ + โลโก้ผู้สนับสนุน
-                         js/floor-plan-board.js คุมแท็บสลับภาพ magnifier (desktop) และภาพใหญ่ใน modal (≤991px) -->
+                    <!-- ภาพรวม 3D ดีไซน์เดิม: ภาพ + เส้นชี้ ดาว และชื่อโซน (callout ใช้ viewBox เดียวกับขนาดภาพ จึงย่อขยายพร้อมกัน)
+                         เส้นอยู่ในพื้นว่างรอบแผนผัง ไม่ทับตัวแผนผัง -->
+                    <figure class="floor-plan__overview">
+                        <div class="floor-plan__overview-visual">
+                            <img class="floor-plan__overview-image" src="images/floor-plan-01.webp" width="1440" height="1141"
+                                loading="lazy" decoding="async"
+                                alt="ภาพรวม 3D ของพื้นที่งาน BetterTrade 2026: Conference, Pavilions และ Experience Zone">
+                            <svg class="floor-plan__callouts" viewBox="0 0 1440 1141" aria-hidden="true">
+                                <g class="floor-plan__callout floor-plan__callout--conference">
+                                    <line class="floor-plan__callout-line" x1="340" y1="240" x2="340" y2="122"></line>
+                                    <image class="floor-plan__callout-mark" href="images/floor-plan-star.webp"
+                                        x="322" y="86" width="36" height="36"></image>
+                                    <text class="floor-plan__callout-label" x="340" y="68" text-anchor="middle">CONFERENCE</text>
+                                </g>
+                                <g class="floor-plan__callout floor-plan__callout--pavilions">
+                                    <line class="floor-plan__callout-line" x1="300" y1="663" x2="300" y2="815"></line>
+                                    <image class="floor-plan__callout-mark" href="images/floor-plan-star.webp"
+                                        x="282" y="815" width="36" height="36"></image>
+                                    <text class="floor-plan__callout-label" x="300" y="897" text-anchor="middle">PAVILIONS</text>
+                                </g>
+                                <g class="floor-plan__callout floor-plan__callout--experience">
+                                    <line class="floor-plan__callout-line" x1="1180" y1="322" x2="1180" y2="175"></line>
+                                    <image class="floor-plan__callout-mark" href="images/floor-plan-star.webp"
+                                        x="1162" y="139" width="36" height="36"></image>
+                                    <text class="floor-plan__callout-label" x="1180" y="121" text-anchor="middle">EXPERIENCE</text>
+                                </g>
+                            </svg>
+                        </div>
+                    </figure>
+
+                    <!-- ผังบูธ: ซ้ายภาพแผนผังบูธ ขวาแผงรายละเอียดบูธ
+                         js/floor-plan-board.js คุม magnifier (desktop) และภาพใหญ่ใน modal (≤991px) -->
                     <div class="floor-plan__board" data-floor-plan-board>
                         <div class="floor-plan__stage">
-                            <div class="floor-plan__toolbar">
-                                <div class="floor-plan__tabs" role="tablist" aria-label="เลือกมุมมองแผนผัง">
-                                    <button id="floor-plan-tab-overview" class="floor-plan__tab" type="button" role="tab" aria-selected="true" aria-controls="floor-plan-view-overview" data-floor-plan-tab>ภาพรวม 3D</button>
-                                    <button id="floor-plan-tab-booths" class="floor-plan__tab" type="button" role="tab" aria-selected="false" aria-controls="floor-plan-view-booths" tabindex="-1" data-floor-plan-tab>แผนผังบูธ</button>
-                                </div>
-                            </div>
                             <figure class="floor-plan__figure">
                                 <div class="floor-plan__visual">
-                                    <img id="floor-plan-view-overview" class="floor-plan__image" src="images/floor-plan-01.webp" width="1440" height="1141"
-                                        loading="lazy" decoding="async" role="tabpanel" aria-labelledby="floor-plan-tab-overview"
-                                        alt="ภาพรวม 3D ของพื้นที่งาน BetterTrade 2026: Conference, Experience Zone และ Pavilion">
-                                    <img id="floor-plan-view-booths" class="floor-plan__image" src="images/floor-plan-02.webp" width="1440" height="870"
-                                        loading="lazy" decoding="async" role="tabpanel" aria-labelledby="floor-plan-tab-booths" hidden
+                                    <img class="floor-plan__image" src="images/floor-plan-02.webp" width="1440" height="870"
+                                        loading="lazy" decoding="async"
                                         alt="แผนผังบูธภายในงาน BetterTrade 2026 พร้อมหมายเลขบูธในแต่ละโซน">
                                     <!-- desktop: magnifier (hover zoom) วงกลมลอยตามเมาส์ (js/floor-plan-board.js) -->
                                     <div class="floor-plan__lens" aria-hidden="true" data-floor-plan-lens></div>
@@ -1375,14 +1591,14 @@
                             <div class="floor-plan__panel-inner">
                                 <div class="floor-plan__panel-header">
                                     <h3 id="floor-plan-panel-title" class="floor-plan__panel-title">บูธในงาน</h3>
-                                    <p class="floor-plan__panel-note">Experience Zone 6 โซน และบูธ Prospect ด้านนอก</p>
+                                    <p class="floor-plan__panel-note">Experience Zone 5 โซน, Life Style Zone และ Pavilion Zone</p>
                                 </div>
                                 <div id="floor-plan-zones" class="floor-plan__zones accordion">
                                     <div class="floor-plan__zone accordion-item" style="--floor-plan-zone-color: var(--color-warning-400);">
                                         <h4 id="floor-plan-zone-heading-1" class="floor-plan__zone-heading accordion-header">
                                             <button class="floor-plan__zone-toggle accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#floor-plan-zone-1" aria-expanded="true" aria-controls="floor-plan-zone-1">
                                                 <span class="floor-plan__zone-swatch" aria-hidden="true"></span>
-                                                <span class="floor-plan__zone-name">1. Capital</span>
+                                                <span class="floor-plan__zone-name">Capital</span>
                                                 <span class="floor-plan__zone-meta">16 บูธ</span>
                                                 <span class="floor-plan__zone-icon" aria-hidden="true"></span>
                                             </button>
@@ -1390,22 +1606,22 @@
                                         <div id="floor-plan-zone-1" class="floor-plan__zone-body accordion-collapse collapse show" aria-labelledby="floor-plan-zone-heading-1" data-bs-parent="#floor-plan-zones">
                                             <div class="floor-plan__zone-inner">
                                                 <ul class="floor-plan__booths">
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A1</span><span class="floor-plan__booth-name">ธนาคารไทยเครดิต จำกัด (มหาชน)</span></li>
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A2</span><span class="floor-plan__booth-name">บริษัทหลักทรัพย์ พาย จำกัด (มหาชน)</span></li>
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A3</span><span class="floor-plan__booth-name">เพจ NamFinance</span></li>
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A4</span><span class="floor-plan__booth-name">บริษัทหลักทรัพย์ บีวายดีเอช จำกัด (มหาชน)</span></li>
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A5</span><span class="floor-plan__booth-name">บริษัทเงินทุน เอเซียน จำกัด (มหาชน)</span></li>
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A6</span><span class="floor-plan__booth-name">บริษัท ซุปเปอร์เทรดเดอร์ รีพับบลิค จำกัด</span></li>
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A7</span><span class="floor-plan__booth-name">บริษัทหลักทรัพย์ ซีจีเอส อินเตอร์เนชั่นแนล (ประเทศไทย) จำกัด</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A8</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A9</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A10</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A11</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A12</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A13</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A14</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A15</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">A16</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">A1</span><span class="floor-plan__booth-name">Thai Credit Bank - ธนาคารไทยเครดิต จำกัด (มหาชน)</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">A2</span><span class="floor-plan__booth-name">PI - บริษัทหลักทรัพย์ พาย จำกัด (มหาชน)</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">A3</span><span class="floor-plan__booth-name">เพจ NamFinance</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">A4</span><span class="floor-plan__booth-name">BYDH - บริษัทหลักทรัพย์ บีวายดีเอช จำกัด (มหาชน)</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">A5</span><span class="floor-plan__booth-name">Asian Finance - บริษัทเงินทุน เอเซียน จำกัด (มหาชน)</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">A6</span><span class="floor-plan__booth-name">Super Trader Republic - บริษัท ซุปเปอร์เทรดเดอร์ รีพับบลิค จำกัด</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">A7</span><span class="floor-plan__booth-name">CGSI - บริษัทหลักทรัพย์ ซีจีเอส อินเตอร์เนชั่นแนล (ประเทศไทย) จำกัด</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-code">A8</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-code">A9</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-code">A10</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-code">A11</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-code">A12</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">A13</span><span class="floor-plan__booth-name">efin.finance</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">A14</span><span class="floor-plan__booth-name">efin.finance</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">A15</span><span class="floor-plan__booth-name">efin.finance</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">A16</span><span class="floor-plan__booth-name">efin.finance</span></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -1414,7 +1630,7 @@
                                         <h4 id="floor-plan-zone-heading-2" class="floor-plan__zone-heading accordion-header">
                                             <button class="floor-plan__zone-toggle accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#floor-plan-zone-2" aria-expanded="false" aria-controls="floor-plan-zone-2">
                                                 <span class="floor-plan__zone-swatch" aria-hidden="true"></span>
-                                                <span class="floor-plan__zone-name">2. Crypto</span>
+                                                <span class="floor-plan__zone-name">Crypto</span>
                                                 <span class="floor-plan__zone-meta">4 บูธ</span>
                                                 <span class="floor-plan__zone-icon" aria-hidden="true"></span>
                                             </button>
@@ -1422,146 +1638,120 @@
                                         <div id="floor-plan-zone-2" class="floor-plan__zone-body accordion-collapse collapse" aria-labelledby="floor-plan-zone-heading-2" data-bs-parent="#floor-plan-zones">
                                             <div class="floor-plan__zone-inner">
                                                 <ul class="floor-plan__booths">
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">B1</span></li>
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">B2</span><span class="floor-plan__booth-name">บริษัท กัลฟ์ ไบแนนซ์ จำกัด</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">B3</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">B4</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-code">B1</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">B2</span><span class="floor-plan__booth-name">Binance TH - บริษัท กัลฟ์ ไบแนนซ์ จำกัด</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-code">B3</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-code">B4</span></li>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="floor-plan__zone accordion-item" style="--floor-plan-zone-color: var(--color-danger-500);">
+                                    <div class="floor-plan__zone accordion-item" style="--floor-plan-zone-color: var(--color-purple-500);">
                                         <h4 id="floor-plan-zone-heading-3" class="floor-plan__zone-heading accordion-header">
                                             <button class="floor-plan__zone-toggle accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#floor-plan-zone-3" aria-expanded="false" aria-controls="floor-plan-zone-3">
                                                 <span class="floor-plan__zone-swatch" aria-hidden="true"></span>
-                                                <span class="floor-plan__zone-name">3. Commodity + Property</span>
-                                                <span class="floor-plan__zone-meta">4 บูธ</span>
+                                                <span class="floor-plan__zone-name">Health</span>
+                                                <span class="floor-plan__zone-meta">8 บูธ</span>
                                                 <span class="floor-plan__zone-icon" aria-hidden="true"></span>
                                             </button>
                                         </h4>
                                         <div id="floor-plan-zone-3" class="floor-plan__zone-body accordion-collapse collapse" aria-labelledby="floor-plan-zone-heading-3" data-bs-parent="#floor-plan-zones">
                                             <div class="floor-plan__zone-inner">
                                                 <ul class="floor-plan__booths">
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">C1</span><span class="floor-plan__booth-name">บริษัท โอนดี จำกัด</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">C2</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">C3</span></li>
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">C4</span><span class="floor-plan__booth-name">บริษัท ห้างขายทองฮั่วเซ่งเฮง จำกัด</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">D1</span><span class="floor-plan__booth-name">บริษัท เมืองไทยประกันชีวิต จำกัด (มหาชน)</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-code">D2</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-code">D3</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-code">D4</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-code">D5</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-code">D6</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-code">D7</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-code">D8</span></li>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="floor-plan__zone accordion-item" style="--floor-plan-zone-color: var(--color-warning-500);">
+                                    <div class="floor-plan__zone accordion-item" style="--floor-plan-zone-color: var(--color-danger-500);">
                                         <h4 id="floor-plan-zone-heading-4" class="floor-plan__zone-heading accordion-header">
                                             <button class="floor-plan__zone-toggle accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#floor-plan-zone-4" aria-expanded="false" aria-controls="floor-plan-zone-4">
                                                 <span class="floor-plan__zone-swatch" aria-hidden="true"></span>
-                                                <span class="floor-plan__zone-name">4. Alternative Investment</span>
-                                                <span class="floor-plan__zone-meta">5 บูธ</span>
+                                                <span class="floor-plan__zone-name">Commodity + Property</span>
+                                                <span class="floor-plan__zone-meta">4 บูธ</span>
                                                 <span class="floor-plan__zone-icon" aria-hidden="true"></span>
                                             </button>
                                         </h4>
                                         <div id="floor-plan-zone-4" class="floor-plan__zone-body accordion-collapse collapse" aria-labelledby="floor-plan-zone-heading-4" data-bs-parent="#floor-plan-zones">
                                             <div class="floor-plan__zone-inner">
                                                 <ul class="floor-plan__booths">
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">E1</span><span class="floor-plan__booth-name">บริษัท เซลลักซ์ เวนเจอร์ส จำกัด</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">E2</span></li>
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">E3</span><span class="floor-plan__booth-name">บริษัท การ์ดเวิลด์.บีเคเค จำกัด</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">E4</span></li>
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">E5</span><span class="floor-plan__booth-name">บริษัท ปฐมอัคราโรจน์ เอ็นเตอร์ไพรส์ จำกัด</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">C1</span><span class="floor-plan__booth-name">OWND - บริษัท โอนดี จำกัด</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-code">C2</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-code">C3</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">C4</span><span class="floor-plan__booth-name">ฮั่วเซ่งเฮง - บริษัท ห้างขายทองฮั่วเซ่งเฮง จำกัด</span></li>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="floor-plan__zone accordion-item" style="--floor-plan-zone-color: var(--color-purple-500);">
+                                    <div class="floor-plan__zone accordion-item" style="--floor-plan-zone-color: var(--color-warning-500);">
                                         <h4 id="floor-plan-zone-heading-5" class="floor-plan__zone-heading accordion-header">
                                             <button class="floor-plan__zone-toggle accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#floor-plan-zone-5" aria-expanded="false" aria-controls="floor-plan-zone-5">
                                                 <span class="floor-plan__zone-swatch" aria-hidden="true"></span>
-                                                <span class="floor-plan__zone-name">5. Health</span>
-                                                <span class="floor-plan__zone-meta">8 บูธ</span>
+                                                <span class="floor-plan__zone-name">Alternative</span>
+                                                <span class="floor-plan__zone-meta">5 บูธ</span>
                                                 <span class="floor-plan__zone-icon" aria-hidden="true"></span>
                                             </button>
                                         </h4>
                                         <div id="floor-plan-zone-5" class="floor-plan__zone-body accordion-collapse collapse" aria-labelledby="floor-plan-zone-heading-5" data-bs-parent="#floor-plan-zones">
                                             <div class="floor-plan__zone-inner">
                                                 <ul class="floor-plan__booths">
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">D1</span><span class="floor-plan__booth-name">บริษัท เมืองไทยประกันชีวิต จำกัด (มหาชน)</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">D2</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">D3</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">D4</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">D5</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">D6</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">D7</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">D8</span></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="floor-plan__zone accordion-item" style="--floor-plan-zone-color: var(--color-blue-500);">
-                                        <h4 id="floor-plan-zone-heading-6" class="floor-plan__zone-heading accordion-header">
-                                            <button class="floor-plan__zone-toggle accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#floor-plan-zone-6" aria-expanded="false" aria-controls="floor-plan-zone-6">
-                                                <span class="floor-plan__zone-swatch" aria-hidden="true"></span>
-                                                <span class="floor-plan__zone-name">6. EFIN</span>
-                                                <span class="floor-plan__zone-meta">บูธผู้จัด</span>
-                                                <span class="floor-plan__zone-icon" aria-hidden="true"></span>
-                                            </button>
-                                        </h4>
-                                        <div id="floor-plan-zone-6" class="floor-plan__zone-body accordion-collapse collapse" aria-labelledby="floor-plan-zone-heading-6" data-bs-parent="#floor-plan-zones">
-                                            <div class="floor-plan__zone-inner">
-                                                <ul class="floor-plan__booths">
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">EFIN</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">E1</span><span class="floor-plan__booth-name">บริษัท เซลลักซ์ เวนเจอร์ส จำกัด</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-code">E2</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">E3</span><span class="floor-plan__booth-name">Cardworld BKK - บริษัท การ์ดเวิลด์.บีเคเค จำกัด</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-code">E4</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">E5</span><span class="floor-plan__booth-name">Guardian Diamond เพชรผู้พิทักษ์</span></li>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="floor-plan__zone accordion-item" style="--floor-plan-zone-color: var(--color-cyan-400);">
+                                        <h4 id="floor-plan-zone-heading-6" class="floor-plan__zone-heading accordion-header">
+                                            <button class="floor-plan__zone-toggle accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#floor-plan-zone-6" aria-expanded="false" aria-controls="floor-plan-zone-6">
+                                                <span class="floor-plan__zone-swatch" aria-hidden="true"></span>
+                                                <span class="floor-plan__zone-name">Life Style Zone</span>
+                                                <span class="floor-plan__zone-meta">13 บูธ</span>
+                                                <span class="floor-plan__zone-icon" aria-hidden="true"></span>
+                                            </button>
+                                        </h4>
+                                        <div id="floor-plan-zone-6" class="floor-plan__zone-body accordion-collapse collapse" aria-labelledby="floor-plan-zone-heading-6" data-bs-parent="#floor-plan-zones">
+                                            <div class="floor-plan__zone-inner">
+                                                <p class="floor-plan__zone-note">บูธด้านนอก</p>
+                                                <ul class="floor-plan__booths">
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">S01</span><span class="floor-plan__booth-name">The Summer Coffee Company</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-code">S02</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">S03</span><span class="floor-plan__booth-name">Scale biz - Arete Platform Co., Ltd.</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">S04</span><span class="floor-plan__booth-name">CIMB - ธนาคาร ซีไอเอ็มบี ไทย จำกัด (มหาชน)</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">S05</span><span class="floor-plan__booth-name">Klink (BYD Batterry) - บริษัท เคลิงค์ แอดวานซ์ เทคโนโลยี จำกัด</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">S06</span><span class="floor-plan__booth-name">TERO DIGITAL - บริษัท เทโร ดิจิทัล จำกัด</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">S07</span><span class="floor-plan__booth-name">Smart Med Tech - บริษัท สมาร์ท เมดเทค จำกัด</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-code">S08</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">S09</span><span class="floor-plan__booth-name">Absolute Health - บริษัท แอ็บโซลูท เฮลธ์ เมดิคอล เซอร์วิสเซส จำกัด</span></li>
+                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">S10</span><span class="floor-plan__booth-name">Honey Nuka (ฮันนี่นูก้า)</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-code">S11</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-code">S12</span></li>
+                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-code">S13</span></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="floor-plan__zone accordion-item" style="--floor-plan-zone-color: var(--color-sky-500);">
                                         <h4 id="floor-plan-zone-heading-7" class="floor-plan__zone-heading accordion-header">
                                             <button class="floor-plan__zone-toggle accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#floor-plan-zone-7" aria-expanded="false" aria-controls="floor-plan-zone-7">
                                                 <span class="floor-plan__zone-swatch" aria-hidden="true"></span>
-                                                <span class="floor-plan__zone-name">Prospect</span>
-                                                <span class="floor-plan__zone-meta">36 บูธ</span>
+                                                <span class="floor-plan__zone-name">Pavilion Zone</span>
                                                 <span class="floor-plan__zone-icon" aria-hidden="true"></span>
                                             </button>
                                         </h4>
                                         <div id="floor-plan-zone-7" class="floor-plan__zone-body accordion-collapse collapse" aria-labelledby="floor-plan-zone-heading-7" data-bs-parent="#floor-plan-zones">
                                             <div class="floor-plan__zone-inner">
-                                                <p class="floor-plan__zone-note">บูธด้านนอก</p>
-                                                <ul class="floor-plan__booths">
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S01</span><span class="floor-plan__booth-name">The Summer Coffee Company</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S02</span></li>
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S03</span><span class="floor-plan__booth-name">Arete Platform Co., Ltd.</span></li>
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S04</span><span class="floor-plan__booth-name">ธนาคาร ซีไอเอ็มบี ไทย จำกัด (มหาชน)</span></li>
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S05</span><span class="floor-plan__booth-name">บริษัท เคลิงค์ แอดวานซ์ เทคโนโลยี จำกัด</span></li>
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S06</span><span class="floor-plan__booth-name">บริษัท เทโร ดิจิทัล จำกัด</span></li>
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S07</span><span class="floor-plan__booth-name">บริษัท สมาร์ท เมดเทค จำกัด</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S08</span></li>
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S09</span><span class="floor-plan__booth-name">บริษัท แอ็บโซลูท เฮลธ์ เมดิคอล เซอร์วิสเซส จำกัด</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S10</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S11</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S12</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S13</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S14</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S15</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S16</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S17</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S18</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S19</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S20</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S21</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S22</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S23</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S24</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S25</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S26</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S27</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S28</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S29</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S30</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S31</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S32</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S33</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S34</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S35</span></li>
-                                                    <li class="floor-plan__booth"><span class="floor-plan__booth-logo">โลโก้</span><span class="floor-plan__booth-code">S36</span></li>
-                                                </ul>
+                                                <p class="floor-plan__zone-note">Card &amp; Brandname</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1572,7 +1762,7 @@
 
                     <!-- ภาพใหญ่สำหรับจอ ≤991px: modal กลางจอ + overlay ดำ เลื่อนดูได้ ซูมด้วยการถ่างนิ้ว แตะสองครั้ง หรือปุ่ม +/− -->
                     <dialog id="floor-plan-lightbox" class="floor-plan-lightbox" aria-labelledby="floor-plan-lightbox-title" data-floor-plan-lightbox>
-                        <p id="floor-plan-lightbox-title" class="visually-hidden" data-floor-plan-lightbox-title>Floor Plan</p>
+                        <p id="floor-plan-lightbox-title" class="visually-hidden" data-floor-plan-lightbox-title>แผนผังบูธ</p>
                         <!-- ปุ่มปิดอยู่นอกกรอบภาพ (มุมขวาบน เหนือ modal) ไม่มีแถบหัวกินพื้นที่ -->
                         <button class="floor-plan-lightbox__close" type="button" aria-label="ปิดภาพขยาย" data-floor-plan-lightbox-close>
                             <svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-x"></use></svg>
@@ -2250,8 +2440,8 @@
     <script src="js/speaker-directory.js?v=43"></script>
     <script src="js/moderator-directory.js?v=1"></script>
     <script src="js/expectation-counter.js?v=2"></script>
-    <script src="js/floor-plan-reveal.js?v=1"></script>
-    <script src="js/floor-plan-board.js?v=7"></script>
+    <script src="js/floor-plan-reveal.js?v=3"></script>
+    <script src="js/floor-plan-board.js?v=8"></script>
     <script src="js/back-to-top.js?v=2"></script>
     <script src="js/early-bird-float.js?v=1"></script>
     <!-- ก่อน journey-indicator: ให้ scale ของ section อัปเดตก่อนในเฟรมเดียวกัน เส้นจึงวัดขนาดปัจจุบัน -->
