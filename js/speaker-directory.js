@@ -18,7 +18,7 @@
             },
             {
                 name: 'คุณกรณ์ จาติกวณิช',
-                role: 'Lorem ipsum dolor sit amet.',
+                role: 'อดีตรัฐมนตรีว่าการกระทรวงการคลัง และสมาชิกกิตติมศักดิ์สมาคมนักวางแผนการเงินไทย',
                 image: 'day-1/D1-กรณ์-จาติกวณิช.webp',
             },
             {
@@ -68,17 +68,17 @@
             },
             {
                 name: 'อาจารย์ขิง สิรภพ นิลบดี',
-                role: 'Lorem ipsum dolor sit amet.',
+                role: 'Head of Bitcoin Education บริษัท Right Shift',
                 image: 'day-1/D1-อ.ขิง-สิรภพ.webp',
             },
             {
                 name: 'คุณสรวิศ กลั่นแก้ว (โค้ชเจ)',
-                role: 'Lorem ipsum dolor sit amet.',
+                role: 'Super Trader',
                 image: 'day-1/D1-โค้ชเจ.webp',
             },
             {
                 name: 'คุณปริญญา นิรนาทล้ำพงศ์  (โค้ชก้อย)',
-                role: 'Lorem ipsum dolor sit amet.',
+                role: 'Super Trader',
                 image: 'day-1/D1-โค้ชก้อย.webp',
             },
         ],
@@ -95,7 +95,7 @@
             },
             {
                 name: 'คุณณฤทธิ์ โกสาลาทิพย์',
-                role: 'กรรมการผู้จัดการ หัวหน้าสายงานที่ปรึกษาและบริหารการลงทุนลูกค้าบุคคล บริษัทหลักทรัพย์<br class="d-none d-xxl-block">เกียรตินาคินภัทร จำกัด (มหาชน)',
+                role: 'ประธานสายงานที่ปรึกษาและบริหารการลงทุนลูกค้าบุคคล บริษัทหลักทรัพย์ เกียรตินาคินภัทร จำกัด (มหาชน)',
                 image: 'day-2/D2-ณฤทธิ์-โกสาลาทิพย์.webp',
             },
             {
@@ -134,18 +134,23 @@
                 image: 'day-2/D2-กฤษฎิ์-ชวาลรัตน์.webp',
             },
             {
+                name: 'คุณคมศักดิ์ ปอประสิทธิ์',
+                role: 'Investor & Collector',
+                image: 'day-2/D2-คมศักดิ์-ปอประสิทธิ์.webp',
+            },
+            {
                 name: 'คุณณัฐดนัย หวังพระธรรม',
-                role: 'Lorem ipsum dolor sit amet.',
+                role: 'Founder QuantCorner',
                 image: 'day-2/D2-ณัฐดนัย-หวังพระธรรม.webp',
             },
             {
                 name: 'คุณภัค วิทยาพันธ์ประชา (โค้ชเล็ก)',
-                role: 'Lorem ipsum dolor sit amet.',
+                role: 'Super Trader',
                 image: 'day-2/D2-โค้ชเล็ก.webp',
             },
             {
                 name: 'คุณปพนสรรค์ จิรวรรณพันธุ์ (โค้ชบอล)',
-                role: 'Lorem ipsum dolor sit amet.',
+                role: 'Super Trader',
                 image: 'day-2/D2-โค้ชบอล.webp',
             },
         ],
