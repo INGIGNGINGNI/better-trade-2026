@@ -620,7 +620,8 @@ body.menu-closing .back-to-top {
     .playbook-steps__action .bt-action-button,
     .playbook-ticket__action,
     .agenda__session-action,
-    .agenda__day-panel-action).bt-action-button--primary {
+    .agenda__day-panel-action,
+    .ticket__workshop-action).bt-action-button--primary {
     --bt-action-fill: var(--color-neutral-800);
 
     border-color: var(--bt-action-fill);
@@ -4152,7 +4153,7 @@ body.menu-open .site-header__backdrop {
     }
 
     /* กล่องชวนสำรองที่นั่ง Workshop ท้ายตารางสิทธิ์ของบัตร Ultimate
-       โทนฟ้าชุดเดียวกับป้าย/กล่องราคาที่เลือกอยู่ ปุ่ม secondary ไม่แย่งความเด่นจากปุ่มซื้อบัตรหลัก */
+       โทนฟ้าชุดเดียวกับป้าย/กล่องราคาที่เลือกอยู่ ปุ่มดำล้วนชุดเดียวกับปุ่มซื้อบัตร */
     .ticket__workshop {
         margin: var(--space-4) 0 0;
         padding: var(--space-4);
