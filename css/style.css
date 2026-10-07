@@ -9087,6 +9087,10 @@ body.menu-open .site-header__backdrop {
     .floor-plan__zone {
         background: transparent;
         border-bottom: var(--rule-width-subtle) solid var(--color-border-faint);
+
+        &:last-child {
+            border-bottom: 0;
+        }
     }
 
     .floor-plan__zone-heading {
