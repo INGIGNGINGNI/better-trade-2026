@@ -9218,10 +9218,12 @@ body.menu-open .site-header__backdrop {
         list-style: none;
     }
 
+    /* คอลัมน์เลขบูธกว้างพอสำหรับช่วงบูธ (เช่น S01-02, A13-16) ของผู้ออกบูธที่ใช้หลายบูธติดกัน
+       (แถวเดียว รายการบูธจริงอยู่ใน data-booths) ชื่อทุกแถวจึงเริ่มตรงแนวเดียวกัน */
     .floor-plan__booth {
         padding: var(--space-2) 0;
         display: grid;
-        grid-template-columns: var(--space-10) minmax(0, 1fr);
+        grid-template-columns: calc(var(--space-12) + var(--space-2)) minmax(0, 1fr);
         column-gap: var(--space-3);
         align-items: baseline;
 

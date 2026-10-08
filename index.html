@@ -65,11 +65,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Baskervville:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <!-- ฟอนต์หลักเริ่มโหลดพร้อม CSS (ไม่ต้องรอ CSS ทุกไฟล์โหลดเสร็จก่อน) ตัวหนาใช้ตอนเปิดหน้าเฉพาะจอมือถือ -->
+    <link rel="preload" href="fonts/fc-minimal-regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/fc-minimal-medium.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/fc-minimal-light.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/fc-minimal-bold.woff2" as="font" type="font/woff2" crossorigin media="(max-width: 575px)">
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="css/main.css?v=61">
-    <link rel="stylesheet" href="css/style.css?v=1186">
+    <link rel="stylesheet" href="css/style.css?v=1187">
 </head>
 
 <body class="is-loading">
@@ -248,11 +253,11 @@
              js/hero-loader.js ส่งตำแหน่งกรอบภาพวิทยากรให้ CSS วางขอบในของกำแพงตรงกรอบภาพ แล้วกำแพงยาวเลยขอบจอออกไป -->
         <picture>
             <source media="(max-width: 991px), (max-aspect-ratio: 1199/1000)" srcset="images/light/wall-left-1280.webp?v=3" width="1280" height="1600">
-            <img class="hero__wall hero__wall--left" src="images/light/wall-left-new.webp?v=1" width="3840" height="2880" alt="" aria-hidden="true">
+            <img class="hero__wall hero__wall--left" src="images/light/wall-left-new.webp?v=1" width="3840" height="2880" alt="" aria-hidden="true" fetchpriority="high">
         </picture>
         <picture>
             <source media="(max-width: 991px), (max-aspect-ratio: 1199/1000)" srcset="images/light/wall-right-1280.webp?v=3" width="1280" height="1600">
-            <img class="hero__wall hero__wall--right" src="images/light/wall-right-new.webp?v=1" width="2880" height="2880" alt="" aria-hidden="true">
+            <img class="hero__wall hero__wall--right" src="images/light/wall-right-new.webp?v=1" width="2880" height="2880" alt="" aria-hidden="true" fetchpriority="high">
         </picture>
 
         <!-- ไอคอนสินทรัพย์ของ hero เดิม: ตำแหน่ง/ขนาด/มุมเดิม (ชุด POSTER) ลอยขึ้นลงช้า ๆ
@@ -1176,7 +1181,7 @@
             <picture>
                 <source srcset="images/playbook-bg-mobile.webp" media="(max-width: 575px)" width="2490" height="2100">
                 <img class="playbook__background-image" src="images/playbook-bg.webp" width="2490" height="1720"
-                    decoding="async" alt="">
+                    loading="lazy" decoding="async" alt="">
             </picture>
         </div>
 
@@ -1231,19 +1236,19 @@
             <picture class="playbook__glow playbook__glow--base">
                 <source srcset="images/playbook-book-glow-mobile.webp" media="(max-width: 575px)" width="2490" height="2100">
                 <img class="playbook__glow-image" src="images/playbook-book-glow.webp" width="2490" height="1720"
-                    decoding="async" alt="">
+                    loading="lazy" decoding="async" alt="">
             </picture>
             <picture>
                 <source srcset="images/playbook-book-mobile.webp" media="(max-width: 575px)" width="2490" height="2100">
                 <img class="playbook__book" src="images/playbook-book.webp" width="2490" height="1720"
-                    decoding="async" alt="">
+                    loading="lazy" decoding="async" alt="">
             </picture>
         </div>
 
         <div class="playbook__content container-xl">
             <header class="playbook__header">
                 <img class="playbook__title-art" src="images/playbook-title.webp" width="1692" height="237"
-                    decoding="async" alt="PLAYBOOK">
+                    loading="lazy" decoding="async" alt="PLAYBOOK">
                 <h2 id="playbook-title" data-shiny-text="ไอเทมลับของคุณ">ไอเทมลับของคุณ</h2>
                 <p>ไม่ใช่พอร์ตสำเร็จรูป แต่คือเครื่องมือการลงทุน <br>ที่ออกแบบมาเพื่อคุณโดยเฉพาะ (PERSONALIZED PLAYBOOK)</p>
             </header>
@@ -1375,22 +1380,22 @@
 
                 <div class="topics-showcase__assets" aria-hidden="true">
                     <figure class="topics-showcase__asset topics-showcase__asset--triangle" data-topic-asset>
-                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/triangle.webp" alt=""></div></div>
+                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/triangle.webp" loading="lazy" decoding="async" alt=""></div></div>
                     </figure>
                     <figure class="topics-showcase__asset topics-showcase__asset--bitcoin" data-topic-asset>
-                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/bitcoin.webp" alt=""></div></div>
+                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/bitcoin.webp" loading="lazy" decoding="async" alt=""></div></div>
                     </figure>
                     <figure class="topics-showcase__asset topics-showcase__asset--gold" data-topic-asset>
-                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/gold.webp" alt=""></div></div>
+                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/gold.webp" loading="lazy" decoding="async" alt=""></div></div>
                     </figure>
                     <figure class="topics-showcase__asset topics-showcase__asset--stock" data-topic-asset>
-                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/stock.webp" alt=""></div></div>
+                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/stock.webp" loading="lazy" decoding="async" alt=""></div></div>
                     </figure>
                     <figure class="topics-showcase__asset topics-showcase__asset--card" data-topic-asset>
-                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/card.webp" alt=""></div></div>
+                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/card.webp" loading="lazy" decoding="async" alt=""></div></div>
                     </figure>
                     <figure class="topics-showcase__asset topics-showcase__asset--heart" data-topic-asset>
-                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/heart.webp" alt=""></div></div>
+                        <div class="topics-showcase__asset-motion"><div class="topics-showcase__asset-float"><img src="images/heart.webp" loading="lazy" decoding="async" alt=""></div></div>
                     </figure>
                 </div>
             </div>
@@ -1633,10 +1638,7 @@
                                         <div id="floor-plan-zone-efin" class="floor-plan__zone-body accordion-collapse collapse" aria-labelledby="floor-plan-zone-heading-efin" data-bs-parent="#floor-plan-zones">
                                             <div class="floor-plan__zone-inner">
                                                 <ul class="floor-plan__booths">
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">A13</span><span class="floor-plan__booth-name">efin.finance</span></li>
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">A14</span><span class="floor-plan__booth-name">efin.finance</span></li>
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">A15</span><span class="floor-plan__booth-name">efin.finance</span></li>
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">A16</span><span class="floor-plan__booth-name">efin.finance</span></li>
+                                                    <li class="floor-plan__booth is-confirmed" data-booths="A13 A14 A15 A16"><span class="floor-plan__booth-code">A13-16</span><span class="floor-plan__booth-name">efin.finance</span></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -1713,10 +1715,8 @@
                                         <div id="floor-plan-zone-5" class="floor-plan__zone-body accordion-collapse collapse" aria-labelledby="floor-plan-zone-heading-5" data-bs-parent="#floor-plan-zones">
                                             <div class="floor-plan__zone-inner">
                                                 <ul class="floor-plan__booths">
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">E1</span><span class="floor-plan__booth-name">บริษัท เซลลักซ์ เวนเจอร์ส จำกัด</span></li>
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">E2</span><span class="floor-plan__booth-name">บริษัท เซลลักซ์ เวนเจอร์ส จำกัด</span></li>
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">E3</span><span class="floor-plan__booth-name">Cardworld BKK - บริษัท การ์ดเวิลด์.บีเคเค จำกัด</span></li>
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">E4</span><span class="floor-plan__booth-name">Cardworld BKK - บริษัท การ์ดเวิลด์.บีเคเค จำกัด</span></li>
+                                                    <li class="floor-plan__booth is-confirmed" data-booths="E1 E2"><span class="floor-plan__booth-code">E1-2</span><span class="floor-plan__booth-name">บริษัท เซลลักซ์ เวนเจอร์ส จำกัด</span></li>
+                                                    <li class="floor-plan__booth is-confirmed" data-booths="E3 E4"><span class="floor-plan__booth-code">E3-4</span><span class="floor-plan__booth-name">Cardworld BKK - บริษัท การ์ดเวิลด์.บีเคเค จำกัด</span></li>
                                                     <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">E5</span><span class="floor-plan__booth-name">Guardian Diamond เพชรผู้พิทักษ์</span></li>
                                                 </ul>
                                             </div>
@@ -1733,14 +1733,12 @@
                                         <div id="floor-plan-zone-6" class="floor-plan__zone-body accordion-collapse collapse" aria-labelledby="floor-plan-zone-heading-6" data-bs-parent="#floor-plan-zones">
                                             <div class="floor-plan__zone-inner">
                                                 <ul class="floor-plan__booths">
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">S01</span><span class="floor-plan__booth-name">The Summer Coffee Company</span></li>
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">S02</span><span class="floor-plan__booth-name">The Summer Coffee Company</span></li>
+                                                    <li class="floor-plan__booth is-confirmed" data-booths="S01 S02"><span class="floor-plan__booth-code">S01-02</span><span class="floor-plan__booth-name">The Summer Coffee Company</span></li>
                                                     <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">S03</span><span class="floor-plan__booth-name">Scale biz - Arete Platform Co., Ltd.</span></li>
                                                     <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">S04</span><span class="floor-plan__booth-name">Honey Nuka (ฮันนี่นูก้า)</span></li>
                                                     <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">S05</span><span class="floor-plan__booth-name">Klink (BYD Batterry) - บริษัท เคลิงค์ แอดวานซ์ เทคโนโลยี จำกัด</span></li>
                                                     <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">S06</span><span class="floor-plan__booth-name">TERO DIGITAL - บริษัท เทโร ดิจิทัล จำกัด</span></li>
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">S07</span><span class="floor-plan__booth-name">Smart Med Tech - บริษัท สมาร์ท เมดเทค จำกัด</span></li>
-                                                    <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">S08</span><span class="floor-plan__booth-name">Smart Med Tech - บริษัท สมาร์ท เมดเทค จำกัด</span></li>
+                                                    <li class="floor-plan__booth is-confirmed" data-booths="S07 S08"><span class="floor-plan__booth-code">S07-08</span><span class="floor-plan__booth-name">Smart Med Tech - บริษัท สมาร์ท เมดเทค จำกัด</span></li>
                                                     <li class="floor-plan__booth is-confirmed"><span class="floor-plan__booth-code">S09</span><span class="floor-plan__booth-name">Absolute Health - บริษัท แอ็บโซลูท เฮลธ์ เมดิคอล เซอร์วิสเซส จำกัด</span></li>
                                                     <li class="floor-plan__booth"><span class="floor-plan__booth-code">S10</span></li>
                                                     <li class="floor-plan__booth"><span class="floor-plan__booth-code">S11</span></li>
@@ -1903,47 +1901,47 @@
             <div class="past-event__marquee-track swiper-wrapper">
                 <figure class="past-event__slide swiper-slide">
                     <div class="past-event__slide-frame">
-                        <img src="images/pass-event/1.webp" width="2000" height="1333" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน BetterTrade ที่ผ่านมา">
+                        <img src="images/pass-event/1.webp?v=2" width="800" height="534" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน BetterTrade ที่ผ่านมา">
                     </div>
                 </figure>
                 <figure class="past-event__slide swiper-slide">
                     <div class="past-event__slide-frame">
-                        <img src="images/pass-event/2.webp" width="2000" height="1333" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน BetterTrade ที่ผ่านมา">
+                        <img src="images/pass-event/2.webp?v=2" width="800" height="534" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน BetterTrade ที่ผ่านมา">
                     </div>
                 </figure>
                 <figure class="past-event__slide swiper-slide">
                     <div class="past-event__slide-frame">
-                        <img src="images/pass-event/3.webp" width="2000" height="1333" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน BetterTrade ที่ผ่านมา">
+                        <img src="images/pass-event/3.webp?v=2" width="800" height="534" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน BetterTrade ที่ผ่านมา">
                     </div>
                 </figure>
                 <figure class="past-event__slide swiper-slide">
                     <div class="past-event__slide-frame">
-                        <img src="images/pass-event/4.webp" width="2000" height="1333" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน BetterTrade ที่ผ่านมา">
+                        <img src="images/pass-event/4.webp?v=2" width="800" height="534" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน BetterTrade ที่ผ่านมา">
                     </div>
                 </figure>
                 <figure class="past-event__slide swiper-slide">
                     <div class="past-event__slide-frame">
-                        <img src="images/pass-event/5.webp" width="2000" height="1333" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน BetterTrade ที่ผ่านมา">
+                        <img src="images/pass-event/5.webp?v=2" width="800" height="534" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน BetterTrade ที่ผ่านมา">
                     </div>
                 </figure>
                 <figure class="past-event__slide swiper-slide">
                     <div class="past-event__slide-frame">
-                        <img src="images/pass-event/6.webp" width="1000" height="667" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน BetterTrade ที่ผ่านมา">
+                        <img src="images/pass-event/6.webp?v=2" width="800" height="534" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน BetterTrade ที่ผ่านมา">
                     </div>
                 </figure>
                 <figure class="past-event__slide swiper-slide">
                     <div class="past-event__slide-frame">
-                        <img src="images/pass-event/7.webp" width="1000" height="667" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน BetterTrade ที่ผ่านมา">
+                        <img src="images/pass-event/7.webp?v=2" width="800" height="534" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน BetterTrade ที่ผ่านมา">
                     </div>
                 </figure>
                 <figure class="past-event__slide swiper-slide">
                     <div class="past-event__slide-frame">
-                        <img src="images/pass-event/8.webp" width="1000" height="667" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน BetterTrade ที่ผ่านมา">
+                        <img src="images/pass-event/8.webp?v=2" width="800" height="534" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน BetterTrade ที่ผ่านมา">
                     </div>
                 </figure>
                 <figure class="past-event__slide swiper-slide">
                     <div class="past-event__slide-frame">
-                        <img src="images/pass-event/9.webp" width="1000" height="667" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน BetterTrade ที่ผ่านมา">
+                        <img src="images/pass-event/9.webp?v=2" width="800" height="534" loading="lazy" decoding="async" alt="ภาพบรรยากาศงาน BetterTrade ที่ผ่านมา">
                     </div>
                 </figure>
             </div>
@@ -2460,7 +2458,7 @@
     <script src="js/in-page-navigation.js?v=14"></script>
     <script src="js/reveal-on-scroll.js?v=11"></script>
     <script src="js/concept-video.js?v=2"></script>
-    <script src="js/past-event-swiper.js?v=6"></script>
+    <script src="js/past-event-swiper.js?v=7"></script>
     <script src="js/faq-tabs.js?v=6"></script>
     <script src="js/cookie-banner.js?v=2"></script>
     <script src="js/cursor-dot.js?v=10"></script>
