@@ -2,17 +2,55 @@
    - สีดำบนพื้นสว่าง สีขาวบนพื้นมืด (ดู isDarkAt)
    - ตามแบบหน่วงเล็กน้อย (lerp) ให้ดูลื่น ผู้ที่ตั้งค่าลด motion จะติดปลายเมาส์ทันที
    - เฉพาะอุปกรณ์ที่มีเมาส์ (hover + pointer: fine) มือถือ/แท็บเล็ตไม่แสดง
-   - ซ่อนเมื่อเมาส์ออกนอกหน้าต่าง */
+   - ซ่อนเมื่อเมาส์ออกนอกหน้าต่าง
+   - ชี้ส่วนที่มี data-cursor-label (เช่นวิดีโอใน Concept) จุดขยายเป็นวงกลมพร้อมข้อความนั้น */
 (() => {
     if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const EASE = reduced ? 1 : 0.22; // สัดส่วนที่ขยับเข้าหาเมาส์ต่อเฟรม
+    const MORPH_EASE = 0.1; // ช้ากว่าปกติตอนลอยออกจากชิ้นต้นทาง (data-cursor-origin) ให้เห็นการเดินทาง
+    let ease = EASE;
 
     const dot = document.createElement('div');
     dot.className = 'cursor-dot';
     dot.setAttribute('aria-hidden', 'true');
+    const label = document.createElement('span');
+    label.className = 'cursor-dot__label';
+    dot.appendChild(label);
     document.body.appendChild(dot);
+
+    // ข้อความในวงกลมตามส่วนที่ชี้อยู่ ("" = จุดปกติ)
+    // data-cursor-origin (selector ภายในส่วนนั้น เช่นปุ่ม play กลางวิดีโอ): วงกลมเริ่มจากตำแหน่ง/ขนาดของชิ้นนั้น
+    // แล้วค่อยลอยมาหาเมาส์ (ชิ้นเดิมจางหายด้วย CSS) ดูเหมือนปุ่มกลางวิดีโอกลายเป็นเคอร์เซอร์ Play
+    let currentLabel = '';
+    const setLabelFrom = el => {
+        const host = el?.closest?.('[data-cursor-label]');
+        const text = host?.dataset.cursorLabel || '';
+        if (text === currentLabel) return;
+        currentLabel = text;
+        if (text) label.textContent = text;
+
+        const origin = text && host.dataset.cursorOrigin ? host.querySelector(host.dataset.cursorOrigin) : null;
+        // ขนาดวงกลมเท่าชิ้นต้นทางตลอดที่อยู่ในส่วนนั้น ออกแล้วคืนขนาดจุดปกติ
+        if (origin) dot.style.setProperty('--bt-cursor-dot-size', `${origin.getBoundingClientRect().width}px`);
+        else dot.style.removeProperty('--bt-cursor-dot-size');
+
+        if (origin && !reduced && dot.classList.contains('is-visible')) {
+            const box = origin.getBoundingClientRect();
+            // วางทับชิ้นต้นทางทันที (ปิด transition ชั่วคราว) แล้วลอยตามเมาส์
+            dot.classList.add('is-snapping', 'has-label');
+            x = box.left + box.width / 2;
+            y = box.top + box.height / 2;
+            dot.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+            ease = MORPH_EASE;
+            void dot.offsetWidth;
+            dot.classList.remove('is-snapping');
+            if (frameId === null) frameId = requestAnimationFrame(render);
+            return;
+        }
+        dot.classList.toggle('has-label', Boolean(text));
+    };
 
     /* พื้นใต้เมาส์มืดไหม: ดูทุกชั้นที่ตำแหน่งเมาส์ (elementsFromPoint บนสุดก่อน) รวม ::before/::after
        ชั้นแรกที่มีพื้นทึบ (สีพื้น หรือสีแรกของ gradient เช่นปุ่มดำแบบ liquid metal) ใช้ตัดสินด้วยความสว่าง
@@ -46,6 +84,8 @@
         if (toneFrame !== null || !dot.classList.contains('is-visible')) return;
         toneFrame = requestAnimationFrame(() => {
             toneFrame = null;
+            // scroll แล้วส่วนที่อยู่ใต้เมาส์ (ที่นิ่งอยู่) อาจเปลี่ยน ตรวจป้ายข้อความใหม่ด้วย
+            setLabelFrom(document.elementFromPoint(targetX, targetY));
             dot.classList.toggle('is-on-dark', isDarkAt(targetX, targetY));
         });
     };
@@ -57,16 +97,19 @@
     let frameId = null;
 
     const render = () => {
-        x += (targetX - x) * EASE;
-        y += (targetY - y) * EASE;
+        x += (targetX - x) * ease;
+        y += (targetY - y) * ease;
         dot.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-        frameId = Math.abs(targetX - x) + Math.abs(targetY - y) > 0.1 ? requestAnimationFrame(render) : null;
+        const distance = Math.abs(targetX - x) + Math.abs(targetY - y);
+        if (distance < 2) ease = EASE; // ถึงเมาส์แล้วกลับมาตามด้วยความเร็วปกติ
+        frameId = distance > 0.1 ? requestAnimationFrame(render) : null;
     };
 
     window.addEventListener('pointermove', event => {
         if (event.pointerType !== 'mouse') return;
         targetX = event.clientX;
         targetY = event.clientY;
+        setLabelFrom(event.target);
         if (!dot.classList.contains('is-visible')) {
             // โผล่ครั้งแรก/กลับเข้าหน้าต่าง: วางที่ปลายเมาส์เลย ไม่ลากมาจากที่เดิม
             x = targetX;

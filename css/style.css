@@ -619,7 +619,9 @@ body.menu-closing .back-to-top {
     .cookie-banner__button,
     .playbook-steps__action .bt-action-button,
     .playbook-ticket__action,
-    .agenda__session-action).bt-action-button--primary {
+    .agenda__session-action,
+    .agenda__day-panel-action,
+    .ticket__workshop-action).bt-action-button--primary {
     --bt-action-fill: var(--color-neutral-800);
 
     border-color: var(--bt-action-fill);
@@ -2600,9 +2602,22 @@ body.menu-open .site-header__backdrop {
         align-self: stretch;
     }
 
+    /* ระยะที่ใบ Ultimate โผล่พ้นใบข้างทั้งบนและล่าง (เท่ากันให้สมมาตร) เดิม 56px
+       เพิ่มเป็น 88px ตอนใบ Ultimate ยาวขึ้นจากกล่องสำรองที่นั่ง Workshop ใบข้างจึงไม่เหลือที่ว่างใต้รายการสิทธิ์ */
+    #ticket .ticket__plans {
+        --bt-ticket-side-offset: calc(var(--space-16) + var(--space-6));
+    }
+
     #ticket .ticket__plan--explorer,
     #ticket .ticket__plan--master {
-        margin-bottom: calc(var(--space-16) - var(--space-2));
+        margin-top: var(--bt-ticket-side-offset);
+        margin-bottom: var(--bt-ticket-side-offset);
+    }
+
+    /* เนื้อหาทั้ง 3 ใบเริ่มระดับเดียวกัน (ป้าย "บัตร", ชื่อบัตร, ราคา, ปุ่ม, รายการสิทธิ์)
+       ใบข้างเลื่อนลงมากกว่าค่าเดิม 56px เท่าไร หัวใบ Ultimate ก็เลื่อนลงเท่านั้น (เดิม space-10 + 2px คู่กับ 56px) */
+    #ticket .ticket__plan--ultimate .ticket__plan-header {
+        margin-top: calc(var(--space-10) + 2px + var(--bt-ticket-side-offset) - (var(--space-16) - var(--space-2)));
     }
 
     /* top = padding-top ของแถว + margin-top ของใบข้าง / bottom = margin-bottom ของใบข้าง
@@ -2611,7 +2626,7 @@ body.menu-open .site-header__backdrop {
     #ticket .ticket__plans::before {
         content: '';
         position: absolute;
-        inset: calc(var(--space-6) + var(--space-16) - var(--space-2)) 0 calc(var(--space-16) - var(--space-2));
+        inset: calc(var(--space-6) + var(--bt-ticket-side-offset)) 0 var(--bt-ticket-side-offset);
         z-index: 1;
         border: var(--rule-width-subtle) solid var(--color-border-faint);
         border-radius: var(--card-radius);
@@ -2826,7 +2841,8 @@ body.menu-open .site-header__backdrop {
     isolation: isolate;
     transition:
         filter var(--duration-fast) var(--ease-standard),
-        transform var(--duration-fast) var(--ease-standard);
+        opacity var(--duration-standard) var(--ease-standard),
+        transform var(--duration-standard) var(--ease-standard);
 }
 
 .concept__video-play::before,
@@ -2854,7 +2870,6 @@ body.menu-open .site-header__backdrop {
     border-radius: inherit;
     background: linear-gradient(180deg, #9b9b9b 0%, #191a1d 100%);
     box-shadow:
-        0 0 0 var(--space-1) var(--bt-concept-video-play-ring-color),
         inset 0 var(--border-width-1) color-mix(in srgb, var(--color-neutral-0) 26%, transparent),
         0 14px 28px color-mix(in srgb, var(--color-neutral-900) 34%, transparent);
 }
@@ -2888,6 +2903,14 @@ body.menu-open .site-header__backdrop {
 .concept__video-poster:focus-visible .concept__video-play {
     filter: brightness(1.08);
     transform: translate(-50%, -50%) scale(1.03);
+}
+
+/* อุปกรณ์มีเมาส์: hover แล้วปุ่ม play จางหาย กลายเป็นวงกลม Play ที่ลอยตามเมาส์แทน (js/cursor-dot.js, data-cursor-origin) */
+@media (hover: hover) and (pointer: fine) {
+    .concept__video-poster:hover .concept__video-play {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.85);
+    }
 }
 
 .concept__video-poster:focus-visible {
@@ -3669,7 +3692,7 @@ body.menu-open .site-header__backdrop {
     .ticket__plan {
         position: relative;
         min-width: 0;
-        padding: var(--space-12) var(--space-8);
+        padding: var(--space-12) var(--space-8) var(--space-8);
         display: flex;
         flex-direction: column;
         border-top: var(--border-width-6) solid transparent;
@@ -4137,6 +4160,81 @@ body.menu-open .site-header__backdrop {
         }
     }
 
+    /* กล่องชวนสำรองที่นั่ง Workshop ท้ายตารางสิทธิ์ของบัตร Ultimate
+       โทนฟ้าชุดเดียวกับป้าย/กล่องราคาที่เลือกอยู่ ปุ่มดำล้วนชุดเดียวกับปุ่มซื้อบัตร */
+    .ticket__workshop {
+        margin: var(--space-4) 0 0;
+        padding: var(--space-4);
+        border: var(--border-width-1) solid var(--color-blue-400);
+        border-radius: var(--card-radius);
+        background: var(--color-blue-100);
+    }
+
+    .ticket__workshop-title {
+        margin: 0;
+        color: var(--color-text-primary);
+        font-size: var(--section-small-size);
+        font-weight: var(--font-weight-medium);
+        line-height: var(--section-small-line-height);
+
+        small {
+            color: var(--color-blue-600);
+            font-weight: var(--font-weight-medium);
+        }
+    }
+
+    /* คำอธิบายกับปุ่มวางคู่กันในแถวเดียว ปุ่มกว้างตามข้อความ
+       การ์ดแคบจนคำอธิบายเหลือไม่ถึง 140px ปุ่มจะตกลงไปบรรทัดใหม่ (ชิดซ้าย ไม่ยืดเต็มกรอบ) */
+    .ticket__workshop-body {
+        margin: var(--space-2) 0 0;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--space-3);
+    }
+
+    .ticket__workshop-description {
+        flex: 1 1 140px;
+        margin: 0;
+        color: var(--color-text-muted);
+        font-size: var(--font-size-12);
+        line-height: var(--section-small-line-height);
+    }
+
+    .ticket__workshop-action {
+        flex: 0 0 auto;
+    }
+
+    /* 480–991px การ์ดกว้างเต็มคอลัมน์: ข้อความทั้งหมด (หัวข้อ + คำอธิบาย) อยู่ซ้าย ปุ่มอยู่ขวากึ่งกลางแนวตั้ง
+       .ticket__workshop-body เป็น display: contents ให้คำอธิบายกับปุ่มเข้า grid ของกล่องโดยตรง
+       <480px ข้อความเหลือไม่ถึง ~180px วางคู่ไม่ไหว ใช้ flow เดิม (หัวข้อเต็มแถว ปุ่มตกลงไปใต้คำอธิบาย) */
+    @media (min-width:480px) and (max-width:991px) {
+        .ticket__workshop {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: center;
+            column-gap: var(--space-6);
+        }
+
+        .ticket__workshop-body {
+            display: contents;
+        }
+
+        .ticket__workshop-title,
+        .ticket__workshop-description {
+            grid-column: 1;
+        }
+
+        .ticket__workshop-description {
+            margin-top: var(--space-2);
+        }
+
+        .ticket__workshop-action {
+            grid-column: 2;
+            grid-row: 1 / span 2;
+        }
+    }
+
     .ticket__status {
         min-width: var(--space-8);
         display: inline-flex;
@@ -4456,9 +4554,13 @@ body.menu-open .site-header__backdrop {
         .ticket__plans {
             --bs-gutter-x: 1.5rem;
 
-            gap: var(--space-6);
+            gap: var(--space-0);
             padding: var(--space-0);
             width: min(calc(100% - var(--bs-gutter-x)), calc(720px - var(--bs-gutter-x)));
+        }
+
+        .ticket__workshop-body {
+            align-items: flex-start;
         }
 
         .ticket__plan {
@@ -4595,7 +4697,7 @@ body.menu-open .site-header__backdrop {
         }
 
         .ticket__plan {
-            padding: var(--space-8) var(--space-5);
+            padding: var(--space-8) var(--space-4) var(--space-4);
         }
 
         .ticket__plan--master {
@@ -4792,6 +4894,24 @@ body.menu-open .site-header__backdrop {
         color: var(--color-text-primary);
         font-size: var(--font-size-24);
         font-weight: var(--font-weight-medium);
+    }
+
+    /* แท็บ Workshop: ไม่แสดงช่วงเวลาของวันในแถบหัว (แต่ละ session มีเวลาของตัวเองอยู่แล้ว) */
+    .agenda__day-panel:has(.agenda__panel[id$="-workshop"]:not([hidden])) .agenda__day-panel-time {
+        display: none;
+    }
+
+    /* ปุ่ม "สำรองที่นั่ง" (ปุ่มดำล้วน --sm กว้างเท่าปุ่มซื้อบัตรท้าย session) แสดงแทนช่วงเวลา เฉพาะแท็บ Workshop */
+    .agenda__day-panel-action {
+        display: none;
+        align-self: center;
+        min-width: 104px;
+        /* ปุ่มสูง 40px กินพื้นที่เท่าบรรทัดวันที่ (24px) หัวการ์ดจึงสูงเท่าแท็บอื่น ไม่กระตุกตอนสลับแท็บ */
+        margin-block: calc(var(--space-2) * -1);
+    }
+
+    .agenda__day-panel:has(.agenda__panel[id$="-workshop"]:not([hidden])) .agenda__day-panel-action {
+        display: inline-flex;
     }
 
     /* Day 1 กับ Day 2 อยู่ในตารางต่อกันตรง ๆ ไม่งั้นดูเหมือนตารางเดียวยาวต่อเนื่อง
@@ -5433,6 +5553,11 @@ body.menu-open .site-header__backdrop {
             margin-bottom: 0;
         }
 
+        /* แสดงตัวพิมพ์ตามข้อมูลต้นฉบับ (ไม่แปลงเป็นตัวพิมพ์ใหญ่) เช่น "Break" ใน Workshop */
+        &.agenda__session-title--as-written {
+            text-transform: none;
+        }
+
         &:has(+ .agenda__session-summary)::after {
             content: ' ';
         }
@@ -5458,8 +5583,52 @@ body.menu-open .site-header__backdrop {
         color: var(--color-text-muted);
     }
 
-    .agenda__session-speaker:has(.agenda__session-speaker-role) {
+    /* session ที่มีตำแหน่งวิทยากร: ชื่อทุกคนในช่องเป็นสีเข้ม (ตำแหน่งสีเทา) แยกชื่อกับตำแหน่งได้ชัด */
+    td:has(.agenda__session-speaker-role) .agenda__session-speaker {
         color: var(--color-text-primary);
+    }
+
+    /* badge จำนวนที่นั่งเหนือชื่อ session (Workshop) หน้าตาเดียวกับ badge สถานะในการ์ดบัตร (.ticket__status--badge) */
+    .agenda__session-seats {
+        margin: 0 0 var(--space-3);
+        line-height: 1;
+    }
+
+    .agenda__session-badge {
+        display: inline-flex;
+        align-items: center;
+        min-height: var(--space-5);
+        padding: var(--space-0) var(--space-2);
+        border: var(--rule-width-subtle) solid var(--color-blue-200);
+        border-radius: var(--pill-radius);
+        color: var(--color-blue-400);
+        background: var(--color-blue-100);
+        font-size: var(--section-tag-size-sm);
+        font-weight: var(--font-weight-regular);
+        line-height: var(--section-body-line-height);
+        white-space: nowrap;
+    }
+
+    /* Workshop: แถวสุดท้ายของห้องที่มีแถบหัวห้องถัดไปต่อท้าย ไม่มีเส้นคั่นล่าง (แถบคั่นแทน)
+       ห้องสุดท้ายยังมีเส้นล่างตามปกติ คั่นก่อนหมายเหตุท้ายการ์ด */
+    .agenda__panel[id$="-workshop"] .agenda__table:has(+ .agenda__room-title) tbody tr:last-child {
+        border-bottom: 0;
+    }
+
+    /* หัวห้องเหนือตาราง (เช่น Workshop room 1 / 2) เมื่อ panel เดียวมีหลายห้อง */
+    /* แถบหัวห้อง: พื้นขาวล้วนพาดเต็มความกว้างการ์ด (ดึงออกไปชนขอบซ้าย-ขวาเท่า padding ของ panel)
+       ตัวหนังสือยังตรงแนวเดียวกับคอลัมน์เวลา ไม่เว้นระยะบน: room 1 ติดแถบวันเวลา room 2 ติดแถวสุดท้ายของ room 1 */
+    .agenda__room-title {
+        --bt-agenda-room-bleed: var(--space-6);
+
+        margin: 0 calc(var(--bt-agenda-room-bleed) * -1) var(--space-2);
+        padding: var(--space-3) var(--bt-agenda-room-bleed);
+        color: var(--color-text-primary);
+        background: #eaeaea;
+        font-size: var(--section-body-size);
+        font-weight: var(--font-weight-medium);
+        line-height: var(--section-body-line-height);
+
     }
 
     /* ปุ่มซื้อบัตรท้าย session (ปุ่มดำล้วนชุดเดียวกับปุ่มซื้อบัตรใน Ticket)
@@ -6122,6 +6291,10 @@ body.menu-open .site-header__backdrop {
 
         .agenda__panel {
             padding: var(--space-0) var(--space-4) var(--space-4);
+        }
+
+        .agenda__room-title {
+            --bt-agenda-room-bleed: var(--space-4);
         }
 
         .agenda__day-switcher-inner {
@@ -7482,8 +7655,6 @@ body.menu-open .site-header__backdrop {
    กริดจึงต้องอยู่ในคอลัมน์ 9 ช่องที่เยื้อง 3 ช่องเท่ากับ .speaker__days
    เพื่อให้แทร็กกว้างเท่ากัน การ์ดสองฝั่งจึงมีขนาดตรงกันเป๊ะโดยไม่ต้องล็อกค่าใด */
 .moderator {
-    /* ข้อมูลและการ์ดพร้อมใช้งานแล้ว แต่ซ่อน section ไว้จนกว่าจะประกาศเปิดตัว */
-    display: none;
     position: relative;
     scroll-margin-top: var(--header-height);
     /* เว้นบน-ล่างเต็มเท่า section อื่นทุกอัน ระยะระหว่าง Speaker กับ section นี้
@@ -8578,7 +8749,7 @@ body.menu-open .site-header__backdrop {
 
 
 /* ---------- Floor Plan ----------
-   แสดงหัวข้อและภาพแผนผังบูทเต็มความกว้างของ Bootstrap container */
+   หัวข้อ → ภาพรวม 3D พร้อม callout ชื่อโซน (ดีไซน์เดิม) → การ์ดผังบูธ (ซ้ายภาพ ขวาแผงรายละเอียดบูธ) */
 .floor-plan {
     --bt-floor-plan-title-size: var(--section-title-size);
     --bt-floor-plan-zone-label-size: var(--font-size-36);
@@ -8605,19 +8776,20 @@ body.menu-open .site-header__backdrop {
         letter-spacing: 0;
     }
 
-    .floor-plan__figure {
+    /* ---------- ภาพรวม 3D (ดีไซน์เดิม) ----------
+       ภาพฐานและ callout ใช้ viewBox เดียวกัน จึงย่อขยายพร้อมกันโดยตำแหน่งไม่คลาด */
+    .floor-plan__overview {
         position: relative;
         margin: var(--space-12) 0 0;
     }
 
-    /* ภาพฐานและ callout ใช้ viewBox เดียวกัน จึงย่อขยายพร้อมกันโดยตำแหน่งไม่คลาด */
-    .floor-plan__visual {
+    .floor-plan__overview-visual {
         position: relative;
         width: 90%;
         margin-inline: auto;
     }
 
-    .floor-plan__image {
+    .floor-plan__overview-image {
         display: block;
         width: 100%;
         height: auto;
@@ -8648,9 +8820,10 @@ body.menu-open .site-header__backdrop {
         letter-spacing: 0;
     }
 
-    /* ซ่อนเฉพาะเมื่อ JavaScript พร้อมทำ reveal เพื่อให้เนื้อหายังแสดงหาก JS ไม่ทำงาน */
+    /* reveal: ภาพขึ้นก่อน แล้ว callout ไล่เป็นชั้น (ทุกเส้น → ทุกดาว → ทุกชื่อ)
+       ซ่อนเฉพาะเมื่อ JavaScript พร้อมทำ reveal เนื้อหาจึงยังแสดงหาก JS ไม่ทำงาน */
     &.is-reveal-ready {
-        .floor-plan__image {
+        .floor-plan__overview-image {
             opacity: 0;
             transform: translateY(var(--bt-floor-plan-image-offset));
         }
@@ -8677,7 +8850,7 @@ body.menu-open .site-header__backdrop {
     }
 
     &.is-reveal-ready.is-visible {
-        .floor-plan__image {
+        .floor-plan__overview-image {
             opacity: 1;
             transform: translateY(0);
             transition:
@@ -8688,6 +8861,7 @@ body.menu-open .site-header__backdrop {
         .floor-plan__callout-line {
             stroke-dashoffset: 0;
             transition: stroke-dashoffset var(--bt-floor-plan-callout-duration) var(--ease-standard);
+            transition-delay: var(--bt-floor-plan-callout-start-delay);
         }
 
         .floor-plan__callout-mark {
@@ -8696,6 +8870,7 @@ body.menu-open .site-header__backdrop {
             transition:
                 opacity var(--bt-floor-plan-callout-duration) var(--ease-standard),
                 transform var(--bt-floor-plan-callout-duration) var(--ease-standard);
+            transition-delay: calc(var(--bt-floor-plan-callout-start-delay) + var(--bt-floor-plan-callout-step-delay));
         }
 
         .floor-plan__callout-label {
@@ -8704,28 +8879,423 @@ body.menu-open .site-header__backdrop {
             transition:
                 opacity var(--bt-floor-plan-callout-duration) var(--ease-standard),
                 transform var(--bt-floor-plan-callout-duration) var(--ease-standard);
-        }
-
-        /* Callouts reveal by layer: every line, then every star, then every label. */
-        .floor-plan__callout-line {
-            transition-delay: var(--bt-floor-plan-callout-start-delay);
-        }
-
-        .floor-plan__callout-mark {
-            transition-delay: calc(var(--bt-floor-plan-callout-start-delay) + var(--bt-floor-plan-callout-step-delay));
-        }
-
-        .floor-plan__callout-label {
             transition-delay: calc(var(--bt-floor-plan-callout-start-delay) + var(--bt-floor-plan-callout-step-delay) + var(--bt-floor-plan-callout-step-delay));
+        }
+    }
+
+    /* สองฝั่ง: ซ้ายภาพแผนผังวางบนพื้น section (ไม่มีกรอบ/พื้น) ขวาแผงรายละเอียดบูธพื้นเทา (กว้างคงที่) */
+    .floor-plan__board {
+        --bt-floor-plan-panel-width: 320px;
+
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) var(--bt-floor-plan-panel-width);
+        /* ระยะระหว่างภาพกับแผงมาจาก padding ของ .floor-plan__stage แล้ว */
+        column-gap: var(--space-0);
+        margin-top: var(--space-12);
+        border: var(--rule-width-subtle) solid var(--color-border-faint);
+        border-radius: var(--radius-1);
+    }
+
+    .floor-plan__stage {
+        min-width: 0;
+        padding: var(--space-6);
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-6);
+    }
+
+    .floor-plan__figure {
+        position: relative;
+        flex: 1 1 auto;
+        margin: 0;
+        display: flex;
+        align-items: center;
+    }
+
+    /* สองภาพซ้อนในช่องเดียวกัน ภาพที่ไม่ได้เลือกยังกินที่ (มองไม่เห็น)
+       ความสูงจึงเท่าภาพที่สูงกว่าเสมอ สลับแท็บแล้วการ์ดไม่กระตุกขึ้นลง
+       ภาพที่เตี้ยกว่า (แผนผังบูธ) อยู่กึ่งกลางแนวตั้ง */
+    .floor-plan__visual {
+        position: relative;
+        width: 100%;
+        display: grid;
+        align-items: center;
+    }
+
+    /* สูงไม่เกินหน้าจอ (หัก header กับแถบแท็บ/ระยะ) ภาพจึงเห็นทั้งภาพในจอเดียว
+       ส่วนที่เหลือจัดด้วย object-fit */
+    .floor-plan__image {
+        grid-area: 1 / 1;
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: calc(100svh - var(--header-height) - var(--space-32));
+        object-fit: contain;
+
+        /* Bootstrap ตั้ง [hidden] เป็น display:none !important ต้องทับด้วย !important
+           ภาพที่ไม่ได้เลือกจึงยังกินที่ (แค่มองไม่เห็น) */
+        &[hidden] {
+            display: block !important;
+            visibility: hidden;
+        }
+    }
+
+    /* desktop: magnifier (hover zoom) วงกลมแบบแว่นขยาย ลอยตามเมาส์
+       ขอบขาวหนา + เส้นขอบบางรอบนอก + เงานุ่ม ให้แยกจากภาพชัด (js/floor-plan-board.js ใส่ภาพพื้นหลัง/ตำแหน่งให้) */
+    .floor-plan__lens {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 2;
+        width: 240px;
+        height: 240px;
+        border: var(--space-1) solid var(--color-neutral-0);
+        border-radius: var(--radius-round);
+        background-color: var(--color-neutral-0);
+        background-repeat: no-repeat;
+        box-shadow:
+            0 0 0 var(--border-width-1) var(--color-border-default),
+            0 var(--space-3) var(--space-8) var(--alpha-ink-34);
+        opacity: 0;
+        transform-origin: center;
+        pointer-events: none;
+        transition: opacity var(--duration-fast) var(--ease-standard);
+
+        &.is-visible {
+            opacity: 1;
+        }
+    }
+
+    /* ≤991px / จอสัมผัส: ปุ่มโปร่งคลุมภาพทั้งภาพ แตะแล้วเปิดภาพใหญ่ + ป้ายบอกมุมล่างซ้าย */
+    .floor-plan__expand {
+        display: none;
+    }
+
+    @media (max-width: 991px), (hover: none) {
+        .floor-plan__lens {
+            display: none;
+        }
+
+        .floor-plan__expand {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            display: block;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            cursor: zoom-in;
+
+            &:focus-visible {
+                outline: var(--border-width-2) solid var(--color-focus-ring);
+                outline-offset: var(--space-1);
+            }
+        }
+
+        .floor-plan__expand-hint {
+            position: absolute;
+            bottom: calc(var(--space-4) * -1);
+            left: calc(var(--space-2) * -1);
+            padding: var(--space-1) var(--space-3);
+            border: var(--border-width-1) solid var(--color-border-default);
+            border-radius: var(--radius-pill);
+            color: var(--color-text-primary);
+            background: var(--color-surface-popover);
+            font-size: var(--font-size-12);
+            line-height: var(--section-small-line-height);
+        }
+    }
+    
+    @media (max-width: 767px) {
+        .floor-plan__expand-hint {
+            left: var(--space-2);
+        }
+    }
+
+    @media (max-width: 575px) {
+        .floor-plan__expand-hint {
+            bottom: calc(var(--space-8) * -1);
+            left: var(--space-1);
+        }
+    }
+
+    /* แผงขวา: พื้นเทาชุดเดียวกับการ์ด Agenda (neutral-50 + radius-1) เนื้อหาเลื่อนในแผงเอง
+       (inner เป็น absolute) แผงจึงไม่ดันให้สูงกว่าภาพ */
+    .floor-plan__panel {
+        position: relative;
+        min-width: 0;
+        /* ตัดพื้นหัวแผงที่ค้างอยู่ด้านบนให้โค้งตามมุมแผง */
+        overflow: hidden;
+        border-radius: var(--radius-1);
+        background: var(--color-neutral-50);
+
+        &[hidden] {
+            display: none;
+        }
+    }
+
+    /* วางข้างภาพ (≥1200px): ด้านซ้ายชนพื้นที่ภาพในกรอบเดียวกัน ไม่ต้องโค้ง โค้งแค่ด้านขวาตามมุมกรอบ */
+    @media (min-width: 1200px) {
+        .floor-plan__panel {
+            /* สูงอย่างน้อยเท่ารายการตอนปิดทุกโซน (js/floor-plan-board.js วัดให้) ไม่ให้เลื่อนได้นิดเดียว */
+            min-height: var(--bt-floor-plan-panel-fit, 0px);
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+    }
+
+    /* เลื่อนดูได้ด้วยล้อเมาส์/ทัชแพด/นิ้ว แต่ไม่แสดง scrollbar (แบบเดียวกับแถบเลื่อนอื่นในเว็บ) */
+    .floor-plan__panel-inner {
+        /* ค่าเดียว (ใช้คำนวณระยะชดเชยของหัวแผงที่ sticky ด้วย) ส่วน padding จริงกำหนดแยกด้านล่าง */
+        --bt-floor-plan-panel-pad: var(--space-6);
+
+        position: absolute;
+        inset: 0;
+        overflow-y: auto;
+        /* วางข้างภาพ (≥1200px): ไม่เว้นล่าง รายการเลื่อนไปชนขอบล่างแผงได้เลย */
+        padding: var(--bt-floor-plan-panel-pad) var(--bt-floor-plan-panel-pad) var(--space-0);
+        overscroll-behavior: contain;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    /* หัวแผงค้างอยู่บนสุดตอนเลื่อนรายการบูธ ยืดพื้นออกไปชนขอบแผง (ชดเชย padding ของ .floor-plan__panel-inner)
+       รายการที่เลื่อนผ่านจึงหายไปใต้พื้นหัวแผง ไม่ทะลุขึ้นมาในช่อง padding ด้านบน */
+    .floor-plan__panel-header {
+        position: sticky;
+        top: calc(var(--bt-floor-plan-panel-pad) * -1);
+        z-index: 2;
+        margin: calc(var(--bt-floor-plan-panel-pad) * -1) calc(var(--bt-floor-plan-panel-pad) * -1) 0;
+        padding: var(--bt-floor-plan-panel-pad) var(--bt-floor-plan-panel-pad) var(--space-4);
+        background: var(--color-neutral-50);
+    }
+
+    .floor-plan__panel-title {
+        margin: 0;
+        color: var(--color-blue-600);
+        font-family: var(--font-family-heading);
+        font-size: var(--font-size-20);
+        font-weight: var(--font-weight-medium);
+        line-height: var(--section-body-line-height);
+        letter-spacing: 0;
+    }
+
+    .floor-plan__panel-note {
+        margin: var(--space-1) 0 0;
+        color: var(--color-text-muted);
+        font-size: var(--section-small-size);
+        line-height: var(--section-body-line-height);
+    }
+
+    /* โซนในแผงขวา: Bootstrap accordion ชุดเดียวกับ FAQ (เปิดทีละโซนด้วย data-bs-parent)
+       หน้าตาตาม FAQ: เส้นคั่นล่าง ไอคอน +/− ระยะบนเพิ่มตอนเปิด และ collapse ที่เลื่อนลื่น */
+    .floor-plan__zones {
+        --bs-accordion-bg: transparent;
+        --bs-accordion-border-width: 0;
+        --bs-accordion-border-color: transparent;
+        --bs-accordion-border-radius: 0;
+        --bs-accordion-inner-border-radius: 0;
+        --bs-accordion-active-bg: transparent;
+        --bs-accordion-active-color: var(--color-text-primary);
+        --bs-accordion-btn-bg: transparent;
+        --bs-accordion-btn-color: var(--color-text-primary);
+        --bs-accordion-btn-focus-border-color: transparent;
+        --bs-accordion-btn-focus-box-shadow: none;
+    }
+
+    .floor-plan__zone {
+        background: transparent;
+        border-bottom: var(--rule-width-subtle) solid var(--color-border-faint);
+
+        &:last-child {
+            border-bottom: 0;
+        }
+    }
+
+    .floor-plan__zone-heading {
+        margin: 0;
+    }
+
+    .floor-plan__zone-toggle {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        padding: var(--space-4) var(--space-0);
+        color: var(--color-text-primary);
+        font-size: var(--section-body-size);
+        font-weight: var(--font-weight-medium);
+        line-height: 1.45;
+        box-shadow: none;
+
+        &::after {
+            display: none;
+        }
+
+        &:not(.collapsed) {
+            padding-top: var(--space-6);
+            padding-bottom: var(--space-3);
+        }
+
+        &:focus-visible {
+            outline: 2px solid #315efb;
+            outline-offset: var(--space-1);
+        }
+    }
+
+    /* ไอคอน +/− เหมือน .faq__icon (เส้นตั้งหดหายตอนเปิด) */
+    .floor-plan__zone-icon {
+        position: relative;
+        width: var(--space-6);
+        height: var(--space-6);
+        flex: 0 0 auto;
+
+        &::before,
+        &::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 14px;
+            height: 1.5px;
+            border-radius: 999px;
+            background: currentColor;
+            transform: translate(-50%, -50%);
+            transition:
+                opacity var(--duration-base) var(--ease-standard),
+                transform var(--duration-base) var(--ease-standard);
+        }
+
+        &::after {
+            transform: translate(-50%, -50%) rotate(90deg);
+        }
+    }
+
+    .floor-plan__zone-toggle:not(.collapsed) .floor-plan__zone-icon::after {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(90deg) scaleX(0.2);
+    }
+
+    .floor-plan__zone-inner {
+        padding: var(--space-0) var(--space-0) var(--space-6);
+    }
+
+    .floor-plan__zone-name {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    /* จำนวนบูธเป็น badge ชุดเดียวกับป้ายสิทธิ์ในบัตร / ป้ายที่นั่งใน Agenda */
+    .floor-plan__zone-meta {
+        display: inline-flex;
+        flex: 0 0 auto;
+        align-items: center;
+        min-height: var(--space-5);
+        padding: var(--space-0) var(--space-2);
+        border: var(--rule-width-subtle) solid var(--color-blue-200);
+        border-radius: var(--pill-radius);
+        color: var(--color-blue-400);
+        background: var(--color-blue-100);
+        font-size: var(--section-tag-size-sm);
+        font-weight: var(--font-weight-regular);
+        line-height: var(--section-body-line-height);
+        white-space: nowrap;
+    }
+
+    .floor-plan__zone-note {
+        margin: 0 0 var(--space-3);
+        color: var(--color-text-muted);
+        font-size: var(--section-small-size);
+        line-height: var(--section-body-line-height);
+    }
+
+    /* บูธละ 1 แถว: หมายเลขบูธ (คอลัมน์กว้างคงที่) + ชื่อบริษัท (ถ้าคอนเฟิมแล้ว) */
+    .floor-plan__booths {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    /* คอลัมน์เลขบูธกว้างพอสำหรับช่วงบูธ (เช่น S01-02, A13-16) ของผู้ออกบูธที่ใช้หลายบูธติดกัน
+       (แถวเดียว รายการบูธจริงอยู่ใน data-booths) ชื่อทุกแถวจึงเริ่มตรงแนวเดียวกัน */
+    .floor-plan__booth {
+        padding: var(--space-2) 0;
+        display: grid;
+        grid-template-columns: calc(var(--space-12) + var(--space-2)) minmax(0, 1fr);
+        column-gap: var(--space-3);
+        align-items: baseline;
+
+        & + & {
+            border-top: var(--rule-width-subtle) solid var(--color-border-faint);
+        }
+    }
+
+    /* บูธที่ยังไม่มีข้อมูล (ยังไม่มีชื่อบริษัท) ปิดไว้ก่อน ได้ชื่อแล้วใส่ .is-confirmed + ชื่อ จะแสดงเอง */
+    .floor-plan__booth:not(.is-confirmed) {
+        display: none;
+    }
+
+    .floor-plan__booth-code {
+        font-size: var(--section-small-size);
+        font-weight: var(--font-weight-medium);
+        line-height: var(--section-small-line-height);
+    }
+
+    .floor-plan__booth-name {
+        color: var(--color-text-muted);
+        font-size: var(--section-small-size);
+        line-height: var(--section-small-line-height);
+    }
+
+    /* ซ่อนเฉพาะเมื่อ JavaScript พร้อมทำ reveal เพื่อให้เนื้อหายังแสดงหาก JS ไม่ทำงาน */
+    &.is-reveal-ready .floor-plan__visual {
+        opacity: 0;
+        transform: translateY(var(--bt-floor-plan-image-offset));
+    }
+
+    &.is-reveal-ready.is-visible .floor-plan__visual {
+        opacity: 1;
+        transform: translateY(0);
+        transition:
+            opacity var(--bt-floor-plan-image-duration) var(--ease-standard),
+            transform var(--bt-floor-plan-image-duration) var(--ease-standard);
+    }
+
+    /* ≤1199px: ภาพอยู่บน แผงรายละเอียดบูธลงมาใต้ภาพ สูงพอดีตอนปิดทุกโซน เปิดโซนแล้วเลื่อนในแผง
+       (ช่วง 992–1199 ถ้าวางข้างกัน แผงจะเบียดภาพผังจนเล็กเกินอ่าน)
+       ขอบบนชนพื้นที่ภาพในกรอบเดียวกัน ไม่ต้องโค้ง โค้งแค่ด้านล่างตามมุมกรอบ */
+    @media (max-width:1199px) {
+        .floor-plan__board {
+            grid-template-columns: minmax(0, 1fr);
+            row-gap: var(--space-6);
+        }
+
+        .floor-plan__panel {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+
+        /* สูงพอดีหัวแผง + แถบชื่อโซนทั้งหมดตอนปิดทุกโซน (js/floor-plan-board.js วัดแล้วใส่ตัวแปรให้)
+           เปิดโซนแล้วเลื่อนในแผง ถ้า JS ไม่ทำงานใช้ 520px แทน */
+        .floor-plan__panel-inner {
+            position: static;
+            max-height: var(--bt-floor-plan-panel-fit, 520px);
+            padding: var(--bt-floor-plan-panel-pad);
         }
     }
 
     @media (max-width:991px) {
         padding: var(--section-padding-y-sm) 0;
 
-        /* จอเล็กคืนความกว้างเต็ม ย่ออีก 20% แล้วชื่อโซนในแผนผังจะอ่านไม่ออก */
-        .floor-plan__visual {
+        /* จอเล็กคืนความกว้างเต็ม ย่ออีกแล้วชื่อโซนในภาพ 3D จะอ่านไม่ออก */
+        .floor-plan__overview-visual {
             width: 100%;
+        }
+
+        .floor-plan__board {
+            margin-top: var(--space-8);
         }
     }
 
@@ -8734,14 +9304,24 @@ body.menu-open .site-header__backdrop {
     @media (max-width: 767px) {
         --bt-floor-plan-title-size: var(--section-heading-size);
         --bt-floor-plan-zone-label-size: var(--font-size-48);
+
+        .floor-plan__stage {
+            padding: var(--space-3);
+        }
+    }
+
+    @media (max-width: 575px) {
+        .floor-plan__stage {
+            padding: var(--space-3) var(--space-3) var(--space-6);
+        }
     }
 
     @media (prefers-reduced-motion: reduce) {
-
-        .floor-plan__image,
+        .floor-plan__overview-image,
         .floor-plan__callout-line,
         .floor-plan__callout-mark,
-        .floor-plan__callout-label {
+        .floor-plan__callout-label,
+        .floor-plan__visual {
             opacity: 1;
             transform: none;
             transition: none;
@@ -8749,6 +9329,168 @@ body.menu-open .site-header__backdrop {
     }
 }
 
+
+
+/* ภาพใหญ่ของ Floor Plan (≤991px): modal กลางจอ เลื่อนดูได้ ซูมด้วยการถ่างนิ้ว/แตะสองครั้ง/ปุ่ม +/− */
+html.has-floor-plan-lightbox {
+    overflow: hidden;
+}
+
+/* modal กลางจอ (ไม่เต็มจอ) พื้นหลังเป็น overlay สีดำ
+   ตัว dialog เป็นกรอบใสเฉย ๆ (ไม่ตัดขอบ) ปุ่มปิดจึงลอยอยู่นอกกล่องภาพได้
+   กล่องภาพจริงคือ .floor-plan-lightbox__frame (มุมโค้งเท่าการ์ดของเว็บ) */
+.floor-plan-lightbox {
+    width: calc(100% - var(--space-8));
+    max-width: 720px;
+    max-height: none;
+    margin: auto;
+    padding: var(--space-12) 0 0;
+    overflow: visible;
+    border: 0;
+    color: var(--color-text-primary);
+    background: transparent;
+
+    &::backdrop {
+        background: color-mix(in srgb, var(--color-neutral-950) 80%, transparent);
+    }
+}
+
+.floor-plan-lightbox__frame {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-1);
+    background: var(--color-surface-page);
+    box-shadow: 0 var(--space-4) var(--space-12) var(--alpha-ink-34);
+}
+
+/* ปุ่มปิด: มุมขวาบนเหนือกล่องภาพ บนพื้น overlay ดำ จึงเป็นไอคอนขาวขอบขาวโปร่ง */
+.floor-plan-lightbox__close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: var(--space-10);
+    height: var(--space-10);
+    padding: 0;
+    display: grid;
+    place-items: center;
+    border: var(--border-width-1) solid color-mix(in srgb, var(--color-neutral-0) 40%, transparent);
+    border-radius: var(--radius-round);
+    color: var(--color-neutral-0);
+    background: transparent;
+    cursor: pointer;
+    transition: background-color var(--duration-fast) var(--ease-standard);
+
+    &:hover {
+        background: color-mix(in srgb, var(--color-neutral-0) 12%, transparent);
+    }
+
+    &:focus-visible {
+        outline: var(--border-width-2) solid var(--color-neutral-0);
+        outline-offset: var(--space-1);
+    }
+}
+
+.floor-plan-lightbox__zoom {
+    width: var(--space-10);
+    height: var(--space-10);
+    padding: 0;
+    display: grid;
+    flex: 0 0 auto;
+    place-items: center;
+    border: var(--border-width-1) solid var(--color-border-default);
+    border-radius: var(--radius-round);
+    color: var(--color-text-primary);
+    background: var(--color-neutral-0);
+    cursor: pointer;
+
+    &:focus-visible {
+        outline: var(--border-width-2) solid var(--color-focus-ring);
+        outline-offset: var(--space-1);
+    }
+
+    &:disabled {
+        color: var(--color-text-muted);
+        cursor: default;
+        opacity: 0.5;
+    }
+}
+
+/* ภาพอยู่กึ่งกลางด้วย margin: auto (ไม่ใช้ place-items) ตอนซูมใหญ่กว่าจอจึงเลื่อนไปถึงขอบได้ครบ */
+/* สูงตามสัดส่วนภาพตอนพอดีกรอบ (JS ใส่ aspect-ratio ให้) แต่ไม่เกินพื้นที่ใน modal
+   ซูมแล้วกรอบไม่ขยายตาม เลื่อนดูภาพข้างในแทน */
+.floor-plan-lightbox__viewport {
+    position: relative;
+    flex: 0 1 auto;
+    width: 100%;
+    min-height: 0;
+    max-height: calc(100dvh - var(--space-12) - var(--space-16));
+    display: flex;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+/* มือถือ (≤575px): กล่องสูงเกือบเต็มจอแทนความสูงตามสัดส่วนภาพ (เหลือที่ให้ปุ่มปิดด้านบน + ขอบเล็กน้อย)
+   ตอนพอดีกรอบภาพยังเต็มความกว้างอยู่กลางกล่อง ซูมแล้วภาพขยายเต็มความสูงกล่อง เห็นผังชัดขึ้น
+   height + width ระบุครบ aspect-ratio ที่ JS ใส่ไว้จึงไม่มีผล */
+@media (max-width: 575px) {
+    .floor-plan-lightbox__viewport {
+        height: calc(100dvh - var(--space-12) - var(--space-10));
+        max-height: none;
+    }
+}
+
+.floor-plan-lightbox__image {
+    width: 100%;
+    max-width: none;
+    height: auto;
+    margin: auto;
+    flex: 0 0 auto;
+    display: block;
+    cursor: zoom-in;
+}
+
+.floor-plan-lightbox.is-zoomed .floor-plan-lightbox__image {
+    cursor: zoom-out;
+}
+
+.floor-plan-lightbox__controls {
+    position: absolute;
+    right: var(--space-3);
+    bottom: var(--space-3);
+    display: flex;
+    gap: var(--space-2);
+}
+
+/* เครื่องหมาย + / − วาดด้วยเส้นแบบไอคอน FAQ */
+.floor-plan-lightbox__zoom {
+    position: relative;
+
+    &::before,
+    &::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 14px;
+        height: 1.5px;
+        border-radius: 999px;
+        background: currentColor;
+        transform: translate(-50%, -50%);
+    }
+
+    &.floor-plan-lightbox__zoom--out::after {
+        display: none;
+    }
+
+    &.floor-plan-lightbox__zoom--in::after {
+        transform: translate(-50%, -50%) rotate(90deg);
+    }
+}
 
 /* ---------- Sponsor & Partners ----------
    กรอบเปล่ารอใส่โลโก้จริงภายหลัง ขนาดตามดีไซน์คุมด้วยแทร็กของกริด (minmax) กรอบจึงหด
@@ -15261,5 +16003,62 @@ body.menu-open .site-header__backdrop {
     /* พื้นมืดใต้เมาส์ (js/cursor-dot.js ตรวจแล้วใส่คลาส) เปลี่ยนเป็นจุดสีขาว */
     &.is-on-dark::before {
         background: var(--color-neutral-0);
+    }
+
+    /* ชี้ส่วนที่มี data-cursor-label: จุดขยายเป็นวงกลมสีดำพร้อมข้อความขาวตรงกลาง
+       (มี data-cursor-origin: ขนาดเท่าชิ้นต้นทาง JS ใส่ --bt-cursor-dot-size ให้ เช่นเท่าปุ่ม play ของวิดีโอ) */
+    &::before {
+        transition:
+            top var(--duration-standard) var(--ease-standard),
+            left var(--duration-standard) var(--ease-standard),
+            width var(--duration-standard) var(--ease-standard),
+            height var(--duration-standard) var(--ease-standard),
+            background-color var(--duration-standard) var(--ease-standard);
+    }
+
+    &.has-label {
+        --bt-cursor-dot-size: 88px;
+    }
+
+    &.has-label::before {
+        background: var(--color-neutral-800);
+    }
+
+    .cursor-dot__label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        color: var(--color-neutral-0);
+        font-family: var(--font-family-heading);
+        font-size: var(--font-size-16);
+        font-weight: var(--font-weight-medium);
+        line-height: 1;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.6);
+        transition:
+            opacity var(--duration-fast) var(--ease-standard),
+            transform var(--duration-standard) var(--ease-standard);
+    }
+
+    &.has-label .cursor-dot__label {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+
+    /* วางทับชิ้นต้นทาง (data-cursor-origin) ก่อนเริ่มขยาย ต้องกระโดดไปทันทีไม่ไล่ขนาด */
+    &.is-snapping::before,
+    &.is-snapping .cursor-dot__label {
+        transition: none;
+    }
+}
+
+/* วงกลมพร้อมข้อความแทนเคอร์เซอร์เดิมตรงนั้นเลย (เฉพาะอุปกรณ์มีเมาส์ที่แสดงจุดตามเมาส์)
+   ซ้ำ selector + :not(:disabled) ให้ชนะ button:not(:disabled) { cursor: pointer } ของ Bootstrap */
+@media (hover: hover) and (pointer: fine) {
+    [data-cursor-label][data-cursor-label]:not(:disabled) {
+        cursor: none;
     }
 }
