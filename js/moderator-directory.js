@@ -1,9 +1,9 @@
 (() => {
     const moderators = [
         {
-            name: 'คุณเนาวรัตน์',
+            name: 'คุณเนาวรัตน์ เจริญประพิณ',
             role: 'Lorem ipsum dolor sit amet.',
-            image: 'MC-เนาวรัตน์.webp',
+            image: 'MC-เนาวรัตน์-เจริญประพิณ.webp',
         },
         {
             name: 'คุณธนธร กาญจนิศากร',
@@ -11,24 +11,24 @@
             image: 'MC-ธนธร-กาญจนิศากร.webp',
         },
         {
-            name: 'คุณดาริน ปริญญากุล',
+            name: 'คุณดาริน วิวัฒน์เจริญพงศ์',
             role: 'Lorem ipsum dolor sit amet.',
-            image: 'MC-ดาริน-ปริญญากุล.webp',
+            image: 'MC-ดาริน-วิวัฒน์เจริญพงศ์.webp',
+        },
+        // {
+        //     name: 'คุณชัชชญา อังคุลี',
+        //     role: 'บรรณาธิการ Crypto by efinanceThai',
+        //     image: 'MC-ชัชชญา-อังคุลี.webp',
+        // },
+        {
+            name: 'คุณทวีชัย แออัด',
+            role: 'Lorem ipsum dolor sit amet.',
+            image: 'MC-ทวีชัย-แออัด.webp',
         },
         {
-            name: 'คุณชัชชญา อังคุลี',
-            role: 'บรรณาธิการ Crypto by efinanceThai',
-            image: 'MC-ชัชชญา-อังคุลี.webp',
-        },
-        {
-            name: 'คุณ Jessie',
+            name: 'คุณบรรพต ธนาเพิ่มสุข',
             role: 'Lorem ipsum dolor sit amet.',
-            image: 'MC-Jessie.webp',
-        },
-        {
-            name: 'คุณบรรพต',
-            role: 'Lorem ipsum dolor sit amet.',
-            image: 'MC-บรรพต.webp',
+            image: 'MC-บรรพต-ธนาเพิ่มสุข.webp',
         },
     ];
 
