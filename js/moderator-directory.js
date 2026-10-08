@@ -1,19 +1,34 @@
 (() => {
     const moderators = [
         {
-            name: 'คุณดาริน ปริญญากุล',
+            name: 'คุณเนาวรัตน์',
             role: 'Lorem ipsum dolor sit amet.',
-            image: 'mc/MC-ดาริน-ปริญญากุล.webp',
-        },
-        {
-            name: 'คุณชัชชญา อังคุลี',
-            role: 'บรรณาธิการ Crypto by efinanceThai',
-            image: 'mc/MC-ชัชชญา-อังคุลี.webp',
+            image: 'MC-เนาวรัตน์.webp',
         },
         {
             name: 'คุณธนธร กาญจนิศากร',
             role: 'เจ้าของเพจ NamFinance',
-            image: 'mc/MC-ธนธร-กาญจนิศากร.webp',
+            image: 'MC-ธนธร-กาญจนิศากร.webp',
+        },
+        {
+            name: 'คุณดาริน ปริญญากุล',
+            role: 'Lorem ipsum dolor sit amet.',
+            image: 'MC-ดาริน-ปริญญากุล.webp',
+        },
+        {
+            name: 'คุณชัชชญา อังคุลี',
+            role: 'บรรณาธิการ Crypto by efinanceThai',
+            image: 'MC-ชัชชญา-อังคุลี.webp',
+        },
+        {
+            name: 'คุณ Jessie',
+            role: 'Lorem ipsum dolor sit amet.',
+            image: 'MC-Jessie.webp',
+        },
+        {
+            name: 'คุณบรรพต',
+            role: 'Lorem ipsum dolor sit amet.',
+            image: 'MC-บรรพต.webp',
         },
     ];
 
@@ -38,7 +53,7 @@
         card.innerHTML = `
             <div class="speaker-card__portrait">
                 <div class="speaker-card__frame">
-                    <img src="images/speakers/${image}" width="${imageWidth}" height="${imageHeight}"
+                    <img src="images/mc/${image}" width="${imageWidth}" height="${imageHeight}"
                         loading="lazy" decoding="async" alt="${name}">
                 </div>
             </div>

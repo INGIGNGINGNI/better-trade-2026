@@ -123,11 +123,11 @@
                 role: 'ผู้ก่อตั้งกลุ่มบริษัท บิทคับ แคปปิตอล กรุ๊ป <br class="d-none d-xxl-block">โฮลดิ้งส์ จำกัด',
                 image: 'day-2/D2-ท๊อป-จิรายุส.webp',
             },
-            {
-                name: 'คุณเผดิมภพ สงเคราะห์',
-                role: 'Lorem ipsum dolor sit amet.',
-                image: 'profile-empty.webp',
-            },
+            // {
+            //     name: 'คุณเผดิมภพ สงเคราะห์',
+            //     role: 'Lorem ipsum dolor sit amet.',
+            //     image: 'profile-empty.webp',
+            // },
             {
                 name: 'ผศ.ดร.อุดมศักดิ์ รักวงษ์วาน',
                 role: 'อาจารย์ด้านคณิตศาสตร์การเงิน มหาวิทยาลัยเกษตรศาสตร์ และผู้ก่อตั้ง Altplus Group',

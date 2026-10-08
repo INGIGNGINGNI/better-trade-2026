@@ -7647,8 +7647,6 @@ body.menu-open .site-header__backdrop {
    กริดจึงต้องอยู่ในคอลัมน์ 9 ช่องที่เยื้อง 3 ช่องเท่ากับ .speaker__days
    เพื่อให้แทร็กกว้างเท่ากัน การ์ดสองฝั่งจึงมีขนาดตรงกันเป๊ะโดยไม่ต้องล็อกค่าใด */
 .moderator {
-    /* ข้อมูลและการ์ดพร้อมใช้งานแล้ว แต่ซ่อน section ไว้จนกว่าจะประกาศเปิดตัว */
-    display: none;
     position: relative;
     scroll-margin-top: var(--header-height);
     /* เว้นบน-ล่างเต็มเท่า section อื่นทุกอัน ระยะระหว่าง Speaker กับ section นี้
