@@ -2841,7 +2841,8 @@ body.menu-open .site-header__backdrop {
     isolation: isolate;
     transition:
         filter var(--duration-fast) var(--ease-standard),
-        transform var(--duration-fast) var(--ease-standard);
+        opacity var(--duration-standard) var(--ease-standard),
+        transform var(--duration-standard) var(--ease-standard);
 }
 
 .concept__video-play::before,
@@ -2869,7 +2870,6 @@ body.menu-open .site-header__backdrop {
     border-radius: inherit;
     background: linear-gradient(180deg, #9b9b9b 0%, #191a1d 100%);
     box-shadow:
-        0 0 0 var(--space-1) var(--bt-concept-video-play-ring-color),
         inset 0 var(--border-width-1) color-mix(in srgb, var(--color-neutral-0) 26%, transparent),
         0 14px 28px color-mix(in srgb, var(--color-neutral-900) 34%, transparent);
 }
@@ -2903,6 +2903,14 @@ body.menu-open .site-header__backdrop {
 .concept__video-poster:focus-visible .concept__video-play {
     filter: brightness(1.08);
     transform: translate(-50%, -50%) scale(1.03);
+}
+
+/* อุปกรณ์มีเมาส์: hover แล้วปุ่ม play จางหาย กลายเป็นวงกลม Play ที่ลอยตามเมาส์แทน (js/cursor-dot.js, data-cursor-origin) */
+@media (hover: hover) and (pointer: fine) {
+    .concept__video-poster:hover .concept__video-play {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.85);
+    }
 }
 
 .concept__video-poster:focus-visible {
@@ -9236,7 +9244,7 @@ body.menu-open .site-header__backdrop {
     .floor-plan__booth-name {
         color: var(--color-text-muted);
         font-size: var(--section-small-size);
-        line-height: var(--section-body-line-height);
+        line-height: var(--section-small-line-height);
     }
 
     /* ซ่อนเฉพาะเมื่อ JavaScript พร้อมทำ reveal เพื่อให้เนื้อหายังแสดงหาก JS ไม่ทำงาน */
@@ -15993,5 +16001,62 @@ html.has-floor-plan-lightbox {
     /* พื้นมืดใต้เมาส์ (js/cursor-dot.js ตรวจแล้วใส่คลาส) เปลี่ยนเป็นจุดสีขาว */
     &.is-on-dark::before {
         background: var(--color-neutral-0);
+    }
+
+    /* ชี้ส่วนที่มี data-cursor-label: จุดขยายเป็นวงกลมสีดำพร้อมข้อความขาวตรงกลาง
+       (มี data-cursor-origin: ขนาดเท่าชิ้นต้นทาง JS ใส่ --bt-cursor-dot-size ให้ เช่นเท่าปุ่ม play ของวิดีโอ) */
+    &::before {
+        transition:
+            top var(--duration-standard) var(--ease-standard),
+            left var(--duration-standard) var(--ease-standard),
+            width var(--duration-standard) var(--ease-standard),
+            height var(--duration-standard) var(--ease-standard),
+            background-color var(--duration-standard) var(--ease-standard);
+    }
+
+    &.has-label {
+        --bt-cursor-dot-size: 88px;
+    }
+
+    &.has-label::before {
+        background: var(--color-neutral-800);
+    }
+
+    .cursor-dot__label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        color: var(--color-neutral-0);
+        font-family: var(--font-family-heading);
+        font-size: var(--font-size-16);
+        font-weight: var(--font-weight-medium);
+        line-height: 1;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.6);
+        transition:
+            opacity var(--duration-fast) var(--ease-standard),
+            transform var(--duration-standard) var(--ease-standard);
+    }
+
+    &.has-label .cursor-dot__label {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+
+    /* วางทับชิ้นต้นทาง (data-cursor-origin) ก่อนเริ่มขยาย ต้องกระโดดไปทันทีไม่ไล่ขนาด */
+    &.is-snapping::before,
+    &.is-snapping .cursor-dot__label {
+        transition: none;
+    }
+}
+
+/* วงกลมพร้อมข้อความแทนเคอร์เซอร์เดิมตรงนั้นเลย (เฉพาะอุปกรณ์มีเมาส์ที่แสดงจุดตามเมาส์)
+   ซ้ำ selector + :not(:disabled) ให้ชนะ button:not(:disabled) { cursor: pointer } ของ Bootstrap */
+@media (hover: hover) and (pointer: fine) {
+    [data-cursor-label][data-cursor-label]:not(:disabled) {
+        cursor: none;
     }
 }
