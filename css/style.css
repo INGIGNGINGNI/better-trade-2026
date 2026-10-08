@@ -4689,7 +4689,7 @@ body.menu-open .site-header__backdrop {
         }
 
         .ticket__plan {
-            padding: var(--space-8) var(--space-5) var(--space-5);
+            padding: var(--space-8) var(--space-4) var(--space-4);
         }
 
         .ticket__plan--master {
@@ -9016,6 +9016,8 @@ body.menu-open .site-header__backdrop {
     .floor-plan__panel {
         position: relative;
         min-width: 0;
+        /* ตัดพื้นหัวแผงที่ค้างอยู่ด้านบนให้โค้งตามมุมแผง */
+        overflow: hidden;
         border-radius: var(--radius-1);
         background: var(--color-neutral-50);
 
@@ -9027,6 +9029,8 @@ body.menu-open .site-header__backdrop {
     /* วางข้างภาพ (≥1200px): ด้านซ้ายชนพื้นที่ภาพในกรอบเดียวกัน ไม่ต้องโค้ง โค้งแค่ด้านขวาตามมุมกรอบ */
     @media (min-width: 1200px) {
         .floor-plan__panel {
+            /* สูงอย่างน้อยเท่ารายการตอนปิดทุกโซน (js/floor-plan-board.js วัดให้) ไม่ให้เลื่อนได้นิดเดียว */
+            min-height: var(--bt-floor-plan-panel-fit, 0px);
             border-top-left-radius: 0;
             border-bottom-left-radius: 0;
         }
@@ -9034,10 +9038,14 @@ body.menu-open .site-header__backdrop {
 
     /* เลื่อนดูได้ด้วยล้อเมาส์/ทัชแพด/นิ้ว แต่ไม่แสดง scrollbar (แบบเดียวกับแถบเลื่อนอื่นในเว็บ) */
     .floor-plan__panel-inner {
+        /* ค่าเดียว (ใช้คำนวณระยะชดเชยของหัวแผงที่ sticky ด้วย) ส่วน padding จริงกำหนดแยกด้านล่าง */
+        --bt-floor-plan-panel-pad: var(--space-6);
+
         position: absolute;
         inset: 0;
         overflow-y: auto;
-        padding: var(--space-6);
+        /* วางข้างภาพ (≥1200px): ไม่เว้นล่าง รายการเลื่อนไปชนขอบล่างแผงได้เลย */
+        padding: var(--bt-floor-plan-panel-pad) var(--bt-floor-plan-panel-pad) var(--space-0);
         overscroll-behavior: contain;
         scrollbar-width: none;
 
@@ -9046,12 +9054,20 @@ body.menu-open .site-header__backdrop {
         }
     }
 
+    /* หัวแผงค้างอยู่บนสุดตอนเลื่อนรายการบูธ ยืดพื้นออกไปชนขอบแผง (ชดเชย padding ของ .floor-plan__panel-inner)
+       รายการที่เลื่อนผ่านจึงหายไปใต้พื้นหัวแผง ไม่ทะลุขึ้นมาในช่อง padding ด้านบน */
     .floor-plan__panel-header {
-        margin-bottom: var(--space-4);
+        position: sticky;
+        top: calc(var(--bt-floor-plan-panel-pad) * -1);
+        z-index: 2;
+        margin: calc(var(--bt-floor-plan-panel-pad) * -1) calc(var(--bt-floor-plan-panel-pad) * -1) 0;
+        padding: var(--bt-floor-plan-panel-pad) var(--bt-floor-plan-panel-pad) var(--space-4);
+        background: var(--color-neutral-50);
     }
 
     .floor-plan__panel-title {
         margin: 0;
+        color: var(--color-blue-600);
         font-family: var(--font-family-heading);
         font-size: var(--font-size-20);
         font-weight: var(--font-weight-medium);
@@ -9158,23 +9174,25 @@ body.menu-open .site-header__backdrop {
         padding: var(--space-0) var(--space-0) var(--space-6);
     }
 
-    .floor-plan__zone-swatch {
-        width: var(--space-3);
-        height: var(--space-3);
-        flex: 0 0 auto;
-        border-radius: var(--radius-1);
-        background: var(--floor-plan-zone-color);
-    }
-
     .floor-plan__zone-name {
         flex: 1 1 auto;
         min-width: 0;
     }
 
+    /* จำนวนบูธเป็น badge ชุดเดียวกับป้ายสิทธิ์ในบัตร / ป้ายที่นั่งใน Agenda */
     .floor-plan__zone-meta {
-        color: var(--color-text-muted);
-        font-size: var(--section-small-size);
+        display: inline-flex;
+        flex: 0 0 auto;
+        align-items: center;
+        min-height: var(--space-5);
+        padding: var(--space-0) var(--space-2);
+        border: var(--rule-width-subtle) solid var(--color-blue-200);
+        border-radius: var(--pill-radius);
+        color: var(--color-blue-400);
+        background: var(--color-blue-100);
+        font-size: var(--section-tag-size-sm);
         font-weight: var(--font-weight-regular);
+        line-height: var(--section-body-line-height);
         white-space: nowrap;
     }
 
@@ -9235,7 +9253,7 @@ body.menu-open .site-header__backdrop {
             transform var(--bt-floor-plan-image-duration) var(--ease-standard);
     }
 
-    /* ≤1199px: ภาพอยู่บน แผงรายละเอียดบูธลงมาใต้ภาพ สูงไม่เกิน 520px เกินแล้วเลื่อนในแผง
+    /* ≤1199px: ภาพอยู่บน แผงรายละเอียดบูธลงมาใต้ภาพ สูงพอดีตอนปิดทุกโซน เปิดโซนแล้วเลื่อนในแผง
        (ช่วง 992–1199 ถ้าวางข้างกัน แผงจะเบียดภาพผังจนเล็กเกินอ่าน)
        ขอบบนชนพื้นที่ภาพในกรอบเดียวกัน ไม่ต้องโค้ง โค้งแค่ด้านล่างตามมุมกรอบ */
     @media (max-width:1199px) {
@@ -9249,9 +9267,12 @@ body.menu-open .site-header__backdrop {
             border-top-right-radius: 0;
         }
 
+        /* สูงพอดีหัวแผง + แถบชื่อโซนทั้งหมดตอนปิดทุกโซน (js/floor-plan-board.js วัดแล้วใส่ตัวแปรให้)
+           เปิดโซนแล้วเลื่อนในแผง ถ้า JS ไม่ทำงานใช้ 520px แทน */
         .floor-plan__panel-inner {
             position: static;
-            max-height: 520px;
+            max-height: var(--bt-floor-plan-panel-fit, 520px);
+            padding: var(--bt-floor-plan-panel-pad);
         }
     }
 
@@ -9265,12 +9286,6 @@ body.menu-open .site-header__backdrop {
 
         .floor-plan__board {
             margin-top: var(--space-8);
-        }
-    }
-
-    @media (max-width: 575px) {
-        .floor-plan__panel-inner {
-            padding: var(--space-4);
         }
     }
 

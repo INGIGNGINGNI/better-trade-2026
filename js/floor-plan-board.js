@@ -23,6 +23,46 @@
         };
     };
 
+    /* ---------- แผงรายชื่อบูธ: วัดความสูงตอนปิดทุกโซน ----------
+       ค่าใส่ไว้ที่ --bt-floor-plan-panel-fit บนการ์ด (CSS เป็นคนเลือกใช้ตาม layout)
+       - ≥1200px วางข้างภาพ: แผงสูงอย่างน้อยเท่านี้ ภาพเตี้ยกว่ารายการเมื่อไร แถวยืดตามแผงแทน
+         (ไม่งั้นรายการที่ยาวเกินภาพแค่ไม่กี่ px จะเลื่อนได้นิดเดียวทั้งที่ปิดทุกโซนอยู่)
+       - ≤1199px วางใต้ภาพ: แผงสูงไม่เกินนี้ ปิดทุกโซนพอดีไม่มีที่ว่าง เปิดโซนแล้วเลื่อนในแผง
+       ความสูงของแถบเปลี่ยนตามความกว้าง (ข้อความตัดบรรทัด) จึงวัดใหม่ทุกครั้งที่แผงเปลี่ยนความกว้าง */
+    const panelInner = board.querySelector('.floor-plan__panel-inner');
+    const zoneList = board.querySelector('.floor-plan__zones');
+    const stackedMedia = window.matchMedia('(max-width: 1199px)');
+
+    const fitPanel = () => {
+        if (!panelInner || !zoneList) return;
+        // วัดจากขอบล่างรายการโซน (ไม่ใช้ scrollHeight เพราะตอนเนื้อหาสั้นกว่าแผง มันคืนค่าความสูงแผงเอง)
+        // หักส่วนของโซนที่เปิดอยู่ออก = ความสูงตอนปิดทุกโซน
+        let openHeight = 0;
+        panelInner.querySelectorAll('.accordion-collapse.show, .accordion-collapse.collapsing')
+            .forEach((body) => { openHeight += body.offsetHeight; });
+        const paddingBottom = parseFloat(getComputedStyle(panelInner).paddingBottom) || 0;
+        const contentHeight = zoneList.getBoundingClientRect().bottom - panelInner.getBoundingClientRect().top
+            + panelInner.scrollTop + paddingBottom - openHeight;
+        board.style.setProperty('--bt-floor-plan-panel-fit', `${Math.ceil(contentHeight)}px`);
+    };
+
+    if (panelInner) {
+        let lastWidth = 0;
+        new ResizeObserver(([entry]) => {
+            const width = Math.round(entry.contentRect.width);
+            if (width === lastWidth) return;
+            lastWidth = width;
+            fitPanel();
+        }).observe(panelInner);
+        stackedMedia.addEventListener('change', fitPanel);
+        document.fonts?.ready.then(fitPanel);
+        // ย่อจอตอนเปิดโซนค้างไว้ ค่าที่หักออกคลาดได้เล็กน้อย (แถบโซนที่เปิดมีระยะบนเพิ่ม)
+        // ปิดครบทุกโซนเมื่อไรวัดใหม่ให้พอดีเป๊ะ
+        panelInner.addEventListener('hidden.bs.collapse', () => {
+            if (!panelInner.querySelector('.accordion-collapse.show')) fitPanel();
+        });
+    }
+
     /* ---------- desktop: magnifier (hover zoom) ---------- */
     const visual = board.querySelector('.floor-plan__visual');
     const lens = board.querySelector('[data-floor-plan-lens]');
