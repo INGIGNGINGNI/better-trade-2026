@@ -2,17 +2,17 @@
     const moderators = [
         {
             name: 'คุณเนาวรัตน์ เจริญประพิณ',
-            role: 'Lorem ipsum dolor sit amet.',
+            role: 'ผู้ดำเนินรายการด้านเศรษฐกิจ และการลงทุน Money Channel',
             image: 'MC-เนาวรัตน์-เจริญประพิณ.webp',
         },
         {
-            name: 'คุณธนธร กาญจนิศากร',
-            role: 'เจ้าของเพจ NamFinance',
+            name: 'คุณธนธร กาญจนิศากร (NamFinance)',
+            role: 'ที่ปรึกษาการเงินส่วนบุคคล พิธีกรรายการ<br class="d-none d-xxl-block">การเงิน',
             image: 'MC-ธนธร-กาญจนิศากร.webp',
         },
         {
             name: 'คุณดาริน วิวัฒน์เจริญพงศ์',
-            role: 'Lorem ipsum dolor sit amet.',
+            role: '',
             image: 'MC-ดาริน-วิวัฒน์เจริญพงศ์.webp',
         },
         // {
@@ -21,14 +21,29 @@
         //     image: 'MC-ชัชชญา-อังคุลี.webp',
         // },
         {
-            name: 'คุณทวีชัย แออัด',
-            role: 'Lorem ipsum dolor sit amet.',
+            name: 'คุณอิก บรรพต ธนาเพิ่มสุข',
+            role: 'AFPT และเจ้าของเพจ ถามอีกกับอิก',
+            image: 'MC-บรรพต-ธนาเพิ่มสุข.webp',
+        },
+        {
+            name: 'คุณวรเกียรติ นิ่มมาก',
+            role: 'พิธีกร Amarin TV และเจ้าของเพจ<br class="d-none d-xl-block">ตายายสอนหลาน',
+            image: 'MC-วรเกียรติ-นิ่มมาก.webp',
+        },
+        {
+            name: 'คุณณัฐเศรษฐ ตุ้ยดา',
+            role: 'AFPT, Senior Content Creator, efinanceThai',
+            image: 'MC-ณัฐเศรษฐ-ตุ้ยดา.webp',
+        },
+        {
+            name: 'Jessie Ink',
+            role: 'เจ้าของเพจ Jessie Variety',
             image: 'MC-ทวีชัย-แออัด.webp',
         },
         {
-            name: 'คุณบรรพต ธนาเพิ่มสุข',
-            role: 'Lorem ipsum dolor sit amet.',
-            image: 'MC-บรรพต-ธนาเพิ่มสุข.webp',
+            name: 'คุณปริม สุขศรีขาว',
+            role: 'เจ้าของเพจ Prim Invest',
+            image: 'MC-ปริม-สุขศรีขาว.webp',
         },
     ];
 

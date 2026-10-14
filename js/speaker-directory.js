@@ -47,6 +47,11 @@
                 image: 'day-1/D1-วินนี่.webp',
             },
             {
+                name: 'คุณโช๊ค โชกุล Shok Shogun',
+                role: 'นักลงทุนและผู้สร้างคอนเทนต์',
+                image: 'day-1/D1-โช๊ค-โชกุล.webp',
+            },
+            {
                 name: 'คุณอภิชัย เอี่ยมไพศาล',
                 role: 'Research and Listing Manager, BINANCE TH Academy',
                 image: 'day-1/D1-อภิชัย-เอี่ยมไพศาล.webp',
@@ -55,6 +60,21 @@
                 name: 'คุณศุภวิชญ์ พูลเพิ่มทรัพย์',
                 role: 'Investment Analyst, BINANCE TH Academy',
                 image: 'day-1/D1-ศุภวิชญ์-พูลเพิ่มทรัพย์.webp',
+            },
+            {
+                name: 'คุณธีรศักดิ์ ธนวรากุล',
+                role: 'ผู้อำนวยการอาวุโส ฝ่ายวิเคราะห์หลักทรัพย์<br class="d-none d-xxl-block">รายย่อย บริษัทหลักทรัพย์ ซีจีเอส อินเตอร์เนชั่นแนล (ประเทศไทย) จำกัด',
+                image: 'day-1/D1-ธีรศักดิ์-ธนวรากุล.webp',
+            },
+            {
+                name: 'คุณศุภกร สุนทรกิจ',
+                role: 'ประธานเจ้าหน้าที่บริหาร บริษัท เวลธ์ แล็บ แอนด์ เทคโนโลยี จำกัด',
+                image: 'day-1/D1-ศุภกร-สุนทรกิจ.webp',
+            },
+            {
+                name: 'คุณภัครัฐพีร์ ตั้งสำเริงวงศ์',
+                role: 'Founder & CEO Arete Platform Co.,Ltd.',
+                image: 'day-1/D1-ภัครัฐพีร์-ตั้งสำเริงวงศ์.webp',
             },
             {
                 name: 'คุณนภดนัย พัฒนาภิวัฒน์',
@@ -96,6 +116,11 @@
                 role: 'Co-Founder Anubis Cards and Craft',
                 image: 'day-1/D1-โอ๊ต-ปรินทร์-ตั้งกิจเวทย์.webp',
             },
+            {
+                name: 'คุณชยกร เหรียญทองคำ',
+                role: 'เพจ โปรครอสflipการ์ด',
+                image: 'day-1/D1-ชยกร-เหรียญทองคำ.webp',
+            },
         ],
         dayTwo: [
             {
@@ -123,11 +148,11 @@
                 role: 'ผู้ก่อตั้งกลุ่มบริษัท บิทคับ แคปปิตอล กรุ๊ป <br class="d-none d-xxl-block">โฮลดิ้งส์ จำกัด',
                 image: 'day-2/D2-ท๊อป-จิรายุส.webp',
             },
-            // {
-            //     name: 'คุณเผดิมภพ สงเคราะห์',
-            //     role: 'Lorem ipsum dolor sit amet.',
-            //     image: 'profile-empty.webp',
-            // },
+            {
+                name: 'คุณเผดิมภพ สงเคราะห์',
+                role: 'Executive Director Head of Retail Business Division บริษัทหลักทรัพย์ กรุงศรี จำกัด (มหาชน)',
+                image: 'day-2/D2-เผดิมภพ-สงเคราะห์.webp',
+            },
             {
                 name: 'ผศ.ดร.อุดมศักดิ์ รักวงษ์วาน',
                 role: 'อาจารย์ด้านคณิตศาสตร์การเงิน มหาวิทยาลัยเกษตรศาสตร์ และผู้ก่อตั้ง Altplus Group',

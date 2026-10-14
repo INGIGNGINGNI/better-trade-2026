@@ -4914,6 +4914,32 @@ body.menu-open .site-header__backdrop {
         display: inline-flex;
     }
 
+    /* จอ ≤991px: ปุ่มเดียวกันวางขวาหมายเหตุท้ายแท็บ Workshop (ไม่อยู่ในหัวการ์ด จึงไม่ต้องชดเชยความสูง)
+       จอ 375px หมายเหตุเหลือ ~130px (ตัด 3 บรรทัด) ยังวางคู่ปุ่มได้ */
+    .agenda__note-row {
+        margin-top: var(--space-6);
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-3) var(--space-4);
+
+        .agenda__note {
+            flex: 1 1 120px;
+            margin: 0;
+        }
+    }
+
+    .agenda__panel-action {
+        flex: 0 0 auto;
+        /* ตกลงบรรทัดใหม่เมื่อไรยังชิดขวา */
+        margin-left: auto;
+
+        .agenda__day-panel-action {
+            margin-block: 0;
+        }
+    }
+
     /* Day 1 กับ Day 2 อยู่ในตารางต่อกันตรง ๆ ไม่งั้นดูเหมือนตารางเดียวยาวต่อเนื่อง
        เว้นระยะ + ขีดคั่นเข้าไปให้เห็นชัดว่าขึ้นวันใหม่แล้ว (ตัวสลับวันด้านข้างบอก
        อยู่แล้วว่าเป็นวันไหน แต่คนละองค์ประกอบกัน ตรงนี้ต้องอ่านออกในตัวมันเองด้วย)
@@ -5542,7 +5568,7 @@ body.menu-open .site-header__backdrop {
 
     .agenda__session-title {
         color: var(--color-blue-600);
-        font-size: var(--section-small-size);
+        font-size: var(--section-body-size);
         font-weight: var(--font-weight-medium);
         line-height: var(--section-small-line-height);
         text-transform: uppercase;
@@ -5645,6 +5671,12 @@ body.menu-open .site-header__backdrop {
         font-weight: var(--font-weight-regular);
         line-height: var(--section-body-line-height);
         letter-spacing: 0;
+    }
+
+    @media (min-width:1400px) and (max-width:1499px) {
+        .agenda__panel {
+            padding: var(--space-0) var(--space-4) var(--space-4);
+        }
     }
 
     @media (max-width:1199px) {
@@ -5929,7 +5961,7 @@ body.menu-open .site-header__backdrop {
        แถวที่ไม่มีรูป (ช่องถูกซ่อน) คอลัมน์นี้เป็น 0 ข้อความได้ความกว้างเต็ม */
     @media (min-width:992px) {
         .agenda__table tr {
-            grid-template-columns: var(--space-20) minmax(0, 1fr) auto;
+            grid-template-columns: var(--space-16) minmax(0, 1fr) auto;
         }
 
         .agenda__table td.agenda__speakers {
@@ -6276,6 +6308,81 @@ body.menu-open .site-header__backdrop {
 
         .agenda__speaker-frame {
             vertical-align: top;
+        }
+
+        /* ชื่อ session กับคำอธิบายอยู่คนละบรรทัดเหมือน desktop */
+        .agenda__session-title,
+        .agenda__session-summary {
+            display: block;
+        }
+    }
+
+    /* 576–991px: รูปวิทยากรอยู่ขวาข้อความเหมือน desktop (คอลัมน์ที่ 3 กว้างตามกริดรูป)
+       แถวที่ไม่มีรูป ช่องรูปถูกซ่อน คอลัมน์นี้เป็น 0 ข้อความได้ความกว้างเต็ม
+       ปุ่มซื้อบัตร (มีเฉพาะจอ ≤991px) อยู่ใต้ข้อความ ชิดซ้ายแนวเดียวกับข้อความ */
+    @media (min-width:576px) and (max-width:991px) {
+        .agenda__table tr {
+            grid-template-columns: var(--bt-agenda-time-width) minmax(0, 1fr) auto;
+        }
+
+        /* ช่องหมวดหมู่ว่างทุกแถว ซ่อนแบบ desktop ข้อความจึงเริ่มบนสุดของแถว ไม่ถูกดันลงตามความสูงรูป */
+        .agenda__table td:first-of-type {
+            display: none;
+        }
+
+        .agenda__table td:first-of-type+td {
+            grid-row: 1;
+            padding-top: var(--space-4);
+        }
+
+        .agenda__table td.agenda__speakers {
+            grid-column: 3;
+            grid-row: 1;
+            align-self: center;
+            justify-content: end;
+            padding: var(--space-4) var(--space-0) var(--space-4) var(--space-3);
+            border-left: 0;
+        }
+
+        /* แถวที่มีปุ่ม: รูปกินสองแถว ส่วนสูงที่เกินจากรูปไปลงแถวปุ่ม (1fr) ปุ่มจึงต่อใต้ข้อความทันที */
+        .agenda__table tr:has(> td.agenda__session-actions) {
+            grid-template-rows: auto 1fr;
+        }
+
+        .agenda__table tr:has(> td.agenda__session-actions) td.agenda__speakers {
+            grid-row: 1 / span 2;
+        }
+
+        .agenda__table td.agenda__session-actions {
+            grid-column: 2;
+            grid-row: 2;
+            align-self: start;
+            justify-self: start;
+            padding: var(--space-0) var(--space-0) var(--space-6) var(--space-4);
+            border-left: 0;
+        }
+
+        .agenda__speakers>.agenda__speaker-frame:last-child:nth-child(odd) {
+            grid-column: 2;
+        }
+
+        .agenda__table td.agenda__speakers:has(> .agenda__speaker-frame:only-child) {
+            grid-template-columns: var(--bt-agenda-speaker-width);
+        }
+
+        .agenda__speakers>.agenda__speaker-frame:last-child:only-child {
+            grid-column: 1;
+        }
+    }
+
+    /* 576–767px ข้อความแคบ ถ้ารูปวางคู่กันข้อความเหลือ ~200px จึงเรียงรูปซ้อนคอลัมน์เดียวแบบจอ ≤575px */
+    @media (min-width:576px) and (max-width:767px) {
+        .agenda__table td.agenda__speakers {
+            grid-template-columns: var(--bt-agenda-speaker-width);
+        }
+
+        .agenda__speakers>.agenda__speaker-frame:last-child:nth-child(odd) {
+            grid-column: 1;
         }
     }
 
@@ -7036,8 +7143,9 @@ body.menu-open .site-header__backdrop {
         pointer-events: none;
     }
 
+    /* สีวันที่/เวลาเดียวกับจอ ≤767px (--agenda-day-details-color) */
     #agenda .agenda__day-switch[aria-current='true'] .agenda__day-switch-details {
-        color: var(--agenda-day-label-color);
+        color: var(--agenda-day-details-color);
         opacity: 1;
         visibility: visible;
     }
@@ -15969,10 +16077,10 @@ html.has-floor-plan-lightbox {
 }
 
 /* ---------- จุดตามเมาส์ (js/cursor-dot.js) ----------
-   จุดสีดำเล็ก ๆ ไม่มีขอบ (สีขาวบนพื้นมืด) เลื่อนตามเมาส์ด้วย transform (จาก JS) ส่วนหน้าตาอยู่ที่ ::before
+   จุดสีดำเล็ก ๆ (สีขาวบนพื้นมืด) คู่กับวงแหวน .cursor-ring ที่ตามหลังมา เลื่อนตามเมาส์ด้วย transform (จาก JS) ส่วนหน้าตาอยู่ที่ ::before
    จุดกึ่งกลางวางที่ปลายเมาส์ อยู่บนสุดของหน้าแต่ไม่รับการคลิก ขนาดคงที่ (ไม่ขยายตอนชี้ปุ่ม) */
 .cursor-dot {
-    --bt-cursor-dot-size: 10px;
+    --bt-cursor-dot-size: 7px;
 
     position: fixed;
     top: 0;
@@ -16003,6 +16111,11 @@ html.has-floor-plan-lightbox {
     /* พื้นมืดใต้เมาส์ (js/cursor-dot.js ตรวจแล้วใส่คลาส) เปลี่ยนเป็นจุดสีขาว */
     &.is-on-dark::before {
         background: var(--color-neutral-0);
+    }
+
+    /* ชี้ลิงก์/ปุ่ม/accordion: จุดเป็นสีน้ำเงิน (วงแหวนคงเดิม) */
+    &.is-hover::before {
+        background: var(--color-blue-600);
     }
 
     /* ชี้ส่วนที่มี data-cursor-label: จุดขยายเป็นวงกลมสีดำพร้อมข้อความขาวตรงกลาง
@@ -16052,6 +16165,58 @@ html.has-floor-plan-lightbox {
     &.is-snapping::before,
     &.is-snapping .cursor-dot__label {
         transition: none;
+    }
+}
+
+/* วงแหวนตามเมาส์ (js/cursor-dot.js) ตามหลังจุดช้ากว่า เกิดระยะห่างตอนขยับแล้วไล่กลับมาล้อมจุด
+   กลายเป็นวงกลมพร้อมข้อความ (PLAY): วงแหวนหดหายไป */
+.cursor-ring {
+    --bt-cursor-ring-size: 30px;
+    --bt-cursor-color: var(--color-text-primary);
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--duration-standard) var(--ease-standard);
+    will-change: transform;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: calc(var(--bt-cursor-ring-size) / -2);
+        left: calc(var(--bt-cursor-ring-size) / -2);
+        width: var(--bt-cursor-ring-size);
+        height: var(--bt-cursor-ring-size);
+        border: var(--border-width-2) solid var(--bt-cursor-color);
+        border-radius: 50%;
+        background: transparent;
+        transition:
+            top 0.5s var(--ease-standard),
+            left 0.5s var(--ease-standard),
+            width 0.5s var(--ease-standard),
+            height 0.5s var(--ease-standard),
+            opacity 0.5s var(--ease-standard),
+            background-color 0.5s var(--ease-standard),
+            border-color var(--duration-standard) var(--ease-standard),
+            transform var(--duration-standard) var(--ease-standard);
+    }
+
+    &.is-visible {
+        opacity: 1;
+    }
+
+    &.is-on-dark {
+        --bt-cursor-color: var(--color-neutral-0);
+    }
+
+    &.is-hidden::before {
+        opacity: 0;
+        transform: scale(0.6);
     }
 }
 
