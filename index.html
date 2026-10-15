@@ -361,16 +361,21 @@
                     <p class="ticket__plan-note">เจาะลึกเฉพาะทางกับตัวจริง กลุ่มเล็ก</p>
                 </header>
 
-                <div class="ticket__prices ticket__prices--single">
-                    <div class="ticket__price ticket__price--static">
-                        <span class="ticket__price-day">ราคาบัตรเริ่มต้นเพียง</span>
+                <div class="ticket__prices" role="radiogroup" aria-label="เลือกบัตร Master Class">
+                    <button class="ticket__price" type="button" role="radio" aria-checked="false" data-ticket-option data-ticket-label="ซื้อบัตร Master Class 31 ต.ค. 490 บาท">
+                        <span class="ticket__price-day">วันที่ 31 ต.ค. 2569</span>
                         <strong>490 <small>บาท</small></strong>
-                        <small class="ticket__price-note">เรียนรู้เชิงลึก พร้อมแลกเปลี่ยนกับผู้เชี่ยวชาญ</small>
-                    </div>
+                        <small class="ticket__price-note">Radiance Rift Rumble (R.R.R)</small>
+                    </button>
+                    <button class="ticket__price" type="button" role="radio" aria-checked="false" data-ticket-option data-ticket-label="ซื้อบัตร Master Class 1 พ.ย. 790 บาท">
+                        <span class="ticket__price-day">วันที่ 1 พ.ย. 2569</span>
+                        <strong>790 <small>บาท</small></strong>
+                        <small class="ticket__price-note">VALUE MEETS MOMENTUM</small>
+                    </button>
                 </div>
 
                 <!-- TODO: เปลี่ยน href เป็นลิงก์ซื้อบัตร Master Class (รอปลายทางจริง ตอนนี้ใช้ลิงก์ buy-ticket เดิมไว้ก่อน) -->
-                <a class="bt-action-button bt-action-button--secondary bt-action-button--xl ticket__action" href="https://www.efin.finance/events/better-trade/better-trade2026/buy-ticket" target="_blank" rel="noopener noreferrer">ซื้อบัตร Master Class</a>
+                <a class="bt-action-button bt-action-button--secondary bt-action-button--xl ticket__action" href="https://www.efin.finance/events/better-trade/better-trade2026/buy-ticket" target="_blank" rel="noopener noreferrer" data-ticket-action>ซื้อบัตร Master Class</a>
 
                 <dl class="ticket__access">
                     <div><dt class="ticket__access-label ticket__access-label--conference"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-mic"></use></svg><span class="ticket__access-copy"><span class="ticket__access-title">Conference <small>(เวทีใหญ่)</small></span><small class="ticket__access-description">วิทยากร 30+ ท่าน รวม 20+ เซสชัน <br class="d-none d-lg-block">บนเวทีหลัก</small></span></dt><dd class="ticket__status ticket__status--badge">บัตร Ultimate เท่านั้น</dd></div>
@@ -823,7 +828,6 @@
                                             <th scope="row"><time>13:00 – 15:00</time></th>
                                             <td></td>
                                             <td>
-                                                <p class="agenda__session-seats"><span class="agenda__session-badge">35 ที่นั่ง</span></p>
                                                 <p class="agenda__session-title">ESPRESSO OR LATTE ?</p>
                                                 <p class="agenda__session-summary">พอร์ตเร่งโต หรือพอร์ตสร้างเงินใช้ แบบไหนใช่สำหรับคุณ ?</p>
                                                 <p class="agenda__session-speaker">คุณศุภกร สุนทรกิจ</p>
@@ -842,7 +846,6 @@
                                             <th scope="row"><time>16:00 – 18:00</time></th>
                                             <td></td>
                                             <td>
-                                                <p class="agenda__session-seats"><span class="agenda__session-badge">35 ที่นั่ง</span></p>
                                                 <p class="agenda__session-title">ALL-WEATHER TRADING AND LONG-TERM PORTFOLIO WORKSHOP</p>
                                                 <p class="agenda__session-speaker">คุณสุชาวดี เรียบร้อย (โค้ชฟิล์ม) <br>และคุณปริญญา นิรนาทล้ำพงศ์ (โค้ชก้อย)</p>
                                             </td>
@@ -870,7 +873,6 @@
                                             <th scope="row"><time>13:00 – 15:00</time></th>
                                             <td></td>
                                             <td>
-                                                <p class="agenda__session-seats"><span class="agenda__session-badge">35 ที่นั่ง</span></p>
                                                 <p class="agenda__session-title">WHY IS THIS CARD WORTH ฿100,000 ?</p>
                                                 <p class="agenda__session-summary">เข้าใจตลาดการ์ดสะสม ตั้งแต่ Value, Grading, Pricing <br class="d-none d-xxl-block">ไปจนถึง Liquidity พร้อมทดลองวิเคราะห์การ์ดจริง</p>
                                                 <p class="agenda__session-speaker">คุณกฤช แก้วสุวรรณ</p>
@@ -889,7 +891,6 @@
                                             <th scope="row"><time>16:00 – 18:00</time></th>
                                             <td></td>
                                             <td>
-                                                <p class="agenda__session-seats"><span class="agenda__session-badge">35 ที่นั่ง</span></p>
                                                 <p class="agenda__session-title">BITCOIN ซื้อ ถือ หาย!</p>
                                                 <p class="agenda__session-summary">คนส่วนใหญ่พลาดตรงไหน แล้วจะป้องกันอย่างไร ?</p>
                                                 <p class="agenda__session-speaker">อาจารย์ขิง สิรภพ นิลบดี</p>
@@ -926,7 +927,6 @@
                                             <th scope="row"><time>09:00 – 18:30</time></th>
                                             <td></td>
                                             <td>
-                                                <p class="agenda__session-seats"><span class="agenda__session-badge">100 ที่นั่ง</span></p>
                                                 <p class="agenda__session-title">RADIANCE RIFT RUMBLE (R.R.R)</p>
                                                 <p class="agenda__session-speaker">คุณวัชรวิชญ์ จิรวงศาพันธุ์ <br class="d-block d-xxl-none">และคุณปรินทร์ ตั้งกิจเวทย์</p>
                                                 <!-- TODO: เปลี่ยน href เป็นลิงก์ซื้อบัตร Master Class (รอปลายทางจริง ตอนนี้ใช้ลิงก์ buy-ticket เดิมไว้ก่อน) -->
@@ -955,7 +955,7 @@
                             <p class="agenda__day-panel-date" role="heading" aria-level="3">1 พฤศจิกายน 2569</p>
                             <time class="agenda__day-panel-time agenda__day-panel-time--default">09:00 – 17:30 น.</time>
                             <time class="agenda__day-panel-time agenda__day-panel-time--experience">10:00 – 17:30 น.</time>
-                            <time class="agenda__day-panel-time agenda__day-panel-time--private-class">13:00 – 18:00 น.</time>
+                            <time class="agenda__day-panel-time agenda__day-panel-time--private-class">13:00 – 15:00 น.</time>
                             <!-- แสดงเฉพาะแท็บ Workshop (แทนช่วงเวลาของวัน) -->
                             <a class="bt-action-button bt-action-button--primary bt-action-button--sm agenda__day-panel-action" href="https://www.efin.finance/events/better-trade/better-trade2026/buy-ticket" target="_blank" rel="noopener noreferrer">สำรองที่นั่ง Workshop</a>
                         </div>
@@ -1215,7 +1215,6 @@
                                             <th scope="row"><time>13:00 – 15:00</time></th>
                                             <td></td>
                                             <td>
-                                                <p class="agenda__session-seats"><span class="agenda__session-badge">25 ที่นั่ง</span></p>
                                                 <p class="agenda__session-title">AI FOR INVESTING : REAL USE CASES, REAL DATA</p>
                                                 <p class="agenda__session-summary">ลงมือทำจริง จาก Zero to Hero</p>
                                                 <p class="agenda__session-speaker">คุณพสุธา ไดจิ อิเดะ <br class="d-block d-xxl-none">และคุณณัฐดนัย หวังพระธรรม</p>
@@ -1235,7 +1234,6 @@
                                             <th scope="row"><time>16:00 – 18:00</time></th>
                                             <td></td>
                                             <td>
-                                                <p class="agenda__session-seats"><span class="agenda__session-badge">35 ที่นั่ง</span></p>
                                                 <p class="agenda__session-title">MARKET INTELLIGENCE</p>
                                                 <p class="agenda__session-summary">ถอดรหัสโวลุ่ม &amp; เชื่อมโยงข่าว คัดหุ้นทำกำไร</p>
                                                 <p class="agenda__session-speaker">คุณภัค วิทยาพันธ์ประชา (โค้ชเล็ก) <br>และคุณปพนสรรค์ จิรวรรณพันธุ์ (โค้ชบอล)</p>
@@ -1264,7 +1262,6 @@
                                             <th scope="row"><time>11:00 – 13:00</time></th>
                                             <td></td>
                                             <td>
-                                                <p class="agenda__session-seats"><span class="agenda__session-badge">25 ที่นั่ง</span></p>
                                                 <p class="agenda__session-title">TRANSFORM TO AUTO WORKFLOW</p>
                                                 <p class="agenda__session-summary">อัปเกรด efin StockPickUp เป็นผู้ช่วยวิเคราะห์หุ้น<br class="d-none d-xxl-block">ส่วนตัว 24 ชม.</p>
                                                 <p class="agenda__session-speaker">คุณวชิรเมษฐ์ ธเนศสถิตพงศ์</p>
@@ -1283,7 +1280,6 @@
                                             <th scope="row"><time>15:00 – 17:00</time></th>
                                             <td></td>
                                             <td>
-                                                <p class="agenda__session-seats"><span class="agenda__session-badge">35 ที่นั่ง</span></p>
                                                 <p class="agenda__session-title">THE FREEDOM PLAN</p>
                                                 <p class="agenda__session-summary">ต้องมีเงินเท่าไหร่ วางแผนยังไง ถึงหยุดทำงานได้</p>
                                                 <p class="agenda__session-speaker">ผศ.ดร.อุดมศักดิ์ รักวงษ์วาน</p>
@@ -1320,7 +1316,6 @@
                                             <th scope="row"><time>13:00 – 15:00</time></th>
                                             <td></td>
                                             <td>
-                                                <p class="agenda__session-seats"><span class="agenda__session-badge">35 ที่นั่ง</span></p>
                                                 <p class="agenda__session-title">VALUE MEETS MOMENTUM</p>
                                                 <p class="agenda__session-summary">หุ้นดีต้องหาให้เจอ จังหวะต้องอ่านให้ออก</p>
                                                 <p class="agenda__session-speaker">คุณเผดิมภพ สงเคราะห์ <br class="d-block d-sm-none d-lg-block d-xxl-none">และคุณกวี ชูกิจเกษม</p>
@@ -1337,18 +1332,18 @@
                                                 <a class="bt-action-button bt-action-button--primary bt-action-button--sm agenda__session-action" href="https://www.efin.finance/events/better-trade/better-trade2026/buy-ticket" target="_blank" rel="noopener noreferrer">ซื้อบัตร</a>
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <!-- ช่วงพักและ SESSION 2 ปิดไว้ก่อน (ข้อมูลยังไม่พร้อม) เอา hidden ออกเมื่อพร้อมแสดง -->
+                                        <tr hidden>
                                             <th scope="row"></th>
                                             <td></td>
                                             <td><p class="agenda__session-title agenda__session-title--simple agenda__session-title--as-written">BREAK</p></td>
                                             <td class="agenda__speakers"></td>
                                         </tr>
-                                        <tr>
+                                        <tr hidden>
                                             <th scope="row"><time>16:00 – 18:00</time></th>
                                             <td></td>
                                             <td>
                                                 <!-- TODO: ใส่ชื่อ session, คำอธิบาย และวิทยากรจริง (ตอนนี้เป็น placeholder) -->
-                                                <p class="agenda__session-seats"><span class="agenda__session-badge">XX ที่นั่ง</span></p>
                                                 <p class="agenda__session-title">SESSION 2</p>
                                                 <p class="agenda__session-summary">Lorem ipsum dolor sit amet</p>
                                                 <p class="agenda__session-speaker">Lorem ipsum</p>
@@ -1794,7 +1789,7 @@
                         <div class="floor-plan__stage">
                             <figure class="floor-plan__figure">
                                 <div class="floor-plan__visual">
-                                    <img class="floor-plan__image" src="images/floor-plan-02.webp?v=5" width="2000" height="1178"
+                                    <img class="floor-plan__image" src="images/floor-plan-02.webp?v=6" width="2000" height="1178"
                                         loading="lazy" decoding="async"
                                         alt="แผนผังบูธภายในงาน BetterTrade 2026 พร้อมหมายเลขบูธในแต่ละโซน">
                                     <!-- desktop: magnifier (hover zoom) วงกลมลอยตามเมาส์ (js/floor-plan-board.js) -->
