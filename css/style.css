@@ -4901,6 +4901,19 @@ body.menu-open .site-header__backdrop {
         display: none;
     }
 
+    /* แท็บ Experience / Master Class ใช้ช่วงเวลาจริงของแท็บนั้นแทนช่วงเวลาของทั้งวัน */
+    .agenda__day-panel-time--experience,
+    .agenda__day-panel-time--private-class,
+    .agenda__day-panel:has(.agenda__panel[id$="-mini-stage"]:not([hidden])) .agenda__day-panel-time--default,
+    .agenda__day-panel:has(.agenda__panel[id$="-private-class"]:not([hidden])) .agenda__day-panel-time--default {
+        display: none;
+    }
+
+    .agenda__day-panel:has(.agenda__panel[id$="-mini-stage"]:not([hidden])) .agenda__day-panel-time--experience,
+    .agenda__day-panel:has(.agenda__panel[id$="-private-class"]:not([hidden])) .agenda__day-panel-time--private-class {
+        display: block;
+    }
+
     /* ปุ่ม "สำรองที่นั่ง" (ปุ่มดำล้วน --sm กว้างเท่าปุ่มซื้อบัตรท้าย session) แสดงแทนช่วงเวลา เฉพาะแท็บ Workshop */
     .agenda__day-panel-action {
         display: none;
@@ -9625,14 +9638,14 @@ html.has-floor-plan-lightbox {
     /* หน้าตาตัวอักษรมาจาก .bt-section-title ทั้งหมด (ฟอนต์/ขนาด/น้ำหนัก/line-height/tracking)
        ให้เหมือนหัวข้อของ section อื่น ที่นี่เหลือแค่ระยะห่างกับการจัดกึ่งกลางตามเลย์เอาต์ของ section นี้ */
     .sponsor__group-title {
-        margin: 0 0 var(--space-8);
+        margin: 0 0 var(--space-12);
         text-align: center;
         text-transform: uppercase;
     }
 
     .sponsor__image {
         width: 100%;
-        max-width: 610px;
+        max-width: 820px;
         height: auto;
         margin: 0 auto;
         display: block;
