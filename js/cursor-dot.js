@@ -1,6 +1,7 @@
-/* จุดเล็ก ๆ วิ่งตามปลายเมาส์ (ตามภาพตัวอย่าง) ไม่แทนเคอร์เซอร์เดิม
-   - สีดำบนพื้นสว่าง สีขาวบนพื้นมืด (ดู isDarkAt)
-   - ตามแบบหน่วงเล็กน้อย (lerp) ให้ดูลื่น ผู้ที่ตั้งค่าลด motion จะติดปลายเมาส์ทันที
+/* จุดเล็ก ๆ + วงแหวน วิ่งตามปลายเมาส์ ไม่แทนเคอร์เซอร์เดิม
+   - จุดตามเร็ว วงแหวนตามช้ากว่า (lerp คนละค่า) ขยับเร็วแล้ววงแหวนห้อยตามหลัง หยุดแล้วไล่กลับมาล้อมจุด
+   - ชี้ลิงก์/ปุ่ม/accordion: จุดเปลี่ยนเป็นสีน้ำเงิน (.is-hover)
+   - สีดำบนพื้นสว่าง สีขาวบนพื้นมืด (ดู isDarkAt) ผู้ที่ตั้งค่าลด motion จะติดปลายเมาส์ทันที
    - เฉพาะอุปกรณ์ที่มีเมาส์ (hover + pointer: fine) มือถือ/แท็บเล็ตไม่แสดง
    - ซ่อนเมื่อเมาส์ออกนอกหน้าต่าง
    - ชี้ส่วนที่มี data-cursor-label (เช่นวิดีโอใน Concept) จุดขยายเป็นวงกลมพร้อมข้อความนั้น */
@@ -8,7 +9,10 @@
     if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const EASE = reduced ? 1 : 0.22; // สัดส่วนที่ขยับเข้าหาเมาส์ต่อเฟรม
+    const EASE = reduced ? 1 : 0.3; // สัดส่วนที่จุดขยับเข้าหาเมาส์ต่อเฟรม
+    const RING_EASE = reduced ? 1 : 0.12; // วงแหวนตามช้ากว่าจุด
+    // ส่วนที่กดได้: จุดเป็นสีน้ำเงิน (ยกเว้นส่วนที่มีวงกลมข้อความของตัวเอง เช่นวิดีโอ)
+    const HOVER_TARGET = 'a, button, [role="button"], summary, label[for], select, .accordion-button';
     const MORPH_EASE = 0.1; // ช้ากว่าปกติตอนลอยออกจากชิ้นต้นทาง (data-cursor-origin) ให้เห็นการเดินทาง
     let ease = EASE;
 
@@ -18,7 +22,15 @@
     const label = document.createElement('span');
     label.className = 'cursor-dot__label';
     dot.appendChild(label);
-    document.body.appendChild(dot);
+    const ring = document.createElement('div');
+    ring.className = 'cursor-ring';
+    ring.setAttribute('aria-hidden', 'true');
+    document.body.append(ring, dot);
+
+    const setHoverFrom = el => {
+        const target = el?.closest?.(HOVER_TARGET);
+        dot.classList.toggle('is-hover', Boolean(target && !target.closest('[data-cursor-label]')));
+    };
 
     // ข้อความในวงกลมตามส่วนที่ชี้อยู่ ("" = จุดปกติ)
     // data-cursor-origin (selector ภายในส่วนนั้น เช่นปุ่ม play กลางวิดีโอ): วงกลมเริ่มจากตำแหน่ง/ขนาดของชิ้นนั้น
@@ -40,6 +52,7 @@
             const box = origin.getBoundingClientRect();
             // วางทับชิ้นต้นทางทันที (ปิด transition ชั่วคราว) แล้วลอยตามเมาส์
             dot.classList.add('is-snapping', 'has-label');
+            ring.classList.add('is-hidden');
             x = box.left + box.width / 2;
             y = box.top + box.height / 2;
             dot.style.transform = `translate3d(${x}px, ${y}px, 0)`;
@@ -50,6 +63,7 @@
             return;
         }
         dot.classList.toggle('has-label', Boolean(text));
+        ring.classList.toggle('is-hidden', Boolean(text));
     };
 
     /* พื้นใต้เมาส์มืดไหม: ดูทุกชั้นที่ตำแหน่งเมาส์ (elementsFromPoint บนสุดก่อน) รวม ::before/::after
@@ -67,7 +81,7 @@
     };
     function isDarkAt(x, y) {
         for (const el of document.elementsFromPoint(x, y)) {
-            if (el === dot || el === document.documentElement) continue;
+            if (el === dot || el === ring || el === document.documentElement) continue;
             if (el.matches(DARK_MARK)) return true;
             for (const pseudo of [null, '::before', '::after']) {
                 const style = getComputedStyle(el, pseudo);
@@ -85,8 +99,12 @@
         toneFrame = requestAnimationFrame(() => {
             toneFrame = null;
             // scroll แล้วส่วนที่อยู่ใต้เมาส์ (ที่นิ่งอยู่) อาจเปลี่ยน ตรวจป้ายข้อความใหม่ด้วย
-            setLabelFrom(document.elementFromPoint(targetX, targetY));
-            dot.classList.toggle('is-on-dark', isDarkAt(targetX, targetY));
+            const under = document.elementFromPoint(targetX, targetY);
+            setLabelFrom(under);
+            setHoverFrom(under);
+            const dark = isDarkAt(targetX, targetY);
+            dot.classList.toggle('is-on-dark', dark);
+            ring.classList.toggle('is-on-dark', dark);
         });
     };
 
@@ -94,15 +112,21 @@
     let targetY = -100;
     let x = targetX;
     let y = targetY;
+    let ringX = targetX;
+    let ringY = targetY;
     let frameId = null;
 
     const render = () => {
         x += (targetX - x) * ease;
         y += (targetY - y) * ease;
+        ringX += (targetX - ringX) * RING_EASE;
+        ringY += (targetY - ringY) * RING_EASE;
         dot.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0)`;
         const distance = Math.abs(targetX - x) + Math.abs(targetY - y);
+        const ringDistance = Math.abs(targetX - ringX) + Math.abs(targetY - ringY);
         if (distance < 2) ease = EASE; // ถึงเมาส์แล้วกลับมาตามด้วยความเร็วปกติ
-        frameId = distance > 0.1 ? requestAnimationFrame(render) : null;
+        frameId = distance > 0.1 || ringDistance > 0.1 ? requestAnimationFrame(render) : null;
     };
 
     window.addEventListener('pointermove', event => {
@@ -110,16 +134,21 @@
         targetX = event.clientX;
         targetY = event.clientY;
         setLabelFrom(event.target);
+        setHoverFrom(event.target);
         if (!dot.classList.contains('is-visible')) {
             // โผล่ครั้งแรก/กลับเข้าหน้าต่าง: วางที่ปลายเมาส์เลย ไม่ลากมาจากที่เดิม
-            x = targetX;
-            y = targetY;
+            x = ringX = targetX;
+            y = ringY = targetY;
             dot.classList.add('is-visible');
+            ring.classList.add('is-visible');
         }
         requestTone();
         if (frameId === null) frameId = requestAnimationFrame(render);
     }, { passive: true });
 
     window.addEventListener('scroll', requestTone, { passive: true });
-    document.documentElement.addEventListener('mouseleave', () => dot.classList.remove('is-visible'));
+    document.documentElement.addEventListener('mouseleave', () => {
+        dot.classList.remove('is-visible');
+        ring.classList.remove('is-visible');
+    });
 })();
