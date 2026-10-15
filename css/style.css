@@ -4268,6 +4268,13 @@ body.menu-open .site-header__backdrop {
         width: 100%;
         margin: var(--space-6) 0 0;
 
+        /* ป้ายปุ่มที่ยาวเกินกว้างปุ่ม (เช่นชื่อ session ของ Master Class) ขึ้นบรรทัดใหม่แทนการถูกตัด
+           ป้ายสั้นยังเป็นบรรทัดเดียวสูงเท่าเดิม */
+        padding-block: var(--space-2);
+        line-height: var(--section-small-line-height);
+        white-space: normal;
+        text-wrap: balance;
+
         /* ปุ่ม Ultimate ใช้สีดำล้วน ไม่มีขอบ spectrum */
         &.bt-action-button--primary {
             border-color: var(--bt-action-fill);
