@@ -47,7 +47,7 @@
                 image: 'day-1/D1-วินนี่.webp',
             },
             {
-                name: 'คุณโช๊ค โชกุล Shok Shogun',
+                name: 'คุณโช๊ค โชกุล (Shok Shogun)',
                 role: 'นักลงทุนและผู้สร้างคอนเทนต์',
                 image: 'day-1/D1-โช๊ค-โชกุล.webp',
             },
