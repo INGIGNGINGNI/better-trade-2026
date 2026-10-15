@@ -5248,7 +5248,10 @@ body.menu-open .site-header__backdrop {
     }
 
     .agenda__panel {
-        padding: var(--space-0) var(--space-6) var(--space-6);
+        /* ระยะซ้ายขวาของการ์ด แถบหัวห้อง Workshop (.agenda__room-title) ยืดออกไปชนขอบเท่าค่านี้พอดี */
+        --bt-agenda-panel-pad-x: var(--space-6);
+
+        padding: var(--space-0) var(--bt-agenda-panel-pad-x) var(--space-6);
         min-width: 0;
         /* สลับแท็บ Stage แล้วเลื่อนมาจอดใต้แถบแท็บที่ sticky อยู่พอดี ไม่ใช่ใต้ header
            เฉย ๆ (นั่นจะทำให้แถบแท็บมาบังหัวตาราง) เผื่อความสูงแถบแท็บ+เส้นคาดเพิ่ม
@@ -5658,7 +5661,7 @@ body.menu-open .site-header__backdrop {
     /* แถบหัวห้อง: พื้นขาวล้วนพาดเต็มความกว้างการ์ด (ดึงออกไปชนขอบซ้าย-ขวาเท่า padding ของ panel)
        ตัวหนังสือยังตรงแนวเดียวกับคอลัมน์เวลา ไม่เว้นระยะบน: room 1 ติดแถบวันเวลา room 2 ติดแถวสุดท้ายของ room 1 */
     .agenda__room-title {
-        --bt-agenda-room-bleed: var(--space-6);
+        --bt-agenda-room-bleed: var(--bt-agenda-panel-pad-x, var(--space-6));
 
         margin: 0 calc(var(--bt-agenda-room-bleed) * -1) var(--space-2);
         padding: var(--space-3) var(--bt-agenda-room-bleed);
@@ -5688,7 +5691,9 @@ body.menu-open .site-header__backdrop {
 
     @media (min-width:1400px) and (max-width:1499px) {
         .agenda__panel {
-            padding: var(--space-0) var(--space-4) var(--space-4);
+            --bt-agenda-panel-pad-x: var(--space-4);
+
+            padding: var(--space-0) var(--bt-agenda-panel-pad-x) var(--space-4);
         }
     }
 
@@ -6410,11 +6415,9 @@ body.menu-open .site-header__backdrop {
         }
 
         .agenda__panel {
-            padding: var(--space-0) var(--space-4) var(--space-4);
-        }
+            --bt-agenda-panel-pad-x: var(--space-4);
 
-        .agenda__room-title {
-            --bt-agenda-room-bleed: var(--space-4);
+            padding: var(--space-0) var(--bt-agenda-panel-pad-x) var(--space-4);
         }
 
         .agenda__day-switcher-inner {
@@ -7306,6 +7309,10 @@ body.menu-open .site-header__backdrop {
         margin-top: var(--space-8);
         padding: var(--space-8) var(--space-8) var(--space-12);
     }
+
+    #moderator .moderator__grid {
+        padding: var(--space-8) var(--space-8) var(--space-12);
+    }
 }
 
 @media (max-width: 767px) {
@@ -7476,7 +7483,9 @@ body.menu-open .site-header__backdrop {
     margin-top: 0;
 }
 
-.speaker__panel {
+/* padding เท่ากันทั้งสองกล่องทุก breakpoint (ด้านล่างเขียนคู่กันทุกจุด) */
+.speaker__panel,
+.moderator__grid {
     padding: var(--space-8) var(--space-8) var(--space-12);
     background: var(--color-neutral-50);
     border-radius: var(--radius-1);
@@ -7487,9 +7496,6 @@ body.menu-open .site-header__backdrop {
    การ์ดสองฝั่งจึงกว้างเท่ากันพอดี แม้พื้นที่กริดรวมกว้างไม่เท่ากันก็ตาม */
 .moderator__grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    padding: var(--space-8);
-    background: var(--color-neutral-50);
-    border-radius: var(--radius-1);
 }
 
 @media (max-width: 1199px) {
@@ -7499,7 +7505,8 @@ body.menu-open .site-header__backdrop {
         gap: var(--space-12) var(--space-8);
     }
 
-    .speaker__panel {
+    .speaker__panel,
+    .moderator__grid {
         padding: var(--space-8) var(--space-6) var(--space-12);
     }
 
@@ -7526,7 +7533,8 @@ body.menu-open .site-header__backdrop {
         gap: var(--space-12) var(--space-6);
     }
 
-    .speaker__panel {
+    .speaker__panel,
+    .moderator__grid {
         padding: var(--space-8) var(--space-8) var(--space-12);
     }
 }
@@ -7541,7 +7549,7 @@ body.menu-open .site-header__backdrop {
 
     .moderator__grid {
         margin-top: var(--space-3);
-        padding: var(--space-4);
+        padding: var(--space-4) var(--space-4) var(--space-8);
         gap: var(--space-12) var(--space-4);
     }
 }
