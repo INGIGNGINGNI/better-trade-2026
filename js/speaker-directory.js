@@ -198,6 +198,11 @@
                 role: 'Super Trader',
                 image: 'day-2/D2-โค้ชบอล.webp',
             },
+            {
+                name: 'คุณนฤมล บุญสนอง',
+                role: 'นักวางแผนการเงิน CFP®',
+                image: 'profile-empty.webp',
+            },
         ],
     };
 

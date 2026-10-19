@@ -4085,6 +4085,125 @@ body.menu-open .site-header__backdrop {
         grid-template-columns: minmax(0, 1fr);
     }
 
+    /* บัตรหลาย session (Master Class): รายการแนวตั้ง แถวละ session ทุกขนาดจอ
+       วงกลมเลือกอยู่ซ้าย | วันที่ + ชื่อ session | ราคาชิดขวา
+       ความสูงตามเนื้อหาของแถว (ไม่ใช้ความสูงเท่ากันกับกล่องราคาของบัตรอื่น) */
+    .ticket__prices.ticket__prices--list {
+        grid-template-columns: minmax(0, 1fr);
+        grid-auto-rows: auto;
+
+        .ticket__price {
+            min-height: 0;
+            padding: var(--space-3) var(--space-4);
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr) auto;
+            /* ราคาตัวใหญ่เท่าบัตรอื่น กินสองบรรทัดทางขวา (วันที่ + ชื่อ session อยู่ซ้าย) */
+            grid-template-areas:
+                "radio day price"
+                ". note price";
+            align-items: center;
+            /* แถวสูงกว่าเนื้อหา (กล่องสูงเท่าบัตรอื่น) ให้ที่เหลือไปอยู่บน/ล่าง ระยะวันที่-ชื่อคงที่ */
+            align-content: center;
+            column-gap: var(--space-4);
+
+            &:not(:first-child) {
+                border-left: 0;
+                border-top: var(--rule-width-subtle) solid var(--color-border-editorial);
+            }
+
+            /* วงกลมเลือกย้ายมาไว้หน้าแถว อยู่แถวเดียวกับวันที่ (บัตรอื่นอยู่ท้ายบรรทัดวันที่) */
+            &::before {
+                content: "";
+                grid-area: radio;
+                width: var(--space-4);
+                height: var(--space-4);
+                border: var(--border-width-1) solid var(--color-border-default);
+                border-radius: var(--radius-round);
+                background: var(--color-neutral-0);
+                box-shadow: inset 0 0 0 var(--border-width-2) var(--color-neutral-0);
+            }
+
+            &.is-active::before {
+                background: var(--color-blue-600);
+                box-shadow:
+                    inset 0 0 0 var(--border-width-2) var(--color-neutral-0),
+                    0 0 0 var(--border-width-1) var(--color-blue-600);
+            }
+
+            .ticket__price-day {
+                grid-area: day;
+                width: auto;
+                margin-bottom: var(--space-2);
+
+                &::after {
+                    content: none;
+                }
+            }
+
+            .ticket__price-note {
+                grid-area: note;
+                min-height: 0;
+                margin-top: 0;
+            }
+
+            strong {
+                grid-area: price;
+                margin-top: 0;
+                line-height: 1;
+            }
+        }
+    }
+
+    /* การ์ดบัตรวางเรียงกัน (≥992px): กล่องตัวเลือกของ Master Class สูงเท่ากล่องราคาของบัตรอื่นพอดี
+       --bt-ticket-price-equal-height มาจาก js/ticket-price-selector.js (ความสูงช่องราคาที่สูงที่สุด) + เส้นบน/ล่างของกล่อง
+       แบ่งความสูงให้ทุกแถวเท่ากัน (1fr) แถวมี padding บนล่าง 12px (--space-3 จากด้านบน)
+       --bt-ticket-list-span = กล่องนี้สูงกี่ช่องราคา: JS ใช้ขยายความสูงกลางให้แถวทั้งหมดพอดีไม่ล้น */
+    @media (min-width: 992px) {
+        .ticket__prices.ticket__prices--list {
+            --bt-ticket-list-span: 1;
+            height: calc(var(--bt-ticket-price-equal-height) + var(--rule-width-subtle) * 2);
+            grid-auto-rows: minmax(0, 1fr);
+        }
+    }
+
+    /* 1200–1399px การ์ดแคบ ชื่อคลาสยาวสุด (R.R.R) ต้องการ ~200px แต่เหลือ ~160px
+       ราคาคงขนาดเท่าบัตรอื่น จึงให้ชื่อคลาสเป็น 12px อยู่บรรทัดเดียว */
+    @media (min-width: 1200px) and (max-width: 1399px) {
+        .ticket__prices.ticket__prices--list .ticket__price {
+            .ticket__price-note {
+                font-size: var(--font-size-12);
+                white-space: nowrap;
+            }
+        }
+    }
+
+    /* 992–1199px บัตรอื่นเรียงช่องราคาซ้อนกันสองช่อง (คอลัมน์เดียว) กล่องจึงสูงสองเท่าของช่อง */
+    @media (min-width: 992px) and (max-width: 1199px) {
+        .ticket__prices.ticket__prices--list {
+            --bt-ticket-list-span: 2;
+            height: calc(var(--bt-ticket-price-equal-height) * 2 + var(--rule-width-subtle) * 2);
+
+            /* การ์ดแคบ ถ้าราคาอยู่ขวา ข้อความเหลือไม่ถึง 80px จึงเรียงลงมาแบบบัตรอื่น: วันที่ / ราคา / ชื่อคลาส
+               ระยะห่าง 8px ทุกบรรทัด (วันที่มี margin-bottom 8px อยู่แล้ว) */
+            .ticket__price {
+                grid-template-columns: auto minmax(0, 1fr);
+                grid-template-areas:
+                    "radio day"
+                    ". price"
+                    ". note";
+                align-content: center;
+            }
+
+            .ticket__price strong {
+                justify-self: start;
+            }
+
+            .ticket__price .ticket__price-note {
+                margin-top: var(--space-2);
+            }
+        }
+    }
+
     .ticket__access {
         margin: var(--space-6) 0 0;
 
