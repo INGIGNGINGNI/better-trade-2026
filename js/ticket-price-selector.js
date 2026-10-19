@@ -8,13 +8,25 @@
         ticket.style.removeProperty('--bt-ticket-price-equal-height');
 
         const selectableOptions = Array.from(
-            ticket.querySelectorAll('.ticket__price[data-ticket-option]:not(:disabled):not([aria-disabled="true"])')
+            ticket.querySelectorAll('.ticket__prices:not(.ticket__prices--list) .ticket__price[data-ticket-option]:not(:disabled):not([aria-disabled="true"])')
         );
 
         if (!selectableOptions.length) return;
 
+        /* กล่องแบบรายการ (Master Class): ตอนลบค่าออกกล่องสูงตามเนื้อหา (แถว + padding เต็ม)
+           CSS ให้กล่องสูง = ค่ากลาง x --bt-ticket-list-span จึงหารกลับเป็นความสูงที่ต้องการต่อช่อง
+           ไม่มี span (การ์ดเรียงซ้อนกัน ≤991px) ไม่ต้องนับ */
+        const listHeights = Array.from(ticket.querySelectorAll('.ticket__prices--list')).map((list) => {
+            const style = getComputedStyle(list);
+            const span = Number(style.getPropertyValue('--bt-ticket-list-span')) || 0;
+            if (!span) return 0;
+            const borders = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
+            return (list.getBoundingClientRect().height - borders) / span;
+        });
+
         const maxHeight = Math.ceil(Math.max(
-            ...selectableOptions.map((option) => option.getBoundingClientRect().height)
+            ...selectableOptions.map((option) => option.getBoundingClientRect().height),
+            ...listHeights
         ));
 
         if (maxHeight > 0) {
