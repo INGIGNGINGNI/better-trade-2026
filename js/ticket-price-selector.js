@@ -49,6 +49,28 @@
         const plan = group.closest('.ticket__plan');
         const action = plan?.querySelector('[data-ticket-action]');
 
+        /* ปุ่มที่ยัง disabled อยู่ในกรอบ [data-ticket-action-hint]: คลิกกรอบแล้วขึ้น tooltip บอกเหตุผล
+           (ปุ่ม disabled เองไม่รับคลิก) แสดงชั่วครู่แล้วหายเอง
+           ตำแหน่งคงที่ไม่ว่าคลิกตรงไหน: ใต้ปุ่ม กึ่งกลาง (ไม่สลับขึ้นด้านบน) */
+        const hintHost = action?.closest('[data-ticket-action-hint]');
+        let hint = null;
+        let hintTimer = 0;
+        if (hintHost && window.bootstrap?.Tooltip) {
+            hint = new window.bootstrap.Tooltip(hintHost, {
+                title: hintHost.dataset.ticketActionHint,
+                trigger: 'manual',
+                placement: 'bottom',
+                fallbackPlacements: ['bottom'],
+                customClass: 'ticket__action-tooltip',
+            });
+            hintHost.addEventListener('click', () => {
+                if (action.getAttribute('aria-disabled') !== 'true') return;
+                hint.show();
+                window.clearTimeout(hintTimer);
+                hintTimer = window.setTimeout(() => hint?.hide(), 2500);
+            });
+        }
+
         const selectOption = (selectedOption, shouldFocus = false) => {
             options.forEach((option) => {
                 const isSelected = option === selectedOption;
@@ -65,6 +87,9 @@
             if (action?.getAttribute('aria-disabled') === 'true') {
                 action.removeAttribute('aria-disabled');
                 action.removeAttribute('tabindex');
+                window.clearTimeout(hintTimer);
+                hint?.dispose();
+                hint = null;
             }
 
             if (shouldFocus) selectedOption.focus();

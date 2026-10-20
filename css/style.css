@@ -4401,15 +4401,18 @@ body.menu-open .site-header__backdrop {
         }
     }
 
+    /* กรอบรอบปุ่มที่ยัง disabled: ปุ่ม disabled ไม่รับคลิก (pointer-events: none) กรอบนี้จึงรับคลิกแทน
+       เพื่อแสดง tooltip บอกเหตุผล เลือกบัตรแล้วปุ่มกดได้ตามปกติ */
     .ticket__action-lock {
         display: block;
         margin: var(--space-6) 0 0;
-        cursor: not-allowed;
+
+        &:has(> [aria-disabled="true"], > :disabled) {
+            cursor: not-allowed;
+        }
 
         .ticket__action {
             margin: 0;
-            pointer-events: none;
-            cursor: not-allowed;
         }
     }
 
@@ -16373,4 +16376,20 @@ html.has-floor-plan-lightbox {
     [data-cursor-label][data-cursor-label]:not(:disabled) {
         cursor: none;
     }
+}
+
+/* Tooltip ปุ่มซื้อบัตรที่ยัง disabled (Bootstrap Tooltip, customClass จาก js/ticket-price-selector.js)
+   tooltip ถูกวางไว้ใต้ body จึงอยู่นอก .ticket ใช้ตัวแปรของ Bootstrap ปรับให้เข้ากับ design system */
+.ticket__action-tooltip {
+    --bs-tooltip-bg: var(--color-surface-inverse);
+    --bs-tooltip-color: var(--color-text-inverse);
+    --bs-tooltip-font-size: var(--font-size-14);
+    --bs-tooltip-padding-x: var(--space-3);
+    --bs-tooltip-padding-y: var(--space-2);
+    --bs-tooltip-border-radius: var(--radius-1);
+    --bs-tooltip-opacity: 1;
+    /* ข้อความสั้น ให้อยู่บรรทัดเดียว (ค่าเดิมของ Bootstrap กว้างสุด 200px) */
+    --bs-tooltip-max-width: none;
+
+    font-family: var(--font-family-base), sans-serif;
 }
