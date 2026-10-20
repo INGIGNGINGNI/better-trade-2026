@@ -61,6 +61,12 @@
                 action.textContent = selectedOption.dataset.ticketLabel;
             }
 
+            // ปุ่มที่เริ่มเป็น disabled (ยังไม่เลือกบัตร เช่น Master Class) กดได้เมื่อเลือกบัตรแล้ว
+            if (action?.getAttribute('aria-disabled') === 'true') {
+                action.removeAttribute('aria-disabled');
+                action.removeAttribute('tabindex');
+            }
+
             if (shouldFocus) selectedOption.focus();
         };
 
