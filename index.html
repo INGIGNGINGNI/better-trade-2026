@@ -74,7 +74,7 @@
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="css/main.css?v=61">
-    <link rel="stylesheet" href="css/style.css?v=1217">
+    <link rel="stylesheet" href="css/style.css?v=1223">
 </head>
 
 <body class="is-loading">
@@ -381,7 +381,10 @@
                 </div>
 
                 <!-- TODO: เปลี่ยน href เป็นลิงก์ซื้อบัตร Master Class (รอปลายทางจริง ตอนนี้ใช้ลิงก์ buy-ticket เดิมไว้ก่อน) -->
-                <a class="bt-action-button bt-action-button--secondary bt-action-button--xl ticket__action" href="https://www.efin.finance/events/better-trade/better-trade2026/buy-ticket" target="_blank" rel="noopener noreferrer" data-ticket-action aria-disabled="true" tabindex="-1">ซื้อบัตร Master Class</a>
+                <!-- ยังไม่เลือกบัตร ปุ่มกดไม่ได้ คลิกที่กรอบนี้แล้วขึ้น tooltip บอกให้เลือก Class ก่อน (js/ticket-price-selector.js) -->
+                <span class="ticket__action-lock" data-ticket-action-hint="กรุณาเลือก Class ที่คุณสนใจ">
+                    <a class="bt-action-button bt-action-button--secondary bt-action-button--xl ticket__action" href="https://www.efin.finance/events/better-trade/better-trade2026/buy-ticket" target="_blank" rel="noopener noreferrer" data-ticket-action aria-disabled="true" tabindex="-1">ซื้อบัตร Master Class</a>
+                </span>
 
                 <dl class="ticket__access">
                     <div><dt class="ticket__access-label ticket__access-label--conference"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-mic"></use></svg><span class="ticket__access-copy"><span class="ticket__access-title">Conference <small>(เวทีใหญ่)</small></span><small class="ticket__access-description">วิทยากร 30+ ท่าน รวม 20+ เซสชัน <br class="d-none d-lg-block">บนเวทีหลัก</small></span></dt><dd class="ticket__status ticket__status--badge">บัตร Ultimate เท่านั้น</dd></div>
@@ -2653,7 +2656,7 @@
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="vendor/swiper/swiper-bundle.min.js"></script>
     <script src="js/action-button.js"></script>
-    <script src="js/ticket-price-selector.js?v=5"></script>
+    <script src="js/ticket-price-selector.js?v=9"></script>
     <script src="js/agenda-tabs.js?v=30"></script>
     <script src="js/speaker-directory.js?v=54"></script>
     <script src="js/moderator-directory.js?v=4"></script>
