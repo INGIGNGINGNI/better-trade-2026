@@ -19,6 +19,7 @@ NEW_SOURCES = {
     "images/agenda/day-1/D1-โช๊ค-โชกุล.webp",
     "images/agenda/day-1/D1-ศุภกร-สุนทรกิจ.webp",
     "images/agenda/day-1/D1-โค้ชฟิล์ม.webp",
+    "images/agenda/day-2/D2-นฤมล-บุญสนอง.webp",
     "images/agenda/day-2/D2-เผดิมภพ-สงเคราะห์.webp",
 }
 

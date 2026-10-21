@@ -9463,9 +9463,9 @@ body.menu-open .site-header__backdrop {
     }
 
     .floor-plan__zone-note {
-        margin: 0 0 var(--space-3);
+        margin: var(--space-3) 0 var(--space-2);
         color: var(--color-text-muted);
-        font-size: var(--section-small-size);
+        font-size: var(--section-body-size);
         line-height: var(--section-body-line-height);
     }
 
