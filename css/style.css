@@ -630,6 +630,17 @@ body.menu-closing .back-to-top {
     &:hover {
         --bt-action-fill: var(--color-neutral-700);
     }
+
+    /* disabled ของปุ่มดำ (เช่น Workshop "เต็มแล้ว"): ยังเป็นปุ่มดำ ตัวอักษรขาว แต่จางทั้งปุ่ม
+       (กดไม่ได้ / ไม่มีเงา / pointer-events: none มาจากกฎ disabled กลางใน css/main.css) */
+    &[aria-disabled="true"],
+    &:disabled {
+        --bt-action-fill: var(--color-neutral-800);
+
+        color: var(--color-neutral-0);
+        filter: none;
+        opacity: 0.4;
+    }
 }
 
 /* Match the solid black treatment used by the Ultimate ticket action. */
@@ -4320,8 +4331,10 @@ body.menu-open .site-header__backdrop {
         line-height: var(--section-small-line-height);
     }
 
+    /* กว้างเท่าปุ่ม Workshop ในหัวการ์ดวันของ agenda (.agenda__day-panel-action) */
     .ticket__workshop-action {
         flex: 0 0 auto;
+        min-width: 104px;
     }
 
     /* 480–991px การ์ดกว้างเต็มคอลัมน์: ข้อความทั้งหมด (หัวข้อ + คำอธิบาย) อยู่ซ้าย ปุ่มอยู่ขวากึ่งกลางแนวตั้ง
