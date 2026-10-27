@@ -32,8 +32,8 @@
                 image: 'day-1/D1-ธนรัชต์-พสวงศ์.webp',
             },
             {
-                name: 'คุณมทินา วัชรวราทร',
-                role: 'CFA, Head of Investment Strategy, KAsset',
+                name: 'คุณมทินา วัชรวราทร CFA',
+                role: 'Head of Investment Strategy, KAsset',
                 image: 'day-1/D1-มทินา-วัชรวราทร.webp',
             },
             {
