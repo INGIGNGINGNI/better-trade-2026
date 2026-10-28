@@ -9782,7 +9782,7 @@ html.has-floor-plan-lightbox {
     font-family: var(--font-family-base);
 
     .sponsor__group:not([hidden])~.sponsor__group:not([hidden]) {
-        margin-top: var(--space-20);
+        margin-top: var(--space-32);
     }
 
     /* หน้าตาตัวอักษรมาจาก .bt-section-title ทั้งหมด (ฟอนต์/ขนาด/น้ำหนัก/line-height/tracking)
@@ -9874,7 +9874,7 @@ html.has-floor-plan-lightbox {
         padding: var(--section-padding-y-sm) 0;
 
         .sponsor__group:not([hidden])~.sponsor__group:not([hidden]) {
-            margin-top: var(--space-12);
+            margin-top: var(--space-16);
         }
 
         .sponsor__group-title {
