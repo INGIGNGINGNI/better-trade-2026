@@ -9482,6 +9482,11 @@ body.menu-open .site-header__backdrop {
         line-height: var(--section-body-line-height);
     }
 
+    /* หัวข้อกลุ่มถัดไปในโซนเดียวกัน (เช่น Dressrosa ต่อจาก Bahamas) เว้นห่างจากรายการก่อนหน้ามากขึ้น */
+    .floor-plan__booths + .floor-plan__zone-note {
+        margin-top: var(--space-8);
+    }
+
     /* บูธละ 1 แถว: หมายเลขบูธ (คอลัมน์กว้างคงที่) + ชื่อบริษัท (ถ้าคอนเฟิมแล้ว) */
     .floor-plan__booths {
         margin: 0;
