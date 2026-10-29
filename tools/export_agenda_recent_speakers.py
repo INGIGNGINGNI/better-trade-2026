@@ -18,9 +18,14 @@ ARCHIVE = OUTPUT.parent / "agenda-speakers-new.zip"
 NEW_SOURCES = {
     "images/agenda/day-1/D1-โช๊ค-โชกุล.webp",
     "images/agenda/day-1/D1-ศุภกร-สุนทรกิจ.webp",
+    "images/agenda/day-1/D1-ชยกร-เหรียญทองคำ.webp",
+    "images/agenda/day-1/D1-ธีรศักดิ์-ธนวรากุล.webp",
+    "images/agenda/day-1/D1-ภัครัฐพีร์-ตั้งสำเริงวงศ์.webp",
     "images/agenda/day-1/D1-โค้ชฟิล์ม.webp",
     "images/agenda/day-2/D2-นฤมล-บุญสนอง.webp",
+    "images/agenda/day-2/D2-อธิป-อัศวานันท์.webp",
     "images/agenda/day-2/D2-เผดิมภพ-สงเคราะห์.webp",
+    "images/agenda/mc/MC-Jessie.webp",
 }
 
 
