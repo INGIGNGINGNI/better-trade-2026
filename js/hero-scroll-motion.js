@@ -17,7 +17,7 @@
     gsap.registerPlugin(ScrollTrigger);
 
     const hero = document.getElementById('hero');
-    const ticketPlans = document.querySelector('.ticket__plans');
+    const ticketPlans = document.querySelector('.ticket:not([hidden]) .ticket__plans'); // ข้าม section บัตรที่ซ่อนไว้
     if (!hero || !ticketPlans) return;
 
     const q = selector => hero.querySelector(selector);

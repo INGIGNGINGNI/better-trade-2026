@@ -1,17 +1,20 @@
 (() => {
     const groups = document.querySelectorAll('.ticket__prices[role="radiogroup"]');
-    const ticket = document.querySelector('.ticket');
+    // section บัตรมีมากกว่า 1 ชุด (#ticket, #rerun-ticket) ปรับความสูงกล่องราคาแยกกันในแต่ละ section
+    const tickets = document.querySelectorAll('.ticket');
 
-    const equalizeTicketPriceHeights = () => {
-        if (!ticket) return;
-
+    const equalizeTicketPriceHeights = (ticket) => {
         ticket.style.removeProperty('--bt-ticket-price-equal-height');
 
         const selectableOptions = Array.from(
             ticket.querySelectorAll('.ticket__prices:not(.ticket__prices--list) .ticket__price[data-ticket-option]:not(:disabled):not([aria-disabled="true"])')
         );
 
-        if (!selectableOptions.length) return;
+        /* กล่องราคาเดียวที่เลือกไม่ได้ (Master Class ของ #rerun-ticket) นับความสูงด้วย
+           section ที่บัตรอื่นเป็นรายการทั้งหมด จึงยังได้ความสูงกลางที่ทุกกล่องสูงเท่ากัน */
+        const staticOptions = Array.from(ticket.querySelectorAll('.ticket__prices .ticket__price--static'));
+
+        if (!selectableOptions.length && !staticOptions.length) return;
 
         /* กล่องแบบรายการ (Master Class): ตอนลบค่าออกกล่องสูงตามเนื้อหา (แถว + padding เต็ม)
            CSS ให้กล่องสูง = ค่ากลาง x --bt-ticket-list-span จึงหารกลับเป็นความสูงที่ต้องการต่อช่อง
@@ -26,6 +29,7 @@
 
         const maxHeight = Math.ceil(Math.max(
             ...selectableOptions.map((option) => option.getBoundingClientRect().height),
+            ...staticOptions.map((option) => option.getBoundingClientRect().height),
             ...listHeights
         ));
 
@@ -40,7 +44,7 @@
         if (equalizeFrame) window.cancelAnimationFrame(equalizeFrame);
         equalizeFrame = window.requestAnimationFrame(() => {
             equalizeFrame = 0;
-            equalizeTicketPriceHeights();
+            tickets.forEach(equalizeTicketPriceHeights);
         });
     };
 
@@ -78,6 +82,12 @@
                 option.setAttribute('aria-checked', String(isSelected));
                 option.tabIndex = isSelected ? 0 : -1;
             });
+
+            // บัตรที่ปิดจำหน่ายแล้ว (data-ticket-closed) ปุ่มคงข้อความ "สิ้นสุดการจำหน่าย" และ disabled ตลอด ไม่ว่าเลือกราคาไหน
+            if (action?.hasAttribute('data-ticket-closed')) {
+                if (shouldFocus) selectedOption.focus();
+                return;
+            }
 
             if (action && selectedOption.dataset.ticketLabel) {
                 action.textContent = selectedOption.dataset.ticketLabel;

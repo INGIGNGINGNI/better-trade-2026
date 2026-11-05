@@ -1,12 +1,11 @@
 import { createLiquidMetalButton } from './liquid-metal-button.js?v=3';
 
-const TICKET_SECTION_HREF = '#ticket';
-const BUY_TICKET_URL = 'https://www.efin.finance/events/better-trade/better-trade2026/buy-ticket';
+const TICKET_SECTION_HREF = '#rerun-ticket';
 const INVESTOR_DNA_URL = 'https://egames.efin.finance/games/investor-dna-quiz';
-const PLAYBOOK_HERO_CTA_LABEL = 'ซื้อบัตรพร้อมรับ PERSONALIZED PLAYBOOK';
+const PLAYBOOK_HERO_CTA_LABEL = 'รับชมย้อนหลัง';
 
 const sharedRegisterOptions = {
-    label: 'ซื้อบัตร',
+    label: 'รับชมย้อนหลัง',
     href: TICKET_SECTION_HREF,
     height: 56,
     fontSize: 18,
@@ -189,20 +188,16 @@ ready.then(() => {
         });
         ctaTicketButton = mountRegisterButton(ctaTicketSlot, {
             ...responsiveOptions,
-            label: 'ซื้อบัตร Ultimate 2 วัน 2,500 บาท',
-            href: BUY_TICKET_URL,
-            target: '_blank',
-            rel: 'noopener noreferrer',
+            label: 'รับชมย้อนหลัง',
+            href: TICKET_SECTION_HREF,
             textColor: '#111318',
             pillBackground: 'linear-gradient(180deg, #ffffff 0%, #f3f4f8 55%, #e4e7ee 100%)',
         });
         mountPlaybookHeroCta();
         playbookUltimateCtaButton = mountRegisterButton(playbookUltimateCtaSlot, {
             ...responsiveOptions,
-            label: 'ซื้อบัตร Ultimate',
-            href: playbookUltimateCtaSlot?.dataset.ctaHref || BUY_TICKET_URL,
-            target: '_blank',
-            rel: 'noopener noreferrer',
+            label: 'รับชมย้อนหลัง',
+            href: playbookUltimateCtaSlot?.dataset.ctaHref || TICKET_SECTION_HREF,
             /* ใช้สีดำชุดเดียวกับปุ่มซื้อบัตรใน header (ขนาดยังเป็นชุด CTA เหมือนเดิม) */
             textColor: '#ffffff',
             pillBackground: 'linear-gradient(180deg, #20242a 0%, #111318 55%, #050607 100%)',

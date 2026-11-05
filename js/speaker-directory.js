@@ -179,11 +179,6 @@
                 image: 'day-2/D2-วนนท์-วรรณป้าน.webp',
             },
             {
-                name: 'คุณกฤษฎิ์ ชวาลรัตน์',
-                role: 'Property Developer & Collector',
-                image: 'day-2/D2-กฤษฎิ์-ชวาลรัตน์.webp',
-            },
-            {
                 name: 'คุณคมศักดิ์ ปอประสิทธิ์',
                 role: 'Investor & Collector',
                 image: 'day-2/D2-คมศักดิ์-ปอประสิทธิ์.webp',

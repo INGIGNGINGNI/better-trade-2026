@@ -1987,6 +1987,16 @@ body.menu-open .site-header__backdrop {
     line-height: var(--line-height-normal);
 }
 
+/* สลับ hierarchy แต่คงลำดับ: ข้อความรองขึ้นก่อน (ต่อจากภาพ title จึงใช้ระยะ 32px ของหัวข้อเดิม)
+   แล้วตามด้วยหัวข้อ (ระยะ 16px ของข้อความรองเดิม) */
+.hero__description--lead {
+    margin-top: var(--space-8);
+}
+
+.hero__headline--follow {
+    margin-top: var(--space-4);
+}
+
 /* Stat styling follows #expectation (.expectation__stat), one size step smaller: ink numbers with a blue "+", a light muted
    label underneath, and the rotated line-star image as the divider between items. */
 .hero__stats {
@@ -2162,10 +2172,11 @@ body.menu-open .site-header__backdrop {
         --bt-hero-gap: var(--space-6);
         /* ระยะขอบขั้นต่ำเป็นสัดส่วนความกว้างจอ จอสูง (เต็มจอ) จะไม่เบียดขอบจนเหลือแค่ 32px */
         --bt-hero-side-min: max(var(--space-8), 5vw);
-        --bt-hero-content-min: calc(480 * var(--bt-hero-u));
-        --bt-hero-content-max: calc(500 * var(--bt-hero-u));
+        /* Hero Rerun: คอลัมน์ข้อความกว้างขึ้น (การ์ด ULTIMATE) ภาพวิทยากรครอปเฉพาะช่วงคน (560:534) กว้าง 62vh */
+        --bt-hero-content-min: calc(600 * var(--bt-hero-u));
+        --bt-hero-content-max: calc(620 * var(--bt-hero-u));
         --bt-hero-pad-y: clamp(var(--space-4), 3vh, var(--space-10));
-        --bt-hero-visual-w: min(80vh, 100vw - 2 * var(--bt-hero-side-min) - var(--bt-hero-gap) - var(--bt-hero-content-min));
+        --bt-hero-visual-w: min(62vh, 100vw - 2 * var(--bt-hero-side-min) - var(--bt-hero-gap) - var(--bt-hero-content-min));
 
         min-height: 100vh;
         padding-block: var(--space-0);
@@ -2201,10 +2212,11 @@ body.menu-open .site-header__backdrop {
         position: relative;
         z-index: 1;
         flex: 0 0 auto;
-        align-self: flex-end;
+        align-self: center;
         width: var(--bt-hero-visual-w);
         height: auto;
-        aspect-ratio: 4 / 5;
+        aspect-ratio: 560 / 534;
+        margin-top: var(--header-height);
         padding: var(--space-0);
     }
 
@@ -2219,11 +2231,14 @@ body.menu-open .site-header__backdrop {
        - เพดาน 1.2 และพื้น 0.8
        ปุ่มซื้อบัตร (liquid metal วาดด้วย canvas) สูงคงที่ ไม่คูณ k */
     .hero {
-        --bt-hero-u: clamp(0.8px, min(0.1627vh - 0.2318px, max(0.9px, (100vw - 2 * var(--bt-hero-side-min) - var(--bt-hero-gap) - 80vh) / 480)), 1.2px);
+        /* Hero Rerun: เนื้อหาที่ k = 1 สูง ~604px กว้าง 620px
+           ความสูง: 604k ≤ 0.94·100vh − 72 → k = 0.1556vh − 0.119px คูณ 0.95 เผื่อที่ว่าง
+           ความกว้าง: 620k ≤ 100vw − ขอบ − ช่องไฟ − ภาพ 62vh */
+        --bt-hero-u: clamp(0.72px, min(0.148vh - 0.113px, max(0.8px, (100vw - 2 * var(--bt-hero-side-min) - var(--bt-hero-gap) - 62vh) / 620)), 1.2px);
     }
 
     .hero__title {
-        max-width: calc(352 * var(--bt-hero-u));
+        max-width: calc(300 * var(--bt-hero-u));
     }
 
     .hero__headline {
@@ -2234,6 +2249,14 @@ body.menu-open .site-header__backdrop {
     .hero__description {
         margin-top: calc(16 * var(--bt-hero-u));
         font-size: calc(16 * var(--bt-hero-u));
+    }
+
+    .hero__description--lead {
+        margin-top: calc(32 * var(--bt-hero-u));
+    }
+
+    .hero__headline--follow {
+        margin-top: calc(16 * var(--bt-hero-u));
     }
 
     .hero__stats {
@@ -2271,8 +2294,10 @@ body.menu-open .site-header__backdrop {
         aspect-ratio: auto;
         border-radius: var(--space-0);
 
+        /* ครอปเฉพาะช่วงวิทยากร ตัดข้อความวันที่ที่ฝังอยู่ด้านล่างภาพออก */
         img {
-            object-position: 50% 50%;
+            object-fit: cover;
+            object-position: 50% 0%;
         }
     }
 
@@ -2549,6 +2574,765 @@ body.menu-open .site-header__backdrop {
     }
 }
 
+/* ---------- Hero Rerun (.hero--rerun แบบ B ใน canvas "BetterTrade Rerun Hero") ----------
+   บน: ชื่องาน | ป้าย RERUN + หัวข้อ · กลาง: ภาพรวมวิทยากรแนวนอน (hero2-speaker.webp 1200×502)
+   ล่าง: การ์ดผู้ถือบัตร ULTIMATE แนวนอน ซ้อนขอบล่างภาพ + หมายเหตุ 2 คอลัมน์
+   ทุกขนาดคูณ --bt-hero-u (≥992 ย่อตามจอให้อยู่ครบใน 1 จอ / จออื่น = 1px)
+   ทับ layout ซ้าย-ขวาเดิมของ .hero (กฎเดิมยังอยู่ด้านบน) */
+.hero.hero--rerun {
+    .hero__content {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        /* กว้างเท่าแถบใน header (min(100% − 48px, 1460px)) ใช้พื้นที่ซ้าย-ขวาให้เต็ม */
+        max-width: 1460px;
+        margin-inline: auto;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: left;
+    }
+
+    /* ชื่องาน | เส้นคั่น | ป้าย + หัวข้อ เป็นก้อนเดียวกึ่งกลาง ห่างจากเส้นคั่นข้างละ 64px
+       หัวข้อใหญ่ ทั้งก้อนกว้างใกล้ภาพวิทยากร (สมดุลกับภาพด้านล่าง) */
+    .hero__intro {
+        max-width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: calc(64 * var(--bt-hero-u, 1px));
+    }
+
+    .hero__title {
+        flex: none;
+        width: calc(400 * var(--bt-hero-u, 1px));
+        max-width: none;
+        margin: 0;
+    }
+
+    .hero__intro-divider {
+        flex: none;
+        width: var(--border-width-1);
+        align-self: stretch;
+        background: var(--color-border-default);
+    }
+
+    .hero__intro-copy {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    /* เหลือแค่ป้าย RERUN สีแดง (ไม่มีกรอบขาวและข้อความต่อท้าย) */
+    .hero__rerun-tag {
+        margin: 0;
+        display: inline-flex;
+        line-height: 1;
+        white-space: nowrap;
+    }
+
+    /* ป้าย RERUN อยู่ต้นบรรทัดแรกของหัวข้อ (บรรทัดเดียวกัน) กึ่งกลางแนวตั้งของตัวอักษร */
+    .hero__rerun-badge {
+        margin-right: calc(16 * var(--bt-hero-u, 1px));
+        vertical-align: middle;
+        position: relative;
+        top: -0.12em;
+        line-height: var(--line-height-1);
+        white-space: nowrap;
+        height: calc(32 * var(--bt-hero-u, 1px));
+        padding: 0 calc(12 * var(--bt-hero-u, 1px));
+        display: inline-flex;
+        align-items: center;
+        gap: calc(8 * var(--bt-hero-u, 1px));
+        border-radius: var(--pill-radius);
+        background: var(--color-danger-600);
+        color: var(--color-neutral-0);
+        font-size: calc(14 * var(--bt-hero-u, 1px));
+        font-weight: var(--font-weight-bold);
+        letter-spacing: var(--letter-spacing-index);
+    }
+
+    .hero__rerun-title {
+        margin: 0;
+        color: var(--color-text-primary);
+        font-size: calc(56 * var(--bt-hero-u, 1px));
+        font-weight: var(--font-weight-medium);
+        line-height: 1.16;
+    }
+
+    /* "รับชมอีกครั้ง" ไล่สี spectrum จาก .bt-title-highlight (ใน markup) ขนาด/น้ำหนักรับจากหัวข้อ
+       (component ล็อก 64px medium ไว้สำหรับหัว section) ห้ามใส่ color/background (ไล่สีใช้ background-clip: text) */
+    .hero__rerun-title-highlight {
+        font-size: inherit;
+        font-weight: inherit;
+    }
+
+    /* ภาพรวมวิทยากรแนวนอน เห็นเต็มภาพ (ไม่ครอป) กว้างได้ถึงเต็มแถว
+       เว้นห่างจากส่วนบน (ชื่องาน/หัวข้อ) 24px ช่วงล่างที่จางขาวอยู่ใต้การ์ด */
+    .hero__visual {
+        width: calc(1420 * var(--bt-hero-u, 1px));
+        max-width: 100%;
+        margin: calc(24 * var(--bt-hero-u, 1px)) 0 0;
+        padding: 0;
+        aspect-ratio: auto;
+        align-self: center;
+    }
+
+    .hero__speakers {
+        --bt-hero-speakers-pull: 0px;
+
+        width: 100%;
+        height: auto;
+        margin: 0;
+        aspect-ratio: 1200 / 502;
+        border-radius: 0;
+        overflow: visible;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: 50% 50%;
+        }
+    }
+
+    /* การ์ดแนวนอน: หัวการ์ด | เส้นคั่น | 2 ขั้นตอน ซ้อนขอบล่างภาพวิทยากร */
+    .hero__rerun-card {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        margin-top: calc(-112 * var(--bt-hero-u, 1px));
+        padding: calc(20 * var(--bt-hero-u, 1px)) calc(32 * var(--bt-hero-u, 1px));
+        display: flex;
+        align-items: center;
+        gap: calc(32 * var(--bt-hero-u, 1px));
+        border: 0;
+        border-radius: var(--card-radius);
+        background: var(--color-neutral-0);
+        box-shadow: var(--shadow-elevated);
+    }
+
+    /* หัวการ์ดหดได้ (หัวการ์ดขึ้นสองบรรทัดที่ "ดูฟรีทุก Session") ขั้นตอนด้านขวาจึงไม่ล้นขอบการ์ด */
+    .hero__rerun-card-head {
+        flex: 0 1 auto;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: calc(8 * var(--bt-hero-u, 1px));
+    }
+
+    /* ข้อความต่อกันเป็นบรรทัดปกติ (ไม่ใช่ flex) ช่องไฟระหว่างคำมาจากเว้นวรรคใน markup */
+    .hero__rerun-card-title {
+        margin: 0;
+        color: var(--color-text-primary);
+        font-size: 22px;
+        font-weight: var(--font-weight-medium);
+        line-height: 1.3;
+    }
+
+    /* ชื่อบัตรใช้ไล่สี spectrum ของ .bt-title-highlight (ใน markup) ชุดเดียวกับ ULTIMATE ในข้อความนำของ section Rerun
+       ตัว serif Baskervville ขนาดรับจากบรรทัด น้ำหนัก regular (Baskervville มีแค่ 400) ห้ามใส่ color/background (ไล่สีใช้ background-clip: text) */
+    .hero__rerun-plan {
+        font-family: 'Baskervville', var(--font-family-base);
+        font-size: inherit;
+        font-weight: var(--font-weight-regular);
+        text-transform: uppercase;
+        line-height: inherit;
+    }
+
+    .hero__rerun-card-note {
+        margin: 0;
+        color: var(--color-text-secondary);
+        font-size: var(--font-size-16);
+        line-height: var(--line-height-relaxed);
+    }
+
+    .hero__rerun-card-divider {
+        flex: none;
+        width: var(--border-width-1);
+        height: calc(64 * var(--bt-hero-u, 1px));
+        background: var(--color-border-faint);
+    }
+
+    /* ขั้นตอนไม่หดต่ำกว่าเนื้อหา (ข้อความไม่ตัดบรรทัด) ที่ไม่พอจึงไปหดหัวการ์ดแทน */
+    .hero__rerun-steps {
+        flex: 1 0 auto;
+        min-width: 0;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        gap: calc(16 * var(--bt-hero-u, 1px));
+        list-style: none;
+    }
+
+    .hero__rerun-step {
+        display: flex;
+        align-items: center;
+        gap: calc(16 * var(--bt-hero-u, 1px));
+    }
+
+    .hero__rerun-step-icon {
+        flex: none;
+        width: calc(48 * var(--bt-hero-u, 1px));
+        height: calc(48 * var(--bt-hero-u, 1px));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--radius-2);
+        background: var(--color-text-primary);
+        color: var(--color-neutral-0);
+
+        svg {
+            width: 50%;
+            height: 50%;
+        }
+    }
+
+    .hero__rerun-step-icon--play {
+        background: var(--color-accent-primary);
+
+        svg {
+            width: 40%;
+            height: 40%;
+        }
+    }
+
+    .hero__rerun-step-copy {
+        display: flex;
+        flex-direction: column;
+        color: var(--color-text-secondary);
+        /* คำอธิบายใต้หัวข้อขั้นตอน 12px คงที่ทุกขนาดจอ (หัวข้อขั้นตอนยังย่อตาม --bt-hero-u) */
+        font-size: var(--font-size-12);
+        line-height: var(--line-height-relaxed);
+        white-space: nowrap;
+
+        >strong {
+            color: var(--color-text-primary);
+            font-size: calc(16 * var(--bt-hero-u, 1px));
+            font-weight: var(--font-weight-medium);
+            margin-bottom: var(--space-1);
+        }
+
+        span strong {
+            color: var(--color-text-primary);
+            font-weight: var(--font-weight-medium);
+        }
+    }
+
+    /* เส้นประยืดเต็มช่องระหว่างขั้นตอน (การ์ดแคบลงแล้ว เส้นจึงสั้นลงตาม) */
+    .hero__rerun-step-arrow {
+        flex: 1 1 0;
+        min-width: calc(64 * var(--bt-hero-u, 1px));
+        display: flex;
+        align-items: center;
+        /* เส้นประและหัวลูกศรสีเดียวกัน (#dbded5) */
+        color: var(--color-border-editorial);
+
+        &::before {
+            content: '';
+            flex: 1 1 0;
+            border-top: var(--border-width-2) dashed currentColor;
+        }
+
+        svg {
+            flex: none;
+            width: calc(16 * var(--bt-hero-u, 1px));
+            height: calc(16 * var(--bt-hero-u, 1px));
+        }
+    }
+
+    /* หมายเหตุ: หัวข้อซ้าย + 2 คอลัมน์ */
+    /* กว้างตามเนื้อหาแล้ววางกึ่งกลางใต้การ์ด (เดิมเต็มแถว คอลัมน์ขวาสั้นจนก้อนดูชิดซ้าย) */
+    .hero__rerun-notes {
+        width: fit-content;
+        margin-top: calc(16 * var(--bt-hero-u, 1px));
+        margin-inline: auto;
+        padding-inline: calc(8 * var(--bt-hero-u, 1px));
+        display: grid;
+        grid-template-columns: auto minmax(0, max-content) minmax(0, max-content);
+        column-gap: calc(32 * var(--bt-hero-u, 1px));
+        color: var(--color-text-muted);
+        /* 12px คงที่ทุกขนาดจอ (ไม่ย่อตาม --bt-hero-u) */
+        font-size: var(--font-size-12);
+        line-height: var(--line-height-relaxed);
+
+        >strong {
+            color: var(--color-text-secondary);
+            font-weight: var(--font-weight-medium);
+        }
+
+        ul {
+            margin: 0;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        /* bullet ดาวชุดเดียวกับรายการในคำตอบ FAQ (.faq__answer-body li) */
+        li {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-2);
+
+            &::before {
+                content: "";
+                flex: 0 0 var(--space-3);
+                width: var(--space-3);
+                height: var(--space-3);
+                margin-top: calc((var(--line-height-relaxed) * 1em - var(--space-3)) / 2);
+                background: url("../images/star.webp") center / contain no-repeat;
+            }
+
+            + li {
+                margin-top: var(--space-1);
+            }
+        }
+
+        li strong {
+            color: var(--color-text-primary);
+            font-weight: var(--font-weight-bold);
+        }
+
+        /* ลิงก์ Rerun Ticket: ปุ่ม --text ชุดเดียวกับ "ค้นหา Investor DNA ในตัวคุณ" ของหน้า personalized-playbook
+           (เส้นใต้ spectrum ยืดเต็มตอน hover ลูกศรไล่สีตอน hover) ขนาด 14px เท่าบรรทัด ไม่มีความสูงขั้นต่ำของปุ่ม */
+        .hero__rerun-link {
+            min-height: 0;
+            margin-left: var(--space-1);
+            padding: 0 0 var(--space-1);
+            gap: var(--space-1);
+            color: var(--color-text-primary);
+            font-size: inherit;
+            font-weight: var(--font-weight-medium);
+            line-height: inherit;
+            vertical-align: baseline;
+
+            &::after {
+                background: var(--spectrum);
+            }
+
+            &:hover,
+            &:focus-visible {
+                color: var(--color-text-primary);
+            }
+
+            &:hover .hero__rerun-link-arrow,
+            &:focus-visible .hero__rerun-link-arrow {
+                stroke: #00d4fe;
+                stroke: url('#hero-rerun-link-spectrum');
+            }
+        }
+
+        .hero__rerun-link-arrow {
+            width: 1em;
+            height: 1em;
+            stroke-width: 2;
+        }
+    }
+}
+
+/* ≥992 แนวนอน: hero สูงพอดี 1 จอ เนื้อหาเรียงบน-ล่างกึ่งกลางช่วงใต้ header
+   ขนาดทั้งชุดคูณ k (--bt-hero-u): เนื้อหาที่ k = 1 สูง ~830px กว้าง 1240px
+   ความสูง: 830k ≤ 100vh − header − 2·ระยะ → k ≈ 0.1145vh − 0.1px · ความกว้าง: 1240k ≤ 100vw − 2·ขอบ */
+@media (min-width:992px) and (min-aspect-ratio: 6/5) {
+    .hero.hero--rerun {
+        /* ความกว้าง: แถบเนื้อหา 1440k เว้นช่องข้างละ max(96px, 9vw) ไว้ให้ไอคอนสินทรัพย์ (จอสูงที่ k โตตามความสูง
+           เนื้อหาจะไม่กว้างจนดันไอคอนออกนอกจอ) */
+        --bt-hero-u: clamp(0.62px, min(0.112vh - 0.1px, (100vw - 2 * max(96px, 9vw)) / 1440), 1.2px);
+        /* k ของทั้ง hero (การ์ด/หมายเหตุตั้ง --bt-hero-u ของตัวเอง) ใช้คุมความกว้างการ์ดให้ใกล้ภาพวิทยากร */
+        --bt-hero-k: var(--bt-hero-u);
+
+        height: 100vh;
+
+        .hero__inner {
+            align-items: center;
+            padding: var(--header-height) var(--space-6) var(--space-0);
+        }
+
+        .hero__content {
+            flex: 1 1 auto;
+        }
+
+        /* การ์ดและหมายเหตุกว้างเต็มแถว ตัวหนังสือโตตามความกว้างจอได้มากกว่าส่วนอื่น (สูงสุด 1.25 เท่าของ k) */
+        /* การ์ดและหมายเหตุกว้างใกล้ภาพวิทยากร (ไม่เกิน 1460k) ตัวหนังสือโตตามความกว้างจอได้มากกว่าส่วนอื่น (สูงสุด 1.25 เท่าของ k) */
+        .hero__rerun-card,
+        .hero__rerun-notes {
+            --bt-hero-u: min(clamp(0.62px, (100vw - 48px) / 1300, 1.2px), 0.143vh - 0.125px);
+
+            max-width: calc(1440 * var(--bt-hero-k));
+        }
+
+        /* ไอคอนอยู่นอกแถบเนื้อหาเสมอ: เนื้อหา (ชื่องาน/หัวข้อ/ภาพ/การ์ด) กว้างไม่เกิน 1440k อยู่กลางจอ
+           ขอบซ้าย-ขวาของแถบ = 50vw ∓ 720k ไอคอนฝั่งซ้ายจุดกึ่งกลางไม่เกิน (ขอบซ้าย − ครึ่งความกว้างหลังหมุน − 8px)
+           ฝั่งขวาไม่น้อยกว่า (ขอบขวา + ครึ่งความกว้างหลังหมุน + 8px) จอที่ช่องข้างแคบ ไอคอนถูกดันเลยขอบจอบางส่วน (hero ตัดส่วนเกิน)
+           ไม่ทับข้อความ จอที่ช่องข้างกว้างพอ ไอคอนอยู่ตำแหน่งเดิม (--cx) / หัวใจยกขึ้นพ้นการ์ด */
+        .hero-asset {
+            --bt-hero-content-half: calc(720 * var(--bt-hero-u));
+            --bt-hero-asset-half: calc(var(--bt-hero-asset-width) * var(--bt-hero-asset-span, 1) / 2 + var(--space-2));
+        }
+
+        .hero-asset:is([data-hero-asset="triangle"], [data-hero-asset="stock"]) {
+            left: min(var(--cx) * 1vw, 50vw - var(--bt-hero-content-half) - var(--bt-hero-asset-half));
+        }
+
+        .hero-asset:is([data-hero-asset="gold"], [data-hero-asset="heart"]) {
+            left: max(var(--cx) * 1vw, 50vw + var(--bt-hero-content-half) + var(--bt-hero-asset-half));
+        }
+
+        /* ความกว้างหลังหมุนเทียบความกว้างภาพ: gold 369×800 เอียง 16° → 1.56 · heart 800×750 เอียง -5° → 1.08 */
+        .hero-asset[data-hero-asset="gold"] {
+            --bt-hero-asset-span: 1.56;
+        }
+
+        .hero-asset[data-hero-asset="heart"] {
+            --bt-hero-asset-span: 1.08;
+        }
+
+        .hero-asset[data-hero-asset="heart"] {
+            --cy: 52;
+        }
+
+        .hero-asset[data-hero-asset="stock"] {
+            --cy: 56;
+        }
+
+        /* ช่องฟ้าระหว่างกำแพงกว้าง 30–70% ของจอถึงขอบล่าง hero (ภาพวิทยากรแนวนอนเตี้ยกว่าภาพ 4:5 เดิม จึงปิดช่วงล่างไม่ได้
+           และตอนเลื่อน เนื้อหาเลื่อนขึ้นจนเห็นวิดีโอช่วงล่างเป็นขอบตัด) ไล่สีพื้นหน้า (สีเดียวกับกำแพงด้านใน) จากขอบล่างขึ้นไป
+           ช่วงล่างจึงต่อเป็นกำแพง/พื้นเดียวกับ section ถัดไป z-index 0 มาหลังสุดใน DOM จึงอยู่บนท้องฟ้า/กำแพง แต่ใต้เนื้อหา (.hero__inner z 1) */
+        &::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 0;
+            height: 45%;
+            background: linear-gradient(to top, var(--color-surface-page) 30%, transparent);
+            pointer-events: none;
+        }
+
+        /* ไอคอนสินทรัพย์อยู่เหนือแถบไล่สี (z 1 > 0) แต่ยังอยู่หลังเนื้อหา (.hero__inner z 1 มาทีหลังใน DOM) */
+        .hero__assets {
+            z-index: 1;
+        }
+
+        /* กำแพงสูงเต็ม hero ช่องฟ้ากลางจอรูปตัว V (ขอบในบนสุด ~30% / ~70% ของจอ) อยู่หลังภาพวิทยากร */
+        .hero__wall--left {
+            left: calc(30vw - var(--bt-hero-wall-left-width));
+        }
+
+        .hero__wall--right {
+            left: 70vw;
+        }
+    }
+}
+
+/* ≤991 / จอแนวตั้ง: บน-ล่างตามลำดับเดิม ส่วนบนเรียงเป็นคอลัมน์กลาง การ์ดเรียงลงมา หมายเหตุคอลัมน์เดียว */
+@media (max-width:991px), (max-aspect-ratio: 1199/1000) {
+    .hero.hero--rerun {
+        /* ไอคอน stock (ซ้าย) และ heart (ขวา) อยู่ที่มุมบนของการ์ด (ระดับขอบล่างภาพวิทยากร ที่การ์ดซ้อนขึ้นมา)
+           ชิดขอบจอ อยู่หลังการ์ด heart สูงกว่า stock เล็กน้อย (กรอบภาพจาก js/hero-loader.js) */
+        .hero-asset[data-hero-asset="heart"] {
+            --ix: 98;
+            --bt-hero-asset-y: calc(var(--bt-hero-img-top, 60vh) + var(--bt-hero-img-h, 0px) * 0.55);
+
+            /* ≤575 ต่ำลงอีก (ภาพวิทยากรเตี้ย ต้องใช้ตัวคูณมากขึ้น) */
+            @media (max-width:575px) {
+                --bt-hero-asset-y: calc(var(--bt-hero-img-top, 60vh) + var(--bt-hero-img-h, 0px) * 0.95);
+            }
+        }
+
+        .hero-asset[data-hero-asset="stock"] {
+            --ix: 6;
+            --bt-hero-asset-y: calc(var(--bt-hero-img-top, 60vh) + var(--bt-hero-img-h, 0px) * 0.85);
+
+            /* ≤575 ต่ำลงอีก (ภาพวิทยากรเตี้ย ต้องใช้ตัวคูณมากขึ้น) */
+            @media (max-width:575px) {
+                --bt-hero-asset-y: calc(var(--bt-hero-img-top, 60vh) + var(--bt-hero-img-h, 0px) * 1.25);
+            }
+        }
+
+        /* stock และ heart เล็กลง 20% (เฉพาะสองตัวนี้ ตัวอื่นขนาดเดิม) */
+        .hero__assets>.hero-asset:is([data-hero-asset="stock"], [data-hero-asset="heart"]) {
+            width: calc(var(--bt-hero-img-w, 100vw) * var(--iw) / 100 * var(--bt-hero-icon-k) * 0.8);
+        }
+
+        /* triangle (ซ้าย) และ gold (ขวา) ต่ำลงจากเดิม (~13%) มาที่ 18% ของความสูง hero แกน X คงเดิม */
+        .hero-asset:is([data-hero-asset="triangle"], [data-hero-asset="gold"]) {
+            --bt-hero-asset-y: 18%;
+
+            /* ≤575 ขึ้นไปอีก (12%) */
+            @media (max-width:575px) {
+                --bt-hero-asset-y: 12%;
+            }
+        }
+
+        /* กำแพงชุดเดียวกับ desktop (wall-left-new 4:3 / wall-right-new 1:1) สูงเต็ม hero ชิดขอบบน-ล่าง
+           ช่องฟ้ากลางจอขอบใน 30% / 70% ของจอ ไม่ยึดภาพวิทยากร (ภาพแนวนอนเตี้ย การ์ดและหมายเหตุอยู่ใต้ภาพ)
+           กำแพงจึงไม่จบกลางทางจนเห็นฟ้าโผล่ใต้กำแพง */
+        .hero__wall {
+            top: 0;
+            height: var(--bt-hero-height, 100vh);
+        }
+
+        .hero__wall--left {
+            --bt-hero-wall-left-width: calc(var(--bt-hero-height, 100vh) * 4 / 3);
+
+            left: calc(30vw - var(--bt-hero-wall-left-width));
+            width: var(--bt-hero-wall-left-width);
+        }
+
+        .hero__wall--right {
+            left: 70vw;
+            width: var(--bt-hero-height, 100vh);
+        }
+
+        .hero__intro {
+            flex-direction: column;
+            gap: var(--space-5);
+            text-align: center;
+        }
+
+        .hero__title {
+            width: min(300px, 70vw);
+
+            /* ≥576 โลโก้งานใหญ่ขึ้น (300 → 380) ≤575 คงเดิม */
+            @media (min-width:576px) {
+                width: min(380px, 70vw);
+            }
+        }
+
+        .hero__intro-divider {
+            display: none;
+        }
+
+        .hero__intro-copy {
+            align-items: center;
+        }
+
+        .hero__rerun-title {
+            font-size: var(--font-size-40);
+
+            /* ≤991 (767 ด้วย) หัวข้อ 32px ส่วน ≤575 ใช้ 28px (กฎในบล็อก ≤575) */
+            @media (max-width:991px) {
+                font-size: var(--font-size-32);
+            }
+        }
+
+        /* ป้าย RERUN เล็กลงตามหัวข้อ (จอนี้ไม่มีตัวคูณ --bt-hero-u ป้ายจะใหญ่เท่าขนาดเต็ม desktop)
+           ผังเรียงลงมา: ป้ายอยู่บรรทัดของตัวเองเหนือหัวข้อ เป็นกล่องแยก กึ่งกลาง ห่างจากหัวข้อ 12px */
+        .hero__rerun-badge {
+            display: flex;
+            width: fit-content;
+            height: var(--space-6);
+            margin: 0 auto var(--space-5);
+            padding: 0 var(--space-3);
+            vertical-align: baseline;
+            top: 0;
+            gap: var(--space-1);
+            font-size: var(--section-tag-size-sm);
+
+            svg {
+                width: 6px;
+                height: 6px;
+            }
+        }
+
+        .hero__visual {
+            max-width: 100%;
+        }
+
+        /* การ์ดซ้อนขอบล่างภาพวิทยากรสัดส่วนเดียวกับ desktop (112 / 1420 ของความกว้างภาพ ≈ 7.9%)
+           กลบช่วงล่างที่จางของภาพ ไม่เห็นช่องฟ้าระหว่างภาพกับการ์ด (% ของ margin อิงความกว้างคอลัมน์ ≈ ความกว้างภาพ) */
+        .hero__rerun-card {
+            margin-top: calc(-112 / 1420 * 100%);
+            flex-direction: column;
+            align-items: flex-start;
+            gap: var(--space-5);
+        }
+
+        .hero__rerun-card-divider {
+            width: 100%;
+            height: var(--border-width-1);
+        }
+
+        .hero__rerun-steps {
+            width: 100%;
+        }
+
+        /* จอแคบ (เช่น 576–767) ขั้นตอนบรรทัดเดียวกว้างเกินการ์ด: ให้ขั้นตอนหดได้ ข้อความตัดบรรทัดได้
+           และเส้นประหดเหลือ 24px ขั้นตอนจึงอยู่ในการ์ดเสมอ (จอที่พอ ขั้นตอนยังกว้างเท่าเนื้อหาเหมือนเดิม) */
+        .hero__rerun-step {
+            flex: 0 1 auto;
+            min-width: 0;
+        }
+
+        .hero__rerun-step-copy {
+            min-width: 0;
+            white-space: normal;
+        }
+
+        .hero__rerun-step-arrow {
+            min-width: var(--space-6);
+        }
+
+        /* ≥576 (ขั้นตอนอยู่แถวเดียวกัน): สองขั้นตอนกว้างเท่ากัน เส้นประยาวไม่เกิน 120 ชุดขั้นตอนอยู่กึ่งกลางการ์ด
+           เส้นประจึงอยู่กลางการ์ดพอดี สมมาตรซ้าย-ขวา ความกว้างคำนวณใน js/hero-loader.js (setupRerunSteps)
+           พื้นที่ไม่พอ เส้นประหดก่อน (ถึง 24px) แล้วสองขั้นตอนหดเท่ากัน · ไม่มีค่า (JS ไม่ทำงาน) ใช้ผังยืดหยุ่นด้านบน */
+        @media (min-width:576px) {
+            .hero__rerun-steps {
+                justify-content: center;
+            }
+
+            .hero__rerun-step {
+                flex: 0 0 var(--bt-hero-step-w, auto);
+            }
+
+            .hero__rerun-step-arrow {
+                flex: 0 0 var(--bt-hero-step-arrow-w, auto);
+            }
+        }
+
+        .hero__rerun-notes {
+            grid-template-columns: minmax(0, 1fr);
+            row-gap: var(--space-1);
+        }
+    }
+}
+
+/* จอกว้าง ≥992 แต่ค่อนข้างสูง (aspect ≤ 1199/1000) ใช้ผังเรียงลงมา แต่การ์ดยังเป็นแถวเดียวแบบ desktop:
+   หัวการ์ด | เส้นคั่นแนวตั้ง | 2 ขั้นตอน (ล้างค่าการ์ดแนวตั้งของบล็อก ≤991 / จอแนวตั้งด้านบน) */
+@media (min-width:992px) and (max-aspect-ratio: 1199/1000) {
+    .hero.hero--rerun {
+        /* ไอคอนลอยเล็กลงเหลือ ~2/3 (ช่วงนี้ภาพวิทยากรกว้าง ไอคอนที่คิดจากความกว้างภาพจึงใหญ่เกิน) */
+        .hero-asset {
+            --bt-hero-icon-k: 1.1;
+        }
+
+        /* การ์ดกว้างเกือบเต็มจอ (เกิน container 880 ได้ เว้นขอบจอข้างละ 32px สูงสุด 1200) อยู่กึ่งกลาง
+           หัวการ์ดมีที่พอ ไม่ขึ้นหลายบรรทัด */
+        .hero__rerun-card {
+            width: min(100vw - 64px, 1200px);
+            max-width: none;
+            align-self: center;
+            flex-direction: row;
+            align-items: center;
+            gap: calc(32 * var(--bt-hero-u, 1px));
+        }
+
+        .hero__rerun-card-divider {
+            width: var(--border-width-1);
+            height: calc(64 * var(--bt-hero-u, 1px));
+        }
+
+        /* หัวการ์ดยืดรับพื้นที่ที่เหลือ ชุดขั้นตอนกว้างเท่าเนื้อหา (เส้นประ 120) ชิดขวาของการ์ด */
+        .hero__rerun-card-head {
+            flex: 1 1 auto;
+        }
+
+        /* ขั้นตอนไม่หดต่ำกว่าเนื้อหา (min-width: auto = กว้างอย่างน้อยเท่าข้อความบรรทัดเดียว) ที่ไม่พอ
+           เส้นประหดก่อน (ถึง 64) แล้วหัวการ์ดตัดบรรทัด ขั้นตอนจึงไม่ล้นออกนอกการ์ด */
+        .hero__rerun-steps {
+            flex: 0 1 auto;
+            min-width: auto;
+            width: auto;
+            justify-content: flex-start;
+        }
+
+        .hero__rerun-step {
+            flex: 0 0 auto;
+            min-width: auto;
+        }
+
+        .hero__rerun-step-copy {
+            white-space: nowrap;
+        }
+
+        /* เส้นประยืดได้แต่ไม่เกิน 120px (ช่วงนี้การ์ดกว้าง ปล่อยยืดเต็มจะยาวเกิน) */
+        .hero__rerun-step-arrow {
+            flex: 0 1 120px;
+            min-width: calc(64 * var(--bt-hero-u, 1px));
+        }
+    }
+}
+
+@media (max-width:575px) {
+    .hero.hero--rerun {
+        .hero__content {
+            display: flex;
+        }
+
+        /* ล้างลำดับ (order) และระยะของผังมือถือเดิม เรียงตาม DOM: ส่วนบน > ภาพ > การ์ด > หมายเหตุ */
+        .hero__title,
+        .hero__visual,
+        .hero__rerun-tag,
+        .hero__rerun-title,
+        .hero__rerun-card,
+        .hero__rerun-notes {
+            order: 0;
+        }
+
+        .hero__visual {
+            margin-top: var(--space-4);
+        }
+
+
+        .hero__title {
+            margin-top: var(--space-8);
+            padding: 0;
+        }
+
+        .hero__rerun-tag {
+            font-size: var(--font-size-12);
+        }
+
+        /* มือถือหัวข้อบรรทัดแรกยาวเต็มจอ ป้ายจึงขึ้นบรรทัดของตัวเอง: ให้เป็นกล่องแยก กึ่งกลาง ห่างจากหัวข้อ 12px
+           (ถ้าปล่อย inline ป้ายจะกินความสูงทั้งบรรทัดของหัวข้อ ระยะห่างเลยมากเกิน) */
+        .hero__rerun-badge {
+            display: flex;
+            width: fit-content;
+            height: var(--space-5);
+            margin: 0 auto var(--space-3);
+            padding: 0 var(--space-2);
+            gap: var(--space-1);
+            font-size: var(--section-tag-size-sm);
+            vertical-align: baseline;
+            top: 0;
+        }
+
+        /* "ทุก Session ที่คุณไม่ควรพลาด" อยู่บรรทัดเดียวที่จอ 375 */
+        .hero__rerun-title {
+            padding: 0;
+            font-size: min(var(--font-size-28), 6.6vw);
+            text-align: center;
+        }
+
+        .hero__rerun-card {
+            padding: var(--space-5);
+        }
+
+        .hero__rerun-card-title {
+            flex-wrap: wrap;
+            font-size: var(--font-size-20);
+            white-space: normal;
+        }
+
+        .hero__rerun-steps {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .hero__rerun-step-copy {
+            white-space: normal;
+        }
+
+        .hero__rerun-step-arrow {
+            display: none;
+        }
+    }
+}
+
 /* Motion เลื่อนจาก hero ไป ticket (js/hero-scroll-motion.js, desktop เท่านั้น)
    ไอคอนบินพ้นขอบล่างของ hero ลงไปหาไอคอนบัตร: ตัดแค่แนวนอน (กำแพงยาวเลยขอบจอ) แนวตั้งปล่อยล้น
    hero เป็น stacking context z-index 1 เท่ากับ .ticket__plans ซึ่งมาทีหลังใน DOM
@@ -2595,6 +3379,46 @@ body.menu-open .site-header__backdrop {
     content: none;
 }
 
+/* Rerun: พื้นหลังภาพห้องชุดเดียวกับ #concept (ความทึบ 0.4 / ≤767 0.55)
+   จางเข้าที่ขอบบนแบบ concept และจางออกที่ขอบล่างด้วย ไม่ให้เห็นขอบภาพตัดกับ section ถัดไป */
+/* ไม่สร้าง stacking context ของ section (ไม่ใส่ isolation / z-index) ไอคอนสินทรัพย์ที่บินจาก hero (z-index 1)
+   จึงลอยทับพื้นและภาพพื้นหลัง (::before z-index 0) ได้ แต่อยู่หลังการ์ดบัตร (.ticket__plans z-index 1 มาทีหลังใน DOM)
+   แบบเดียวกับ section ticket เดิม */
+#rerun-ticket {
+    --bt-rerun-bg-opacity: 0.4;
+
+    overflow: clip;
+
+    &::before {
+        content: '';
+        inset: 0;
+        height: auto;
+        z-index: 0;
+        background: url("../images/concept-room-bg.webp") center top / cover no-repeat;
+        opacity: var(--bt-rerun-bg-opacity);
+        -webkit-mask-image: linear-gradient(180deg,
+                transparent 0px,
+                transparent 120px,
+                rgba(0, 0, 0, 0.12) 220px,
+                rgba(0, 0, 0, 0.45) 320px,
+                #000 460px,
+                #000 calc(100% - 320px),
+                transparent 100%);
+        mask-image: linear-gradient(180deg,
+                transparent 0px,
+                transparent 120px,
+                rgba(0, 0, 0, 0.12) 220px,
+                rgba(0, 0, 0, 0.45) 320px,
+                #000 460px,
+                #000 calc(100% - 320px),
+                transparent 100%);
+    }
+
+    @media (max-width: 767px) {
+        --bt-rerun-bg-opacity: 0.55;
+    }
+}
+
 /* การ์ด Explorer / Master Class ใช้พื้นสีเดียวกับหน้า เดิมตัดกับภาพพื้นหลังมืดจึงเห็นขอบการ์ด
    พอไม่มีภาพแล้วขอบหายไปกับพื้น ใส่เส้นขอบบางสีเดียวกับเส้นคั่นในการ์ดแทน
    (outline ไม่ดันขนาดการ์ด และวาดตามมุมโค้ง; Ultimate มีกรอบ spectrum ของตัวเองอยู่แล้ว) */
@@ -2609,32 +3433,38 @@ body.menu-open .site-header__backdrop {
    ส่วนใบ Ultimate ยืดถึงขอบล่างแถว จึงยื่นพ้นกรอบลงล่างเท่าที่ยื่นขึ้นบนเสมอ ไม่ว่าใบไหนเนื้อหายาวกว่า
    (พื้นใบข้างสีเดียวกับหน้า ส่วนที่ยืดจึงมองไม่เห็น) */
 @media (min-width: 992px) {
-    #ticket .ticket__plan {
+    :is(#ticket, #rerun-ticket) .ticket__plan {
         align-self: stretch;
     }
 
     /* ระยะที่ใบ Ultimate โผล่พ้นใบข้างทั้งบนและล่าง (เท่ากันให้สมมาตร) เดิม 56px
        เพิ่มเป็น 88px ตอนใบ Ultimate ยาวขึ้นจากกล่องสำรองที่นั่ง Workshop ใบข้างจึงไม่เหลือที่ว่างใต้รายการสิทธิ์ */
-    #ticket .ticket__plans {
+    :is(#ticket, #rerun-ticket) .ticket__plans {
         --bt-ticket-side-offset: calc(var(--space-16) + var(--space-6));
     }
 
-    #ticket .ticket__plan--explorer,
-    #ticket .ticket__plan--master {
+    /* Rerun: ใบ Ultimate ไม่มีแถบ "คุ้มที่สุด" และกล่อง Workshop แล้ว โผล่พ้นใบข้างแค่ 24px
+       (ค่า 88px/56px ทำให้หัวและท้ายใบ Ultimate เหลือที่ว่าง) */
+    #rerun-ticket .ticket__plans {
+        --bt-ticket-side-offset: var(--space-6);
+    }
+
+    :is(#ticket, #rerun-ticket) .ticket__plan--explorer,
+    :is(#ticket, #rerun-ticket) .ticket__plan--master {
         margin-top: var(--bt-ticket-side-offset);
         margin-bottom: var(--bt-ticket-side-offset);
     }
 
     /* เนื้อหาทั้ง 3 ใบเริ่มระดับเดียวกัน (ป้าย "บัตร", ชื่อบัตร, ราคา, ปุ่ม, รายการสิทธิ์)
        ใบข้างเลื่อนลงมากกว่าค่าเดิม 56px เท่าไร หัวใบ Ultimate ก็เลื่อนลงเท่านั้น (เดิม space-10 + 2px คู่กับ 56px) */
-    #ticket .ticket__plan--ultimate .ticket__plan-header {
+    :is(#ticket, #rerun-ticket) .ticket__plan--ultimate .ticket__plan-header {
         margin-top: calc(var(--space-10) + 2px + var(--bt-ticket-side-offset) - (var(--space-16) - var(--space-2)));
     }
 
     /* top = padding-top ของแถว + margin-top ของใบข้าง / bottom = margin-bottom ของใบข้าง
        z-index 1 เพื่อให้อยู่เหนือพื้นใบข้าง (ขอบกรอบทับขอบการ์ดพอดี) แต่ใบ Ultimate
        (z-index 1 เหมือนกันแต่มาทีหลังใน DOM) ยังทับกรอบอยู่ */
-    #ticket .ticket__plans::before {
+    :is(#ticket, #rerun-ticket) .ticket__plans::before {
         content: '';
         position: absolute;
         inset: calc(var(--space-6) + var(--bt-ticket-side-offset)) 0 var(--bt-ticket-side-offset);
@@ -2642,6 +3472,128 @@ body.menu-open .site-header__backdrop {
         border: var(--rule-width-subtle) solid var(--color-border-faint);
         border-radius: var(--card-radius);
         pointer-events: none;
+    }
+}
+
+/* Rerun ≥992: การ์ดสองใบแยกกัน (มีช่องคั่น) จึงไม่มีกรอบรวมผืนเดียวของแถวแบบ #ticket
+   ใบ Master Class มีเส้นขอบบางของตัวเองรอบทั้ง 4 ด้าน (กฎด้านล่าง) */
+@media (min-width: 992px) {
+    #rerun-ticket .ticket__plans--pair {
+        &::before {
+            content: none;
+        }
+
+    }
+
+    /* การ์ดแยกกันแล้วจึงสูงเท่ากัน ไม่ยื่นสูงต่ำแบบการ์ดเรียงแถว 3 ใบ (offset 0 ทุกขนาดจอ ≥992) */
+    #rerun-ticket .ticket__plans {
+        --bt-ticket-side-offset: 0px;
+    }
+}
+
+/* Rerun ≥768: ด้านในการ์ดเป็นแนวนอนแบบหน้า personalized-playbook (≥1200 การ์ดวางคู่กัน / 768–1199 การ์ดเต็มแถวซ้อนกัน)
+   ซ้าย: หัวการ์ด (ชื่อบัตรใต้ไอคอน) + ตารางสิทธิ์ / ขวา: ราคา + ปุ่มซื้อ (.ticket__purchase)
+   ใบสูงเท่ากันไม่ยื่นสูงต่ำ (offset 0) padding เท่ากันทั้งสองใบ ราคาและปุ่มของสองใบจึงอยู่ระดับเดียวกัน
+   ใบ Ultimate ยังเด่นด้วยกรอบเข้ม ภาพพื้นหลัง ไอคอนใหญ่ ปุ่มดำ
+   (≤767 การ์ดแคบเกินจะแบ่งสองฝั่ง ใช้การ์ดแนวตั้งแบบ section ticket) */
+@media (min-width: 768px) {
+    #rerun-ticket .ticket__plans--pair {
+        --bt-ticket-side-offset: 0px;
+
+        .ticket__plan {
+            padding: var(--space-8);
+            display: grid;
+            /* ฝั่งราคา (ขวา) กว้างกว่าฝั่งหัวการ์ด/สิทธิ์เล็กน้อย (5 : 6) */
+            grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+            grid-template-areas:
+                "head    purchase"
+                "access  purchase";
+            grid-template-rows: auto 1fr;
+            column-gap: var(--space-8);
+            row-gap: var(--space-6);
+            align-content: start;
+        }
+
+        /* ใบ Master Class: เส้นขอบบางรอบทั้ง 4 ด้านเป็น border จริง (เดิมใช้ border-top โปร่งใส + เส้นเงาด้านใน
+           ซึ่งทำให้เส้นบนเลื่อนลงไม่ตรงกับมุมโค้ง) และเพิ่ม padding ส่วนต่างความหนาขอบกับใบ Ultimate (2px)
+           เนื้อหาสองใบจึงยังเริ่มระดับเดียวกัน */
+        .ticket__plan--master {
+            padding: calc(var(--space-8) + var(--border-width-2) - var(--rule-width-subtle));
+            border: var(--rule-width-subtle) solid var(--color-border-faint);
+            box-shadow: none;
+        }
+
+        /* หัวการ์ดเรียงแบบเดิม: ไอคอน แล้ว "บัตร" กับชื่อบัตรอยู่ใต้ไอคอน */
+        .ticket__plan-header,
+        .ticket__plan--ultimate .ticket__plan-header {
+            grid-area: head;
+            margin: 0;
+        }
+
+        .ticket__purchase {
+            grid-area: purchase;
+            align-self: start;
+        }
+
+        .ticket__access {
+            grid-area: access;
+            align-self: start;
+            margin: 0;
+        }
+    }
+}
+
+/* Rerun: ใบ Ultimate ไม่มีแถบ "คุ้มที่สุด" แล้ว คืนเส้นขอบบน (กฎ ≤991 ของการ์ด 3 ใบตัดออกด้วย !important)
+   ≤991 การ์ดเรียงคอลัมน์เดียว ไม่ต้องเว้นที่ใต้แถบให้หัวการ์ด
+   (≥992 ใช้สูตร margin-top ของ #ticket ด้านบน ซึ่งอิง --bt-ticket-side-offset ของ section นี้ เนื้อหาสองใบจึงเริ่มระดับเดียวกัน) */
+/* Rerun: กล่องไอคอนสูงเท่ามงกุฎของ Ultimate (80px) หัวการ์ดสองใบจึงสูงเท่ากัน
+   ภาพเพชรเต็มกรอบกว่าภาพมงกุฎ (มงกุฎมีที่ว่างรอบตัว) ถ้ากว้าง 80px เท่ากันจะดูใหญ่กว่า
+   จึงให้เพชรกว้าง 60px ชิดซ้ายกึ่งกลางแนวตั้ง ขนาดที่มองเห็นจึงใกล้เคียงมงกุฎ */
+#rerun-ticket .ticket__plan-icon {
+    width: 80px;
+    height: 80px;
+}
+
+#rerun-ticket .ticket__plan--master .ticket__plan-icon {
+    width: 60px;
+    object-position: left center;
+}
+
+#rerun-ticket .ticket__plan--ultimate {
+    border-top: var(--border-width-2) solid #19274A !important;
+    /* ภาพพื้นหลังวางตำแหน่ง/ขนาดชุดเดียวกับการ์ด Ultimate ของหน้า personalized-playbook
+       (.playbook-ticket__plan: 46% 74% / auto 1580px) ทินต์อ่อนเท่าการ์ดเดิม */
+    background:
+        linear-gradient(color-mix(in srgb, #ffffff 72%, transparent), color-mix(in srgb, var(--color-surface-page) 64%, transparent)),
+        url('../images/ultimate-bg.webp') 46% 74% / auto 1580px no-repeat;
+
+    &:hover {
+        background:
+            linear-gradient(color-mix(in srgb, #ffffff 64%, transparent), color-mix(in srgb, var(--color-surface-page) 56%, transparent)),
+            url('../images/ultimate-bg.webp') 46% 74% / auto 1580px no-repeat;
+    }
+
+    @media (max-width: 991px) {
+        .ticket__plan-header {
+            margin-top: 0;
+        }
+    }
+}
+
+/* Rerun ≤991: การ์ดเรียงคอลัมน์เดียว ใบ Master Class มีกรอบบาง + มุมโค้งของตัวเองแบบจอใหญ่ และเว้นห่างจาก Ultimate
+   (การ์ด 3 ใบเดิมที่ ≤991 ไม่มีกรอบ ใช้เส้นคั่นบนแทน ซึ่งกลืนไปกับภาพพื้นหลังของ section นี้) */
+@media (max-width: 991px) {
+    #rerun-ticket .ticket__plans--pair .ticket__plan--master {
+        margin-top: var(--space-6);
+        padding-bottom: var(--space-8);
+        border: var(--rule-width-subtle) solid var(--color-border-faint);
+        border-radius: var(--card-radius);
+    }
+}
+
+@media (max-width: 575px) {
+    #rerun-ticket .ticket__plans--pair .ticket__plan--master {
+        padding-bottom: var(--space-4);
     }
 }
 
@@ -3673,6 +4625,30 @@ body.menu-open .site-header__backdrop {
         text-wrap-style: balance;
     }
 
+    /* ข้อความนำใต้หัว section (#rerun-ticket) ชุดเดียวกับ .playbook-steps__lead ของหน้า personalized-playbook
+       สีจาง 20px (≤991 16px) ระยะบรรทัด relaxed ห่างจากหัวข้อ 48px */
+    .ticket__lead {
+        max-width: var(--layout-narrow-max);
+        margin: var(--space-12) var(--space-0) var(--space-0);
+        color: var(--color-text-muted);
+        font-size: var(--section-topic-size-sm);
+        font-weight: var(--font-weight-regular);
+        line-height: var(--line-height-relaxed);
+
+        @media (max-width: 991px) {
+            font-size: var(--section-body-size);
+        }
+    }
+
+    /* ชื่อบัตรในข้อความนำ: ไล่สี spectrum จาก .bt-title-highlight ใน markup ชุดเดียวกับ
+       .identity-cards__highlight-plan ของหน้า personalized-playbook ขนาดรับจากบรรทัด
+       และคืนน้ำหนักเป็น regular (Baskervville โหลดมาแค่ 400) ห้ามใส่ color/background (ไล่สีใช้ background-clip: text) */
+    .ticket__lead-plan {
+        font-family: 'Baskervville', var(--font-family-base);
+        font-size: inherit;
+        font-weight: var(--font-weight-regular);
+    }
+
     .ticket__intro {
         margin: 0;
         color: var(--color-text-muted);
@@ -4141,6 +5117,18 @@ body.menu-open .site-header__backdrop {
                     0 0 0 var(--border-width-1) var(--color-blue-600);
             }
 
+            /* แถวที่แสดงราคาอย่างเดียว (บัตรสิ้นสุดการจำหน่าย) ไม่มีวงกลมเลือก และไม่เว้นคอลัมน์ของวงกลม */
+            &.ticket__price--static {
+                grid-template-columns: minmax(0, 1fr) auto;
+                grid-template-areas:
+                    "day price"
+                    "note price";
+
+                &::before {
+                    content: none;
+                }
+            }
+
             .ticket__price-day {
                 grid-area: day;
                 width: auto;
@@ -4211,6 +5199,14 @@ body.menu-open .site-header__backdrop {
 
             .ticket__price .ticket__price-note {
                 margin-top: var(--space-2);
+            }
+
+            .ticket__price.ticket__price--static {
+                grid-template-columns: minmax(0, 1fr);
+                grid-template-areas:
+                    "day"
+                    "price"
+                    "note";
             }
         }
     }
@@ -4448,7 +5444,7 @@ body.menu-open .site-header__backdrop {
             text-align: center;
         }
 
-        ul {
+        .ticket__benefits-list {
             margin: 0;
             padding: 0;
             list-style: none;
@@ -4456,7 +5452,7 @@ body.menu-open .site-header__backdrop {
             column-gap: var(--bt-ticket-benefit-list-gap-x);
         }
 
-        li {
+        .ticket__benefits-list > li {
             position: relative;
             flex: 0 0 25%;
             max-width: 25%;
@@ -4585,11 +5581,11 @@ body.menu-open .site-header__backdrop {
                 text-align: start;
             }
 
-            ul {
+            .ticket__benefits-list {
                 row-gap: var(--bt-ticket-benefit-list-gap-y);
             }
 
-            li {
+            .ticket__benefits-list > li {
                 flex: 0 0 calc((100% - var(--bt-ticket-benefit-list-gap-x)) / 2);
                 max-width: calc((100% - var(--bt-ticket-benefit-list-gap-x)) / 2);
                 padding: 0 var(--bt-ticket-benefit-padding-x-md);
@@ -4756,7 +5752,7 @@ body.menu-open .site-header__backdrop {
                 margin-bottom: var(--space-8);
             }
 
-            li {
+            .ticket__benefits-list > li {
                 gap: var(--space-6);
 
                 &:nth-child(odd) {
@@ -4882,11 +5878,11 @@ body.menu-open .site-header__backdrop {
                 margin-bottom: var(--space-6);
             }
 
-            ul {
+            .ticket__benefits-list {
                 row-gap: var(--bt-ticket-benefit-list-gap-y);
             }
 
-            li {
+            .ticket__benefits-list > li {
                 flex-direction: column;
                 align-items: flex-start;
                 align-content: start;
@@ -4926,6 +5922,204 @@ body.menu-open .site-header__backdrop {
         .ticket__price .ticket__price-day {
             flex-wrap: nowrap;
             gap: 2px;
+        }
+    }
+
+    /* ---------- Rerun ticket (#rerun-ticket): 2 บัตร Ultimate + Master Class ----------
+       วางท้าย block ให้ชนะกฎตาม breakpoint ด้านบนที่ออกแบบไว้สำหรับ 3 ใบ */
+
+    /* 2 ใบแถวเดียว (#rerun-ticket) กว้างเท่ากัน แถวกว้างเท่าแถบใน header (.site-header__inner: min(100% - 48px, 1460px))
+       ≤991 ใช้ความกว้าง .container ตามกฎเดิม ซึ่งตรงกับ header ช่วงนั้นอยู่แล้ว */
+    .ticket__plans.ticket__plans--pair {
+        --bt-ticket-plans-width: 1460px;
+    }
+
+    /* แยกเป็นการ์ดสองใบ เว้นช่องระหว่างการ์ด 24px
+       ≥1200 วางคู่กันแถวเดียว (กว้างเท่ากันใบละครึ่งของที่เหลือ) / ≤1199 กว้างเต็มแถว ซ้อนกัน 2 แถว */
+    @media (min-width: 1200px) {
+        .ticket__plans.ticket__plans--pair {
+            column-gap: var(--space-6);
+        }
+
+        .ticket__plans--pair .ticket__plan {
+            width: calc((100% - var(--space-6)) / 2);
+        }
+    }
+
+    /* 992–1199 แถวไม่กว้างเต็มจอ ใช้ความกว้างเนื้อหาของ .container (960px − gutter) แนวเดียวกับหัว section และแถบรูปแบบการรับชม */
+    @media (min-width: 992px) and (max-width: 1199px) {
+        .ticket__plans.ticket__plans--pair {
+            --bs-gutter-x: 1.5rem;
+
+            width: min(calc(100% - var(--bs-gutter-x)), calc(880px - var(--bs-gutter-x)));
+            row-gap: var(--space-6);
+        }
+
+        .ticket__plans--pair .ticket__plan {
+            width: 100%;
+        }
+    }
+
+    /* หัว section จัดกึ่งกลาง (#rerun-ticket): title / sub / lead
+       จัดกลางแล้วตัดเส้น-ดาวท้ายบรรทัดของ sub ออก แบบหัว section ticket ของหน้า personalized-playbook */
+    .ticket__header--center {
+        /* จุดลงจอดของเมนู Ticket / ปุ่มรับชมย้อนหลัง (data-scroll-to=".ticket__header") หัวข้ออยู่ใต้ header 24px
+           หัว section และการ์ดบัตรจึงเห็นพร้อมกันในจอ */
+        scroll-margin-top: calc(var(--header-height) + var(--space-6));
+        text-align: center;
+
+        .bt-section-subtext {
+            justify-content: center;
+
+            &::after {
+                display: none;
+            }
+        }
+
+        .ticket__lead {
+            margin-right: auto;
+            margin-left: auto;
+        }
+    }
+
+    /* ราคา Ultimate ของ #rerun-ticket เป็นรายการ (.ticket__prices--list) ชุดเดียวกับบัตร Master Class ของ section ticket
+       กล่องราคาของสองใบสูงตามเนื้อหาของตัวเอง (ไม่ใช้ความสูงกลางจาก js/ticket-price-selector.js)
+       แต่ละแถวของรายการสูงตามเนื้อหา ระยะในแถวเท่ารายการต้นแบบ */
+    .ticket__plans--pair {
+        .ticket__prices.ticket__prices--list {
+            height: auto;
+            grid-auto-rows: auto;
+        }
+
+        .ticket__prices.ticket__prices--single {
+            grid-auto-rows: auto;
+
+            .ticket__price {
+                min-height: 0;
+            }
+        }
+    }
+
+    /* 992–1199 การ์ดกว้างพอ คงแถวแบบ วงกลม | วันที่ + ชนิดบัตร | ราคาชิดขวา (ไม่เรียงลงแบบการ์ดแคบ 3 ใบ) */
+    @media (min-width: 992px) and (max-width: 1199px) {
+        .ticket__plans--pair .ticket__prices.ticket__prices--list .ticket__price {
+            grid-template-columns: auto minmax(0, 1fr) auto;
+            grid-template-areas:
+                "radio day price"
+                ". note price";
+
+            strong {
+                justify-self: auto;
+            }
+
+            .ticket__price-note {
+                margin-top: 0;
+            }
+        }
+    }
+
+    /* แถบจุดขาย 3 ข้อ: 3 ช่องเท่ากันแถวเดียวทุกขนาดจอ มีเส้นดาวคั่นทุกช่องยกเว้นช่องแรก
+       ไอคอนเป็นภาพแก้ว spectrum (benefit-rerun-*.webp) ใช้ขนาด/saturate(1.5) ของ .ticket__benefit-icon เดิม */
+    .ticket__benefits.ticket__benefits--trio {
+        .ticket__benefits-list > li {
+            flex: 0 0 calc((100% - var(--bt-ticket-benefit-list-gap-x) * 2) / 3);
+            max-width: calc((100% - var(--bt-ticket-benefit-list-gap-x) * 2) / 3);
+
+            &:not(:first-child)::before {
+                display: block;
+            }
+        }
+    }
+
+    /* 576–1199 คอลัมน์ขวาแคบ (3 ช่อง) ไอคอนอยู่บนข้อความ จัดกลาง แบบจอใหญ่ แทนการวางไอคอนข้างข้อความของแถบ 4 ช่อง */
+    @media (min-width: 576px) and (max-width: 1199px) {
+        .ticket__benefits.ticket__benefits--trio .ticket__benefits-list > li {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+
+            span {
+                text-align: center;
+            }
+        }
+    }
+
+    @media (max-width: 575px) {
+        .ticket__benefits.ticket__benefits--trio .ticket__benefits-list > li {
+            padding: 0 var(--space-3);
+
+            &:first-child {
+                padding-left: 0;
+            }
+
+            &:last-child {
+                padding-right: 0;
+            }
+        }
+    }
+
+    /* ต่ำกว่า 375 (เช่น 320px) แถบจุดขายเรียงเป็นรายการแนวตั้ง ไอคอนซ้าย ข้อความขวา */
+    @media (max-width: 374px) {
+        .ticket__benefits.ticket__benefits--trio {
+            .ticket__benefits-list {
+                row-gap: var(--space-4);
+            }
+
+            .ticket__benefits-list > li,
+            .ticket__benefits-list > li:first-child,
+            .ticket__benefits-list > li:last-child {
+                flex: 0 0 100%;
+                max-width: 100%;
+                padding: 0;
+                flex-direction: row;
+                align-items: center;
+                gap: var(--space-4);
+
+                &::before {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    /* รายละเอียดการรับชม 5 ข้อ ต่อใต้จุดขาย 3 ข้อในคอลัมน์ขวาของแถบ (คั่นด้วยเส้นบาง)
+       bullet เป็นดาวชุดเดียวกับรายการในคำตอบ FAQ (.faq__answer-body li) */
+    .ticket__watch-list {
+        margin: var(--space-8) 0 0;
+        padding: var(--space-8) 0 0;
+        list-style: none;
+
+        li {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-3);
+            color: var(--color-text-muted);
+            font-size: var(--section-body-size);
+            line-height: var(--section-body-line-height);
+
+            &::before {
+                content: "";
+                flex: 0 0 var(--space-3);
+                width: var(--space-3);
+                height: var(--space-3);
+                margin-top: calc((var(--section-body-line-height) - var(--space-3)) / 2);
+                background: url("../images/star.webp") center / contain no-repeat;
+            }
+
+            + li {
+                margin-top: var(--space-1);
+            }
+
+            strong {
+                color: var(--color-text-primary);
+                font-weight: var(--font-weight-medium);
+            }
+        }
+    }
+
+    @media (max-width: 575px) {
+        .ticket__watch-list li {
+            font-size: var(--font-size-14);
         }
     }
 }
@@ -15914,6 +17108,24 @@ html.has-floor-plan-lightbox {
         }
     }
 
+    /* กล่องที่แสดงราคาอย่างเดียว (บัตรสิ้นสุดการจำหน่าย): ไม่มีวงกลมเลือก ไม่มีสีตอนชี้ กดไม่ได้ */
+    .playbook-ticket__price--static {
+        cursor: default;
+
+        &:hover {
+            background: transparent;
+        }
+
+        .playbook-ticket__price-day::after {
+            content: none;
+        }
+    }
+
+    /* กล่องราคาสองช่องคั่นด้วยเส้นตั้ง (เดิมกล่องที่เลือกมีกรอบสีของตัวเองแทน) */
+    .playbook-ticket__price--static + .playbook-ticket__price--static {
+        border-left-color: var(--color-border-subtle);
+    }
+
     .playbook-ticket__price.is-active .playbook-ticket__price-day::after {
         border-color: var(--color-accent-primary);
         background:
@@ -16206,6 +17418,13 @@ html.has-floor-plan-lightbox {
             --bt-playbook-ticket-plan-padding: var(--space-8) var(--space-5);
             --bt-playbook-ticket-price-padding: var(--space-4);
             --bt-playbook-ticket-plan-title-size: var(--font-size-28);
+        }
+
+        /* กล่องราคาแคบ "2,500 บาท" ไม่พอบรรทัดเดียว ขณะที่ "1,500 บาท" พอ ตัวเลขสองกล่องจึงไม่เสมอกัน
+           ให้ "บาท" ขึ้นบรรทัดใหม่ใต้ตัวเลขทั้งสองกล่องเหมือนกัน */
+        .playbook-ticket__price-value small {
+            display: block;
+            margin-top: var(--space-1);
         }
 
         /* ราคาเดิม "2,500 บาท" + ป้าย "คุ้มกว่า" ต้องใช้ 123px แต่กล่องมีที่ 101px ที่จอ 375
