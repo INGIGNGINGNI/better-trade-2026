@@ -867,11 +867,12 @@ ol {
 /* จังหวะ fade-up ของทั้งเว็บ แยกเวลาของ opacity กับ transform ออกจากกัน
    ให้ตัวอักษรทึบครบก่อนการเลื่อนจะหยุด ช่วงท้ายจึงเป็นการไหลเข้าที่เฉย ๆ ไม่มีการจางแล้ว
    ซึ่งเป็นตัวที่ทำให้อ่านว่านุ่ม ไม่ใช่ความยาวของเวลา ย่นเวลาลงจึงยังคงความรู้สึกเดิมไว้ได้
-   (เดิม 920/760ms ซึ่งยาวเกินไปสำหรับระยะเลื่อนแค่ 80px) */
+   (เคยลองสั้นแค่ 560/440ms แต่เร็วจนแทบไม่เห็นว่าเล่น จึงยืดเป็น 900/700ms
+    คู่กับเริ่มเล่นเมื่อ element เข้าจอแล้วใน reveal-on-scroll.js) */
 body.reveal-on-scroll-ready [data-reveal] {
     --reveal-y: var(--space-20);
-    --reveal-duration: 560ms;
-    --reveal-fade-duration: 440ms;
+    --reveal-duration: 900ms;
+    --reveal-fade-duration: 700ms;
     --reveal-delay: 0ms;
 
     opacity: 0;

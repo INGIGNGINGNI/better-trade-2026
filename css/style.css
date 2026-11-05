@@ -2633,17 +2633,17 @@ body.menu-open .site-header__backdrop {
         white-space: nowrap;
     }
 
-    /* ป้าย RERUN อยู่ต้นบรรทัดแรกของหัวข้อ (บรรทัดเดียวกัน) กึ่งกลางแนวตั้งของตัวอักษร */
+    /* ป้าย RERUN อยู่บรรทัดของตัวเองเหนือหัวข้อ ชิดซ้ายตรงกับหัวข้อ ห่างจากหัวข้อ 8px (+ ช่องว่างจาก line-height ของหัวข้อ)
+       (โลโก้งานด้านซ้ายสูงกว่าหัวข้ออยู่แล้ว ป้ายที่เพิ่มขึ้นมาจึงทำให้ก้อนบนสูงขึ้นเพียงเล็กน้อย) */
     .hero__rerun-badge {
-        margin-right: calc(16 * var(--bt-hero-u, 1px));
-        vertical-align: middle;
+        width: fit-content;
+        margin: 0 0 calc(8 * var(--bt-hero-u, 1px));
         position: relative;
-        top: -0.12em;
         line-height: var(--line-height-1);
         white-space: nowrap;
         height: calc(32 * var(--bt-hero-u, 1px));
         padding: 0 calc(12 * var(--bt-hero-u, 1px));
-        display: inline-flex;
+        display: flex;
         align-items: center;
         gap: calc(8 * var(--bt-hero-u, 1px));
         border-radius: var(--pill-radius);
@@ -2675,6 +2675,14 @@ body.menu-open .site-header__backdrop {
     .hero__rerun-title-highlight {
         font-size: inherit;
         font-weight: inherit;
+    }
+
+    /* "Dashboard Playbook" ในขั้นตอน "รับชมได้เลย" เน้นด้วยไล่สี spectrum ชุดเดียวกับ "Ultimate" และ "รับชมอีกครั้ง"
+       (.bt-title-highlight ใน markup) ขนาดรับจากบรรทัด (component ล็อก 64/56/40px ไว้สำหรับหัว section) ห้ามใส่ color/background */
+    .hero__rerun-step-highlight {
+        font-size: inherit;
+        font-weight: var(--font-weight-medium);
+        line-height: inherit;
     }
 
     /* ภาพรวมวิทยากรแนวนอน เห็นเต็มภาพ (ไม่ครอป) กว้างได้ถึงเต็มแถว
@@ -2804,9 +2812,10 @@ body.menu-open .site-header__backdrop {
     .hero__rerun-step-icon--play {
         background: var(--color-accent-primary);
 
+        /* สามเหลี่ยม play กินพื้นที่แค่ราวครึ่งของ viewBox จึงตั้งกรอบ svg ใหญ่กว่าไอคอน QR เล็กน้อย */
         svg {
-            width: 40%;
-            height: 40%;
+            width: 48%;
+            height: 48%;
         }
     }
 
@@ -2854,16 +2863,24 @@ body.menu-open .site-header__backdrop {
         }
     }
 
-    /* หมายเหตุ: หัวข้อซ้าย + 2 คอลัมน์ */
-    /* กว้างตามเนื้อหาแล้ววางกึ่งกลางใต้การ์ด (เดิมเต็มแถว คอลัมน์ขวาสั้นจนก้อนดูชิดซ้าย) */
+    /* หมายเหตุ: หัวข้อซ้าย + รายการเรียงลงมาคอลัมน์เดียว */
+    /* กว้างตามเนื้อหาแล้ววางกึ่งกลางใต้การ์ด */
     .hero__rerun-notes {
         width: fit-content;
         margin-top: calc(16 * var(--bt-hero-u, 1px));
         margin-inline: auto;
         padding-inline: calc(8 * var(--bt-hero-u, 1px));
         display: grid;
-        grid-template-columns: auto minmax(0, max-content) minmax(0, max-content);
+        grid-template-columns: auto minmax(0, max-content);
         column-gap: calc(32 * var(--bt-hero-u, 1px));
+
+        /* desktop: ul ที่สองต่อใต้ ul แรกในคอลัมน์เดียวกัน ระยะเท่าระหว่างข้อ (ผังเรียงลงมามี grid ของตัวเอง) */
+        @media (min-width:992px) and (min-aspect-ratio: 6/5) {
+            ul + ul {
+                grid-column: 2;
+                margin-top: var(--space-1);
+            }
+        }
         color: var(--color-text-muted);
         /* 12px คงที่ทุกขนาดจอ (ไม่ย่อตาม --bt-hero-u) */
         font-size: var(--font-size-12);
@@ -3293,19 +3310,7 @@ body.menu-open .site-header__backdrop {
             font-size: var(--font-size-12);
         }
 
-        /* มือถือหัวข้อบรรทัดแรกยาวเต็มจอ ป้ายจึงขึ้นบรรทัดของตัวเอง: ให้เป็นกล่องแยก กึ่งกลาง ห่างจากหัวข้อ 12px
-           (ถ้าปล่อย inline ป้ายจะกินความสูงทั้งบรรทัดของหัวข้อ ระยะห่างเลยมากเกิน) */
-        .hero__rerun-badge {
-            display: flex;
-            width: fit-content;
-            height: var(--space-5);
-            margin: 0 auto var(--space-3);
-            padding: 0 var(--space-2);
-            gap: var(--space-1);
-            font-size: var(--section-tag-size-sm);
-            vertical-align: baseline;
-            top: 0;
-        }
+        /* ป้าย RERUN ใช้ค่าเดียวกับผังเรียงลงมาของจออื่น (สูง 24px ห่างจากหัวข้อ 20px) ไม่ตั้งแยก */
 
         /* "ทุก Session ที่คุณไม่ควรพลาด" อยู่บรรทัดเดียวที่จอ 375 */
         .hero__rerun-title {
