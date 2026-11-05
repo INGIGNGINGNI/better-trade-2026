@@ -3062,12 +3062,13 @@ body.menu-open .site-header__backdrop {
             --bt-hero-asset-span: 1.08;
         }
 
+        /* stock และ heart อยู่ช่วงล่างของจอ (heart สูงกว่า stock เล็กน้อย) เดิม 52 / 56vh */
         .hero-asset[data-hero-asset="heart"] {
-            --cy: 52;
+            --cy: 62;
         }
 
         .hero-asset[data-hero-asset="stock"] {
-            --cy: 56;
+            --cy: 66;
         }
 
         /* ช่องฟ้าระหว่างกำแพงกว้าง 30–70% ของจอถึงขอบล่าง hero (ภาพวิทยากรแนวนอนเตี้ยกว่าภาพ 4:5 เดิม จึงปิดช่วงล่างไม่ได้
