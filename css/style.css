@@ -2653,6 +2653,13 @@ body.menu-open .site-header__backdrop {
         font-size: calc(14 * var(--bt-hero-u, 1px));
         font-weight: var(--font-weight-bold);
         letter-spacing: var(--letter-spacing-index);
+
+        /* ไอคอน repeat (ลูกศรวนสองทาง) สูงเท่าตัวอักษร */
+        svg {
+            flex: none;
+            width: 1em;
+            height: 1em;
+        }
     }
 
     .hero__rerun-title {
