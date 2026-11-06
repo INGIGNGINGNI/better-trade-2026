@@ -2647,8 +2647,15 @@ body.menu-open .site-header__backdrop {
         align-items: center;
         gap: calc(8 * var(--bt-hero-u, 1px));
         border-radius: var(--pill-radius);
-        /* สีหลักของแบรนด์ (ฟ้าเดียวกับไอคอนขั้นตอน "รับชมได้เลย") ไม่ใช้แดง (แดงสื่อถึง LIVE) */
-        background: var(--color-accent-primary);
+        /* ไล่สี spectrum ชุดเดียวกับ "รับชมอีกครั้ง" / "Ultimate" (ไม่ใช้แดง เพราะแดงสื่อถึง LIVE)
+           สีไหลไป-กลับด้วย animation ชุดเดียวกับ .bt-title-highlight (bt-title-spectrum-flow) */
+        background: var(--spectrum);
+        background-size: 200% 100%;
+        animation: bt-title-spectrum-flow 3s ease-in-out infinite alternate;
+
+        @media (prefers-reduced-motion: reduce) {
+            animation: none;
+        }
         color: var(--color-neutral-0);
         font-size: calc(14 * var(--bt-hero-u, 1px));
         font-weight: var(--font-weight-bold);
