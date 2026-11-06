@@ -62,9 +62,37 @@
         });
     }
 
+    /* ระหว่างบิน/ค้างอยู่กลางทางลง section Rerun (idle ของ float หยุดอยู่) ไอคอนยังขยับเล็กน้อย
+       ขยับที่ภาพข้างใน (img) ไม่ใช่ .hero-asset__inner ที่ js/hero-scroll-motion.js ใช้บิน เส้นทางบินจึงไม่เพี้ยน */
+    const flightBobTweens = [];
+
+    function startFlightBob() {
+        if (reduced || flightBobTweens.length || typeof gsap === 'undefined') return;
+
+        assetInners.forEach(inner => {
+            const img = inner.querySelector('img');
+            if (!img) return;
+            flightBobTweens.push(gsap.to(img, {
+                y: gsap.utils.random(6, 12) * (Math.random() > 0.5 ? 1 : -1),
+                rotate: gsap.utils.random(2, 5) * (Math.random() > 0.5 ? 1 : -1),
+                duration: gsap.utils.random(2.4, 3.6),
+                ease: 'sine.inOut',
+                yoyo: true,
+                repeat: -1,
+                paused: true,
+            }));
+        });
+    }
+
     function syncIdle() {
         const active = heroVisible && !document.hidden && !iconsFlying;
         idleTweens.forEach(tween => tween.paused(!active));
+        startFlightBob();
+        const bobbing = iconsFlying && !document.hidden;
+        flightBobTweens.forEach(tween => {
+            if (bobbing) tween.play();
+            else tween.pause().progress(0);
+        });
     }
 
     /* js/hero-scroll-motion.js บินไอคอนลงไปหาการ์ดบัตรโดยขยับ .hero-asset__inner ในกรอบของ .hero-asset__float
@@ -144,8 +172,13 @@
         const edgeOf = (wall, name, fallback) => Number.parseFloat(getComputedStyle(wall).getPropertyValue(name)) || fallback;
         const halfGap = edgeOf(left, '--bt-hero-wall-half-gap', 0);
         const figMid = fig.left + fig.width / 2;
-        const innerL = Math.min(fig.left + fig.width * edgeOf(left, '--bt-hero-wall-left-edge', 0.36), figMid - halfGap) - heroBox.left;
-        const innerR = Math.max(fig.left + fig.width * edgeOf(right, '--bt-hero-wall-right-edge', 0.63), figMid + halfGap) - heroBox.left;
+        let innerL = Math.min(fig.left + fig.width * edgeOf(left, '--bt-hero-wall-left-edge', 0.36), figMid - halfGap) - heroBox.left;
+        let innerR = Math.max(fig.left + fig.width * edgeOf(right, '--bt-hero-wall-right-edge', 0.63), figMid + halfGap) - heroBox.left;
+        /* กำแพงชุด desktop (ไม่ใช่ไฟล์ -1280) ขอบในคือขอบไฟล์ วัดจากตำแหน่งจริงที่ CSS วาง (เช่น 30vw / 70vw)
+           จะได้ปิดชนกันพอดีแม้ CSS ไม่ได้ยึดกรอบภาพวิทยากร */
+        const desktopArt = wall => !(wall.currentSrc || wall.src).includes('-1280');
+        if (desktopArt(left) && shown(left)) innerL = left.getBoundingClientRect().right - heroBox.left;
+        if (desktopArt(right) && shown(right)) innerR = right.getBoundingClientRect().left - heroBox.left;
         const meet = (innerL + innerR) / 2;
         if (innerL <= 0 || innerR >= heroBox.width) return null;
         /* ให้ขอบในช่วงตั้งตรง (ช่วงล่าง) ของทั้งสองฝั่งชนกันที่กึ่งกลางพอดี
@@ -347,7 +380,8 @@
         if (!walls.length || !visual) return;
 
         const content = hero.querySelector('.hero__content');
-        const stats = hero.querySelector('.hero__stats');
+        // แถว stat ถูกเอาออกแล้ว ใช้หัวข้อ (ข้อความบรรทัดสุดท้ายก่อนปุ่ม) เป็นจุดอ้างอิงแทน
+        const stats = hero.querySelector('.hero__stats') || hero.querySelector('.hero__headline');
         const cta = hero.querySelector('#cta-slot');
         const title = hero.querySelector('.hero__title');
 
@@ -413,8 +447,42 @@
         window.addEventListener(LOADER_COMPLETE_EVENT, sync);
     }
 
+    /* การ์ด rerun ผังเรียงลงมา (≥576): สองขั้นตอนกว้างเท่ากัน (= ขั้นตอนที่ยาวกว่า) เส้นประยาวได้ถึง 120px
+       พื้นที่ไม่พอ หดเส้นประก่อน (เหลือ 24px) แล้วจึงหดสองขั้นตอนเท่ากัน (ข้อความตัดบรรทัด)
+       CSS ใช้ --bt-hero-step-w / --bt-hero-step-arrow-w เฉพาะผังนั้น ที่อื่นค่าเหล่านี้ไม่มีผล */
+    function setupRerunSteps() {
+        const list = hero?.querySelector('.hero__rerun-steps');
+        const steps = list ? [...list.querySelectorAll('.hero__rerun-step')] : [];
+        const arrow = list?.querySelector('.hero__rerun-step-arrow');
+        if (steps.length !== 2 || !arrow) return;
+
+        const ARROW_MAX = 120;
+        const ARROW_MIN = 24;
+        const sync = () => {
+            const natural = steps.map(step => {
+                step.style.width = 'max-content';
+                step.style.flex = 'none';
+                const width = step.getBoundingClientRect().width;
+                step.style.removeProperty('width');
+                step.style.removeProperty('flex');
+                return width;
+            });
+            const gap = Number.parseFloat(getComputedStyle(list).columnGap) || 0;
+            const room = list.clientWidth - gap * 2;
+            const step = Math.min(Math.ceil(Math.max(...natural)), Math.floor((room - ARROW_MIN) / 2));
+            const line = Math.max(ARROW_MIN, Math.min(ARROW_MAX, room - step * 2));
+            list.style.setProperty('--bt-hero-step-w', `${Math.max(0, step)}px`);
+            list.style.setProperty('--bt-hero-step-arrow-w', `${line}px`);
+        };
+
+        sync();
+        new ResizeObserver(sync).observe(list);
+        document.fonts?.ready.then(sync);
+    }
+
     function boot() {
         setupWall();
+        setupRerunSteps();
         setupSkyVideo();
         if (hero) {
             new IntersectionObserver(([entry]) => {

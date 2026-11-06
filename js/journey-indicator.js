@@ -5,6 +5,7 @@
     const title = indicator.querySelector('.journey-indicator__title');
     const route = [
         { id: 'ticket', label: 'Ticket Price' },
+        { id: 'rerun-ticket', label: 'Rerun' },
         { id: 'agenda', label: 'Agenda' },
         { id: 'playbook', label: 'Personalized Playbook' },
         { id: 'concept', label: 'Concept' },

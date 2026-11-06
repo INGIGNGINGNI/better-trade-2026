@@ -26,6 +26,13 @@
         }
     };
 
+    /* จุดลงจอดของ section: element ข้างในตาม data-scroll-to ของเมนูที่ชี้ section นั้น (ถ้ามี) ไม่งั้นขอบบน section
+       ใช้ทั้งตอนคลิกลิงก์ที่ไม่ได้ตั้ง data-scroll-to เอง และตอนเข้ามาจากหน้าอื่นด้วย #hash จุดลงจอดจึงตรงกันทุกทาง */
+    const landingFor = (section) => {
+        const scrollTo = document.querySelector(`a[href="#${section.id}"][data-scroll-to]`)?.dataset.scrollTo;
+        return (scrollTo && section.querySelector(scrollTo)) || section;
+    };
+
     const hasLanded = (target) => {
         const scrollMarginTop = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
         const offset = target.getBoundingClientRect().top - scrollMarginTop;
@@ -142,8 +149,9 @@
         const id = decodeURIComponent(window.location.hash.slice(1));
         if (!id) return;
 
-        const target = document.getElementById(id);
-        if (!target) return;
+        const section = document.getElementById(id);
+        if (!section) return;
+        const target = landingFor(section);
 
         const startedAt = performance.now();
         let frame = 0;
@@ -202,7 +210,7 @@
         if (!target) return;
 
         const navigate = () => {
-            scrollTargetIntoView(target, 'instant');
+            scrollTargetIntoView(landingFor(target), 'instant');
             landOnInitialHash();
         };
 

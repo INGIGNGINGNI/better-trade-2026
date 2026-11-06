@@ -20,7 +20,7 @@
     <meta property="og:description" content="PERSONALIZED PLAYBOOK คู่มือลงทุนที่ถอดจากตัวคุณเอง เริ่มด้วยแบบทดสอบ Investor DNA 7 ข้อ ฟรี ใน 2 นาที">
     <meta property="og:url" content="https://www.efin.finance/events/better-trade/better-trade2026/personalized-playbook">
     <meta property="og:image:type" content="image/webp">
-    <meta property="og:image" content="./images/og-image.webp?v=5">
+    <meta property="og:image" content="./images/og-image.webp?v=6">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="PERSONALIZED PLAYBOOK | BetterTrade 2026: New World New Playbook">
@@ -28,7 +28,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="ไม่มี Playbook เล่มไหนเหมาะกับคุณเท่าเล่มที่คุณสร้างเอง">
     <meta name="twitter:description" content="PERSONALIZED PLAYBOOK คู่มือลงทุนที่ถอดจากตัวคุณเอง เริ่มด้วยแบบทดสอบ Investor DNA 7 ข้อ ฟรี ใน 2 นาที">
-    <meta name="twitter:image" content="./images/og-image.webp?v=5">
+    <meta name="twitter:image" content="./images/og-image.webp?v=6">
 
     <!-- ฉากพื้นหลังเป็น CSS background จึงถูกค้นพบช้ากว่า img ปกติ ต้องบอกให้โหลดก่อน -->
     <link rel="preload" as="image" href="images/playbook-bg.webp" fetchpriority="high" media="(min-width: 576px)">
@@ -43,8 +43,8 @@
     <link rel="preload" href="fonts/fc-minimal-bold.woff2" as="font" type="font/woff2" crossorigin media="(max-width: 575px)">
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="fonts/fonts.css">
-    <link rel="stylesheet" href="css/main.css?v=61">
-    <link rel="stylesheet" href="css/style.css?v=1231">
+    <link rel="stylesheet" href="css/main.css?v=62">
+    <link rel="stylesheet" href="css/style.css?v=1392">
 </head>
 
 <body class="playbook-page">
@@ -58,7 +58,7 @@
 
             <nav class="site-header__nav" aria-label="เมนูหลัก">
                 <a href="index.html#home"><span class="site-header__nav-label">Home</span></a>
-                <a href="index.html#ticket"><span class="site-header__nav-label">Ticket</span></a>
+                <a href="index.html#rerun-ticket"><span class="site-header__nav-label">Ticket</span></a>
                 <a href="index.html#agenda"><span class="site-header__nav-label">Agenda</span></a>
                 <a href="personalized-playbook.html" aria-current="page"><span class="site-header__nav-label">Personalized Playbook</span></a>
                 <a href="index.html#speaker"><span class="site-header__nav-label">Speaker</span></a>
@@ -66,10 +66,11 @@
                 <div class="site-header__nav-sky-sensor" data-header-theme="dark" aria-hidden="true"></div>
             </nav>
 
+            <!-- ปุ่มรับชมย้อนหลังทุกจุดปิดไว้ก่อน (มี data-rerun-cta + hidden) เปิดกลับ: ลบ hidden ออกจาก element ที่มี data-rerun-cta -->
             <div class="site-header__actions">
                 <a class="bt-action-button bt-action-button--secondary bt-action-button--xl bt-action-button--header" href="https://egames.efin.finance/games/investor-dna-quiz" target="_blank" rel="noopener noreferrer">INVESTOR DNA</a>
-                <span class="site-header__primary-cta" data-header-register-cta data-header-register-href="https://www.efin.finance/events/better-trade/better-trade2026/buy-ticket/ultimate/2-days">
-                    <a class="bt-action-button bt-action-button--primary bt-action-button--xl bt-action-button--header" href="https://www.efin.finance/events/better-trade/better-trade2026/buy-ticket/ultimate/2-days">ซื้อบัตร</a>
+                <span class="site-header__primary-cta" data-header-register-cta data-rerun-cta hidden data-header-register-href="index.html#rerun-ticket">
+                    <a class="bt-action-button bt-action-button--primary bt-action-button--xl bt-action-button--header" href="index.html#rerun-ticket">รับชมย้อนหลัง</a>
                 </span>
             </div>
 
@@ -85,7 +86,7 @@
         <div class="site-header__mobile-scroll">
             <nav class="site-header__mobile-nav" aria-label="เมนูหลักสำหรับมือถือ">
                 <a href="index.html#home"><span>Home</span><span class="site-header__mobile-nav-index">01</span></a>
-                <a href="index.html#ticket"><span>Ticket</span><span class="site-header__mobile-nav-index">02</span></a>
+                <a href="index.html#rerun-ticket"><span>Ticket</span><span class="site-header__mobile-nav-index">02</span></a>
                 <a href="index.html#agenda"><span>Agenda</span><span class="site-header__mobile-nav-index">03</span></a>
                 <a href="personalized-playbook.html" aria-current="page"><span>Personalized Playbook</span><span class="site-header__mobile-nav-index">04</span></a>
                 <a href="index.html#speaker"><span>Speaker</span><span class="site-header__mobile-nav-index">05</span></a>
@@ -128,10 +129,10 @@
         <a class="bt-action-button bt-action-button--secondary bt-action-button--xl bt-action-button--header"
             href="https://egames.efin.finance/games/investor-dna-quiz" target="_blank"
             rel="noopener noreferrer">INVESTOR DNA</a>
-        <span class="site-header__primary-cta" data-header-register-cta
-            data-header-register-href="index.html#ticket">
+        <span class="site-header__primary-cta" data-header-register-cta data-rerun-cta hidden
+            data-header-register-href="index.html#rerun-ticket">
             <a class="bt-action-button bt-action-button--primary bt-action-button--xl bt-action-button--header"
-                href="index.html#ticket">ซื้อบัตร</a>
+                href="index.html#rerun-ticket">รับชมย้อนหลัง</a>
         </span>
     </div>
     <!-- End Component : Header -->
@@ -165,8 +166,8 @@
                                     decoding="async" alt="Playbook">
                             </h1>
                             <p class="playbook-hero__lead" data-reveal data-reveal-delay="160">คู่มือการลงทุนส่วนตัวที่คอยนำทาง<br>สแกนทุกโอกาสการลงทุนในโลกยุคใหม่</p>
-                            <div class="playbook-hero__actions" data-reveal data-reveal-delay="240">
-                                <div id="playbook-hero-cta-slot" class="playbook-hero__action" data-cta-href="index.html#ticket"></div>
+                            <div class="playbook-hero__actions" data-reveal data-reveal-delay="240" data-rerun-cta hidden>
+                                <div id="playbook-hero-cta-slot" class="playbook-hero__action" data-cta-href="index.html#rerun-ticket"></div>
                             </div>
 
                             <p class="playbook-hero__copy" data-reveal data-reveal-delay="320">ไม่มี PLAYBOOK การลงทุนเล่มไหนที่จะเหมาะกับคุณ<br>ได้มากไปกว่าเล่มที่คุณสร้างขึ้นด้วยตัวเอง</p>
@@ -491,8 +492,8 @@
                         </li>
                     </ol>
 
-                    <div class="playbook-benefit__action" data-reveal data-reveal-delay="320">
-                        <div id="playbook-ultimate-cta-slot" data-cta-href="https://www.efin.finance/events/better-trade/better-trade2026/buy-ticket/ultimate/2-days"></div>
+                    <div class="playbook-benefit__action" data-reveal data-reveal-delay="320" data-rerun-cta hidden>
+                        <div id="playbook-ultimate-cta-slot" data-cta-href="index.html#rerun-ticket"></div>
                     </div>
                 </div>
             </div>
@@ -811,24 +812,18 @@
                                 <h3 id="playbook-ticket-plan-title" class="playbook-ticket__plan-title">Ultimate</h3>
                             </header>
 
-                            <!-- ราคาและปุ่มอยู่กล่องเดียวกัน ปุ่มจึงต่อจากราคาเสมอ ไม่ถูกดันลงตามความยาวรายการสิทธิ์ -->
+                            <!-- สิ้นสุดการจำหน่ายแล้ว: แสดงราคาอย่างเดียว ไม่มีตัวเลือก/สถานะเลือก และไม่มีปุ่มซื้อบัตร -->
                             <div class="playbook-ticket__purchase">
-                                <div class="playbook-ticket__prices" role="radiogroup" aria-label="เลือกราคาบัตร Ultimate" data-playbook-price-group>
-                                    <button class="playbook-ticket__price" type="button" role="radio" aria-checked="false" tabindex="-1"
-                                        data-playbook-price data-playbook-price-label="ซื้อบัตร Ultimate 1 วัน 1,500 บาท">
+                                <div class="playbook-ticket__prices">
+                                    <div class="playbook-ticket__price playbook-ticket__price--static">
                                         <span class="playbook-ticket__price-day">บัตร 1 วัน</span>
                                         <strong class="playbook-ticket__price-value">1,500 <small>บาท</small></strong>
-                                    </button>
-                                    <button class="playbook-ticket__price is-active" type="button" role="radio" aria-checked="true"
-                                        data-playbook-price data-playbook-price-label="ซื้อบัตร Ultimate 2 วัน 2,500 บาท">
+                                    </div>
+                                    <div class="playbook-ticket__price playbook-ticket__price--static">
                                         <span class="playbook-ticket__price-day">บัตร 2 วัน</span>
                                         <strong class="playbook-ticket__price-value">2,500 <small>บาท</small></strong>
-                                    </button>
+                                    </div>
                                 </div>
-
-                                <a class="bt-action-button bt-action-button--primary bt-action-button--xl playbook-ticket__action"
-                                    href="https://www.efin.finance/events/better-trade/better-trade2026/buy-ticket/ultimate/2-days"
-                                    target="_blank" rel="noopener noreferrer" data-playbook-price-action>ซื้อบัตร Ultimate 2 วัน 2,500 บาท</a>
                             </div>
 
                             <ul class="playbook-ticket__features">
@@ -995,13 +990,13 @@
     <script src="js/page-header.js?v=1"></script>
     <script src="js/back-to-top.js?v=2"></script>
     <script src="js/mobile-cta-bar.js?v=4"></script>
-    <script src="js/reveal-on-scroll.js?v=11"></script>
+    <script src="js/reveal-on-scroll.js?v=12"></script>
     <script src="js/scroll-expand.js?v=5"></script>
     <script src="js/identity-cards-carousel.js?v=14"></script>
     <script src="js/cookie-banner.js?v=2"></script>
     <script src="js/cursor-dot.js?v=12"></script>
     <!-- Liquid metal CTAs (WebGL) ชุดเดียวกับหน้าแรก mount ปุ่มใน header และ hero ของหน้านี้ -->
-    <script type="module" src="js/hero-v2-cta.js?v=29"></script>
+    <script type="module" src="js/hero-v2-cta.js?v=31"></script>
 </body>
 
 </html>
