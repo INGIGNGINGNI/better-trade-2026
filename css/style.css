@@ -3491,6 +3491,21 @@ body.menu-open .site-header__backdrop {
     }
 }
 
+/* Rerun: ปุ่มซื้อบัตร Ultimate อยู่บรรทัดเดียวเสมอ ป้ายยาวสุด "ซื้อบัตร Ultimate 1 วัน (31 ต.ค.) 490 บาท" กว้าง ~17.3 เท่าของขนาดตัวอักษร
+   ตัวอักษร 16px ตามปกติ ย่อลงเองเฉพาะเมื่อปุ่มแคบไม่พอ (100cqi = ความกว้างปุ่ม เพราะปุ่มกว้างเต็ม .ticket__purchase
+   หัก padding 16px สองข้าง + เส้นขอบ) */
+#rerun-ticket .ticket__plan--ultimate {
+    .ticket__purchase {
+        container-type: inline-size;
+    }
+
+    .ticket__action {
+        padding-inline: var(--space-4);
+        font-size: min(var(--font-size-16), (100cqi - 34px) / 17.6);
+        white-space: nowrap;
+    }
+}
+
 /* การ์ด Explorer / Master Class ใช้พื้นสีเดียวกับหน้า เดิมตัดกับภาพพื้นหลังมืดจึงเห็นขอบการ์ด
    พอไม่มีภาพแล้วขอบหายไปกับพื้น ใส่เส้นขอบบางสีเดียวกับเส้นคั่นในการ์ดแทน
    (outline ไม่ดันขนาดการ์ด และวาดตามมุมโค้ง; Ultimate มีกรอบ spectrum ของตัวเองอยู่แล้ว) */
