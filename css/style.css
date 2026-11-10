@@ -2950,8 +2950,8 @@ body.menu-open .site-header__backdrop {
             }
         }
         color: var(--color-text-muted);
-        /* 12px คงที่ทุกขนาดจอ (ไม่ย่อตาม --bt-hero-u) */
-        font-size: var(--font-size-12);
+        /* 14px คงที่ทุกขนาดจอ (ไม่ย่อตาม --bt-hero-u) */
+        font-size: var(--font-size-14);
         line-height: var(--line-height-relaxed);
 
         >strong {
