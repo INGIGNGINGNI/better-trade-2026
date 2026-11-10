@@ -3684,7 +3684,8 @@ body.menu-open .site-header__backdrop {
             align-self: start;
         }
 
-        .ticket__access {
+        .ticket__access,
+        .ticket__access-group {
             grid-area: access;
             align-self: start;
             margin: 0;
@@ -3706,6 +3707,129 @@ body.menu-open .site-header__backdrop {
 #rerun-ticket .ticket__plan--master .ticket__plan-icon {
     width: 60px;
     object-position: left center;
+}
+
+/* Rerun ≥992: "บัตร" + ชื่อบัตรวางต่อจากไอคอนทางขวา (ไอคอนกินสองบรรทัด) แทนการเรียงใต้ไอคอน การ์ดจึงเตี้ยลง
+   992–1199 (การ์ดเต็มแถว หัวการ์ดกว้างพอ) ไอคอนและชื่อบัตรขนาดเดิม */
+@media (min-width: 992px) {
+    #rerun-ticket .ticket__plan-header {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        grid-template-rows: auto auto;
+        align-content: center;
+        column-gap: var(--space-4);
+
+        .ticket__plan-icon {
+            grid-row: 1 / span 2;
+            align-self: center;
+            margin: 0;
+        }
+
+        .ticket__plan-index {
+            grid-column: 2;
+            align-self: end;
+            margin: 0;
+        }
+
+        h3 {
+            grid-column: 2;
+            align-self: start;
+        }
+    }
+}
+
+/* Rerun ≥1200 (การ์ดวางคู่กัน หัวการ์ดแคบ): ไอคอนเล็กลงจาก 80 เหลือ 48px (เพชรกว้าง 60 → 36)
+   ชื่อบัตรไม่เกิน 7/8 ของขนาด section (28 / 24.5px) และย่อตามความกว้างจอให้ "MASTER CLASS" อยู่บรรทัดเดียว
+   (หัวการ์ด Master Class กว้าง ≈ 22.7vw − 64px หักไอคอน+ระยะ 48px · ตัวอักษรกว้าง ~7.9 เท่าของขนาดฟอนต์
+   → ฟอนต์ ≤ 2.84vw − 14px: จอ 1200 ≈ 20px / 1280 ≈ 22px / 1470 ≈ 28px) สองใบใช้ขนาดเดียวกัน */
+@media (min-width: 1200px) {
+    #rerun-ticket .ticket__plan-header {
+        column-gap: var(--space-3);
+
+        .ticket__plan-icon {
+            width: 48px;
+            height: 48px;
+        }
+
+        h3 {
+            font-size: min(calc(var(--bt-ticket-plan-title-size) * 0.875), 2.84vw - 14px);
+            white-space: nowrap;
+        }
+    }
+
+    #rerun-ticket .ticket__plan--master .ticket__plan-header .ticket__plan-icon {
+        width: 36px;
+    }
+
+    /* ราคา 32px (ค่าของ section ที่จอ ≥1400 ใหญ่กว่านี้) */
+    #rerun-ticket {
+        --bt-ticket-price-size: var(--font-size-32);
+    }
+
+    /* ด้านในการ์ดเป็น 4 แถวร่วมกันทั้งสองคอลัมน์ (subgrid): หัวการ์ด / หัวตารางสิทธิ์ / สิทธิ์แถว 1 / สิทธิ์แถว 2
+       กล่องราคากินแถว 1–3 ชิดล่าง ขอบล่างกล่องราคาจึงตรงกับเส้นคั่นระหว่างสิทธิ์แถว 1 กับ 2 พอดี
+       ปุ่มซื้ออยู่แถว 4 คู่กับสิทธิ์แถว 2 · สองการ์ดแถวสูงเท่ากัน เส้นจึงตรงกันข้ามการ์ดด้วย */
+    #rerun-ticket .ticket__plans--pair {
+        .ticket__plan {
+            grid-template-areas: none;
+            grid-template-rows: repeat(4, auto);
+            row-gap: 0;
+        }
+
+        /* รวมใบ Ultimate ด้วย (กฎ ≥768 ตั้ง grid-area: head ให้ .ticket__plan--ultimate .ticket__plan-header แยกไว้) */
+        .ticket__plan-header,
+        .ticket__plan--ultimate .ticket__plan-header {
+            grid-area: 1 / 1 / 2 / 2;
+            margin: 0 0 var(--space-6);
+        }
+
+        .ticket__access-group {
+            grid-area: 2 / 1 / 5 / 2;
+            display: grid;
+            grid-template-rows: subgrid;
+            margin: 0;
+
+            /* ตั้งคอลัมน์ 1 ทับ grid-area: access ของกฎ ≥768 (ชื่อเส้นนั้นไม่มีใน subgrid จะไปสร้างคอลัมน์ใหม่ข้างหัวตาราง) */
+            .ticket__access {
+                grid-area: 2 / 1 / 4 / 2;
+                display: grid;
+                grid-template-rows: subgrid;
+            }
+        }
+
+        .ticket__purchase {
+            grid-area: 1 / 2 / 5 / 3;
+            display: grid;
+            grid-template-rows: subgrid;
+            align-self: stretch;
+
+            .ticket__prices {
+                grid-row: 1 / 4;
+                align-self: end;
+            }
+
+            .ticket__action {
+                grid-row: 4;
+                align-self: start;
+            }
+        }
+
+        /* กล่องราคาเดียวของ Master Class ระยะในเท่าแถวราคาฝั่ง Ultimate แนวนอน (8px 16px) */
+        .ticket__plan--master .ticket__price--static {
+            padding: var(--space-2) var(--space-4);
+        }
+
+        /* subgrid ใช้กับกล่องที่เป็น container (layout containment) ไม่ได้ ช่วงนี้จึงเลิกใช้ container ของ .ticket__purchase
+           ป้ายปุ่มซื้อ Ultimate คำนวณจากความกว้างจอแทน (ปุ่มกว้าง ≈ 27.2vw − 74px · ป้ายยาวสุด ~17.6 เท่าของขนาดฟอนต์ + 34px)
+           → 16px ที่จอ ≥ ~1430 / 15px ที่ 1366 / 13.7px ที่ 1280 / 12.4px ที่ 1200 (ค่าเท่ากับสูตร cqi เดิม) */
+        .ticket__plan--ultimate .ticket__purchase {
+            container-type: normal;
+        }
+
+        .ticket__plan--ultimate .ticket__action {
+            font-size: min(var(--font-size-16), 1.547vw - 6.14px);
+        }
+    }
 }
 
 #rerun-ticket .ticket__plan--ultimate {
@@ -5188,6 +5312,11 @@ body.menu-open .site-header__backdrop {
             line-height: var(--bt-ticket-price-line-height);
             letter-spacing: 0;
             white-space: nowrap;
+
+            /* กล่องที่มีแต่ราคา (ไม่มีบรรทัดวันที่/ป้ายบัตรด้านบน) ไม่เว้นระยะบน ราคาจึงอยู่กึ่งกลางกล่อง */
+            &:first-child {
+                margin-top: var(--space-0);
+            }
         }
 
         .ticket__price-compare+strong {
@@ -5293,6 +5422,15 @@ body.menu-open .site-header__backdrop {
                 }
             }
 
+            /* แถวที่ไม่มีบรรทัดรอง (เช่นราคา Rerun ที่ไม่มีป้าย "บัตร 1 วัน") วันที่อยู่แถวเดียวกับราคา กึ่งกลางแนวตั้งตรงกัน */
+            &:not(:has(.ticket__price-note)) {
+                grid-template-areas: "radio day price";
+
+                .ticket__price-day {
+                    margin-bottom: var(--space-0);
+                }
+            }
+
             .ticket__price-note {
                 grid-area: note;
                 min-height: 0;
@@ -5363,6 +5501,21 @@ body.menu-open .site-header__backdrop {
                     "note";
             }
         }
+    }
+
+    /* หัวตารางสิทธิ์ (Rerun: "สิทธิ์รับชมย้อนหลังที่ได้รับ") อยู่ติดตารางเป็นก้อนเดียวกัน
+       ตัวอักษรใช้ .ticket__plan-note (ชุดเดียวกับคำอธิบายใต้ชื่อบัตร) ใน markup ไม่เว้นระยะบน เว้นล่าง 8px
+       ระยะห่างจากด้านบนย้ายมาอยู่ที่ก้อนแทนตาราง */
+    .ticket__access-group {
+        margin: var(--space-6) 0 0;
+
+        .ticket__access {
+            margin: 0;
+        }
+    }
+
+    .ticket__plan-note.ticket__access-caption {
+        margin: 0 0 var(--space-2);
     }
 
     .ticket__access {
@@ -6008,6 +6161,10 @@ body.menu-open .site-header__backdrop {
                 flex-wrap: wrap;
                 gap: var(--space-2);
             }
+        }
+
+        .ticket__access-group {
+            margin: var(--space-4) var(--space-0) var(--space-0);
         }
 
         .ticket__access {

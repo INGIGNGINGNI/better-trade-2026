@@ -74,7 +74,7 @@
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="css/main.css?v=62">
-    <link rel="stylesheet" href="css/style.css?v=1406">
+    <link rel="stylesheet" href="css/style.css?v=1418">
 </head>
 
 <body class="is-loading">
@@ -298,7 +298,7 @@
 
                 <section class="hero__rerun-card" aria-label="รับชมย้อนหลัง">
                     <div class="hero__rerun-card-top">
-                        <p class="hero__rerun-card-lead">รับชมย้อนหลังได้แล้ว ทั้ง Conference Workshop <span class="text-nowrap">และ Master Class</span></p>
+                        <p class="hero__rerun-card-lead">รับชมย้อนหลังได้แล้ว ทั้ง Conference, Workshop <span class="text-nowrap">และ Master Class</span></p>
                         <span class="hero__rerun-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v-3a3 3 0 0 1 3-3h13m-3-3 3 3-3 3"/><path d="M20 12v3a3 3 0 0 1-3 3H4m3 3-3-3 3-3"/></svg>ดูได้ไม่จำกัดรอบ ไม่จำกัดเวลา</span>
                     </div>
                     <div class="hero__rerun-card-offers">
@@ -328,7 +328,7 @@
                 <div class="hero__rerun-notes">
                     <strong>หมายเหตุ</strong>
                     <ul>
-                        <li><span>รับชมย้อนหลังได้ทั้ง Conference Workshop และ <span class="text-nowrap">Master Class</span></span></li>
+                        <li><span>รับชมย้อนหลังได้ทั้ง Conference, Workshop และ <span class="text-nowrap">Master Class</span></span></li>
                         <li><span>รับชมฟรีได้ตามสิทธิ์บัตรที่ถือ เช่น บัตร Ultimate วันที่ <span class="text-nowrap">31 ตุลาคม 2569</span> ดู Conference และ Workshop ของวันที่ <span class="text-nowrap">31 ตุลาคม 2569</span> ได้ทุก Session</span></li>
                     </ul>
                     <ul>
@@ -400,17 +400,14 @@
                         <button class="ticket__price" type="button" role="radio" aria-checked="false" data-ticket-option data-ticket-days="1" data-ticket-label="ซื้อบัตร Ultimate 1 วัน (31 ต.ค.) 490 บาท">
                             <span class="ticket__price-day">31 ต.ค. 2569</span>
                             <strong>490 <small>บาท</small></strong>
-                            <small class="ticket__price-note">บัตร 1 วัน</small>
                         </button>
                         <button class="ticket__price" type="button" role="radio" aria-checked="false" data-ticket-option data-ticket-days="1" data-ticket-label="ซื้อบัตร Ultimate 1 วัน (1 พ.ย.) 490 บาท">
                             <span class="ticket__price-day">1 พ.ย. 2569</span>
                             <strong>490 <small>บาท</small></strong>
-                            <small class="ticket__price-note">บัตร 1 วัน</small>
                         </button>
                         <button class="ticket__price is-active" type="button" role="radio" aria-checked="true" data-ticket-option data-ticket-days="2" data-ticket-label="ซื้อบัตร Ultimate 2 วัน 790 บาท">
                             <span class="ticket__price-day">31 ต.ค. – 1 พ.ย. 2569</span>
                             <strong>790 <small>บาท</small></strong>
-                            <small class="ticket__price-note">บัตร 2 วัน</small>
                         </button>
                     </div>
 
@@ -420,10 +417,13 @@
                 </div>
 
 
-                <dl class="ticket__access">
-                    <div><dt class="ticket__access-label ticket__access-label--conference"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-mic"></use></svg><span class="ticket__access-copy"><span class="ticket__access-title">Conference <small>(เวทีใหญ่)</small></span><small class="ticket__access-description">ทุกเซสชันบนเวทีหลัก ตามวันที่บนบัตร</small></span></dt></div>
-                    <div><dt class="ticket__access-label ticket__access-label--workshop"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-presentation"></use></svg><span class="ticket__access-copy"><span class="ticket__access-title">Workshop <small>(คลาสลงมือทำ)</small></span><small class="ticket__access-description">ทุก Session ตามวันที่บนบัตร</small></span></dt></div>
-                </dl>
+                <div class="ticket__access-group">
+                    <p class="ticket__plan-note ticket__access-caption">สิทธิ์รับชมย้อนหลังที่ได้รับ</p>
+                    <dl class="ticket__access">
+                        <div><dt class="ticket__access-label ticket__access-label--conference"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-mic"></use></svg><span class="ticket__access-copy"><span class="ticket__access-title">Conference <small>(เวทีใหญ่)</small></span><small class="ticket__access-description">ทุกเซสชันบนเวทีหลัก ตามวันที่บนบัตร</small></span></dt></div>
+                        <div><dt class="ticket__access-label ticket__access-label--workshop"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-presentation"></use></svg><span class="ticket__access-copy"><span class="ticket__access-title">Workshop <small>(คลาสลงมือทำ)</small></span><small class="ticket__access-description">ทุก Session ตามวันที่บนบัตร</small></span></dt></div>
+                    </dl>
+                </div>
             </article>
 
             <article class="ticket__plan ticket__plan--master col-12 col-lg-5" aria-labelledby="rerun-ticket-master-title">
@@ -437,7 +437,6 @@
                 <div class="ticket__purchase">
                     <div class="ticket__prices ticket__prices--single">
                         <div class="ticket__price ticket__price--static">
-                            <span class="ticket__price-day">บัตร 2 Class</span>
                             <strong>390 <small>บาท</small></strong>
                         </div>
                     </div>
@@ -446,10 +445,13 @@
                     <a class="bt-action-button bt-action-button--secondary bt-action-button--xl ticket__action" href="https://www.efin.finance/events/better-trade/better-trade2026/buy-ticket" target="_blank" rel="noopener noreferrer">ซื้อบัตร Master Class 390 บาท</a>
                 </div>
 
-                <dl class="ticket__access">
-                    <div><dt class="ticket__access-label ticket__access-label--private-class"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-users"></use></svg><span class="ticket__access-copy"><span class="ticket__access-title">VALUE MEETS MOMENTUM</span><small class="ticket__access-description">หุ้นดีต้องหาให้เจอ จังหวะต้องอ่านให้ออก</small></span></dt></div>
-                    <div><dt class="ticket__access-label ticket__access-label--private-class"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-users"></use></svg><span class="ticket__access-copy"><span class="ticket__access-title">MONEY MAKEOVER 40+</span><small class="ticket__access-description">40+ แล้ว ถึงเวลาจัดการเงินใหม่ให้ชีวิตไปต่อ</small></span></dt></div>
-                </dl>
+                <div class="ticket__access-group">
+                    <p class="ticket__plan-note ticket__access-caption">สิทธิ์รับชมย้อนหลังที่ได้รับ</p>
+                    <dl class="ticket__access">
+                        <div><dt class="ticket__access-label ticket__access-label--private-class"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-users"></use></svg><span class="ticket__access-copy"><span class="ticket__access-title">VALUE MEETS MOMENTUM</span><small class="ticket__access-description">หุ้นดีต้องหาให้เจอ จังหวะต้องอ่านให้ออก</small></span></dt></div>
+                        <div><dt class="ticket__access-label ticket__access-label--private-class"><svg class="bt-icon" aria-hidden="true"><use href="images/icons.svg#icon-users"></use></svg><span class="ticket__access-copy"><span class="ticket__access-title">MONEY MAKEOVER 40+</span><small class="ticket__access-description">40+ แล้ว ถึงเวลาจัดการเงินใหม่ให้ชีวิตไปต่อ</small></span></dt></div>
+                    </dl>
+                </div>
             </article>
         </div>
 
