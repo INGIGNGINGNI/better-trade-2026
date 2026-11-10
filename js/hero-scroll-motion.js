@@ -3,15 +3,18 @@
    - คอลัมน์ข้อความจางและลอยขึ้น (ออกเร็ว)
    - ภาพวิทยากรเลื่อนลงช้ากว่าหน้า + ย่อเล็กน้อย (มีความลึก)
    - กำแพงแยกออกด้านข้าง
-   - ไอคอนทั้ง 4 ใน hero (stock / triangle / heart / gold) บินลงไปรวมที่กึ่งกลาง (แนวนอน) ของการ์ดบัตร Ultimate ขนาดเท่าเดิม แล้วจางหาย
+   - ไอคอนสินทรัพย์เป็น parallax: ลอยขึ้นเร็วกว่าหน้าคนละความเร็ว (PARALLAX = ระยะลอยขึ้นตลอดช่วง scroll) มีมิติลึก
+     ไม่บินลงไปที่การ์ดบัตรแล้ว ถ้าจะเปิดกลับ ใส่รายการใน FLIGHTS และคืน onUpdate (สลับ .is-icons-flying) ใน scrollTrigger
    เริ่มหลัง loader จบ (ไอคอนต้องกระจายเข้าที่ก่อน) ข้ามทั้งหมดถ้าผู้ใช้ตั้งค่าลด motion
    ย้อนกลับ: ลบ <script src="js/hero-scroll-motion.js"> ใน index.html และคลาส .hero.is-scroll-motion ใน style.css */
 (() => {
     const LOADER_COMPLETE_EVENT = 'bettertrade:loader-complete';
     const DESKTOP_QUERY = '(min-width: 992px) and (min-aspect-ratio: 6/5) and (prefers-reduced-motion: no-preference)';
-    // ไอคอนทั้ง 4 ใน hero (stock / triangle / heart / gold) บินลงไปรวมที่กึ่งกลาง (แนวนอน) ของการ์ดบัตร Ultimate ขนาดเท่าเดิม แล้วจางหายหลังการ์ด
-    const FLIGHTS = ['stock', 'triangle', 'heart', 'gold'].map(asset => ({ asset, plan: '.ticket__plan--ultimate' }));
+    // ไอคอนไม่บินลงการ์ดบัตรแล้ว (เดิม: ['stock', 'triangle', 'heart', 'gold'].map(asset => ({ asset, plan: '.ticket__plan--ultimate' })))
+    const FLIGHTS = [];
     const FADERS = []; // ไอคอนทั้งหมดบินลงการ์ด ไม่มีตัวที่จางออกเฉย ๆ
+    // parallax: ระยะ (px) ที่ไอคอนลอยขึ้นเพิ่มจากการเลื่อนของหน้า ตลอดช่วง scroll ของ timeline ค่าต่างกันจึงดูอยู่คนละระดับความลึก
+    const PARALLAX = { triangle: -520, gold: -400, heart: -640, stock: -480 };
 
     if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
     gsap.registerPlugin(ScrollTrigger);
@@ -61,15 +64,6 @@
                     // (scrub แบบหน่วงทำให้ไอคอนค้างแล้วค่อยวิ่งตามตอนหยุดเลื่อน)
                     scrub: true,
                     invalidateOnRefresh: true,
-                    // ไอคอนต้องลอยข้าม hero ลงไปทับ ticket และอยู่หน้าภาพระหว่างบิน ยกชั้นเฉพาะตอนเริ่มเลื่อน
-                    // (ตอนอยู่นิ่ง ไอคอนยังอยู่หลังเนื้อหา/ภาพตามเดิม)
-                    onUpdate: self => {
-                        const flying = self.progress > 0.02;
-                        if (flying === hero.classList.contains('is-icons-flying')) return;
-                        hero.classList.toggle('is-icons-flying', flying);
-                        // hero-loader.js หยุดการลอย idle ระหว่างบิน (เส้นทางบินจะได้ไม่เอียงตาม float)
-                        window.dispatchEvent(new CustomEvent('bettertrade:hero-icons-flying', { detail: { flying } }));
-                    },
                 },
             });
 
@@ -77,6 +71,19 @@
                 .to(q('.hero__speakers img'), { yPercent: 10, scale: 0.94, transformOrigin: '50% 100%', duration: 0.8 }, 0)
                 .to(q('.hero__wall--left'), { xPercent: -14, duration: 0.8 }, 0)
                 .to(q('.hero__wall--right'), { xPercent: 14, duration: 0.8 }, 0);
+
+            // แกนของ .hero-asset__inner เอียงตาม --rot ของ .hero-asset หมุนเวกเตอร์กลับ ไอคอนจึงลอยขึ้นตรงแนวตั้ง
+            Object.entries(PARALLAX).forEach(([key, distance]) => {
+                const node = asset(key);
+                const inner = node?.querySelector('.hero-asset__inner');
+                if (!inner) return;
+                const angle = () => (Number.parseFloat(getComputedStyle(node).getPropertyValue('--rot')) || 0) * Math.PI / 180;
+                tl.to(inner, {
+                    x: () => Math.sin(angle()) * distance,
+                    y: () => Math.cos(angle()) * distance,
+                    duration: 1,
+                }, 0);
+            });
 
             FADERS.forEach(key => {
                 const inner = asset(key)?.querySelector('.hero-asset__inner');
