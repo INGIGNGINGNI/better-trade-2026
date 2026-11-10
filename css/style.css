@@ -3728,7 +3728,7 @@ body.menu-open .site-header__backdrop {
         .ticket__plan-index {
             grid-column: 2;
             align-self: end;
-            margin: 0;
+            margin: 0 0 var(--space-1);
         }
 
         h3 {
