@@ -2721,8 +2721,11 @@ body.menu-open .site-header__backdrop {
         }
     }
 
-    /* การ์ดแนวนอน: หัวการ์ด | เส้นคั่น | 2 ขั้นตอน ซ้อนขอบล่างภาพวิทยากร */
+    /* การ์ด 3 แถว ซ้อนขอบล่างภาพวิทยากร คั่นแถวด้วยเส้นบาง (สีเดียวกับเส้นคั่นในการ์ด)
+       บน: ข้อความนำ | ป้ายไม่จำกัดรอบ · กลาง: ผู้ถือบัตร Ultimate | เส้นคั่น | ยังไม่มีบัตร · ล่าง: 2 ขั้นตอน */
     .hero__rerun-card {
+        --bt-hero-card-row-gap: calc(16 * var(--bt-hero-u, 1px));
+
         position: relative;
         z-index: 1;
         width: 100%;
@@ -2731,21 +2734,78 @@ body.menu-open .site-header__backdrop {
         margin-top: calc(-64 * var(--bt-hero-k, var(--bt-hero-u, 1px)));
         padding: calc(20 * var(--bt-hero-u, 1px)) calc(32 * var(--bt-hero-u, 1px));
         display: flex;
-        align-items: center;
-        gap: calc(32 * var(--bt-hero-u, 1px));
+        flex-direction: column;
+        align-items: stretch;
         border: 0;
         border-radius: var(--card-radius);
         background: var(--color-neutral-0);
         box-shadow: var(--shadow-elevated);
     }
 
-    /* หัวการ์ดหดได้ (หัวการ์ดขึ้นสองบรรทัดที่ "ดูฟรีทุก Session") ขั้นตอนด้านขวาจึงไม่ล้นขอบการ์ด */
+    /* แถวกลางและแถวล่างมีเส้นคั่นด้านบน ระยะเหนือ-ใต้เส้นเท่ากัน (--bt-hero-card-row-gap) */
+    .hero__rerun-card-offers,
+    .hero__rerun-card .hero__rerun-steps {
+        margin-top: var(--bt-hero-card-row-gap);
+        padding-top: var(--bt-hero-card-row-gap);
+        border-top: var(--border-width-1) solid var(--color-border-faint);
+    }
+
+    /* แถวบน: ข้อความนำชิดซ้าย ป้ายชิดขวา ที่ไม่พอป้ายขึ้นบรรทัดใหม่ */
+    .hero__rerun-card-top {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-3) calc(24 * var(--bt-hero-u, 1px));
+    }
+
+    .hero__rerun-card-lead {
+        margin: 0;
+        color: var(--color-text-primary);
+        font-size: var(--font-size-18);
+        font-weight: var(--font-weight-medium);
+        line-height: 1.3;
+    }
+
+    /* ป้ายชุดเดียวกับ badge ของ agenda (.agenda__session-badge: ขอบ blue-200 พื้น blue-100 ตัวอักษร blue-400) ขนาดใหญ่ขึ้น
+       ไอคอน repeat ชุดเดียวกับป้าย RERUN */
+    .hero__rerun-chip {
+        flex: none;
+        min-height: var(--space-8);
+        padding: var(--space-0) var(--space-4);
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-2);
+        border: var(--rule-width-subtle) solid var(--color-blue-200);
+        border-radius: var(--pill-radius);
+        background: var(--color-blue-100);
+        color: var(--color-blue-400);
+        font-size: var(--font-size-14);
+        font-weight: var(--font-weight-medium);
+        line-height: 1;
+        white-space: nowrap;
+
+        svg {
+            flex: none;
+            width: 1.15em;
+            height: 1.15em;
+        }
+    }
+
+    /* แถวกลาง: ผู้ถือบัตร | เส้นคั่นแนวตั้ง | ยังไม่มีบัตร คอลัมน์ซ้ายกว้างตามเนื้อหา คอลัมน์ขวารับที่เหลือ
+       (ไม่แบ่งครึ่งเท่ากัน การ์ดจึงไม่กว้างเกินจำเป็น หัวข้อไม่ตัดบรรทัดที่จอ ~1280) */
+    .hero__rerun-card-offers {
+        display: grid;
+        grid-template-columns: auto auto minmax(0, 1fr);
+        align-items: center;
+        column-gap: calc(32 * var(--bt-hero-u, 1px));
+    }
+
     .hero__rerun-card-head {
-        flex: 0 1 auto;
         min-width: 0;
         display: flex;
         flex-direction: column;
-        gap: calc(8 * var(--bt-hero-u, 1px));
+        gap: calc(4 * var(--bt-hero-u, 1px));
     }
 
     /* ข้อความต่อกันเป็นบรรทัดปกติ (ไม่ใช่ flex) ช่องไฟระหว่างคำมาจากเว้นวรรคใน markup */
@@ -2757,8 +2817,9 @@ body.menu-open .site-header__backdrop {
         line-height: 1.3;
     }
 
-    /* ชื่อบัตรใช้ไล่สี spectrum ของ .bt-title-highlight (ใน markup) ชุดเดียวกับ ULTIMATE ในข้อความนำของ section Rerun
-       ตัว serif Baskervville ขนาดรับจากบรรทัด น้ำหนัก regular (Baskervville มีแค่ 400) ห้ามใส่ color/background (ไล่สีใช้ background-clip: text) */
+    /* ชื่อบัตร ตัว serif Baskervville ตัวพิมพ์ใหญ่ ขนาดรับจากบรรทัด น้ำหนัก regular (Baskervville มีแค่ 400)
+       ULTIMATE ไล่สี spectrum ด้วย .bt-title-highlight ใน markup (ห้ามใส่ color/background ที่นี่ ไล่สีใช้ background-clip: text)
+       MASTER CLASS ไม่มี .bt-title-highlight จึงเป็นสีเดียวกับหัวการ์ด */
     .hero__rerun-plan {
         font-family: 'Baskervville', var(--font-family-base);
         font-size: inherit;
@@ -2777,18 +2838,18 @@ body.menu-open .site-header__backdrop {
     .hero__rerun-card-divider {
         flex: none;
         width: var(--border-width-1);
-        height: calc(64 * var(--bt-hero-u, 1px));
+        align-self: stretch;
         background: var(--color-border-faint);
     }
 
-    /* ขั้นตอนไม่หดต่ำกว่าเนื้อหา (ข้อความไม่ตัดบรรทัด) ที่ไม่พอจึงไปหดหัวการ์ดแทน */
+    /* แถวล่าง: ขั้นตอน | ลูกศร | ขั้นตอน อยู่กึ่งกลางการ์ด */
     .hero__rerun-steps {
-        flex: 1 0 auto;
         min-width: 0;
         margin: 0;
         padding: 0;
         display: flex;
         align-items: center;
+        justify-content: center;
         gap: calc(16 * var(--bt-hero-u, 1px));
         list-style: none;
     }
@@ -2968,28 +3029,33 @@ body.menu-open .site-header__backdrop {
 
 /* ≥992 แนวนอน: hero สูงพอดี 1 จอ เนื้อหาเรียงบน-ล่างกึ่งกลางช่วงใต้ header
    ขนาดทั้งชุดคูณ k (--bt-hero-u) การ์ด/หมายเหตุคูณ u ของตัวเอง (--bt-hero-card-u) ตัวหนังสือในการ์ดเป็น px คงที่
-   ความสูงเนื้อหา (วัดจริง ชื่องานถึงหมายเหตุ 4 ข้อ) ≈ 567k + 97u + 151px (หมายเหตุเพิ่ม/ลด 1 ข้อ = ±23px)
-   ความสูง: เนื้อหา ≤ 100vh − header 72px − ระยะว่างบน-ล่างอย่างน้อยข้างละ 24px → k ≤ (100vh − 271px − 97u) / 567
+   ความสูงที่ต้องพอดี 1 จอ = ชื่องานถึงการ์ด 3 แถว (หมายเหตุไม่นับ ล้นลงใต้จอได้ hero สูงตามเนื้อหา)
+   วัดจริง ≈ 567k + 134u + 113px (ทั้งก้อนรวมหมายเหตุ 4 ข้อ ≈ 567k + 166u + 201px)
+   ความสูง: ชื่องานถึงการ์ด ≤ 100vh − header 72px − ระยะว่างบน-ล่างอย่างน้อยข้างละ 24px → k ≤ (100vh − 233px − 134u) / 567
    ความกว้าง: แถบเนื้อหา 1440k ≤ 100vw − 2·ขอบ */
 @media (min-width:992px) and (min-aspect-ratio: 6/5) {
     .hero.hero--rerun {
         /* u ของการ์ด/หมายเหตุ ตัวหนังสือโตตามความกว้างจอได้มากกว่าส่วนอื่น */
         --bt-hero-card-u: min(clamp(0.62px, (100vw - 48px) / 1300, 1.2px), 0.143vh - 0.125px);
         /* ความกว้าง: แถบเนื้อหา 1440k เว้นช่องข้างละ max(96px, 9vw) ไว้ให้ไอคอนสินทรัพย์ (จอสูงที่ k โตตามความสูง
-           เนื้อหาจะไม่กว้างจนดันไอคอนออกนอกจอ) · ต่ำสุด 0.5 ให้จอเตี้ยราว 650px ยังเว้นระยะบน-ล่างได้ครบ */
-        --bt-hero-u: clamp(0.5px, min((100vh - 271px - 97 * var(--bt-hero-card-u)) / 567, (100vw - 2 * max(96px, 9vw)) / 1440), 1.2px);
+           เนื้อหาจะไม่กว้างจนดันไอคอนออกนอกจอ) · ต่ำสุด 0.5 */
+        --bt-hero-u: clamp(0.5px, min((100vh - 233px - 134 * var(--bt-hero-card-u)) / 567, (100vw - 2 * max(96px, 9vw)) / 1440), 1.2px);
         /* k ของทั้ง hero (การ์ด/หมายเหตุตั้ง --bt-hero-u ของตัวเอง) ใช้คุมความกว้างการ์ดให้ใกล้ภาพวิทยากร */
         --bt-hero-k: var(--bt-hero-u);
 
-        height: 100vh;
+        /* สูงอย่างน้อย 1 จอ (min-height ของ .hero) เนื้อหาไม่เกินจออยู่กึ่งกลาง เกินจอ (หมายเหตุล้นลงใต้จอ)
+           hero สูงตามเนื้อหา กำแพงสูงตาม hero (--bt-hero-height จาก js/hero-loader.js) */
+        height: auto;
 
         .hero__inner {
             align-items: center;
             padding: var(--header-height) var(--space-6) var(--space-0);
         }
 
+        /* ระยะว่างใต้ header และใต้หมายเหตุอย่างน้อยข้างละ 24px */
         .hero__content {
             flex: 1 1 auto;
+            margin-block: var(--space-6);
         }
 
         /* การ์ดและหมายเหตุกว้างเต็มแถว ตัวหนังสือโตตามความกว้างจอได้มากกว่าส่วนอื่น (สูงสุด 1.25 เท่าของ k) */
@@ -3025,12 +3091,26 @@ body.menu-open .site-header__backdrop {
         .hero__rerun-card {
             width: fit-content;
             margin-top: calc(-52 * var(--bt-hero-k));
-            /* ระยะรอบเส้นคั่น 24 (เดิม 32) เผื่อที่ให้ขั้นตอนที่ 2 ที่มี 3 บรรทัด หัวการ์ดจึงไม่ถูกบีบจนตัดบรรทัดที่จอ ~1280 */
-            gap: calc(24 * var(--bt-hero-u));
         }
 
-        .hero__rerun-steps {
-            flex: 0 0 auto;
+        /* หัวข้อสองคอลัมน์ในการ์ด 22px ที่จอ ≥1375 ย่อตามความกว้างจอถึง 20px สองหัวข้อจึงอยู่บรรทัดเดียว
+           จนถึงจอ ~1280 (การ์ดกว้างได้ไม่เกินแถบเนื้อหา) */
+        .hero__rerun-card-title {
+            font-size: clamp(var(--font-size-20), 1.6vw, 22px);
+        }
+
+        /* คำอธิบายขั้นตอนเป็นบรรทัดเดียว (ซ่อน <br> ใช้เว้นวรรคใน markup แทน) การ์ดแคบไม่พอจึงตัดตามวลี
+           (แต่ละวลีเป็น text-nowrap ใน markup) หัวข้อขั้นตอนไม่ตัดบรรทัด */
+        .hero__rerun-step-br {
+            display: none;
+        }
+
+        .hero__rerun-step-copy {
+            white-space: normal;
+
+            >strong {
+                white-space: nowrap;
+            }
         }
 
         /* หมายเหตุห่างจากการ์ด 32 หน่วย (ค่าตั้งต้น 16) */
@@ -3223,15 +3303,30 @@ body.menu-open .site-header__backdrop {
         /* การ์ดซ้อนขอบล่างภาพวิทยากรสัดส่วนเดียวกับ desktop (64 / 1420 ของความกว้างภาพ ≈ 4.5%)
            กลบช่วงล่างที่จางของภาพ ไม่เห็นช่องฟ้าระหว่างภาพกับการ์ด (% ของ margin อิงความกว้างคอลัมน์ ≈ ความกว้างภาพ) */
         .hero__rerun-card {
+            --bt-hero-card-row-gap: var(--space-4);
+
             margin-top: calc(-64 / 1420 * 100%);
-            flex-direction: column;
-            align-items: flex-start;
-            gap: var(--space-5);
+        }
+
+        /* แถวกลางเรียงลงมา: ผู้ถือบัตร Ultimate / เส้นคั่นแนวนอน / ยังไม่มีบัตร
+           ≥768 การ์ดกว้างพอ กลับเป็นสองคอลัมน์ เส้นคั่นแนวตั้งแบบ desktop */
+        .hero__rerun-card-offers {
+            grid-template-columns: minmax(0, 1fr);
+            row-gap: var(--bt-hero-card-row-gap);
+
+            @media (min-width:768px) {
+                grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+            }
         }
 
         .hero__rerun-card-divider {
             width: 100%;
             height: var(--border-width-1);
+
+            @media (min-width:768px) {
+                width: var(--border-width-1);
+                height: auto;
+            }
         }
 
         .hero__rerun-steps {
@@ -3288,48 +3383,11 @@ body.menu-open .site-header__backdrop {
         }
 
         /* การ์ดกว้างเกือบเต็มจอ (เกิน container 880 ได้ เว้นขอบจอข้างละ 32px สูงสุด 1200) อยู่กึ่งกลาง
-           หัวการ์ดมีที่พอ ไม่ขึ้นหลายบรรทัด */
+           แถวและขั้นตอนใช้ผังเรียงลงมา ≥768 (แถวกลางสองคอลัมน์ ขั้นตอนกว้างเท่ากันกึ่งกลาง) */
         .hero__rerun-card {
             width: min(100vw - 64px, 1200px);
             max-width: none;
             align-self: center;
-            flex-direction: row;
-            align-items: center;
-            gap: calc(32 * var(--bt-hero-u, 1px));
-        }
-
-        .hero__rerun-card-divider {
-            width: var(--border-width-1);
-            height: calc(64 * var(--bt-hero-u, 1px));
-        }
-
-        /* หัวการ์ดยืดรับพื้นที่ที่เหลือ ชุดขั้นตอนกว้างเท่าเนื้อหา (เส้นประ 120) ชิดขวาของการ์ด */
-        .hero__rerun-card-head {
-            flex: 1 1 auto;
-        }
-
-        /* ขั้นตอนไม่หดต่ำกว่าเนื้อหา (min-width: auto = กว้างอย่างน้อยเท่าข้อความบรรทัดเดียว) ที่ไม่พอ
-           เส้นประหดก่อน (ถึง 64) แล้วหัวการ์ดตัดบรรทัด ขั้นตอนจึงไม่ล้นออกนอกการ์ด */
-        .hero__rerun-steps {
-            flex: 0 1 auto;
-            min-width: auto;
-            width: auto;
-            justify-content: flex-start;
-        }
-
-        .hero__rerun-step {
-            flex: 0 0 auto;
-            min-width: auto;
-        }
-
-        .hero__rerun-step-copy {
-            white-space: nowrap;
-        }
-
-        /* เส้นประยืดได้แต่ไม่เกิน 120px (ช่วงนี้การ์ดกว้าง ปล่อยยืดเต็มจะยาวเกิน) */
-        .hero__rerun-step-arrow {
-            flex: 0 1 120px;
-            min-width: calc(64 * var(--bt-hero-u, 1px));
         }
     }
 }
@@ -3382,6 +3440,10 @@ body.menu-open .site-header__backdrop {
 
         .hero__rerun-card {
             padding: var(--space-5);
+        }
+
+        .hero__rerun-card-lead {
+            font-size: var(--font-size-16);
         }
 
         .hero__rerun-card-title {
@@ -6047,8 +6109,9 @@ body.menu-open .site-header__backdrop {
         }
     }
 
-    /* หัว section จัดกึ่งกลาง (#rerun-ticket): title / sub / lead
-       จัดกลางแล้วตัดเส้น-ดาวท้ายบรรทัดของ sub ออก แบบหัว section ticket ของหน้า personalized-playbook */
+    /* หัว section จัดกึ่งกลาง (#rerun-ticket): title / sub / เส้นคั่น / lead
+       จัดกลางแล้วย้ายเส้น-ดาวของ sub จากท้ายบรรทัดลงมาเป็นเส้นคั่นกึ่งกลางใต้ sub
+       ชุดเดียวกับ "What's Inside" ของหน้า personalized-playbook (.playbook-intro__eyebrow) */
     .ticket__header--center {
         /* จุดลงจอดของเมนู Ticket / ปุ่มรับชมย้อนหลัง (data-scroll-to=".ticket__header") หัวข้ออยู่ใต้ header 24px
            หัว section และการ์ดบัตรจึงเห็นพร้อมกันในจอ */
@@ -6056,10 +6119,19 @@ body.menu-open .site-header__backdrop {
         text-align: center;
 
         .bt-section-subtext {
-            justify-content: center;
+            --bt-ticket-header-ornament-length: var(--space-32);
 
+            justify-content: center;
+            flex-wrap: wrap;
+
+            /* เส้น-ดาว (line-star.webp ดาวกึ่งกลางเส้น) ขึ้นบรรทัดใหม่เต็มแถวแล้วจัดกึ่งกลางเอง
+               ความยาวเส้นคุมที่ background-size อัตราส่วนภาพ 360:39 (÷ 9.13) */
             &::after {
-                display: none;
+                flex-basis: 100%;
+                width: auto;
+                height: calc(var(--bt-ticket-header-ornament-length) / 9.13);
+                margin: var(--space-10) var(--space-0) var(--space-0);
+                background: url('../images/line-star.webp') center / var(--bt-ticket-header-ornament-length) auto no-repeat;
             }
         }
 
