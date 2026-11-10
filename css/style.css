@@ -6245,47 +6245,6 @@ body.menu-open .site-header__backdrop {
             }
         }
     }
-
-    /* รายละเอียดการรับชม 5 ข้อ ต่อใต้จุดขาย 3 ข้อในคอลัมน์ขวาของแถบ (คั่นด้วยเส้นบาง)
-       bullet เป็นดาวชุดเดียวกับรายการในคำตอบ FAQ (.faq__answer-body li) */
-    .ticket__watch-list {
-        margin: var(--space-8) 0 0;
-        padding: var(--space-8) 0 0;
-        list-style: none;
-
-        li {
-            display: flex;
-            align-items: flex-start;
-            gap: var(--space-3);
-            color: var(--color-text-muted);
-            font-size: var(--section-body-size);
-            line-height: var(--section-body-line-height);
-
-            &::before {
-                content: "";
-                flex: 0 0 var(--space-3);
-                width: var(--space-3);
-                height: var(--space-3);
-                margin-top: calc((var(--section-body-line-height) - var(--space-3)) / 2);
-                background: url("../images/star.webp") center / contain no-repeat;
-            }
-
-            + li {
-                margin-top: var(--space-1);
-            }
-
-            strong {
-                color: var(--color-text-primary);
-                font-weight: var(--font-weight-medium);
-            }
-        }
-    }
-
-    @media (max-width: 575px) {
-        .ticket__watch-list li {
-            font-size: var(--font-size-14);
-        }
-    }
 }
 
 /* ---------- Agenda ----------
