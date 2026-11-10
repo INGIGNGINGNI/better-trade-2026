@@ -4798,6 +4798,11 @@ body.menu-open .site-header__backdrop {
         font-weight: var(--font-weight-regular);
     }
 
+    /* ชื่อบัตรที่ไม่ไล่สี (MASTER CLASS ต่อจาก ULTIMATE) ตัว serif เดียวกัน สีดำเท่าหัวข้อ */
+    .ticket__lead-plan--plain {
+        color: var(--color-text-primary);
+    }
+
     .ticket__intro {
         margin: 0;
         color: var(--color-text-muted);
