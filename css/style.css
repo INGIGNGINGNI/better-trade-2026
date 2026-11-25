@@ -4898,18 +4898,25 @@ body.menu-open .site-header__backdrop {
         text-wrap-style: balance;
     }
 
-    /* ข้อความนำใต้หัว section (#rerun-ticket) ชุดเดียวกับ .playbook-steps__lead ของหน้า personalized-playbook
-       สีจาง 20px (≤991 16px) ระยะบรรทัด relaxed ห่างจากหัวข้อ 48px */
+    /* ข้อความนำใต้หัว section (#rerun-ticket) สีจาง ห่างจากหัวข้อ 48px
+       ขนาด/ระยะบรรทัดชุดเดียวกับข้อความนำของ section Concept (.concept__description):
+       24/40 · ≤991 20/32 · ≤575 16/24 */
     .ticket__lead {
         max-width: var(--layout-narrow-max);
         margin: var(--space-12) var(--space-0) var(--space-0);
         color: var(--color-text-muted);
-        font-size: var(--section-topic-size-sm);
+        font-size: var(--section-topic-size);
         font-weight: var(--font-weight-regular);
-        line-height: var(--line-height-relaxed);
+        line-height: var(--section-topic-line-height);
 
         @media (max-width: 991px) {
-            font-size: var(--section-body-size);
+            font-size: var(--section-topic-size-sm);
+            line-height: var(--section-topic-line-height-sm);
+        }
+
+        @media (max-width: 575px) {
+            font-size: var(--section-topic-size-xs);
+            line-height: var(--section-topic-line-height-xs);
         }
     }
 
@@ -6401,6 +6408,400 @@ body.menu-open .site-header__backdrop {
                 }
             }
         }
+    }
+}
+
+/* ---------- E-Book ----------
+   แผงการ์ดชุดเดียวกับ section CTA (.cta__panel: พื้นไล่สีฟ้า/spectrum อ่อน มุมโค้ง) ต่อใต้ section Rerun Ticket
+   ซ้าย: ภาพ mockup หน้าปก (พื้นโปร่ง มีเงาในตัวภาพ)
+   ขวา: ชื่อหนังสือ (ตัวเล็ก) / หัวข้อ section "อ่านเกมเงิน เกมลงทุน" (.bt-section-title ขนาดตามระบบ)
+        / ป้าย E-Book (.bt-section-subtext ใต้หัวข้อแบบหัว section ทั่วไป) / คำโปรย / ปุ่ม
+   ≤767 เรียงลงมา ภาพบน ข้อความล่าง จัดกึ่งกลาง */
+.ebook {
+    position: relative;
+    /* ระยะเหนือแผง = padding ล่างของ section Rerun Ticket อยู่แล้ว ไม่เว้นซ้ำ */
+    padding: var(--space-0);
+    color: var(--color-text-primary);
+    background: var(--color-surface-page);
+    font-family: var(--font-family-base);
+}
+
+/* E-Book ท้ายหน้า (แทน section CTA ที่ปิดไว้) เว้นระยะบนเท่า section CTA เดิม
+   ไม่มีป้าย E-Book และคำโปรย ภาพปกเล็กกว่าแผงด้านบน (340 / ≤991 260px) */
+.ebook--end {
+    padding-top: var(--section-padding-y-sm);
+
+    @media (max-width: 575px) {
+        padding-top: var(--space-0);
+    }
+
+    .ebook__media img {
+        max-width: 340px;
+
+        @media (max-width: 991px) {
+            max-width: 260px;
+        }
+    }
+
+    /* แผงนี้เตี้ยกว่าแผงด้านบน (ภาพปกเล็ก ไม่มีคำโปรย) ตำแหน่งไอคอนจึงตั้งแยก ไม่ทับข้อความ/ปุ่ม
+       bitcoin ค่อนไปทางขวามากกว่าแผงด้านบนเล็กน้อย · ≤991 triangle อยู่ช่วงล่างของภาพปก (ภาพเตี้ยกว่า) */
+    .ebook__assets {
+        .ebook__asset--bitcoin {
+            --bt-cta-asset-x: 40%;
+
+            @media (max-width: 1199px) {
+                --bt-cta-asset-x: 41%;
+            }
+
+            @media (max-width: 991px) {
+                --bt-cta-asset-x: 22%;
+            }
+
+            @media (max-width: 575px) {
+                --bt-cta-asset-x: 10%;
+            }
+        }
+
+        .cta__asset--stock {
+            --bt-cta-asset-y: 62%;
+
+            @media (max-width: 1199px) {
+                --bt-cta-asset-y: 64%;
+            }
+
+            @media (max-width: 991px) {
+                --bt-cta-asset-y: 32%;
+            }
+        }
+
+        .cta__asset--triangle {
+            @media (max-width: 991px) {
+                --bt-cta-asset-y: 265px;
+            }
+        }
+    }
+}
+
+.ebook__panel {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: center;
+    /* ภาพปกชิดเนื้อหา (ภาพมีขอบโปร่งในตัวอยู่แล้ว) */
+    column-gap: var(--space-0);
+    padding: var(--space-12) var(--space-16);
+    overflow: hidden;
+    border-radius: var(--card-radius);
+    background:
+        radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--color-blue-100) 72%, transparent) 0%, transparent 34%),
+        radial-gradient(circle at 92% 100%, color-mix(in srgb, var(--color-kv-spectrum-4) 12%, transparent) 0%, transparent 34%),
+        var(--color-neutral-50);
+}
+
+.ebook__media img {
+    width: 100%;
+    max-width: 420px;
+    height: auto;
+    display: block;
+    margin-inline: auto;
+}
+
+/* ชื่อหนังสือเหนือหัวข้อ: ตัว serif Baskervville ตัวพิมพ์ใหญ่ ชุดเดียวกับชื่อบัตร (ULTIMATE / MASTER CLASS)
+   ตัวเลขปีใช้ฟอนต์หลัก (FC Minimal) เหมือนตัวเลขในหัวข้ออื่นของเว็บ น้ำหนัก light ให้เบาเท่าเส้นของตัว serif */
+.ebook__name {
+    margin: 0;
+    font-family: 'Baskervville', var(--font-family-base);
+    font-size: var(--font-size-28);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--section-heading-line-height);
+    letter-spacing: var(--section-heading-tracking);
+    text-transform: uppercase;
+}
+
+.ebook__year {
+    font-family: var(--font-family-base);
+    font-weight: var(--font-weight-light);
+}
+
+/* ตัวขึ้นบรรทัดชื่อหนังสือ ใช้เฉพาะ ≤575 (The Capital / Playbook 2027) เว้นวรรคก่อน <br> ใน markup ไว้แล้ว */
+.ebook__name-break {
+    display: none;
+
+    @media (max-width: 575px) {
+        display: inline;
+    }
+}
+
+.ebook__title {
+    margin: var(--space-2) 0 0;
+
+    /* ทั้งหัวข้อเป็นคำไล่สี spectrum ใช้ขนาดของ component (64 / ≤991 56 / ≤767 40px) เหมือนคำเน้นใน section อื่น
+       ยกเว้นจอ 992–1399 (ภาพคู่ข้อความ คอลัมน์ข้อความแคบ) ใช้ขนาดหัวข้อ section ปกติ 48px */
+    .bt-title-highlight {
+        @media (min-width: 992px) and (max-width: 1399px) {
+            font-size: inherit;
+        }
+
+        /* ≤575 32px (component 36px ยาวเกินแผงแคบ) */
+        @media (max-width: 575px) {
+            font-size: var(--font-size-32);
+        }
+    }
+}
+
+/* ระยะ: หัวข้อ → 24 → ป้าย E-Book → 48 → คำโปรย → 40 → ปุ่ม */
+/* ขนาด/ระยะบรรทัดชุดเดียวกับข้อความนำของ section Concept (.concept__description): 24/40 · ≤991 20/32 · ≤575 16/24 */
+.ebook__lead {
+    margin: var(--space-12) 0 0;
+    color: var(--color-text-muted);
+    font-size: var(--section-topic-size);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--section-topic-line-height);
+
+    @media (max-width: 991px) {
+        font-size: var(--section-topic-size-sm);
+        line-height: var(--section-topic-line-height-sm);
+    }
+
+    @media (max-width: 575px) {
+        font-size: var(--section-topic-size-xs);
+        line-height: var(--section-topic-line-height-xs);
+    }
+}
+
+/* ปุ่มดาวน์โหลด (liquid metal จาก js/hero-v2-cta.js) ≤767 อยู่กึ่งกลางตามข้อความ */
+.ebook__action {
+    margin-top: var(--space-10);
+    display: flex;
+
+    @media (max-width: 991px) {
+        justify-content: center;
+    }
+}
+
+/* ไอคอนสินทรัพย์ตกแต่ง: ชั้น/ตำแหน่ง/ฟิลเตอร์ใช้ .cta__assets / .cta__asset (ตำแหน่งเป็น % ของแผง ถูกตัดขอบด้วย overflow ของแผง)
+   ไอคอนอยู่หลังเนื้อหา ภาพปกและข้อความยกชั้นขึ้นมาเหนือไอคอน
+   สลับฝั่งจากแผง CTA (triangle ซ้าย stock ขวา) ไม่พลิกภาพ เฉพาะ stock เอียงกลับทิศ (+24° แทน −34°) ให้ดูเหมือนพลิก
+   และเล็กกว่าแผง CTA 5% */
+.ebook__assets .cta__asset--stock {
+    --bt-cta-asset-rotation: 24deg;
+
+    width: calc(var(--bt-cta-asset-size) * 0.95);
+}
+
+/* triangle ชิดขอบซ้ายค่อนล่าง (60% ของความสูง) ล้นขอบแผงออกไป 20% ของตัวไอคอน (จุดกลางห่างขอบ 30% ของขนาดไอคอน)
+   ขนาดสลับกับ bitcoin: 128 / ≤991 96 / ≤575 80px */
+.ebook__assets .cta__asset--triangle {
+    --bt-cta-asset-size: var(--space-32);
+    --bt-cta-asset-x: calc(var(--bt-cta-asset-size) * 0.3);
+    --bt-cta-asset-y: 60%;
+
+    /* 992–1199: ขนาดเป็นสัดส่วนของแผงเท่าจอใหญ่ (128 / แผง 1236px ≈ 10.4%) ภาพรวมจึงเหมือนจอใหญ่ย่อลงมา */
+    @media (max-width: 1199px) {
+        --bt-cta-asset-size: 10.4%;
+    }
+
+    /* ≤991 เรียงบน-ล่าง: ขนาดเท่าจอใหญ่ ตำแหน่งรอบภาพปกช่วงบน (ตาม .ebook__assets ด้านล่าง) ≤767 / ≤575 เล็กลง */
+    @media (max-width: 991px) {
+        --bt-cta-asset-size: var(--space-32);
+    }
+
+    @media (max-width: 767px) {
+        --bt-cta-asset-size: var(--space-24);
+    }
+
+    @media (max-width: 575px) {
+        --bt-cta-asset-size: var(--space-16);
+    }
+}
+
+/* bitcoin ด้านบนค่อนกลางแผง (ตำแหน่งตามช่วงจอใน .ebook__assets ด้านล่าง)
+   ขนาดสลับกับ triangle: 0.8 เท่าของขนาด triangle ในแผง CTA (≈ 90 / ≤991 77 / ≤767 70 / ≤575 64px) */
+.ebook__asset--bitcoin {
+    --bt-cta-asset-size: calc(var(--space-28) * 0.8);
+    --bt-cta-asset-rotation: -12deg;
+
+    /* 992–1199: สัดส่วนของแผงเท่าจอใหญ่ (90 / 1236px ≈ 7.3%) */
+    @media (max-width: 1199px) {
+        --bt-cta-asset-size: 7.3%;
+    }
+
+    /* ≤991 เรียงบน-ล่าง: ขนาดเท่าจอใหญ่ ≤767 / ≤575 เล็กลง */
+    @media (max-width: 991px) {
+        --bt-cta-asset-size: calc(var(--space-28) * 0.8);
+    }
+
+    @media (max-width: 767px) {
+        --bt-cta-asset-size: calc(var(--space-24) * 0.75);
+    }
+
+    @media (max-width: 575px) {
+        --bt-cta-asset-size: calc(var(--space-20) * 0.7);
+    }
+}
+
+.ebook__panel> :not(.cta__assets) {
+    position: relative;
+    z-index: 1;
+}
+
+.ebook__assets {
+    /* ภาพ ขนาด และขนาดตามจอใช้ของ .cta__asset--stock / --triangle ทั้งหมด (stock เอียง/ย่อด้านบน)
+       ตำแหน่ง: bitcoin ด้านบนค่อนมาทางกลางแผง (อยู่ในแผงทั้งตัว) / stock ฝั่งขวา / triangle ขอบซ้าย (กฎด้านบน)
+       ทุกค่าวัดจริงทีละช่วงจอ: ไม่ทับข้อความ/ปุ่ม และ stock อยู่ในแผงอย่างน้อย ~90% */
+    .ebook__asset--bitcoin {
+        --bt-cta-asset-x: 37%;
+        --bt-cta-asset-y: 9%;
+    }
+
+    .cta__asset--stock {
+        --bt-cta-asset-x: 92%;
+        --bt-cta-asset-y: 72%;
+    }
+
+    /* 992–1199: bitcoin ตำแหน่งเดียวกับจอใหญ่ (สัดส่วนของแผง) stock เล็กลงเหลือ 0.75 เท่าของแผง CTA */
+    @media (max-width: 1199px) {
+        .ebook__asset--bitcoin {
+            --bt-cta-asset-x: 38%;
+            --bt-cta-asset-y: 7%;
+        }
+
+        .cta__asset--stock {
+            --bt-cta-asset-x: 92%;
+            --bt-cta-asset-y: 64%;
+        }
+    }
+
+    @media (min-width: 992px) and (max-width: 1199px) {
+        .cta__asset--stock {
+            width: calc(var(--bt-cta-asset-size) * 0.75);
+        }
+    }
+
+    /* ≤991 เรียงบน-ล่าง (ภาพปกบน ข้อความล่าง) ไอคอนลอยอยู่ช่วงภาพปก (ไม่ลงไปถึงข้อความ)
+       bitcoin ซ้ายบน / triangle ขวาค่อนล่างของภาพปก / stock ขวาบน · ≤575 triangle ซ้ายบน bitcoin ขวา */
+    /* ≤991 ตามแบบ: bitcoin ซ้ายบนชิดขอบบน / stock ขวาบน / triangle ล้นขอบซ้ายช่วงล่างของภาพปก
+       (≤767 ตำแหน่งเดียวกัน ไอคอนเล็กลงตามจอ)
+       แนวตั้งเป็น px จากขอบบนแผง (ภาพปกอยู่บนสุดของแผงเสมอ ความสูงแผงเปลี่ยนตามข้อความ) */
+    @media (max-width: 991px) {
+        .ebook__asset--bitcoin {
+            --bt-cta-asset-x: 22%;
+            --bt-cta-asset-y: 36px;
+        }
+
+        .cta__asset--triangle {
+            --bt-cta-asset-x: 6%;
+            --bt-cta-asset-y: 378px;
+        }
+
+        .cta__asset--stock {
+            --bt-cta-asset-x: 94%;
+            --bt-cta-asset-y: 32%;
+            --bt-cta-asset-rotation: 16deg;
+        }
+    }
+
+    /* ภาพปกอยู่สูงขึ้น (padding แผงลดลง / ภาพย่อที่จอแคบ) ยก triangle ขึ้นเล็กน้อยไม่ให้ลงไปถึงข้อความ */
+    @media (max-width: 767px) {
+        .cta__asset--triangle {
+            --bt-cta-asset-y: 350px;
+        }
+    }
+
+    /* ≤575 ภาพปกกว้างเกือบเต็มแผง ไอคอนเล็กลงและชิดขอบแผงมากขึ้น ไม่จมหลังภาพปก */
+    @media (max-width: 575px) {
+        .ebook__asset--bitcoin {
+            --bt-cta-asset-x: 10%;
+        }
+
+        .cta__asset--triangle {
+            --bt-cta-asset-x: 3%;
+            --bt-cta-asset-y: 330px;
+        }
+
+        .cta__asset--stock {
+            --bt-cta-asset-x: 96%;
+
+            width: calc(var(--bt-cta-asset-size) * 0.8);
+        }
+    }
+}
+
+@media (max-width: 1199px) {
+    .ebook__panel {
+        padding: var(--space-12) var(--space-10);
+    }
+
+    .ebook__name {
+        font-size: var(--font-size-24);
+    }
+
+    /* 992–1199: หัวข้อดึงขึ้นชิดชื่อหนังสือ (ช่องว่างบนตัวอักษรไทยของบรรทัดหัวข้อทำให้ดูห่าง) ≤991 ใช้ระยะปกติ 8px */
+    .ebook__title {
+        @media (min-width: 992px) {
+            margin-top: calc(var(--space-2) * -1);
+        }
+    }
+}
+
+/* ≤991 เรียงบน-ล่าง: ภาพปกบน ข้อความล่าง จัดกึ่งกลาง */
+@media (max-width: 991px) {
+    .ebook__panel {
+        grid-template-columns: minmax(0, 1fr);
+        row-gap: var(--space-8);
+        padding: var(--space-12) var(--space-8);
+        text-align: center;
+    }
+
+    .ebook__media img {
+        max-width: 320px;
+    }
+
+    /* ป้ายจัดกึ่งกลาง ไม่มีเส้น-ดาว (เส้นทอดไปด้านเดียว ข้อความจะดูเยื้อง) */
+    .ebook__eyebrow {
+        justify-content: center;
+
+        &::after {
+            display: none;
+        }
+    }
+
+    /* เรียงลงมา ข้อความกว้างเต็มแผง ชื่อหนังสือ 24px */
+    .ebook__name {
+        font-size: var(--font-size-24);
+    }
+}
+
+@media (max-width: 767px) {
+    .ebook__panel {
+        padding: var(--space-10) var(--space-6);
+    }
+
+    .ebook__lead {
+        margin: var(--space-8) 0 0;
+    }
+}
+
+@media (max-width: 575px) {
+    .ebook__panel {
+        padding: var(--space-12) var(--space-5);
+    }
+
+    .ebook__name {
+        font-size: var(--font-size-20);
+        line-height: 1.5;
+    }
+
+    .ebook__title {
+        margin-top: var(--space-3);
+    }
+
+    .ebook__lead {
+        margin-top: var(--space-6);
+    }
+
+    .ebook__action {
+        margin-top: var(--space-8);
     }
 }
 
