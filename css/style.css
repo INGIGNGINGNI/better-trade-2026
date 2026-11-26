@@ -6435,6 +6435,13 @@ body.menu-open .site-header__backdrop {
         padding-top: var(--space-0);
     }
 
+    /* ≥1200 ระยะในแผงเท่าเดิม (48 / 64) แผงด้านบนใช้ 80 / 64 */
+    .ebook__panel {
+        @media (min-width: 1200px) {
+            padding: var(--space-12) var(--space-16);
+        }
+    }
+
     .ebook__media img {
         max-width: 340px;
 
@@ -6489,7 +6496,7 @@ body.menu-open .site-header__backdrop {
     align-items: center;
     /* ภาพปกชิดเนื้อหา (ภาพมีขอบโปร่งในตัวอยู่แล้ว) */
     column-gap: var(--space-0);
-    padding: var(--space-12) var(--space-16);
+    padding: var(--space-20) var(--space-16);
     overflow: hidden;
     border-radius: var(--card-radius);
     background:
@@ -6500,7 +6507,7 @@ body.menu-open .site-header__backdrop {
 
 .ebook__media img {
     width: 100%;
-    max-width: 420px;
+    max-width: 380px;
     height: auto;
     display: block;
     margin-inline: auto;
@@ -6618,25 +6625,26 @@ body.menu-open .site-header__backdrop {
 /* bitcoin ด้านบนค่อนกลางแผง (ตำแหน่งตามช่วงจอใน .ebook__assets ด้านล่าง)
    ขนาดสลับกับ triangle: 0.8 เท่าของขนาด triangle ในแผง CTA (≈ 90 / ≤991 77 / ≤767 70 / ≤575 64px) */
 .ebook__asset--bitcoin {
-    --bt-cta-asset-size: calc(var(--space-28) * 0.8);
+    /* เล็กลง 15% จากชุดเดิม (90 → 76px) */
+    --bt-cta-asset-size: calc(var(--space-28) * 0.68);
     --bt-cta-asset-rotation: -12deg;
 
-    /* 992–1199: สัดส่วนของแผงเท่าจอใหญ่ (90 / 1236px ≈ 7.3%) */
+    /* 992–1199: สัดส่วนของแผงเท่าจอใหญ่ (76 / 1236px ≈ 6.2%) */
     @media (max-width: 1199px) {
-        --bt-cta-asset-size: 7.3%;
+        --bt-cta-asset-size: 6.2%;
     }
 
     /* ≤991 เรียงบน-ล่าง: ขนาดเท่าจอใหญ่ ≤767 / ≤575 เล็กลง */
     @media (max-width: 991px) {
-        --bt-cta-asset-size: calc(var(--space-28) * 0.8);
+        --bt-cta-asset-size: calc(var(--space-28) * 0.68);
     }
 
     @media (max-width: 767px) {
-        --bt-cta-asset-size: calc(var(--space-24) * 0.75);
+        --bt-cta-asset-size: calc(var(--space-24) * 0.64);
     }
 
     @media (max-width: 575px) {
-        --bt-cta-asset-size: calc(var(--space-20) * 0.7);
+        --bt-cta-asset-size: calc(var(--space-20) * 0.6);
     }
 }
 

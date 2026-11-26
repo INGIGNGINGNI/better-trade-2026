@@ -202,6 +202,9 @@ ready.then(() => {
             ...responsiveOptions,
             label: 'ดาวน์โหลด E-Book ฟรี',
             href: slot.dataset.ctaHref || '#ebook',
+            // ไฟล์ E-Book อยู่นอกเว็บ เปิดแท็บใหม่ หน้าเว็บจึงไม่หายไป
+            target: '_blank',
+            rel: 'noopener noreferrer',
             textColor: '#111318',
             pillBackground: 'linear-gradient(180deg, #ffffff 0%, #f3f4f8 55%, #e4e7ee 100%)',
         }));
