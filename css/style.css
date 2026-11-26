@@ -6521,10 +6521,10 @@ body.menu-open .site-header__backdrop {
 
 /* บรรทัดรองใต้หัวข้อ: "อ่านเกมเงิน เกมลงทุน" ฟอนต์หลัก (FC Minimal) */
 .ebook__name {
-    margin: 0;
+    margin: var(--space-1) 0 0;
     font-size: var(--font-size-32);
     font-weight: var(--font-weight-medium);
-    line-height: var(--section-heading-line-height);
+    line-height: normal;
 }
 
 /* หัวข้อหลัก: ชื่อหนังสือภาษาอังกฤษ ตัว serif Baskervville ตัวพิมพ์ใหญ่ (ชุดเดียวกับชื่อบัตร ULTIMATE / MASTER CLASS)
@@ -6780,8 +6780,9 @@ body.menu-open .site-header__backdrop {
         }
     }
 
-    /* เรียงลงมา ข้อความกว้างเต็มแผง ชื่อหนังสือ 24px */
+    /* เรียงลงมา ข้อความกว้างเต็มแผง ชื่อหนังสือ 24px ห่างชื่ออังกฤษ 12px */
     .ebook__name {
+        margin-top: var(--space-3);
         font-size: var(--font-size-24);
     }
 }
