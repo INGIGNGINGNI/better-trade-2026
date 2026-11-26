@@ -6456,6 +6456,12 @@ body.menu-open .site-header__backdrop {
         .ebook__asset--bitcoin {
             --bt-cta-asset-x: 40%;
 
+            /* ≥1400 หัวข้ออังกฤษ 64px กว้างขึ้น ขยับเข้าซ้ายและลงเล็กน้อยไม่ให้ทับตัวหนังสือ */
+            @media (min-width: 1400px) {
+                --bt-cta-asset-x: 38%;
+                --bt-cta-asset-y: 14%;
+            }
+
             @media (max-width: 1199px) {
                 --bt-cta-asset-x: 41%;
             }
@@ -6513,15 +6519,22 @@ body.menu-open .site-header__backdrop {
     margin-inline: auto;
 }
 
-/* ชื่อหนังสือเหนือหัวข้อ: ตัว serif Baskervville ตัวพิมพ์ใหญ่ ชุดเดียวกับชื่อบัตร (ULTIMATE / MASTER CLASS)
-   ตัวเลขปีใช้ฟอนต์หลัก (FC Minimal) เหมือนตัวเลขในหัวข้ออื่นของเว็บ น้ำหนัก light ให้เบาเท่าเส้นของตัว serif */
+/* บรรทัดรองใต้หัวข้อ: "อ่านเกมเงิน เกมลงทุน" ฟอนต์หลัก (FC Minimal) */
 .ebook__name {
     margin: 0;
-    font-family: 'Baskervville', var(--font-family-base);
-    font-size: var(--font-size-28);
-    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-32);
+    font-weight: var(--font-weight-medium);
     line-height: var(--section-heading-line-height);
+}
+
+/* หัวข้อหลัก: ชื่อหนังสือภาษาอังกฤษ ตัว serif Baskervville ตัวพิมพ์ใหญ่ (ชุดเดียวกับชื่อบัตร ULTIMATE / MASTER CLASS)
+   ไล่สี spectrum ด้วย .bt-title-highlight ใน markup แบ่งสองบรรทัด THE CAPITAL / PLAYBOOK 2027
+   ตัวเลขปีใช้ฟอนต์หลัก (FC Minimal) น้ำหนัก light ให้เบาเท่าเส้นของตัว serif */
+.ebook__title-en {
+    font-family: 'Baskervville', var(--font-family-base);
+    font-weight: var(--font-weight-regular);
     letter-spacing: var(--section-heading-tracking);
+    line-height: 1.1;
     text-transform: uppercase;
 }
 
@@ -6530,28 +6543,27 @@ body.menu-open .site-header__backdrop {
     font-weight: var(--font-weight-light);
 }
 
-/* ตัวขึ้นบรรทัดชื่อหนังสือ ใช้เฉพาะ ≤575 (The Capital / Playbook 2027) เว้นวรรคก่อน <br> ใน markup ไว้แล้ว */
+/* ตัวขึ้นบรรทัดชื่อหนังสือ (The Capital / Playbook 2027) ≥1400 แสดงบรรทัดเดียว
+   (เว้นวรรคก่อน <br> ใน markup ไว้แล้ว แต่ละวลีเป็น text-nowrap ถ้าตัด 2 บรรทัดจะตัดตรงนี้เท่านั้น) */
 .ebook__name-break {
-    display: none;
+    display: inline;
 
-    @media (max-width: 575px) {
-        display: inline;
+    @media (min-width: 1400px) {
+        display: none;
     }
 }
 
 .ebook__title {
-    margin: var(--space-2) 0 0;
+    margin: 0;
 
-    /* ทั้งหัวข้อเป็นคำไล่สี spectrum ใช้ขนาดของ component (64 / ≤991 56 / ≤767 40px) เหมือนคำเน้นใน section อื่น
-       ยกเว้นจอ 992–1399 (ภาพคู่ข้อความ คอลัมน์ข้อความแคบ) ใช้ขนาดหัวข้อ section ปกติ 48px */
+    /* ชื่อหนังสือไล่สี spectrum 40px (≤767 32 / ≤575 28px ตามหัวข้อ section)
+       (component ตั้ง 64/56/40px ไว้สำหรับคำเน้นบางคำในหัวข้อ) */
     .bt-title-highlight {
-        @media (min-width: 992px) and (max-width: 1399px) {
-            font-size: inherit;
-        }
+        font-size: inherit;
 
-        /* ≤575 32px (component 36px ยาวเกินแผงแคบ) */
-        @media (max-width: 575px) {
-            font-size: var(--font-size-32);
+        /* ≥992 (ภาพคู่ข้อความ) 40px */
+        @media (min-width: 992px) {
+            font-size: var(--font-size-40);
         }
     }
 }
@@ -6744,12 +6756,6 @@ body.menu-open .site-header__backdrop {
         font-size: var(--font-size-24);
     }
 
-    /* 992–1199: หัวข้อดึงขึ้นชิดชื่อหนังสือ (ช่องว่างบนตัวอักษรไทยของบรรทัดหัวข้อทำให้ดูห่าง) ≤991 ใช้ระยะปกติ 8px */
-    .ebook__title {
-        @media (min-width: 992px) {
-            margin-top: calc(var(--space-2) * -1);
-        }
-    }
 }
 
 /* ≤991 เรียงบน-ล่าง: ภาพปกบน ข้อความล่าง จัดกึ่งกลาง */
@@ -6798,10 +6804,6 @@ body.menu-open .site-header__backdrop {
     .ebook__name {
         font-size: var(--font-size-20);
         line-height: 1.5;
-    }
-
-    .ebook__title {
-        margin-top: var(--space-3);
     }
 
     .ebook__lead {
