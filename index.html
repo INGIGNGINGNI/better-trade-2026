@@ -74,7 +74,7 @@
     <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="css/main.css?v=62">
-    <link rel="stylesheet" href="css/style.css?v=1419">
+    <link rel="stylesheet" href="css/style.css?v=1488">
 </head>
 
 <body class="is-loading">
@@ -470,6 +470,46 @@
         </div>
     </section>
     <!-- End Section : Rerun Ticket -->
+
+    <!-- Start Section : E-Book (แผงการ์ดชุดเดียวกับ section CTA ซ้ายภาพปก ขวาข้อความ) -->
+    <section id="ebook" class="ebook" aria-labelledby="ebook-title">
+        <div class="ebook__inner container">
+            <div class="ebook__panel">
+                <!-- ไอคอนสินทรัพย์ชุดเดียวกับแผง CTA (stock + triangle ภาพ/ขนาด/องศา/ฟิลเตอร์เดียวกัน) ลอยขยับด้วย js/cta-assets-motion.js -->
+                <div class="cta__assets ebook__assets" aria-hidden="true">
+                    <span class="cta__asset cta__asset--stock" data-cta-asset>
+                        <span class="cta__asset-float">
+                            <img src="images/stock.webp" width="178" height="800" alt="" loading="lazy" decoding="async">
+                        </span>
+                    </span>
+                    <span class="cta__asset cta__asset--triangle" data-cta-asset>
+                        <span class="cta__asset-float">
+                            <img src="images/triangle.webp" width="800" height="769" alt="" loading="lazy" decoding="async">
+                        </span>
+                    </span>
+                    <span class="cta__asset ebook__asset--bitcoin" data-cta-asset>
+                        <span class="cta__asset-float">
+                            <img src="images/bitcoin.webp" width="787" height="800" alt="" loading="lazy" decoding="async">
+                        </span>
+                    </span>
+                </div>
+                <div class="ebook__media">
+                    <img src="images/ebook-capital-playbook-2027.webp?v=2" width="840" height="887"
+                        alt="หน้าปก E-Book THE CAPITAL PLAYBOOK 2027 อ่านเกมเงิน เกมลงทุน" loading="lazy" decoding="async">
+                </div>
+                <div class="ebook__copy">
+                    <h2 id="ebook-title" class="bt-section-title ebook__title"><span class="bt-title-highlight ebook__title-en"><span class="text-nowrap">The Capital</span> <br class="ebook__name-break"><span class="text-nowrap">Playbook <span class="ebook__year">2027</span></span></span></h2>
+                    <p class="ebook__name">อ่านเกมเงิน เกมลงทุน</p>
+                    <p class="bt-section-subtext ebook__eyebrow">E-Book</p>
+                    <p class="ebook__lead">INSIGHTS และกลยุทธ์ทุกประเด็นร้อน <span class="text-nowrap">ต่อยอดเป็น PLAYBOOK ของคุณ</span></p>
+                    <!-- ปุ่ม liquid metal สร้างโดย js/hero-v2-cta.js (ชุดเดียวกับปุ่ม CTA อื่นในเว็บ)
+                         ลิงก์ดาวน์โหลด E-Book อยู่ที่ data-cta-href (เปิดแท็บใหม่) -->
+                    <div class="ebook__action" data-ebook-cta data-cta-href="https://inevents.efin.finance/api/conference-file/18c26b41-ce7b-4024-a57e-2ab30b6acf8c"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Section : E-Book -->
 
 
     <!-- Start Section : Ticket (สิ้นสุดการจำหน่ายแล้ว เอาปุ่มซื้อบัตรออกทุกใบ — ซื้อได้ที่ Rerun Ticket ด้านบน) -->
@@ -2727,7 +2767,8 @@
 
 
     <!-- Start Section : CTA -->
-    <section id="cta" class="cta" aria-labelledby="cta-title">
+    <!-- ปิดไว้ แสดง E-Book (ท้ายหน้า) แทน เปิดกลับ: ลบ hidden -->
+    <section id="cta" class="cta" aria-labelledby="cta-title" hidden>
         <div class="cta__inner container">
             <div class="cta__panel" data-scroll-expand="0.85">
                 <!-- ของประกอบฉากชุดเดียวกับ section Playbook (ภาพเดียวกัน ขนาด/ฟิลเตอร์เดียวกัน) ลอยขยับด้วย js/cta-assets-motion.js -->
@@ -2751,6 +2792,44 @@
         </div>
     </section>
     <!-- End Section : CTA -->
+
+    <!-- Start Section : E-Book (ท้ายหน้า แทน section CTA ที่ปิดไว้ · ชุดเดียวกับ E-Book ใต้ Rerun Ticket) -->
+    <section id="ebook-end" class="ebook ebook--end" aria-labelledby="ebook-end-title">
+        <div class="ebook__inner container">
+            <div class="ebook__panel">
+                <!-- ไอคอนสินทรัพย์ชุดเดียวกับแผง CTA (stock + triangle ภาพ/ขนาด/องศา/ฟิลเตอร์เดียวกัน) ลอยขยับด้วย js/cta-assets-motion.js -->
+                <div class="cta__assets ebook__assets" aria-hidden="true">
+                    <span class="cta__asset cta__asset--stock" data-cta-asset>
+                        <span class="cta__asset-float">
+                            <img src="images/stock.webp" width="178" height="800" alt="" loading="lazy" decoding="async">
+                        </span>
+                    </span>
+                    <span class="cta__asset cta__asset--triangle" data-cta-asset>
+                        <span class="cta__asset-float">
+                            <img src="images/triangle.webp" width="800" height="769" alt="" loading="lazy" decoding="async">
+                        </span>
+                    </span>
+                    <span class="cta__asset ebook__asset--bitcoin" data-cta-asset>
+                        <span class="cta__asset-float">
+                            <img src="images/bitcoin.webp" width="787" height="800" alt="" loading="lazy" decoding="async">
+                        </span>
+                    </span>
+                </div>
+                <div class="ebook__media">
+                    <img src="images/ebook-capital-playbook-2027.webp?v=2" width="840" height="887"
+                        alt="หน้าปก E-Book THE CAPITAL PLAYBOOK 2027 อ่านเกมเงิน เกมลงทุน" loading="lazy" decoding="async">
+                </div>
+                <div class="ebook__copy">
+                    <h2 id="ebook-end-title" class="bt-section-title ebook__title"><span class="bt-title-highlight ebook__title-en"><span class="text-nowrap">The Capital</span> <br class="ebook__name-break"><span class="text-nowrap">Playbook <span class="ebook__year">2027</span></span></span></h2>
+                    <p class="ebook__name">อ่านเกมเงิน เกมลงทุน</p>
+                    <!-- ปุ่ม liquid metal สร้างโดย js/hero-v2-cta.js (ชุดเดียวกับปุ่ม CTA อื่นในเว็บ)
+                         ลิงก์ดาวน์โหลด E-Book อยู่ที่ data-cta-href (เปิดแท็บใหม่) -->
+                    <div class="ebook__action" data-ebook-cta data-cta-href="https://inevents.efin.finance/api/conference-file/18c26b41-ce7b-4024-a57e-2ab30b6acf8c"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Section : E-Book (ท้ายหน้า) -->
 
 
     <!-- Start Component : Footer -->
@@ -2877,7 +2956,7 @@
 
     <!-- Liquid metal CTAs (WebGL). Module scripts are deferred, so this runs after
      the markup exists but before window 'load' fires the hero intro. -->
-    <script type="module" src="js/hero-v2-cta.js?v=31"></script>
+    <script type="module" src="js/hero-v2-cta.js?v=34"></script>
     <script src="js/event-countdown.js?v=3"></script>
     <script src="js/loader-mist.js?v=3"></script>
     <script src="vendor/gsap/gsap.min.js"></script>
@@ -2887,7 +2966,7 @@
     <script src="js/topics-reveal.js?v=6"></script>
     <script src="js/topics-assets-motion.js?v=22"></script>
     <script src="js/playbook-assets-motion.js?v=5"></script>
-    <script src="js/cta-assets-motion.js?v=1"></script>
+    <script src="js/cta-assets-motion.js?v=2"></script>
     <script src="js/playbook-glow-motion.js?v=1"></script>
     <!-- หลัง hero เพราะ ScrollTrigger refresh ตามลำดับที่สร้าง และ speaker อยู่ใต้ hero ในหน้า -->
     <script src="js/speaker-motion.js?v=5"></script>

@@ -120,6 +120,8 @@ ready.then(() => {
     const heroCtaSlot = document.getElementById('cta-slot');
     const playbookCtaSlot = document.getElementById('playbook-cta-slot');
     const ctaTicketSlot = document.getElementById('cta-ticket-slot');
+    // ปุ่มดาวน์โหลดในแผง E-Book (ใต้ section Rerun Ticket และท้ายหน้า) ปลายทางมาจาก data-cta-href ของ slot
+    const ebookCtaSlots = Array.from(document.querySelectorAll('[data-ebook-cta]'));
     // Hero และ section What you get ของหน้า personalized-playbook.html
     // (หน้าอื่นไม่มี slot เหล่านี้ จึงข้ามไปเอง)
     const playbookHeroCtaSlot = document.getElementById('playbook-hero-cta-slot');
@@ -129,6 +131,7 @@ ready.then(() => {
     let heroCtaButton = null;
     let playbookCtaButton = null;
     let ctaTicketButton = null;
+    let ebookCtaButtons = [];
     let playbookHeroCtaButton = null;
     let playbookUltimateCtaButton = null;
     let heroCtaSize = null;
@@ -171,6 +174,7 @@ ready.then(() => {
         heroCtaButton?.destroy?.();
         playbookCtaButton?.destroy?.();
         ctaTicketButton?.destroy?.();
+        ebookCtaButtons.forEach(button => button?.destroy?.());
         playbookUltimateCtaButton?.destroy?.();
         heroCtaButton = mountRegisterButton(heroCtaSlot, {
             ...responsiveOptions,
@@ -193,6 +197,17 @@ ready.then(() => {
             textColor: '#111318',
             pillBackground: 'linear-gradient(180deg, #ffffff 0%, #f3f4f8 55%, #e4e7ee 100%)',
         });
+        /* แผง E-Book พื้นสว่าง ใช้ pill ขาวตัวอักษรดำชุดเดียวกับปุ่มในแผง CTA */
+        ebookCtaButtons = ebookCtaSlots.map(slot => mountRegisterButton(slot, {
+            ...responsiveOptions,
+            label: 'ดาวน์โหลด E-Book ฟรี',
+            href: slot.dataset.ctaHref || '#ebook',
+            // ไฟล์ E-Book อยู่นอกเว็บ เปิดแท็บใหม่ หน้าเว็บจึงไม่หายไป
+            target: '_blank',
+            rel: 'noopener noreferrer',
+            textColor: '#111318',
+            pillBackground: 'linear-gradient(180deg, #ffffff 0%, #f3f4f8 55%, #e4e7ee 100%)',
+        }));
         mountPlaybookHeroCta();
         playbookUltimateCtaButton = mountRegisterButton(playbookUltimateCtaSlot, {
             ...responsiveOptions,
